@@ -12,10 +12,20 @@ declare global {
 
 function ActiveSlide() {
   useKeyboardNav();
-  const { slideIndex, stepCounts } = useDeck();
+  const { slideIndex, stepCounts, goTo } = useDeck();
+
   useEffect(() => {
     window.__DECK_SLIDE_COUNT__ = stepCounts.length;
-  }, [stepCounts.length]);
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get("slide");
+    if (requested != null) {
+      const n = Math.max(0, Math.min(Number(requested), stepCounts.length - 1));
+      goTo(n, 0);
+    }
+    // We only honor the query string on first mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const def = smokeDeck[slideIndex];
   return (
     <Slide

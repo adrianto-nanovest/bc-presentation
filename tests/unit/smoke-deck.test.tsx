@@ -35,3 +35,12 @@ test("smoke deck declares one slide per supported animation mode", () => {
   expect(seen.has("looping-ambient")).toBe(true);
   expect(seen.has("interactive")).toBe(true);
 });
+
+test("?slide=N query string jumps the deck to slide N on mount", () => {
+  Object.defineProperty(window, "location", {
+    value: new URL("http://localhost/?slide=3"),
+    writable: true,
+  });
+  render(<App />);
+  expect(screen.getByTestId("slide").getAttribute("data-slide-index")).toBe("3");
+});

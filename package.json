@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "export:pdf": "node scripts/export-pdf.mjs exports/smoke-deck.pdf",
-    "export:pptx": "node scripts/export-pptx.mjs exports/smoke-deck.pptx"
+    "export:pptx": "node scripts/export-pptx.mjs exports/smoke-deck.pptx",
+    "projection-test": "node scripts/projection-test.mjs"
   },
   "keywords": [],
   "author": "",
