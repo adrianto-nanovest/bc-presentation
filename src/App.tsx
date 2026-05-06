@@ -1,3 +1,5 @@
+import { Deck } from "./deck/Deck";
+
 export default function App() {
-  return <div data-testid="app-root">deck mounts here</div>;
+  return <Deck />;
 }
