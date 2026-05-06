@@ -1,0 +1,17 @@
+// 4px grid — Carbon-derived. Tailwind's default already maps `1` → 4px,
+// so these are semantic aliases for the values we use most on slides.
+export const spacing = {
+  0: "0px",
+  1: "4px",
+  2: "8px",
+  3: "12px",
+  4: "16px",
+  6: "24px",
+  8: "32px",
+  12: "48px",
+  16: "64px",
+  24: "96px",
+  32: "128px",
+  48: "192px",
+  64: "256px",
+} as const;
