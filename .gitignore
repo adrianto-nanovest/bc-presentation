@@ -32,3 +32,10 @@ htmlcov/
 *.env
 credentials/
 secrets/
+
+node_modules/
+dist/
+playwright-report/
+test-results/
+.vite/
+exports/
