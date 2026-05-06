@@ -2,11 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS variable bridge — mirrors the TS tokens so non-Tailwind CSS
+   (animation keyframes, third-party libs) can reference the same values.
+   Keep these in sync with src/design-system/* — Task 8 adds a test. */
+:root {
+  --copper-500: #b86e3d;
+  --copper-700: #7a4626;
+  --neutral-50: #f5f5f5;
+  --neutral-900: #0a0a0a;
+  --surface-dark: #0a0a0a;
+  --surface-light: #f5f5f5;
+
+  --serif-en: "Source Serif 4", Georgia, serif;
+  --serif-id: "Source Serif 4", Georgia, serif;
+  --serif-display: "Instrument Serif", Georgia, serif;
+  --sans: "Inter", system-ui, sans-serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+
+  --shadow-base: 0 16px 48px -8px rgba(0, 0, 0, 0.45);
+  --radius-base: 0px;
+}
+
 html,
 body,
 #root {
   height: 100%;
   margin: 0;
-  background: #0a0a0a;
-  color: #f5f5f5;
+  background: var(--surface-dark);
+  color: var(--neutral-50);
+  font-family: var(--serif-en);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
