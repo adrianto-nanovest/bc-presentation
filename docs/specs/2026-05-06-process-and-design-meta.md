@@ -124,7 +124,7 @@ Slides without mouse interaction MUST NOT consume click events on stage (avoids 
 | Mode | Description | Typical use |
 |------|-------------|-------------|
 | Interactive | Click/drag-driven content manipulation | Showcase slides; in-slide demos |
-| Looping ambient | Runs continuously, no trigger | Hero slides; section dividers |
+| Looping ambient | Runs continuously, no trigger | Hero slides; section dividers; timeline-chart |
 | Step-reveal | `Space`-driven progressive build | Diagrams; layered concepts (e.g., prompt/context/harness Russian doll) |
 | Static | No animation | Image-led slides; hook moments |
 
@@ -274,11 +274,11 @@ Foundational. Slide-level content is a downstream spec.
 | pptxgenjs continuity expectation from prior Adri decks | Acknowledge upfront: this deck is intentionally a step-up in design sophistication, breaking visual continuity with HR Group / Townhall AISC / SDLC decks |
 | Showcase content for Hook 2 is sparse when assembly time comes | Adri begins assembling portfolio inventory in parallel with downstream specs (action item, not in spec body) |
 
-## 12. Open questions
+## 12. Open questions - ANSWERED
 
-1. **Bahasa coverage.** Fully English / fully Bahasa / bilingual (English deck with Bahasa key terms + quotes)? Affects type tokens (`--serif-id` may diverge), pacing (reading-time differs), and hook framing.
-2. **Sinarmas Group brand reference.** No constraint enforced (per Q4-i), but: any single corporate-identity gesture worth honoring (e.g., a quiet nod on title slide) should be raised now rather than retrofit.
-3. **Workshop date.** Not yet known — sets the calendar for downstream specs and implementation plans.
+1. **Bahasa coverage.** Fully English / fully Bahasa / bilingual (English deck with Bahasa key terms + quotes)? Affects type tokens (`--serif-id` may diverge), pacing (reading-time differs), and hook framing. Answer : FULLY ENGLISH
+2. **Sinarmas Group brand reference.** No constraint enforced (per Q4-i), but: any single corporate-identity gesture worth honoring (e.g., a quiet nod on title slide) should be raised now rather than retrofit. Answer : NO CONSTRAINT, NO NEED FOR BRAND REFERENCE
+3. **Workshop date.** Not yet known — sets the calendar for downstream specs and implementation plans. Answer: 18-21 May (Berau Site), 26 May (JKT), 2-5 June (Berau Site), and one more day in JKT
 
 ## 13. Acceptance — locked decisions
 
