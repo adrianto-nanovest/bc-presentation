@@ -37,7 +37,7 @@ export function HarnessCanvas({ selectedId, mode, onToggleMode, children }: Harn
           {mode === "simulation" ? "see it real" : "back to simulation"}
         </button>
       )}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.div
           key={`${selectedId ?? "default"}-${mode}`}
           initial={{ opacity: 0, scale: 0.98 }}
