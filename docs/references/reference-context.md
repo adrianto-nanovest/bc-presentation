@@ -45,6 +45,10 @@ You can dispatch multiple explore / general-purpose agents (use Haiku model) to 
 5. Claude vs Codex - docs/references/claude-vs-codex.pdf, and repo in /Users/macbook/Projects/_web_presentation/codex-exploration
 6. Claude Design Personal Learnings - docs/references/claude-design-learnings.pdf
 7. Discussion Summary with Berau PICs in Whatsapp - docs/references/berau-pic-discussion.md
+8. Adri's portfolio (the repo is actually for pitching, but my profile mostly there along with projects i did, the projects also some are mentioned in number 3 - townhall presentation) - repo in /Users/macbook/Projects/_web_presentation/toppan-presentation
+9. NotebookLM plugin I developed - /Users/macbook/Projects/_nanovest_bitbucket/mcp-notebooklm/plugin/notebooklm
+10. nanovest-product plugin I developed - /Users/macbook/Projects/_nanovest_bitbucket/nanovest-confluence/plugin
+11. gemini-image-gen MCP I developed - /Users/macbook/Projects/_nanovest_bitbucket/mcp-gemini-multimedia-gen 
 
 I think you can also dispatch agents also to do web research on the topics i raised above, to strengthen the content information.
 
