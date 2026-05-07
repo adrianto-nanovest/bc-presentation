@@ -32,9 +32,14 @@ export function StepConnector({
       data-direction={direction}
       data-ambient={ambient ?? ""}
       className="relative flex items-center justify-center"
-      style={{ width, height }}
+      style={{ width, height, maxWidth: "100%", maxHeight: "100%" }}
     >
-      <svg width={width} height={height} className="overflow-visible">
+      <svg
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${width} ${height}`}
+        className="overflow-visible"
+      >
         <defs>
           <marker
             id="arrowhead"
