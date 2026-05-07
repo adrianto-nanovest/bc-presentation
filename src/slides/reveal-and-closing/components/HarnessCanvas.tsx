@@ -37,6 +37,7 @@ export function HarnessCanvas({ selectedId, mode, onToggleMode, children }: Harn
           {mode === "simulation" ? "see it real" : "back to simulation"}
         </button>
       )}
+      {/* mode="wait" omitted: jsdom never fires onExitComplete, leaving incoming child unmounted in tests. */}
       <AnimatePresence>
         <motion.div
           key={`${selectedId ?? "default"}-${mode}`}

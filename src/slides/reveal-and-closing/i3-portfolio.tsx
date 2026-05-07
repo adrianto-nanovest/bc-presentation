@@ -96,7 +96,7 @@ export function I3Portfolio() {
   const canvasChild = (() => {
     if (!selectedId) return undefined;        // HarnessCanvas falls back to DefaultHarness
     if (mode === "screenshots" && HEAVY_RENDERERS[selectedId]) {
-      const paths = HEAVY_SCREENSHOTS[selectedId];
+      const paths = HEAVY_SCREENSHOTS[selectedId] ?? [];
       if (paths.length === 0) {
         return (
           <div className="flex h-full items-center justify-center font-serif italic text-neutral-400">
