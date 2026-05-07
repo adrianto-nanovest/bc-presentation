@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { PulseGlow } from "@/slides/reveal-and-closing/components/PulseGlow";
+import { PulseGlow } from "@/components/PulseGlow";
 
 test("PulseGlow renders its child and applies a looping animate prop", () => {
   render(

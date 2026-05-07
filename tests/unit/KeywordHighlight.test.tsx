@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { KeywordHighlight } from "@/slides/reveal-and-closing/components/KeywordHighlight";
+import { KeywordHighlight } from "@/components/KeywordHighlight";
 
 test("KeywordHighlight wraps text in copper-italic span", () => {
   render(<KeywordHighlight>90 minutes</KeywordHighlight>);

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { DisplayPhrase } from "@/slides/reveal-and-closing/components/DisplayPhrase";
+import { DisplayPhrase } from "@/components/DisplayPhrase";
 
 test("DisplayPhrase renders all words as inline spans", () => {
   render(<DisplayPhrase staggerType="word" words={["Foundation", "before", "velocity"]} />);

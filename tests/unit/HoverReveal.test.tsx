@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { HoverReveal } from "@/slides/reveal-and-closing/components/HoverReveal";
+import { HoverReveal } from "@/components/HoverReveal";
 
 test("HoverReveal renders trigger; payload is hidden until hover", () => {
   render(

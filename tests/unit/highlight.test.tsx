@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { highlight } from "@/slides/reveal-and-closing/components/highlight";
+import { highlight } from "@/components/highlight";
 
 test("highlight wraps each keyword in a copper-italic span", () => {
   render(<p>{highlight("Foundation before velocity", ["Foundation", "velocity"])}</p>);

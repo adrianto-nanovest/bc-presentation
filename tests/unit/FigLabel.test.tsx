@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { FigLabel } from "@/slides/reveal-and-closing/components/FigLabel";
+import { FigLabel } from "@/components/FigLabel";
 
 test("FigLabel renders the canonical FIG <section>.<num> · <label> format", () => {
   render(<FigLabel section="I" num={2} label="THE JOURNEY" />);

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { HeroPhoto } from "@/slides/reveal-and-closing/components/HeroPhoto";
+import { HeroPhoto } from "@/components/HeroPhoto";
 
 test("HeroPhoto renders an image and a vignette overlay", () => {
   render(<HeroPhoto src="/heroes/test.jpg" vignetteSide="bottom-left" alt="" />);
