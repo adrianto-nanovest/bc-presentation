@@ -82,22 +82,29 @@ export function D2TheConvergence() {
         </motion.div>
       ))}
 
-      {/* Connector arrows — drawn over the cards. SVG occupies the full slide. */}
-      <svg className="pointer-events-none absolute inset-0 z-0" data-testid="d2-arrows">
+      {/* Connector arrows — drawn over the cards. SVG occupies the full slide.
+          viewBox 0..100 maps directly to the percent geometry of SLOT_STYLE,
+          stretched non-uniformly so the integers below read as percent x/y. */}
+      <svg
+        className="pointer-events-none absolute inset-0 z-0"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        data-testid="d2-arrows"
+      >
         {/* BPM → IPA */}
         <motion.path
-          d="M 20% 25% L 45% 45%"
+          d="M 20 25 L 45 45"
           stroke="#7a4626"
           strokeWidth={1.5}
           fill="none"
           markerEnd="url(#d2-arrowhead)"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: stepIndex >= 3 ? 1 : 0 }}
-          transition={{ duration: 0.2, delay: stepIndex >= 3 ? 0 : 0 }}
+          transition={{ duration: 0.2 }}
         />
         {/* RPA → IPA */}
         <motion.path
-          d="M 80% 25% L 55% 45%"
+          d="M 80 25 L 55 45"
           stroke="#7a4626"
           strokeWidth={1.5}
           fill="none"
@@ -108,7 +115,7 @@ export function D2TheConvergence() {
         />
         {/* AI → IPA */}
         <motion.path
-          d="M 50% 80% L 50% 55%"
+          d="M 50 80 L 50 55"
           stroke="#7a4626"
           strokeWidth={1.5}
           fill="none"
@@ -119,7 +126,7 @@ export function D2TheConvergence() {
         />
         {/* IPA → AGENTIC */}
         <motion.path
-          d="M 55% 45% L 80% 45%"
+          d="M 55 45 L 80 45"
           stroke="#7a4626"
           strokeWidth={1.5}
           fill="none"
