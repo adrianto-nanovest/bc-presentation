@@ -5,7 +5,7 @@ const slideAttr = '[data-testid="slide"]';
 test("ArrowRight walks the deck from slide 0 to the last slide", async ({ page }) => {
   await page.goto("/");
   const count = await page.evaluate(() => window.__DECK_SLIDE_COUNT__);
-  expect(count).toBeGreaterThanOrEqual(10); // 9 reveal-and-closing + HexLadder
+  expect(count).toBeGreaterThanOrEqual(15); // 5 foundation-core + 9 reveal-and-closing + HexLadder
 
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "0");
   for (let i = 1; i < count; i++) {
@@ -29,8 +29,8 @@ test("Space advances within a step-reveal slide; ArrowLeft resets step on previo
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "0");
 });
 
-test("I.3 (slide 2) is interactive: clicks on list items don't bubble past Interactive wrapper", async ({ page }) => {
-  await page.goto("/?slide=2");
+test("I.3 (slide 7) is interactive: clicks on list items don't bubble past Interactive wrapper", async ({ page }) => {
+  await page.goto("/?slide=7");
   await expect(page.locator(slideAttr)).toHaveAttribute("data-animation-mode", "interactive");
   // Walk to step 4 so canvas is revealed.
   for (let i = 0; i < 4; i++) await page.keyboard.press(" ");
@@ -38,5 +38,5 @@ test("I.3 (slide 2) is interactive: clicks on list items don't bubble past Inter
   // Stocks intel feed labels should now be on screen.
   await expect(page.getByText("Investing.com")).toBeVisible();
   // Clicking an item must not advance the slide.
-  await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "2");
+  await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "7");
 });
