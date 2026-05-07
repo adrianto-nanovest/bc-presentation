@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 
+// Module-level default so the array identity is stable across renders;
+// inlining the literal as a default-prop value would re-create it each render
+// and re-trigger the animation effect on every parent re-render.
+const DEFAULT_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 interface CountUpProps {
   from: number;
   to: number;
@@ -15,7 +20,7 @@ export function CountUp({
   from,
   to,
   durationMs = 1500,
-  ease = [0.16, 1, 0.3, 1],
+  ease = DEFAULT_EASE,
   testId,
   className,
 }: CountUpProps) {
