@@ -1,9 +1,14 @@
 import { test, expect } from "@playwright/test";
 
-const SLIDES = 7;
+declare global {
+  interface Window {
+    __DECK_SLIDE_COUNT__: number;
+  }
+}
 
 test("every slide fits inside the viewport with no overflow", async ({ page }) => {
   await page.goto("/");
+  const SLIDES = await page.evaluate(() => window.__DECK_SLIDE_COUNT__);
   for (let i = 0; i < SLIDES; i++) {
     const overflow = await page.evaluate(() => {
       const slide = document.querySelector('[data-testid="slide"]') as HTMLElement;
