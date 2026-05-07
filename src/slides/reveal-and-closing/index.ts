@@ -1,6 +1,7 @@
 import type { SlideDef } from "@/deck/types";
 import { j1Slide } from "./j1-humility-intro";
+import { k1Slide } from "./k1-challenge-handoff";
 
-// Populated incrementally by tasks in Phases 4–7. Order matches
-// spec §1: I.1 → I.2 → I.3 → I.4 → J.1 → J.2 → J.3 → J.4 → K.1.
-export const revealAndClosingSlides: SlideDef[] = [j1Slide];
+// Order matches spec §1: I → J → K. Currently we have only the J/K
+// hero slides while diagrammatic + portfolio slides land in later tasks.
+export const revealAndClosingSlides: SlideDef[] = [j1Slide, k1Slide];
