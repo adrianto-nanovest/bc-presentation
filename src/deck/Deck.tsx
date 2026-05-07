@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { DeckProvider, useDeck } from "./DeckContext";
 import { useKeyboardNav } from "./useKeyboardNav";
 import { Slide } from "./Slide";
-import { smokeDeck } from "./smoke-deck";
+import { deckSlides } from "./registry";
 
 declare global {
   interface Window {
@@ -26,7 +26,7 @@ function ActiveSlide() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const def = smokeDeck[slideIndex];
+  const def = deckSlides[slideIndex];
   return (
     <Slide
       index={slideIndex}
@@ -41,7 +41,7 @@ function ActiveSlide() {
 
 export function Deck() {
   return (
-    <DeckProvider stepCounts={smokeDeck.map((s) => s.steps)}>
+    <DeckProvider stepCounts={deckSlides.map((s) => s.steps)}>
       <ActiveSlide />
     </DeckProvider>
   );
