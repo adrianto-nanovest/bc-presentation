@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { HoverReveal } from "./HoverReveal";
+import { HoverReveal } from "@/components/HoverReveal";
 
 interface RecipeStepCardProps {
   num: number;

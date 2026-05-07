@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
-import { HoverReveal } from "./HoverReveal";
+import { HoverReveal } from "@/components/HoverReveal";
 
 export interface TimelineAnchor {
   id: string;

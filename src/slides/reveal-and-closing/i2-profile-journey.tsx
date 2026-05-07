@@ -2,11 +2,11 @@
 import { motion } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
-import { FigLabel } from "./components/FigLabel";
-import { HeroPhoto } from "./components/HeroPhoto";
+import { FigLabel } from "@/components/FigLabel";
+import { HeroPhoto } from "@/components/HeroPhoto";
 import { Timeline, type TimelineAnchor } from "./components/Timeline";
-import { highlight } from "./components/highlight";
-import { HoverReveal } from "./components/HoverReveal";
+import { highlight } from "@/components/highlight";
+import { HoverReveal } from "@/components/HoverReveal";
 import { i2Content as C } from "./content";
 
 export function I2ProfileJourney() {

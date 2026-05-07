@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { StepReveal } from "@/motion/StepReveal";
-import { FigLabel } from "./components/FigLabel";
-import { HeroPhoto } from "./components/HeroPhoto";
-import { PulseGlow } from "./components/PulseGlow";
-import { highlight } from "./components/highlight";
+import { FigLabel } from "@/components/FigLabel";
+import { HeroPhoto } from "@/components/HeroPhoto";
+import { PulseGlow } from "@/components/PulseGlow";
+import { highlight } from "@/components/highlight";
 import { k1Content as C } from "./content";
 
 export function K1ChallengeHandoff() {

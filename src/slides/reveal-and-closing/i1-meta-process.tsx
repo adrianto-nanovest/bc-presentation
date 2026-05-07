@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { Fragment } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
-import { FigLabel } from "./components/FigLabel";
+import { FigLabel } from "@/components/FigLabel";
 import { HorizontalFlow, type FlowStage } from "./components/HorizontalFlow";
-import { KeywordHighlight } from "./components/KeywordHighlight";
-import { highlight } from "./components/highlight";
+import { KeywordHighlight } from "@/components/KeywordHighlight";
+import { highlight } from "@/components/highlight";
 import { i1Content as C } from "./content";
 
 function Headline() {

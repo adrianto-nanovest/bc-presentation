@@ -1,8 +1,8 @@
 import type { SlideDef } from "@/deck/types";
 import { StepReveal } from "@/motion/StepReveal";
-import { FigLabel } from "./components/FigLabel";
-import { HeroPhoto } from "./components/HeroPhoto";
-import { highlight } from "./components/highlight";
+import { FigLabel } from "@/components/FigLabel";
+import { HeroPhoto } from "@/components/HeroPhoto";
+import { highlight } from "@/components/highlight";
 import { j1Content as C } from "./content";
 
 export function J1HumilityIntro() {

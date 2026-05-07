@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
-import { FigLabel } from "./components/FigLabel";
+import { FigLabel } from "@/components/FigLabel";
 import { RecipeStepCard } from "./components/RecipeStepCard";
-import { highlight } from "./components/highlight";
+import { highlight } from "@/components/highlight";
 import { j2Content as C } from "./content";
 
 export function J2FivePrinciples() {

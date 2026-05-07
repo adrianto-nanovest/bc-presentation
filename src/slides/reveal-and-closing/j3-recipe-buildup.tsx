@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
-import { FigLabel } from "./components/FigLabel";
+import { FigLabel } from "@/components/FigLabel";
 import { RecipeStepCard } from "./components/RecipeStepCard";
 import { StepConnector } from "./components/StepConnector";
-import { highlight } from "./components/highlight";
+import { highlight } from "@/components/highlight";
 import { j3Content as C } from "./content";
 
 export function J3RecipeBuildup() {

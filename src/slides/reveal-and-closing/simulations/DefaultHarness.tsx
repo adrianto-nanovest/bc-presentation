@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { highlight } from "../components/highlight";
+import { highlight } from "@/components/highlight";
 
 // Generic harness diagram: main agent (centered), 2 chains (sub-agents), 2 tools.
 export function DefaultHarness() {
