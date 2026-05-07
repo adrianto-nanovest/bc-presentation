@@ -10,7 +10,7 @@ export function J2FivePrinciples() {
   const { stepIndex } = useDeck();
   const revealed = stepIndex >= 1;
   return (
-    <div className="relative h-full w-full bg-neutral-900">
+    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
       {/* Dot-grid texture per memory rule (feedback_slide_visual_conventions.md). */}
       <div
         aria-hidden

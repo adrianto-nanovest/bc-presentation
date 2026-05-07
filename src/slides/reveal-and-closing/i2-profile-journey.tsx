@@ -50,7 +50,7 @@ export function I2ProfileJourney() {
     caption: a.captionKeywords ? highlight(a.caption, a.captionKeywords) : a.caption,
   }));
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/i2-night-workspace.jpg" alt="" vignetteSide="bottom-left" />
       <FigLabel section="I" num={2} label="THE JOURNEY" />
       <div className="absolute bottom-12 left-12 z-20 flex max-w-[90vw] flex-col gap-12">

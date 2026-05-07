@@ -37,7 +37,7 @@ export function I1MetaProcess() {
     sub: highlight(s.sub, s.keywords),
   }));
   return (
-    <div className="relative h-full w-full bg-neutral-900">
+    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
       <div
         aria-hidden
         className="absolute inset-0 opacity-[0.05]"

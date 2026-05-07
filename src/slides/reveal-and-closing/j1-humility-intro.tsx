@@ -7,7 +7,7 @@ import { j1Content as C } from "./content";
 
 export function J1HumilityIntro() {
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/j1-notebook-study.jpg" alt="" vignetteSide="bottom-left" />
       <FigLabel section="J" num={1} label="THE RECIPE" />
       <div className="absolute bottom-24 left-24 z-20 flex max-w-[60vw] flex-col gap-8">

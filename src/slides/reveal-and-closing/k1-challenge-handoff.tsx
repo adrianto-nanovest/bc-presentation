@@ -9,7 +9,7 @@ import { k1Content as C } from "./content";
 
 export function K1ChallengeHandoff() {
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/k1-morning-workspace.jpg" alt="" vignetteSide="bottom-left" />
       <FigLabel section="K" num={1} label="NOW FEEL IT" />
       <div className="absolute bottom-24 left-24 z-20 flex max-w-[68vw] flex-col gap-10">

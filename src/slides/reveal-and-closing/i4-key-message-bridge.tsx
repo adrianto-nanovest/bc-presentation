@@ -15,7 +15,7 @@ export function I4KeyMessageBridge() {
   const beatARevealed = stepIndex >= 2;
   const beatBRevealed = stepIndex >= 3;
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/i4-dusk-horizon.jpg" alt="" vignetteSide="bottom" />
       <FigLabel section="I" num={4} label="THE BRIDGE" />
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-12 px-16 text-center">
