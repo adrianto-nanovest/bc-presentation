@@ -1,4 +1,4 @@
-import { type AnimationMode } from "./Slide";
+import { type SlideDef } from "./types";
 import { Hero } from "@/primitives/Hero";
 import { SectionDivider } from "@/primitives/SectionDivider";
 import { ContentSlide } from "@/primitives/ContentSlide";
@@ -7,15 +7,9 @@ import { HexLadder } from "@/primitives/HexLadder";
 import { StepReveal } from "@/motion/StepReveal";
 import { LoopingAmbient } from "@/motion/LoopingAmbient";
 import { Interactive } from "@/motion/Interactive";
-import { useState, type JSX } from "react";
+import { useState } from "react";
 
-export interface SmokeSlide {
-  steps: number; // step count for DeckProvider
-  animationMode: AnimationMode;
-  canonicalPose: number;
-  surface?: "dark" | "light";
-  render: () => JSX.Element;
-}
+export type SmokeSlide = SlideDef;       // back-compat alias; removed in 0.3
 
 function ComparatorDemo() {
   const [on, setOn] = useState(false);
