@@ -7,9 +7,17 @@ import { spawn } from "node:child_process";
 
 const server = spawn("npm", ["run", "dev"], { stdio: "inherit", shell: true });
 
-setTimeout(() => {
-  // Slide index 6 is the HexLadder in the smoke deck.
-  const url = "http://localhost:5173/?slide=6&fullscreen=1";
+setTimeout(async () => {
+  // Resolve the HexLadder index = slide count - 1 (always last per registry.ts).
+  const { chromium } = await import("playwright");
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto("http://localhost:5173", { waitUntil: "networkidle" });
+  const count = await page.evaluate(() => window.__DECK_SLIDE_COUNT__);
+  await browser.close();
+  const ladderIndex = Math.max(0, count - 1);
+
+  const url = `http://localhost:5173/?slide=${ladderIndex}&fullscreen=1`;
   console.log("\nProjection test ready. Opening:", url);
   console.log(
     "Steps:\n" +
