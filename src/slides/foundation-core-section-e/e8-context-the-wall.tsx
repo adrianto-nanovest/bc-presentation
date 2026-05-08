@@ -65,6 +65,7 @@ export function E8ContextTheWall() {
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: revealed ? 1 : 0, y: revealed ? 0 : 4 }}
                   transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ pointerEvents: revealed ? "auto" : "none" }}
                   onMouseEnter={() => setHoveredKind(p.id as PitfallKind)}
                   onMouseLeave={() => setHoveredKind(null)}
                   className="flex items-start gap-3 border border-copper-800 bg-neutral-950/60 px-4 py-3 hover:border-copper-300"
