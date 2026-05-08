@@ -78,7 +78,7 @@ export function NaiveVsProper({
           animate={{ opacity: revealResults ? 0.7 : 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="whitespace-pre-wrap font-mono italic text-neutral-400"
-          style={{ fontSize: "clamp(0.8rem, 0.95vw, 1rem)", maxHeight: "6em", overflow: "hidden" }}
+          style={{ fontSize: "clamp(0.8rem, 0.95vw, 1rem)", maxHeight: "6em", overflow: "hidden", WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)", maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)" }}
         >
           {naiveResult}
         </motion.pre>
@@ -106,7 +106,7 @@ export function NaiveVsProper({
           animate={{ opacity: revealResults ? 1 : 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="whitespace-pre-wrap font-mono text-neutral-100"
-          style={{ fontSize: "clamp(0.8rem, 0.95vw, 1rem)", maxHeight: "6em", overflow: "hidden" }}
+          style={{ fontSize: "clamp(0.8rem, 0.95vw, 1rem)", maxHeight: "6em", overflow: "hidden", WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)", maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)" }}
         >
           {properResult}
         </motion.pre>
