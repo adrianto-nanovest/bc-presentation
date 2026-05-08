@@ -16,7 +16,6 @@ export function E6ContextWhatWhy() {
   // Space 3 — left gutter definition + analogy
   // Space 4 — ladder rung 2 lights + ambient begins
   const showHub = stepIndex >= 0;
-  const _showFirstSat = stepIndex >= 0;
   const showAllSats = stepIndex >= 1;
   const showGutter = stepIndex >= 2;
   const ambientOn = stepIndex >= 3;
