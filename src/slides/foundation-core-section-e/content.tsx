@@ -443,6 +443,27 @@ export const e8Content = {
   footerCaptionKeywords: ["you", "better way"] as const,
 };
 
+export const e9Content = {
+  headline: "Layer 3: Harness — execution.",
+  headlineKeywords: ["Harness"] as const,
+  satellites: [
+    { id: "user-prompt", label: "User Prompt", icon: "MessageSquare" as const },
+    { id: "conv-mem", label: "Conversation Memory", icon: "History" as const },
+    { id: "rag", label: "RAG Knowledge Base", icon: "BookOpen" as const },
+    { id: "tools", label: "Tools & APIs", icon: "Wrench" as const },
+    { id: "persist", label: "Persistent Memory", icon: "Archive" as const },
+    { id: "system", label: "System Instructions", icon: "Shield" as const },
+  ],
+  includes: [
+    "Context Isolation",
+    "Tool Loadout",
+    "Subagent Verification",
+    "Pruning",
+    "Summarization",
+    "Offloading",
+  ] as const,
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
