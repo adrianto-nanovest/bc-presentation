@@ -402,6 +402,47 @@ export const e5Content = {
   closingCaptionKeywords: ["That's where the next layers begin"] as const,
 };
 
+export const e8Content = {
+  headline: "Context works. But you're orchestrating it every session.",
+  headlineKeywords: ["you're orchestrating it"] as const,
+  pitfalls: [
+    {
+      id: "conflict",
+      icon: "GitMerge" as const,
+      title: "CONTEXT CONFLICT",
+      essence: "Sources contradict → cognitive gridlock",
+    },
+    {
+      id: "confusion",
+      icon: "Triangle" as const,
+      title: "CONTEXT CONFUSION",
+      essence: "Tools + noise + cognitive overload",
+    },
+    {
+      id: "poisoning",
+      icon: "Droplets" as const,
+      title: "CONTEXT POISONING",
+      essence: "Wrong info spreads silently",
+    },
+    {
+      id: "distraction",
+      icon: "TrendingDown" as const,
+      title: "CONTEXT DISTRACTION",
+      essence: "Token overload → the 'dumb zone'",
+    },
+  ],
+  satellites: [
+    { id: "user-prompt", label: "User Prompt", icon: "MessageSquare" as const },
+    { id: "conv-mem", label: "Conversation Memory", icon: "History" as const },
+    { id: "rag", label: "RAG Knowledge Base", icon: "BookOpen" as const },
+    { id: "tools", label: "Tools & APIs", icon: "Wrench" as const },
+    { id: "persist", label: "Persistent Memory", icon: "Archive" as const },
+    { id: "system", label: "System Instructions", icon: "Shield" as const },
+  ],
+  footerCaption: "Each session, you fight all of this. There's a better way.",
+  footerCaptionKeywords: ["you", "better way"] as const,
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
