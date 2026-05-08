@@ -5,7 +5,7 @@ const slideAttr = '[data-testid="slide"]';
 test("ArrowRight walks the deck from slide 0 to the last slide", async ({ page }) => {
   await page.goto("/");
   const count = await page.evaluate(() => window.__DECK_SLIDE_COUNT__);
-  expect(count).toBeGreaterThanOrEqual(20); // 5 foundation-core + 5 foundation-core-section-e + 9 reveal-and-closing + HexLadder
+  expect(count).toBeGreaterThanOrEqual(26); // 5 foundation-core + 11 foundation-core-section-e + 9 reveal-and-closing + HexLadder
 
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "0");
   for (let i = 1; i < count; i++) {
