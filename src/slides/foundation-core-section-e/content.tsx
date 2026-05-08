@@ -3,6 +3,18 @@
 
 import type { ReactNode } from "react";
 
+export const e1Content = {
+  headline: "Three layers. Each one contains the last.",
+  headlineKeywords: ["Each one contains the last"] as const,
+  layers: [
+    { layer: "prompt" as const, label: "PROMPT", essence: "the instructions", essenceKeywords: ["instructions"] as const },
+    { layer: "context" as const, label: "CONTEXT", essence: "the information", essenceKeywords: ["information"] as const },
+    { layer: "harness" as const, label: "HARNESS", essence: "the system", essenceKeywords: ["system"] as const },
+  ],
+  quote: "A decent model with a great harness beats a great model with a bad harness. — Anthropic",
+  quoteKeywords: ["A decent model with a great harness beats a great model with a bad harness"] as const,
+};
+
 export const e2Content = {
   headline: "Layer 1: Prompt — clarity.",
   headlineKeywords: ["Prompt"] as const,
