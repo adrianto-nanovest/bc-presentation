@@ -1,0 +1,1 @@
+- TODO: generate e11-bridge.jpg via gemini-image-gen per spec §4.11 (three concentric layered piles)

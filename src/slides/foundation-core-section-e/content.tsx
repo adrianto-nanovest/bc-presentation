@@ -566,6 +566,17 @@ export const e10Content = {
   ],
 };
 
+export const e11Content = {
+  beat1: {
+    text: "Three layers. The fundamentals are built.",
+    keywords: ["Three layers", "fundamentals"] as const,
+  },
+  beat2: {
+    text: "Next: the techniques that matter most.",
+    keywords: ["Next", "techniques that matter most"] as const,
+  },
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
