@@ -368,6 +368,40 @@ export const e7Content = {
   ],
 };
 
+export const e5Content = {
+  headline: "A great prompt still has limits.",
+  headlineKeywords: ["A great prompt", "limits"] as const,
+  bestPracticesHeader: "BEST PRACTICES",
+  bestPractices: [
+    "Be clear and concise",
+    "Iterate and test",
+    "Steer with detail",
+    "Evaluate the output",
+    "Set success metrics",
+  ],
+  commonMistakesHeader: "COMMON MISTAKES",
+  commonMistakes: [
+    "Vague instructions",
+    "Overcomplicated prompts",
+    "Lack of context",
+    "Ignoring AI limitations",
+    "Failing to iterate",
+  ],
+  wallHeader: "WHERE PROMPT ENDS",
+  wallSubLine: "Even a perfect prompt can't:",
+  wallSubLineKeywords: ["can't"] as const,
+  constraints: [
+    "Provide knowledge the model wasn't trained on",
+    "Pull current or proprietary data",
+    "Use tools, call APIs, or take actions",
+    "Persist memory across sessions",
+    "Verify its own output against reality",
+    "Run autonomously on schedule or trigger",
+  ],
+  closingCaption: "That's where the next layers begin.",
+  closingCaptionKeywords: ["That's where the next layers begin"] as const,
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
