@@ -299,6 +299,63 @@ export const e4Content = {
   },
 };
 
+export const e7Content = {
+  headline: "Four strategies. Each one solves a context problem.",
+  headlineKeywords: ["Each one solves a context problem"] as const,
+  footerCaption: "When context grows, these four keep it useful.",
+  footerCaptionKeywords: ["keep it useful"] as const,
+  rings: [
+    {
+      id: "write",
+      label: "WRITE",
+      subHeadline: "Store data for future use",
+      subList: ["Long-term memory", "Scratchpad", "Session state"],
+      copper: "copper-700" as const,
+      kinetic: "pause" as const,
+      popoverLines: [
+        "Save what you'll need later.",
+        "For your weekly report: this week's draft saves into long-term memory so next week's task can reference it.",
+      ],
+    },
+    {
+      id: "select",
+      label: "SELECT",
+      subHeadline: "Choose data needed for the task",
+      subList: ["Retrieve tools", "Retrieve scratchpad", "Retrieve memory", "Retrieve knowledge"],
+      copper: "copper-600" as const,
+      kinetic: "filter" as const,
+      popoverLines: [
+        "Pull only what's relevant now.",
+        "For 'this Friday's report' fetch the last 7 days of activity, not the last year.",
+      ],
+    },
+    {
+      id: "compress",
+      label: "COMPRESS",
+      subHeadline: "Summarize past events efficiently",
+      subList: ["Summarize", "Trim irrelevant tokens"],
+      copper: "copper-500" as const,
+      kinetic: "merge" as const,
+      popoverLines: [
+        "Summarize the past so it fits.",
+        "Replace 12 prior weekly reports with a single trend-summary that fits the context window.",
+      ],
+    },
+    {
+      id: "isolate",
+      label: "ISOLATE",
+      subHeadline: "Separate tasks to avoid interference",
+      subList: ["Partition state", "Sandbox", "Multi-agent"],
+      copper: "copper-400" as const,
+      kinetic: "split" as const,
+      popoverLines: [
+        "Keep tasks from polluting each other.",
+        "The drafting task and the verification task each get their own context — no cross-contamination.",
+      ],
+    },
+  ],
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
