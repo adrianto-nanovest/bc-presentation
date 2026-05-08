@@ -79,7 +79,7 @@ export function E4PromptMethodologies() {
         <TechniqueModal
           id={activeId}
           title={cardLookup[activeId]?.title ?? activeId}
-          layerAnnotation={activeContent.layerAnnotation}
+          layerAnnotation={"layerAnnotation" in activeContent ? (activeContent.layerAnnotation as string) : undefined}
           bullets={activeContent.bullets}
           open
           onClose={() => setActiveId(null)}
