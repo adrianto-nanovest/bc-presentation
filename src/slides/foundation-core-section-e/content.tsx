@@ -464,6 +464,108 @@ export const e9Content = {
   ] as const,
 };
 
+export const e10Content = {
+  headline: "What good harness teams do: eight practices.",
+  headlineKeywords: ["eight practices"] as const,
+  practices: [
+    {
+      id: "orchestration",
+      icon: "Network" as const,
+      name: "Orchestration",
+      essence: "pattern + agents + tools",
+      bullets: [
+        "Main Agent dispatches",
+        "Delegate to sub-agents OR call tools direct",
+        "Pattern: centralized",
+      ],
+    },
+    {
+      id: "plugins",
+      icon: "Package" as const,
+      name: "Plugins",
+      essence: "packaged: subagents, skills, hooks, MCP",
+      bullets: [
+        "Subagents — specialized workers",
+        "Skills — domain modules",
+        "Hooks — lifecycle guardrails",
+        "MCP — external integrations",
+        "One bundle, install everywhere",
+      ],
+    },
+    {
+      id: "memory",
+      icon: "Brain" as const,
+      name: "Memory",
+      essence: "self-learning — gotchas stay",
+      bullets: [
+        "Captures gotchas during work",
+        "Records what broke, what worked",
+        "Stores decisions + rationale",
+        "Next session inherits",
+      ],
+    },
+    {
+      id: "observability",
+      icon: "Activity" as const,
+      name: "Observability",
+      essence: "every decision auditable",
+      bullets: [
+        "Tool calls + results",
+        "Context state per step",
+        "Permission decisions",
+        "Token usage trends",
+      ],
+    },
+    {
+      id: "triggers",
+      icon: "Zap" as const,
+      name: "Triggers",
+      essence: "manual, schedule, or event",
+      bullets: [
+        "Manual — you ask",
+        "Schedule — cron, daily, recurring",
+        "Event — webhook, file change, message",
+      ],
+    },
+    {
+      id: "spec-driven",
+      icon: "FileText" as const,
+      name: "Spec-driven",
+      essence: "spec = source of truth",
+      bullets: [
+        "Spec is the contract",
+        "Progress measured against spec",
+        "No work outside the spec",
+        "Verification = spec compliance",
+      ],
+    },
+    {
+      id: "hitl",
+      icon: "Users" as const,
+      name: "HITL",
+      essence: "approval at key steps",
+      bullets: [
+        "Approval gates on critical actions",
+        "Human pauses on ambiguity",
+        "Human signs off on dangerous commands",
+        "Human checkpoints on long runs",
+      ],
+    },
+    {
+      id: "ralph",
+      icon: "Repeat" as const,
+      name: "Ralph Wiggum",
+      essence: "autonomous loop until done",
+      bullets: [
+        "Loops until spec is satisfied",
+        "Failure feeds back as input",
+        "Survives across context limits",
+        '"I\'m helping!" persistence',
+      ],
+    },
+  ],
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
