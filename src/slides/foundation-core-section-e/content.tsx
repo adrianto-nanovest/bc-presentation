@@ -132,6 +132,73 @@ export const e3Content = {
   ],
 };
 
+export const e6Content = {
+  headline: "Layer 2: Context — relevance.",
+  headlineKeywords: ["Context"] as const,
+  subHeadline: "6 components — the full context the model can see.",
+  subHeadlineKeywords: ["6 components"] as const,
+  definition: "Context = filling the model's window with just the right information — for each step.",
+  definitionKeywords: ["right information"] as const,
+  analogy: "Like hiring an expert with amnesia — capable, but useless without context.",
+  analogyKeywords: ["amnesia"] as const,
+  satellites: [
+    {
+      id: "user-prompt",
+      label: "User Prompt",
+      icon: "MessageSquare" as const,
+      popoverLines: [
+        "The instructions you just spent four slides on.",
+        "Includes the output format spec — that lives inside the prompt itself.",
+        "One of six components — not the only one.",
+      ],
+    },
+    {
+      id: "conv-mem",
+      label: "Conversation Memory",
+      icon: "History" as const,
+      popoverLines: [
+        "Short-term — what was said earlier in this session.",
+        "Episodic memory. Resets when session ends.",
+      ],
+    },
+    {
+      id: "rag",
+      label: "RAG Knowledge Base",
+      icon: "BookOpen" as const,
+      popoverLines: [
+        "Retrieved documents pulled in for this specific question.",
+        "Retrieval-Augmented Generation.",
+      ],
+    },
+    {
+      id: "tools",
+      label: "Tools & APIs",
+      icon: "Wrench" as const,
+      popoverLines: [
+        "Actions the model can take in the world — call a function, query a database, fetch live data.",
+      ],
+    },
+    {
+      id: "persist",
+      label: "Persistent Memory",
+      icon: "Archive" as const,
+      popoverLines: [
+        "Long-term — what the model remembers across sessions.",
+        "Semantic + Episodic memory. Last week's conversation informs this week's.",
+      ],
+    },
+    {
+      id: "system",
+      label: "System Instructions",
+      icon: "Shield" as const,
+      popoverLines: [
+        "The persistent rules — who the model is, what it can or can't do, what tone to use.",
+        "Procedural memory.",
+      ],
+    },
+  ],
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
