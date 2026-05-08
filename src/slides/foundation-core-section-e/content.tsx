@@ -199,6 +199,106 @@ export const e6Content = {
   ],
 };
 
+export const e4Content = {
+  headline: "Eight techniques. Three tiers.",
+  headlineKeywords: ["Three tiers"] as const,
+  footerCaption: "Higher tiers borrow from later layers. ART · RAG · ReAct already point to context and harness.",
+  footerCaptionKeywords: ["Higher tiers", "context", "harness"] as const,
+  tierAnnotation: "↘ context · harness",
+  tiers: [
+    {
+      id: "basic",
+      label: "BASIC",
+      copper: "copper-700" as const,
+      cards: [
+        { id: "zero-shot", title: "Zero-Shot", essence: "Ask once, no examples" },
+        { id: "few-shot", title: "Few-Shot", essence: "Show 2–3 examples" },
+        { id: "cot", title: "Chain-of-Thought", essence: "Think step by step" },
+      ],
+    },
+    {
+      id: "intermediate",
+      label: "INTERMEDIATE",
+      copper: "copper-500" as const,
+      cards: [
+        { id: "self-cons", title: "Self-Consistency", essence: "Multiple paths, consensus" },
+        { id: "tot", title: "Tree of Thoughts", essence: "Branch decision paths" },
+      ],
+    },
+    {
+      id: "advanced",
+      label: "ADVANCED",
+      copper: "copper-300" as const,
+      cards: [
+        { id: "rag", title: "RAG", essence: "Retrieve + ground in docs" },
+        { id: "art", title: "ART", essence: "Reason + use tools" },
+        { id: "react", title: "ReAct", essence: "Think → Act → Observe → repeat" },
+      ],
+    },
+  ],
+  modalContent: {
+    "zero-shot": {
+      bullets: [
+        { label: "Best for", body: "well-defined tasks · quick single-pass requests" },
+        { label: "Example", body: '"Analyze the financial risks in our Q3 report and provide recommendations."' },
+        { label: "Trade-off", body: "simplest path; relies entirely on training" },
+      ],
+    },
+    "few-shot": {
+      bullets: [
+        { label: "Best for", body: "classification · formatting · style mimicking" },
+        { label: "Example", body: "Classify these emails by department: Example 1: 'I need help with my account balance' → Finance · Example 2: 'The app keeps crashing' → Tech Support · Now classify: 'I found an error in my invoice'" },
+        { label: "Trade-off", body: "examples consume tokens; pattern transfers reliably" },
+      ],
+    },
+    cot: {
+      bullets: [
+        { label: "Best for", body: "math · logic · multi-step reasoning" },
+        { label: "Example", body: "Calculate customer acquisition cost. Think step-by-step: 1. List marketing expenses · 2. Count new customers · 3. Divide. Show your reasoning." },
+        { label: "Trade-off", body: "longer outputs; more accurate on hard problems" },
+      ],
+    },
+    "self-cons": {
+      bullets: [
+        { label: "Best for", body: "high-stakes decisions · accuracy-critical work" },
+        { label: "Example", body: "Generate 3 different approaches to reduce costs by 15%. For each: list steps, estimate time, calculate savings. Identify elements common to all three." },
+        { label: "Trade-off", body: "3× compute cost; substantially more reliable" },
+      ],
+    },
+    tot: {
+      bullets: [
+        { label: "Best for", body: "strategic decisions · multi-option evaluation" },
+        { label: "Example", body: "Path A: Singapore vs Thailand. Path B: Germany vs Netherlands. For each: market size, regulations, competition. Recommend best." },
+        { label: "Trade-off", body: "heavier reasoning; explores trade-offs systematically" },
+      ],
+    },
+    rag: {
+      layerAnnotation: "Layer 2",
+      bullets: [
+        { label: "Best for", body: "questions about your data · recent events · specific knowledge" },
+        { label: "Example", body: "Using our knowledge base: search for 'remote work policy'. Create updated FAQ addressing top 5 questions." },
+        { label: "Trade-off", body: "needs retrieval setup; grounds answers in real sources" },
+      ],
+    },
+    art: {
+      layerAnnotation: "Layer 3",
+      bullets: [
+        { label: "Best for", body: "multi-step workflows requiring different capabilities" },
+        { label: "Example", body: "For quarterly financials: calculator for growth %, search web for benchmarks, access CRM, generate charts. Select tools automatically." },
+        { label: "Trade-off", body: "needs tool wiring; massively expands what's possible" },
+      ],
+    },
+    react: {
+      layerAnnotation: "Layer 3",
+      bullets: [
+        { label: "Best for", body: "investigation · debugging · adaptive workflows" },
+        { label: "Example", body: "Debug churn: Thought (check support tickets) → Action (search Oct DB) → Observation (45% billing complaints) → Thought (billing issue?) → Action (check logs) → continue." },
+        { label: "Trade-off", body: "agent loop; the heart of how modern AI agents work" },
+      ],
+    },
+  },
+};
+
 // Helper used by E.3 slide to build SpineElement[] with React popover nodes.
 export function spinePopoverContent(lines: readonly string[]): ReactNode {
   return (
