@@ -2,6 +2,7 @@ import type { SlideDef } from "./types";
 import { HexLadder } from "@/primitives/HexLadder";
 import { revealAndClosingSlides } from "@/slides/reveal-and-closing";
 import { foundationCoreSlides } from "@/slides/foundation-core";
+import { foundationCoreSectionESlides } from "@/slides/foundation-core-section-e";
 
 // HexLadder is a developer-only slide retained for projection-test
 // (see scripts/projection-test.mjs). Always last so projection-test
@@ -15,11 +16,10 @@ export const hexLadderDevSlide: SlideDef = {
   render: () => <HexLadder />,
 };
 
-// Section D (foundation-core) precedes the Reveal+Closing arc in the final
-// deck order per the parent meta-spec; for now we register both so dev/
-// projection-test can navigate the full sequence.
+// Final deck order per parent meta-spec: D → E → ... → I/J/K.
 export const deckSlides: SlideDef[] = [
   ...foundationCoreSlides,
+  ...foundationCoreSectionESlides,
   ...revealAndClosingSlides,
   hexLadderDevSlide,
 ];
