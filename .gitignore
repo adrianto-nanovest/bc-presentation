@@ -40,3 +40,5 @@ test-results/
 .vite/
 exports/
 *.tsbuildinfo
+
+.mcp.json

@@ -239,7 +239,7 @@ Foundational. Slide-level content is a downstream spec.
 | **A** | **Hook 1: BCE Vol-1 Winner** | Celebrate the winner; raise the ceiling: *"They achieved A — imagine combining what they did with the foundation we'll build today"* | Content TBD; BCE PIC delivers winner materials. **Slot designed**: 4–6 slides, before/after framing, optional interactive comparator, photography-anchored. Never "they were naive, here's how to do it right." |
 | B | AI evolution + landscape | The "B" Hook 1 gestures toward — what's possible right now | Use Indonesia 92%-adoption stat as relevance anchor; "79% say adopted, 11% in production, 40% risk cancellation by 2027" as inverse hook |
 | C | Mindset | AI as bridge / multiplier / portable adaptability | Throughline: *"AI is the bridge from where you are to wherever you need to be"* — never named as transition |
-| D | Process improvement | BPA / RPA / IPA / agentic | Use *"73% of automation projects fail because broken processes get automated unchanged"* as fix-the-spec hook |
+| D | Process improvement | BPM / RPA / IPA / agentic | Use *"73% of automation projects fail because broken processes get automated unchanged"* as fix-the-spec hook |
 | E | Engineering fundamentals | Prompt / context / harness (Russian doll) | Step-reveal animation builds the layers piece by piece |
 | F | Techniques | MCP / RAG / skills / agent orchestration | Plain-language framing; each technique gets a non-engineer-graspable example |
 | G | Tools ecosystem | Claude (deep) / Google (deep) / OpenAI (brief) | Capability matrix slide; decision-tree slide; NotebookLM emphasized |

@@ -1,7 +1,8 @@
 # Next Sub-Spec Brainstorm Handoffs
 
 **Created:** 2026-05-07
-**Purpose:** Paste-into-fresh-session prompts for the remaining 3 slide-content sub-specs.
+**Updated:** 2026-05-08 — Foundation Core split into per-section handoffs (D done; E + F as separate fresh-session prompts).
+**Purpose:** Paste-into-fresh-session prompts for the remaining slide-content brainstorms (Foundation Core E, Foundation Core F, Opening, Application).
 
 ## Section mapping (locked by parent meta-spec §9 + 2026-05-06 brainstorm)
 
@@ -10,7 +11,9 @@ The slide-content brainstorm was decomposed into 4 sub-specs by narrative arc:
 | Sub-spec | Sections | Status |
 |---|---|---|
 | **Reveal + Closing** | I (Showcase + Hook 2) · J (Adoption) · K (Lab handoff) | ✅ Done — `docs/specs/2026-05-07-slides-reveal-and-closing.md` |
-| **Foundation Core** | D (Process improvement) · E (Engineering fundamentals) · F (Techniques) | ⏳ NEXT (priority) |
+| **Foundation Core — D** | D (Process improvement) | ✅ Done — `docs/specs/2026-05-08-slides-foundation-core.md` (§4.1–§4.5) |
+| **Foundation Core — E** | E (Engineering fundamentals) | ⏳ NEXT (fresh session) |
+| **Foundation Core — F** | F (Techniques) | ⏳ Pending (fresh session after E) |
 | **Opening** | Title · B (AI evolution + landscape) · C (Mindset) | ⏳ Pending |
 | **Application** | G (Tools ecosystem) · H (Pitfalls + best practices) | ⏳ Pending |
 
@@ -18,34 +21,72 @@ The slide-content brainstorm was decomposed into 4 sub-specs by narrative arc:
 
 ---
 
-## 1. Foundation Core — handoff prompt (priority — start here)
+## 1. Foundation Core — split into per-section handoffs
+
+The Foundation Core sub-spec was originally a single brainstorm. It has been split into per-section sessions because of design depth required per slide. Section D was completed in a 2026-05-08 session; Sections E and F are scoped as separate fresh-session brainstorms.
+
+### 1a. Section D — DONE
+
+Section D is fully specified at:
+
+- **Spec:** `docs/specs/2026-05-08-slides-foundation-core.md` §4.1–§4.5 (5 slides, 22 logical advances)
+- **Slides:** D.1 (THE TRAP, consolidated 73% + amplification + fix-the-spec) · D.2 (THE CONVERGENCE, 5-card synthesis diagram) · D.3 (ONE PROCESS, FOUR LEVELS, cinematic unfolding) · D.4 (DECISION PATTERN, horizontal ladder-rise) · D.5 (BRIDGE TO E, photographic close)
+- **Locked terminology:** BPM / RPA / IPA / Agentic Automation (per Adri's correction — *no* "BPA" or "APA" in the audience-facing taxonomy). AI shows up as a feeder discipline (capability set), not as an automation level.
+- **New primitives introduced:** `<CountUp>`, `<AmplificationBar>`, `<ConvergenceCard>`, `<LevelCard>` (with focal/filed/converged morph via Framer `layoutId`), `<LadderRise>` family, plus 4 motion-design vignette glyphs (`<BpmCompressionGlyph>`, `<RpaAccelerationGlyph>`, `<IpaSynthesisGlyph>`, `<AgenticInversionGlyph>`).
+
+The Section D spec is the **tonal precedent** for E and F brainstorms — read it for register, depth, and motion grammar.
+
+---
+
+### 1b. Section E — handoff prompt (NEXT — start here)
 
 > Paste the block below into a fresh Claude Code session in this same project directory.
 
 ```
-You are joining a multi-spec slide-content brainstorm for the Berau Coal Energy AI Workshop deck (Vol 2, Session 2). The deck has been decomposed into 4 sub-specs by narrative arc; this is sub-spec #2 of 4.
+You are joining a multi-spec slide-content brainstorm for the Berau Coal Energy AI Workshop deck (Vol 2, Session 2). The deck's Foundation Core sub-spec was originally one session; it has been split into per-section sessions because of design depth required per slide. Section D is DONE. This session is for Section E only.
 
 **Project location:** /Users/macbook/Projects/_web_presentation/berau-presentation
 
 **Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md — locks the substrate (skill stack, design system, interaction model, section structure A through K).
 
-**Prior sub-spec (already done — read for tonal precedent + cross-spec dependencies):** docs/specs/2026-05-07-slides-reveal-and-closing.md — Sections I, J, K.
+**Prior sub-specs (already done — read for cumulative tonal precedent + cross-spec dependencies):**
+- docs/specs/2026-05-07-slides-reveal-and-closing.md — Sections I, J, K. Houses the cross-spec dependency on harness vocabulary (I.3 portfolio simulations).
+- docs/specs/2026-05-08-slides-foundation-core.md — Sections D fully specified (§4.1–§4.5); Sections E and F have TBD placeholders. **Your job is to fill in Section E in this same file**, mirroring the depth and structure of Section D.
 
-# Scope of this sub-spec — Foundation Core
+# Scope of this session — Section E only
 
-This is the deck's conceptual heart. Sections D + E + F.
+**Section E — Engineering fundamentals** (prompt / context / harness — the Russian doll).
 
-- **Section D — Process improvement** (BPA / RPA / IPA / agentic). Use the *"73% of automation projects fail because broken processes get automated unchanged"* fix-the-spec hook from meta-spec §9.
-- **Section E — Engineering fundamentals** (prompt / context / harness Russian doll). Step-reveal animation builds the layers piece by piece. **CRITICAL CROSS-SPEC DEPENDENCY:** the "harness" vocabulary is heavily referenced in I.3's portfolio simulations. Section E must define harness clearly enough that I.3's callbacks land.
-- **Section F — Techniques** (MCP / RAG / skills / agent orchestration). Plain-language framing — each technique gets a non-engineer-graspable example. **CRITICAL CROSS-SPEC DEPENDENCY:** MCPs and agent orchestration are also referenced in I.3. Section F must define these clearly enough that I.3's portfolio reads as "concepts you just learned, instantiated."
+The audience needs to leave Section E understanding:
+1. **Prompt** = the instructions you give the model (clarity).
+2. **Context** = what information the model can see when answering (relevance).
+3. **Harness** = the entire system around the model that lets it act in the world — tools, memory, hooks, orchestration, observability, error recovery (execution).
+4. The three layers stack like a Russian doll. Each solves a different problem. Each layer's value compounds the previous. *"A decent model with a great harness beats a great model with a bad harness"* — Anthropic.
+
+# CRITICAL cross-spec dependency
+
+I.3's portfolio simulations (already shipped in the Reveal+Closing spec) heavily reference the **"harness"** vocabulary:
+
+- I.3 left-rail categorization uses **HARNESSES** as a top-level category (containing Workflows + Plugins).
+- I.3 default-state diagram shows: `MAIN AGENT (orchestrator) | chains, tools | sub-agents, [tools]` — and labels this *"the harness pattern."*
+- I.3 simulations show concrete harnesses: orchestrator → sub-agents → tools, hub-and-spoke with 50+ MCP tools, etc.
+
+Section E MUST define "harness" clearly enough that when the audience reaches I.3, those diagrams read as *"this is the harness you just learned about, instantiated"* rather than *"novel jargon."*
 
 # Inputs
 
-**Research files (consume without re-litigating):**
-- docs/researches/topic-process-improvement.md (Section D)
-- docs/researches/topic-ai-engineering-fundamentals.md (Section E)
-- docs/researches/topic-ai-techniques.md (Section F)
-- docs/researches/portfolio-*.md and workflow-*.md — for harness vocabulary alignment with I.3
+**Research file (consume without re-litigating):**
+- docs/researches/topic-ai-engineering-fundamentals.md — full research on the three-layer trichotomy with the 60% / 85% / 95% impact ladder, ReAct loop, harness components.
+
+**Reference PDFs (additional inputs — Adri has presented prompt + context engineering before; read for tonal precedent and existing visual approaches Adri has used internally):**
+- docs/references/nanovest-pilot-workshop.pdf — **slides 20–31** (prompt + context engineering deep dive). Use the Read tool with the `pages` parameter to extract these specific slides.
+- docs/references/nanovest-ai-sdlc-foundation.pdf — **slide 9** (prompt - context - harness engineering evolution). Use the Read tool with `pages: "9"`.
+
+These are internal Nanovest decks Adri has delivered to engineers. The BCE workshop has a different audience (mining industry, not engineers), so the *exact content* should not transfer wholesale — but the *conceptual approach* and any successful explanatory frames should inform the E brainstorm. Treat as "how Adri has previously explained these concepts," not "what to copy."
+
+**Cross-reference for harness vocabulary alignment:**
+- docs/specs/2026-05-07-slides-reveal-and-closing.md §4.3 (I.3 portfolio simulations) — confirm Section E's harness definition resolves cleanly to the simulations described there.
+- docs/researches/portfolio-*.md and docs/researches/workflow-*.md — for any concrete harness examples worth referencing in E.
 
 **Memory files (deck-wide conventions — apply automatically):**
 - feedback_keyword_highlighting.md — copper-italic on 1–3 keywords per chunk
@@ -57,42 +98,145 @@ This is the deck's conceptual heart. Sections D + E + F.
 # Process
 
 1. Use the superpowers:brainstorming skill.
-2. Do NOT re-litigate decisions already locked in the parent meta-spec or the prior sub-spec.
-3. For each section (D → E → F, in that order):
+2. Do NOT re-litigate decisions already locked in the parent meta-spec, the Reveal+Closing spec, or the Foundation Core spec's Section D.
+3. Brainstorm Section E:
    a. Decide narrative architecture (what's the section's emotional shape?)
    b. Decide slide count + per-slide breakdown
    c. Per-slide deep dive: layout / components / content / motion / hover / canonical pose
-   d. Reference the harness vocabulary from I.3 where relevant — keep terminology consistent
-4. Write the spec to docs/specs/YYYY-MM-DD-slides-foundation-core.md following the structure of the prior sub-spec (sections 0–11).
+   d. Lock harness vocabulary so I.3 callbacks resolve cleanly
+   e. Match Section D's design depth (motion-design vignettes where appropriate; editorial-serious tone; copper-only palette; 0px corner)
+4. Update docs/specs/2026-05-08-slides-foundation-core.md by replacing the §4.6 TBD placeholder for Section E with full per-slide specs. Update §1.1 section structure table, §3.2 new primitives table, §6 animation budget, and §10 acceptance criteria to reflect E.
 5. Self-review for placeholders / contradictions / scope drift.
-6. Hand back to me for review before invoking writing-plans.
+6. Hand back to me for review before moving on to Section F.
 
 # Constraints
 
-- Stay within the substrate locked by the parent meta-spec (shadcn + Tailwind + Framer Motion; copper-only palette; 0px corner; static photographic backgrounds for hero slides; etc.)
-- Honor cross-spec dependencies (Section I.3's harness/MCP/orchestration callbacks must resolve to clear definitions in E + F)
-- Free-stack only
-- Mining-audience plain-language framing
-- Editorial-serious tone (no playful, no consumer-luxury, no tech-bro)
-- Topic D in particular needs to land for *broken-process* awareness — many mining-engineer attendees will resonate with "we automated a broken process and it failed harder"
+- Stay within the substrate locked by the parent meta-spec (shadcn + Tailwind + Framer Motion; copper-only palette; 0px corner; static photographic backgrounds for hero slides).
+- Honor cross-spec dependency: I.3's harness vocabulary must resolve to E's definitions.
+- Free-stack only.
+- Mining-audience plain-language framing — even though the reference PDFs were for an engineering audience, the BCE deck stays generic-but-accessible per the deck-wide "generic body, concentrated hooks" rule.
+- Editorial-serious tone (no playful, no consumer-luxury, no tech-bro).
+- The Russian-doll metaphor needs deliberate step-reveal pacing — each layer earns its reveal.
+- Match Section D's pacing: slow, deliberate, design-each-slide-right. Multi-sitting if needed.
 
 # Estimated scope
 
-- Section D: ~5–8 slides (process improvement is conceptually rich and has a strong opening hook)
-- Section E: ~5–8 slides (Russian doll requires deliberate step-reveal pacing)
-- Section F: ~6–10 slides (4+ techniques, each with an example)
-- Total: ~16–26 slides, ~30–60 logical advances
-
-This is the LARGEST sub-spec by content volume. Plan for a long brainstorm session — possibly multiple sittings.
+- Section E: ~5–8 slides (Russian doll requires deliberate step-reveal pacing).
 
 # First step
 
-Begin by reading:
-1. The parent meta-spec
-2. The prior sub-spec (Reveal + Closing) for tonal precedent + cross-spec callbacks
-3. The 3 topic research files (D, E, F)
+Begin by reading, in this order:
+1. The parent meta-spec (docs/specs/2026-05-06-process-and-design-meta.md) — substrate.
+2. The Reveal+Closing spec (docs/specs/2026-05-07-slides-reveal-and-closing.md) — tonal precedent + I.3 cross-spec dependency.
+3. The Foundation Core spec as it stands today (docs/specs/2026-05-08-slides-foundation-core.md) — Section D is the immediate tonal precedent + the section E will sit alongside.
+4. The topic research file (docs/researches/topic-ai-engineering-fundamentals.md) — content scope.
+5. The reference PDFs at the specified slide ranges (Nanovest pilot workshop slides 20–31; AI-SDLC foundation slide 9) — Adri's prior framings.
 
-Then present your understanding of the scope and ask the first clarifying question (typically: which of D/E/F to brainstorm first, given that E + F are downstream of D conceptually but Cross-spec dependencies pull E forward).
+Then present your understanding of the scope and ask the first clarifying question (typically: narrative shape — Russian-doll-led versus impact-ladder-led versus example-led; or whether to start by sketching the harness diagram visual that I.3 already references).
+```
+
+---
+
+### 1c. Section F — handoff prompt (after E)
+
+> Paste this block when ready to brainstorm Section F (after E is done).
+
+```
+You are joining a multi-spec slide-content brainstorm for the Berau Coal Energy AI Workshop deck (Vol 2, Session 2). The deck's Foundation Core sub-spec was originally one session; it has been split into per-section sessions because of design depth required per slide. Sections D and E are DONE. This session is for Section F only.
+
+**Project location:** /Users/macbook/Projects/_web_presentation/berau-presentation
+
+**Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md — locks the substrate.
+
+**Prior sub-specs (already done — read for cumulative tonal precedent + cross-spec dependencies):**
+- docs/specs/2026-05-07-slides-reveal-and-closing.md — Sections I, J, K. Houses the cross-spec dependency on MCP and agent orchestration vocabulary (I.3 portfolio simulations).
+- docs/specs/2026-05-08-slides-foundation-core.md — Sections D and E fully specified. Section F has a TBD placeholder. **Your job is to fill in Section F in this same file**, mirroring the depth and structure of Sections D and E.
+
+# Scope of this session — Section F only
+
+**Section F — Techniques** (MCP / RAG / Skills / Agent orchestration).
+
+Each technique gets a plain-language framing and a non-engineer-graspable example. The audience needs to leave Section F understanding:
+1. **MCP** — universal adapter / "USB for AI." Lets AI safely access existing business systems (calendar, email, databases) via a standard protocol.
+2. **RAG** — retrieval-augmented generation. AI grounds answers in the actual relevant documents you provide, not on guesswork. Stops hallucinations.
+3. **Skills** — reusable expertise packages. Write expertise once (a SKILL.md); use it across chat, code, APIs. Update once → everyone gets the new standard.
+4. **Agent orchestration** — specialists > generalists. Planner agent + specialist sub-agents (cost / safety / scheduling) + reviewer agent → faster, more reliable, less drift than one agent doing everything. Includes the supervisor-worker pattern, parallel sub-agents, ReAct loops.
+
+Then a "how they fit together" closer that ties the four techniques into the layered architecture that maps onto Section E's harness.
+
+# CRITICAL cross-spec dependency
+
+I.3's portfolio simulations (already shipped in the Reveal+Closing spec) reference:
+
+- **MCPs** as one of the categories: gemini-image-gen MCP, Sonarqube MCP, Bitbucket MCP shown as light panels in I.3.
+- **Agent orchestration** patterns: nanovest-product portfolio simulation shows orchestrator → brainstorm sub-agent → research-agent → plan-reviewer → draft-agent → draft-reviewer → optional parallel branch → enrich → validate → publish. NotebookLM portfolio simulation shows main NotebookLM agent at center routing to 6 sub-agents on the perimeter, each firing MCP tools.
+- **Skills** (Claude Code skills) are referenced in I.1 stage 4 (`Plugins + Skills`).
+
+Section F MUST define MCP and agent orchestration clearly enough that when the audience reaches I.3, those simulations read as *"concepts you just learned, instantiated"* rather than *"novel technical jargon."*
+
+# Inputs
+
+**Research file (consume without re-litigating):**
+- docs/researches/topic-ai-techniques.md — full research on MCP / RAG / Skills / Agent orchestration with 2026 ecosystem state, mining-relevant examples, layered architecture diagram.
+
+**Cross-reference for vocabulary alignment with I.3:**
+- docs/specs/2026-05-07-slides-reveal-and-closing.md §4.3 (I.3 portfolio simulations) — confirm Section F's definitions resolve cleanly to the simulations described there.
+- docs/researches/portfolio-nanovest-product-plugin.md — orchestrator + sub-agent pattern Adri built (concrete agent orchestration example).
+- docs/researches/portfolio-notebooklm-plugin.md — hub-and-spoke pattern (concrete agent orchestration + MCP example).
+- docs/researches/portfolio-gemini-image-gen-mcp.md — concrete MCP example.
+
+**Memory files (deck-wide conventions — apply automatically):**
+- feedback_keyword_highlighting.md — copper-italic on 1–3 keywords per chunk
+- feedback_slide_visual_conventions.md — background tiering, FIG label, gemini-image-gen MCP for hero imagery
+- feedback_slide_interaction_conventions.md — hover micro-interactions
+- feedback_audience_framing.md — no commit counts, no "solo" repeats, plain-language
+- feedback_no_paid_components.md — free stack only
+
+# Process
+
+1. Use the superpowers:brainstorming skill.
+2. Do NOT re-litigate decisions already locked in the parent meta-spec, the Reveal+Closing spec, or the Foundation Core spec's Sections D + E.
+3. Brainstorm Section F:
+   a. Decide narrative architecture (parallel-structure-per-technique versus storytelling-led versus problem-led arc?).
+   b. Decide slide count + per-slide breakdown (4 techniques × 1 slide each? Or some techniques get more depth than others — MCP and agent orchestration carry double duty for I.3 callbacks, so they may warrant richer treatment than RAG and Skills).
+   c. Per-slide deep dive: layout / components / content / motion / hover / canonical pose.
+   d. Lock MCP and agent orchestration vocabulary so I.3 callbacks resolve cleanly.
+   e. Decide whether F gets a "how it all fits together" closer slide that ties the four techniques into Section E's harness.
+   f. Match Sections D + E's design depth (motion-design vignettes where appropriate; editorial-serious tone; copper-only palette; 0px corner).
+4. Update docs/specs/2026-05-08-slides-foundation-core.md by replacing the §4.6 TBD placeholder for Section F with full per-slide specs. Update §1.1 section structure table, §3.2 new primitives table, §6 animation budget, and §10 acceptance criteria to reflect F.
+5. Self-review for placeholders / contradictions / scope drift across all of D + E + F together.
+6. Hand back to me for review.
+
+# Constraints
+
+- Stay within the substrate locked by the parent meta-spec.
+- Honor cross-spec dependencies: I.3's MCP, agent orchestration, and skills callbacks must resolve to F's definitions.
+- Free-stack only.
+- Mining-audience plain-language framing.
+- Editorial-serious tone.
+- Each technique's plain-language analogy MUST land for non-engineer attendees ("USB for AI" for MCP, "fact-checker's toolkit" for RAG, etc.).
+- Match Sections D + E's pacing: slow, deliberate, design-each-slide-right.
+
+# Estimated scope
+
+- Section F: ~6–10 slides (4+ techniques each with example, possibly a fit-together closer).
+
+# After this session
+
+The Foundation Core sub-spec is COMPLETE. Next sub-specs:
+- **Application** (Sections G + H) — see §3 of docs/brainstorms/2026-05-07-next-sub-specs-handoffs.md
+- **Opening** (Title + Sections B + C) — see §2 of the same file
+
+# First step
+
+Begin by reading, in this order:
+1. The parent meta-spec — substrate.
+2. The Reveal+Closing spec — tonal precedent + I.3 cross-spec dependency on MCP / orchestration / skills.
+3. The Foundation Core spec as it stands today — Sections D and E are immediate tonal precedent.
+4. The topic research file (docs/researches/topic-ai-techniques.md) — content scope.
+5. Skim the three portfolio research files (nanovest-product-plugin, notebooklm-plugin, gemini-image-gen-mcp) — concrete examples to anchor the F slides if useful.
+
+Then present your understanding of the scope and ask the first clarifying question (typically: parallel structure or varied — i.e., does each technique get the same per-slide template, or do MCP and agent orchestration earn richer treatment than RAG and Skills given the I.3 cross-spec load).
 ```
 
 ---
@@ -203,16 +347,19 @@ All 4 sub-specs are complete. Next step: invoke superpowers:writing-plans for ea
 
 ## Order recommendation (for reference)
 
-The user is starting with Foundation Core. After Foundation Core, the recommended remaining order is:
+Foundation Core Section D is complete. Recommended remaining order:
 
-1. **Foundation Core** (current priority) — biggest sub-spec; conceptual heart; defines harness vocabulary that I.3 already references.
-2. **Application** — second; depends on Foundation Core's definitions; sets up Hook 2.
-3. **Opening** — last; Title-slide tone is informed by everything else; opener calibrates against the now-defined whole.
+1. **Foundation Core — Section E** (next; fresh session) — engineering fundamentals (Russian doll). Locks the harness vocabulary that I.3 already references; uses the Nanovest pilot-workshop and AI-SDLC-foundation reference PDFs for prompt + context engineering precedent.
+2. **Foundation Core — Section F** (after E; fresh session) — techniques (MCP / RAG / Skills / Agent orchestration). Depends on E's harness definition; locks the MCP and orchestration vocabulary I.3 references.
+3. **Application** (sub-spec #3 of 4) — Sections G + H. Depends on Foundation Core's full definitions; sets up Hook 2.
+4. **Opening** (sub-spec #4 of 4) — Title + Sections B + C. Last; Title-slide tone is informed by everything else; opener calibrates against the now-defined whole.
 
-This order optimizes for *fewer revisits* — each spec consumes the prior sub-specs' outputs without re-litigating.
+This order optimizes for *fewer revisits* — each session consumes the prior sessions' outputs without re-litigating.
 
-Alternative valid order: Opening → Foundation Core → Application (chronological / matching delivery flow). Trade-off: Opening's tone calibration is harder without Foundation Core defined yet.
+Alternative valid orders:
+- E → F → Opening → Application (cosmetic preference; Application benefits more from Hook 2 calibration than Opening does)
+- Opening → F → Application (chronological / matching delivery flow); only viable once E is done since F depends on E
 
 ## Done state
 
-All 4 sub-specs locked → all 4 implementation plans written → execute. Then projection-test, rehearse, deliver.
+All sections locked across all 4 sub-specs → all implementation plans written → execute. Then projection-test, rehearse, deliver.
