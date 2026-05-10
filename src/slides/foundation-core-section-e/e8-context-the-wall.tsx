@@ -1,138 +1,197 @@
+// E.8 — CONTEXT · PITFALLS
+//
+// Ported from `claude-design-project/jsx/slides-b.jsx:460-636`.
+//
+// 2 steps:
+//   0 — 4 pitfall cards visible (left col) + headline; right canvas is empty
+//        until a card is hovered.
+//   1 — italic footer caption reveals at the bottom of the left column.
+//
+// Hover state: hovering pitfall card N sets `activeKind = N.id`. The
+// `<PitfallCanvas>` on the right reads that state and renders the matching
+// SMIL anim + caption. When `activeKind` is null, the canvas renders nothing
+// (per T9 — `defaultIllustration` was removed).
+//
+// Layout uses absolute coordinates against the 1280×720 stage. Reveal /
+// CopperRule are the shared T10 reveal primitives — no Framer Motion.
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { GitMerge, Triangle, Droplets, TrendingDown, type LucideIcon } from "lucide-react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
-import { NodeNetwork } from "./components/NodeNetwork";
+import { Reveal, CopperRule } from "./components/Reveal";
+import { LucideIcon } from "./components/LucideIcon";
 import { PitfallCanvas } from "./components/PitfallCanvas";
 import { type PitfallKind } from "./components/PitfallAnims";
 import { e8Content as C } from "./content";
 
-const PITFALL_ICONS: Record<string, LucideIcon> = {
-  GitMerge,
-  Triangle,
-  Droplets,
-  TrendingDown,
-};
+// ───────────────────── slide ─────────────────────
 
 export function E8ContextTheWall() {
   const { stepIndex } = useDeck();
-  // Spec §4.8 motion table:
-  // Space 1 — network returns from E.6 (carry-over), STILL MANUAL stamp lands, chaos arrows ambient begins
-  // Space 2 — pitfalls 1–2 reveal (Conflict + Confusion)
-  // Space 3 — pitfalls 3–4 reveal (Poisoning + Distraction)
-  // Space 4 — footer caption fades in
-  const showCanvas = stepIndex >= 0;
-  const ambientOn = stepIndex >= 0;
-  const pitfallsRevealedThrough = stepIndex >= 2 ? 4 : stepIndex >= 1 ? 2 : 0;
-  const showFooter = stepIndex >= 3;
 
-  const [hoveredKind, setHoveredKind] = useState<PitfallKind | null>(null);
+  const showCards = stepIndex >= 0;
+  const showFooter = stepIndex >= 1;
+
+  const [activeKind, setActiveKind] = useState<PitfallKind | null>(null);
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
+    <>
+      <FigLabel section="E" num={8} label="CONTEXT · PITFALLS" />
+
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">
+          {highlight(C.headline, C.headlineKw)}
+        </h1>
+      </div>
+
+      {/* LEFT — pitfall cards + footer.
+          Top:156 / bottom:80 aligns with the codebase's `.slide-content` rule
+          (the design source uses 200/80 — we follow the codebase convention as
+          established by E.5 / E.6 / E.7 in this rewrite series). */}
       <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
+        data-testid="e8-left-pane"
         style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
+          position: "absolute",
+          left: 48,
+          top: 156,
+          width: 480,
+          bottom: 80,
+          display: "flex",
+          flexDirection: "column",
         }}
-      />
-      <FigLabel section="E" num={8} label="STILL MANUAL" />
+      >
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.22em",
+            color: "var(--copper-300)",
+            textTransform: "uppercase",
+          }}
+        >
+          Four pitfalls
+        </span>
+        <div style={{ marginTop: 12 }}>
+          <CopperRule on width="40%" />
+        </div>
 
-      <div className="relative z-10 mx-auto grid h-full max-w-[92vw] grid-cols-[30fr_70fr] gap-10 px-12 py-20">
-        <div className="flex flex-col gap-6">
-          <h1
-            className="font-display text-neutral-50"
-            style={{ fontSize: "clamp(1.8rem, 2.4vw, 2.4rem)", lineHeight: 1.15 }}
-          >
-            {highlight(C.headline, C.headlineKeywords)}
-          </h1>
-
-          <ul className="flex flex-col gap-3">
-            {C.pitfalls.map((p, i) => {
-              const Icon = PITFALL_ICONS[p.icon];
-              const revealed = i < pitfallsRevealedThrough;
-              return (
-                <motion.li
-                  key={p.id}
-                  data-testid={`pitfall-item-${p.id}`}
-                  data-revealed={String(revealed)}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: revealed ? 1 : 0, y: revealed ? 0 : 4 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ pointerEvents: revealed ? "auto" : "none" }}
-                  onMouseEnter={() => setHoveredKind(p.id as PitfallKind)}
-                  onMouseLeave={() => setHoveredKind(null)}
-                  className="flex items-start gap-3 border border-copper-800 bg-neutral-950/60 px-4 py-3 hover:border-copper-300"
+        <div
+          data-testid="e8-pitfall-list"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            marginTop: 16,
+          }}
+        >
+          {C.pitfalls.map((p, i) => {
+            const kind = p.id as PitfallKind;
+            const isHover = activeKind === kind;
+            return (
+              <Reveal
+                key={p.id}
+                on={showCards}
+                delay={120 + i * 90}
+                data-testid={`pitfall-item-${p.id}`}
+                data-active={isHover ? "true" : "false"}
+              >
+                <div
+                  onMouseEnter={() => setActiveKind(kind)}
+                  onMouseLeave={() => setActiveKind(null)}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    padding: "10px 12px",
+                    border: "1px solid",
+                    borderColor: isHover
+                      ? "var(--copper-200)"
+                      : "var(--copper-800)",
+                    background: isHover
+                      ? "rgba(184,110,61,0.06)"
+                      : "transparent",
+                    transition:
+                      "border-color 0.2s var(--ease), background 0.2s var(--ease)",
+                    cursor: "pointer",
+                  }}
                 >
-                  {Icon && (
-                    <Icon
-                      size={28}
-                      strokeWidth={1.5}
-                      className="text-copper-300"
-                      aria-hidden
-                    />
-                  )}
-                  <div className="flex flex-col gap-1">
-                    <span
-                      className="font-mono uppercase tracking-[0.18em] text-copper-300"
-                      style={{ fontSize: "clamp(0.75rem, 0.95vw, 0.95rem)" }}
+                  <div style={{ marginTop: 2 }}>
+                    <LucideIcon name={p.icon} size={20} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontFamily: "var(--mono)",
+                        fontSize: 12,
+                        letterSpacing: "0.18em",
+                        color: "var(--copper-100)",
+                        textTransform: "uppercase",
+                      }}
                     >
                       {p.title}
-                    </span>
-                    <span
-                      className="font-serif italic text-neutral-300"
-                      style={{ fontSize: "clamp(0.85rem, 1.05vw, 1.05rem)" }}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "var(--serif)",
+                        fontStyle: "italic",
+                        fontSize: 13,
+                        color: "var(--neutral-300)",
+                        marginTop: 3,
+                      }}
                     >
                       {p.essence}
-                    </span>
+                    </div>
                   </div>
-                </motion.li>
-              );
-            })}
-          </ul>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
 
-          <motion.p
-            className="font-serif italic text-neutral-200"
-            style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.2rem)", lineHeight: 1.4 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: showFooter ? 1 : 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        <div style={{ flex: 1 }} />
+
+        <Reveal on={showFooter} data-testid="e8-footer">
+          <p
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontSize: 15,
+              color: "var(--copper-200)",
+              margin: 0,
+              lineHeight: 1.4,
+            }}
           >
-            {highlight(C.footerCaption, C.footerCaptionKeywords)}
-          </motion.p>
-        </div>
-
-        <div className="relative">
-          {showCanvas && (
-            <PitfallCanvas
-              activeKind={hoveredKind}
-              defaultIllustration={
-                <NodeNetwork
-                  variant="context-hub"
-                  state="stamped"
-                  centerNode="CONTEXT"
-                  satellites={C.satellites}
-                  play={ambientOn}
-                />
-              }
-            />
-          )}
-        </div>
+            {highlight(C.footer, C.footerKw)}
+          </p>
+        </Reveal>
       </div>
-    </div>
+
+      {/* RIGHT — pitfall illustration + caption (renders nothing until hover). */}
+      <div
+        data-testid="e8-right-pane"
+        style={{
+          position: "absolute",
+          right: 48,
+          top: 156,
+          width: 660,
+          bottom: 80,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <PitfallCanvas activeKind={activeKind} />
+      </div>
+    </>
   );
 }
 
+// ───────────────────── slide def ─────────────────────
+
 export const e8Slide: SlideDef = {
-  steps: 4,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
-  canonicalPose: 3,
   surface: "dark",
   section: "E",
   render: () => <E8ContextTheWall />,
