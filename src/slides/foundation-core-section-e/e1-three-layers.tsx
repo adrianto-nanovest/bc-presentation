@@ -1,130 +1,381 @@
-// src/slides/foundation-core-section-e/e1-three-layers.tsx
+// E.1 — THREE LAYERS
+//
+// Ported from `claude-design-project/jsx/slides-a.jsx:36-184`.
+// 4 steps: 0=PROMPT focal, 1=CONTEXT focal, 2=HARNESS focal, 3=SUMMARY.
+//
+// Layout uses absolute coordinates against the 1280×720 stage (see
+// src/deck/Slide.tsx + globals.css `.stage-wrap`). The design source is the
+// spec for pixel positions — do not refactor into Tailwind utilities.
+import { useState, type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
-import { LayerCard, type LayerMode } from "./components/LayerCard";
-import { LayerDemo } from "./components/LayerDemo";
+import { RingStack } from "./components/RingStack";
 import { e1Content as C } from "./content";
 
-type LayerName = "prompt" | "context" | "harness";
+type LayerId = (typeof C.layers)[number]["id"];
 
-interface LayerState {
-  visible: boolean;
-  mode: LayerMode;
-}
+const FADE_TRANSITION = { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const };
 
-// Spec §4.1 step → state table.
-function layerStatesFor(step: number): Record<LayerName, LayerState> {
-  // 0,1 → PROMPT focal alone
-  // 2,3 → CONTEXT focal, PROMPT nested
-  // 4,5 → HARNESS focal, both inner nested
-  // 6   → all nested + quote
-  const promptVisible = step >= 0;
-  const contextVisible = step >= 2;
-  const harnessVisible = step >= 4;
-  return {
-    prompt: {
-      visible: promptVisible,
-      mode: step >= 2 ? "nested" : "focal",
-    },
-    context: {
-      visible: contextVisible,
-      mode: step >= 4 ? "nested" : "focal",
-    },
-    harness: {
-      visible: harnessVisible,
-      mode: step >= 6 ? "nested" : "focal",
-    },
-  };
-}
-
-function demoForStep(step: number): "prompt-typing" | "context-network" | "multi-agent-orchestration" | null {
-  if (step === 1) return "prompt-typing";
-  if (step === 3) return "context-network";
-  if (step === 5) return "multi-agent-orchestration";
-  return null;
-}
+// ───────────────────── slide ─────────────────────
 
 export function E1ThreeLayers() {
   const { stepIndex } = useDeck();
-  const states = layerStatesFor(stepIndex);
-  const demo = demoForStep(stepIndex);
-  const showQuote = stepIndex >= 6;
+  const step = stepIndex;
+  const focal: LayerId | null =
+    step === 0 ? "prompt" : step === 1 ? "context" : step === 2 ? "harness" : null;
+  const isSummary = step === 3;
+  const focusIndex = step === 0 ? 0 : step === 1 ? 1 : step === 2 ? 2 : null;
+  const mode: "focal" | "summary" = isSummary ? "summary" : "focal";
 
-  // Demo always renders inside whichever layer is currently focal.
-  const focalLayer: LayerName | null =
-    states.harness.visible && states.harness.mode === "focal"
-      ? "harness"
-      : states.context.visible && states.context.mode === "focal"
-        ? "context"
-        : states.prompt.visible && states.prompt.mode === "focal"
-          ? "prompt"
-          : null;
+  const [hoverTag, setHoverTag] = useState<string | null>(null);
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
+    <>
       <FigLabel section="E" num={1} label="THE THREE LAYERS" />
 
-      <div className="relative z-10 flex h-full w-full flex-col items-center justify-start px-12 py-20">
-        <h1
-          className="font-display text-neutral-50"
-          style={{ fontSize: "clamp(2.25rem, 3.25vw, 3.5rem)", lineHeight: 1.1, textAlign: "center" }}
-        >
-          {highlight(C.headline, C.headlineKeywords)}
+      <div className="slide-headline-row">
+        <h1 className="slide-headline">
+          {highlight(C.headline, C.headlineKw)}
         </h1>
-
-        {/* Concentric stage — fills the rest of the slide. */}
-        <div className="relative mt-8 flex flex-1 w-full items-center justify-center">
-          {/* Render outermost first so SVG/HTML painter order has innermost on top.
-              But layoutId tweens still match by id so render order is mostly cosmetic. */}
-          {(["harness", "context", "prompt"] as const).map((layer) => {
-            const s = states[layer];
-            if (!s.visible) return null;
-            const meta = C.layers.find((l) => l.layer === layer)!;
-            return (
-              <LayerCard
-                key={layer}
-                layer={layer}
-                mode={s.mode}
-                label={meta.label}
-                essence={meta.essence}
-                essenceKeywords={meta.essenceKeywords}
-              >
-                {focalLayer === layer && demo ? <LayerDemo kind={demo} play /> : null}
-              </LayerCard>
-            );
-          })}
-        </div>
-
-        <motion.p
-          className="mb-2 mt-6 max-w-3xl text-center font-serif italic text-neutral-300"
-          style={{ fontSize: "clamp(1rem, 1.4vw, 1.4rem)", lineHeight: 1.4 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: showQuote ? 1 : 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {highlight(C.quote, C.quoteKeywords)}
-        </motion.p>
       </div>
-    </div>
+
+      {/* Left: concentric rings — top-aligned with the right column. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 60,
+          top: 155,
+          width: 540,
+          height: 460,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <RingStack focusIndex={focusIndex} mode={mode} width={540} height={460} />
+      </div>
+
+      {/* Right: focal detail (steps 0–2) or layer summary (step 3). */}
+      <div
+        style={{
+          position: "absolute",
+          right: 60,
+          top: 170,
+          width: 580,
+          bottom: 80,
+        }}
+      >
+        {focal && (
+          <FocalDetail
+            key={focal}
+            layer={focal}
+            hoverTag={hoverTag}
+            setHoverTag={setHoverTag}
+          />
+        )}
+        {isSummary && <LayerSummary key="summary" />}
+      </div>
+
+      {/* Footer quote — only on summary step. */}
+      {isSummary && (
+        <motion.div
+          data-testid="e1-footer-quote"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...FADE_TRANSITION, delay: 0.25 }}
+          style={{
+            position: "absolute",
+            left: 60,
+            right: 60,
+            bottom: 30,
+            display: "flex",
+            alignItems: "baseline",
+            gap: 16,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--display)",
+              fontSize: 36,
+              color: "var(--copper-400)",
+              lineHeight: 1,
+            }}
+          >
+            “
+          </span>
+          <p
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontSize: 17,
+              color: "var(--neutral-200)",
+              margin: 0,
+              lineHeight: 1.4,
+              maxWidth: 800,
+            }}
+          >
+            {highlight(C.quote, C.quoteKw)}
+          </p>
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              color: "var(--neutral-500)",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {C.attr}
+          </span>
+        </motion.div>
+      )}
+    </>
   );
 }
 
+// ───────────────────── FocalDetail (steps 0–2) ─────────────────────
+
+interface FocalDetailProps {
+  layer: LayerId;
+  hoverTag: string | null;
+  setHoverTag: (t: string | null) => void;
+}
+
+function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
+  const data = C.layers.find((l) => l.id === layer);
+  if (!data) return null;
+  const layerNum = layer === "prompt" ? 1 : layer === "context" ? 2 : 3;
+
+  return (
+    <motion.div
+      data-testid={`focal-detail-${layer}`}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={FADE_TRANSITION}
+    >
+      <span
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 12,
+          letterSpacing: "0.22em",
+          color: "var(--copper-300)",
+          textTransform: "uppercase",
+        }}
+      >
+        Layer {layerNum}
+      </span>
+      <h2
+        style={{
+          fontFamily: "var(--display)",
+          fontSize: 56,
+          color: "var(--neutral-50)",
+          margin: "8px 0 6px 0",
+          lineHeight: 0.98,
+        }}
+      >
+        {data.titleA}
+        <br />
+        {data.titleB}
+      </h2>
+      <p
+        style={{
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          fontSize: 20,
+          color: "var(--copper-200)",
+          margin: "0 0 14px 0",
+        }}
+      >
+        {highlight(data.essence, data.kw)}
+      </p>
+
+      {/* Copper rule — animated reveal via class (delay 300ms). */}
+      <motion.div
+        className="copper-rule on"
+        style={{ width: "40%" }}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+      />
+
+      <p
+        style={{
+          fontFamily: "var(--serif)",
+          fontSize: 16,
+          color: "var(--neutral-300)",
+          margin: "16px 0 18px 0",
+          lineHeight: 1.5,
+          maxWidth: 500,
+        }}
+      >
+        {data.blurb}
+      </p>
+
+      <div
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 10,
+          letterSpacing: "0.22em",
+          color: "var(--copper-400)",
+          textTransform: "uppercase",
+          marginBottom: 8,
+        }}
+      >
+        Key terms · echoed in following slides
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, maxWidth: 540 }}>
+        {data.tags.map((t) => {
+          const isHover = hoverTag === t;
+          const tagStyle: CSSProperties = {
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            padding: "6px 10px",
+            border: `1px solid ${
+              isHover ? "var(--copper-200)" : "var(--copper-700)"
+            }`,
+            background: isHover
+              ? "rgba(217,158,108,0.12)"
+              : "rgba(10,10,10,0.4)",
+            color: isHover ? "var(--copper-100)" : "var(--neutral-200)",
+            transition: "all 0.2s var(--ease)",
+            cursor: "default",
+          };
+          return (
+            <span
+              key={t}
+              data-testid={`tag-chip-${t}`}
+              data-hover={isHover ? "true" : "false"}
+              onMouseEnter={() => setHoverTag(t)}
+              onMouseLeave={() => setHoverTag(null)}
+              style={tagStyle}
+            >
+              {t}
+            </span>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+}
+
+// ───────────────────── LayerSummary (step 3) ─────────────────────
+
+function LayerSummary() {
+  return (
+    <motion.div
+      data-testid="layer-summary"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={FADE_TRANSITION}
+    >
+      <span
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 12,
+          letterSpacing: "0.22em",
+          color: "#e8c4a0",
+          textTransform: "uppercase",
+        }}
+      >
+        Three Layers · Summary
+      </span>
+      <h2
+        style={{
+          fontFamily: "var(--display)",
+          fontSize: 44,
+          color: "#e8c4a0",
+          margin: "10px 0 6px 0",
+          lineHeight: 1,
+        }}
+      >
+        The full stack.
+      </h2>
+      <motion.div
+        className="copper-rule on"
+        style={{ width: "40%", background: "#e8c4a0" }}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      />
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+          marginTop: 22,
+        }}
+      >
+        {C.layers.map((l, i) => (
+          <motion.div
+            key={l.id}
+            data-testid={`summary-row-${l.id}`}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...FADE_TRANSITION, delay: 0.3 + i * 0.15 }}
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: 14,
+              padding: "10px 14px",
+              borderLeft: "2px solid #e8c4a0",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                letterSpacing: "0.22em",
+                color: "var(--copper-300)",
+                textTransform: "uppercase",
+                minWidth: 56,
+              }}
+            >
+              Layer {i + 1}
+            </span>
+            <div style={{ flex: 1 }}>
+              <div
+                style={{
+                  fontFamily: "var(--display)",
+                  fontSize: 24,
+                  color: "var(--neutral-50)",
+                  lineHeight: 1.05,
+                }}
+              >
+                {l.titleA} {l.titleB}
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontStyle: "italic",
+                  fontSize: 15,
+                  color: "var(--neutral-300)",
+                  marginTop: 4,
+                  lineHeight: 1.35,
+                }}
+              >
+                {l.summarySub}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+// ───────────────────── slide def ─────────────────────
+
 export const e1Slide: SlideDef = {
-  steps: 7,
+  steps: 4,
+  canonicalPose: 3,
   animationMode: "step-reveal",
-  canonicalPose: 6,
   surface: "dark",
   section: "E",
   render: () => <E1ThreeLayers />,
