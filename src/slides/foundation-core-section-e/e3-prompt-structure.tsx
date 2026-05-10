@@ -123,5 +123,6 @@ export const e3Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "E",
   render: () => <E3PromptStructure />,
 };

@@ -60,5 +60,6 @@ export const e7Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 4,
   surface: "dark",
+  section: "E",
   render: () => <E7ContextStrategies />,
 };

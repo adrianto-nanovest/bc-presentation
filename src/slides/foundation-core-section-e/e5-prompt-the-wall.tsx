@@ -174,5 +174,6 @@ export const e5Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "E",
   render: () => <E5PromptTheWall />,
 };

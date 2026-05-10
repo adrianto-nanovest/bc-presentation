@@ -90,5 +90,6 @@ export const i1Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "I",
   render: () => <I1MetaProcess />,
 };

@@ -80,5 +80,6 @@ export const i4Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "I",
   render: () => <I4KeyMessageBridge />,
 };

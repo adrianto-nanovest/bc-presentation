@@ -82,5 +82,6 @@ export const i2Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 4,
   surface: "dark",
+  section: "I",
   render: () => <I2ProfileJourney />,
 };

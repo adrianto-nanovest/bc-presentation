@@ -112,5 +112,6 @@ export const e9Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 4,
   surface: "dark",
+  section: "E",
   render: () => <E9HarnessWhatWhy />,
 };

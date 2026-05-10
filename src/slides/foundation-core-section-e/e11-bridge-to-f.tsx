@@ -35,5 +35,6 @@ export const e11Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
+  section: "E",
   render: () => <E11BridgeToF />,
 };

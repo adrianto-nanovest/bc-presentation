@@ -150,5 +150,6 @@ export const d2Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 4,
   surface: "dark",
+  section: "D",
   render: () => <D2TheConvergence />,
 };

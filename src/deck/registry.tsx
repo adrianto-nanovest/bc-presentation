@@ -13,6 +13,9 @@ export const hexLadderDevSlide: SlideDef = {
   animationMode: "static",
   canonicalPose: 0,
   surface: "light",
+  // Dev-only utility — tagged "K" so the NavBar can rely on `section`
+  // being non-optional. NavBar treats it like any K-section slide.
+  section: "K",
   render: () => <HexLadder />,
 };
 

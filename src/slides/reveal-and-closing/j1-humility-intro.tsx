@@ -41,5 +41,6 @@ export const j1Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "J",
   render: () => <J1HumilityIntro />,
 };

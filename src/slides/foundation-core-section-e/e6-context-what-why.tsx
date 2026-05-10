@@ -100,5 +100,6 @@ export const e6Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "E",
   render: () => <E6ContextWhatWhy />,
 };

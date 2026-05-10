@@ -178,5 +178,6 @@ export const i3Slide: SlideDef = {
   animationMode: "interactive",
   canonicalPose: 4,
   surface: "dark",
+  section: "I",
   render: () => <I3Portfolio />,
 };

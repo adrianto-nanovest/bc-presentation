@@ -72,5 +72,6 @@ export const j2Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
+  section: "J",
   render: () => <J2FivePrinciples />,
 };

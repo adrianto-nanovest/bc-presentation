@@ -126,5 +126,6 @@ export const e1Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 6,
   surface: "dark",
+  section: "E",
   render: () => <E1ThreeLayers />,
 };

@@ -71,5 +71,6 @@ export const k1Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "K",
   render: () => <K1ChallengeHandoff />,
 };

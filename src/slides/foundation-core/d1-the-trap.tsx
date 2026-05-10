@@ -137,5 +137,6 @@ export const d1Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "D",
   render: () => <D1TheTrap />,
 };

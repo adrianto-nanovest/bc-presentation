@@ -134,5 +134,6 @@ export const e8Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
+  section: "E",
   render: () => <E8ContextTheWall />,
 };
