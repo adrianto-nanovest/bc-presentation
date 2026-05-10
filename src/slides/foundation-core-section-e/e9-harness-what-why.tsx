@@ -1,116 +1,359 @@
-import { motion } from "framer-motion";
+// E.9 — HARNESS · WHAT & WHY
+//
+// Ported from `claude-design-project/jsx/slides-c.jsx:5-98`.
+//
+// 5 steps:
+//   0 — left pane reveals (sub-kicker, copper rule, definition, 4 why-points)
+//   1 — "Includes" package (the 6 context mitigations) reveals on left
+//   2 — equation `Agent = Model + Harness` + Cursor quote reveal on right
+//   3 — 4-line stanza reveals
+//   4 — italic tagline reveals
+//
+// Layout uses absolute coordinates against the 1280×720 stage. Reveal /
+// CopperRule are the shared T10 reveal primitives — no Framer Motion. The
+// legacy NodeNetwork compression sequence has been dropped per the new
+// design (claude-design-revamp.md §2.4).
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
-import { NodeNetwork } from "./components/NodeNetwork";
-import { HarnessPackage } from "./components/HarnessPackage";
-import { ThesisPanel } from "./components/ThesisPanel";
-import { ImpactLadder } from "./components/ImpactLadder";
+import { Reveal, CopperRule } from "./components/Reveal";
 import { e9Content as C } from "./content";
+
+// ───────────────────── slide ─────────────────────
 
 export function E9HarnessWhatWhy() {
   const { stepIndex } = useDeck();
-  // Spec §4.9 motion table:
-  // Space 1 — network from E.8 returns; STILL MANUAL stamp dissolves; nodes brighten
-  // Space 2 — compression sequence; satellites pull inward; harness package box appears
-  // Space 3 — Includes row + arrows reveal
-  // Space 4 — thesis (equation + Cursor quote + stanza)
-  // Space 5 — tagline + ladder rung 3 lights
-  const showStampedNetwork = stepIndex >= 0 && stepIndex < 1;
-  const showCompressedNetwork = stepIndex >= 1;
-  const showHarnessPackage = stepIndex >= 1;
-  const showIncludes = stepIndex >= 2;
-  const showArrows = stepIndex >= 2;
-  const revealEquation = stepIndex >= 3;
-  const revealStanza = stepIndex >= 3;
-  const revealTagline = stepIndex >= 4;
-  const rung3Lit = stepIndex >= 4;
+
+  const showLeft = stepIndex >= 0;
+  const showIncludes = stepIndex >= 1;
+  const showEq = stepIndex >= 2;
+  const showStanza = stepIndex >= 3;
+  const showTagline = stepIndex >= 4;
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
+    <>
+      <FigLabel section="E" num={9} label="LAYER 3 · HARNESS" />
+
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">
+          {highlight(C.headline, C.headlineKw)}
+        </h1>
+      </div>
+
+      {/* LEFT — sub + definition + 4 why-points + Includes package.
+          Top:156 / bottom:80 aligns with the codebase's `.slide-content`
+          rule (the design source uses 170/80 — we follow the codebase
+          convention as established in T14–T17). */}
       <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
+        data-testid="e9-left-pane"
         style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
+          position: "absolute",
+          left: 48,
+          top: 156,
+          width: 500,
+          bottom: 80,
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
         }}
-      />
-      <FigLabel section="E" num={9} label="HARNESS" />
-
-      <div className="relative z-10 mx-auto grid h-full max-w-[92vw] grid-cols-[55fr_45fr] gap-10 px-12 py-20">
-        <div className="relative flex flex-col items-center justify-center gap-6">
-          <h1
-            className="font-display text-neutral-50"
-            style={{ fontSize: "clamp(2rem, 3vw, 3rem)", lineHeight: 1.1 }}
+      >
+        <Reveal on={showLeft} data-testid="e9-sub">
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              color: "var(--copper-300)",
+              textTransform: "uppercase",
+            }}
           >
-            {highlight(C.headline, C.headlineKeywords)}
-          </h1>
+            {C.sub}
+          </span>
+        </Reveal>
 
-          <div className="relative flex h-[36vh] w-full items-center justify-center">
-            {showStampedNetwork && (
-              <NodeNetwork
-                variant="context-hub"
-                state="activated"
-                centerNode="CONTEXT"
-                satellites={C.satellites}
-                play={false}
+        <CopperRule on={showLeft} width="40%" delay={120} />
+
+        <Reveal
+          on={showLeft}
+          delay={220}
+          data-testid="e9-definition"
+        >
+          <p
+            style={{
+              fontFamily: "var(--serif)",
+              fontSize: 19,
+              color: "var(--neutral-100)",
+              margin: 0,
+              lineHeight: 1.45,
+            }}
+          >
+            {highlight(C.definition, C.definitionKw)}
+          </p>
+        </Reveal>
+
+        <div style={{ height: 4 }} />
+
+        <ul
+          data-testid="e9-why-list"
+          style={{
+            listStyle: "none",
+            padding: 0,
+            margin: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
+          {C.whyPoints.map((b, i) => (
+            <Reveal
+              key={i}
+              on={showLeft}
+              delay={350 + i * 130}
+              as="li"
+              data-testid={`e9-why-${i}`}
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                gap: 10,
+                fontFamily: "var(--serif)",
+                fontSize: 15,
+                color: "var(--neutral-300)",
+                lineHeight: 1.4,
+              }}
+            >
+              <span
+                style={{
+                  width: 6,
+                  height: 6,
+                  background: "var(--copper-400)",
+                  flexShrink: 0,
+                  transform: "translateY(-1px)",
+                }}
               />
-            )}
-            {showCompressedNetwork && (
-              <NodeNetwork
-                variant="context-hub"
-                state="compressed"
-                centerNode="CONTEXT"
-                satellites={C.satellites}
-                play={false}
+              <span>{highlight(b.text, b.kw)}</span>
+            </Reveal>
+          ))}
+        </ul>
+
+        <div style={{ flex: 1 }} />
+
+        {/* HARNESS package — the six context mitigations. */}
+        <Reveal
+          on={showIncludes}
+          delay={150}
+          data-testid="e9-includes-package"
+        >
+          <div
+            style={{
+              border: "1px solid var(--copper-700)",
+              padding: "14px 16px",
+              background: "rgba(184,110,61,0.05)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 12,
+              }}
+            >
+              <span
+                data-testid="e9-includes-kicker"
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 11,
+                  letterSpacing: "0.22em",
+                  color: "var(--copper-200)",
+                  textTransform: "uppercase",
+                }}
+              >
+                {C.includesKicker}
+              </span>
+              <span
+                style={{
+                  flex: 1,
+                  height: 1,
+                  background: "var(--copper-800)",
+                }}
               />
-            )}
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 6,
+              }}
+            >
+              {C.includes.map((item, i) => (
+                <Reveal
+                  key={item}
+                  on={showIncludes}
+                  delay={250 + i * 60}
+                  data-testid={`e9-include-${i}`}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 11,
+                      color: "var(--copper-300)",
+                      padding: "5px 10px",
+                      border: "1px solid var(--copper-800)",
+                      display: "inline-block",
+                      width: "100%",
+                    }}
+                  >
+                    {item}
+                  </span>
+                </Reveal>
+              ))}
+            </div>
           </div>
+        </Reveal>
+      </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{
-              opacity: showHarnessPackage ? 1 : 0,
-              y: showHarnessPackage ? 0 : 12,
+      {/* RIGHT — equation + Cursor quote + 4-line stanza + tagline. */}
+      <div
+        data-testid="e9-right-pane"
+        style={{
+          position: "absolute",
+          right: 48,
+          top: 156,
+          width: 540,
+          bottom: 80,
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+        }}
+      >
+        <Reveal on={showEq} data-testid="e9-equation">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: 14,
+              fontFamily: "var(--display)",
+              fontSize: 56,
+              color: "var(--neutral-50)",
+              lineHeight: 1,
             }}
-            transition={{
-              duration: 0.6,
-              ease: [0.16, 1, 0.3, 1],
-              delay: showHarnessPackage ? 0.8 : 0,
-            }}
-            className="flex w-full justify-center"
           >
-            <HarnessPackage
-              includes={C.includes}
-              revealIncludes={showIncludes}
-              revealArrows={showArrows}
-            />
-          </motion.div>
+            <span
+              style={{
+                color: "var(--copper-300)",
+                fontStyle: "italic",
+              }}
+            >
+              Agent
+            </span>
+            <span>=</span>
+            <span>Model</span>
+            <span>+</span>
+            <span
+              style={{
+                color: "var(--copper-300)",
+                fontStyle: "italic",
+              }}
+            >
+              Harness
+            </span>
+          </div>
+        </Reveal>
+
+        <CopperRule on={showEq} width="60%" delay={400} />
+
+        <Reveal on={showEq} delay={650} data-testid="e9-quote">
+          <div>
+            <p
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: 18,
+                color: "var(--neutral-200)",
+                margin: 0,
+                lineHeight: 1.45,
+              }}
+            >
+              {"“"}
+              {highlight(C.quote, C.quoteKw)}
+              {"”"}
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                letterSpacing: "0.22em",
+                color: "var(--neutral-500)",
+                textTransform: "uppercase",
+                textAlign: "right",
+                margin: "6px 0 0 0",
+              }}
+            >
+              — Cursor engineering
+            </p>
+          </div>
+        </Reveal>
+
+        <CopperRule on={showStanza} width="40%" />
+
+        <div
+          data-testid="e9-stanza"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+          }}
+        >
+          {C.stanza.map((line, i) => (
+            <Reveal
+              key={line}
+              on={showStanza}
+              delay={i * 200}
+              data-testid={`e9-stanza-${i}`}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: 17,
+                  color: "var(--neutral-100)",
+                  margin: 0,
+                  lineHeight: 1.4,
+                }}
+              >
+                {line}
+              </p>
+            </Reveal>
+          ))}
         </div>
 
-        <div className="flex flex-col justify-center">
-          <ThesisPanel
-            revealEquation={revealEquation}
-            revealStanza={revealStanza}
-            revealTagline={revealTagline}
-          />
-        </div>
-      </div>
+        <div style={{ flex: 1 }} />
 
-      <div className="absolute bottom-8 left-1/2 z-10 w-[80vw] -translate-x-1/2">
-        <ImpactLadder rungs={3} currentRung={rung3Lit ? 3 : 2} />
+        <Reveal on={showTagline} data-testid="e9-tagline">
+          <p
+            style={{
+              fontFamily: "var(--display)",
+              fontStyle: "italic",
+              fontSize: 32,
+              color: "var(--copper-200)",
+              margin: 0,
+              lineHeight: 1.1,
+            }}
+          >
+            {C.tagline}
+          </p>
+        </Reveal>
       </div>
-    </div>
+    </>
   );
 }
 
+// ───────────────────── slide def ─────────────────────
+
 export const e9Slide: SlideDef = {
   steps: 5,
-  animationMode: "step-reveal",
   canonicalPose: 4,
+  animationMode: "step-reveal",
   surface: "dark",
   section: "E",
   render: () => <E9HarnessWhatWhy />,
