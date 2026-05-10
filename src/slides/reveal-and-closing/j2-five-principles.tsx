@@ -22,10 +22,10 @@ export function J2FivePrinciples() {
         }}
       />
       <FigLabel section="J" num={2} label="FIVE PRINCIPLES" />
-      <div className="relative z-10 mx-auto flex h-full max-w-[92vw] flex-col items-center justify-center gap-12 px-16 py-24">
+      <div className="relative z-10 mx-auto flex h-full max-w-[92%] flex-col items-center justify-center gap-12 px-16 py-24">
         <h2
           className="font-display text-neutral-50"
-          style={{ fontSize: "clamp(2.5rem, 4.5vw, 4rem)", lineHeight: 1.15 }}
+          style={{ fontSize: "3.6rem", lineHeight: 1.15 }}
         >
           {highlight(C.headline, C.headlineKeywords)}
         </h2>
@@ -58,7 +58,7 @@ export function J2FivePrinciples() {
         </div>
         <p
           className="font-serif italic text-copper-300"
-          style={{ fontSize: "clamp(1rem, 1.2vw, 1.4rem)" }}
+          style={{ fontSize: "1rem" }}
         >
           {highlight(C.caption, ["Hover any card"])}
         </p>

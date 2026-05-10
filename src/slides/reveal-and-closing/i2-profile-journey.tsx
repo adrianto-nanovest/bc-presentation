@@ -18,21 +18,21 @@ export function I2ProfileJourney() {
   const lines = [
     {
       key: "name",
-      content: <span className="font-display tracking-wide text-neutral-50" style={{ fontSize: "clamp(2.75rem, 4.5vw, 4.5rem)", lineHeight: 1.05 }}>{C.name}</span>,
+      content: <span className="font-display tracking-wide text-neutral-50" style={{ fontSize: "3.6rem", lineHeight: 1.05 }}>{C.name}</span>,
     },
     {
       key: "role",
-      content: <span className="font-display text-neutral-50" style={{ fontSize: "clamp(1.75rem, 2.75vw, 2.75rem)", lineHeight: 1.2 }}>{highlight(C.role.text, C.role.keywords)}</span>,
+      content: <span className="font-display text-neutral-50" style={{ fontSize: "2.2rem", lineHeight: 1.2 }}>{highlight(C.role.text, C.role.keywords)}</span>,
     },
     {
       key: "delivery",
-      content: <span className="font-serif text-neutral-50" style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)", lineHeight: 1.35 }}>{highlight(C.delivery.text, C.delivery.keywords)}</span>,
+      content: <span className="font-serif text-neutral-50" style={{ fontSize: "2rem", lineHeight: 1.35 }}>{highlight(C.delivery.text, C.delivery.keywords)}</span>,
     },
     {
       key: "credentials",
       // The "Computer Vision" keyword also gets a HoverReveal per spec §4.2.
       content: (
-        <span className="font-serif italic text-neutral-300" style={{ fontSize: "clamp(1.1rem, 1.7vw, 1.75rem)", lineHeight: 1.4 }}>
+        <span className="font-serif italic text-neutral-300" style={{ fontSize: "1.36rem", lineHeight: 1.4 }}>
           ITB Electrical Eng · Chosun M.S.{" "}
           <HoverReveal
             trigger={<em className="text-copper-400 italic">Computer Vision</em>}
@@ -53,7 +53,7 @@ export function I2ProfileJourney() {
     <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/i2-night-workspace.jpg" alt="" vignetteSide="bottom-left" />
       <FigLabel section="I" num={2} label="THE JOURNEY" />
-      <div className="absolute bottom-12 left-12 z-20 flex max-w-[90vw] flex-col gap-12">
+      <div className="absolute bottom-12 left-12 z-20 flex max-w-[90%] flex-col gap-12">
         <div className="flex flex-col gap-5">
           {lines.map((l, i) => (
             <motion.div

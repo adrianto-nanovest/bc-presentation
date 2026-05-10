@@ -24,7 +24,7 @@ export function D4DecisionPattern() {
       <FigLabel section="D" num={4} label="WHICH LEVEL, WHEN" />
       <h1
         className="absolute left-12 right-12 top-12 z-10 font-display text-neutral-50"
-        style={{ fontSize: "clamp(2rem, 3vw, 3rem)", lineHeight: 1.2 }}
+        style={{ fontSize: "2.4rem", lineHeight: 1.2 }}
       >
         {highlight(C.headline, C.headlineKeywords)}
       </h1>
@@ -33,7 +33,7 @@ export function D4DecisionPattern() {
       </div>
       <motion.p
         className="absolute bottom-8 right-12 z-10 font-serif italic text-neutral-300"
-        style={{ fontSize: "clamp(1.25rem, 1.6vw, 1.75rem)" }}
+        style={{ fontSize: "1.28rem" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: showFooter ? 1 : 0 }}
         transition={{ duration: 0.4 }}

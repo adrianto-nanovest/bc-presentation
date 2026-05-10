@@ -19,12 +19,12 @@ export function LadderTerminal({
       data-testid="ladder-terminal"
       data-altitude-tier={altitudeTier}
       className="flex flex-col gap-2 border border-copper-500 bg-neutral-950/60 p-4"
-      style={{ width: "clamp(180px, 18vw, 240px)" }}
+      style={{ width: "230px" }}
     >
-      <h3 className="font-display text-neutral-50" style={{ fontSize: "clamp(1.6rem, 2vw, 2.25rem)", lineHeight: 1.1 }}>
+      <h3 className="font-display text-neutral-50" style={{ fontSize: "1.6rem", lineHeight: 1.1 }}>
         {abbrev}
       </h3>
-      <p className="font-serif italic text-neutral-300" style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.25rem)", lineHeight: 1.35 }}>
+      <p className="font-serif italic text-neutral-300" style={{ fontSize: "0.95rem", lineHeight: 1.35 }}>
         {subLine}
       </p>
     </div>
@@ -35,7 +35,7 @@ export function LadderTerminal({
       position="below"
       trigger={card}
       payload={
-        <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-5 font-serif italic text-neutral-100 shadow" style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.25rem)", lineHeight: 1.45 }}>
+        <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-5 font-serif italic text-neutral-100 shadow" style={{ fontSize: "0.95rem", lineHeight: 1.45 }}>
           {hoverExample}
         </span>
       }

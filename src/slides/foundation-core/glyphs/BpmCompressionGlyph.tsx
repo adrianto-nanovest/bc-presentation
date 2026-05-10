@@ -71,7 +71,7 @@ export function BpmCompressionGlyph({ play }: BpmCompressionGlyphProps) {
       <span
         data-testid="bpm-counter"
         className="font-mono uppercase tracking-[0.18em] text-copper-300"
-        style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)" }}
+        style={{ fontSize: "0.85rem" }}
       >
         STEPS · {play ? <CountUp from={20} to={8} durationMs={1200} /> : "8"}
       </span>

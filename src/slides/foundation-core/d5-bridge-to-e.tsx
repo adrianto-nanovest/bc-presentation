@@ -10,23 +10,23 @@ export function D5BridgeToE() {
     <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/d5-bridge.jpg" alt="" vignetteSide="bottom-left" />
       <FigLabel section="D" num={5} label="THE NEXT QUESTION" />
-      <div className="absolute bottom-24 left-24 z-20 flex max-w-[60vw] flex-col gap-8">
+      <div className="absolute bottom-24 left-24 z-20 flex max-w-[60%] flex-col gap-8">
         <StepReveal>
           <p
             className="font-display text-neutral-50"
-            style={{ fontSize: "clamp(3rem, 5vw, 5rem)", lineHeight: 1.18 }}
+            style={{ fontSize: "4rem", lineHeight: 1.18 }}
           >
             {highlight(C.beat1.text, C.beat1.keywords)}
           </p>
           <p
             className="font-display text-neutral-50"
-            style={{ fontSize: "clamp(2.75rem, 4.5vw, 4.5rem)", lineHeight: 1.18 }}
+            style={{ fontSize: "3.6rem", lineHeight: 1.18 }}
           >
             {highlight(C.beat2.text, C.beat2.keywords)}
           </p>
           <p
             className="font-serif italic text-neutral-200"
-            style={{ fontSize: "clamp(1.75rem, 2.5vw, 2.5rem)", lineHeight: 1.4 }}
+            style={{ fontSize: "2rem", lineHeight: 1.4 }}
           >
             {highlight(C.bridge.text, C.bridge.keywords)}
           </p>

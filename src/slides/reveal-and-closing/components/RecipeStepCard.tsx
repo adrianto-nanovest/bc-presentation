@@ -28,20 +28,20 @@ export function RecipeStepCard({
     >
       <span
         className="font-mono text-copper-400"
-        style={{ fontSize: "clamp(1.25rem, 1.4vw, 1.75rem)" }}
+        style={{ fontSize: "1.25rem" }}
       >
         {padded}
       </span>
       <h3
         className="font-display text-neutral-50"
-        style={{ fontSize: "clamp(1.75rem, 2.2vw, 2.5rem)", lineHeight: 1.18 }}
+        style={{ fontSize: "1.76rem", lineHeight: 1.18 }}
       >
         {headline}
       </h3>
       <hr className="w-[70%] border-0 border-t border-copper-700/70" />
       <p
         className="font-serif italic text-neutral-300"
-        style={{ fontSize: "clamp(1.15rem, 1.4vw, 1.6rem)", lineHeight: 1.45 }}
+        style={{ fontSize: "1.15rem", lineHeight: 1.45 }}
       >
         {subText}
       </p>
@@ -55,7 +55,7 @@ export function RecipeStepCard({
       payload={
         <span
           className="block max-w-[480px] border border-copper-500 bg-neutral-900 p-6 font-serif italic text-neutral-100 shadow"
-          style={{ fontSize: "clamp(1rem, 1.2vw, 1.35rem)", lineHeight: 1.5 }}
+          style={{ fontSize: "1rem", lineHeight: 1.5 }}
         >
           {hoverExample}
         </span>

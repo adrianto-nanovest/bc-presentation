@@ -21,10 +21,10 @@ export function J3RecipeBuildup() {
         }}
       />
       <FigLabel section="J" num={3} label="BUILDING YOURSELF UP" />
-      <div className="relative z-10 mx-auto flex h-full max-w-[80vw] flex-col items-center justify-center gap-8 py-20">
+      <div className="relative z-10 mx-auto flex h-full max-w-[80%] flex-col items-center justify-center gap-8 py-20">
         <h2
           className="font-display text-neutral-50"
-          style={{ fontSize: "clamp(2.25rem, 3.6vw, 3.5rem)", lineHeight: 1.15 }}
+          style={{ fontSize: "2.88rem", lineHeight: 1.15 }}
         >
           {highlight(C.headline, C.headlineKeywords)}
         </h2>
@@ -63,7 +63,7 @@ export function J3RecipeBuildup() {
         })}
         <p
           className="font-serif italic text-copper-300"
-          style={{ fontSize: "clamp(1rem, 1.2vw, 1.4rem)" }}
+          style={{ fontSize: "1rem" }}
         >
           {highlight(C.caption, ["Hover any step"])}
         </p>

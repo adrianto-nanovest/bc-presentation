@@ -50,18 +50,18 @@ export function ConvergenceCard({
       data-position={position}
       data-copper-stop={copperStop}
       className={`relative flex flex-col gap-3 border-l-2 ${stopBorderClass[copperStop]} bg-neutral-950/60 p-6 shadow`}
-      style={{ width: "clamp(220px, 22vw, 320px)" }}
+      style={{ width: "282px" }}
     >
-      <h3 className="font-display text-neutral-50" style={{ fontSize: "clamp(1.5rem, 2vw, 2rem)", lineHeight: 1.15 }}>
+      <h3 className="font-display text-neutral-50" style={{ fontSize: "1.6rem", lineHeight: 1.15 }}>
         {title}
       </h3>
-      <p className="font-serif italic text-neutral-300" style={{ fontSize: "clamp(1rem, 1.3vw, 1.4rem)", lineHeight: 1.3 }}>
+      <p className="font-serif italic text-neutral-300" style={{ fontSize: "1.04rem", lineHeight: 1.3 }}>
         {subName}
       </p>
-      <p className="font-serif text-neutral-50" style={{ fontSize: "clamp(1.1rem, 1.4vw, 1.5rem)", lineHeight: 1.35 }}>
+      <p className="font-serif text-neutral-50" style={{ fontSize: "1.12rem", lineHeight: 1.35 }}>
         <em className="italic">{highlight(tagline, taglineKeywords)}</em>
       </p>
-      <ul className="flex flex-col gap-1 font-sans text-neutral-200" style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)", lineHeight: 1.45 }}>
+      <ul className="flex flex-col gap-1 font-sans text-neutral-200" style={{ fontSize: "0.95rem", lineHeight: 1.45 }}>
         {bullets.map((b, i) => (
           <li key={i} className="before:mr-2 before:content-['·']">{b}</li>
         ))}

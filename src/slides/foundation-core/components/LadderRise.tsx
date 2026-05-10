@@ -39,7 +39,7 @@ export function LadderRise({ content, revealedSteps }: LadderRiseProps) {
       data-testid="ladder-rise"
       data-revealed-steps={revealedSteps}
       className="relative w-full"
-      style={{ minHeight: "60vh" }}
+      style={{ minHeight: "27rem" }}
     >
       {/* Bottom rail: start + 5 questions */}
       <div className="absolute bottom-[20%] left-0 right-0 flex items-center justify-between gap-4 px-12">
@@ -49,7 +49,7 @@ export function LadderRise({ content, revealedSteps }: LadderRiseProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: revealedSteps >= 1 ? 1 : 0 }}
           transition={{ duration: 0.4 }}
-          style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)" }}
+          style={{ fontSize: "0.85rem" }}
         >
           Start
         </motion.div>

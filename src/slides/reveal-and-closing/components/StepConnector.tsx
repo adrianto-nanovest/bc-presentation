@@ -93,7 +93,7 @@ export function StepConnector({
         <span
           className="absolute font-sans italic text-copper-300"
           style={{
-            fontSize: "clamp(0.85rem, 1vw, 1.1rem)",
+            fontSize: "0.85rem",
             top: direction === "down" ? "50%" : `${height + 4}px`,
             left: direction === "down" ? `${width / 2 + 12}px` : "50%",
             transform:

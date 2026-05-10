@@ -72,13 +72,13 @@ export function Timeline({ anchors, segmentLabel, anchorsRevealed, ambient }: Ti
             <span className="block h-4 w-4 rounded-full border border-copper-400 bg-neutral-900" />
             <span
               className="font-mono text-copper-300"
-              style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.25rem)" }}
+              style={{ fontSize: "0.95rem" }}
             >
               {a.label}
             </span>
             <span
               className="font-serif italic text-neutral-300"
-              style={{ fontSize: "clamp(0.85rem, 1vw, 1.15rem)" }}
+              style={{ fontSize: "0.85rem" }}
             >
               {a.caption}
             </span>
@@ -113,7 +113,7 @@ export function Timeline({ anchors, segmentLabel, anchorsRevealed, ambient }: Ti
             top: 16,
             left: `${(positions[0] + positions[1]) / 2}%`,
             transform: "translateX(-50%)",
-            fontSize: "clamp(0.95rem, 1.15vw, 1.3rem)",
+            fontSize: "0.95rem",
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: anchorsRevealed >= 2 ? 1 : 0 }}

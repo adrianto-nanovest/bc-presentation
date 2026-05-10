@@ -19,7 +19,7 @@ export function LightPanel({ title, body }: LightPanelProps) {
           <motion.span
             key={i}
             className="font-mono text-copper-700"
-            style={{ fontSize: "clamp(1rem, 1.4vw, 1.5rem)" }}
+            style={{ fontSize: "1.12rem" }}
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25, delay: i * 0.08 }}
@@ -30,7 +30,7 @@ export function LightPanel({ title, body }: LightPanelProps) {
       </div>
       <motion.h3
         className="font-display text-neutral-50"
-        style={{ fontSize: "clamp(1.75rem, 2.4vw, 2.75rem)", lineHeight: 1.2 }}
+        style={{ fontSize: "1.92rem", lineHeight: 1.2 }}
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.4 }}
@@ -39,7 +39,7 @@ export function LightPanel({ title, body }: LightPanelProps) {
       </motion.h3>
       <motion.div
         className="font-serif text-neutral-300"
-        style={{ fontSize: "clamp(1.05rem, 1.35vw, 1.5rem)", lineHeight: 1.5 }}
+        style={{ fontSize: "1.08rem", lineHeight: 1.5 }}
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.55 }}

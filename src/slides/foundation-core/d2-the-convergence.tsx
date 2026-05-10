@@ -42,7 +42,7 @@ export function D2TheConvergence() {
       <FigLabel section="D" num={2} label="THE CONVERGENCE" />
       <h1
         className="absolute left-12 right-12 top-12 z-10 font-display text-neutral-50"
-        style={{ fontSize: "clamp(2rem, 3vw, 3rem)", lineHeight: 1.2 }}
+        style={{ fontSize: "2.4rem", lineHeight: 1.2 }}
       >
         {highlight(C.headline, C.headlineKeywords)}
       </h1>
@@ -74,7 +74,7 @@ export function D2TheConvergence() {
               />
             }
             payload={
-              <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.25rem)", lineHeight: 1.45 }}>
+              <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "0.95rem", lineHeight: 1.45 }}>
                 {card.hoverAnalogy}
               </span>
             }

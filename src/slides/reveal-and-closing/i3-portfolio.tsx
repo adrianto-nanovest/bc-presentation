@@ -130,7 +130,7 @@ export function I3Portfolio() {
         <div className="relative z-10 flex h-full flex-col gap-6 px-12 py-20">
           <h2
             className="font-display text-neutral-50"
-            style={{ fontSize: "clamp(2.25rem, 3.6vw, 3.5rem)", lineHeight: 1.15 }}
+            style={{ fontSize: "2.88rem", lineHeight: 1.15 }}
           >
             {highlight(C.headline, ["Built. Taught. In production"])}
           </h2>
@@ -163,7 +163,7 @@ export function I3Portfolio() {
           </div>
           <p
             className="font-serif italic text-copper-300"
-            style={{ fontSize: "clamp(1rem, 1.2vw, 1.4rem)" }}
+            style={{ fontSize: "1rem" }}
           >
             {highlight(C.caption, ["Click any item to see how it works"])}
           </p>

@@ -39,13 +39,13 @@ export function D1TheTrap() {
         }}
       />
       <FigLabel section="D" num={1} label="THE TRAP" />
-      <div className="relative z-10 mx-auto flex h-full max-w-[80vw] flex-col items-center justify-center gap-10 px-12 py-20 text-center">
+      <div className="relative z-10 mx-auto flex h-full max-w-[80%] flex-col items-center justify-center gap-10 px-12 py-20 text-center">
         {/* Beat 1 — number */}
         {showStat && (
           <div className="flex flex-col items-center gap-4">
             <h1
               className="font-display text-copper-400"
-              style={{ fontSize: "clamp(7rem, 16vw, 17.5rem)", lineHeight: 1 }}
+              style={{ fontSize: "12.8rem", lineHeight: 1 }}
             >
               〔
               <CountUp from={0} to={C.beat1.statValue} durationMs={1500} testId="d1-stat-counter" />
@@ -60,7 +60,7 @@ export function D1TheTrap() {
             />
             <motion.p
               className="font-serif text-neutral-50"
-              style={{ fontSize: "clamp(2rem, 2.75vw, 2.75rem)", lineHeight: 1.3 }}
+              style={{ fontSize: "2.2rem", lineHeight: 1.3 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: showStat ? 1 : 0 }}
               transition={{ duration: 0.4, delay: 1.8 }}
@@ -69,7 +69,7 @@ export function D1TheTrap() {
             </motion.p>
             <motion.p
               className="font-sans text-neutral-400"
-              style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)" }}
+              style={{ fontSize: "0.95rem" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: showStat ? 1 : 0 }}
               transition={{ duration: 0.4, delay: 2.0 }}
@@ -86,7 +86,7 @@ export function D1TheTrap() {
           <div className="flex flex-col items-center gap-8">
             <motion.h2
               className="font-display text-neutral-50"
-              style={{ fontSize: "clamp(2.25rem, 3.25vw, 3.25rem)", lineHeight: 1.2 }}
+              style={{ fontSize: "2.6rem", lineHeight: 1.2 }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -109,7 +109,7 @@ export function D1TheTrap() {
           <div className="flex flex-col items-center gap-4">
             <motion.h2
               className="font-display text-neutral-50"
-              style={{ fontSize: "clamp(2.25rem, 3.25vw, 3.25rem)", lineHeight: 1.2 }}
+              style={{ fontSize: "2.6rem", lineHeight: 1.2 }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -118,7 +118,7 @@ export function D1TheTrap() {
             </motion.h2>
             <motion.p
               className="font-serif italic text-neutral-300"
-              style={{ fontSize: "clamp(1.5rem, 2vw, 2rem)", lineHeight: 1.35 }}
+              style={{ fontSize: "1.6rem", lineHeight: 1.35 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.5 }}

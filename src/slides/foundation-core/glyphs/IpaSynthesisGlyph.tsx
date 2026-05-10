@@ -40,7 +40,7 @@ export function IpaSynthesisGlyph({ play }: Props) {
         ))}
       </div>
       {/* Middle: 2x2 grid of core strengths */}
-      <div className="grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-copper-300" style={{ fontSize: "clamp(0.7rem, 0.85vw, 0.85rem)" }}>
+      <div className="grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-copper-300" style={{ fontSize: "0.7rem" }}>
         {STRENGTHS.map((s, i) => (
           <motion.span
             key={s}

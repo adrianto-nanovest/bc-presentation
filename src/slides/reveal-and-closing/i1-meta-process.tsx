@@ -16,7 +16,7 @@ function Headline() {
   return (
     <h1
       className="font-display text-neutral-50"
-      style={{ fontSize: "clamp(2.75rem, 4.5vw, 4.5rem)", lineHeight: 1.15 }}
+      style={{ fontSize: "3.6rem", lineHeight: 1.15 }}
     >
       {C.headlineParts.map((part, i) =>
         // Even indices are literals; odd indices are keywords (per content.ts shape).
@@ -48,7 +48,7 @@ export function I1MetaProcess() {
         }}
       />
       <FigLabel section="I" num={1} label="THE PROCESS" />
-      <div className="relative z-10 mx-auto flex h-full max-w-[92vw] flex-col justify-center gap-12 px-12 py-20">
+      <div className="relative z-10 mx-auto flex h-full max-w-[92%] flex-col justify-center gap-12 px-12 py-20">
         <Headline />
         <motion.div
           initial={{ opacity: 0 }}
@@ -58,7 +58,7 @@ export function I1MetaProcess() {
         >
           <p
             className="font-serif text-copper-300"
-            style={{ fontSize: "clamp(1.5rem, 2vw, 2.25rem)", lineHeight: 1.35 }}
+            style={{ fontSize: "1.6rem", lineHeight: 1.35 }}
           >
             {highlight(C.subLine, C.subLineKeywords)}
           </p>
@@ -73,7 +73,7 @@ export function I1MetaProcess() {
         <HorizontalFlow stages={stages} revealed={stagesRevealed} ambient={stagesRevealed} />
         <motion.p
           className="font-serif italic text-neutral-300"
-          style={{ fontSize: "clamp(1.1rem, 1.4vw, 1.6rem)", lineHeight: 1.45 }}
+          style={{ fontSize: "1.12rem", lineHeight: 1.45 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: taglineRevealed ? 1 : 0 }}
           transition={{ duration: 0.2 }}

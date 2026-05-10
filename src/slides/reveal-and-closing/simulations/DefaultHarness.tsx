@@ -78,7 +78,7 @@ export function DefaultHarness() {
       </svg>
       <p
         className="font-serif italic text-neutral-300"
-        style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.3rem)" }}
+        style={{ fontSize: "0.95rem" }}
       >
         {highlight("The harness pattern / Five expressions follow", ["The harness pattern", "Five expressions follow"])}
       </p>

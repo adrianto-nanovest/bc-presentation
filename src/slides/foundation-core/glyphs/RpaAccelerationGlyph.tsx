@@ -55,7 +55,7 @@ export function RpaAccelerationGlyph({ play }: Props) {
           ))}
         </motion.svg>
       </div>
-      <span className="font-mono uppercase tracking-[0.18em] text-copper-300" style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)" }}>
+      <span className="font-mono uppercase tracking-[0.18em] text-copper-300" style={{ fontSize: "0.85rem" }}>
         MANUAL · 6 hours / week
       </span>
       <motion.svg
@@ -77,7 +77,7 @@ export function RpaAccelerationGlyph({ play }: Props) {
           transition={{ duration: 0.2, delay: play ? 2.0 : 0 }}
         />
       </motion.svg>
-      <span className="font-mono uppercase tracking-[0.18em] text-copper-300" style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)" }}>
+      <span className="font-mono uppercase tracking-[0.18em] text-copper-300" style={{ fontSize: "0.85rem" }}>
         BOT · instant
       </span>
     </div>

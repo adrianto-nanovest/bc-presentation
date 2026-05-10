@@ -32,7 +32,7 @@ export function HarnessCanvas({ selectedId, mode, onToggleMode, children }: Harn
           type="button"
           onClick={onToggleMode}
           className="absolute right-6 top-6 z-10 border border-copper-500 px-4 py-1 font-sans text-copper-300 hover:bg-copper-900/30"
-          style={{ fontSize: "clamp(0.85rem, 1vw, 1.05rem)" }}
+          style={{ fontSize: "0.85rem" }}
         >
           {mode === "simulation" ? "see it real" : "back to simulation"}
         </button>

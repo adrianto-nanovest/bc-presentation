@@ -27,8 +27,8 @@ export function AmplificationBar({
       data-testid="amplification-bar"
       className="relative flex w-full flex-col gap-2"
     >
-      <div className="flex items-baseline justify-between font-mono text-copper-300" style={{ fontSize: "clamp(1rem, 1.25vw, 1.4rem)" }}>
-        <span className="font-sans uppercase tracking-[0.18em] text-copper-400" style={{ fontSize: "clamp(0.75rem, 0.9vw, 1rem)" }}>{label}</span>
+      <div className="flex items-baseline justify-between font-mono text-copper-300" style={{ fontSize: "1rem" }}>
+        <span className="font-sans uppercase tracking-[0.18em] text-copper-400" style={{ fontSize: "0.75rem" }}>{label}</span>
         <span data-testid="amplification-bar-counter">
           <CountUp from={0} to={counterTo} durationMs={durationMs} />
           <span className="ml-0.5">×</span>

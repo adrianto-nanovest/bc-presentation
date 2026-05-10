@@ -27,7 +27,7 @@ export function CategoryList({ items, selectedId, onSelect, revealedHeaders }: C
               data-testid="category-header"
               data-revealed={String(revealed)}
               className="mt-6 text-copper-400 uppercase tracking-[0.18em]"
-              style={{ fontSize: "clamp(0.85rem, 1vw, 1.1rem)" }}
+              style={{ fontSize: "0.85rem" }}
               initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: revealed ? 1 : 0, x: revealed ? 0 : -4 }}
               transition={{ duration: 0.3 }}
@@ -42,7 +42,7 @@ export function CategoryList({ items, selectedId, onSelect, revealedHeaders }: C
             <motion.li
               key={i}
               className="ml-4 text-copper-300 italic"
-              style={{ fontSize: "clamp(0.85rem, 1vw, 1.05rem)" }}
+              style={{ fontSize: "0.85rem" }}
               initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: groupRevealed ? 1 : 0, x: groupRevealed ? 0 : -4 }}
               transition={{ duration: 0.25, delay: 0.05 }}
@@ -70,7 +70,7 @@ export function CategoryList({ items, selectedId, onSelect, revealedHeaders }: C
                   ? "border-l-2 border-copper-400 pl-3 text-neutral-50"
                   : "border-l-2 border-transparent pl-3 text-neutral-300 hover:text-neutral-50 hover:border-copper-700"
               }`}
-              style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.25rem)", lineHeight: 1.4 }}
+              style={{ fontSize: "0.95rem", lineHeight: 1.4 }}
             >
               <span aria-hidden="true">• </span>
               <span>{entry.label}</span>

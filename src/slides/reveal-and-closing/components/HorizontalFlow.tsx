@@ -35,19 +35,19 @@ export function HorizontalFlow({ stages, revealed, ambient }: HorizontalFlowProp
           >
             <span
               className="font-mono text-copper-400"
-              style={{ fontSize: "clamp(0.95rem, 1.05vw, 1.25rem)" }}
+              style={{ fontSize: "0.95rem" }}
             >
               {String(stage.num).padStart(2, "0")}
             </span>
             <h4
               className="font-display text-neutral-50"
-              style={{ fontSize: "clamp(1.4rem, 1.8vw, 2rem)", lineHeight: 1.2 }}
+              style={{ fontSize: "1.44rem", lineHeight: 1.2 }}
             >
               {stage.label}
             </h4>
             <p
               className="font-serif italic text-neutral-300"
-              style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.3rem)", lineHeight: 1.45 }}
+              style={{ fontSize: "0.95rem", lineHeight: 1.45 }}
             >
               {stage.sub}
             </p>

@@ -85,7 +85,7 @@ export function D3OneProcessFourLevels() {
       <FigLabel section="D" num={3} label="ONE PROCESS · FOUR LEVELS" />
       <h1
         className="absolute left-12 right-12 top-12 z-10 font-display text-neutral-50"
-        style={{ fontSize: "clamp(1.75rem, 2.5vw, 2.5rem)", lineHeight: 1.2 }}
+        style={{ fontSize: "2rem", lineHeight: 1.2 }}
       >
         {highlight(C.headline, C.headlineKeywords)}
       </h1>
@@ -126,7 +126,7 @@ export function D3OneProcessFourLevels() {
                 position="below"
                 trigger={card}
                 payload={
-                  <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.25rem)", lineHeight: 1.45 }}>
+                  <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "0.95rem", lineHeight: 1.45 }}>
                     <strong className="not-italic text-copper-300">Ask:</strong> {level.ask}<br />
                     <strong className="not-italic text-copper-300">Outcome:</strong> {level.outcome}
                   </span>
@@ -162,7 +162,7 @@ export function D3OneProcessFourLevels() {
                 />
               }
               payload={
-                <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "clamp(0.95rem, 1.15vw, 1.25rem)", lineHeight: 1.45 }}>
+                <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "0.95rem", lineHeight: 1.45 }}>
                   {aiCard.hoverAnalogy}
                 </span>
               }
@@ -185,7 +185,7 @@ export function D3OneProcessFourLevels() {
       {showCapstone && (
         <motion.p
           className="absolute bottom-6 left-12 right-12 z-10 text-center font-serif italic text-neutral-300"
-          style={{ fontSize: "clamp(1.25rem, 1.6vw, 1.75rem)" }}
+          style={{ fontSize: "1.28rem" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}

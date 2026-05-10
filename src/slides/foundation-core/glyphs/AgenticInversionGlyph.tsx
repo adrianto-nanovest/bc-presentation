@@ -15,7 +15,7 @@ export function AgenticInversionGlyph({ play }: Props) {
       <div className="flex items-center gap-3">
         <motion.span
           className="font-mono text-neutral-50"
-          style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)" }}
+          style={{ fontSize: "0.85rem" }}
           initial={{ opacity: 0 }}
           animate={play ? { opacity: [0, 1, 1, 1, 1] } : { opacity: 1 }}
           transition={{ duration: 2.4, times: [0, 0.25, 0.5, 0.7, 1], delay: 0 }}
@@ -43,7 +43,7 @@ export function AgenticInversionGlyph({ play }: Props) {
         </motion.svg>
         <motion.span
           className="font-mono text-neutral-50"
-          style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)" }}
+          style={{ fontSize: "0.85rem" }}
           initial={{ opacity: 0 }}
           animate={play ? { opacity: 1 } : { opacity: 1 }}
           transition={{ duration: 0.4, delay: play ? 0.6 : 0 }}
@@ -54,7 +54,7 @@ export function AgenticInversionGlyph({ play }: Props) {
       <motion.span
         data-testid="agentic-loopback"
         className="font-mono text-copper-400"
-        style={{ fontSize: "clamp(1rem, 1.2vw, 1.2rem)" }}
+        style={{ fontSize: "1rem" }}
         initial={{ opacity: 0 }}
         animate={play ? { opacity: 1 } : { opacity: 1 }}
         transition={{ duration: 0.3, delay: play ? 2.1 : 0 }}
@@ -63,7 +63,7 @@ export function AgenticInversionGlyph({ play }: Props) {
       </motion.span>
       <motion.span
         className="font-serif italic text-neutral-300"
-        style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)" }}
+        style={{ fontSize: "0.95rem" }}
         initial={{ opacity: 0 }}
         animate={play ? { opacity: 1 } : { opacity: 1 }}
         transition={{ duration: 0.3, delay: play ? 2.1 : 0 }}

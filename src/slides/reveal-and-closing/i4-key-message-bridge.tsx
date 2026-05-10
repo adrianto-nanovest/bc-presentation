@@ -22,7 +22,7 @@ export function I4KeyMessageBridge() {
         {firstBeatRevealed && (
           <h1
             className="font-display text-neutral-50"
-            style={{ fontSize: "clamp(4rem, 7.5vw, 7.5rem)", lineHeight: 1.05 }}
+            style={{ fontSize: "6rem", lineHeight: 1.05 }}
           >
             <DisplayPhrase
               staggerType="word"
@@ -46,7 +46,7 @@ export function I4KeyMessageBridge() {
           {beatARevealed && (
             <motion.p
               className="font-serif italic text-neutral-50"
-              style={{ fontSize: "clamp(2rem, 3.5vw, 3.5rem)", lineHeight: 1.25 }}
+              style={{ fontSize: "2.8rem", lineHeight: 1.25 }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -57,7 +57,7 @@ export function I4KeyMessageBridge() {
           {beatBRevealed && (
             <motion.p
               className="font-serif italic text-neutral-50"
-              style={{ fontSize: "clamp(2rem, 3.5vw, 3.5rem)", lineHeight: 1.25 }}
+              style={{ fontSize: "2.8rem", lineHeight: 1.25 }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
