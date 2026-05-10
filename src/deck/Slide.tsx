@@ -1,4 +1,8 @@
-import { type CSSProperties, type ReactNode, type MouseEvent } from "react";
+import { type CSSProperties, type ReactNode } from "react";
+import { useDeck } from "./DeckContext";
+import { useViewportScale } from "./useViewportScale";
+import { NavBar } from "./NavBar";
+import type { SlideSection } from "./types";
 
 export type AnimationMode =
   | "interactive"
@@ -13,17 +17,19 @@ export interface SlideProps {
   // screenshotting (spec §4.1). 0 for static slides.
   canonicalPose: number;
   surface?: "dark" | "light";
+  section: SlideSection;
   children: ReactNode;
-  onClick?: (e: MouseEvent<HTMLElement>) => void;
 }
 
-const baseStyle: CSSProperties = {
-  position: "relative",
-  width: "100vw",
-  height: "100vh",
-  overflow: "hidden",
-  display: "flex",
-  flexDirection: "column",
+// Fixed letterbox stage dimensions — see useViewportScale.ts. Mirrors the
+// design source (claude-design-project/jsx/shell.jsx Stage component).
+const STAGE_WIDTH = 1280;
+const STAGE_HEIGHT = 720;
+
+const stageStyle: CSSProperties = {
+  width: STAGE_WIDTH,
+  height: STAGE_HEIGHT,
+  cursor: "pointer",
 };
 
 export function Slide({
@@ -31,31 +37,41 @@ export function Slide({
   animationMode,
   canonicalPose,
   surface = "dark",
+  section,
   children,
-  onClick,
 }: SlideProps) {
-  // Spec §5.2 — non-interactive slides MUST NOT consume click events on stage,
-  // so the speaker can gesture without accidentally advancing.
-  const handleClick =
-    animationMode === "interactive" && onClick ? onClick : undefined;
+  const scale = useViewportScale();
+  const { advance } = useDeck();
+
+  // Click-to-advance: any click inside the stage advances one step (with
+  // spillover into the next slide), unless the click target sits inside an
+  // interactive element or carries an explicit `data-no-advance` opt-out.
+  // The NavBar uses `data-no-advance` on its outer `.nav-zone` wrapper.
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const t = e.target as HTMLElement | null;
+    if (t?.closest("button, a, input, textarea, select, [data-no-advance]")) {
+      return;
+    }
+    advance();
+  };
 
   return (
-    <section
-      data-testid="slide"
-      data-slide-index={index}
-      data-animation-mode={animationMode}
-      data-canonical-pose={canonicalPose}
-      data-surface={surface}
-      style={{
-        ...baseStyle,
-        background:
-          surface === "dark" ? "var(--surface-dark)" : "var(--surface-light)",
-        color:
-          surface === "dark" ? "var(--neutral-50)" : "var(--neutral-900)",
-      }}
-      onClick={handleClick}
-    >
-      {children}
-    </section>
+    <div className="viewport">
+      <div className="stage-wrap" style={{ transform: `scale(${scale})` }}>
+        <div
+          className={`stage ${surface === "light" ? "light" : ""}`}
+          data-testid="slide"
+          data-slide-index={index}
+          data-animation-mode={animationMode}
+          data-canonical-pose={canonicalPose}
+          data-surface={surface}
+          style={stageStyle}
+          onClick={handleClick}
+        >
+          {children}
+          <NavBar section={section} />
+        </div>
+      </div>
+    </div>
   );
 }

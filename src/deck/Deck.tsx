@@ -33,6 +33,7 @@ function ActiveSlide() {
       animationMode={def.animationMode}
       canonicalPose={def.canonicalPose}
       surface={def.surface ?? "dark"}
+      section={def.section}
     >
       {def.render()}
     </Slide>

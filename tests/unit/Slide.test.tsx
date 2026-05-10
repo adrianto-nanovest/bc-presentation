@@ -1,70 +1,149 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Slide } from "@/deck/Slide";
-import { DeckProvider } from "@/deck/DeckContext";
+import { DeckProvider, useDeck } from "@/deck/DeckContext";
 
 const wrap = (ui: React.ReactNode) => (
-  <DeckProvider stepCounts={[1]}>{ui}</DeckProvider>
+  <DeckProvider stepCounts={[2, 2]}>{ui}</DeckProvider>
 );
 
-test("Slide root has viewport-fitting inline style", () => {
+test("Slide annotates animation mode and canonical pose as data attrs on the stage element", () => {
   render(
     wrap(
-      <Slide animationMode="static" canonicalPose={0} index={0}>
+      <Slide
+        animationMode="step-reveal"
+        canonicalPose={2}
+        index={0}
+        section="E"
+      >
+        hi
+      </Slide>,
+    ),
+  );
+  const root = screen.getByTestId("slide");
+  // The data attrs live on the inner `.stage` element so the export
+  // pipeline (PDF/PPTX) can still find them via [data-testid="slide"].
+  expect(root.classList.contains("stage")).toBe(true);
+  expect(root.getAttribute("data-animation-mode")).toBe("step-reveal");
+  expect(root.getAttribute("data-canonical-pose")).toBe("2");
+  expect(root.getAttribute("data-slide-index")).toBe("0");
+});
+
+test("Slide stage has fixed 1280x720 dimensions", () => {
+  render(
+    wrap(
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
         hi
       </Slide>,
     ),
   );
   const root = screen.getByTestId("slide");
   const style = root.getAttribute("style") ?? "";
-  expect(style).toMatch(/height:\s*100vh/);
-  expect(style).toMatch(/overflow:\s*hidden/);
+  expect(style).toMatch(/width:\s*1280px/);
+  expect(style).toMatch(/height:\s*720px/);
 });
 
-test("Slide annotates animation mode and canonical pose as data attrs", () => {
+test("Slide stage has cursor: pointer", () => {
   render(
     wrap(
-      <Slide animationMode="step-reveal" canonicalPose={2} index={0}>
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
         hi
       </Slide>,
     ),
   );
   const root = screen.getByTestId("slide");
-  expect(root.getAttribute("data-animation-mode")).toBe("step-reveal");
-  expect(root.getAttribute("data-canonical-pose")).toBe("2");
+  const style = root.getAttribute("style") ?? "";
+  expect(style).toMatch(/cursor:\s*pointer/);
 });
 
-test("Slide ignores click events when animationMode is not 'interactive'", () => {
-  const onClick = vi.fn();
+// Tiny probe component that exposes the deck's slide+step indices to the DOM
+// so tests can assert state changes after click-to-advance fires.
+function StateProbe() {
+  const { slideIndex, stepIndex } = useDeck();
+  return (
+    <div
+      data-testid="probe"
+      data-slide={slideIndex}
+      data-step={stepIndex}
+    />
+  );
+}
+
+test("clicking the stage advances the deck (animationMode=static)", () => {
   render(
-    wrap(
+    <DeckProvider stepCounts={[2, 2]}>
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+        <span>body</span>
+      </Slide>
+      <StateProbe />
+    </DeckProvider>,
+  );
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("0");
+  fireEvent.click(screen.getByText("body"));
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("1");
+});
+
+test("clicking the stage advances the deck (animationMode=step-reveal)", () => {
+  render(
+    <DeckProvider stepCounts={[2, 2]}>
       <Slide
-        animationMode="static"
+        animationMode="step-reveal"
         canonicalPose={0}
         index={0}
-        onClick={onClick}
+        section="E"
       >
+        <span>body</span>
+      </Slide>
+      <StateProbe />
+    </DeckProvider>,
+  );
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("0");
+  fireEvent.click(screen.getByText("body"));
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("1");
+});
+
+test("clicking a <button> inside the stage does NOT advance", () => {
+  render(
+    <DeckProvider stepCounts={[2, 2]}>
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+        <button type="button">no-op</button>
+      </Slide>
+      <StateProbe />
+    </DeckProvider>,
+  );
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("0");
+  fireEvent.click(screen.getByRole("button", { name: "no-op" }));
+  // Step did not advance — the button matched the closest() guard.
+  // (NavBar buttons are also covered by this since they're <button> elements.)
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("0");
+});
+
+test("clicking an element marked data-no-advance does NOT advance", () => {
+  render(
+    <DeckProvider stepCounts={[2, 2]}>
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+        <div data-no-advance data-testid="opt-out">
+          shielded
+        </div>
+      </Slide>
+      <StateProbe />
+    </DeckProvider>,
+  );
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("0");
+  fireEvent.click(screen.getByTestId("opt-out"));
+  expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("0");
+});
+
+test("Slide renders NavBar inside the stage with the section tag", () => {
+  render(
+    wrap(
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
         hi
       </Slide>,
     ),
   );
-  screen.getByTestId("slide").click();
-  expect(onClick).not.toHaveBeenCalled();
-});
-
-test("Slide forwards click events when animationMode is 'interactive'", () => {
-  const onClick = vi.fn();
-  render(
-    wrap(
-      <Slide
-        animationMode="interactive"
-        canonicalPose={0}
-        index={0}
-        onClick={onClick}
-      >
-        hi
-      </Slide>,
-    ),
-  );
-  screen.getByTestId("slide").click();
-  expect(onClick).toHaveBeenCalledTimes(1);
+  // NavBar's section tag reads "Section E" and lives inside the stage.
+  const tag = screen.getByText(/Section\s+E/);
+  expect(tag).toBeInTheDocument();
+  const stage = screen.getByTestId("slide");
+  expect(stage.contains(tag)).toBe(true);
 });
