@@ -88,7 +88,7 @@ test("step 3 → LayerSummary visible with all 3 rows + footer quote", () => {
 
 test("hovering a tag chip updates its data-hover attribute", () => {
   renderAtStep(0);
-  const chip = screen.getByTestId("tag-chip-Role");
+  const chip = screen.getByTestId("tag-chip-role");
   expect(chip.getAttribute("data-hover")).toBe("false");
   fireEvent.mouseEnter(chip);
   expect(chip.getAttribute("data-hover")).toBe("true");

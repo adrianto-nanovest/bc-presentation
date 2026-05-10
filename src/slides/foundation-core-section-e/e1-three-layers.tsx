@@ -7,27 +7,31 @@
 // src/deck/Slide.tsx + globals.css `.stage-wrap`). The design source is the
 // spec for pixel positions — do not refactor into Tailwind utilities.
 import { useState, type CSSProperties } from "react";
-import { motion } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { RingStack } from "./components/RingStack";
+import { Reveal, CopperRule } from "./components/Reveal";
 import { e1Content as C } from "./content";
 
 type LayerId = (typeof C.layers)[number]["id"];
-
-const FADE_TRANSITION = { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const };
 
 // ───────────────────── slide ─────────────────────
 
 export function E1ThreeLayers() {
   const { stepIndex } = useDeck();
-  const step = stepIndex;
   const focal: LayerId | null =
-    step === 0 ? "prompt" : step === 1 ? "context" : step === 2 ? "harness" : null;
-  const isSummary = step === 3;
-  const focusIndex = step === 0 ? 0 : step === 1 ? 1 : step === 2 ? 2 : null;
+    stepIndex === 0
+      ? "prompt"
+      : stepIndex === 1
+      ? "context"
+      : stepIndex === 2
+      ? "harness"
+      : null;
+  const isSummary = stepIndex === 3;
+  const focusIndex =
+    stepIndex === 0 ? 0 : stepIndex === 1 ? 1 : stepIndex === 2 ? 2 : null;
   const mode: "focal" | "summary" = isSummary ? "summary" : "focal";
 
   const [hoverTag, setHoverTag] = useState<string | null>(null);
@@ -81,11 +85,10 @@ export function E1ThreeLayers() {
 
       {/* Footer quote — only on summary step. */}
       {isSummary && (
-        <motion.div
+        <Reveal
+          on
+          delay={250}
           data-testid="e1-footer-quote"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...FADE_TRANSITION, delay: 0.25 }}
           style={{
             position: "absolute",
             left: 60,
@@ -114,7 +117,6 @@ export function E1ThreeLayers() {
               color: "var(--neutral-200)",
               margin: 0,
               lineHeight: 1.4,
-              maxWidth: 800,
             }}
           >
             {highlight(C.quote, C.quoteKw)}
@@ -131,7 +133,7 @@ export function E1ThreeLayers() {
           >
             {C.attr}
           </span>
-        </motion.div>
+        </Reveal>
       )}
     </>
   );
@@ -151,12 +153,7 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
   const layerNum = layer === "prompt" ? 1 : layer === "context" ? 2 : 3;
 
   return (
-    <motion.div
-      data-testid={`focal-detail-${layer}`}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={FADE_TRANSITION}
-    >
+    <Reveal on data-testid={`focal-detail-${layer}`}>
       <span
         style={{
           fontFamily: "var(--mono)",
@@ -194,13 +191,7 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
       </p>
 
       {/* Copper rule — animated reveal via class (delay 300ms). */}
-      <motion.div
-        className="copper-rule on"
-        style={{ width: "40%" }}
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-      />
+      <CopperRule on width="40%" delay={300} />
 
       <p
         style={{
@@ -246,10 +237,11 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
             transition: "all 0.2s var(--ease)",
             cursor: "default",
           };
+          const slug = t.toLowerCase().replace(/\s+/g, "-");
           return (
             <span
               key={t}
-              data-testid={`tag-chip-${t}`}
+              data-testid={`tag-chip-${slug}`}
               data-hover={isHover ? "true" : "false"}
               onMouseEnter={() => setHoverTag(t)}
               onMouseLeave={() => setHoverTag(null)}
@@ -260,7 +252,7 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
           );
         })}
       </div>
-    </motion.div>
+    </Reveal>
   );
 }
 
@@ -268,18 +260,13 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
 
 function LayerSummary() {
   return (
-    <motion.div
-      data-testid="layer-summary"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={FADE_TRANSITION}
-    >
+    <Reveal on data-testid="layer-summary">
       <span
         style={{
           fontFamily: "var(--mono)",
           fontSize: 12,
           letterSpacing: "0.22em",
-          color: "#e8c4a0",
+          color: "var(--copper-200)",
           textTransform: "uppercase",
         }}
       >
@@ -289,20 +276,14 @@ function LayerSummary() {
         style={{
           fontFamily: "var(--display)",
           fontSize: 44,
-          color: "#e8c4a0",
+          color: "var(--copper-200)",
           margin: "10px 0 6px 0",
           lineHeight: 1,
         }}
       >
         The full stack.
       </h2>
-      <motion.div
-        className="copper-rule on"
-        style={{ width: "40%", background: "#e8c4a0" }}
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      />
+      <CopperRule on width="40%" style={{ background: "var(--copper-200)" }} />
 
       <div
         style={{
@@ -313,18 +294,17 @@ function LayerSummary() {
         }}
       >
         {C.layers.map((l, i) => (
-          <motion.div
+          <Reveal
+            on
+            delay={300 + i * 150}
             key={l.id}
             data-testid={`summary-row-${l.id}`}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...FADE_TRANSITION, delay: 0.3 + i * 0.15 }}
             style={{
               display: "flex",
               alignItems: "baseline",
               gap: 14,
               padding: "10px 14px",
-              borderLeft: "2px solid #e8c4a0",
+              borderLeft: "2px solid var(--copper-200)",
             }}
           >
             <span
@@ -363,10 +343,10 @@ function LayerSummary() {
                 {l.summarySub}
               </div>
             </div>
-          </motion.div>
+          </Reveal>
         ))}
       </div>
-    </motion.div>
+    </Reveal>
   );
 }
 
