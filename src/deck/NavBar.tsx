@@ -98,7 +98,7 @@ export function NavBar({ section }: NavBarProps) {
             <div className="nav-group-row">
               <button
                 className="nav-btn"
-                title="Previous step"
+                title="Previous step (Backspace)"
                 disabled={atFirstStep}
                 onClick={prevStep}
               >
@@ -114,7 +114,7 @@ export function NavBar({ section }: NavBarProps) {
               </button>
               <button
                 className="nav-btn"
-                title="Reset to step 1 (U)"
+                title="Reset step (U)"
                 onClick={resetStep}
               >
                 <IconChev dir="reset-step" />

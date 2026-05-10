@@ -1,4 +1,4 @@
-import { render, screen, act } from "@testing-library/react";
+import { fireEvent, render, screen, act } from "@testing-library/react";
 import { NavBar } from "@/deck/NavBar";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
 
@@ -77,14 +77,14 @@ test("renders zero-padded step and slide counters", () => {
 
 test("step prev button is disabled at stepIndex 0", () => {
   setup({ stepCounts: [3, 4, 2] });
-  expect(getButton("Previous step").disabled).toBe(true);
+  expect(getButton("Previous step (Backspace)").disabled).toBe(true);
   expect(getButton("Next step").disabled).toBe(false);
 });
 
 test("step next button is disabled at the last step of the slide", () => {
   setup({ stepCounts: [3, 4, 2], initialSlide: 0, initialStep: 2 });
   expect(getButton("Next step").disabled).toBe(true);
-  expect(getButton("Previous step").disabled).toBe(false);
+  expect(getButton("Previous step (Backspace)").disabled).toBe(false);
 });
 
 test("slide prev button is disabled at slideIndex 0", () => {
@@ -101,18 +101,33 @@ test("slide next button is disabled at the last slide", () => {
 
 test("nav-bar click does not bubble to the parent (stopPropagation)", () => {
   const parentClick = vi.fn();
-  const parentMouseDown = vi.fn();
   render(
-    <div onClick={parentClick} onMouseDown={parentMouseDown}>
+    <div onClick={parentClick}>
       <DeckProvider stepCounts={[3, 4, 2]}>
         <NavBar section="E" />
       </DeckProvider>
     </div>,
   );
-  // Click an enabled button. Both the click and any mousedown bubble must
-  // be stopped by the .nav-bar handlers.
+  // HTMLElement.click() / fireEvent.click only synthesizes a click — it
+  // does NOT fire a preceding mousedown — so this test isolates the click
+  // path. The mousedown stop guard is exercised separately below.
   act(() => getButton("Next step").click());
   expect(parentClick).not.toHaveBeenCalled();
+});
+
+test("nav-bar mousedown does not bubble to the parent (stopPropagation)", () => {
+  const parentMouseDown = vi.fn();
+  render(
+    <div onMouseDown={parentMouseDown}>
+      <DeckProvider stepCounts={[3, 4, 2]}>
+        <NavBar section="E" />
+      </DeckProvider>
+    </div>,
+  );
+  // Explicitly fire a mousedown so the .nav-bar onMouseDown={stop} guard
+  // is actually exercised. Slide.tsx (T6) listens to mousedown for its
+  // click-to-advance logic, so the bubble guard is load-bearing.
+  fireEvent.mouseDown(getButton("Next step"));
   expect(parentMouseDown).not.toHaveBeenCalled();
 });
 
@@ -126,7 +141,7 @@ test("clicking next step advances stepIndex", () => {
 test("clicking prev step decrements stepIndex", () => {
   setup({ stepCounts: [3, 4, 2], initialSlide: 0, initialStep: 2 });
   expect(screen.getByTestId("step").textContent).toBe("2");
-  act(() => getButton("Previous step").click());
+  act(() => getButton("Previous step (Backspace)").click());
   expect(screen.getByTestId("step").textContent).toBe("1");
 });
 
@@ -134,7 +149,7 @@ test("clicking reset-step sends step to 0 without changing slide", () => {
   setup({ stepCounts: [3, 4, 2], initialSlide: 1, initialStep: 3 });
   expect(screen.getByTestId("slide").textContent).toBe("1");
   expect(screen.getByTestId("step").textContent).toBe("3");
-  act(() => getButton("Reset to step 1 (U)").click());
+  act(() => getButton("Reset step (U)").click());
   expect(screen.getByTestId("slide").textContent).toBe("1");
   expect(screen.getByTestId("step").textContent).toBe("0");
 });
