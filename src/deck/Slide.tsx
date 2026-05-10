@@ -21,14 +21,9 @@ export interface SlideProps {
   children: ReactNode;
 }
 
-// Fixed letterbox stage dimensions — see useViewportScale.ts. Mirrors the
-// design source (claude-design-project/jsx/shell.jsx Stage component).
-const STAGE_WIDTH = 1280;
-const STAGE_HEIGHT = 720;
-
+// Stage dimensions (1280×720) are owned by `.stage-wrap` / `.stage` rules in
+// src/styles/globals.css — see useViewportScale.ts. We only set cursor here.
 const stageStyle: CSSProperties = {
-  width: STAGE_WIDTH,
-  height: STAGE_HEIGHT,
   cursor: "pointer",
 };
 

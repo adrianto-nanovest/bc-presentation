@@ -28,18 +28,22 @@ test("Slide annotates animation mode and canonical pose as data attrs on the sta
   expect(root.getAttribute("data-slide-index")).toBe("0");
 });
 
-test("Slide stage has fixed 1280x720 dimensions", () => {
-  render(
+test("Slide stage has fixed 1280x720 dimensions (via CSS classes)", () => {
+  // Stage dimensions are owned by globals.css (`.stage-wrap` = 1280×720,
+  // `.stage` = absolute inset:0). We document the contract here by asserting
+  // class membership; the actual layout is verified at the e2e level in
+  // tests/e2e/viewport-fit.spec.ts.
+  const { container } = render(
     wrap(
       <Slide animationMode="static" canonicalPose={0} index={0} section="E">
         hi
       </Slide>,
     ),
   );
-  const root = screen.getByTestId("slide");
-  const style = root.getAttribute("style") ?? "";
-  expect(style).toMatch(/width:\s*1280px/);
-  expect(style).toMatch(/height:\s*720px/);
+  const stageWrap = container.querySelector(".stage-wrap");
+  expect(stageWrap).not.toBeNull();
+  const stage = screen.getByTestId("slide");
+  expect(stage.classList.contains("stage")).toBe(true);
 });
 
 test("Slide stage has cursor: pointer", () => {
