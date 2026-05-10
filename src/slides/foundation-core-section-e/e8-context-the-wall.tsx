@@ -7,7 +7,7 @@ import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { NodeNetwork } from "./components/NodeNetwork";
 import { PitfallCanvas } from "./components/PitfallCanvas";
-import { type PitfallKind } from "./components/PitfallIllustration";
+import { type PitfallKind } from "./components/PitfallAnims";
 import { e8Content as C } from "./content";
 
 const PITFALL_ICONS: Record<string, LucideIcon> = {

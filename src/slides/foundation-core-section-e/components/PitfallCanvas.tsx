@@ -1,45 +1,53 @@
-import { AnimatePresence, motion } from "framer-motion";
-import type { ReactNode } from "react";
-import { PitfallIllustration, type PitfallKind } from "./PitfallIllustration";
+// Container for the four E.8 pitfall illustrations + caption pair.
+//
+// Behaviour ported from `claude-design-project/jsx/slides-b.jsx:506-519`:
+// when no pitfall is hovered, render nothing; otherwise render the matching
+// SMIL animation on top of its caption. All four anims and the PIT_DETAIL
+// metadata live in `PitfallAnims.tsx`.
+import {
+  ConflictAnim,
+  ConfusionAnim,
+  DistractionAnim,
+  PitCaption,
+  PoisoningAnim,
+  type PitfallKind,
+} from "./PitfallAnims";
 
 interface PitfallCanvasProps {
   activeKind: PitfallKind | null;
-  defaultIllustration: ReactNode;
 }
 
-export function PitfallCanvas({ activeKind, defaultIllustration }: PitfallCanvasProps) {
-  const showDefault = activeKind === null;
+export function PitfallCanvas({ activeKind }: PitfallCanvasProps) {
+  if (!activeKind) return null;
   return (
     <div
+      key={activeKind}
       data-testid="pitfall-canvas"
-      data-active={activeKind ?? "default"}
-      className="relative h-full w-full"
+      data-active={activeKind}
+      style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 20px",
+      }}
     >
-      <AnimatePresence mode="wait">
-        {showDefault ? (
-          <motion.div
-            key="default"
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.65, 0, 0.35, 1] }}
-          >
-            {defaultIllustration}
-          </motion.div>
-        ) : (
-          <motion.div
-            key={activeKind}
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.65, 0, 0.35, 1] }}
-          >
-            <PitfallIllustration kind={activeKind} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+          width: "100%",
+        }}
+      >
+        {activeKind === "conflict" && <ConflictAnim />}
+        {activeKind === "confusion" && <ConfusionAnim />}
+        {activeKind === "poisoning" && <PoisoningAnim />}
+        {activeKind === "distraction" && <DistractionAnim />}
+      </div>
+      <PitCaption kind={activeKind} />
     </div>
   );
 }
