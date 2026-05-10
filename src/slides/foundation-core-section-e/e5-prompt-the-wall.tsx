@@ -1,178 +1,297 @@
-// src/slides/foundation-core-section-e/e5-prompt-the-wall.tsx
-import { motion } from "framer-motion";
+// E.5 — PROMPT · THE WALL
+//
+// Ported from `claude-design-project/jsx/slides-b.jsx:5-74`.
+//
+// 4 steps:
+//   0 — BP card reveals (Best Practices, left)
+//   1 — CM card reveals (Common Mistakes, right)
+//   2 — "WHERE PROMPT ENDS" wall section + 3-column constraint grid
+//   3 — italic closing line at the bottom
+//
+// Layout uses absolute coordinates against the 1280×720 stage. Reveal is the
+// shared T10 reveal primitive — no Framer Motion here. Card hover transitions
+// are handled by the `.e5-card` / `.e5-constraint` rules in globals.css (T3).
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
+import { Reveal } from "./components/Reveal";
 import { e5Content as C } from "./content";
-
-function StaggeredList({
-  items,
-  prefix,
-  bulletColor,
-  visible,
-  testIdPrefix,
-}: {
-  items: readonly string[];
-  prefix: string;
-  bulletColor: string;
-  visible: boolean;
-  testIdPrefix: string;
-}) {
-  return (
-    <ul className="flex flex-col gap-2">
-      {items.map((item, i) => (
-        <motion.li
-          key={item}
-          data-testid={`${testIdPrefix}-${i}`}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 4 }}
-          transition={{
-            duration: 0.4,
-            ease: [0.16, 1, 0.3, 1],
-            delay: visible ? i * 0.08 : 0,
-          }}
-          className="font-serif text-neutral-100"
-          style={{ fontSize: "clamp(1rem, 1.4vw, 1.4rem)", lineHeight: 1.4 }}
-        >
-          <span className={`mr-2 ${bulletColor}`}>{prefix}</span>
-          {item}
-        </motion.li>
-      ))}
-    </ul>
-  );
-}
 
 export function E5PromptTheWall() {
   const { stepIndex } = useDeck();
-  // Spec §4.5 motion table: Space 1 BEST PRACTICES; Space 2 COMMON MISTAKES;
-  // Space 3 WHERE PROMPT ENDS section; Space 4 closing caption.
+
   const showBP = stepIndex >= 0;
   const showCM = stepIndex >= 1;
   const showWall = stepIndex >= 2;
   const showClosing = stepIndex >= 3;
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
-      <FigLabel section="E" num={5} label="THE WALL" />
+    <>
+      <FigLabel section="E" num={5} label="LIMITS OF PROMPTING" />
 
-      <div className="relative z-10 mx-auto flex h-full max-w-[88vw] flex-col gap-10 px-12 py-20">
-        <h1
-          className="font-display text-neutral-50"
-          style={{ fontSize: "clamp(2.25rem, 3.25vw, 3.25rem)", lineHeight: 1.1 }}
-        >
-          {highlight(C.headline, C.headlineKeywords)}
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">
+          {highlight(C.headline, C.headlineKw)}
         </h1>
+      </div>
 
-        {/* TOP: BP + CM side-by-side */}
-        <div className="grid grid-cols-2 gap-12">
-          <div className="flex flex-col gap-3">
-            <motion.h3
-              className="font-mono uppercase tracking-[0.18em] text-copper-300"
-              style={{ fontSize: "clamp(0.9rem, 1.1vw, 1.15rem)" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showBP ? 1 : 0 }}
-              transition={{ duration: 0.4 }}
+      {/* Slide content area — matches the .slide-content rule
+          (left:48, right:48, top:156, bottom:80). The design source uses
+          top:170 but we align to the codebase's existing slide-content rule
+          per the T14 task notes. */}
+      <div
+        data-testid="e5-content"
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: 156,
+          bottom: 80,
+          display: "flex",
+          flexDirection: "column",
+          gap: 22,
+        }}
+      >
+        {/* Top 2-column row: BP + CM cards */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 24,
+          }}
+        >
+          <Reveal
+            on={showBP}
+            data-testid="e5-bp-card"
+            className="card e5-card"
+            style={{ borderColor: "var(--copper-300)" }}
+          >
+            <div
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                letterSpacing: "0.22em",
+                color: "var(--copper-300)",
+                textTransform: "uppercase",
+                marginBottom: 10,
+              }}
             >
-              {C.bestPracticesHeader}
-            </motion.h3>
-            <StaggeredList
-              items={C.bestPractices}
-              prefix="•"
-              bulletColor="text-copper-300"
-              visible={showBP}
-              testIdPrefix="e5-bp"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <motion.h3
-              className="font-mono uppercase tracking-[0.18em] text-copper-400"
-              style={{ fontSize: "clamp(0.9rem, 1.1vw, 1.15rem)" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showCM ? 1 : 0 }}
-              transition={{ duration: 0.4 }}
+              Best Practices
+            </div>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
             >
-              {C.commonMistakesHeader}
-            </motion.h3>
-            <StaggeredList
-              items={C.commonMistakes}
-              prefix="•"
-              bulletColor="text-copper-400"
-              visible={showCM}
-              testIdPrefix="e5-cm"
-            />
-          </div>
+              {C.bp.map((b, i) => (
+                <li
+                  key={b}
+                  data-testid={`e5-bp-${i}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: 10,
+                    fontFamily: "var(--serif)",
+                    fontSize: 16,
+                    color: "var(--neutral-100)",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      background: "var(--copper-300)",
+                      flexShrink: 0,
+                      transform: "translateY(-1px)",
+                    }}
+                  />
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal
+            on={showCM}
+            delay={120}
+            data-testid="e5-cm-card"
+            className="card e5-card"
+            style={{ borderColor: "var(--copper-700)" }}
+          >
+            <div
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                letterSpacing: "0.22em",
+                color: "var(--copper-500)",
+                textTransform: "uppercase",
+                marginBottom: 10,
+              }}
+            >
+              Common Mistakes
+            </div>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              {C.cm.map((b, i) => (
+                <li
+                  key={b}
+                  data-testid={`e5-cm-${i}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: 10,
+                    fontFamily: "var(--serif)",
+                    fontSize: 16,
+                    color: "var(--neutral-300)",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      background: "var(--copper-700)",
+                      flexShrink: 0,
+                      transform: "translateY(-1px)",
+                    }}
+                  />
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
 
-        {/* BOTTOM: WHERE PROMPT ENDS — full-width, weighted */}
-        <motion.div
-          className="flex flex-col gap-4 border-t border-copper-700 pt-6"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: showWall ? 1 : 0, y: showWall ? 0 : 12 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        {/* Wall section — full-width, with 3-col constraint grid */}
+        <Reveal
+          on={showWall}
+          delay={150}
+          data-testid="e5-wall"
+          style={{ flex: 1, display: "flex", minHeight: 0 }}
         >
-          <h2
-            className="font-display uppercase text-neutral-50"
-            style={{ fontSize: "clamp(1.6rem, 2.4vw, 2.5rem)", lineHeight: 1 }}
+          <div
+            style={{
+              borderTop: "1px solid var(--copper-700)",
+              paddingTop: 18,
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+            }}
           >
-            <em className="not-italic text-copper-400 italic">{C.wallHeader}</em>
-          </h2>
-          <p
-            className="font-serif italic text-neutral-50"
-            style={{ fontSize: "clamp(1.2rem, 1.6vw, 1.6rem)", lineHeight: 1.3 }}
-          >
-            {highlight(C.wallSubLine, C.wallSubLineKeywords)}
-          </p>
-          <ul className="flex flex-col gap-1">
-            {C.constraints.map((c, i) => (
-              <motion.li
-                key={c}
-                data-testid={`e5-constraint-${i}`}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: showWall ? 1 : 0, y: showWall ? 0 : 4 }}
-                transition={{
-                  duration: 0.4,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: showWall ? 0.3 + i * 0.1 : 0,
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                marginBottom: 14,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 12,
+                  letterSpacing: "0.22em",
+                  color: "var(--copper-200)",
+                  textTransform: "uppercase",
                 }}
-                className="font-serif text-neutral-100"
-                style={{ fontSize: "clamp(1rem, 1.35vw, 1.35rem)", lineHeight: 1.4 }}
               >
-                <span className="mr-2 text-copper-300">▸</span>
-                {c}
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
+                Where prompt ends
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontStyle: "italic",
+                  fontSize: 16,
+                  color: "var(--neutral-300)",
+                }}
+              >
+                {highlight(C.wallSub, C.wallSubKw)}
+              </span>
+            </div>
+            <div
+              data-testid="e5-constraint-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: 10,
+                flex: 1,
+                minHeight: 0,
+              }}
+            >
+              {C.constraints.map((c, i) => (
+                <div
+                  key={c}
+                  data-testid={`e5-constraint-${i}`}
+                  className="e5-constraint"
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    alignItems: "center",
+                    fontFamily: "var(--serif)",
+                    fontSize: 14,
+                    color: "var(--neutral-200)",
+                    padding: "14px 16px",
+                    border: "1px solid var(--copper-800)",
+                    background: "rgba(10,10,10,0.5)",
+                    lineHeight: 1.35,
+                  }}
+                >
+                  <span
+                    className="e5-constraint-num"
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 11,
+                      color: "var(--copper-500)",
+                      minWidth: 18,
+                    }}
+                  >
+                    0{i + 1}
+                  </span>
+                  {c}
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
 
-        {/* Closing caption */}
-        <motion.p
-          className="text-center font-serif italic text-neutral-200"
-          style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)", lineHeight: 1.4 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: showClosing ? 1 : 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {highlight(C.closingCaption, C.closingCaptionKeywords)}
-        </motion.p>
+        {/* Closing line */}
+        <Reveal on={showClosing} data-testid="e5-closing">
+          <p
+            style={{
+              fontFamily: "var(--display)",
+              fontStyle: "italic",
+              fontSize: 22,
+              color: "var(--copper-200)",
+              margin: 0,
+            }}
+          >
+            {highlight(C.closing, C.closingKw)}
+          </p>
+        </Reveal>
       </div>
-    </div>
+    </>
   );
 }
 
+// ───────────────────── slide def ─────────────────────
+
 export const e5Slide: SlideDef = {
   steps: 4,
-  animationMode: "step-reveal",
   canonicalPose: 3,
+  animationMode: "step-reveal",
   surface: "dark",
   section: "E",
   render: () => <E5PromptTheWall />,
