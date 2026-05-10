@@ -30,20 +30,30 @@ export function E10HarnessPractices() {
 
   // Double-rAF mount trick (ported from slides-c.jsx:104-116).
   // Guarantees the browser paints the off-state first so the .fade
-  // transition can play when we flip to on. We re-arm whenever step 0
-  // becomes active so the stagger replays on backward navigation too.
+  // transition can play when we flip to on. We re-arm the stagger on every
+  // visit to step 0 (including backward navigation 1 → 0) by depending on
+  // `stepIndex` directly. At step 1+ the cards stay mounted (no flicker) —
+  // we only flip mounted off transiently when we re-enter step 0 to replay
+  // the stagger.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    if (stepIndex >= 0) {
-      setMounted(false);
-      const r1 = requestAnimationFrame(() => {
-        requestAnimationFrame(() => setMounted(true));
-      });
-      return () => cancelAnimationFrame(r1);
+    // Steps > 0: ensure cards are visible but skip the rAF replay.
+    if (stepIndex !== 0) {
+      setMounted(true);
+      return undefined;
     }
+    // Step 0: paint off-state once, then flip on next frame so the
+    // CSS .fade transition actually plays.
     setMounted(false);
-    return undefined;
-  }, [stepIndex >= 0]);
+    let id2 = 0;
+    const id1 = requestAnimationFrame(() => {
+      id2 = requestAnimationFrame(() => setMounted(true));
+    });
+    return () => {
+      cancelAnimationFrame(id1);
+      cancelAnimationFrame(id2);
+    };
+  }, [stepIndex]);
 
   const showCards = mounted && stepIndex >= 0;
   const showFooter = stepIndex >= 1;

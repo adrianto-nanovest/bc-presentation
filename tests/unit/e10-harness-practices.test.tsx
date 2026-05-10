@@ -112,3 +112,86 @@ test("step 1 (canonicalPose) → footer caption revealed", () => {
     expect(screen.getByTestId(`practice-card-${p.id}`)).toBeInTheDocument();
   }
 });
+
+test("backward navigation 0 → 1 → 0 re-arms the card stagger", () => {
+  // Stub rAF so we can drive the double-rAF mount trick deterministically.
+  // Without this, jsdom's native rAF runs on a setTimeout and the .fade.on
+  // class flip would be racy under act().
+  let frameCallbacks: Array<(t: number) => void> = [];
+  let frameId = 0;
+  const rafSpy = vi
+    .spyOn(globalThis, "requestAnimationFrame")
+    .mockImplementation((cb) => {
+      frameId++;
+      frameCallbacks.push(cb);
+      return frameId;
+    });
+  const cafSpy = vi
+    .spyOn(globalThis, "cancelAnimationFrame")
+    .mockImplementation(() => {});
+
+  const flushFrames = () => {
+    // Drain the current queue. Each call may enqueue more (the double-rAF
+    // pattern queues a second frame from inside the first), so loop.
+    while (frameCallbacks.length > 0) {
+      const cbs = frameCallbacks;
+      frameCallbacks = [];
+      cbs.forEach((cb) => cb(performance.now()));
+    }
+  };
+
+  function GoTo({ slide, step }: { slide: number; step: number }) {
+    const { goTo } = useDeck();
+    return (
+      <button
+        data-testid={`goto-${slide}-${step}`}
+        onClick={() => goTo(slide, step)}
+      />
+    );
+  }
+
+  try {
+    render(
+      <DeckProvider stepCounts={[e10Slide.steps]}>
+        <GoTo slide={0} step={0} />
+        <GoTo slide={0} step={1} />
+        <E10HarnessPractices />
+      </DeckProvider>,
+    );
+
+    const firstCardId = `practice-card-${e10Content.practices[0].id}`;
+
+    // Initial mount is at step 0. Flush rAF so the double-rAF resolves and
+    // the cards transition to the .on state.
+    act(() => {
+      flushFrames();
+    });
+    expect(screen.getByTestId(firstCardId).className).toMatch(/\bon\b/);
+
+    // Forward: 0 → 1. Cards stay mounted (we set mounted=true synchronously
+    // for non-zero steps), so .on is preserved — no flicker on advance.
+    act(() => {
+      screen.getByTestId("goto-0-1").click();
+    });
+    expect(screen.getByTestId(firstCardId).className).toMatch(/\bon\b/);
+
+    // Backward: 1 → 0. The effect must run setMounted(false) synchronously,
+    // dropping .on from every card before the next rAF re-flips it.
+    act(() => {
+      screen.getByTestId("goto-0-0").click();
+    });
+    // At this point the rAF callbacks are queued but not yet flushed →
+    // cards are in the off state, ready to replay the stagger.
+    expect(screen.getByTestId(firstCardId).className).not.toMatch(/\bon\b/);
+
+    // Flush the double-rAF → cards transition back to .on. This is the
+    // re-armed stagger replaying on backward navigation.
+    act(() => {
+      flushFrames();
+    });
+    expect(screen.getByTestId(firstCardId).className).toMatch(/\bon\b/);
+  } finally {
+    rafSpy.mockRestore();
+    cafSpy.mockRestore();
+  }
+});
