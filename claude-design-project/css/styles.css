@@ -1,0 +1,146 @@
+/* Berau Section E — Foundation Core */
+:root {
+  --copper-50:#fbf6f1; --copper-100:#f4e4d2; --copper-200:#e8c4a0;
+  --copper-300:#d99e6c; --copper-400:#c98548; --copper-500:#b86e3d;
+  --copper-600:#9c5a30; --copper-700:#7a4626; --copper-800:#5a341c;
+  --copper-900:#3d2413; --copper-950:#21130a;
+  --neutral-0:#ffffff; --neutral-50:#f5f5f5; --neutral-100:#e5e5e5;
+  --neutral-200:#d4d4d4; --neutral-300:#a3a3a3; --neutral-400:#737373;
+  --neutral-500:#525252; --neutral-700:#262626; --neutral-800:#171717;
+  --neutral-900:#0a0a0a; --neutral-950:#050505;
+  --serif:"Source Serif 4",Georgia,serif;
+  --display:"Instrument Serif",Georgia,serif;
+  --sans:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; background: #050505; color: var(--neutral-50); font-family: var(--serif); overflow: hidden; }
+
+/* Stage / scaling */
+.viewport { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #050505; }
+.stage-wrap { position: relative; width: 1280px; height: 720px; flex: 0 0 auto; transform-origin: center; }
+.stage { position: absolute; inset: 0; background: var(--neutral-900); overflow: hidden; }
+.stage.light { background: var(--neutral-50); color: var(--neutral-900); }
+
+/* Header consistency */
+.fig-label { position: absolute; top: 36px; left: 48px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--copper-300); text-transform: uppercase; z-index: 5; }
+.fig-label .dot { color: var(--copper-700); margin: 0 8px; }
+.slide-headline-row { position: absolute; top: 80px; left: 48px; right: 48px; }
+.slide-headline { font-family: var(--display); font-weight: 400; font-size: 46px; line-height: 1.05; letter-spacing: -0.01em; color: var(--neutral-50); margin: 0; }
+.slide-headline.small { font-size: 40px; }
+.slide-content { position: absolute; left: 48px; right: 48px; top: 156px; bottom: 80px; }
+
+/* Stage section divider */
+em.kw { color: var(--copper-300); font-style: italic; font-weight: 400; }
+.stage.light em.kw { color: var(--copper-600); }
+
+/* Bottom nav — hidden until user hovers the bottom edge of the stage */
+.nav-zone { position: absolute; left: 0; right: 0; bottom: 0; height: 88px; z-index: 50; pointer-events: auto; }
+.nav-zone .nav-bar { opacity: 0; transition: opacity 0.25s var(--ease); }
+.nav-zone:hover .nav-bar, .nav-zone:focus-within .nav-bar { opacity: 1; }
+
+.nav-bar {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: flex-end; align-items: flex-end;
+  padding: 0 28px 14px;
+  pointer-events: none;
+}
+.nav-bar > * { pointer-events: auto; }
+
+.nav-section-tag {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  color: var(--copper-300); text-transform: uppercase;
+  white-space: nowrap; padding-bottom: 8px; margin-right: 6px;
+}
+
+.nav-clusters { display: flex; gap: 18px; align-items: flex-end; }
+.nav-group-count { white-space: nowrap; }
+.nav-group { display: flex; flex-direction: column; gap: 6px; }
+.nav-group-head { display: flex; align-items: baseline; gap: 8px; padding: 0 2px; }
+.nav-group-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.20em;
+  color: var(--copper-700); text-transform: uppercase;
+}
+.nav-group-count {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  color: var(--copper-300); text-transform: uppercase;
+}
+.nav-group-row { display: flex; gap: 6px; }
+
+.nav-btn {
+  background: rgba(10,10,10,0.7); border: 1px solid var(--copper-800);
+  color: var(--copper-300); width: 30px; height: 28px; cursor: pointer;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.18s var(--ease); padding: 0;
+}
+.nav-btn:hover { border-color: var(--copper-300); color: var(--copper-100); }
+.nav-btn[disabled] { opacity: 0.3; cursor: not-allowed; }
+.nav-btn svg { width: 14px; height: 14px; stroke-width: 2; }
+
+/* Reusable */
+.fade { opacity: 0; transition: opacity 0.45s var(--ease), transform 0.45s var(--ease); transform: translateY(8px); }
+.fade.on { opacity: 1; transform: translateY(0); animation: fadeReveal 0.5s var(--ease) both; }
+@keyframes fadeReveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.copper-rule { height: 1px; background: var(--copper-700); transform-origin: left; transform: scaleX(0); transition: transform 0.6s var(--ease); }
+.copper-rule.on { transform: scaleX(1); }
+
+/* Type scale */
+.t-mono { font-family: var(--mono); }
+.t-display { font-family: var(--display); }
+.t-serif { font-family: var(--serif); }
+.t-sans { font-family: var(--sans); }
+.t-uppercase { text-transform: uppercase; letter-spacing: 0.18em; }
+
+/* Badges, cards */
+.card { border: 1px solid var(--copper-700); background: rgba(10,10,10,0.7); padding: 16px; }
+.card.active { border-color: var(--copper-300); }
+
+/* NodeNetwork */
+.satellite { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 10px; background: rgba(10,10,10,0.92); border: 1px solid var(--copper-700); min-width: 110px; transition: all 0.4s var(--ease); }
+.satellite .icon { color: var(--copper-300); }
+.satellite .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--neutral-200); text-transform: uppercase; text-align: center; line-height: 1.15; }
+.satellite.active { border-color: var(--copper-300); background: rgba(20,12,6,0.95); }
+
+/* E6 — bigger satellites + consistent icon size + hover state */
+.e6-sat { min-width: 0; padding: 12px 14px; gap: 10px; flex-direction: column; justify-content: center; align-items: center; }
+.e6-sat .e6-sat-icon-wrap { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; flex: 0 0 30px; color: var(--copper-300); }
+.e6-sat .e6-sat-icon-wrap svg { width: 28px !important; height: 28px !important; display: block; stroke-width: 1.6; }
+.e6-sat .label { font-size: 11px; letter-spacing: 0.18em; }
+.e6-sat:hover, .e6-sat.active { border-color: var(--copper-200); background: rgba(184,110,61,0.10); box-shadow: 0 0 0 1px var(--copper-300) inset; }
+.e6-sat:hover .e6-sat-icon-wrap, .e6-sat.active .e6-sat-icon-wrap { color: var(--copper-100); }
+
+.e6-hub { font-size: 14px; letter-spacing: 0.18em; }
+
+/* E6 — flow animation for connector lines */
+@keyframes e6-flow {
+  0%   { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0;  }
+}
+.e6-flow { animation: e6-flow 1.6s linear infinite; }
+
+.hub { position: absolute; transform: translate(-50%, -50%); width: 90px; height: 90px; border-radius: 50%; border: 1px solid var(--copper-300); background: rgba(184,110,61,0.15); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--copper-200); text-transform: uppercase; text-align: center; line-height: 1.15; }
+
+.svg-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+
+/* Practice card */
+.pcard { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border: 1px solid var(--copper-700); background: rgba(10,10,10,0.7); transition: border-color 0.2s var(--ease); }
+.pcard:hover { border-color: var(--copper-300); }
+
+/* E5 — card hover highlights */
+.e5-card { transition: border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+.e5-card:hover { border-color: var(--copper-200) !important; background: rgba(184,110,61,0.08); box-shadow: 0 0 0 1px var(--copper-300) inset; }
+.e5-constraint { transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+.e5-constraint:hover { border-color: var(--copper-200) !important; background: rgba(184,110,61,0.12) !important; color: var(--neutral-100); box-shadow: 0 0 0 1px var(--copper-300) inset; }
+.e5-constraint:hover .e5-constraint-num { color: var(--copper-200) !important; }
+
+.pad-inset { padding-bottom: 56px; } /* keep content above nav bar */
+
+/* Streaming caret used by Typewriter (slide E2) */
+.tw-caret { display: inline-block; animation: tw-blink 0.7s steps(1) infinite; margin-left: 1px; }
+.tw-caret-block { width: 0.55em; height: 1.05em; background: var(--copper-300); vertical-align: -0.15em; margin-left: 2px; }
+@keyframes tw-blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
