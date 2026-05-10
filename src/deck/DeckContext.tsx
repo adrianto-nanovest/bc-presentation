@@ -14,6 +14,10 @@ type DeckState = {
   advance: () => void;
   retreat: () => void;
   goTo: (slide: number, step?: number) => void;
+  nextStep: () => void;
+  prevStep: () => void;
+  resetStep: () => void;
+  resetDeck: () => void;
 };
 
 const DeckCtx = createContext<DeckState | null>(null);
@@ -64,9 +68,58 @@ export function DeckProvider({
     [stepCounts],
   );
 
+  // Per-slide step controls — explicitly NO spillover to adjacent slides.
+  // The NavBar uses these so its step buttons feel scoped to the current slide.
+  const nextStep = useCallback(() => {
+    setPos((cur) => {
+      const stepsHere = stepCounts[cur.slide] ?? 1;
+      if (cur.step + 1 < stepsHere) return { slide: cur.slide, step: cur.step + 1 };
+      return cur; // clamp at slide's last step
+    });
+  }, [stepCounts]);
+
+  const prevStep = useCallback(() => {
+    setPos((cur) => {
+      if (cur.step > 0) return { slide: cur.slide, step: cur.step - 1 };
+      return cur; // clamp at 0
+    });
+  }, []);
+
+  const resetStep = useCallback(() => {
+    setPos((cur) => (cur.step === 0 ? cur : { slide: cur.slide, step: 0 }));
+  }, []);
+
+  const resetDeck = useCallback(() => {
+    setPos((cur) =>
+      cur.slide === 0 && cur.step === 0 ? cur : { slide: 0, step: 0 },
+    );
+  }, []);
+
   const value = useMemo<DeckState>(
-    () => ({ slideIndex, stepIndex, stepCounts, advance, retreat, goTo }),
-    [slideIndex, stepIndex, stepCounts, advance, retreat, goTo],
+    () => ({
+      slideIndex,
+      stepIndex,
+      stepCounts,
+      advance,
+      retreat,
+      goTo,
+      nextStep,
+      prevStep,
+      resetStep,
+      resetDeck,
+    }),
+    [
+      slideIndex,
+      stepIndex,
+      stepCounts,
+      advance,
+      retreat,
+      goTo,
+      nextStep,
+      prevStep,
+      resetStep,
+      resetDeck,
+    ],
   );
 
   return <DeckCtx.Provider value={value}>{children}</DeckCtx.Provider>;
