@@ -7,3 +7,17 @@ Fix slideD4, currently as attached, on claude-design-section-d folder
 
 create Tasks for all items above (your TaskCreate tool), dispatch and delegate to your general-purpose agent to fix it.
 For better understanding, you can dispatch your Explore agent.
+
+-----------------
+
+Implement section F based on docs/specs/2026-05-11-slides-foundation-techniques-section-f.md 
+create Tasks for all items to do (your TaskCreate tool), dispatch and delegate to your general-purpose agents to implement.
+For better understanding on current codebase (src/ folder) and research content (docs/researches/), you can dispatch your Explore agent.
+FYI, if need some reference on styles, components, animations, layouts, refer to section D and E, since section I,J,K not properly done yet
+
+_________________
+
+Implement title slide and section A,B,C based on docs/specs/2026-05-11-slides-opening-title-A-B-C.md 
+create Tasks for all items to do (your TaskCreate tool), dispatch and delegate to your general-purpose agents to implement.
+For better understanding on current codebase (src/ folder) and research content (docs/researches/), you can dispatch your Explore agent.
+FYI, if need some reference on styles, components, animations, layouts, refer to section D,E, and F, since section I,J,K not properly done yet

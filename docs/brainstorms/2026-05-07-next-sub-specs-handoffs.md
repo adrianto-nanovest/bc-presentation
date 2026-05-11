@@ -195,47 +195,57 @@ Use haiku model for any explore agents used.
 > Paste this block when ready to brainstorm the deck opener.
 
 ```
-You are joining the multi-spec slide-content brainstorm for the Berau Coal Energy AI Workshop deck. This is sub-spec #3 of 4.
-
-**Project location:** /Users/macbook/Projects/_web_presentation/berau-presentation
-
-**Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md
-**Prior sub-specs (read both for cumulative tonal precedent):**
-- docs/specs/2026-05-07-slides-reveal-and-closing.md (Sections I, J, K)
-- docs/specs/<date>-slides-foundation-core.md (Sections D, E, F)
+Let's discuss on title slide & section A,B,C based on **Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md 
 
 # Scope — Opening
 
-The deck opener. Sets tone. Three pieces:
+The deck opener. Sets tone. Four pieces:
 
 - **Title slide** — workshop name, date, audience. Per meta-spec: small bottom-corner attribution `Adri • Nanovest`. NO dedicated speaker-intro slide (verbal intro happens during Hook 1 setup).
+- **Section A — Hook 1: BCE Vol-1 Winner**. All what winner delivered is good, the goal is to give questions of the improvement can be made, and the answer is by having proper foundational knowledge, as explained further in the deck (check first current implementation, find the gap, but NOT in the tone to do "correction", just make it as the "bridge" WHY we need this workshop.
 - **Section B — AI evolution + landscape**. The "B" Hook 1 gestures toward — what's possible right now. Use Indonesia 92%-adoption stat + "79% adopted, 11% in production, 40% risk cancellation by 2027" as inverse hooks (per meta-spec §9).
 - **Section C — Mindset**. AI as bridge / multiplier / portable adaptability. Throughline: *"AI is the bridge from where you are to wherever you need to be."* NEVER name as transition.
 
 # Inputs
 
 **Research files:**
-- docs/researches/topic-ai-evolution.md (Section B)
-- docs/references/* — internal-deck PDFs for tonal precedent
-
-**Memory files:** all 5 deck-wide conventions (apply automatically).
+- Section A - docs/references/ai-catalyst-berau-vol1-winner-project-material.pdf
+- Section B - docs/researches/topic-ai-evolution.md as synthesis from docs/references/nanovest-pilot-workshop.pdf (slide 9-13)
+- Section C - docs/references/nanovest-pilot-workshop.pdf (slide 3-7) & docs/researches/internal-hr-group.md for mindset research and framing inspiration.
+We can dispatch explore agents to understand from above material, do web research based on section topics as needed, and store the analysis on docs/researches/ then use it as input. Use haiku model for any explore agents used.
+For PDF, use Read tool with `pages` parameter to extract these specific slides (no unnecessary context bloat)
 
 # Special considerations
 
-- **Hook 1 (Section A) is OUT OF SCOPE** — material pending from BCE PIC. The Title slide must hand off cleanly to Hook 1 without committing to specific Hook 1 content.
 - **Section C must seed the late-deck Hook 2 reveal** without telegraphing it. The mindset throughline ("bridge") supports the eventual "what could you build?" pivot in I.4.
 - **Tone calibration is the most important task here** — Opening sets the editorial register the audience receives for the next 90 minutes.
 
 # Process
 
-Same as Foundation Core: superpowers:brainstorming skill, per-section narrative architecture → slide count → per-slide deep dive. Output to docs/specs/YYYY-MM-DD-slides-opening.md.
+1. Explore current codebase on sections D + E to understand existing visual language and design depth (also the content). May a bit different from parent meta-spec, existing implementation is proper reference.
+2. Brainstorm All sections in the Opening arc (Title + A + B + C):
+   a. Decide narrative architecture
+   b. Decide slide count + per-slide breakdown
+   c. Per-slide deep dive: layout / components / content / motion / hover / canonical pose.
+   f. Match Sections D + E's design depth (motion-design vignettes where appropriate; editorial-serious tone; copper-only palette; 0px corner).
+3. Create a new dedicated specs in docs/specs.
+4. Self-review for placeholders / contradictions / scope drift
+5. Hand back to me for review.
+
+# Constraints
+
+- Free-stack only.
+- Mining-audience plain-language framing (do not very technical).
+
+Use haiku model for any explore agents used.
 
 # Estimated scope
 
 - Title: 1 slide
+- Section A: ~1-2 slides
 - Section B: ~4–6 slides
 - Section C: ~3–5 slides
-- Total: ~8–12 slides, ~15–25 logical advances
+- Total: ~8–13 slides, ~20–30 logical advances
 ```
 
 ---
@@ -245,51 +255,50 @@ Same as Foundation Core: superpowers:brainstorming skill, per-section narrative 
 > Paste this block when ready to brainstorm the practical close.
 
 ```
-You are joining the multi-spec slide-content brainstorm for the Berau Coal Energy AI Workshop deck. This is sub-spec #4 of 4 — the LAST one before implementation.
-
-**Project location:** /Users/macbook/Projects/_web_presentation/berau-presentation
-
-**Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md
-**All prior sub-specs (read for cumulative tonal precedent):**
-- docs/specs/2026-05-07-slides-reveal-and-closing.md (Sections I, J, K)
-- docs/specs/<date>-slides-foundation-core.md (Sections D, E, F)
-- docs/specs/<date>-slides-opening.md (Title, B, C)
+Let's discuss on section G & H based on **Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md 
 
 # Scope — Application
 
 The practical-close arc. Sections G + H. Bridges from foundation chapters to the late-deck Hook 2 reveal (Section I).
 
-- **Section G — Tools ecosystem** (Claude (deep) / Google (deep) / OpenAI (brief)). Capability matrix slide; decision-tree slide; NotebookLM emphasized (per meta-spec §9). NOTE: NotebookLM appears in I.3 portfolio (as one of Adri's plugins) — Section G's NotebookLM coverage should set up the I.3 callback.
-- **Section H — Pitfalls + best practices**. Catalog + answers; fear-of-replacement reframe. Pair pitfalls with practices that solve them.
+- **Section G — Tools ecosystem** (Claude (deep) / Google (deep) / OpenAI (brief)). Capability matrix slide; decision-tree slide; NotebookLM emphasized (per meta-spec §9). 
+- **Section H — Pitfalls + best practices**. Catalog + answers; including fear-of-replacement reframe. Pair pitfalls with practices that solve them.
 
 # Inputs
+
+**Main context files (MUST READ)**
+- docs/references/tools-context.md - how we should frame it for section G
+- docs/references/pitfalls-and-best-practices.md - some of my thinking to be covered on section H, but need to be refined
+- docs/references/tools-capabilities-assets.md - for the video assets to be used on section G (current video assets in assets/videos folder), we need to define whether we want to use it in our deck, embed videos directly, or just using youtube iframe
 
 **Research files:**
 - docs/researches/topic-ai-tools-ecosystem.md (Section G)
 - docs/researches/topic-pitfalls-and-best-practices.md (Section H)
 - docs/researches/internal-claude-tooling.md (Claude-specific tooling context)
-
-**Memory files:** all 5 deck-wide conventions (apply automatically).
+We can dispatch explore agents to understand the research material, or do web research on non-covered research topics, and store the analysis on docs/researches/ then use it as input. Use haiku model for any explore agents used.
 
 # Special considerations
 
-- **Section G's NotebookLM coverage is load-bearing** — sets up the audience to recognize NotebookLM when it appears in I.3 portfolio (Adri built a NotebookLM plugin). Subtle continuity payoff.
 - **Section H must NOT be doom-and-gloom** — the meta-spec specifies "fear-of-replacement reframe" and "pair pitfalls with practices." Each pitfall needs its corresponding practice on the same slide or adjacent.
 - **Application is the LAST conceptual section before Section I** — its closing slide should leave the audience curious about "who is this guy?" — seeding the Hook 2 reveal that follows.
 
 # Process
 
-Same as prior sub-specs: superpowers:brainstorming skill, narrative arch → slide count → per-slide deep dive. Output to docs/specs/YYYY-MM-DD-slides-application.md.
+1. Explore current codebase on sections D + E to understand existing visual language and design depth. May a bit different from parent meta-spec, but existing implementation is proper reference.
+2. Brainstorm topic: 
+   a. Decide narrative architecture
+   b. Decide slide count + per-slide breakdown
+   c. Per-slide deep dive: layout / components / content / motion / illustration / hover / canonical pose.
+   f. Match Sections D + E's design depth (motion-design vignettes where appropriate; editorial-serious tone; copper-only palette; 0px corner).
+   e. Display tools capabilities approach, content plus videos? iframve or direct asset embedding? or no videos?
+3. Create a new dedicated specs in docs/specs.
+4. Self-review for placeholders / contradictions / scope drift
+5. Hand back to me for review.
 
-# Estimated scope
+# Constraints
 
-- Section G: ~5–7 slides
-- Section H: ~4–6 slides
-- Total: ~9–13 slides, ~18–28 logical advances
-
-# After this sub-spec
-
-All 4 sub-specs are complete. Next step: invoke superpowers:writing-plans for each sub-spec to produce the implementation plan, then superpowers:executing-plans (or subagent-driven-development) to build the slides.
+- Free-stack only.
+- Mining-audience plain-language framing (do not very technical).
 ```
 
 ---
