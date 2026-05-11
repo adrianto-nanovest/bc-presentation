@@ -42,9 +42,8 @@ test("E.10 declares 2 steps with canonicalPose=1", () => {
 
 test("E.10 renders the FIG label `FIG. E.10 · HARNESS · PRACTICES`", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.10 · HARNESS · PRACTICES/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.10.*HARNESS.*PRACTICES/i);
 });
 
 test("step 0 → 8 practice cards rendered (each with name, pattern chip, 3 bullets); footer hidden", () => {

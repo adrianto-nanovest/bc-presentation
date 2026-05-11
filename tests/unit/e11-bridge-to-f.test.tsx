@@ -43,9 +43,8 @@ test("E.11 declares 2 steps with canonicalPose=1", () => {
 
 test("E.11 renders the FIG label `FIG. E.11 · BRIDGE · BUILT`", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.11 · BRIDGE · BUILT/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.11.*BRIDGE.*BUILT/i);
 });
 
 test("E.11 renders the bridge hero photo + three layered overlays", () => {

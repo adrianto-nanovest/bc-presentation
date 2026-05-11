@@ -42,9 +42,8 @@ test("E.3 declares 3 steps with canonicalPose=2", () => {
 
 test("E.3 renders without throwing under DeckProvider and shows the FigLabel", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.3 · LAYER 1 · STRUCTURE/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.3.*LAYER 1.*STRUCTURE/i);
 });
 
 test("step 0 → 6 spine cards visible; framework grid + footer hidden; right column blank by default", () => {

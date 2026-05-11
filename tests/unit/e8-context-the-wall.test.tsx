@@ -43,9 +43,8 @@ test("E.8 declares 2 steps with canonicalPose=1", () => {
 
 test("E.8 renders the FIG label `FIG. E.8 · CONTEXT · PITFALLS`", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.8 · CONTEXT · PITFALLS/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.8.*CONTEXT.*PITFALLS/i);
 });
 
 test("step 0 → headline + 4 pitfall cards visible; footer hidden; canvas empty", () => {

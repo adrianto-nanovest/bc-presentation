@@ -14,7 +14,8 @@ test("I.3 renders FIG label, headline, caption, and the categorized list", () =>
       <I3Portfolio />
     </DeckProvider>,
   );
-  expect(screen.getByText(/FIG\. I\.3 · THE PORTFOLIO/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*I\.3.*THE PORTFOLIO/i);
   expect(
     screen.getByText((_content, node) => node?.textContent === "Built. Taught. In production."),
   ).toBeInTheDocument();

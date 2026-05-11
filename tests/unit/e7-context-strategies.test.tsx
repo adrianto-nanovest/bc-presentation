@@ -45,9 +45,8 @@ test("E.7 declares 6 steps with canonicalPose=5", () => {
 
 test("E.7 renders the FIG label `FIG. E.7 · CONTEXT STRATEGIES`", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.7 · CONTEXT STRATEGIES/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.7.*CONTEXT STRATEGIES/i);
 });
 
 test("step 0 → headline + funnel canvas visible; cards not yet revealed", () => {

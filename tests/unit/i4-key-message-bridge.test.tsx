@@ -22,7 +22,8 @@ test("I.4 renders Foundation, before, velocity tokens and the rhetorical questio
     </DeckProvider>,
   );
   act(() => screen.getByTestId("goto").click());
-  expect(screen.getByText(/FIG\. I\.4 · THE BRIDGE/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*I\.4.*THE BRIDGE/i);
   expect(screen.getByText("Foundation")).toBeInTheDocument();
   expect(screen.getByText("velocity")).toBeInTheDocument();
   // "Project Manager" is wrapped in <KeywordHighlight>; match the sibling text node

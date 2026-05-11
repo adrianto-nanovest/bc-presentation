@@ -1,199 +1,157 @@
-import { motion } from "framer-motion";
-import type { CSSProperties } from "react";
+// D.3 — ONE PROCESS · FOUR LEVELS
+//
+// Ported from `claude-design-section-d/jsx/slides-d.jsx:626-910`.
+// 5 steps: 0..3 walk the focus through BPM → RPA → IPA → AGENTIC; step 4
+// reveals the capstone caption and unlocks hover (hover overrides the
+// step-driven focus from step 4 onward).
+//
+// Layout:
+//   FigLabel + Headline (slide-headline-row, .small)
+//   Sub-line (mono uppercase, copper-300) under the headline
+//   4-column grid (1fr each) of `D3LevelCard`s — each carrying its own
+//   looping motion glyph (`D3*Anim`) as `children`.
+//   Capstone caption row at the bottom (height reserved so the grid
+//   doesn't shift when it appears).
+//
+// Step gating logic per card (index `i` in 0..3):
+//   focused  = stepIndex === i
+//   revealed = stepIndex >= i              (lit but not highlighted)
+//   hovered  = canHover && hoverKey === key (overrides focus visually
+//              via D3LevelCard's `highlight = focused || hovered`)
+//   canHover = stepIndex >= 4              (hover only unlocks at capstone)
+//
+// canonicalPose = 4 — the capstone step where hover is unlocked.
+import { useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { HoverReveal } from "@/components/HoverReveal";
-import { highlight } from "@/components/highlight";
-import { LevelCard, type LevelMode, type LevelPosition } from "./components/LevelCard";
-import { ConvergenceCard } from "./components/ConvergenceCard";
-import { BpmCompressionGlyph } from "./glyphs/BpmCompressionGlyph";
-import { RpaAccelerationGlyph } from "./glyphs/RpaAccelerationGlyph";
-import { IpaSynthesisGlyph } from "./glyphs/IpaSynthesisGlyph";
-import { AgenticInversionGlyph } from "./glyphs/AgenticInversionGlyph";
-import { d2Content } from "./content";
-import { d3Content as C } from "./content";
+import { highlight as KW } from "@/components/highlight";
+import { Reveal } from "@/slides/foundation-core-section-e/components/Reveal";
+import { D3LevelCard } from "./components/D3LevelCard";
+import {
+  D3BpmAnim,
+  D3RpaAnim,
+  D3IpaAnim,
+  D3AgenticAnim,
+} from "./components/D3Anims";
+import { d3Content as C, type D3LevelKey } from "./content";
 
-// Re-use D.2's 5 slot positions for converged cards (geometry rhyme — spec §5.3).
-const SLOT_STYLE: Record<string, CSSProperties> = {
-  "bpm-tl":    { top: "18%", left: "8%", position: "absolute" },
-  "rpa-tr":    { top: "18%", right: "8%", position: "absolute" },
-  "ai-bc":     { bottom: "10%", left: "50%", transform: "translateX(-50%)", position: "absolute" },
-  "ipa-c":     { top: "45%", left: "50%", transform: "translate(-50%, -50%)", position: "absolute" },
-  "agentic-r": { top: "45%", right: "8%", transform: "translateY(-50%)", position: "absolute" },
-  "center":    { top: "50%", left: "50%", transform: "translate(-50%, -50%)", position: "absolute" },
-};
-
-type LevelKey = "bpm" | "rpa" | "ipa" | "agentic";
-
-interface LevelLayout {
-  mode: LevelMode | "hidden";
-  position: LevelPosition;
+// Map: which animation belongs to which level key (mirrors the design
+// source's `D3LevelAnim` switch).
+function D3LevelAnim({ levelKey, copper }: { levelKey: D3LevelKey; copper: string }) {
+  if (levelKey === "bpm") return <D3BpmAnim copper={copper} />;
+  if (levelKey === "rpa") return <D3RpaAnim copper={copper} />;
+  if (levelKey === "ipa") return <D3IpaAnim copper={copper} />;
+  if (levelKey === "agentic") return <D3AgenticAnim copper={copper} />;
+  return null;
 }
-
-// Mode-progression matrix per spec §4.3 motion table.
-function levelLayoutAtStep(level: LevelKey, step: number): LevelLayout {
-  if (level === "bpm") {
-    if (step === 0) return { mode: "focal", position: "center" };
-    if (step <= 3) return { mode: "filed", position: "bpm-tl" };
-    return { mode: "converged", position: "bpm-tl" };
-  }
-  if (level === "rpa") {
-    if (step <= 0) return { mode: "hidden", position: "center" };
-    if (step === 1) return { mode: "focal", position: "center" };
-    if (step <= 3) return { mode: "filed", position: "rpa-tr" };
-    return { mode: "converged", position: "rpa-tr" };
-  }
-  if (level === "ipa") {
-    if (step <= 1) return { mode: "hidden", position: "center" };
-    if (step === 2) return { mode: "focal", position: "center" };
-    return { mode: "converged", position: "ipa-c" };
-  }
-  // agentic
-  if (step <= 2) return { mode: "hidden", position: "center" };
-  if (step === 3) return { mode: "focal", position: "center" };
-  return { mode: "converged", position: "agentic-r" };
-}
-
-const GLYPHS = {
-  bpm: BpmCompressionGlyph,
-  rpa: RpaAccelerationGlyph,
-  ipa: IpaSynthesisGlyph,
-  agentic: AgenticInversionGlyph,
-} as const;
 
 export function D3OneProcessFourLevels() {
   const { stepIndex } = useDeck();
-  // AI feeder card appears at Space 3 (stepIndex >= 2).
-  const showAiFeeder = stepIndex >= 2;
-  // Result capstone appears at Space 5 (stepIndex >= 4).
-  const showCapstone = stepIndex >= 4;
-
-  // The D.2 source-of-truth for AI card content.
-  const aiCard = d2Content.cards.find((c) => c.key === "ai")!;
+  const showCap = stepIndex >= 4;
+  // Hover only unlocks once the auto-focus walk has finished (step >= 4).
+  // Until then, the focused card is driven by the step pointer.
+  const canHover = stepIndex >= 4;
+  const [hovered, setHovered] = useState<D3LevelKey | null>(null);
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
+    <>
       <FigLabel section="D" num={3} label="ONE PROCESS · FOUR LEVELS" />
-      <h1
-        className="absolute left-12 right-12 top-12 z-10 font-display text-neutral-50"
-        style={{ fontSize: "2rem", lineHeight: 1.2 }}
+
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">
+          {KW(C.headline, C.headlineKw)}
+        </h1>
+      </div>
+
+      {/* Stage block — sub-line + 4-column grid + capstone slot. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: 152,
+          bottom: 56,
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+        }}
       >
-        {highlight(C.headline, C.headlineKeywords)}
-      </h1>
+        {/* Sub-line — always visible (mono caps, copper-300). */}
+        <Reveal on style={{ marginTop: 4 }}>
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              color: "var(--copper-300)",
+              textTransform: "uppercase",
+            }}
+          >
+            {KW(C.sub, C.subKw)}
+          </span>
+        </Reveal>
 
-      {/* The four morphing level cards, with HoverReveal wrap at canonical pose */}
-      {C.levels.map((level) => {
-        const layout = levelLayoutAtStep(level.key, stepIndex);
-        if (layout.mode === "hidden") return null;
-        const Glyph = GLYPHS[level.key];
-        const cardD2 = d2Content.cards.find((c) => c.key === level.key)!;
-
-        const card = (
-          <LevelCard
-            level={level.key}
-            mode={layout.mode}
-            position={layout.position}
-            ask={level.ask}
-            askKeywords={level.askKeywords}
-            doText={level.doText}
-            doKeywords={level.doKeywords}
-            outcome={level.outcome}
-            glyph={<Glyph play={layout.mode === "focal"} />}
-            convergedTitle={cardD2.title}
-            convergedSubName={cardD2.subName}
-            convergedTagline={cardD2.tagline}
-            convergedTaglineKeywords={cardD2.taglineKeywords}
-            convergedBullets={level.convergedBullets}
-            convergedCopperStop={cardD2.copperStop}
-          />
-        );
-
-        // Hover only attaches at canonical pose, on converged cards (spec §4.3).
-        const wrapHover = layout.mode === "converged" && stepIndex >= 4;
-        return (
-          <div key={level.key} style={SLOT_STYLE[layout.position]}>
-            {wrapHover ? (
-              <HoverReveal
-                position="below"
-                trigger={card}
-                payload={
-                  <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "0.95rem", lineHeight: 1.45 }}>
-                    <strong className="not-italic text-copper-300">Ask:</strong> {level.ask}<br />
-                    <strong className="not-italic text-copper-300">Outcome:</strong> {level.outcome}
-                  </span>
+        {/* 4-column grid — one D3LevelCard per level. */}
+        <div
+          style={{
+            flex: 1,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 12,
+            minHeight: 0,
+          }}
+        >
+          {C.levels.map((lv, i) => {
+            const focused = stepIndex === i;
+            const isHovered = canHover && hovered === lv.key;
+            const revealed = stepIndex >= i;
+            return (
+              <D3LevelCard
+                key={lv.key}
+                level={lv}
+                index={i}
+                focused={focused}
+                hovered={isHovered}
+                revealed={revealed}
+                canHover={canHover}
+                onMouseEnter={
+                  canHover ? () => setHovered(lv.key) : undefined
                 }
-              />
-            ) : (
-              card
-            )}
-          </div>
-        );
-      })}
+                onMouseLeave={
+                  canHover
+                    ? () =>
+                        setHovered((h) => (h === lv.key ? null : h))
+                    : undefined
+                }
+              >
+                <D3LevelAnim levelKey={lv.key} copper={lv.copper} />
+              </D3LevelCard>
+            );
+          })}
+        </div>
 
-      {/* AI feeder card — never has a focal scene; HoverReveal at canonical pose */}
-      {showAiFeeder && (
-        <motion.div
-          style={SLOT_STYLE["ai-bc"]}
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {stepIndex >= 4 ? (
-            <HoverReveal
-              position="below"
-              trigger={
-                <ConvergenceCard
-                  title={aiCard.title}
-                  subName={aiCard.subName}
-                  tagline={aiCard.tagline}
-                  taglineKeywords={aiCard.taglineKeywords}
-                  bullets={C.aiFeederBullets}
-                  copperStop={aiCard.copperStop}
-                  position="ai-bc"
-                />
-              }
-              payload={
-                <span className="block max-w-[420px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100 shadow" style={{ fontSize: "0.95rem", lineHeight: 1.45 }}>
-                  {aiCard.hoverAnalogy}
-                </span>
-              }
-            />
-          ) : (
-            <ConvergenceCard
-              title={aiCard.title}
-              subName={aiCard.subName}
-              tagline={aiCard.tagline}
-              taglineKeywords={aiCard.taglineKeywords}
-              bullets={C.aiFeederBullets}
-              copperStop={aiCard.copperStop}
-              position="ai-bc"
-            />
-          )}
-        </motion.div>
-      )}
-
-      {/* Result capstone footer */}
-      {showCapstone && (
-        <motion.p
-          className="absolute bottom-6 left-12 right-12 z-10 text-center font-serif italic text-neutral-300"
-          style={{ fontSize: "1.28rem" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {highlight(C.resultCapstone, C.resultCapstoneKeywords)}
-        </motion.p>
-      )}
-    </div>
+        {/* Capstone — left-aligned, serif italic, copper-200. Height
+            reserved so the grid above doesn't shift when it appears. */}
+        <div style={{ minHeight: 22 }}>
+          <Reveal on={showCap}>
+            <p
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: 15,
+                color: "var(--copper-200)",
+                margin: 0,
+                textAlign: "left",
+                lineHeight: 1.3,
+              }}
+            >
+              {KW(C.capstone, C.capstoneKw)}
+            </p>
+          </Reveal>
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -14,7 +14,8 @@ test("I.1 renders the FIG label, headline keywords, 6 stages, and tagline", () =
       <I1MetaProcess />
     </DeckProvider>,
   );
-  expect(screen.getByText(/FIG\. I\.1 · THE PROCESS/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*I\.1.*THE PROCESS/i);
   expect(screen.getByText(/facilitated with AI/)).toBeInTheDocument();
   expect(screen.getByText("90 minutes")).toBeInTheDocument();
   expect(screen.getAllByTestId("flow-stage")).toHaveLength(6);

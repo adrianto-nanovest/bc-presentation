@@ -43,9 +43,8 @@ test("E.4 declares 4 steps with canonicalPose=3", () => {
 
 test("E.4 renders without throwing under DeckProvider and shows the FigLabel", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.4 · LAYER 1 · METHODOLOGIES/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.4.*LAYER 1.*METHODOLOGIES/i);
 });
 
 test("step 0 → BASIC tier visible; INTERMEDIATE + ADVANCED Reveal not yet on; footer hidden", () => {

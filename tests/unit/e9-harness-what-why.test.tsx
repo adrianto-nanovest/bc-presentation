@@ -42,9 +42,8 @@ test("E.9 declares 5 steps with canonicalPose=4", () => {
 
 test("E.9 renders the FIG label `FIG. E.9 · LAYER 3 · HARNESS`", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.9 · LAYER 3 · HARNESS/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.9.*LAYER 3.*HARNESS/i);
 });
 
 test("step 0 → left pane visible (definition + 4 why-points); right reveals hidden", () => {

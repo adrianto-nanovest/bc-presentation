@@ -1,236 +1,350 @@
-// Single source of truth for all Section D slide copy.
+// Single source of truth for all Section D slide copy (D.1–D.5).
+//
+// Schema is ported verbatim from `claude-design-section-d/jsx/data.jsx` — the
+// design source — with two differences:
+//   1. `const D<N> = {...}` → `export const d<N>Content = {...}`
+//   2. The window-globals attach is dropped (TS modules export instead).
+//
+// Field names match the design source EXACTLY (e.g. `headlineKw`, `subLineKw`,
+// `mechanismKw`, `taglineKw`, `outcomeKw`, `levels[].bullets[].kw`,
+// `terminals[KEY].sub`). Slide files (d1..d5) in this directory will be
+// re-ported in a later wave; until then, TS errors in those slide files are
+// expected.
+//
+// Markup convention: data carries plain strings + a sibling `kw` / `*Kw` array
+// of substrings to highlight at render time. No inline `<em>` tags in data.
 
-export const d1Content = {
+// ─── D.1 ───────────────────────────────────────────────────────────────────
+
+export interface D1Content {
   beat1: {
-    statValue: 73,                       // animated 0 → 73
+    statValue: number;
+    statSuffix: string;
+    subLine: string;
+    subLineKw: readonly string[];
+    caption: string;
+  };
+  beat2: {
+    mechanism: string;
+    mechanismKw: readonly string[];
+    manualLabel: string;
+    manualValue: string;
+    machineLabel: string;
+    machineValue: string;
+    caption: string;
+    captionKw: readonly string[];
+  };
+  beat3: {
+    prescription: string;
+    prescriptionKw: readonly string[];
+    sub: string;
+    subKw: readonly string[];
+  };
+}
+
+export const d1Content: D1Content = {
+  beat1: {
+    statValue: 73,
     statSuffix: "%",
     subLine: "of automation projects fail.",
-    subLineKeywords: ["fail"] as const,
+    subLineKw: ["fail"],
     caption: "— widely cited across automation industry research, 2024–2026",
   },
   beat2: {
     mechanism: "Automation amplifies what's already there. Broken or excellent.",
-    mechanismKeywords: ["Automation", "Broken", "excellent"] as const,
-    manualBar: { fromPct: 0, toPct: 18, counterTo: 1, label: "manual pace" },
-    machineBar: { fromPct: 0, toPct: 140, counterTo: 1000, label: "machine pace" },
+    mechanismKw: ["amplifies", "Broken", "excellent"],
+    manualLabel: "manual pace",
+    manualValue: "1×",
+    machineLabel: "machine pace",
+    machineValue: "1,000×",
+    caption: "A bad process automated runs 1,000× faster — at being bad.",
+    captionKw: ["1,000×"],
   },
   beat3: {
     prescription: "Fix the spec first. Then automate.",
-    prescriptionKeywords: ["spec"] as const,
-    subPrescription: "Process improvement is a prerequisite, not a phase.",
-    subPrescriptionKeywords: ["prerequisite"] as const,
+    prescriptionKw: ["spec"],
+    sub: "Process improvement is a prerequisite, not a phase.",
+    subKw: ["prerequisite"],
   },
 };
 
-export const d2Content = {
+// ─── D.2 ───────────────────────────────────────────────────────────────────
+
+export type D2CardKey = "bpm" | "rpa" | "ai" | "ipa" | "agentic";
+
+export interface D2Card {
+  key: D2CardKey;
+  title: string;
+  subName: string;
+  icon: string;
+  tagline: string;
+  taglineKw: readonly string[];
+  bullets: readonly string[];
+  copper: string;
+  analogy: string;
+}
+
+export interface D2Content {
+  headline: string;
+  headlineKw: readonly string[];
+  cards: readonly D2Card[];
+  summary: string;
+  summaryKw: readonly string[];
+}
+
+export const d2Content: D2Content = {
   headline: "Three disciplines converge. One evolves.",
-  headlineKeywords: ["converge", "evolves"] as const,
+  headlineKw: ["converge", "evolves"],
   cards: [
     {
-      key: "bpm" as const,
+      key: "bpm",
       title: "BPM",
       subName: "Business Process Management",
+      icon: "workflow",
       tagline: "The GPS for operations",
-      taglineKeywords: ["GPS"] as const,
+      taglineKw: ["GPS"],
       bullets: [
         "Holistic workflow optimization",
         "Identifies bottlenecks and waste",
         "Redesigns end-to-end flow",
       ],
-      copperStop: "copper-700" as const,
-      position: "bpm-tl" as const,
-      hoverAnalogy:
-        "Like asking 'where's the waste?' before you ask 'how do we go faster?'.",
+      copper: "copper-700",
+      analogy: "Like asking 'where's the waste?' before 'how do we go faster?'",
     },
     {
-      key: "rpa" as const,
+      key: "rpa",
       title: "RPA",
       subName: "Robotic Process Automation",
+      icon: "bot",
       tagline: "Deterministic digital workers",
-      taglineKeywords: ["Deterministic"] as const,
+      taglineKw: ["Deterministic"],
       bullets: [
         "Rule-based task execution",
         "Fast, reliable, no intelligence needed",
         "Scales repetitive operations",
       ],
-      copperStop: "copper-500" as const,
-      position: "rpa-tr" as const,
-      hoverAnalogy:
-        "Like a digital worker following a checklist exactly — fast, never tired, never improvises.",
+      copper: "copper-500",
+      analogy:
+        "A digital worker following a checklist exactly — fast, never tired, never improvises.",
     },
     {
-      key: "ai" as const,
+      key: "ai",
       title: "AI",
       subName: "Artificial Intelligence",
+      icon: "sparkles",
       tagline: "Core strengths",
-      taglineKeywords: ["Core strengths"] as const,
+      taglineKw: ["Core strengths"],
       bullets: [
         "Summarization & analysis",
         "Generation & NLU",
         "Multimodal & adaptive learning",
       ],
-      copperStop: "copper-400" as const,
-      position: "ai-bc" as const,
-      hoverAnalogy:
-        "What AI does well — quickly, at scale, on text/image/audio simultaneously.",
+      copper: "copper-400",
+      analogy: "What AI does well — quickly, at scale, on text/image/audio simultaneously.",
     },
     {
-      key: "ipa" as const,
+      key: "ipa",
       title: "IPA",
       subName: "Intelligent Process Automation",
+      icon: "layers",
       tagline: "End-to-end intelligent workflow",
-      taglineKeywords: ["intelligent"] as const,
+      taglineKw: ["intelligent"],
       bullets: [
-        "Combines process, automation, and AI",
+        "Combines process, automation & AI",
         "Context-aware and adaptive",
         "End-to-end orchestration",
       ],
-      copperStop: "copper-300" as const,
-      position: "ipa-c" as const,
-      hoverAnalogy:
-        "Process discipline + deterministic automation + AI strengths, in one workflow.",
+      copper: "copper-300",
+      analogy: "Process discipline + deterministic automation + AI strengths, in one workflow.",
     },
     {
-      key: "agentic" as const,
-      title: "AGENTIC AUTOMATION",
+      key: "agentic",
+      title: "AGENTIC",
       subName: "Autonomous Agents",
+      icon: "target",
       tagline: "Goals, not just steps",
-      taglineKeywords: ["Goals"] as const,
+      taglineKw: ["Goals"],
       bullets: [
         "Self-directed orchestration toward outcomes",
         "Multi-agent collaboration",
         "Continuous learning and adaptation",
       ],
-      copperStop: "copper-200" as const,
-      position: "agentic-r" as const,
-      hoverAnalogy:
+      copper: "copper-200",
+      analogy:
         "An agent that pursues a goal — 'ensure zero unplanned downtime' — and adapts as conditions change.",
     },
   ],
+  summary: "BPM + RPA + AI fuse into IPA. Given a goal, it becomes Agentic.",
+  summaryKw: ["fuse into IPA", "becomes Agentic"],
 };
 
-export const d3Content = {
-  headline: "Monthly operations report — the same process at every level.",
-  headlineKeywords: ["every level"] as const,
+// ─── D.3 ───────────────────────────────────────────────────────────────────
+
+export type D3LevelKey = "bpm" | "rpa" | "ipa" | "agentic";
+
+export interface D3Bullet {
+  text: string;
+  kw: readonly string[];
+}
+
+export interface D3Level {
+  key: D3LevelKey;
+  label: string;
+  copper: string;
+  ask: string;
+  askKw: readonly string[];
+  bullets: readonly D3Bullet[];
+  outcome: string;
+  outcomeKw: readonly string[];
+}
+
+export interface D3Content {
+  headline: string;
+  headlineKw: readonly string[];
+  sub: string;
+  subKw: readonly string[];
+  levels: readonly D3Level[];
+  capstone: string;
+  capstoneKw: readonly string[];
+}
+
+export const d3Content: D3Content = {
+  headline: "One process. Four levels.",
+  headlineKw: ["Four levels"],
+  sub: "Monthly operations report — same task, four lenses.",
+  subKw: ["four lenses"],
   levels: [
     {
-      key: "bpm" as const,
+      key: "bpm",
+      label: "BPM",
+      copper: "copper-700",
       ask: "Where's the waste?",
-      askKeywords: ["waste"] as const,
-      doText:
-        "Redesign report scope; consolidate three duplicate reports into one; integrate data sources end-to-end.",
-      doKeywords: [] as const,
+      askKw: ["waste"],
+      bullets: [
+        { text: "Redesign report scope", kw: ["Redesign"] },
+        { text: "Consolidate duplicate reports", kw: ["Consolidate"] },
+        { text: "Integrate data end-to-end", kw: ["Integrate"] },
+        { text: "Standardize the spec", kw: ["Standardize"] },
+      ],
       outcome: "Fewer reports; clearer signal.",
-      convergedBullets: [
-        "Redesigned report scope",
-        "3 reports → 1",
-        "Sources integrated end-to-end",
-      ],
+      outcomeKw: ["clearer signal"],
     },
     {
-      key: "rpa" as const,
+      key: "rpa",
+      label: "RPA",
+      copper: "copper-500",
       ask: "What repeats?",
-      askKeywords: ["repeats"] as const,
-      doText:
-        "Bot pulls KPIs each Monday; populates the template; distributes to stakeholders.",
-      doKeywords: [] as const,
+      askKw: ["repeats"],
+      bullets: [
+        { text: "Bot pulls KPIs every Monday", kw: ["Bot"] },
+        { text: "Populates the template", kw: ["Populates"] },
+        { text: "Distributes to stakeholders", kw: ["Distributes"] },
+        { text: "Validates against rules", kw: ["Validates"] },
+      ],
       outcome: "Hours reclaimed; zero copy-paste.",
-      convergedBullets: [
-        "Bot pulls KPIs Monday",
-        "Auto-fills template",
-        "Auto-distributes",
-      ],
+      outcomeKw: ["Hours reclaimed"],
     },
     {
-      key: "ipa" as const,
-      ask: "Which steps need AI's core strengths?",
-      askKeywords: ["core strengths"] as const,
-      doText:
-        "Layer AI's core strengths: summarization (compress raw data), analysis (spot anomalies), generation (draft narrative), NLU (interpret stakeholder comments).",
-      doKeywords: ["summarization", "analysis", "generation", "NLU"] as const,
+      key: "ipa",
+      label: "IPA",
+      copper: "copper-300",
+      ask: "Which steps need AI?",
+      askKw: ["AI"],
+      bullets: [
+        { text: "Summarize raw data", kw: ["Summarize"] },
+        { text: "Analyze for anomalies", kw: ["Analyze"] },
+        { text: "Generate the narrative", kw: ["Generate"] },
+        { text: "Interpret comments via NLU", kw: ["NLU"] },
+      ],
       outcome: "Insight, not just data.",
-      convergedBullets: [
-        "Bot reads sources → summarizes anomalies",
-        "Drafts narrative",
-        "Flags risks",
-      ],
+      outcomeKw: ["Insight"],
     },
     {
-      key: "agentic" as const,
+      key: "agentic",
+      label: "AGENTIC",
+      copper: "copper-200",
       ask: "Can this run itself?",
-      askKeywords: ["run itself"] as const,
-      doText:
-        "Agent monitors continuously; generates report on demand; escalates to leadership without being asked.",
-      doKeywords: [] as const,
-      outcome: "Earlier risk detection; report becomes ambient.",
-      convergedBullets: [
-        "Agent monitors continuously",
-        "Generates on demand",
-        "Escalates without being asked",
+      askKw: ["run itself"],
+      bullets: [
+        { text: "Monitors continuously", kw: ["Monitors"] },
+        { text: "Generates report on demand", kw: ["Generates"] },
+        { text: "Escalates without prompting", kw: ["Escalates"] },
+        { text: "Adapts to new patterns", kw: ["Adapts"] },
       ],
+      outcome: "Earlier signals; ambient reporting.",
+      outcomeKw: ["ambient"],
     },
   ],
-  aiFeederBullets: [
-    "Summarization · generation",
-    "Analysis · NLU",
-    "On the source data",
-  ],
-  resultCapstone: "~80% time saved · risks surfaced earlier",
-  resultCapstoneKeywords: ["~80% time saved", "risks surfaced earlier"] as const,
+  capstone: "≈80% time saved · risks surfaced earlier.",
+  capstoneKw: ["80%", "risks"],
 };
 
-export const d4Content = {
+// ─── D.4 ───────────────────────────────────────────────────────────────────
+
+export type D4TerminalKey = "STOP" | "BPM" | "RPA" | "IPA" | "AGENTIC";
+
+export interface D4Question {
+  num: number;
+  q: string;
+  kw: readonly string[];
+  yes: string;
+  no: string;
+  yesTerminal?: D4TerminalKey;
+  noTerminal?: D4TerminalKey;
+}
+
+export interface D4Terminal {
+  sub: string;
+  copper: string;
+}
+
+export interface D4Content {
+  headline: string;
+  headlineKw: readonly string[];
+  questions: readonly D4Question[];
+  terminals: Record<D4TerminalKey, D4Terminal>;
+  footer: string;
+  footerKw: readonly string[];
+}
+
+export const d4Content: D4Content = {
   headline: "Each level builds on the previous. You can't skip.",
-  headlineKeywords: ["previous"] as const,
-  footerCaption: "Skip a level, and the level above fails harder.",
-  footerCaptionKeywords: ["fails harder"] as const,
-  ladder: {
-    questions: [
-      { number: 1, question: "Does the process work today?", keywords: ["work today"] as const, yesLabel: "continue", noLabel: "STOP ↻" },
-      { number: 2, question: "Have you removed waste + bottlenecks?", keywords: ["waste"] as const, yesLabel: "continue", noLabel: "apply BPM first" },
-      { number: 3, question: "Are there repetitive, rule-based steps?", keywords: ["repetitive"] as const, yesLabel: "RPA", noLabel: "continue" },
-      { number: 4, question: "Do steps need AI's core strengths?", keywords: ["AI's core strengths"] as const, yesLabel: "IPA", noLabel: "continue" },
-      { number: 5, question: "Should it pursue a goal autonomously?", keywords: ["goal autonomously"] as const, yesLabel: "AGENTIC", noLabel: "stay at IPA" },
-    ],
-    terminals: [
-      {
-        abbrev: "BPM",
-        subLine: "Redesign + integrate. The foundation everything else stands on.",
-        altitudeTier: 1 as const,
-        hoverExample: "Example: cut a 20-step approval flow to 8 steps before automating any of it.",
-        fromQ: 2,
-        branch: "no" as const,
-      },
-      {
-        abbrev: "RPA",
-        subLine: "Automate the rule-based parts. Reclaim hours.",
-        altitudeTier: 2 as const,
-        hoverExample: "Example: bot pulls 6 reports each Monday, fills the template, distributes.",
-        fromQ: 3,
-        branch: "yes" as const,
-      },
-      {
-        abbrev: "IPA",
-        subLine: "Layer AI's core strengths. Insight, not just data.",
-        altitudeTier: 3 as const,
-        hoverExample: "Example: bot reads source data, summarizes anomalies, flags risks for human review.",
-        fromQ: 4,
-        branch: "yes" as const,
-      },
-      {
-        abbrev: "AGENTIC",
-        subLine: "Autonomous orchestration. The process pursues the goal.",
-        altitudeTier: 4 as const,
-        hoverExample: "Example: agent monitors operations continuously, generates report on demand, escalates without being asked.",
-        fromQ: 5,
-        branch: "yes" as const,
-      },
-    ],
+  headlineKw: ["builds on the previous", "can't skip"],
+  questions: [
+    { num: 1, q: "Does the process work today?",            kw: ["work today"],          yes: "continue", no: "STOP ↻",          noTerminal: "STOP" },
+    { num: 2, q: "Have you removed waste + bottlenecks?",   kw: ["waste"],               yes: "continue", no: "apply BPM first", noTerminal: "BPM" },
+    { num: 3, q: "Are there repetitive, rule-based steps?", kw: ["repetitive"],          yes: "RPA",      no: "continue",        yesTerminal: "RPA" },
+    { num: 4, q: "Do steps need AI's core strengths?",      kw: ["AI's core strengths"], yes: "IPA",      no: "continue",        yesTerminal: "IPA" },
+    { num: 5, q: "Should it pursue a goal autonomously?",   kw: ["goal autonomously"],   yes: "AGENTIC",  no: "stay at IPA",     yesTerminal: "AGENTIC" },
+  ],
+  terminals: {
+    STOP:    { sub: "If the process is broken, automation just breaks faster.",        copper: "copper-700" },
+    BPM:     { sub: "Redesign + integrate. The foundation everything else stands on.", copper: "copper-700" },
+    RPA:     { sub: "Automate the rule-based parts. Reclaim hours.",                   copper: "copper-500" },
+    IPA:     { sub: "Layer AI's core strengths. Insight, not just data.",              copper: "copper-300" },
+    AGENTIC: { sub: "Autonomous orchestration. The process pursues the goal.",         copper: "copper-200" },
   },
+  footer: "Skip a level, and the level above fails harder.",
+  footerKw: ["fails harder"],
 };
 
-export const d5Content = {
-  beat1: { text: "Process is the spec.", keywords: ["spec"] as const },
-  beat2: { text: "Engineering is the system around it.", keywords: ["system"] as const },
-  bridge: { text: "Next: how that system gets built.", keywords: ["Next"] as const },
+// ─── D.5 ───────────────────────────────────────────────────────────────────
+
+export interface D5Beat {
+  text: string;
+  kw: readonly string[];
+}
+
+export interface D5Content {
+  beat1: D5Beat;
+  beat2: D5Beat;
+  bridge: D5Beat;
+  attr: string;
+}
+
+export const d5Content: D5Content = {
+  beat1: { text: "Process is the spec.", kw: ["spec"] },
+  beat2: { text: "Engineering is the system around it.", kw: ["system"] },
+  bridge: { text: "Next: how that system gets built.", kw: ["how that system gets built"] },
+  attr: "— Section E · Foundation Core",
 };

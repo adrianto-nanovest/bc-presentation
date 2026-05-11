@@ -6,11 +6,10 @@ interface FigLabelProps {
 
 export function FigLabel({ section, num, label }: FigLabelProps) {
   return (
-    <p
-      className="absolute top-12 left-12 z-20 font-sans uppercase tracking-[0.18em] text-copper-400"
-      style={{ fontSize: "clamp(0.95rem, 1.05vw, 1.25rem)" }}
-    >
-      — FIG. {section}.{num} · {label}
-    </p>
+    <div className="fig-label">
+      — FIG. {section}.{num}
+      <span className="dot">·</span>
+      <span style={{ color: "var(--copper-200)" }}>{label}</span>
+    </div>
   );
 }

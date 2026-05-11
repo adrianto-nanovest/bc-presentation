@@ -117,12 +117,16 @@ body,
   position: absolute;
   top: 36px;
   left: 48px;
+  right: 48px;
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: 0.18em;
   color: var(--copper-300);
   text-transform: uppercase;
   z-index: 5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .fig-label .dot {
   color: var(--copper-700);
@@ -519,4 +523,75 @@ em.kw {
   100% {
     opacity: 0;
   }
+}
+
+/* ========== Section D — D.3 motion glyphs ========== */
+
+/* ─── Slide D3 · per-card looping animations ──────────────── */
+/* Uniform shell — same height + same padding-top so the gap from the
+   last DO bullet to the first motion element is identical for all four
+   levels. The caption is absolutely positioned at the shell's bottom
+   edge so all four caption baselines align to the pixel. */
+.d3-anim {
+  position: relative;
+  width: 100%;
+  height: 108px;
+  padding: 26px 0 22px;
+  display: flex; flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  user-select: none;
+}
+.d3-anim-caption {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 6px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--copper-400);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* BPM compression: 20 thin blocks fade/fall, 8 thick blocks materialize.
+   Bumped block dimensions so the glyph reads at the same visual weight
+   as the IPA/AGENTIC SVG diagrams. */
+.d3-bpm-row { display: flex; }
+.d3-bpm-row.top    { gap: 3px; }
+.d3-bpm-row.bottom { gap: 7px; }
+.d3-bpm-block { display: block; background: var(--accent, var(--copper-500)); }
+.d3-bpm-block.top    { width: 5px;  height: 14px; opacity: 0.75; animation: d3-bpm-top 4s var(--ease) infinite both; }
+.d3-bpm-block.bottom { width: 14px; height: 18px; opacity: 0;    animation: d3-bpm-bottom 4s var(--ease) infinite both; }
+@keyframes d3-bpm-top {
+  0%, 22%   { opacity: 0.75; transform: translateY(0);    }
+  38%, 92%  { opacity: 0;    transform: translateY(18px); }
+  100%      { opacity: 0.75; transform: translateY(0);    }
+}
+@keyframes d3-bpm-bottom {
+  0%, 28%   { opacity: 0; transform: scale(0.5); }
+  44%, 90%  { opacity: 1; transform: scale(1);   }
+  100%      { opacity: 0; transform: scale(0.5); }
+}
+
+/* RPA acceleration: long manual fill creeps; tiny bot fill snaps in.
+   Track height bumped so the bars carry the same visual weight as the
+   block rows in BPM and the SVG glyphs in IPA/AGENTIC. */
+.d3-rpa-row { display: flex; align-items: center; gap: 12px; }
+.d3-rpa-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: var(--copper-400); text-transform: uppercase; width: 60px; text-align: right; }
+.d3-rpa-track { width: 130px; height: 12px; border: 1px solid var(--copper-800); position: relative; background: rgba(184,110,61,0.06); }
+.d3-rpa-fill  { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent, var(--copper-500)); }
+.d3-rpa-fill.manual { animation: d3-rpa-manual 4s var(--ease) infinite both; }
+.d3-rpa-fill.bot    { animation: d3-rpa-bot    4s var(--ease) infinite both; box-shadow: 0 0 8px var(--accent, var(--copper-500)); }
+@keyframes d3-rpa-manual {
+  0%, 4%   { width: 0; }
+  62%, 92% { width: 100%; }
+  100%     { width: 0; }
+}
+@keyframes d3-rpa-bot {
+  0%, 8%   { width: 0; }
+  14%, 92% { width: 8.3%; } /* 30 min / 360 min */
+  100%     { width: 0; }
 }

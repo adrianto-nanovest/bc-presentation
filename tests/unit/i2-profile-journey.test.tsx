@@ -14,7 +14,8 @@ test("I.2 renders FIG label, name, role, delivery line, credentials, and 3 timel
       <I2ProfileJourney />
     </DeckProvider>,
   );
-  expect(screen.getByText(/FIG\. I\.2 · THE JOURNEY/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*I\.2.*THE JOURNEY/i);
   expect(screen.getByText(/ADRIANTO TEDJOKUSUMO/)).toBeInTheDocument();
   expect(screen.getByText(/13 years tech delivery/)).toBeInTheDocument();
   expect(screen.getByText(/ITB Electrical Eng/)).toBeInTheDocument();

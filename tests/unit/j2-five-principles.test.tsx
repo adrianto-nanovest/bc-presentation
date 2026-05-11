@@ -13,7 +13,8 @@ test("J.2 renders the FIG label, headline, caption, and 5 cards", () => {
       <J2FivePrinciples />
     </DeckProvider>,
   );
-  expect(screen.getByText(/FIG\. J\.2 · FIVE PRINCIPLES/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*J\.2.*FIVE PRINCIPLES/i);
   expect(screen.getByText(/Mindset before tools/)).toBeInTheDocument();
   expect(screen.getByText(/Hover any card/)).toBeInTheDocument();
   expect(screen.getAllByTestId("recipe-step-card")).toHaveLength(5);

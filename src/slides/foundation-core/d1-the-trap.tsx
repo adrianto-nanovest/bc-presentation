@@ -1,141 +1,261 @@
-import { motion } from "framer-motion";
+// D.1 — THE TRAP
+//
+// Ported from `claude-design-section-d/jsx/slides-d.jsx:143-257`.
+// 3 steps: 0=stat full-bleed center, 1=stat shrinks into header +
+// mechanism/bars/AutomationLoop, 2=prescription block at the bottom.
+// canonicalPose = 2.
+//
+// Layout uses absolute coordinates against the 1280×720 stage (see
+// src/deck/Slide.tsx + globals.css `.stage-wrap`). The design source is the
+// spec for pixel positions — do not refactor into Tailwind utilities.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { highlight } from "@/components/highlight";
+import { highlight as KW } from "@/components/highlight";
 import { CountUp } from "./components/CountUp";
-import { AmplificationBar } from "./components/AmplificationBar";
-import { d1Content as C } from "./content";
-
-function Divider({ shown }: { shown: boolean }) {
-  return (
-    <motion.hr
-      className="w-[30%] self-center border-0 border-t border-copper-700"
-      initial={{ scaleX: 0 }}
-      animate={{ scaleX: shown ? 1 : 0 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      style={{ transformOrigin: "left center" }}
-    />
-  );
-}
+import { AmpBar } from "./components/AmpBar";
+import { AutomationLoop } from "./components/AutomationLoop";
+import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
+import { d1Content as D1 } from "./content";
 
 export function D1TheTrap() {
   const { stepIndex } = useDeck();
-  // Beats 1/2/3 reveal at stepIndex 0/1/2; everything settles by stepIndex 3.
   const showStat = stepIndex >= 0;
-  const showMechanism = stepIndex >= 1;
-  const showBars = stepIndex >= 2;
-  const showPrescription = stepIndex >= 3;
+  const showBody = stepIndex >= 1;
+  const showRx = stepIndex >= 2;
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-neutral-900">
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
+    <>
       <FigLabel section="D" num={1} label="THE TRAP" />
-      <div className="relative z-10 mx-auto flex h-full max-w-[80%] flex-col items-center justify-center gap-10 px-12 py-20 text-center">
-        {/* Beat 1 — number */}
-        {showStat && (
-          <div className="flex flex-col items-center gap-4">
-            <h1
-              className="font-display text-copper-400"
-              style={{ fontSize: "12.8rem", lineHeight: 1 }}
-            >
-              〔
-              <CountUp from={0} to={C.beat1.statValue} durationMs={1500} testId="d1-stat-counter" />
-              〕{C.beat1.statSuffix}
-            </h1>
-            <motion.hr
-              className="border-0 border-t border-copper-700"
-              initial={{ scaleX: 0, width: "30%" }}
-              animate={{ scaleX: showStat ? 1 : 0 }}
-              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-              style={{ transformOrigin: "left center" }}
+
+      {/* The big stat — full-bleed at step 0; shrinks into header style at step 1+ */}
+      <div
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: showBody ? 76 : 130,
+          transition: "top 0.7s var(--ease)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: showBody ? 16 : 24,
+            justifyContent: showBody ? "flex-start" : "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <h1
+            style={{
+              margin: 0,
+              fontFamily: "var(--display)",
+              fontWeight: 400,
+              lineHeight: showBody ? 1.05 : 0.9,
+              letterSpacing: showBody ? "-0.01em" : "normal",
+              fontSize: showBody ? 40 : 200,
+              transition:
+                "font-size 0.7s var(--ease), line-height 0.7s var(--ease), letter-spacing 0.7s var(--ease)",
+              display: "inline-flex",
+              alignItems: "baseline",
+              color: "var(--copper-700)",
+            }}
+          >
+            <CountUp
+              from={0}
+              to={D1.beat1.statValue}
+              durationMs={1500}
+              testId="d1-stat-counter"
             />
-            <motion.p
-              className="font-serif text-neutral-50"
-              style={{ fontSize: "2.2rem", lineHeight: 1.3 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showStat ? 1 : 0 }}
-              transition={{ duration: 0.4, delay: 1.8 }}
+            <span
+              style={{
+                fontSize: showBody ? "1em" : "0.55em",
+                marginLeft: showBody ? "0.02em" : "0.05em",
+                color: "var(--copper-300)",
+                transition: "font-size 0.7s var(--ease)",
+              }}
             >
-              {highlight(C.beat1.subLine, C.beat1.subLineKeywords)}
-            </motion.p>
-            <motion.p
-              className="font-sans text-neutral-400"
-              style={{ fontSize: "0.95rem" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showStat ? 1 : 0 }}
-              transition={{ duration: 0.4, delay: 2.0 }}
+              {D1.beat1.statSuffix}
+            </span>
+          </h1>
+          <p
+            style={{
+              margin: 0,
+              fontFamily: showBody ? "var(--display)" : "var(--serif)",
+              fontWeight: 400,
+              color: showBody ? "var(--neutral-50)" : "var(--neutral-100)",
+              fontSize: showBody ? 40 : 32,
+              lineHeight: showBody ? 1.05 : 1.25,
+              letterSpacing: showBody ? "-0.01em" : "normal",
+              transition:
+                "font-size 0.7s var(--ease), line-height 0.7s var(--ease), color 0.7s var(--ease), font-family 0s 0.35s",
+              maxWidth: 720,
+            }}
+          >
+            {KW(D1.beat1.subLine, D1.beat1.subLineKw)}
+          </p>
+        </div>
+        {!showBody && (
+          <Reveal
+            on={showStat}
+            delay={1700}
+            style={{ textAlign: "center", marginTop: 28 }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 12,
+                letterSpacing: "0.18em",
+                color: "var(--neutral-500)",
+                textTransform: "uppercase",
+                margin: 0,
+              }}
             >
-              {C.beat1.caption}
-            </motion.p>
-          </div>
-        )}
-
-        <Divider shown={showMechanism} />
-
-        {/* Beat 2 — mechanism + bars */}
-        {showMechanism && (
-          <div className="flex flex-col items-center gap-8">
-            <motion.h2
-              className="font-display text-neutral-50"
-              style={{ fontSize: "2.6rem", lineHeight: 1.2 }}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {highlight(C.beat2.mechanism, C.beat2.mechanismKeywords)}
-            </motion.h2>
-            {showBars && (
-              <div className="flex w-full max-w-3xl flex-col gap-4">
-                <AmplificationBar {...C.beat2.manualBar} offFrame={false} durationMs={500} />
-                <AmplificationBar {...C.beat2.machineBar} offFrame durationMs={1200} delayMs={700} />
-              </div>
-            )}
-          </div>
-        )}
-
-        <Divider shown={showPrescription} />
-
-        {/* Beat 3 — prescription */}
-        {showPrescription && (
-          <div className="flex flex-col items-center gap-4">
-            <motion.h2
-              className="font-display text-neutral-50"
-              style={{ fontSize: "2.6rem", lineHeight: 1.2 }}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {highlight(C.beat3.prescription, C.beat3.prescriptionKeywords)}
-            </motion.h2>
-            <motion.p
-              className="font-serif italic text-neutral-300"
-              style={{ fontSize: "1.6rem", lineHeight: 1.35 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.5 }}
-            >
-              {highlight(C.beat3.subPrescription, C.beat3.subPrescriptionKeywords)}
-            </motion.p>
-          </div>
+              {D1.beat1.caption}
+            </p>
+          </Reveal>
         )}
       </div>
-    </div>
+
+      {/* Body — 50:50 split. Left = text/bars/caption + prescription. Right = looping automation. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: 156,
+          bottom: 80,
+          display: "flex",
+          gap: 48,
+          opacity: showBody ? 1 : 0,
+          transition: "opacity 0.5s var(--ease) 0.4s",
+          pointerEvents: showBody ? "auto" : "none",
+        }}
+      >
+        {/* LEFT */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            minWidth: 0,
+          }}
+        >
+          <Reveal on={showBody}>
+            <h2
+              style={{
+                fontFamily: "var(--display)",
+                fontWeight: 400,
+                fontSize: 36,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.15,
+              }}
+            >
+              {KW(D1.beat2.mechanism, D1.beat2.mechanismKw)}
+            </h2>
+          </Reveal>
+          <div style={{ height: 14 }} />
+          <CopperRule on={showBody} delay={250} width="32%" />
+          <div style={{ height: 22 }} />
+
+          {/* Bars */}
+          <Reveal
+            on={showBody}
+            delay={400}
+            style={{ display: "flex", flexDirection: "column", gap: 16 }}
+          >
+            <AmpBar
+              label={D1.beat2.manualLabel}
+              value={D1.beat2.manualValue}
+              widthPct={1.5}
+              on={showBody}
+              delay={500}
+              accent="copper-700"
+            />
+            <AmpBar
+              label={D1.beat2.machineLabel}
+              value={D1.beat2.machineValue}
+              widthPct={140}
+              on={showBody}
+              delay={1100}
+              accent="copper-300"
+              tall
+            />
+          </Reveal>
+
+          <Reveal on={showBody} delay={1300} style={{ marginTop: 18 }}>
+            <p
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: 15,
+                color: "var(--neutral-400)",
+                margin: 0,
+              }}
+            >
+              {KW(D1.beat2.caption, D1.beat2.captionKw)}
+            </p>
+          </Reveal>
+
+          {/* Prescription */}
+          <Reveal
+            on={showRx}
+            delay={150}
+            style={{
+              marginTop: "auto",
+              paddingTop: 24,
+              borderTop: "1px solid var(--copper-800)",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "var(--display)",
+                fontWeight: 400,
+                fontSize: 32,
+                color: "var(--copper-200)",
+                margin: 0,
+                lineHeight: 1.1,
+              }}
+            >
+              {KW(D1.beat3.prescription, D1.beat3.prescriptionKw)}
+            </h2>
+            <p
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: 16,
+                color: "var(--neutral-300)",
+                margin: "6px 0 0 0",
+              }}
+            >
+              {KW(D1.beat3.sub, D1.beat3.subKw)}
+            </p>
+          </Reveal>
+        </div>
+
+        {/* RIGHT — looping automation animation */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minWidth: 0,
+          }}
+        >
+          <AutomationLoop on={showBody} />
+        </div>
+      </div>
+    </>
   );
 }
 
 export const d1Slide: SlideDef = {
-  steps: 4,
+  steps: 3,
+  canonicalPose: 2,
   animationMode: "step-reveal",
-  canonicalPose: 3,
   surface: "dark",
   section: "D",
   render: () => <D1TheTrap />,

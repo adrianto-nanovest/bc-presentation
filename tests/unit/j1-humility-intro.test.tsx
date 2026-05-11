@@ -18,7 +18,8 @@ test("J.1 declares 4 steps with canonicalPose=3", () => {
 
 test("J.1 renders the FIG label, hero photo, and the three lines", () => {
   harness();
-  expect(screen.getByText(/FIG\. J\.1 · THE RECIPE/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*J\.1.*THE RECIPE/i);
   expect(screen.getByText(/Still a beginner/)).toBeInTheDocument();
   expect(screen.getByText(/I've earned a few lessons/)).toBeInTheDocument();
   expect(screen.getByText(/Here's some advice/)).toBeInTheDocument();

@@ -41,9 +41,8 @@ test("E.5 declares 4 steps with canonicalPose=3", () => {
 
 test("E.5 renders without throwing under DeckProvider and shows the FigLabel", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.5 · LIMITS OF PROMPTING/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.5.*LIMITS OF PROMPTING/i);
 });
 
 test("step 0 → BP card visible; CM card, wall section, and closing not yet revealed", () => {

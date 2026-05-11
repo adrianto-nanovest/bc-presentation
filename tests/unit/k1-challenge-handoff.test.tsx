@@ -15,7 +15,8 @@ test("K.1 renders FIG label, headline pieces, body lines, and tagline", () => {
       <K1ChallengeHandoff />
     </DeckProvider>,
   );
-  expect(screen.getByText(/FIG\. K\.1 · NOW FEEL IT/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*K\.1.*NOW FEEL IT/i);
   expect(screen.getByText(/Theory ends/)).toBeInTheDocument();
   expect(screen.getByText(/Hands begin/)).toBeInTheDocument();
   expect(screen.getByText(/Tools loaded/)).toBeInTheDocument();

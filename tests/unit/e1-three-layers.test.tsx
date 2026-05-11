@@ -35,7 +35,8 @@ test("E.1 declares 4 steps with canonicalPose=3", () => {
 
 test("E.1 renders without throwing under DeckProvider and shows the FigLabel", () => {
   renderAtStep(0);
-  expect(screen.getByText(/FIG\. E\.1 · THE THREE LAYERS/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.1.*THE THREE LAYERS/i);
 });
 
 test("step 0 → PROMPT focal detail visible (titleA + titleB + blurb)", () => {

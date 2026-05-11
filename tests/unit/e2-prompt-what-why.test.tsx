@@ -41,9 +41,8 @@ test("E.2 declares 6 steps with canonicalPose=5", () => {
 
 test("E.2 renders without throwing under DeckProvider and shows the FigLabel", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.2 · LAYER 1 · PROMPT/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.2.*LAYER 1.*PROMPT/i);
 });
 
 test("step 0 → left pane (definition + outcomes) visible; bridge hidden", () => {

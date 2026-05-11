@@ -142,19 +142,9 @@ Then present your understanding of the scope and ask the first clarifying questi
 > Paste this block when ready to brainstorm Section F (after E is done).
 
 ```
-You are joining a multi-spec slide-content brainstorm for the Berau Coal Energy AI Workshop deck (Vol 2, Session 2). The deck's Foundation Core sub-spec was originally one session; it has been split into per-section sessions because of design depth required per slide. Sections D and E are DONE. This session is for Section F only.
+Let's discuss on section F based on **Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md 
 
-**Parent meta-spec:** docs/specs/2026-05-06-process-and-design-meta.md — locks the substrate.
-
-**Prior sub-specs (already done — read for cumulative tonal precedent + cross-spec dependencies):**
-- docs/specs/2026-05-07-slides-reveal-and-closing.md — Sections I, J, K. Houses the cross-spec dependency on MCP and agent orchestration vocabulary (I.3 portfolio simulations).
-- docs/specs/2026-05-08-slides-foundation-core.md — Sections D
-- docs/specs/2026-05-08-slides-foundation-core-section-e.md - Section E
-**Your job is to create a new spec file for section F**, mirroring the depth and structure from above specs
-
-# Scope of this session — Section F only
-
-**Section F — Techniques** (MCP / RAG / Skills / Agent orchestration).
+**Section F — Techniques** (MCP / RAG / Plugins / Agent orchestration).
 
 Each technique gets a plain-language framing and a non-engineer-graspable example. The audience needs to leave Section F understanding:
 1. **MCP** — universal adapter / "USB for AI." Lets AI safely access existing business systems (calendar, email, databases) via a standard protocol.
@@ -164,75 +154,38 @@ Each technique gets a plain-language framing and a non-engineer-graspable exampl
 
 Then a "how they fit together" closer that ties the four techniques into the layered architecture that maps onto Section E's harness.
 
-# CRITICAL cross-spec dependency
-
-I.3's portfolio simulations (already shipped in the Reveal+Closing spec) reference:
-
-- **MCPs** as one of the categories: gemini-image-gen MCP, Sonarqube MCP, Bitbucket MCP shown as light panels in I.3.
-- **Agent orchestration** patterns: nanovest-product portfolio simulation shows orchestrator → brainstorm sub-agent → research-agent → plan-reviewer → draft-agent → draft-reviewer → optional parallel branch → enrich → validate → publish. NotebookLM portfolio simulation shows main NotebookLM agent at center routing to 6 sub-agents on the perimeter, each firing MCP tools. Some orchestrations pattern also highlighted in E.1.
-- **Plugins** are referenced in I.1 stage 4 (`Plugins + Skills`) also in E.10.
-
-Section F MUST define MCP and agent orchestration clearly enough that when the audience reaches I.3, those simulations read as *"concepts you just learned, instantiated"* rather than *"novel technical jargon."*
-
 # Inputs
 
 **Research file (consume without re-litigating):**
-- docs/researches/topic-ai-techniques.md — full research on MCP / RAG / Skills / Agent orchestration with 2026 ecosystem state, mining-relevant examples, layered architecture diagram.
-
-**Cross-reference for vocabulary alignment with I.3:**
-- docs/specs/2026-05-07-slides-reveal-and-closing.md §4.3 (I.3 portfolio simulations) — confirm Section F's definitions resolve cleanly to the simulations described there.
-- docs/researches/portfolio-nanovest-product-plugin.md — orchestrator + sub-agent pattern Adri built (concrete agent orchestration example).
-- docs/researches/portfolio-notebooklm-plugin.md — hub-and-spoke pattern (concrete agent orchestration + MCP example).
-- docs/researches/portfolio-gemini-image-gen-mcp.md — concrete MCP example.
-
-**Memory files (deck-wide conventions — apply automatically):**
-- feedback_keyword_highlighting.md — copper-italic on 1–3 keywords per chunk
-- feedback_slide_visual_conventions.md — background tiering, FIG label, gemini-image-gen MCP for hero imagery
-- feedback_slide_interaction_conventions.md — hover micro-interactions
-- feedback_audience_framing.md — no commit counts, no "solo" repeats, plain-language
-- feedback_no_paid_components.md — free stack only
+- docs/researches/topic-ai-techniques.md — full research on MCP / RAG / Plugins / Agent orchestration with 2026 ecosystem state, mining-relevant examples, layered architecture diagram.
+- docs/references/nanovest-pilot-workshop.pdf — **slides 32–33** on RAG and MCP. (or from docs/researches/internal-pilot-workshop.md)
+- docs/references/nanovest-ai-sdlc-foundation.pdf — **slides 10–13** on plugins, skills, hooks (also from docs/researches/internal-ai-sdlc-foundation.md)
+Use either explore agent or Read tool with `pages` parameter to extract these specific slides (no unnecessary context bloat)
 
 # Process
 
-1. Use the superpowers:brainstorming skill.
-2. Do NOT re-litigate decisions already locked in the parent meta-spec, the Reveal+Closing spec, or the Foundation Core spec's Sections D + E.
-3. Brainstorm Section F:
+1. Explore current codebase on sections D + E to understand existing visual language and design depth (also the content). May a bit different from parent meta-spec, existing implementation is proper reference.
+2. Brainstorm Section F:
    a. Decide narrative architecture (parallel-structure-per-technique versus storytelling-led versus problem-led arc?).
-   b. Decide slide count + per-slide breakdown (4 techniques × 1 slide each? Or some techniques get more depth than others — MCP and agent orchestration carry double duty for I.3 callbacks, so they may warrant richer treatment than RAG and Skills).
+   b. Decide slide count + per-slide breakdown (4 techniques × 1 slide each)? Or some techniques get more depth than others (especially on Plugins which contains skills, hooks, MCPs, sub-agents)
    c. Per-slide deep dive: layout / components / content / motion / hover / canonical pose.
    d. Lock MCP and agent orchestration vocabulary so I.3 callbacks resolve cleanly.
    e. Decide whether F gets a "how it all fits together" closer slide that ties the four techniques into Section E's harness.
    f. Match Sections D + E's design depth (motion-design vignettes where appropriate; editorial-serious tone; copper-only palette; 0px corner).
-4. Update docs/specs/2026-05-08-slides-foundation-core.md by replacing the §4.6 TBD placeholder for Section F with full per-slide specs. Update §1.1 section structure table, §3.2 new primitives table, §6 animation budget, and §10 acceptance criteria to reflect F.
-5. Self-review for placeholders / contradictions / scope drift across all of D + E + F together.
-6. Hand back to me for review.
+3. Create a new dedicated specs in docs/specs.
+4. Self-review for placeholders / contradictions / scope drift across all of D + E + F together.
+5. Hand back to me for review.
 
 # Constraints
 
 - Stay within the substrate locked by the parent meta-spec.
-- Honor cross-spec dependencies: I.3's MCP, agent orchestration, and skills callbacks must resolve to F's definitions.
 - Free-stack only.
 - Mining-audience plain-language framing (do not very technical).
 - Editorial-serious tone.
 - Each technique's plain-language analogy MUST land for non-engineer attendees ("USB for AI" for MCP, "fact-checker's toolkit" for RAG, etc.).
 - Match Sections D + E's pacing: slow, deliberate, design-each-slide-right.
 
-# Estimated scope
-
-- Section F: ~6–10 slides (4+ techniques each with example, possibly a fit-together closer).
-
-# First step
-
-Use your explore agent to do codebase research related to the current slides implementation in section D,E,I,J,K
-And also use your explore agent to understand below items:
-1. The parent meta-spec — substrate.
-2. The Reveal+Closing spec — tonal precedent + I.3 cross-spec dependency on MCP / orchestration / skills.
-3. The Foundation Core spec as it stands today — Sections D and E are immediate tonal precedent.
-4. The topic research file (docs/researches/topic-ai-techniques.md) — content scope.
-5. Skim the three portfolio research files (nanovest-product-plugin, notebooklm-plugin, gemini-image-gen-mcp) — concrete examples to anchor the F slides if useful.
-
 Use haiku model for any explore agents used.
-Then present your understanding of the scope and ask the first clarifying question (typically: parallel structure or varied — i.e., does each technique get the same per-slide template, or do MCP and agent orchestration earn richer treatment than RAG and Skills given the I.3 cross-spec load).
 ```
 
 ---

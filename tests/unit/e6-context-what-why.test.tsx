@@ -43,9 +43,8 @@ test("E.6 declares 3 steps with canonicalPose=2", () => {
 
 test("E.6 renders the FIG label `FIG. E.6 · LAYER 2 · CONTEXT`", () => {
   renderAtStep(0);
-  expect(
-    screen.getByText(/FIG\. E\.6 · LAYER 2 · CONTEXT/),
-  ).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.6.*LAYER 2.*CONTEXT/i);
 });
 
 test("step 0 → definition + 3 why-points reveal; network not rendered yet", () => {

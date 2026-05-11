@@ -13,7 +13,8 @@ test("J.3 renders FIG label, headline, 3 cards, and 2 down connectors", () => {
       <J3RecipeBuildup />
     </DeckProvider>,
   );
-  expect(screen.getByText(/FIG\. J\.3 · BUILDING YOURSELF UP/)).toBeInTheDocument();
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*J\.3.*BUILDING YOURSELF UP/i);
   expect(screen.getByText(/Habits before output/)).toBeInTheDocument();
   expect(screen.getAllByTestId("recipe-step-card")).toHaveLength(3);
   const conns = screen.getAllByTestId("step-connector");

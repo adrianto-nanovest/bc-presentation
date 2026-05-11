@@ -442,12 +442,12 @@ export const e10Content = {
     },
     {
       id: "ralph", icon: "Repeat", name: "Ralph Wiggum",
-      essence: "Autonomous loop that won't quit until the spec is met.",
+      essence: "Autonomous loop persists until the spec is met.",
       pattern: "Spec → attempt → fail → re-diagnose → repeat",
       bullets: [
         "Errors feed back into the next prompt",
         "Crosses context boundaries via checkpoints",
-        "Pattern formalized by Geoffrey Huntley (2025)",
+        "Success criteria / goal defined (like Codex)",
       ],
     },
   ],
