@@ -5,14 +5,22 @@
 // Conventions match the rest of the deck (see ../foundation-core/content.ts):
 //   - Plain strings, sibling `*Kw` substring arrays at the same level.
 //   - 1–3 keywords per chunk; copper-400 italic at render time.
+//
+// Header convention (post 2026-05-13 rework):
+//   Each of c1Content..c5Content carries a `headline` field used by the
+//   canonical `.slide-headline.small` header (FigLabel + headline). C1 and
+//   C5 additionally carry a `bigHeadline` field for the large strikethrough
+//   declaration that lives in the body of the slide.
 
 // ─── C.1 — Tool → Bridge ───────────────────────────────────────────────────
 
 export interface C1Content {
   figLabel: string;
-  headline: string;
-  strikethroughWord: string;     // word to strikethrough — "tool"
-  clarifier: string;             // "It's a bridge."
+  slideTitle: string;
+  headline: string;               // canonical .slide-headline.small text
+  bigHeadline: string;            // body declaration with strikethrough — "AI is not a tool."
+  strikethroughWord: string;      // word to strikethrough — "tool"
+  clarifier: string;              // "It's a bridge."
   clarifierKw: readonly string[];
   fromLabel: string;
   fromText: string;
@@ -25,8 +33,10 @@ export interface C1Content {
 }
 
 export const c1Content: C1Content = {
-  figLabel: "FROM TOOL TO BRIDGE",
-  headline: "AI is not a tool.",
+  figLabel: "MINDSET 1 / 5",
+  slideTitle: "From Tool to Bridge.",
+  headline: "From Tool to Bridge.",
+  bigHeadline: "AI is not a tool.",
   strikethroughWord: "tool",
   clarifier: "It's a bridge.",
   clarifierKw: ["bridge"],
@@ -42,14 +52,20 @@ export const c1Content: C1Content = {
 
 // ─── C.2 — Replacement → Multiplier ────────────────────────────────────────
 
+export interface C2CardBullet {
+  text: string;
+  kw: readonly string[];
+}
+
 export interface C2Card {
-  title: string;            // "MULTIPLIER"
-  body: string;
-  bodyKw: readonly string[];
+  label: string;                  // "LEVERAGE" | "VELOCITY" | "JUDGMENT"
+  animKey: string;                // "leverage" | "velocity" | "judgment"
+  bullets: readonly C2CardBullet[];
 }
 
 export interface C2Content {
   figLabel: string;
+  headline: string;               // canonical .slide-headline.small text
   recognition: string;
   recognitionItalicClause: string; // "That's a reasonable place to start."
   fearPanel: string;
@@ -60,7 +76,8 @@ export interface C2Content {
 }
 
 export const c2Content: C2Content = {
-  figLabel: "FROM FEAR TO LEVERAGE",
+  figLabel: "MINDSET 2 / 5",
+  headline: "From Fear to Leverage.",
   recognition:
     "Most of us start with AI the way we started with Google — type, read, move on. That's a reasonable place to start.",
   recognitionItalicClause: "That's a reasonable place to start.",
@@ -70,19 +87,31 @@ export const c2Content: C2Content = {
   leverageSub: "So I learn to use it.",
   cards: [
     {
-      title: "MULTIPLIER",
-      body: "10× your existing output on what you already do well.",
-      bodyKw: [],
+      label: "LEVERAGE",
+      animKey: "leverage",
+      bullets: [
+        { text: "10× existing output", kw: ["10×"] },
+        { text: "On work you already do well", kw: ["already do well"] },
+        { text: "Compound over time", kw: ["Compound"] },
+      ],
     },
     {
-      title: "CO-PILOT",
-      body: "AI drafts, you decide. AI types, you think.",
-      bodyKw: [],
+      label: "VELOCITY",
+      animKey: "velocity",
+      bullets: [
+        { text: "5 drafts in the time of 1", kw: ["5 drafts"] },
+        { text: "Cheaper to try, easier to discard", kw: ["Cheaper"] },
+        { text: "More shots, more learning", kw: ["More shots"] },
+      ],
     },
     {
-      title: "FORCE-MULTIPLIER",
-      body: "Your team's reach expands without headcount change.",
-      bodyKw: [],
+      label: "JUDGMENT",
+      animKey: "judgment",
+      bullets: [
+        { text: "Your taste scales when typing doesn't", kw: ["taste scales"] },
+        { text: "Verify is the new bottleneck", kw: ["Verify"] },
+        { text: "Domain expertise wins", kw: ["Domain expertise"] },
+      ],
     },
   ],
 };
@@ -96,14 +125,17 @@ export interface C3Side {
 
 export interface C3Content {
   figLabel: string;
+  headline: string;               // canonical .slide-headline.small text
   executor: C3Side;
   orchestrator: C3Side;
+  triadCaption: string;           // "Direct. Verify. Decide." — mono caps beneath ORCHESTRATOR
   punchline: string;
   punchlineKw: readonly string[];
 }
 
 export const c3Content: C3Content = {
-  figLabel: "A NEW ROLE",
+  figLabel: "MINDSET 3 / 5",
+  headline: "From Executor to Orchestrator.",
   executor: {
     label: "EXECUTOR",
     bullets: [
@@ -120,10 +152,11 @@ export const c3Content: C3Content = {
       "Design and architect",
       "Specify intent",
       "Verify and review",
-      "Decide and innovate",
+      "Decide and own it",
       "Time → thinking",
     ],
   },
+  triadCaption: "Direct. Verify. Decide.",
   punchline: "AI handles the typing. You handle the thinking.",
   punchlineKw: ["thinking"],
 };
@@ -143,6 +176,7 @@ export interface C4Distribution {
 
 export interface C4Content {
   figLabel: string;
+  headline: string;               // canonical .slide-headline.small text
   nodes: readonly C4Node[];   // specify, generate, verify, ship
   humanCaption: string;
   aiCaption: string;
@@ -152,14 +186,16 @@ export interface C4Content {
   punchlineKw: readonly string[];
   anchor: string;
   anchorKw: readonly string[];
+  coreSkillKw: readonly string[]; // ambient-pulse target on the anchor line
 }
 
 export const c4Content: C4Content = {
-  figLabel: "THE NEW WORK SHAPE",
+  figLabel: "MINDSET 4 / 5",
+  headline: "The Shape of the New Work.",
   nodes: [
     { label: "SPECIFY", caption: "what to build, why it's right" },
     { label: "GENERATE", caption: "bulk work — AI does this" },
-    { label: "VERIFY", caption: "review, validate, polish" },
+    { label: "VERIFY", caption: "review, validate, judge" },
     { label: "→ SHIP", caption: "" },
   ],
   humanCaption: "HUMAN WORK: SPECIFY + VERIFY",
@@ -168,8 +204,9 @@ export const c4Content: C4Content = {
   after: { specifyPct: 30, generatePct: 20, verifyPct: 50 },
   punchline: "More time on what and why. Less time on how to type it.",
   punchlineKw: ["how to type it"],
-  anchor: "This is the productivity multiplier.",
-  anchorKw: ["productivity multiplier"],
+  anchor: "Verification is the new core skill.",
+  anchorKw: ["Verification is the new core skill"],
+  coreSkillKw: ["core skill"],
 };
 
 // ─── C.5 — Role → Trajectory ───────────────────────────────────────────────
@@ -182,9 +219,10 @@ export interface C5Beat {
 
 export interface C5Content {
   figLabel: string;
-  headline: string;
-  strikethroughWord: string;    // "role"
-  clarifier: string;            // "It's a trajectory you build."
+  headline: string;               // canonical .slide-headline.small text
+  bigHeadline: string;            // body declaration — "It's not a role you take."
+  strikethroughWord: string;      // "role"
+  clarifier: string;              // "It's a trajectory you build."
   clarifierKw: readonly string[];
   beats: readonly C5Beat[];
   closing: string;
@@ -195,16 +233,17 @@ export interface C5Content {
 }
 
 export const c5Content: C5Content = {
-  figLabel: "WHEREVER YOU GO",
-  headline: "It's not a role you take.",
+  figLabel: "MINDSET 5 / 5",
+  headline: "From Role to Trajectory.",
+  bigHeadline: "It's not a role you take.",
   strikethroughWord: "role",
   clarifier: "It's a trajectory you build.",
   clarifierKw: ["trajectory"],
   beats: [
     {
       label: "COMPETITIVE",
-      caption: "Roles without AI fluency fall behind.",
-      captionKw: [],
+      caption: "Roles without AI fluency stop being economical.",
+      captionKw: ["economical"],
     },
     {
       label: "CAPACITY",
@@ -218,8 +257,8 @@ export const c5Content: C5Content = {
     },
     {
       label: "PERSONAL",
-      caption: "From repetitive execution to creative judgment.",
-      captionKw: ["creative judgment"],
+      caption: "From writing the answer to choosing the question.",
+      captionKw: ["choosing the question"],
     },
   ],
   closing:

@@ -47,10 +47,9 @@ import { AmbientPulse } from "@/components/AmbientPulse";
 import { QuoteStack } from "./components/QuoteStack";
 import { bridgeContent as C } from "./content";
 
-// Asset hasn't landed yet — pass `undefined` so HeroPhoto paints only the
-// fallback gradient (no console 404). When the real photo lands, swap in
-// `C.heroSrc` and HeroPhoto will render it on top.
-const HERO_SRC: string | undefined = undefined;
+// Hero photo path lives in content.ts; HeroPhoto cross-fades it over the
+// fallback gradient on mount.
+const HERO_SRC: string | undefined = C.heroSrc;
 
 // Quote stagger calibration (per spec §3.5):
 //   FIG label   →   0ms after step 0 fires

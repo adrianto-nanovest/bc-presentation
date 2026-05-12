@@ -1,16 +1,21 @@
-// TimelineRail — horizontal copper line that draws stage-by-stage. Used as
-// the spine of B.1's evolution timeline.
+// TimelineRail — horizontal copper rail spanning all 6 era nodes.
 //
-// Rendered as a single SVG line with strokeDasharray = total length, and
-// strokeDashoffset reduced proportionally as `progress` increases (0..1).
-// A second optional dashed segment renders the AGI tail when `dashedTail` is
-// non-zero — that draws in only on the final stage (AGI reveal).
+// Renders as:
+//   1. A dim base rail (always present once the slide mounts) spanning the
+//      full distance from node-1 to node-5. This grounds the layout so the
+//      audience reads the journey as continuous even before reveals fire.
+//   2. Bright copper segments brightened one-by-one as `progress` advances.
+//      `progress` is the fraction of solid segments revealed (0..1, in steps
+//      of 1/4 for the 4 segments between nodes 1→5).
+//   3. A dashed AGI tail from node-5 → node-6, drawn only when `dashedOn`.
+//
+// Geometry is pixel-space; the host slide positions us at (left, top).
 import type { CSSProperties } from "react";
 
 export interface TimelineRailProps {
-  /** Pixel length of the full rail (left node center → last node center). */
+  /** Pixel length of the solid portion (node-1 center → node-5 center). */
   length: number;
-  /** Pixel length of the dashed tail (last node-1 → AGI node), if any. */
+  /** Pixel length of the dashed AGI tail (node-5 → node-6). */
   dashedTailLength?: number;
   /** Solid portion progress, 0..1. */
   progress: number;
@@ -42,8 +47,8 @@ export function TimelineRail({
     pointerEvents: "none",
   };
 
-  // Solid copper-300 portion: strokeDasharray = length, dashoffset draws in.
-  const solidDashoffset = length * (1 - Math.max(0, Math.min(1, progress)));
+  // Bright copper segment: a moving dash-offset reveals length × progress.
+  const solidVisible = length * Math.max(0, Math.min(1, progress));
 
   return (
     <div data-testid="timeline-rail" style={containerStyle}>
@@ -54,7 +59,17 @@ export function TimelineRail({
         style={{ display: "block", overflow: "visible" }}
         aria-hidden
       >
-        {/* Solid segment — runs from node-1 center to node-5 center */}
+        {/* Dim base rail — always visible, full solid span. Carries the eye. */}
+        <line
+          x1={0}
+          y1={1}
+          x2={length}
+          y2={1}
+          stroke="var(--copper-700)"
+          strokeWidth="1"
+          opacity={0.55}
+        />
+        {/* Bright segment — grows in proportion to `progress`. */}
         <line
           x1={0}
           y1={1}
@@ -62,13 +77,12 @@ export function TimelineRail({
           y2={1}
           stroke="var(--copper-300)"
           strokeWidth="1"
-          strokeDasharray={length}
-          strokeDashoffset={solidDashoffset}
+          strokeDasharray={`${solidVisible} ${length}`}
           style={{
-            transition: "stroke-dashoffset 600ms var(--ease)",
+            transition: "stroke-dasharray 600ms var(--ease)",
           }}
         />
-        {/* Dashed tail — appears only when dashedOn (AGI step). */}
+        {/* Dashed AGI tail — appears only when dashedOn. */}
         {dashedTailLength > 0 && (
           <line
             x1={length}

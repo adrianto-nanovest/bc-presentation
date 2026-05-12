@@ -12,6 +12,8 @@ interface CountUpProps {
   durationMs?: number;
   // Cubic-bezier control points (Framer accepts a 4-tuple).
   ease?: [number, number, number, number];
+  /** Number of decimal places to render. Default 0 (integer behaviour, unchanged). */
+  decimals?: number;
   testId?: string;
   className?: string;
 }
@@ -21,11 +23,14 @@ export function CountUp({
   to,
   durationMs = 1500,
   ease = DEFAULT_EASE,
+  decimals = 0,
   testId,
   className,
 }: CountUpProps) {
   const value = useMotionValue(from);
-  const rounded = useTransform(value, (n) => Math.round(n).toString());
+  const rounded = useTransform(value, (n) =>
+    decimals > 0 ? n.toFixed(decimals) : Math.round(n).toString(),
+  );
 
   useEffect(() => {
     const controls = animate(value, to, {

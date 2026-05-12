@@ -1,61 +1,104 @@
-// B.3 — MODEL MECHANICS & LANDSCAPE MAP
+// B.3 — HOW LLMs WORK · THE PIPELINE AND ITS DIALS
 //
-// Densest slide in the opener. Demystifies *how* you talk to a model (3 dials
-// on the left) and *which* model for what (5 task rows on the right). Layout
-// is a 50/50 vertical split with a 1px copper-700 divider that draws in on
-// load. Surface clean, depth on demand via hover.
+// Layout: 50:50 split below the header.
+//   ┌─ FIG · slide-headline ───────────────────────────────────────────┐
+//   │ ┌─ Pipeline column (595w) ─┐  ┌─ MODEL PARAMETERS (595w) ─────┐ │
+//   │ │ RAW INPUT                │  │  [EFFORT] [MAX TOK] [CTX WIN] │ │
+//   │ │ token→flow→attend→bars   │  │  [TEMP]   [TOP-P]   [SYS PR]  │ │
+//   │ │ PREDICTED NEXT WORD      │  │                                │ │
+//   │ └──────────────────────────┘  └────────────────────────────────┘ │
+//   │   footer · bottom-left, small italic                              │
+//   └──────────────────────────────────────────────────────────────────┘
 //
-// Step map (load animation is mount-driven; stepIndex 0 = first Space press):
-//   load (on mount):  FIG label + dot-grid bg + vertical divider draws in
-//   stepIndex 0:      Dial 1 (Temperature)    slides in from left, knob settles → Mid
-//   stepIndex 1:      Dial 2 (Context Window) slides in
-//   stepIndex 2:      Dial 3 (System Prompt)  slides in
-//   stepIndex 3:      All 5 right-side task rows fade in with 100ms stagger
-//   stepIndex 4:      Faint copper ambient pulse on all model chips (canonical pose)
-//
-// Hover (presenter detail layer):
-//   • DialRow → mono technical-name popover ("temperature: 0.0 - 1.5+")
-//   • ModelChip → lifts, copper-200 border, "best for X" caption beneath
-//
-// Spec note: model names live in content.ts so they can be refreshed at
-// delivery time without diving into JSX (frontier models shift).
-import { useEffect, useState, type CSSProperties } from "react";
+// Step map (stepIndex 0 = first Space press):
+//   load (on mount):    FIG label fades in. Both columns empty.
+//   stepIndex 0:        Pipeline column reveals (its internal build-up + loop).
+//   stepIndex 1:        3×2 tile grid reveals — 80ms row-major stagger.
+//   stepIndex 2:        Footer caption fades in italic with copper-300 KW.
+
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { highlight } from "@/components/highlight";
-import { DialRow } from "./components/DialRow";
-import { TaskRow } from "./components/TaskRow";
-import { ModelChip } from "./components/ModelChip";
+import { highlight as KW } from "@/components/highlight";
+import { Reveal } from "../foundation-core-section-e/components/Reveal";
+import { B3Pipeline } from "./components/B3Pipeline";
+import { B3ParamTile } from "./components/B3ParamTile";
+import {
+  EffortAnim,
+  MaxTokensAnim,
+  ContextWindowAnim,
+  TemperatureAnim,
+  TopPAnim,
+  SystemPromptAnim,
+} from "./components/B3ParamAnims";
 import { b3Content as C } from "./content";
 
-// Stage-anchored layout (1280×720 stage; content sits below the 88px FIG band).
 const STAGE_W = 1280;
-const CONTENT_TOP = 116;
-const CONTENT_BOTTOM = 56;
-const SIDE_PAD = 64;
-const DIVIDER_X = STAGE_W / 2;
+const STAGE_H = 720;
 
-// ───────────────────── slide ─────────────────────
+// Body envelope under the header (FIG + slide headline occupy ~y 0–155).
+// Section titles sit at y=BODY_TOP, ~50px below the headline.
+const BODY_TOP = 155;
+const BODY_BOT = 640;
+// H = effective left edge of `.slide-headline-row` (CSS: left: 48px). Both
+// columns anchor here so the section titles, RAW INPUT label, TOKENIZE
+// column, and PREDICTED NEXT WORD box all share the slide's left-edge
+// rhythm — visually rhyming with the FIG label and slide headline above.
+const H = 48;
+const COL_W = 580;
+const COL_H = BODY_BOT - BODY_TOP; // 485
+//
+// Column layout math: 48 (H) + 580 (left col) + 24 (mid gutter) +
+// 580 (right col) + 48 (H) = 1280. Clean 24px gutter between columns; no
+// overlap. Mirrors the `.slide-headline-row` left/right padding.
+
+// Section-title block sits at y=BODY_TOP. Its full height (text + 6px gap +
+// 1px copper rule + 18px breathing room below) is ~40px → content envelope
+// runs from BODY_TOP + 40 = 170 down to BODY_BOT = 640 (470px tall).
+//
+// Fix #14.1: Right-column grid's first tile top must visually align with the
+// LEFT column's first BOX top (not the RAW INPUT label top). The RAW INPUT
+// label is 16px tall + 6px gap, so the box top sits 22px below where the
+// section-title block ends on the left. To make the right grid match, we
+// push the right grid down by 20px (gap 14 → 34) AND shrink each tile by
+// 10px (215 → 205) so the grid still bottoms out at y=BODY_BOT.
+//   Math: 28 (section title) + 34 (gap) + 205 + 13 (row-gap) + 205 = 485 ✓
+const SECTION_TITLE_GAP = 18;
+const RIGHT_GRID_TITLE_GAP = 39;
+
+// Map param-tile ids → animation components. Order matches `paramTiles`
+// content order: effort, max-tok, context, temp, top-p, sys-prompt.
+function animFor(id: string) {
+  switch (id) {
+    case "effort":     return <EffortAnim />;
+    case "max-tok":    return <MaxTokensAnim />;
+    case "context":    return <ContextWindowAnim />;
+    case "temp":       return <TemperatureAnim />;
+    case "top-p":      return <TopPAnim />;
+    case "sys-prompt": return <SystemPromptAnim />;
+    default:           return null;
+  }
+}
 
 export function B3MechanicsLandscape() {
   const { stepIndex } = useDeck();
 
-  // Divider draws in on mount as part of load animation (no Space needed).
-  const [dividerOn, setDividerOn] = useState(false);
-  useEffect(() => {
-    const t = window.setTimeout(() => setDividerOn(true), 120);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  // Step gates. stepIndex 0 = first Space press (dial 1 reveal).
-  const dialOn = (i: number) => stepIndex >= i;
-  const tasksOn = stepIndex >= 3;
-  const glowOn = stepIndex >= 4;
+  const pipelineOn = stepIndex >= 0;
+  const tilesOn = stepIndex >= 1;
+  const footerOn = stepIndex >= 2;
 
   return (
-    <div data-testid="slide-b3" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-      {/* Background — plain neutral-950 + subtle dot-grid texture (matches A.1). */}
+    <div
+      data-testid="slide-b3"
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: STAGE_W,
+        height: STAGE_H,
+        overflow: "hidden",
+      }}
+    >
+      {/* Background — neutral-950 base + subtle dot grid (deck convention). */}
       <div
         aria-hidden
         style={{
@@ -80,182 +123,147 @@ export function B3MechanicsLandscape() {
 
       <FigLabel section="B" num={3} label={C.figLabel} />
 
-      {/* Vertical divider — 1px copper-700, draws in on load via stroke-
-          dashoffset animation. Spans the content band only (not the full
-          stage height) so the FIG label and bottom nav stay clean. */}
-      <DividerLine
-        on={dividerOn}
-        x={DIVIDER_X}
-        top={CONTENT_TOP}
-        bottom={CONTENT_BOTTOM}
-      />
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">
+          {KW(C.slideTitle, C.slideTitleKw)}
+        </h1>
+      </div>
 
-      {/* ───────────── LEFT HALF — Dials ───────────── */}
+      {/* ── LEFT COLUMN · Pipeline ─────────────────────────────────── */}
       <div
-        data-testid="b3-left"
+        data-testid="b3-pipeline-column"
         style={{
           position: "absolute",
-          left: SIDE_PAD,
-          top: CONTENT_TOP + 24,
-          width: DIVIDER_X - SIDE_PAD - 40,
-          bottom: CONTENT_BOTTOM,
+          left: H,
+          top: BODY_TOP,
+          width: COL_W,
+          height: COL_H,
+          zIndex: 5,
           display: "flex",
           flexDirection: "column",
-          zIndex: 5,
+          opacity: pipelineOn ? 1 : 0,
+          transition: "opacity 400ms var(--ease)",
         }}
       >
-        <SectionLabel text="HOW YOU TALK TO IT" />
+        {/* Section title — A.1 convention (mono-caps + copper rule the
+            width of the text). Sits at y=BODY_TOP, paired with the right
+            column's title at the same y for visual symmetry. */}
+        <Reveal on={pipelineOn} data-testid="b3-pipeline-title">
+          <SectionTitle label={C.leftSectionTitle} />
+        </Reveal>
+        <div style={{ height: SECTION_TITLE_GAP }} />
+
+        {/* Pipeline fills the remaining vertical space. The ~438px pipeline
+            content (66 + 10 + 290 + 6 + 66) fits inside the ~445px content
+            envelope (BODY_TOP + ~40 title → BODY_BOT), so the PREDICTED
+            NEXT WORD box bottoms out near y≈640 matching the right column. */}
+        <B3Pipeline mounted={pipelineOn} />
+      </div>
+
+      {/* ── RIGHT COLUMN · Model Parameters grid ─────────────────────
+          Same top/bottom as the left column (BODY_TOP → BODY_BOT). The
+          3×2 grid is positioned to bottom-out at y=BODY_BOT so the two
+          columns visually end at the same y. */}
+      <div
+        data-testid="b3-params-column"
+        style={{
+          position: "absolute",
+          right: H,
+          top: BODY_TOP,
+          width: COL_W,
+          height: COL_H,
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 6,
+        }}
+      >
+        {/* Section title — A.1 convention, same y as the left column title. */}
+        <Reveal on={tilesOn} data-testid="b3-params-title">
+          <SectionTitle label={C.rightSectionTitle} />
+        </Reveal>
+        <div style={{ height: RIGHT_GRID_TITLE_GAP }} />
+
+        {/* 3×2 tile grid — top-aligned 20px lower than before so the first
+            tile's top edge lines up with the LEFT column's RAW INPUT BOX top
+            (Fix #14.1). Grid footprint: 3×180 + 2×10 = 560 wide (20px slack
+            on the right), 2×205 + 13 = 423 tall. Combined with the 28px
+            section title block + 34px gap below it = 485, fills the 485px
+            content envelope (BODY_TOP → BODY_BOT) exactly.
+            `justifyContent: flex-start` puts the first tile at column-local
+            x=0 so it shares its left edge with the section title above. */}
         <div
+          data-testid="b3-tile-grid"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 12,
-            marginTop: 24,
+            flex: 1,
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 180px)",
+            gridTemplateRows: "repeat(2, 205px)",
+            columnGap: 10,
+            rowGap: 13,
+            alignContent: "start",
             justifyContent: "flex-start",
           }}
         >
-          {C.dials.map((d, i) => (
-            <DialRow
-              key={d.label}
-              label={d.label}
-              caption={highlight(d.caption, d.captionKw)}
-              hover={d.hover}
-              on={dialOn(i)}
-            />
+          {C.paramTiles.map((tile, i) => (
+            <Reveal
+              key={tile.id}
+              on={tilesOn}
+              delay={i * 80}
+              data-testid={`b3-tile-reveal-${tile.id}`}
+            >
+              <B3ParamTile label={tile.label} bullets={tile.bullets}>
+                {animFor(tile.id)}
+              </B3ParamTile>
+            </Reveal>
           ))}
         </div>
       </div>
 
-      {/* ───────────── RIGHT HALF — Task rows ───────────── */}
-      <div
-        data-testid="b3-right"
+      {/* ── FOOTER CAPTION ────────────────────────────────────────────── */}
+      <Reveal
+        on={footerOn}
+        delay={200}
+        data-testid="b3-footer-caption"
         style={{
           position: "absolute",
-          left: DIVIDER_X + 40,
-          top: CONTENT_TOP + 24,
-          right: SIDE_PAD,
-          bottom: CONTENT_BOTTOM,
-          display: "flex",
-          flexDirection: "column",
-          zIndex: 5,
+          left: 48,
+          bottom: 50,
+          right: 48,
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          fontSize: 14,
+          color: "var(--neutral-400)",
+          lineHeight: 1.4,
+          zIndex: 7,
         }}
       >
-        <SectionLabel text="WHICH MODEL FOR WHAT" />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-            marginTop: 24,
-          }}
-        >
-          {C.taskRows.map((row, i) => (
-            <TaskRow
-              key={row.task}
-              task={row.task}
-              on={tasksOn}
-              delay={i * 100}
-            >
-              {row.chips.map((chip) => (
-                <ModelChip
-                  key={chip.name}
-                  name={chip.name}
-                  bestFor={chip.bestFor}
-                  glow={glowOn}
-                />
-              ))}
-            </TaskRow>
-          ))}
-        </div>
-      </div>
-
-      {/* Inline keyframe for the model-chip ambient pulse. Scoped to B.3 via
-          the unique animation name; safe to ship inline alongside the slide. */}
-      <style>{`
-        @keyframes b3-chip-glow {
-          0%, 100% {
-            box-shadow: 0 0 0 rgba(217,158,108,0);
-            border-color: var(--copper-700);
-          }
-          50% {
-            box-shadow: 0 0 10px rgba(217,158,108,0.35);
-            border-color: var(--copper-500);
-          }
-        }
-      `}</style>
+        {KW(C.footer, C.footerKw)}
+      </Reveal>
     </div>
   );
 }
 
-// ───────────────────── SectionLabel ─────────────────────
-// Small uppercase mono caption that anchors each half ("HOW YOU TALK TO IT"
-// / "WHICH MODEL FOR WHAT"). Visual stand-in for a sub-header without
-// committing to display-type, keeps the two halves balanced.
-
-function SectionLabel({ text }: { text: string }) {
+// ───────────────────── Section title (A.1 convention) ─────────────────────
+//
+// Mono-caption ~11px, copper-500, with a 1px copper-700 underline whose width
+// equals the text width (achieved via `width: fit-content` + borderBottom).
+// Reveal/fade is handled by the surrounding <Reveal> wrapper.
+function SectionTitle({ label }: { label: string }) {
   return (
-    <span
+    <div
       style={{
+        width: "fit-content",
+        borderBottom: "1px solid var(--copper-700)",
+        paddingBottom: 5,
         fontFamily: "var(--mono)",
         fontSize: 11,
-        letterSpacing: "0.28em",
-        color: "var(--copper-200)",
+        letterSpacing: "0.22em",
+        color: "var(--copper-500)",
         textTransform: "uppercase",
+        lineHeight: 1.2,
       }}
     >
-      {text}
-    </span>
-  );
-}
-
-// ───────────────────── DividerLine ─────────────────────
-// 1px copper-700 vertical line. Draws in on load via stroke-dashoffset (pathLength)
-// animation so the audience sees the stage take shape rather than appear all at once.
-
-function DividerLine({
-  on,
-  x,
-  top,
-  bottom,
-}: {
-  on: boolean;
-  x: number;
-  top: number;
-  bottom: number;
-}) {
-  const height = 720 - top - bottom;
-  const containerStyle: CSSProperties = {
-    position: "absolute",
-    left: x - 1,
-    top,
-    width: 2,
-    height,
-    zIndex: 3,
-    pointerEvents: "none",
-  };
-  return (
-    <div data-testid="b3-divider" data-on={on ? "1" : "0"} style={containerStyle}>
-      <svg
-        width={2}
-        height={height}
-        viewBox={`0 0 2 ${height}`}
-        style={{ display: "block", overflow: "visible" }}
-        aria-hidden
-      >
-        <line
-          x1={1}
-          y1={0}
-          x2={1}
-          y2={height}
-          stroke="var(--copper-700)"
-          strokeWidth="1"
-          strokeDasharray={height}
-          strokeDashoffset={on ? 0 : height}
-          style={{
-            transition: "stroke-dashoffset 700ms var(--ease)",
-          }}
-        />
-      </svg>
+      {label}
     </div>
   );
 }
@@ -263,10 +271,10 @@ function DividerLine({
 // ───────────────────── slide def ─────────────────────
 
 export const b3Slide: SlideDef = {
-  // 5 stepIndex values (0..4): three dial reveals, task fade, glow pulse.
-  // Load animation (divider draw-in) is mount-driven and not a Space step.
-  steps: 5,
-  canonicalPose: 4,
+  // 3 stepIndex values (0..2): pipeline reveal, tiles reveal, footer fade.
+  // Pipeline loop runs continuously once revealed — not step-gated past 0.
+  steps: 3,
+  canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "B",

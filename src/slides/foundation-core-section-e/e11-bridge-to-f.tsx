@@ -103,20 +103,39 @@ export function E11BridgeToF() {
           zIndex: 20,
         }}
       >
-        <Reveal on={showBeat1} data-testid="e11-beat1">
-          <p
-            style={{
-              fontFamily: "var(--display)",
-              fontSize: 56,
-              color: "var(--neutral-50)",
-              margin: 0,
-              lineHeight: 1.05,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            {highlight(C.beat1.text, C.beat1.kw)}
-          </p>
-        </Reveal>
+        <div
+          data-testid="e11-beat1"
+          style={{ display: "flex", flexDirection: "column", gap: 10 }}
+        >
+          <Reveal on={showBeat1} delay={0} data-testid="e11-beat1-lineA">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 56,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineA.text, C.beat1.lineA.kw)}
+            </p>
+          </Reveal>
+          <Reveal on={showBeat1} delay={250} data-testid="e11-beat1-lineB">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 56,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineB.text, C.beat1.lineB.kw)}
+            </p>
+          </Reveal>
+        </div>
 
         <CopperRule on={showBeat1} width="30%" delay={400} />
 

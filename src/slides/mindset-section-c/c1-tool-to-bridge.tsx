@@ -1,45 +1,45 @@
-// C.1 — TOOL → BRIDGE (photographic hero)
+// C.1 — TOOL → BRIDGE (canonical dark surface, 2-step collapse)
 //
-// Twin to C.5. Establishes the central metaphor of Section C: AI is not a
-// tool you reach for occasionally — it's a bridge crossed daily. The
-// strikethrough on `tool` (copper-700, 400ms easeOutExpo) is the visual
-// hinge of the section and is *intentionally* mirrored on C.5's `role`.
-// The closing copper-italic keyword pulse on `standing capability`
-// (4s ambient) rhymes with C.5's `wherever you need to be` — both planted
-// memory cues that Hook 2 (Section I.4) detonates 90 minutes later.
+// Section C is the deck's cognitive interior — five mindset slides happening
+// "in the head," not in the physical world. Per spec §1.2 we render on the
+// standard dark + dot-grid surface (the deck's parent <Slide> wrapper paints
+// it). The Bridge slide alone breaks the photographic embargo as the singular
+// "we've arrived" moment.
 //
-// Background — photographic hero. Until `assets/heroes/c1-bridge.jpg`
-// lands, HeroPhoto paints its built-in deep-near-black + copper-glow
-// radial fallback (no console 404). DarkenOverlay at strength=0.20.
+// Per spec §3.1, C.1 collapses to 2 steps. Its narrative is two declarations,
+// not five — one Space press per declaration. The strikethrough on `tool`
+// (copper-700, 400ms easeOutExpo) remains the visual hinge of the section
+// and is intentionally mirrored on C.5's `role`.
 //
 // Layout —
-//   • Photo full-bleed. Left third blank for breathing.
-//   • FIG label top-RIGHT (rhymes with C.5; mirrors title strip convention).
-//   • Display headline anchored at ~45% from top, right two-thirds.
-//   • Italic clarifier directly beneath.
-//   • FromToBlock pinned to the lower-right.
+//   FIG label + slide title at top-left (canonical, via FigLabel + slide-headline-row).
+//   Display headline anchored at top:280, centered.
+//   Italic clarifier directly beneath at top:400, centered.
+//   FromToBlock pinned to the lower-right (right:64, bottom:72).
 //
 // Motion —
-//   load (mount-driven):  Photo cross-fades in SLOWLY (1200ms) — slower than
-//                         other backgrounds; this is C's quiet moment.
-//                         FIG label fades in.
-//   stepIndex 0:          (initial pose) headline frame ready — copy hidden
-//   stepIndex 1:          Headline reveals; copper-700 strikethrough draws
-//                         across `tool` (400ms easeOutExpo)
-//   stepIndex 2:          Clarifier reveals: "It's a bridge." italic copper
-//   stepIndex 3:          "From: ..." line slides in from the right
-//   stepIndex 4 (canon):  "To: ..." line slides in; ambient copper pulse on
-//                         `standing capability` (4s loop)
+//   load (mount-driven):  FIG label + slide title fade in together (400ms).
+//   stepIndex 0:          Load pose — headline/clarifier/FromTo all hidden.
+//   stepIndex 1:          Declaration 1. Headline "AI is not a tool." fades
+//                         (300ms) → 300ms later strikethrough draws across
+//                         `tool` (400ms easeOutExpo) → 200ms after strike
+//                         completes the clarifier "It's a bridge." italic
+//                         copper-400 fades in.
+//   stepIndex 2 (canon):  Declaration 2. "From: ..." slides up from 12px
+//                         offset (400ms); 250ms later "To: ..." slides up
+//                         (400ms). 4s ambient copper-glow pulse begins on
+//                         `standing capability`.
 //
 // Hover (presenter detail layer) —
-//   `standing capability` italic → micro popover:
-//     "Something you carry daily, not something you reach for occasionally."
+//   `bridge` (clarifier word)      → "Something you cross daily, not
+//                                     something you reach for occasionally."
+//   `standing capability` (To text) → "Fluency that travels with you across
+//                                      contexts."
 import { useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
-import { HeroPhoto } from "@/components/HeroPhoto";
-import { DarkenOverlay } from "@/components/DarkenOverlay";
+import { FigLabel } from "@/components/FigLabel";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { AmbientPulse } from "@/components/AmbientPulse";
 import { StrikethroughAnimator } from "@/components/StrikethroughAnimator";
@@ -47,127 +47,121 @@ import { HoverReveal } from "@/components/HoverReveal";
 import { FromToBlock } from "./components/FromToBlock";
 import { c1Content as C } from "./content";
 
-// Asset hasn't landed yet — pass `undefined` so HeroPhoto paints only the
-// fallback gradient (no console 404). When the real photo lands, swap in
-// `C.heroSrc` and HeroPhoto will cross-fade it on top.
-const HERO_SRC: string | undefined = undefined;
-
 // ───────────────────── slide ─────────────────────
 
 export function C1ToolToBridge() {
   const { stepIndex } = useDeck();
 
-  // Photo + FIG label fade in on mount as part of the load animation
-  // (no Space needed). The photo fade is slower than other slides (1200ms)
-  // — the spec explicitly calls for C.1 to be the "quiet moment".
-  const [loadStage, setLoadStage] = useState(0);
+  // Mount-driven load: FIG label + slide title fade in together over 400ms.
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const t1 = window.setTimeout(() => setLoadStage(1), 80);   // photo
-    const t2 = window.setTimeout(() => setLoadStage(2), 1200); // fig label
-    return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-    };
+    const t = window.setTimeout(() => setLoaded(true), 80);
+    return () => window.clearTimeout(t);
   }, []);
 
-  const photoOn = loadStage >= 1;
-  const figOn = loadStage >= 2;
+  // Step 1's internal stagger: headline reveals, then 300ms later the strike
+  // draws, then 200ms after the strike completes (~900ms after step 1 entered)
+  // the clarifier reveals. We chain these via local timers so the presenter
+  // advances on a single Space press and lets the choreography play.
+  const [headlineOn, setHeadlineOn] = useState(false);
+  const [strikeOn, setStrikeOn] = useState(false);
+  const [clarifierOn, setClarifierOn] = useState(false);
 
-  // Step gates — stepIndex 0 is the initial canonical-after-load pose.
-  // The headline + strikethrough land on stepIndex 1.
-  const headlineOn = stepIndex >= 1;
-  const strikeOn = stepIndex >= 1;
-  const clarifierOn = stepIndex >= 2;
-  const fromOn = stepIndex >= 3;
-  const toOn = stepIndex >= 4;
-  const pulseOn = stepIndex >= 4;
+  useEffect(() => {
+    // Reset all internal step-1 latches on every stepIndex change.
+    const timers: number[] = [];
+    if (stepIndex >= 1) {
+      // Step 1: chained internal stagger.
+      timers.push(window.setTimeout(() => setHeadlineOn(true), 0));
+      timers.push(window.setTimeout(() => setStrikeOn(true), 300));
+      // Strike duration 400ms + 200ms wait = clarifier @ 900ms after step 1.
+      timers.push(window.setTimeout(() => setClarifierOn(true), 900));
+    } else {
+      setHeadlineOn(false);
+      setStrikeOn(false);
+      setClarifierOn(false);
+    }
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+  }, [stepIndex]);
+
+  // Step 2 gates: From slides up immediately, To slides up 250ms later.
+  const fromOn = stepIndex >= 2;
+  const toOn = stepIndex >= 2;
+  const pulseOn = stepIndex >= 2;
 
   // Reveal helper — shared easeOutExpo curve.
-  const liftStyle = (on: boolean, lift = 16, duration = 600): CSSProperties => ({
+  const liftStyle = (on: boolean, lift = 12, duration = 400, delay = 0): CSSProperties => ({
     opacity: on ? 1 : 0,
     transform: on ? "translateY(0)" : `translateY(${lift}px)`,
-    transition: `opacity ${duration}ms var(--ease), transform ${duration}ms var(--ease)`,
+    transition: `opacity ${duration}ms var(--ease) ${delay}ms, transform ${duration}ms var(--ease) ${delay}ms`,
     willChange: "opacity, transform",
   });
+
+  // FIG + slide title fade-in (no lift, just opacity over 400ms).
+  const headerFade: CSSProperties = {
+    opacity: loaded ? 1 : 0,
+    transition: "opacity 400ms var(--ease)",
+    willChange: "opacity",
+  };
 
   return (
     <div
       data-testid="slide-c1"
       style={{ position: "absolute", inset: 0, overflow: "hidden" }}
     >
-      {/* Background — hero photo or fallback gradient. SLOW cross-fade. */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
-          opacity: photoOn ? 1 : 0,
-          transition: "opacity 1200ms ease-out",
-        }}
-      >
-        <HeroPhoto src={HERO_SRC} alt={C.heroAlt} vignetteSide="bottom-left" />
+      {/* FIG label — canonical top-left position, via shared component. */}
+      <div style={headerFade}>
+        <FigLabel section="C" num={1} label={C.figLabel} />
       </div>
 
-      {/* Dark wash for contrast. */}
-      <DarkenOverlay strength={C.darkenStrength} zIndex={15} />
-
-      {/* FIG label top-RIGHT (twin convention with C.5 — not the default
-          .fig-label class, which is top-left and spans full width). */}
-      <div
-        data-testid="c1-fig-label"
-        style={{
-          position: "absolute",
-          top: 36,
-          right: 48,
-          fontFamily: "var(--mono)",
-          fontSize: 12,
-          letterSpacing: "0.22em",
-          color: "var(--neutral-400)",
-          textTransform: "uppercase",
-          zIndex: 20,
-          ...liftStyle(figOn, 0, 400),
-        }}
-      >
-        — FIG. C.1
-        <span style={{ color: "var(--copper-700)", margin: "0 8px" }}>·</span>
-        <span style={{ color: "var(--copper-200)" }}>{C.figLabel}</span>
+      {/* Slide title — canonical .slide-headline.small at top:80 left:48. */}
+      <div className="slide-headline-row" style={headerFade}>
+        <h1 className="slide-headline small">{C.headline}</h1>
       </div>
 
-      {/* Right two-thirds composition. Left third stays blank for breathing. */}
+      {/* Big headline — "AI is not a tool." centered horizontally at top:280. */}
       <div
+        data-testid="c1-headline"
         style={{
           position: "absolute",
-          left: "33%",
-          right: 64,
-          top: "45%",
-          transform: "translateY(-50%)",
+          top: 280,
+          left: 0,
+          right: 0,
           display: "flex",
-          flexDirection: "column",
-          gap: 20,
-          zIndex: 20,
+          justifyContent: "center",
+          ...liftStyle(headlineOn, 14, 300),
         }}
       >
-        {/* Headline — "AI is not a tool." with strikethrough on `tool`. */}
-        <div data-testid="c1-headline" style={liftStyle(headlineOn, 14, 700)}>
-          <DisplayTitle
-            size={88}
-            style={{
-              lineHeight: 0.95,
-              letterSpacing: "-0.01em",
-              color: "var(--neutral-100)",
-              textAlign: "left",
-            }}
-          >
-            {renderHeadline(C.headline, C.strikethroughWord, strikeOn)}
-          </DisplayTitle>
-        </div>
-
-        {/* Clarifier — "It's a bridge." italic copper-400. */}
-        <p
-          data-testid="c1-clarifier"
+        <DisplayTitle
+          size={88}
           style={{
-            ...liftStyle(clarifierOn, 10, 600),
+            lineHeight: 0.95,
+            letterSpacing: "-0.01em",
+            color: "var(--neutral-50)",
+            textAlign: "center",
+          }}
+        >
+          {renderHeadline(C.bigHeadline, C.strikethroughWord, strikeOn)}
+        </DisplayTitle>
+      </div>
+
+      {/* Clarifier — "It's a bridge." centered at top:400, italic copper-400. */}
+      <div
+        data-testid="c1-clarifier"
+        style={{
+          position: "absolute",
+          top: 400,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+          ...liftStyle(clarifierOn, 10, 400),
+        }}
+      >
+        <p
+          style={{
             fontFamily: "var(--serif)",
             fontStyle: "italic",
             fontSize: 52,
@@ -175,13 +169,14 @@ export function C1ToolToBridge() {
             margin: 0,
             lineHeight: 1.1,
             fontWeight: 400,
+            textAlign: "center",
           }}
         >
-          {C.clarifier}
+          {renderClarifier(C.clarifier, "bridge")}
         </p>
       </div>
 
-      {/* From/To pair — lower-right, slides in on stepIndex 3 / 4. */}
+      {/* From/To pair — lower-right, slides up on stepIndex 2. */}
       <div
         data-testid="c1-from-to"
         style={{
@@ -195,13 +190,18 @@ export function C1ToolToBridge() {
         <FromToBlock
           fromLabel={C.fromLabel}
           fromText={
-            <span style={{ ...liftStyle(fromOn, 8, 500) }}>
+            <span style={{ ...liftStyle(fromOn, 12, 400) }}>
               {C.fromText}
             </span>
           }
           toLabel={C.toLabel}
           toText={
-            <span style={{ ...liftStyle(toOn, 8, 500), display: "inline-block" }}>
+            <span
+              style={{
+                ...liftStyle(toOn, 12, 400, 250),
+                display: "inline-block",
+              }}
+            >
               {renderToText(C.toText, C.toTextKw, pulseOn)}
             </span>
           }
@@ -217,8 +217,6 @@ export function C1ToolToBridge() {
 // StrikethroughAnimator. The match is whitespace-aware so we don't
 // strikethrough trailing punctuation (e.g. the period after "tool").
 function renderHeadline(text: string, word: string, active: boolean): ReactNode {
-  // Find the word as a discrete token. We accept it as-is (word boundaries
-  // are not language-sensitive for the simple "tool" / "role" cases).
   const idx = text.indexOf(word);
   if (idx === -1) return text;
   const before = text.slice(0, idx);
@@ -234,13 +232,70 @@ function renderHeadline(text: string, word: string, active: boolean): ReactNode 
   );
 }
 
+// Shared popover style block — reused for both `bridge` and `standing
+// capability` hovers so the visual treatment matches verbatim.
+function popoverSpan(text: string): ReactNode {
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        background: "rgba(10,10,10,0.92)",
+        border: "1px solid var(--copper-700)",
+        padding: "10px 14px",
+        fontFamily: "var(--serif)",
+        fontStyle: "italic",
+        fontSize: 14,
+        color: "var(--neutral-200)",
+        lineHeight: 1.35,
+        maxWidth: 260,
+        whiteSpace: "normal",
+      }}
+    >
+      {text}
+    </span>
+  );
+}
+
+// Render the clarifier "It's a bridge." with the word `bridge` wrapped in
+// a HoverReveal. The popover surfaces the "cross daily" framing that used
+// to live on the `standing capability` keyword; in the rework each popover
+// matches its keyword's meaning.
+function renderClarifier(text: string, word: string): ReactNode {
+  const idx = text.indexOf(word);
+  if (idx === -1) return text;
+  const before = text.slice(0, idx);
+  const after = text.slice(idx + word.length);
+  const trigger = (
+    <em
+      data-testid="c1-clarifier-keyword"
+      style={{
+        fontFamily: "var(--serif)",
+        fontStyle: "italic",
+        color: "var(--copper-400)",
+        fontWeight: 400,
+      }}
+    >
+      {word}
+    </em>
+  );
+  const popover = popoverSpan(
+    "Something you cross daily, not something you reach for occasionally.",
+  );
+  return (
+    <>
+      {before}
+      <HoverReveal trigger={trigger} payload={popover} position="below" />
+      {after}
+    </>
+  );
+}
+
 // Render the "To: ..." copy with the italic copper accent on
 // `standing capability`. When `pulse` is true (canonical pose), wrap the
 // accent in AmbientPulse for the 4s copper-glow loop. We also paint a
 // subtle copper-500 underline that fades in on canonical pose so the
 // rhyme with C.5's underline-pulse reads.
 function renderToText(text: string, keywords: readonly string[], pulse: boolean): ReactNode {
-  // Single keyword expected for C.1's `standing capability`.
   const kw = keywords[0];
   if (!kw) return text;
   const idx = text.indexOf(kw);
@@ -267,7 +322,6 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
     </em>
   );
 
-  // Hover popover — presenter detail layer.
   const trigger = pulse ? (
     <AmbientPulse periodSeconds={4} keyword={kw}>
       {accent}
@@ -276,24 +330,8 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
     accent
   );
 
-  const popover = (
-    <span
-      style={{
-        display: "inline-block",
-        background: "rgba(10,10,10,0.92)",
-        border: "1px solid var(--copper-700)",
-        padding: "10px 14px",
-        fontFamily: "var(--serif)",
-        fontStyle: "italic",
-        fontSize: 14,
-        color: "var(--neutral-200)",
-        lineHeight: 1.35,
-        maxWidth: 260,
-        whiteSpace: "normal",
-      }}
-    >
-      Something you carry daily, not something you reach for occasionally.
-    </span>
+  const popover = popoverSpan(
+    "Fluency that travels with you across contexts.",
   );
 
   return (
@@ -308,8 +346,8 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
 // ───────────────────── slide def ─────────────────────
 
 export const c1Slide: SlideDef = {
-  steps: 5,
-  canonicalPose: 4,
+  steps: 2,
+  canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",

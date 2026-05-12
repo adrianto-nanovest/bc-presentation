@@ -1,4 +1,4 @@
-// C.3 — EXECUTOR → ORCHESTRATOR
+// C.3 — EXECUTOR → ORCHESTRATOR (canonical header + filled silhouettes + triad)
 //
 // Diagrammatic mid-section slide. Introduces the new self-image: from the
 // person who types every line to the person who designs, specifies, and
@@ -7,28 +7,36 @@
 //
 //     "AI handles the typing. You handle the thinking."
 //
-// Layout — vertical 50/50 split with a 1px copper-700 divider drawn via
-// pathLength on mount (identical pattern to B.3).
+// Layout — canonical FIG + .slide-headline.small header at top:36 / top:80,
+// then a 50/50 vertical split with a 1px copper-700 divider drawn via
+// pathLength (y:156–620, intentionally down-shifted to clear the title).
 //
-//   LEFT  (BEFORE / EXECUTOR)     → neutral-500, hunched silhouette + 5 bullets
-//   RIGHT (AFTER  / ORCHESTRATOR) → copper-400, taller/wider silhouette + 5 bullets
+//   LEFT  (BEFORE / EXECUTOR)     → neutral-500 silhouette + 5 bullets with
+//                                    14×14 line glyphs in copper-300
+//   RIGHT (AFTER  / ORCHESTRATOR) → copper-400 silhouette (taller/wider) +
+//                                    "Direct. Verify. Decide." triad caption +
+//                                    5 bullets with 14×14 line glyphs in
+//                                    copper-400
 //   BOTTOM-CENTER                  → italic Source Serif punchline; `thinking`
-//                                    in copper-400 italic + copper underline
-//                                    + 4s ambient pulse.
+//                                    in copper-400 italic + copper-500
+//                                    underline + 4s ambient pulse.
 //
 // Motion (5 steps, canonicalPose: 4) —
-//   mount:               FIG + vertical divider draw in (700ms pathLength)
-//   stepIndex 0:         LEFT silhouette + title `EXECUTOR` reveal (500ms)
-//   stepIndex 1:         LEFT bullets stagger-fade (5 × 80ms)
-//   stepIndex 2:         RIGHT silhouette + title `ORCHESTRATOR` reveal —
+//   mount:               FIG + slide title + vertical divider draw in
+//                        (header 400ms fade; divider 700ms pathLength).
+//   stepIndex 0:         Load pose — left/right hidden; header+divider only.
+//   stepIndex 1:         LEFT filled silhouette + title `EXECUTOR` reveal.
+//   stepIndex 2:         LEFT bullets stagger-fade (5 × 80ms).
+//   stepIndex 3:         RIGHT filled silhouette + title `ORCHESTRATOR` +
+//                        triad caption "Direct. Verify. Decide." reveal —
 //                        silhouette settles into expansive pose via opacity +
-//                        slight scale (700ms easeOutExpo)
-//   stepIndex 3:         RIGHT bullets stagger-fade (5 × 80ms)
-//   stepIndex 4 (canon): Punchline fades in italic; copper underline +
+//                        slight scale (700ms easeOutExpo).
+//   stepIndex 4 (canon): RIGHT bullets stagger-fade (5 × 80ms) +
+//                        punchline fades in italic; copper underline +
 //                        4s ambient pulse on `thinking`.
 //
-// Hover (presenter detail layer) — Hover any bullet for a 1-line
-// elaboration to the right. CSS-only.
+// Hover (presenter detail layer) — Hover any bullet for a 1-line elaboration
+// to the right. CSS-only, preserved from prior implementation.
 import { useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
@@ -36,12 +44,16 @@ import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { AmbientPulse } from "@/components/AmbientPulse";
 import { MindsetSilhouette } from "./components/MindsetSilhouette";
+import { c3Icons } from "./components/C3Icons";
 import { c3Content as C } from "./content";
 
-// Stage geometry (1280×720 stage; content below 88px FIG band).
+// Stage geometry (1280×720 stage; canonical header reserves y:0–~130).
 const STAGE_W = 1280;
-const CONTENT_TOP = 116;
-const CONTENT_BOTTOM = 140;       // leave room for punchline + nav
+// Divider runs y:156–620 per spec §3.3 (clears the slide title).
+const DIVIDER_TOP = 156;
+const DIVIDER_BOTTOM_Y = 620;
+const CONTENT_TOP = DIVIDER_TOP;    // content panels begin at the divider top
+const CONTENT_BOTTOM = 100;          // bottom inset; leaves room for punchline
 const SIDE_PAD = 80;
 const DIVIDER_X = STAGE_W / 2;
 
@@ -63,25 +75,59 @@ const ORCHESTRATOR_HOVER: readonly string[] = [
   "Time freed from typing is time spent on judgment.",
 ];
 
+// Per-bullet icon mapping (spec §3.3). Index aligned to content.ts bullet order.
+const EXECUTOR_ICON_KEYS = [
+  "keyboard",
+  "magnifier",
+  "paperStack",
+  "repeatArrows",
+  "clock",
+] as const;
+
+const ORCHESTRATOR_ICON_KEYS = [
+  "compass",
+  "penBrief",
+  "shieldCheck",
+  "flag",
+  "lightbulb",
+] as const;
+
 // ───────────────────── slide ─────────────────────
 
 export function C3ExecutorOrchestrator() {
   const { stepIndex } = useDeck();
 
-  // FIG + divider draw on mount (no Space needed).
+  // FIG + slide title + divider draw on mount (no Space needed).
+  const [loaded, setLoaded] = useState(false);
   const [dividerOn, setDividerOn] = useState(false);
   useEffect(() => {
-    const t = window.setTimeout(() => setDividerOn(true), 120);
-    return () => window.clearTimeout(t);
+    const t1 = window.setTimeout(() => setLoaded(true), 80);
+    const t2 = window.setTimeout(() => setDividerOn(true), 120);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
   }, []);
 
-  // Step gates. stepIndex 0 = first Space press (left silhouette/title).
-  const leftOn = stepIndex >= 0;
-  const leftBulletsOn = stepIndex >= 1;
-  const rightOn = stepIndex >= 2;
-  const rightBulletsOn = stepIndex >= 3;
+  // Step gates per spec §3.3 (canonical 5-step rhythm).
+  //   step 0 (load): header + divider only
+  //   step 1: left silhouette + EXECUTOR title
+  //   step 2: left bullets stagger
+  //   step 3: right silhouette + ORCHESTRATOR title + triad caption
+  //   step 4 (canon): right bullets stagger + punchline + ambient pulse
+  const leftOn = stepIndex >= 1;
+  const leftBulletsOn = stepIndex >= 2;
+  const rightOn = stepIndex >= 3;
+  const rightBulletsOn = stepIndex >= 4;
   const punchlineOn = stepIndex >= 4;
   const pulseOn = stepIndex >= 4;
+
+  // Header fade — mount-driven (matches C1).
+  const headerFade: CSSProperties = {
+    opacity: loaded ? 1 : 0,
+    transition: "opacity 400ms var(--ease)",
+    willChange: "opacity",
+  };
 
   return (
     <div
@@ -111,14 +157,22 @@ export function C3ExecutorOrchestrator() {
         }}
       />
 
-      <FigLabel section="C" num={3} label={C.figLabel} />
+      {/* FIG label — canonical top-left, fades in on mount. */}
+      <div style={headerFade}>
+        <FigLabel section="C" num={3} label={C.figLabel} />
+      </div>
+
+      {/* Slide title — canonical .slide-headline.small at top:80 left:48. */}
+      <div className="slide-headline-row" style={headerFade}>
+        <h1 className="slide-headline small">{C.headline}</h1>
+      </div>
 
       {/* Vertical divider — copper-700, draws in via stroke-dashoffset. */}
       <DividerLine
         on={dividerOn}
         x={DIVIDER_X}
-        top={CONTENT_TOP}
-        bottom={CONTENT_BOTTOM}
+        top={DIVIDER_TOP}
+        bottomY={DIVIDER_BOTTOM_Y}
       />
 
       {/* ───────────── LEFT — EXECUTOR (BEFORE) ───────────── */}
@@ -144,6 +198,8 @@ export function C3ExecutorOrchestrator() {
         bullets={C.executor.bullets}
         bulletsOn={leftBulletsOn}
         bulletColor="var(--neutral-500)"
+        glyphColor="var(--copper-300)"
+        iconKeys={EXECUTOR_ICON_KEYS}
         hoverColor="var(--neutral-400)"
         hoverTexts={EXECUTOR_HOVER}
         titleOn={leftOn}
@@ -157,6 +213,7 @@ export function C3ExecutorOrchestrator() {
         kickerColor="var(--copper-300)"
         title={C.orchestrator.label}
         titleColor="var(--copper-400)"
+        triadCaption={C.triadCaption}
         silhouette={
           <MindsetSilhouette
             variant="orchestrator"
@@ -175,6 +232,8 @@ export function C3ExecutorOrchestrator() {
         bullets={C.orchestrator.bullets}
         bulletsOn={rightBulletsOn}
         bulletColor="var(--copper-400)"
+        glyphColor="var(--copper-400)"
+        iconKeys={ORCHESTRATOR_ICON_KEYS}
         hoverColor="var(--copper-200)"
         hoverTexts={ORCHESTRATOR_HOVER}
         titleOn={rightOn}
@@ -188,7 +247,8 @@ export function C3ExecutorOrchestrator() {
           position: "absolute",
           left: 48,
           right: 48,
-          bottom: 56,
+          // y≈660 per spec §3.3 — anchored from the top for stable layout.
+          top: 660,
           display: "flex",
           justifyContent: "center",
           zIndex: 6,
@@ -209,8 +269,9 @@ export function C3ExecutorOrchestrator() {
 }
 
 // ───────────────────── SidePanel ─────────────────────
-// One half of the 50/50 split. Renders kicker label + title + silhouette +
-// 5 bullets. Bullets stagger-fade based on `bulletsOn`.
+// One half of the 50/50 split. Renders kicker label + silhouette + title +
+// optional triad caption (right side only) + 5 bullets with line-glyph
+// iconography. Bullets stagger-fade based on `bulletsOn`.
 
 interface SidePanelProps {
   align: "left" | "right";
@@ -218,10 +279,13 @@ interface SidePanelProps {
   kickerColor: string;
   title: string;
   titleColor: string;
+  triadCaption?: string;
   silhouette: ReactNode;
   bullets: readonly string[];
   bulletsOn: boolean;
   bulletColor: string;
+  glyphColor: string;
+  iconKeys: readonly (keyof typeof c3Icons)[];
   hoverColor: string;
   hoverTexts: readonly string[];
   titleOn: boolean;
@@ -234,10 +298,13 @@ function SidePanel({
   kickerColor,
   title,
   titleColor,
+  triadCaption,
   silhouette,
   bullets,
   bulletsOn,
   bulletColor,
+  glyphColor,
+  iconKeys,
   hoverColor,
   hoverTexts,
   titleOn,
@@ -261,11 +328,11 @@ function SidePanel({
       data-testid={testIdPrefix}
       style={{
         position: "absolute",
-        top: CONTENT_TOP + 24,
+        top: CONTENT_TOP,
         bottom: CONTENT_BOTTOM,
         display: "flex",
         flexDirection: "column",
-        gap: 18,
+        gap: 14,
         alignItems: isLeft ? "flex-start" : "flex-end",
         textAlign: isLeft ? "left" : "right",
         zIndex: 5,
@@ -319,6 +386,26 @@ function SidePanel({
         {title}
       </h2>
 
+      {/* Orchestrator triad caption — right side only, beneath title. */}
+      {triadCaption ? (
+        <div
+          data-testid={`${testIdPrefix}-triad`}
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            color: "var(--copper-300)",
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            opacity: titleOn ? 1 : 0,
+            transform: titleOn ? "translateY(0)" : "translateY(6px)",
+            transition:
+              "opacity 500ms var(--ease) 80ms, transform 500ms var(--ease) 80ms",
+          }}
+        >
+          {triadCaption}
+        </div>
+      ) : null}
+
       {/* Bullets */}
       <ul
         data-testid={`${testIdPrefix}-bullets`}
@@ -334,6 +421,8 @@ function SidePanel({
       >
         {bullets.map((b, i) => {
           const onAt = bulletsOn;
+          const iconKey = iconKeys[i];
+          const glyph = iconKey ? c3Icons[iconKey] : null;
           return (
             <li
               key={b}
@@ -346,7 +435,7 @@ function SidePanel({
                   "opacity 420ms var(--ease), transform 420ms var(--ease)",
                 transitionDelay: onAt ? `${i * 80}ms` : "0ms",
                 display: "flex",
-                alignItems: "baseline",
+                alignItems: "center",
                 justifyContent: isLeft ? "flex-start" : "flex-end",
                 gap: 12,
                 color: bulletColor,
@@ -357,9 +446,7 @@ function SidePanel({
             >
               {isLeft ? (
                 <>
-                  <span style={{ flex: "0 0 auto" }}>
-                    <BulletDot color={bulletColor} />
-                  </span>
+                  <BulletGlyph color={glyphColor} glyph={glyph} />
                   <span style={{ flex: "0 1 auto" }}>
                     <BulletText text={b} />
                   </span>
@@ -406,9 +493,7 @@ function SidePanel({
                   <span style={{ flex: "0 1 auto" }}>
                     <BulletText text={b} />
                   </span>
-                  <span style={{ flex: "0 0 auto" }}>
-                    <BulletDot color={bulletColor} />
-                  </span>
+                  <BulletGlyph color={glyphColor} glyph={glyph} />
                 </>
               )}
             </li>
@@ -444,20 +529,30 @@ function BulletText({ text }: { text: string }) {
   );
 }
 
-function BulletDot({ color }: { color: string }) {
+// 14×14 SVG line glyph — same horizontal slot as the legacy circle dot.
+// Glyph uses `currentColor` so we set the wrapper's `color` to tint it.
+function BulletGlyph({
+  color,
+  glyph,
+}: {
+  color: string;
+  glyph: ReactNode;
+}) {
   return (
     <span
       aria-hidden
       style={{
-        display: "inline-block",
-        width: 6,
-        height: 6,
-        borderRadius: "50%",
-        background: color,
-        opacity: 0.7,
-        transform: "translateY(-2px)",
+        flex: "0 0 auto",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 14,
+        height: 14,
+        color,
       }}
-    />
+    >
+      {glyph}
+    </span>
   );
 }
 
@@ -555,19 +650,19 @@ function punchlineParaStyle(): CSSProperties {
 
 // ───────────────────── DividerLine ─────────────────────
 // 1px copper-700 vertical line. Draws in on mount via stroke-dashoffset.
-// Mirrors B.3's pattern verbatim.
+// Spans y:top → y:bottomY (absolute stage coordinates).
 function DividerLine({
   on,
   x,
   top,
-  bottom,
+  bottomY,
 }: {
   on: boolean;
   x: number;
   top: number;
-  bottom: number;
+  bottomY: number;
 }) {
-  const height = 720 - top - bottom;
+  const height = bottomY - top;
   const containerStyle: CSSProperties = {
     position: "absolute",
     left: x - 1,

@@ -1,45 +1,47 @@
-// C.4 — THE V-BOUNCE WORKFLOW
+// C.4 — THE SHAPE OF THE NEW WORK
 //
 // Makes C.3's "Orchestrator" identity *concrete*. Shows exactly what the new
-// shape of work looks like — Specify → Generate → Verify → Ship — and the
-// time-distribution shift that makes it a productivity multiplier:
+// shape of work looks like — Specify → Generate → Verify → Ship — plus the
+// time-distribution shift that frames Verification as the new core skill:
 //
 //        BEFORE   10% Specify · 80% Generate · 10% Verify
 //        AFTER    30% Specify · 20% Generate · 50% Verify
 //
 // The visual rhyme: in the V-shape work *descends* into Generate (AI takes
-// over) and *ascends* back into Verify (human resumes). The dominant 80%
-// Generate block in BEFORE collapses into a slim copper-700 in AFTER while
-// Verify expands into a dominant 50% copper-400 block. The two bars stay
-// visible simultaneously at canonical pose — the contrast itself is the
-// emotional payoff.
+// over) and *ascends* back into Verify (human resumes). A dotted recursive
+// loop-back arrow from VERIFY back to SPECIFY (revealed at step 3) converts
+// the V from a one-pass diagram into a recursive shape — matching the
+// research's strong claim that AI work is iterative.
 //
 // Layout —
-//   TOP HALF (~50%):    V-workflow diagram (Specify → Generate → Verify → Ship)
-//   BOTTOM HALF (~50%): BEFORE bar (10/80/10), AFTER bar (30/20/50)
-//   BOTTOM:             Italic punchline + copper anchor line
+//   Header:    FigLabel + .slide-headline.small ("The Shape of the New Work.")
+//   V-diagram: positioned y:156–400 (below slide title at y:80–~130)
+//   Bars:      BEFORE y≈480, AFTER y≈530
+//   Bottom:    Punchline y≈610, Anchor y≈660
 //
 // Background — plain neutral-950 + dot-grid (diagrammatic tier; matches
 // C.2 / C.3).
 //
-// Motion (6 steps, canonicalPose: 5) —
-//   mount:               FIG label fades in (200ms)
-//   stepIndex 0:         SPECIFY node + connecting line draws toward
-//                        GENERATE (600ms)
-//   stepIndex 1:         GENERATE node + connecting line draws toward
-//                        VERIFY (600ms)
-//   stepIndex 2:         VERIFY node + SHIP arrow extends rightward (600ms)
-//   stepIndex 3:         BEFORE bar — segments grow left-to-right with
-//                        stagger; 80% copper-700 dominates (800ms total)
-//   stepIndex 4:         AFTER bar — segments grow left-to-right; 50%
-//                        copper-400 Verify dominates. BEFORE stays visible
-//                        for contrast (800ms total)
-//   stepIndex 5 (canon): Punchline + anchor italic fade in (600ms)
+// Motion (5 steps, canonicalPose: 4) — collapsed from 6 by chunking the V's
+// peaks into one beat —
+//   load (mount-driven):  FIG + title + lane hairline fade in (400ms)
+//   stepIndex 1:          Both V-peak nodes (SPECIFY + VERIFY) reveal
+//                         simultaneously + both diagonal arrows draw down
+//                         toward GENERATE position (700ms)
+//   stepIndex 2:          GENERATE node + trough reveal; SHIP arrow extends
+//                         right from VERIFY (600ms)
+//   stepIndex 3:          Dotted recursive loop-back arrow draws
+//                         (pathLength 0→1, 500ms); `iterate` label fades
+//                         200ms after path completes
+//   stepIndex 4 (canon):  BEFORE + AFTER bars grow simultaneously (segment
+//                         stagger 180ms); punchline + anchor line fade
+//                         200ms after bars; 4s ambient pulse on `core skill`
 import { useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { AmbientPulse } from "@/components/AmbientPulse";
 import { VWorkflowDiagram } from "./components/VWorkflowDiagram";
 import {
   TimeDistributionBar,
@@ -48,23 +50,26 @@ import {
 import { c4Content as C } from "./content";
 
 // ─── Stage geometry (1280×720) ───
-const STAGE_W = 1280;
-const SIDE_PAD = 64;
+const SIDE_PAD = 48;
 
-// Top half: V-diagram occupies ~290px of vertical space starting just below
-// the FIG band. Bottom half: bars stacked above the punchline / anchor.
-const FIG_BOTTOM = 100;
-const V_TOP = FIG_BOTTOM + 12;       // ~112
-const V_HEIGHT = 280;                // V-diagram band
-const BARS_TOP = V_TOP + V_HEIGHT + 18; // ~410
-const BARS_GAP = 16;                 // vertical gap between BEFORE and AFTER
-const PUNCHLINE_TOP = 590;
-const ANCHOR_TOP = 642;
+// V-diagram occupies y:156–400 (244px tall band). It sits below the slide
+// title (top:80, ~46px tall → bottom ~126) with breathing room.
+const V_TOP = 156;
+const V_BOTTOM = 400;
+const V_HEIGHT = V_BOTTOM - V_TOP; // 244
+
+// BEFORE / AFTER bars
+const BEFORE_BAR_TOP = 460;
+const AFTER_BAR_TOP = 540;
+
+// Bottom text lines
+const PUNCHLINE_TOP = 622;
+const ANCHOR_TOP = 666;
 
 export function C4VBounceWorkflow() {
   const { stepIndex } = useDeck();
 
-  // Mount-driven FIG fade (no Space needed).
+  // Mount-driven FIG + title + lane hairline fade (step-0 "load" pose).
   const [mountedOn, setMountedOn] = useState(false);
   useEffect(() => {
     const t = window.setTimeout(() => setMountedOn(true), 100);
@@ -72,20 +77,27 @@ export function C4VBounceWorkflow() {
   }, []);
 
   // Step gates.
-  // stepIndex 0/1/2 → V-diagram beats (driven inside VWorkflowDiagram by
-  //                   passing stepIndex directly).
-  // stepIndex 3     → BEFORE bar grows.
-  // stepIndex 4     → AFTER bar grows.
-  // stepIndex 5     → Punchline + anchor fade in.
-  const beforeBarOn = stepIndex >= 3;
-  const afterBarOn = stepIndex >= 4;
-  const punchlineOn = stepIndex >= 5;
-  const anchorOn = stepIndex >= 5;
+  //   step 0 (load) : FIG + title + lane hairline
+  //   step 1        : V peaks reveal (SPECIFY + VERIFY + both diagonals)
+  //   step 2        : GENERATE + SHIP
+  //   step 3        : dotted loop-back arrow draws
+  //   step 4 (canon): bars + punchline + anchor + ambient pulse
+  const barsOn = stepIndex >= 4;
+  const punchlineOn = stepIndex >= 4;
+  const anchorOn = stepIndex >= 4;
+  const pulseOn = stepIndex >= 4;
+  const showLoopBack = stepIndex >= 3;
 
-  // The V-diagram only cares about steps 0..2. Clamp so once we move into the
-  // bars (stepIndex ≥ 3) the V freezes in its canonical pose rather than
-  // continuing to "advance".
-  const vStepIndex = Math.min(stepIndex, 2);
+  // No clamp — VWorkflowDiagram is fully drawn by step 2; for steps ≥ 3 the
+  // diagram simply holds its canonical pose and the loop-back is rendered as
+  // an overlay. Passing stepIndex directly lets the diagram know the deck has
+  // advanced (required because `showLoopBack` is gated on stepIndex ≥ 3).
+  const vStepIndex = stepIndex;
+
+  // Mutable V-nodes: per spec §3.4 we drop the inline "→ SHIP" arrow prefix
+  // (the diagram renders its own SHIP marker) and surface the
+  // review/validate/judge caption already canonical in content.ts.
+  const vNodes = C.nodes;
 
   // Build segment specs. Colors per spec:
   //   BEFORE: Specify copper-300, Generate copper-700 (dominant), Verify copper-300 dim
@@ -100,6 +112,13 @@ export function C4VBounceWorkflow() {
     { label: "Generate", percent: C.after.generatePct, color: "var(--copper-700)" },
     { label: "Verify", percent: C.after.verifyPct, color: "var(--copper-400)" },
   ];
+
+  // FIG + title fade-in (no lift, just opacity over 400ms).
+  const headerFade: CSSProperties = {
+    opacity: mountedOn ? 1 : 0,
+    transition: "opacity 400ms var(--ease)",
+    willChange: "opacity",
+  };
 
   return (
     <div
@@ -129,9 +148,20 @@ export function C4VBounceWorkflow() {
         }}
       />
 
-      <FigLabel section="C" num={4} label={C.figLabel} />
+      {/* FIG label — canonical top-left position, via shared component. */}
+      <div style={headerFade}>
+        <FigLabel section="C" num={4} label={C.figLabel} />
+      </div>
 
-      {/* ───────────── TOP — V-workflow diagram ───────────── */}
+      {/* Slide title — canonical .slide-headline.small at top:80 left:48. */}
+      <div className="slide-headline-row" style={headerFade}>
+        <h1 className="slide-headline small">{C.headline}</h1>
+      </div>
+
+      {/* ───────────── V-workflow diagram ─────────────
+          Positioned y:156–400. The component owns its own internal
+          coordinate space (1000×400 viewBox) — this wrapper just sets the
+          bounding box of the V's stage area. */}
       <div
         data-testid="c4-v-stage"
         style={{
@@ -146,47 +176,59 @@ export function C4VBounceWorkflow() {
         }}
       >
         <VWorkflowDiagram
-          nodes={C.nodes}
+          nodes={vNodes}
           humanCaption={C.humanCaption}
           aiCaption={C.aiCaption}
           stepIndex={vStepIndex}
+          showLaneHairline={true}
+          showLoopBack={showLoopBack}
         />
       </div>
 
-      {/* ───────────── MIDDLE — BEFORE / AFTER bars ───────────── */}
+      {/* ───────────── BEFORE / AFTER bars ───────────── */}
       <div
-        data-testid="c4-bars"
+        data-testid="c4-before-row"
         style={{
           position: "absolute",
           left: SIDE_PAD,
           right: SIDE_PAD,
-          top: BARS_TOP,
+          top: BEFORE_BAR_TOP,
           display: "flex",
-          flexDirection: "column",
-          gap: BARS_GAP,
-          alignItems: "center",
+          justifyContent: "center",
           zIndex: 5,
         }}
       >
-        <TimeDistributionBar
+        <HoverableTimeDistributionBar
           label="BEFORE"
           labelColor="var(--neutral-400)"
           segments={beforeSegments}
-          on={beforeBarOn}
-          trackWidth={Math.min(880, STAGE_W - SIDE_PAD * 2 - 140)}
+          on={barsOn}
           testId="c4-before-bar"
         />
-        <TimeDistributionBar
+      </div>
+      <div
+        data-testid="c4-after-row"
+        style={{
+          position: "absolute",
+          left: SIDE_PAD,
+          right: SIDE_PAD,
+          top: AFTER_BAR_TOP,
+          display: "flex",
+          justifyContent: "center",
+          zIndex: 5,
+        }}
+      >
+        <HoverableTimeDistributionBar
           label="AFTER"
           labelColor="var(--copper-400)"
           segments={afterSegments}
-          on={afterBarOn}
-          trackWidth={Math.min(880, STAGE_W - SIDE_PAD * 2 - 140)}
+          on={barsOn}
           testId="c4-after-bar"
         />
       </div>
 
-      {/* ───────────── BOTTOM — punchline + anchor ───────────── */}
+      {/* ───────────── BOTTOM — punchline + anchor ─────────────
+          Both fade in 200ms after bars (segment stagger ~620ms total). */}
       <div
         data-testid="c4-punchline"
         style={{
@@ -199,7 +241,7 @@ export function C4VBounceWorkflow() {
           opacity: punchlineOn ? 1 : 0,
           transform: punchlineOn ? "translateY(0)" : "translateY(8px)",
           transition:
-            "opacity 600ms var(--ease), transform 600ms var(--ease)",
+            "opacity 600ms var(--ease) 800ms, transform 600ms var(--ease) 800ms",
           zIndex: 6,
         }}
       >
@@ -218,11 +260,130 @@ export function C4VBounceWorkflow() {
           opacity: anchorOn ? 1 : 0,
           transform: anchorOn ? "translateY(0)" : "translateY(8px)",
           transition:
-            "opacity 600ms var(--ease) 120ms, transform 600ms var(--ease) 120ms",
+            "opacity 600ms var(--ease) 1000ms, transform 600ms var(--ease) 1000ms",
           zIndex: 6,
         }}
       >
-        <AnchorLine text={C.anchor} keyword={C.anchorKw[0] ?? "productivity multiplier"} />
+        <AnchorLine
+          text={C.anchor}
+          coreSkillKeyword={C.coreSkillKw[0] ?? "core skill"}
+          pulse={pulseOn}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─────────── Bar with per-segment hover (% glow + 1px lift) ───────────
+//
+// Wraps TimeDistributionBar; positions an absolutely-positioned hover
+// overlay on top of the bar with three transparent zones (one per segment).
+// Hovering a zone elevates the underlying segment via a slight lift
+// transform and brightens the % caption beneath.
+function HoverableTimeDistributionBar(props: {
+  label: string;
+  labelColor: string;
+  segments: readonly TimeDistributionSegment[];
+  on: boolean;
+  testId?: string;
+}): ReactNode {
+  const { label, labelColor, segments, on, testId } = props;
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  // Compose a copy of segments — when on and hovered, brighten the matching
+  // segment by switching to copper-300 from copper-700 (or keep original).
+  // We keep colors stable here; hover effect is delivered via the absolutely-
+  // positioned overlay zones instead so we don't fight TimeDistributionBar.
+  return (
+    <div
+      data-testid={testId ? `${testId}-wrap` : undefined}
+      style={{ position: "relative", width: "100%", maxWidth: 1000 }}
+    >
+      <TimeDistributionBar
+        label={label}
+        labelColor={labelColor}
+        segments={segments}
+        on={on}
+        trackWidth={820}
+        testId={testId}
+      />
+
+      {/* Hover overlay — three flex zones aligned over the bar track. The
+          row label (90px + 18px gap) sits to the left, so the zones start at
+          offset 108px and span the 820px track. */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 108,
+          top: 0,
+          width: 820,
+          height: 32,
+          display: "flex",
+          pointerEvents: on ? "auto" : "none",
+        }}
+      >
+        {segments.map((seg, i) => (
+          <div
+            key={`hover-${seg.label}-${i}`}
+            data-testid={`${testId}-hover-${seg.label.toLowerCase()}`}
+            onMouseEnter={() => setHoveredIdx(i)}
+            onMouseLeave={() => setHoveredIdx(null)}
+            style={{
+              flex: `0 0 ${seg.percent}%`,
+              height: "100%",
+              cursor: "default",
+              transform:
+                hoveredIdx === i ? "translateY(-1px)" : "translateY(0)",
+              transition: "transform 180ms var(--ease)",
+              boxShadow:
+                hoveredIdx === i
+                  ? "0 0 0 1px var(--copper-400), 0 0 12px rgba(184,110,61,0.35)"
+                  : "none",
+              borderRadius: 1,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Hover-driven % glow overlay — sits over the segment captions row
+          beneath the bar track. The captions are flex children at the
+          assigned percent; we mirror that to highlight the hovered one. */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 108,
+          top: 38,
+          width: 820,
+          display: "flex",
+          pointerEvents: "none",
+        }}
+      >
+        {segments.map((seg, i) => (
+          <div
+            key={`pct-glow-${seg.label}-${i}`}
+            style={{
+              flex: `0 0 ${seg.percent}%`,
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: 2,
+              opacity: hoveredIdx === i ? 1 : 0,
+              transition: "opacity 180ms var(--ease)",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 18,
+                color: "var(--copper-300)",
+                lineHeight: 1,
+                textShadow: "0 0 10px rgba(184,110,61,0.55)",
+              }}
+            >
+              {seg.percent}%
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -275,18 +436,19 @@ function Punchline({
 }
 
 // ───────────────────── AnchorLine ─────────────────────
-// "This is the productivity multiplier."
-//   • Source Serif 4 italic ~22px, copper-400
-//   • `productivity multiplier` is the keyword — rendered italic with the
-//     full line in copper-400 since the entire phrase is the emphasis.
+// "Verification is the new core skill."
+//   • Source Serif 4 italic ~22px, copper-400 (entire phrase)
+//   • `core skill` keyword gets a copper-500 underline + 4s ambient pulse
+//     at canonical pose.
 function AnchorLine({
   text,
-  keyword,
+  coreSkillKeyword,
+  pulse,
 }: {
   text: string;
-  keyword: string;
+  coreSkillKeyword: string;
+  pulse: boolean;
 }): ReactNode {
-  const idx = text.indexOf(keyword);
   const baseStyle: CSSProperties = {
     fontFamily: "var(--serif)",
     fontStyle: "italic",
@@ -297,26 +459,45 @@ function AnchorLine({
     margin: 0,
     textAlign: "center",
   };
+
+  const idx = text.indexOf(coreSkillKeyword);
   if (idx < 0) {
-    return <p style={baseStyle}>{text}</p>;
+    return (
+      <p style={baseStyle} data-testid="c4-anchor-text">
+        {text}
+      </p>
+    );
   }
   const head = text.slice(0, idx);
-  const tail = text.slice(idx + keyword.length);
+  const tail = text.slice(idx + coreSkillKeyword.length);
+
+  const accent = (
+    <em
+      data-testid="c4-anchor-keyword"
+      style={{
+        fontStyle: "italic",
+        fontFamily: "var(--serif)",
+        color: "var(--copper-400)",
+        textDecoration: "underline",
+        textDecorationColor: "var(--copper-500)",
+        textUnderlineOffset: "4px",
+        textDecorationThickness: "1px",
+      }}
+    >
+      {coreSkillKeyword}
+    </em>
+  );
+
   return (
     <p style={baseStyle} data-testid="c4-anchor-text">
       {head}
-      <em
-        data-testid="c4-anchor-keyword"
-        style={{
-          color: "var(--copper-300)",
-          fontStyle: "italic",
-          fontFamily: "var(--serif)",
-          borderBottom: "1px solid var(--copper-500)",
-          paddingBottom: 1,
-        }}
-      >
-        {keyword}
-      </em>
+      {pulse ? (
+        <AmbientPulse periodSeconds={4} keyword={coreSkillKeyword}>
+          {accent}
+        </AmbientPulse>
+      ) : (
+        accent
+      )}
       {tail}
     </p>
   );
@@ -325,8 +506,8 @@ function AnchorLine({
 // ───────────────────── slide def ─────────────────────
 
 export const c4Slide: SlideDef = {
-  steps: 6,
-  canonicalPose: 5,
+  steps: 5,
+  canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",

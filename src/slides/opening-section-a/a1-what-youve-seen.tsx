@@ -1,153 +1,104 @@
 // A.1 — WHAT YOU'VE ALREADY SEEN
 //
-// Section A opener. Acknowledges the capability classes Session 1 covered
-// (without redescribing individual winners' work — audience-respect rule)
-// and poses 4 open questions that point into later sections. Functions as
-// Hook 1 AND a curiosity-driven table-of-contents.
-//
-// Layout —
-//   • TOP STRIP: FIG label (top-left, owned by FigLabel.css), horizontal row
-//     of 5 capability chips just below.
-//   • MIDDLE: single italic bridging line, centered.
-//   • BOTTOM TWO-THIRDS: vertical stack of 4 questions, generous spacing.
-//   • Background: plain neutral-950 + subtle dot-grid texture.
-//
-// Motion (4 step-reveals + load animation) —
-//   step 0 (load): FIG label + capability chips (left-to-right stagger) +
-//     bridge line all reveal as part of the load animation (no Space needed).
-//   step 0 (= same step): Q1 reveals as Space is pressed the first time.
-//   step 1: Q2 reveals.
-//   step 2: Q3 reveals.
-//   step 3: Q4 reveals + faint copper underline pulse on `questions` in the
-//     bridge line (4s ambient loop).
-//
-// Step indexing note —
-//   The spec describes 5 logical reveal beats (load + 4 questions), but the
-//   deck's stepCounts is indexed from 0, and the load animation is
-//   load-on-mount (no Space needed). So steps:4 with canonicalPose:3 maps to:
-//     stepIndex 0 → Q1 visible
-//     stepIndex 1 → Q1+Q2 visible
-//     stepIndex 2 → Q1+Q2+Q3 visible
-//     stepIndex 3 → all 4 visible + pulse on `questions`
-//   This matches the registered `steps:4, canonicalPose:3` shape.
-//
-// Hover (presenter-controlled detail layer) —
-//   Hover any question → "→ Section X" chip slides in (~150ms). Mouse-leave
-//   reverses. CSS-only via QuestionRow.
+// Step 0 chips morph into step 1 cards via framer-motion `layoutId` on a
+// shared <CapabilityShape>. Step 0 also carries a "CAPABILITIES COVERED"
+// rule-header that fades out during the morph.
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
+import { MessageSquare, FileText, ScanSearch, Sparkles, Map } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { highlight } from "@/components/highlight";
-import { AmbientPulse } from "@/components/AmbientPulse";
-import { CapabilityChip } from "./components/CapabilityChip";
-import { QuestionRow } from "./components/QuestionRow";
-import { a1Content as C } from "./content";
+import { highlight as KW } from "@/components/highlight";
+import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
+import { a1Content as C, type A1IconName, type A1Capability } from "./content";
+
+const ICONS: Record<A1IconName, LucideIcon> = {
+  MessageSquare,
+  FileText,
+  ScanSearch,
+  Sparkles,
+  Map,
+};
+
+const COLUMN_TOP = 170;
+const COLUMN_BOTTOM = 80;
+const COLUMN_WIDTH = 520;
+const CARD_HEIGHT = 64;
+const CARD_GAP = 10;
+
+const MORPH_TRANSITION = {
+  type: "spring" as const,
+  stiffness: 220,
+  damping: 28,
+};
 
 // ───────────────────── slide ─────────────────────
 
 export function A1WhatYouveSeen() {
   const { stepIndex } = useDeck();
 
-  // Load animation state — staged via setTimeout so the chip row and the
-  // bridge line settle BEFORE the first Space-driven question reveal.
-  // Stage gates: 0 → nothing; 1 → chips; 2 → bridge line.
-  const [loadStage, setLoadStage] = useState(0);
+  // Mount-driven entry stagger: tagline → rule → chips fade in on first mount.
+  // Stage advances once and stays at max; subsequent step transitions are
+  // governed independently by stepIndex below.
+  const [stage, setStage] = useState(0);
   useEffect(() => {
-    const t1 = window.setTimeout(() => setLoadStage(1), 200); // chips begin
-    const t2 = window.setTimeout(() => setLoadStage(2), 1000); // bridge line
+    const t1 = window.setTimeout(() => setStage(1), 220); // tagline
+    const t2 = window.setTimeout(() => setStage(2), 460); // rule
+    const t3 = window.setTimeout(() => setStage(3), 680); // chips (stagger inside)
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
+      window.clearTimeout(t3);
     };
   }, []);
 
-  const chipsOn = loadStage >= 1;
-  const bridgeOn = loadStage >= 2;
+  const taglineMounted = stage >= 1;
+  const ruleMounted = stage >= 2;
+  const chipsMounted = stage >= 3;
 
-  // Reusable lift+fade helper for question rows.
-  const liftStyle = (on: boolean): CSSProperties => ({
-    opacity: on ? 1 : 0,
-    transform: on ? "translateY(0)" : "translateY(8px)",
-    transition: "opacity 400ms var(--ease), transform 400ms var(--ease)",
-    willChange: "opacity, transform",
-  });
+  const showOpener = stepIndex === 0;
+  const showCards = stepIndex >= 1;
+  const showQuestions = stepIndex >= 2;
+  const showFooter = stepIndex >= 3;
+
+  const mode: ShapeMode = showCards ? "card" : "chip";
 
   return (
-    <div data-testid="slide-a1" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-      {/* Background — plain neutral-950 + subtle dot-grid texture. */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "var(--neutral-950)",
-          zIndex: 0,
-        }}
-      />
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.05,
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-          zIndex: 1,
-        }}
-      />
-
+    <>
       <FigLabel section="A" num={1} label={C.figLabel} />
 
-      {/* Capability chip strip — sits just below FigLabel's reserved band. */}
-      <div
-        data-testid="a1-chip-strip"
-        style={{
-          position: "absolute",
-          left: 48,
-          right: 48,
-          top: 88,
-          display: "flex",
-          alignItems: "center",
-          gap: 28,
-          zIndex: 10,
-          flexWrap: "nowrap",
-        }}
-      >
-        {C.capabilityChips.map((label, i) => {
-          // Left-to-right stagger: 80ms per chip after `chipsOn` triggers.
-          const onAt = chipsOn;
-          const style: CSSProperties = {
-            opacity: onAt ? 1 : 0,
-            transform: onAt ? "translateX(0)" : "translateX(-8px)",
-            transition:
-              "opacity 350ms var(--ease), transform 350ms var(--ease)",
-            transitionDelay: onAt ? `${i * 80}ms` : "0ms",
-          };
-          return (
-            <div key={label} style={style}>
-              <CapabilityChip label={label} />
-            </div>
-          );
-        })}
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">
+          {KW(C.slideTitle, C.slideTitleKw)}
+        </h1>
       </div>
 
-      {/* Bridge line — centered italic, sits between the chip strip and
-          the question stack. `questions` keyword is wrapped in
-          AmbientPulse once the canonical pose (step 3) is reached. */}
-      <div
-        data-testid="a1-bridge-line"
+      <OpenerChrome
+        taglineOn={showOpener && taglineMounted}
+        ruleOn={showOpener && ruleMounted}
+      />
+
+      <LayoutGroup id="a1-capabilities">
+        {mode === "chip" ? (
+          <ChipsRow on={chipsMounted} capabilities={C.capabilities} />
+        ) : (
+          <CapabilitiesColumn on={showCards} capabilities={C.capabilities} />
+        )}
+      </LayoutGroup>
+
+      <QuestionsColumn on={showQuestions} />
+
+      <Reveal
+        on={showFooter}
+        data-testid="a1-footer-caption"
         style={{
           position: "absolute",
           left: 48,
           right: 48,
-          top: 168,
-          textAlign: "center",
-          opacity: bridgeOn ? 1 : 0,
-          transform: bridgeOn ? "translateY(0)" : "translateY(8px)",
-          transition: "opacity 500ms var(--ease), transform 500ms var(--ease)",
+          bottom: 50,
           zIndex: 10,
         }}
       >
@@ -155,92 +106,455 @@ export function A1WhatYouveSeen() {
           style={{
             fontFamily: "var(--serif)",
             fontStyle: "italic",
-            fontSize: 32,
+            fontSize: 14,
+            color: "var(--neutral-400)",
+            margin: 0,
+            lineHeight: 1.4,
+          }}
+        >
+          {KW(C.footerCaption, C.footerCaptionKw)}
+        </p>
+      </Reveal>
+    </>
+  );
+}
+
+// ───────────────────── STEP 0 chrome — rule header + tagline ─────────────────────
+
+function OpenerChrome({
+  taglineOn,
+  ruleOn,
+}: {
+  taglineOn: boolean;
+  ruleOn: boolean;
+}) {
+  return (
+    <>
+      <div
+        data-testid="a1-tagline"
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: 270,
+          opacity: taglineOn ? 1 : 0,
+          transform: taglineOn ? "translateY(0)" : "translateY(10px)",
+          transition:
+            "opacity 520ms var(--ease), transform 520ms var(--ease)",
+          pointerEvents: taglineOn ? "auto" : "none",
+          zIndex: 10,
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--serif)",
+            fontStyle: "italic",
+            fontSize: 40,
             color: "var(--neutral-200)",
             margin: 0,
             lineHeight: 1.3,
             fontWeight: 400,
+            textAlign: "center",
           }}
         >
-          {renderBridgeLine(C.bridgeLine, stepIndex >= 3)}
+          {KW(C.tagline, C.taglineKw)}
         </p>
       </div>
 
-      {/* Question stack — bottom two-thirds, generous spacing. */}
       <div
-        data-testid="a1-question-stack"
+        data-testid="a1-rule-header"
         style={{
           position: "absolute",
-          left: 80,
-          right: 80,
-          top: 280,
-          bottom: 56,
+          left: 48,
+          right: 48,
+          top: 380,
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          gap: 4,
-          zIndex: 10,
+          alignItems: "center",
+          gap: 16,
+          opacity: ruleOn ? 1 : 0,
+          transition: "opacity 280ms var(--ease)",
+          pointerEvents: ruleOn ? "auto" : "none",
+          zIndex: 9,
         }}
       >
-        {C.questions.map((q, i) => {
-          const on = stepIndex >= i;
-          return (
-            <div
-              key={q.pointer}
-              data-testid={`a1-question-${i + 1}`}
-              style={liftStyle(on)}
-            >
-              <QuestionRow pointer={q.pointer}>
-                {highlight(q.text, q.kw)}
-              </QuestionRow>
-            </div>
-          );
-        })}
+        <div
+          style={{
+            flex: 1,
+            height: 1,
+            background: "var(--copper-700)",
+            transformOrigin: "left center",
+            transform: ruleOn ? "scaleX(1)" : "scaleX(0)",
+            transition: "transform 520ms var(--ease) 120ms",
+          }}
+        />
+        <div
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.22em",
+            color: "var(--copper-400)",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+            opacity: ruleOn ? 1 : 0,
+            transition: "opacity 360ms var(--ease) 320ms",
+          }}
+        >
+          Capabilities Covered
+        </div>
+        <div
+          style={{
+            flex: 1,
+            height: 1,
+            background: "var(--copper-700)",
+            transformOrigin: "right center",
+            transform: ruleOn ? "scaleX(1)" : "scaleX(0)",
+            transition: "transform 520ms var(--ease) 120ms",
+          }}
+        />
+      </div>
+    </>
+  );
+}
+
+// ───────────────────── STEP 0 — chip row (centered) ─────────────────────
+
+function ChipsRow({
+  on,
+  capabilities,
+}: {
+  on: boolean;
+  capabilities: readonly A1Capability[];
+}) {
+  return (
+    <div
+      data-testid="a1-chip-strip"
+      style={{
+        position: "absolute",
+        left: 48,
+        right: 48,
+        top: 460,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 16,
+        flexWrap: "wrap",
+        zIndex: 10,
+      }}
+    >
+      {capabilities.map((cap, i) => (
+        <div
+          key={cap.label}
+          style={{
+            opacity: on ? 1 : 0,
+            transform: on ? "translateY(0)" : "translateY(10px)",
+            transition:
+              "opacity 420ms var(--ease), transform 420ms var(--ease)",
+            transitionDelay: on ? `${i * 80}ms` : "0ms",
+          }}
+        >
+          <CapabilityShape cap={cap} mode="chip" index={i} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ───────────────────── STEP 1+ — capabilities column ─────────────────────
+
+function CapabilitiesColumn({
+  on,
+  capabilities,
+}: {
+  on: boolean;
+  capabilities: readonly A1Capability[];
+}) {
+  return (
+    <div
+      data-testid="a1-capabilities-column"
+      style={{
+        position: "absolute",
+        left: 48,
+        top: COLUMN_TOP,
+        width: COLUMN_WIDTH,
+        bottom: COLUMN_BOTTOM,
+        display: "flex",
+        flexDirection: "column",
+        pointerEvents: on ? "auto" : "none",
+      }}
+    >
+      <ColumnHeading on={on} label="Five capabilities" />
+      <div style={{ height: 12 }} />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: CARD_GAP,
+          flex: 1,
+          minHeight: 0,
+        }}
+      >
+        {capabilities.map((cap, i) => (
+          <CapabilityShape
+            key={cap.label}
+            cap={cap}
+            mode="card"
+            index={i}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-// ───────────────────── helpers ─────────────────────
+// ───────────────────── morphable capability shape ─────────────────────
 
-// Render the bridge line with `questions` as a copper-400 italic accent.
-// When `pulse` is true (final reveal), wrap it in AmbientPulse for the 4s
-// loop described in the sub-spec.
-function renderBridgeLine(text: string, pulse: boolean) {
-  // Split on the literal substring "questions" so we can replace it with
-  // a styled span. (We don't reuse `highlight` here because that emits
-  // KeywordHighlight, which uses the default italic copper — we want to
-  // optionally wrap it in AmbientPulse on the canonical step.)
-  const parts = text.split("questions");
-  if (parts.length === 1) return text;
-  const accent = (
-    <em
+type ShapeMode = "chip" | "card";
+
+function CapabilityShape({
+  cap,
+  mode,
+  index,
+}: {
+  cap: A1Capability;
+  mode: ShapeMode;
+  index: number;
+}) {
+  const Icon = ICONS[cap.iconName];
+  const isCard = mode === "card";
+  const [hovered, setHovered] = useState(false);
+
+  const shellStyle: CSSProperties = isCard
+    ? {
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        minHeight: CARD_HEIGHT,
+        flex: 1,
+        width: "100%",
+        padding: "10px 14px",
+        border: `1px solid ${hovered ? "var(--copper-200)" : "var(--copper-700)"}`,
+        background: hovered ? "rgba(217,158,108,0.12)" : "rgba(10,10,10,0.6)",
+        boxSizing: "border-box",
+        transition: "all 0.2s var(--ease)",
+        cursor: "default",
+      }
+    : {
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 16px",
+        border: `1px solid ${hovered ? "var(--copper-200)" : "var(--copper-700)"}`,
+        background: hovered ? "rgba(217,158,108,0.08)" : "rgba(10,10,10,0.4)",
+        boxSizing: "border-box",
+        whiteSpace: "nowrap",
+        transition: "all 0.2s var(--ease)",
+        cursor: "default",
+      };
+
+  return (
+    <motion.div
+      layoutId={`a1-cap-${index}`}
+      transition={MORPH_TRANSITION}
+      data-testid={
+        isCard ? `a1-cap-card-${cap.iconName}` : "capability-chip"
+      }
+      data-hovered={hovered ? "true" : "false"}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={shellStyle}
+    >
+      <motion.div
+        layout="position"
+        transition={MORPH_TRANSITION}
+        style={{
+          flex: isCard ? "0 0 22px" : "0 0 auto",
+          width: isCard ? 22 : 14,
+          height: isCard ? 22 : 14,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "var(--copper-300)",
+        }}
+      >
+        <Icon size={isCard ? 22 : 14} color="currentColor" strokeWidth={1.5} />
+      </motion.div>
+
+      <motion.div
+        layout="position"
+        transition={MORPH_TRANSITION}
+        style={{ flex: isCard ? 1 : "0 0 auto", minWidth: 0 }}
+      >
+        <div
+          style={{
+            fontFamily: isCard ? "var(--display)" : "var(--mono)",
+            fontWeight: isCard ? 400 : 500,
+            fontSize: isCard ? 17 : 12,
+            letterSpacing: isCard ? "normal" : "0.22em",
+            textTransform: isCard ? "none" : "uppercase",
+            color: hovered
+              ? "var(--copper-100)"
+              : isCard
+                ? "var(--neutral-50)"
+                : "var(--neutral-200)",
+            lineHeight: isCard ? 1.05 : 1,
+            whiteSpace: isCard ? "normal" : "nowrap",
+            transition: "color 0.2s var(--ease)",
+          }}
+        >
+          {cap.label}
+        </div>
+
+        <AnimatePresence initial={false}>
+          {isCard && (
+            <motion.div
+              key="desc"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, delay: 0.15 }}
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: 12,
+                color: "var(--neutral-300)",
+                lineHeight: 1.3,
+                marginTop: 3,
+                overflow: "hidden",
+              }}
+            >
+              {KW(cap.description, cap.descriptionKw)}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ───────────────────── STEP 2+ — Questions column ─────────────────────
+
+function QuestionsColumn({ on }: { on: boolean }) {
+  return (
+    <div
+      data-testid="a1-questions-column"
       style={{
-        fontFamily: "var(--serif)",
-        fontStyle: "italic",
-        color: "var(--copper-400)",
-        fontWeight: 400,
-        textDecoration: pulse ? "underline" : "none",
-        textDecorationColor: pulse ? "var(--copper-500)" : "transparent",
-        textUnderlineOffset: "4px",
-        textDecorationThickness: "1px",
-        transition: "text-decoration-color 400ms var(--ease)",
+        position: "absolute",
+        right: 48,
+        top: COLUMN_TOP,
+        width: COLUMN_WIDTH,
+        bottom: COLUMN_BOTTOM,
+        opacity: on ? 1 : 0,
+        transform: on ? "translateX(0)" : "translateX(8px)",
+        transition: "opacity 400ms var(--ease), transform 400ms var(--ease)",
+        pointerEvents: on ? "auto" : "none",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      questions
-    </em>
+      <ColumnHeading on={on} label="Questions we'll answer" />
+      <div style={{ height: 12 }} />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: CARD_GAP,
+          flex: 1,
+          minHeight: 0,
+        }}
+      >
+        {C.questions.map((q, i) => (
+          <Reveal
+            on={on}
+            delay={i * 90}
+            key={q.sectionLabel}
+            data-testid={`a1-question-card-${i + 1}`}
+            style={{ flex: 1, minHeight: CARD_HEIGHT, display: "flex" }}
+          >
+            <QuestionCard q={q} />
+          </Reveal>
+        ))}
+      </div>
+    </div>
   );
+}
+
+function QuestionCard({ q }: { q: (typeof C.questions)[number] }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      data-hovered={hovered ? "true" : "false"}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        gap: 4,
+        minHeight: CARD_HEIGHT,
+        flex: 1,
+        width: "100%",
+        padding: "10px 14px",
+        border: `1px solid ${hovered ? "var(--copper-200)" : "var(--copper-700)"}`,
+        background: hovered ? "rgba(217,158,108,0.12)" : "rgba(10,10,10,0.6)",
+        boxSizing: "border-box",
+        transition: "all 0.2s var(--ease)",
+        cursor: "default",
+      }}
+    >
+      <p
+        style={{
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          fontSize: 16,
+          fontWeight: 400,
+          color: hovered ? "var(--copper-100)" : "var(--neutral-100)",
+          margin: 0,
+          lineHeight: 1.3,
+          transition: "color 0.2s var(--ease)",
+        }}
+      >
+        {KW(q.text, q.kw)}
+      </p>
+      <div
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 10,
+          fontWeight: 500,
+          letterSpacing: "0.18em",
+          color: "var(--copper-300)",
+          textTransform: "uppercase",
+          lineHeight: 1,
+        }}
+      >
+        {"→ "}
+        {q.sectionLabel}
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────── shared column heading ─────────────────────
+
+function ColumnHeading({ on, label }: { on: boolean; label: string }) {
   return (
     <>
-      {parts[0]}
-      {pulse ? (
-        <AmbientPulse periodSeconds={4} keyword="questions">
-          {accent}
-        </AmbientPulse>
-      ) : (
-        accent
-      )}
-      {parts[1]}
+      <div
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 10,
+          letterSpacing: "0.22em",
+          color: "var(--copper-400)",
+          textTransform: "uppercase",
+          marginBottom: 4,
+          opacity: on ? 1 : 0,
+          transform: on ? "translateY(0)" : "translateY(-4px)",
+          transition:
+            "opacity 320ms var(--ease) 80ms, transform 320ms var(--ease) 80ms",
+        }}
+      >
+        {label}
+      </div>
+      <CopperRule on={on} width="40%" />
     </>
   );
 }

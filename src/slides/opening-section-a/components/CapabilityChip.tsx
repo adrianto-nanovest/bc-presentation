@@ -1,37 +1,44 @@
-// CapabilityChip — uppercase chip with a copper-700 1px left-edge stop.
-// Used on A.1 to mark each "capability you've already seen". The label
-// is deliberately generic (e.g. AI CHATBOT, GEOSPATIAL AI) — never a
-// winner's project name (audience-respect rule, see user memory).
-//
-// Visual register: Inter ~14px caps, 0.18em tracking, neutral-300; the
-// left-edge stop is the only ornament. No fill, no hover lift — the chip
-// is a passive marker, not interactive.
-import type { CSSProperties } from "react";
+// CapabilityChip — bordered uppercase chip used on A.1 step 0 in the
+// horizontal row. Hover lifts border + tints background, matching the E.1
+// tag-chip register. The label is deliberately generic (e.g. AI CHATBOT,
+// GEOSPATIAL AI) — never a winner's project name (audience-respect rule).
+import { useState, type CSSProperties } from "react";
 
 export interface CapabilityChipProps {
   label: string;
-  /** Optional extra style overrides. */
   style?: CSSProperties;
 }
 
 export function CapabilityChip({ label, style }: CapabilityChipProps) {
+  const [hovered, setHovered] = useState(false);
+
   const base: CSSProperties = {
     display: "inline-flex",
     alignItems: "center",
-    fontFamily: "var(--sans)",
+    fontFamily: "var(--mono)",
     fontWeight: 500,
     fontSize: 12,
-    letterSpacing: "0.18em",
-    color: "var(--neutral-300)",
+    letterSpacing: "0.22em",
     textTransform: "uppercase",
-    padding: "6px 0 6px 12px",
-    borderLeft: "1px solid var(--copper-700)",
+    padding: "10px 16px",
+    border: `1px solid ${hovered ? "var(--copper-200)" : "var(--copper-700)"}`,
+    background: hovered ? "rgba(217,158,108,0.08)" : "rgba(10,10,10,0.4)",
+    color: hovered ? "var(--copper-100)" : "var(--neutral-200)",
     lineHeight: 1,
     whiteSpace: "nowrap",
+    cursor: "default",
+    transition: "all 200ms var(--ease)",
     ...style,
   };
+
   return (
-    <span data-testid="capability-chip" style={base}>
+    <span
+      data-testid="capability-chip"
+      data-hovered={hovered ? "true" : "false"}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={base}
+    >
       {label}
     </span>
   );

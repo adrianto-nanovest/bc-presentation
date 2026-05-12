@@ -336,15 +336,17 @@ export interface D5Beat {
 }
 
 export interface D5Content {
-  beat1: D5Beat;
+  beat1: {
+    lineA: D5Beat;
+    lineB: D5Beat;
+  };
   beat2: D5Beat;
-  bridge: D5Beat;
-  attr: string;
 }
 
 export const d5Content: D5Content = {
-  beat1: { text: "Process is the spec.", kw: ["spec"] },
-  beat2: { text: "Engineering is the system around it.", kw: ["system"] },
-  bridge: { text: "Next: how that system gets built.", kw: ["how that system gets built"] },
-  attr: "— Section E · Foundation Core",
+  beat1: {
+    lineA: { text: "Process is the spec.", kw: ["spec"] },
+    lineB: { text: "Engineering is the system around it.", kw: ["system"] },
+  },
+  beat2: { text: "Next: how the system gets built.", kw: ["how the system gets built"] },
 };

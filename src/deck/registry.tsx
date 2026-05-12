@@ -7,6 +7,8 @@ import { revealAndClosingSlides } from "@/slides/reveal-and-closing";
 import { foundationCoreSlides } from "@/slides/foundation-core";
 import { foundationCoreSectionESlides } from "@/slides/foundation-core-section-e";
 import { foundationTechniquesSectionFSlides } from "@/slides/foundation-techniques-section-f";
+import { applicationSectionGSlides } from "@/slides/application-section-g";
+import { applicationSectionHSlides } from "@/slides/application-section-h";
 
 // HexLadder is a developer-only slide retained for projection-test
 // (see scripts/projection-test.mjs). Always last so projection-test
@@ -24,7 +26,7 @@ export const hexLadderDevSlide: SlideDef = {
 };
 
 // Final deck order per parent meta-spec:
-//   Opening (Title + A) → B → C (incl. C→D bridge) → D → E → F → I/J/K.
+//   Opening (Title + A) → B → C (incl. C→D bridge) → D → E → F → G → H → I/J/K.
 export const deckSlides: SlideDef[] = [
   ...openingSectionASlides,     // Title + A.1
   ...landscapeSectionBSlides,   // B.1–B.5
@@ -32,6 +34,8 @@ export const deckSlides: SlideDef[] = [
   ...foundationCoreSlides,      // D (existing)
   ...foundationCoreSectionESlides, // E (existing)
   ...foundationTechniquesSectionFSlides, // F (existing)
+  ...applicationSectionGSlides, // G.1–G.11
+  ...applicationSectionHSlides, // H.1–H.3
   ...revealAndClosingSlides,    // I/J/K (existing)
   hexLadderDevSlide,
 ];

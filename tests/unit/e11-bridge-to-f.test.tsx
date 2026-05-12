@@ -62,9 +62,12 @@ test("E.11 renders the bridge hero photo + three layered overlays", () => {
 test("step 0 → beat 1 visible, beat 2 hidden", () => {
   renderAtStep(0);
 
-  const beat1 = screen.getByTestId("e11-beat1");
-  expect(beat1.className).toMatch(/\bon\b/);
-  expect(beat1.textContent).toMatch(e11Content.beat1.text);
+  const lineA = screen.getByTestId("e11-beat1-lineA");
+  const lineB = screen.getByTestId("e11-beat1-lineB");
+  expect(lineA.className).toMatch(/\bon\b/);
+  expect(lineB.className).toMatch(/\bon\b/);
+  expect(lineA.textContent).toMatch(e11Content.beat1.lineA.text);
+  expect(lineB.textContent).toMatch(e11Content.beat1.lineB.text);
 
   const beat2 = screen.getByTestId("e11-beat2");
   expect(beat2.className).not.toMatch(/\bon\b/);
@@ -73,9 +76,12 @@ test("step 0 → beat 1 visible, beat 2 hidden", () => {
 test("step 1 (canonicalPose) → both beats visible", () => {
   renderAtStep(1);
 
-  const beat1 = screen.getByTestId("e11-beat1");
-  expect(beat1.className).toMatch(/\bon\b/);
-  expect(beat1.textContent).toMatch(e11Content.beat1.text);
+  const lineA = screen.getByTestId("e11-beat1-lineA");
+  const lineB = screen.getByTestId("e11-beat1-lineB");
+  expect(lineA.className).toMatch(/\bon\b/);
+  expect(lineB.className).toMatch(/\bon\b/);
+  expect(lineA.textContent).toMatch(e11Content.beat1.lineA.text);
+  expect(lineB.textContent).toMatch(e11Content.beat1.lineB.text);
 
   const beat2 = screen.getByTestId("e11-beat2");
   expect(beat2.className).toMatch(/\bon\b/);

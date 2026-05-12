@@ -4,8 +4,8 @@
 //   - 2 steps · canonicalPose: 1
 //   - Step 0: quote stack staggers in (FIG + 3 lines + attribution)
 //   - Step 1: handoff line "From here, the how." fades in italic, pulse on `how`
-//   - Hero photo fades at 1500ms (slowest in deck) — verified indirectly via
-//     the HeroPhoto fallback (no src), and the slide root render.
+//   - Hero photo fades at 1500ms (slowest in deck) — verified via the
+//     HeroPhoto <img> src (bridgeContent.heroSrc) and the slide root render.
 //   - NO hover handlers anywhere on the slide.
 import { render, screen, act } from "@testing-library/react";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
@@ -48,10 +48,14 @@ test("Bridge renders the top-right BRIDGE label with the correct phrase", () => 
   expect(label.textContent).toMatch(/FROM MINDSET TO MECHANICS/);
 });
 
-test("Bridge renders the hero fallback (no `src`) and the strongest darken overlay 0.30", () => {
-  renderAtStep(0);
-  // Without `src`, HeroPhoto paints only the fallback gradient — no <img>.
-  expect(screen.getByTestId("hero-fallback")).toBeInTheDocument();
+test("Bridge renders the hero photo from content and the strongest darken overlay 0.30", () => {
+  const { container } = renderAtStep(0);
+  // HeroPhoto renders an <img> using bridgeContent.heroSrc — no fallback.
+  expect(screen.queryByTestId("hero-fallback")).toBeNull();
+  const img = container.querySelector("img");
+  expect(img).not.toBeNull();
+  expect(img?.getAttribute("src")).toBe(bridgeContent.heroSrc);
+  expect(img?.getAttribute("alt")).toBe(bridgeContent.heroAlt);
   const darken = screen.getByTestId("darken-overlay");
   expect(darken.getAttribute("data-strength")).toBe("0.3");
 });

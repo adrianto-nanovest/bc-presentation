@@ -7,7 +7,7 @@ import type { AnimationMode } from "./Slide";
 // Section tag drives the NavBar's "Section X" label. Required so the
 // NavBar can rely on it for every slide; the dev-only hex-ladder slide
 // gets "K" as a deliberate trade-off to keep the field non-optional.
-export type SlideSection = "A" | "B" | "C" | "D" | "E" | "F" | "I" | "J" | "K";
+export type SlideSection = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K";
 
 export interface SlideDef {
   steps: number;                       // step count fed to DeckProvider

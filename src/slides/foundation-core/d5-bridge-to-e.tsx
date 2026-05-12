@@ -1,25 +1,16 @@
 // D.5 — BRIDGE TO E
 //
-// Ported line-by-line from `claude-design-section-d/jsx/slides-d.jsx:1103-1162`.
+// 2 steps:
+//   0 — beat 1 reveals (two display lines + copper rule).
+//   1 — beat 2 reveals (italic copper subline).
 //
-// 3 steps. Two big lines + a bridge cue. Bottom-left aligned.
-// Subtle horizon glow rises behind the type as steps reveal.
-//
-//   step 0 — beat1 reveals + radial horizon glow fades in
-//   step 1 — beat2 reveals + 1px copper horizon line fades in
-//   step 2 — bridge cue reveals (italic + monospace attribution)
-//
-// Layout: full-bleed hero photo (`<HeroPhoto>` provides the photo + the
-// bottom-left vignette), then on top of it the design's two horizon-glow
-// layers (radial ellipse + 1px copper line), then the FigLabel, then the
-// editorial stack anchored at `bottom: 100, left: 80, right: 80` with
-// `justify-content: flex-end`.
+// Mirrors E.11's anatomy: full-bleed hero + three darkening overlays,
+// bottom-left anchored beats, FigLabel top-left.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { HeroPhoto } from "@/components/HeroPhoto";
 import { highlight } from "@/components/highlight";
-import { Reveal } from "../foundation-core-section-e/components/Reveal";
+import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
 import { d5Content as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
@@ -27,143 +18,131 @@ import { d5Content as C } from "./content";
 export function D5BridgeToE() {
   const { stepIndex } = useDeck();
 
-  const showA = stepIndex >= 0;
-  const showB = stepIndex >= 1;
-  const showC = stepIndex >= 2;
+  const showBeat1 = stepIndex >= 0;
+  const showBeat2 = stepIndex >= 1;
 
   return (
     <div
       data-testid="d5-root"
       style={{ position: "absolute", inset: 0, overflow: "hidden" }}
     >
-      {/* Hero photo + bottom-left vignette (covers photo + dark overlay). */}
-      <HeroPhoto src="/heroes/d5-bridge.jpg" alt="" vignetteSide="bottom-left" />
-
-      {/* Horizon glow — radial ellipse, fades in on step 0. */}
+      {/* Hero photo — full-bleed bridge. */}
       <div
-        data-testid="d5-horizon-glow"
+        data-testid="d5-hero"
         aria-hidden
         style={{
           position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: "60%",
+          inset: 0,
+          backgroundImage: "url(/heroes/d5-bridge.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+
+      {/* Vignette: bottom-left — anchors the headline against a dark mass. */}
+      <div
+        data-testid="d5-overlay-bottom-left"
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
           background:
-            "radial-gradient(ellipse at 30% 110%, rgba(184,110,61,0.45), rgba(10,10,10,0) 60%)",
-          opacity: showA ? 1 : 0,
-          transition: "opacity 1.2s var(--ease)",
-          zIndex: 11,
+            "linear-gradient(to top right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 35%, rgba(10,10,10,0.0) 70%)",
           pointerEvents: "none",
         }}
       />
 
-      {/* Horizon line — 1px copper, fades in on step 1. */}
+      {/* Vignette: top-left ellipse — protects FigLabel readability. */}
       <div
-        data-testid="d5-horizon-line"
+        data-testid="d5-overlay-top-left"
         aria-hidden
         style={{
           position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: 1,
+          inset: 0,
           background:
-            "linear-gradient(90deg, transparent, var(--copper-500), transparent)",
-          opacity: showB ? 1 : 0,
-          transition: "opacity 1s var(--ease) 200ms",
-          zIndex: 12,
+            "radial-gradient(ellipse 520px 280px at top left, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.55) 35%, rgba(10,10,10,0.15) 70%, rgba(10,10,10,0) 100%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Soft top edge gloom — keeps FigLabel band legible. */}
+      <div
+        data-testid="d5-overlay-top-gloom"
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.18) 80px, rgba(10,10,10,0) 140px)",
           pointerEvents: "none",
         }}
       />
 
       <FigLabel section="D" num={5} label="THE NEXT QUESTION" />
 
-      {/* Editorial stack — anchored bottom-left via flex-end. */}
+      {/* Bottom-left anchored beats. */}
       <div
-        data-testid="d5-stack"
+        data-testid="d5-beats"
         style={{
           position: "absolute",
-          left: 80,
-          right: 80,
-          top: 130,
-          bottom: 100,
+          left: 48,
+          bottom: 110,
+          maxWidth: 760,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-end",
-          gap: 22,
+          gap: 24,
           zIndex: 20,
         }}
       >
-        <Reveal on={showA} data-testid="d5-beat1">
-          <p
-            style={{
-              fontFamily: "var(--display)",
-              fontSize: 72,
-              color: "var(--neutral-50)",
-              margin: 0,
-              lineHeight: 1.05,
-              letterSpacing: "-0.01em",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {highlight(C.beat1.text, C.beat1.kw)}
-          </p>
-        </Reveal>
+        <div
+          data-testid="d5-beat1"
+          style={{ display: "flex", flexDirection: "column", gap: 10 }}
+        >
+          <Reveal on={showBeat1} delay={0} data-testid="d5-beat1-lineA">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 56,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineA.text, C.beat1.lineA.kw)}
+            </p>
+          </Reveal>
+          <Reveal on={showBeat1} delay={250} data-testid="d5-beat1-lineB">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 56,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineB.text, C.beat1.lineB.kw)}
+            </p>
+          </Reveal>
+        </div>
 
-        <Reveal on={showB} delay={150} data-testid="d5-beat2">
+        <CopperRule on={showBeat1} width="30%" delay={400} />
+
+        <Reveal on={showBeat2} delay={150} data-testid="d5-beat2">
           <p
             style={{
               fontFamily: "var(--display)",
-              fontSize: 56,
+              fontStyle: "italic",
+              fontSize: 40,
               color: "var(--copper-200)",
               margin: 0,
-              lineHeight: 1.08,
-              letterSpacing: "-0.01em",
-              whiteSpace: "nowrap",
+              lineHeight: 1.1,
             }}
           >
             {highlight(C.beat2.text, C.beat2.kw)}
           </p>
-        </Reveal>
-
-        <Reveal on={showC} delay={150} data-testid="d5-bridge">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: 18,
-              marginTop: 8,
-              paddingLeft: 18,
-              borderLeft: "2px solid var(--copper-500)",
-              flexWrap: "wrap",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--serif)",
-                fontStyle: "italic",
-                fontSize: 24,
-                color: "var(--neutral-300)",
-                margin: 0,
-                lineHeight: 1.4,
-              }}
-            >
-              {highlight(C.bridge.text, C.bridge.kw)}
-            </p>
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 11,
-                letterSpacing: "0.22em",
-                color: "var(--copper-300)",
-                textTransform: "uppercase",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {C.attr}
-            </span>
-          </div>
         </Reveal>
       </div>
     </div>
@@ -173,8 +152,8 @@ export function D5BridgeToE() {
 // ───────────────────── slide def ─────────────────────
 
 export const d5Slide: SlideDef = {
-  steps: 3,
-  canonicalPose: 2,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "D",

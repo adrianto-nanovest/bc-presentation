@@ -1,0 +1,61 @@
+/* ────────────────────────────────────────────────────────────────────
+ * G.6 — OpenAI · Card styling
+ * ──────────────────────────────────────────────────────────────────── */
+
+.g6-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px 24px;
+  border: 1px solid var(--copper-700);
+  background: rgba(10, 10, 10, 0.5);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  height: 100%;
+  overflow: hidden;
+}
+
+.g6-card:hover {
+  border-color: var(--copper-200);
+  background: rgba(184, 110, 61, 0.06);
+  box-shadow: 0 4px 12px rgba(184, 110, 61, 0.08);
+}
+
+.g6-card-name {
+  font-family: var(--display);
+  font-size: 26px;
+  color: var(--neutral-50);
+  margin-top: 6px;
+  line-height: 1.1;
+}
+
+.g6-card-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--neutral-300);
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.g6-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.g6-card-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--copper-300);
+  background: transparent;
+  border: 1px solid var(--copper-700);
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.g6-card-btn:hover {
+  border-color: var(--copper-300);
+  color: var(--copper-100);
+}

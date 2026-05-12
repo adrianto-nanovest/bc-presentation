@@ -1,78 +1,81 @@
-// B.4 — TIERS & DEPLOYMENT
+// B.4 — MODELS BY CATEGORY · FRONTIER vs OPEN-WEIGHT
 //
-// Three horizontal bands stacked vertically:
-//   TOP   (~30%): Tier ladder. Three rungs build BOTTOM-UP (Haiku → Sonnet →
-//                 Opus) so the audience feels the ladder grow. Border-left
-//                 grades copper-700 → copper-400 by tier so the apex visibly
-//                 brightens.
-//   MID   (~25%): Competitor strip. Four horizontal chips slide in left-to-
-//                 right with a 100ms stagger.
-//   BOTTOM(~40%): Cloud-vs-Local split. LEFT half (frontier) appears first,
-//                 RIGHT half (local + fine-tune) second, then a copper arrow
-//                 draws between them via SVG pathLength and the italic
-//                 insight line fades in below.
+// Two-column composition matching B.2 / B.3:
+//   ┌─ FIG · slide-headline ───────────────────────────────────────────┐
+//   │ ┌─ SIX CATEGORIES (left) ─┐  ┌─ (right) ───────────────────────┐ │
+//   │ │  [icon] LABEL           │  │ step 0: section box appears     │ │
+//   │ │   essence (italic)      │  │   ONLY while a card is hovered  │ │
+//   │ │  ... ×6 cards           │  │ step 1: bare qualitative matrix │ │
+//   │ │                         │  │   (no border, no fill)          │ │
+//   │ │                         │  │                                 │ │
+//   │ │   footer · italic caption                                    │ │
+//   └──────────────────────────────────────────────────────────────────┘
 //
-// Step map (load animation is mount-driven; stepIndex 0 = first Space press):
-//   load (on mount): FIG label + dot-grid background fade in
-//   stepIndex 0:     Tier ladder builds bottom-up — Haiku → Sonnet → Opus
-//                    (300ms per row, 150ms stagger)
-//   stepIndex 1:     Competitor strip slides in (4 chips, 100ms stagger)
-//   stepIndex 2:     Cloud-Frontier side (LEFT) reveals
-//   stepIndex 3:     Local + Fine-Tuned side (RIGHT) reveals
-//   stepIndex 4 (canonical):
-//                    Copper connecting arrow draws via stroke-dashoffset +
-//                    italic key-insight line fades in
-//
-// Background tier: diagrammatic → plain neutral-950 + faint dot-grid (matches
-// B.1/B.2/B.3 and A.1).
-//
-// Hover (presenter detail layer) is intentionally minimal here — the slide
-// already carries a lot of text. Tier rows lift slightly + brighten the
-// border on hover; competitor chips brighten their border. Anything heavier
-// would interfere with the "land the load-bearing insight" moment.
-import type { CSSProperties } from "react";
+// Step map (2 stepIndex slots; canonical pose = 1):
+//   stepIndex 0:   Left cards staggered in top→bottom. Right side is fully
+//                  empty by default; hovering a card mounts the bordered
+//                  section box with the matching `B4ModelDetailPanel`.
+//                  Leaving the card unmounts the box again.
+//                  Footer is hidden.
+//   stepIndex 1:   Right side renders the qualitative summary BARE — no
+//                  border, no copper-700 fill. Cards still highlight on
+//                  hover but DO NOT drive the right pane. Footer fades in.
+
+import { useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { highlight } from "@/components/highlight";
-import { b4Content as C } from "./content";
+import { highlight as KW } from "@/components/highlight";
+import { Reveal } from "../foundation-core-section-e/components/Reveal";
+import { B4CategoryList } from "./components/B4CategoryCard";
+import { B4ModelDetailPanel } from "./components/B4ModelDetailPanel";
+import { B4QualitativeSummary } from "./components/B4QualitativeSummary";
+import { b4Content as C, type B4CategoryId } from "./content";
 
-// Stage: 1280×720. FIG band ~88px top, nav reserves ~64px bottom.
-const SIDE_PAD = 64;
+const STAGE_W = 1280;
+const STAGE_H = 720;
 
-// Vertical band tops (px from stage top). Tuned so the three bands sit
-// comfortably between the FIG label and the bottom nav.
-const LADDER_TOP = 120;
-const LADDER_HEIGHT = 168;     // ~3 rows × 52px + small gap
-const COMPETITORS_TOP = LADDER_TOP + LADDER_HEIGHT + 22; // ≈ 310
-const COMPETITORS_HEIGHT = 64;
-const SPLIT_TOP = COMPETITORS_TOP + COMPETITORS_HEIGHT + 28; // ≈ 402
-const SPLIT_HEIGHT = 160;
-const INSIGHT_TOP = SPLIT_TOP + SPLIT_HEIGHT + 22; // ≈ 584
+const H = 48;                  // shared left/right edge
+const BODY_TOP = 155;
+const SECTION_TITLE_GAP = 18;
+// Right column uses a tighter gap so its content top visually aligns with
+// the first left card's top border.
+const RIGHT_SECTION_TITLE_GAP = 10;
+// Footer band sits at bottom: 50 → 14px tall caption → ~64. Give the columns
+// a 16px breathing space above the band.
+const COLS_BOTTOM = 100;
+
+const LEFT_COL_W = 520;
+const RIGHT_COL_LEFT = STAGE_W - H - 620; // 612 — leaves 612px right column
+const RIGHT_COL_W = STAGE_W - H - RIGHT_COL_LEFT; // 620
 
 // ───────────────────── slide ─────────────────────
 
-export function B4TiersDeployment() {
+export function B4ModelsByCategory() {
   const { stepIndex } = useDeck();
 
-  // Step gates. The ladder builds bottom-up: bottom row (Haiku) appears at
-  // step 0 immediately; mid row staggers 150ms; apex row staggers 300ms. We
-  // keep this internal to the rendering rather than splitting across step
-  // indices — one Space press lights the whole ladder, which matches the
-  // spec's "Tier ladder builds bottom-up" beat.
-  const ladderOn = stepIndex >= 0;
-  const competitorsOn = stepIndex >= 1;
-  const cloudOn = stepIndex >= 2;
-  const localOn = stepIndex >= 3;
-  const arrowOn = stepIndex >= 4;
-  const insightOn = stepIndex >= 4;
+  const showCards = stepIndex >= 0;
+  const isSummary = stepIndex >= 1;
+  const showFooter = stepIndex >= 1;
+
+  const [hoveredId, setHoveredId] = useState<B4CategoryId | null>(null);
+
+  // Hover is the only driver of the right pane on step 0. Step 1 ignores it.
+  const activeId: B4CategoryId | null = hoveredId;
+  const showDetailBox = !isSummary && activeId !== null;
 
   return (
     <div
       data-testid="slide-b4"
-      style={{ position: "absolute", inset: 0, overflow: "hidden" }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: STAGE_W,
+        height: STAGE_H,
+        overflow: "hidden",
+      }}
     >
-      {/* Background — plain dark + dot-grid (matches the rest of section B). */}
+      {/* Background — neutral-950 + faint dot-grid (matches B.1/B.2/B.3). */}
       <div
         aria-hidden
         style={{
@@ -97,487 +100,200 @@ export function B4TiersDeployment() {
 
       <FigLabel section="B" num={4} label={C.figLabel} />
 
-      {/* ───────────── BAND 1 — Tier ladder ───────────── */}
-      <div
-        data-testid="b4-ladder"
-        style={{
-          position: "absolute",
-          left: SIDE_PAD,
-          right: SIDE_PAD,
-          top: LADDER_TOP,
-          height: LADDER_HEIGHT,
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          zIndex: 5,
-        }}
-      >
-        <BandLabel text="TIER LADDER · CLAUDE FAMILY" />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column-reverse", // bottom-up: Haiku first visually
-            gap: 6,
-            marginTop: 8,
-          }}
-        >
-          {/* Render in source order (top → mid → apex); flex-direction
-              column-reverse stacks bottom-to-top visually so the ladder
-              grammar matches the audience reading flow. */}
-          {C.tiers.map((t, i) => (
-            <TierRung
-              key={t.position}
-              position={t.position}
-              model={t.model}
-              price={t.price}
-              caption={highlight(t.caption, t.captionKw)}
-              on={ladderOn}
-              delay={i * 150}
-            />
-          ))}
-        </div>
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">
+          {KW(C.slideTitle, C.slideTitleKw)}
+        </h1>
       </div>
 
-      {/* ───────────── BAND 2 — Competitor strip ───────────── */}
+      {/* ── LEFT COLUMN · Six category cards ──────────────────────────── */}
       <div
-        data-testid="b4-competitors"
+        data-testid="b4-left-column"
         style={{
           position: "absolute",
-          left: SIDE_PAD,
-          right: SIDE_PAD,
-          top: COMPETITORS_TOP,
-          height: COMPETITORS_HEIGHT,
+          left: H,
+          top: BODY_TOP,
+          width: LEFT_COL_W,
+          bottom: COLS_BOTTOM,
+          zIndex: 5,
           display: "flex",
           flexDirection: "column",
-          gap: 6,
-          zIndex: 5,
         }}
       >
-        <BandLabel text="VIABLE ALTERNATIVES · ASIA FRONTIER" />
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 12,
-            marginTop: 4,
-          }}
-        >
-          {C.competitors.map((c, i) => (
-            <CompetitorTile
-              key={c.name}
-              name={c.name}
-              desc={c.desc}
-              on={competitorsOn}
-              delay={i * 100}
-            />
-          ))}
-        </div>
-      </div>
+        <Reveal on={showCards} data-testid="b4-left-title">
+          <SectionTitle label={C.leftSectionTitle} />
+        </Reveal>
+        <div style={{ height: SECTION_TITLE_GAP }} />
 
-      {/* ───────────── BAND 3 — Cloud / Local split + insight ───────────── */}
-      <div
-        data-testid="b4-split"
-        style={{
-          position: "absolute",
-          left: SIDE_PAD,
-          right: SIDE_PAD,
-          top: SPLIT_TOP,
-          height: SPLIT_HEIGHT,
-          zIndex: 5,
-        }}
-      >
-        <SplitWithArrow
-          cloudOn={cloudOn}
-          localOn={localOn}
-          arrowOn={arrowOn}
-          cloudLabel={C.cloud.label}
-          cloudSuperlative={highlight(C.cloud.superlative, C.cloud.superlativeKw)}
-          localLabel={C.local.label}
-          localSuperlative={highlight(C.local.superlative, C.local.superlativeKw)}
+        <B4CategoryList
+          categories={C.categories}
+          activeId={activeId}
+          onHover={setHoveredId}
+          showCards={showCards}
         />
       </div>
 
-      {/* ───────────── Key insight ───────────── */}
+      {/* ── RIGHT COLUMN · invisible-placeholder header so the content
+          envelope shares the LEFT column's vertical rhythm exactly (Task 18).
+          The placeholder mirrors the SectionTitle + 18px gap on the left so
+          the right-side content top aligns with the first card top without
+          any hand-tuned offsets. */}
       <div
-        data-testid="b4-insight"
+        data-testid="b4-right-column"
         style={{
           position: "absolute",
-          left: SIDE_PAD,
-          right: SIDE_PAD,
-          top: INSIGHT_TOP,
-          textAlign: "center",
-          opacity: insightOn ? 1 : 0,
-          transform: insightOn ? "translateY(0)" : "translateY(8px)",
-          transition: "opacity 0.6s var(--ease) 0.25s, transform 0.6s var(--ease) 0.25s",
-          zIndex: 5,
+          left: RIGHT_COL_LEFT,
+          top: BODY_TOP,
+          width: RIGHT_COL_W,
+          bottom: COLS_BOTTOM,
+          zIndex: 6,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {/* Section title — visible only at step 1 (the qualitative summary
+            pose). At step 0 the same SectionTitle renders invisibly so the
+            right content top stays vertically aligned with the first left
+            card's top border. */}
+        <div
+          style={{ visibility: isSummary ? "visible" : "hidden" }}
+          aria-hidden={!isSummary}
+        >
+          <SectionTitle
+            label={isSummary ? C.qualitativeSummary.header : C.leftSectionTitle}
+          />
+        </div>
+        <div style={{ height: RIGHT_SECTION_TITLE_GAP }} />
+
+        <div
+          data-testid="b4-right-content"
+          style={{
+            flex: 1,
+            position: "relative",
+          }}
+        >
+          {/* Qualitative summary (step 1) — rendered BARE, no border/fill.
+              Lives behind the detail box so transitions cross-fade cleanly. */}
+          <PaneLayer visible={isSummary} delayIn={80} padded={false}>
+            {isSummary ? (
+              <B4QualitativeSummary
+                key="qsum"
+                data={C.qualitativeSummary}
+                freshness={C.freshness}
+              />
+            ) : null}
+          </PaneLayer>
+
+          {/* Detail box (step 0) — copper-bordered section box wraps the
+              detail panel and only mounts while a card is hovered. */}
+          <PaneLayer visible={showDetailBox} delayIn={50} padded={false}>
+            {showDetailBox ? (
+              <div
+                data-testid="b4-section-box"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  border: "1px solid var(--copper-700)",
+                  background: "rgba(10,10,10,0.6)",
+                  boxSizing: "border-box",
+                  padding: 20,
+                  overflow: "hidden",
+                }}
+              >
+                <B4ModelDetailPanel key={activeId!} categoryId={activeId!} />
+              </div>
+            ) : null}
+          </PaneLayer>
+        </div>
+      </div>
+
+      {/* ── FOOTER BAND ─ caption-only; freshness lives inside the
+          qualitative summary panel. ───────────────────────────────── */}
+      <div
+        style={{
+          position: "absolute",
+          left: H,
+          right: H,
+          bottom: 50,
+          zIndex: 7,
         }}
       >
         <p
+          data-testid="b4-footer-caption"
           style={{
             margin: 0,
             fontFamily: "var(--serif)",
             fontStyle: "italic",
-            fontSize: 25,
-            lineHeight: 1.3,
-            color: "var(--neutral-200)",
-            letterSpacing: "-0.005em",
+            fontSize: 14,
+            color: "var(--neutral-400)",
+            lineHeight: 1.4,
+            opacity: showFooter ? 1 : 0,
+            transform: showFooter ? "translateY(0)" : "translateY(6px)",
+            transition:
+              "opacity 500ms var(--ease), transform 500ms var(--ease)",
+            maxWidth: 760,
           }}
         >
-          {highlight(C.insight, C.insightKw)}
+          {KW(C.footer, C.footerKw)}
         </p>
       </div>
     </div>
   );
 }
 
-// ───────────────────── BandLabel ─────────────────────
+// ───────────────────── Section title (A.1 / B.3 convention) ─────────────────────
 
-function BandLabel({ text }: { text: string }) {
+function SectionTitle({ label }: { label: string }) {
   return (
-    <span
+    <div
       style={{
+        width: "fit-content",
+        borderBottom: "1px solid var(--copper-700)",
+        paddingBottom: 5,
         fontFamily: "var(--mono)",
-        fontSize: 10,
-        letterSpacing: "0.28em",
-        color: "var(--copper-300)",
+        fontSize: 11,
+        letterSpacing: "0.22em",
+        color: "var(--copper-500)",
         textTransform: "uppercase",
+        lineHeight: 1.2,
       }}
     >
-      {text}
-    </span>
-  );
-}
-
-// ───────────────────── TierRung ─────────────────────
-// Single ladder rung. Renders model + price + caption in a horizontal row
-// with a 2px copper border-left whose tone brightens by tier (entry → apex).
-// Slides up + fades in from `delay` ms.
-
-const positionAccent: Record<"top" | "mid" | "apex", string> = {
-  top: "copper-700",  // entry — dim
-  mid: "copper-500",
-  apex: "copper-300", // apex — brightest
-};
-
-function TierRung({
-  position,
-  model,
-  price,
-  caption,
-  on,
-  delay,
-}: {
-  position: "top" | "mid" | "apex";
-  model: string;
-  price: string;
-  caption: React.ReactNode;
-  on: boolean;
-  delay: number;
-}) {
-  // Visible position label varies by spec. Render the human-facing tier
-  // tag (ENTRY / WORKHORSE / APEX) since "top/mid/apex" maps to the data
-  // model rather than what the audience reads.
-  const tag: Record<typeof position, string> = {
-    top: "ENTRY",
-    mid: "WORKHORSE",
-    apex: "APEX",
-  };
-  const accent = positionAccent[position];
-
-  return (
-    <div
-      data-testid={`b4-tier-${position}`}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "108px 230px 110px 1fr",
-        alignItems: "baseline",
-        gap: 18,
-        padding: "10px 14px",
-        borderLeft: `2px solid var(--${accent})`,
-        background: "rgba(10,10,10,0.35)",
-        opacity: on ? 1 : 0,
-        transform: on ? "translateY(0)" : "translateY(10px)",
-        transition: `opacity 0.45s var(--ease) ${delay}ms, transform 0.45s var(--ease) ${delay}ms`,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.28em",
-          color: `var(--${accent})`,
-          textTransform: "uppercase",
-        }}
-      >
-        {tag[position]}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--display)",
-          fontSize: 22,
-          color: "var(--neutral-50)",
-          lineHeight: 1,
-        }}
-      >
-        {model}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 12,
-          letterSpacing: "0.08em",
-          color: "var(--copper-200)",
-        }}
-      >
-        {price}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 14,
-          color: "var(--neutral-300)",
-          lineHeight: 1.3,
-        }}
-      >
-        {caption}
-      </span>
+      {label}
     </div>
   );
 }
 
-// ───────────────────── CompetitorTile ─────────────────────
-// Slim chip for the alternatives strip. Slides in from below + fades.
+// ───────────────────── PaneLayer — cross-fade wrapper ─────────────────────
 
-function CompetitorTile({
-  name,
-  desc,
-  on,
-  delay,
+function PaneLayer({
+  visible,
+  delayIn,
+  padded = true,
+  children,
 }: {
-  name: string;
-  desc: string;
-  on: boolean;
-  delay: number;
-}) {
-  return (
-    <div
-      data-testid="b4-competitor"
-      style={{
-        padding: "8px 12px",
-        border: "1px solid var(--copper-800)",
-        background: "rgba(10,10,10,0.55)",
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        opacity: on ? 1 : 0,
-        transform: on ? "translateY(0)" : "translateY(8px)",
-        transition: `opacity 0.45s var(--ease) ${delay}ms, transform 0.45s var(--ease) ${delay}ms, border-color 0.25s var(--ease)`,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.2em",
-          color: "var(--copper-200)",
-          textTransform: "uppercase",
-        }}
-      >
-        {name}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontSize: 12,
-          color: "var(--neutral-300)",
-          fontStyle: "italic",
-          lineHeight: 1.25,
-        }}
-      >
-        {desc}
-      </span>
-    </div>
-  );
-}
-
-// ───────────────────── SplitWithArrow ─────────────────────
-// Two-half panel with a copper arrow drawn via SVG path between them.
-// The two halves are absolutely positioned inside a relative container so
-// the arrow SVG (which sits between them) can overlap their inner edges
-// cleanly. Arrow draws via stroke-dashoffset (pathLength-style animation).
-
-function SplitWithArrow({
-  cloudOn,
-  localOn,
-  arrowOn,
-  cloudLabel,
-  cloudSuperlative,
-  localLabel,
-  localSuperlative,
-}: {
-  cloudOn: boolean;
-  localOn: boolean;
-  arrowOn: boolean;
-  cloudLabel: string;
-  cloudSuperlative: React.ReactNode;
-  localLabel: string;
-  localSuperlative: React.ReactNode;
+  visible: boolean;
+  delayIn?: number;
+  /** When false, the layer omits its 20px inner padding (used for layers
+   *  that own their own padded wrapper — see the detail section box). */
+  padded?: boolean;
+  children: React.ReactNode;
 }) {
   return (
     <div
       style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        display: "grid",
-        gridTemplateColumns: "1fr 80px 1fr",
-        alignItems: "stretch",
-        gap: 0,
+        position: "absolute",
+        inset: 0,
+        padding: padded ? 20 : 0,
+        boxSizing: "border-box",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: `opacity 300ms var(--ease) ${
+          visible ? delayIn ?? 0 : 0
+        }ms, transform 300ms var(--ease) ${visible ? delayIn ?? 0 : 0}ms`,
+        pointerEvents: visible ? "auto" : "none",
       }}
     >
-      <SplitHalf
-        sideLabel="CLOUD · FRONTIER (RAW)"
-        mainLine={cloudLabel}
-        superlative={cloudSuperlative}
-        on={cloudOn}
-        align="right"
-      />
-
-      {/* Center arrow well. Stretches the full band height; arrow draws
-          horizontally at the vertical midline. */}
-      <ArrowBetween on={arrowOn} />
-
-      <SplitHalf
-        sideLabel="LOCAL · FINE-TUNED"
-        mainLine={localLabel}
-        superlative={localSuperlative}
-        on={localOn}
-        align="left"
-      />
-    </div>
-  );
-}
-
-function SplitHalf({
-  sideLabel,
-  mainLine,
-  superlative,
-  on,
-  align,
-}: {
-  sideLabel: string;
-  mainLine: string;
-  superlative: React.ReactNode;
-  on: boolean;
-  align: "left" | "right";
-}) {
-  const containerStyle: CSSProperties = {
-    padding: "16px 18px",
-    border: "1px solid var(--copper-800)",
-    background: "rgba(10,10,10,0.55)",
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-    height: "100%",
-    boxSizing: "border-box",
-    opacity: on ? 1 : 0,
-    transform: on ? "translateY(0)" : "translateY(10px)",
-    transition: "opacity 0.5s var(--ease), transform 0.5s var(--ease)",
-    textAlign: align,
-  };
-  return (
-    <div data-testid={`b4-split-${align}`} style={containerStyle}>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.28em",
-          color: "var(--copper-300)",
-          textTransform: "uppercase",
-        }}
-      >
-        {sideLabel}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--display)",
-          fontSize: 22,
-          color: "var(--neutral-50)",
-          lineHeight: 1.15,
-        }}
-      >
-        {mainLine}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 14,
-          color: "var(--copper-200)",
-          marginTop: "auto",
-        }}
-      >
-        {superlative}
-      </span>
-    </div>
-  );
-}
-
-// Connecting copper arrow drawn via stroke-dashoffset. Curved line from the
-// right edge of the left half to the left edge of the right half, with an
-// arrowhead at the destination. The arrowhead opacity follows the path so
-// it appears at the same time as the path completes.
-function ArrowBetween({ on }: { on: boolean }) {
-  const W = 80;
-  const H = 160; // matches SPLIT_HEIGHT
-  // Path: subtle S-curve from (0, mid) → (W, mid). Length ~80 (close enough
-  // for a smooth gradual stroke).
-  const pathLength = 90;
-  return (
-    <div
-      data-testid="b4-arrow"
-      data-on={on ? "1" : "0"}
-      aria-hidden
-      style={{
-        position: "relative",
-        width: W,
-        height: H,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <svg
-        width={W}
-        height={H}
-        viewBox={`0 0 ${W} ${H}`}
-        style={{ overflow: "visible" }}
-      >
-        <defs>
-          <marker
-            id="b4-arrow-head"
-            viewBox="0 0 10 10"
-            refX="8"
-            refY="5"
-            markerWidth="7"
-            markerHeight="7"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--copper-400)" />
-          </marker>
-        </defs>
-        <path
-          d={`M 0 ${H / 2} C ${W / 3} ${H / 2 - 8}, ${(W * 2) / 3} ${H / 2 + 8}, ${W} ${H / 2}`}
-          fill="none"
-          stroke="var(--copper-400)"
-          strokeWidth="1.5"
-          strokeDasharray={pathLength}
-          strokeDashoffset={on ? 0 : pathLength}
-          style={{ transition: "stroke-dashoffset 700ms var(--ease)" }}
-          markerEnd="url(#b4-arrow-head)"
-        />
-      </svg>
+      {children}
     </div>
   );
 }
@@ -585,11 +301,10 @@ function ArrowBetween({ on }: { on: boolean }) {
 // ───────────────────── slide def ─────────────────────
 
 export const b4Slide: SlideDef = {
-  // 5 stepIndex values (0..4): ladder, competitors, cloud, local, arrow+insight.
-  steps: 5,
-  canonicalPose: 4,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "B",
-  render: () => <B4TiersDeployment />,
+  render: () => <B4ModelsByCategory />,
 };

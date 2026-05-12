@@ -1,8 +1,8 @@
 // D.5 — BRIDGE TO E · slide tests.
 //
-// Covers the rewritten 3-step design (0=beat1 + horizon glow, 1=beat2 +
-// horizon line, 2=bridge cue) ported from
-// `claude-design-section-d/jsx/slides-d.jsx:1103-1162`.
+// Covers the 2-step design mirroring E.11:
+//   step 0 — beat1 (two display lines) + copper rule
+//   step 1 — beat2 (italic copper subline)
 import { render, screen, act } from "@testing-library/react";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
 import {
@@ -29,9 +29,9 @@ function renderAtStep(step: number) {
   return result;
 }
 
-test("D.5 declares 3 steps with canonicalPose=2", () => {
-  expect(d5Slide.steps).toBe(3);
-  expect(d5Slide.canonicalPose).toBe(2);
+test("D.5 declares 2 steps with canonicalPose=1", () => {
+  expect(d5Slide.steps).toBe(2);
+  expect(d5Slide.canonicalPose).toBe(1);
   expect(d5Slide.animationMode).toBe("step-reveal");
   expect(d5Slide.section).toBe("D");
 });
@@ -43,21 +43,20 @@ test("D.5 renders the FIG label", () => {
   expect(fig.textContent).toMatch(/FIG\.\s*D\.5\s*·\s*THE NEXT QUESTION/);
 });
 
-test("D.5 renders the hero photo + bottom-left vignette", () => {
+test("D.5 renders the hero photo + overlays", () => {
   renderAtStep(0);
-  // HeroPhoto renders an <img> + a data-testid="hero-vignette" div.
-  expect(screen.getByTestId("hero-vignette")).toBeInTheDocument();
+  expect(screen.getByTestId("d5-hero")).toBeInTheDocument();
+  expect(screen.getByTestId("d5-overlay-bottom-left")).toBeInTheDocument();
+  expect(screen.getByTestId("d5-overlay-top-left")).toBeInTheDocument();
+  expect(screen.getByTestId("d5-overlay-top-gloom")).toBeInTheDocument();
   expect(screen.getByTestId("d5-root")).toBeInTheDocument();
 });
 
-test("D.5 at canonicalPose renders all three editorial lines", () => {
+test("D.5 at canonicalPose renders beat1 (both lines) and beat2", () => {
   renderAtStep(d5Slide.canonicalPose);
   const beat1 = screen.getByTestId("d5-beat1");
   const beat2 = screen.getByTestId("d5-beat2");
-  const bridge = screen.getByTestId("d5-bridge");
-  expect(beat1.textContent).toMatch(d5Content.beat1.text);
+  expect(beat1.textContent).toMatch(d5Content.beat1.lineA.text);
+  expect(beat1.textContent).toMatch(d5Content.beat1.lineB.text);
   expect(beat2.textContent).toMatch(d5Content.beat2.text);
-  expect(bridge.textContent).toMatch(d5Content.bridge.text);
-  // Attribution mono caption is part of the bridge stack.
-  expect(bridge.textContent).toMatch(/Foundation Core/);
 });

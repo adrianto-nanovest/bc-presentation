@@ -456,6 +456,9 @@ export const e10Content = {
 } as const;
 
 export const e11Content = {
-  beat1: { text: "Three layers. The fundamentals are built.", kw: ["Three layers", "fundamentals"] },
+  beat1: {
+    lineA: { text: "Three layers.", kw: ["Three layers"] },
+    lineB: { text: "The fundamentals are built.", kw: ["fundamentals"] },
+  },
   beat2: { text: "Next: the techniques that matter most.", kw: ["techniques that matter most"] },
 } as const;

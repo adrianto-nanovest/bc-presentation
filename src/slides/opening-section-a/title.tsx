@@ -1,73 +1,47 @@
 // Title — "From AI Curiosity to AI Capability"
 //
-// Opening slide. Sets editorial register (dignity + forward motion). Names
-// the workshop and facilitator without spectacle. Background is a photographic
-// hero — until `title-data-topology.jpg` lands in `assets/heroes/`, HeroPhoto
-// falls back to its built-in deep-near-black + copper-glow radial gradient
-// (no 404 in console). DarkenOverlay at strength=0.10 modulates contrast.
-//
-// Layout —
-//   • Headline centered, vertically anchored at ~38–40% from top (slight lift,
-//     NOT pure center).
-//   • Workshop subtitle directly below.
-//   • Attribution chip bottom-right via <AttributionChip>.
-//
-// Motion (load only — NO step-advances) —
-//   • Photo cross-fades in (800ms easeOut)
-//   • Headline reveals 200ms later (translate-y 16→0, 600ms)
-//   • Subtitle 200ms after the headline
-//   • Attribution chip 300ms after the subtitle
-// Total: ~1.5s load. Static after load.
-//
-// Spec slot:
-//   - 1 step (canonical-only — `steps:1` per registry convention)
-//   - canonicalPose: 0
-//   - animationMode: static (Slide.tsx still allows click-to-advance into A.1)
-//   - section: A (Title is grouped under the opening section for nav)
+// Opening slide. Headline + serif tagline + workshop meta line stack at
+// left:80; speaker info chip sits bottom-left to share that left edge. A
+// left-side darken gradient lifts the title text off the hero photo.
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
+import { Mic } from "lucide-react";
 import type { SlideDef } from "@/deck/types";
 import { HeroPhoto } from "@/components/HeroPhoto";
 import { DarkenOverlay } from "@/components/DarkenOverlay";
 import { DisplayTitle } from "@/components/DisplayTitle";
-import { AttributionChip } from "@/components/AttributionChip";
+import { highlight as KW } from "@/components/highlight";
 import { titleContent as C } from "./content";
-
-// Asset hasn't landed yet — pass empty src so HeroPhoto paints only the
-// fallback gradient (no console 404). When the real photo lands, swap in
-// `C.heroSrc` and HeroPhoto will cross-fade it on top.
-const HERO_SRC: string | undefined = undefined;
 
 // ───────────────────── slide ─────────────────────
 
 export function Title() {
-  // Stage all four reveal layers on mount with a single timer so they
-  // chain deterministically. The values mirror the timings in the file
-  // header: 0=photo, 1=headline, 2=subtitle, 3=attribution.
   const [stage, setStage] = useState(0);
 
   useEffect(() => {
     const t1 = window.setTimeout(() => setStage(1), 50);   // photo in
     const t2 = window.setTimeout(() => setStage(2), 850);  // headline
-    const t3 = window.setTimeout(() => setStage(3), 1050); // subtitle
-    const t4 = window.setTimeout(() => setStage(4), 1350); // attribution
+    const t3 = window.setTimeout(() => setStage(3), 1100); // tagline
+    const t4 = window.setTimeout(() => setStage(4), 1300); // workshop chip (under tagline)
+    const t5 = window.setTimeout(() => setStage(5), 1500); // speaker info chip (bottom-left)
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
       window.clearTimeout(t3);
       window.clearTimeout(t4);
+      window.clearTimeout(t5);
     };
   }, []);
 
   const photoOn = stage >= 1;
   const headlineOn = stage >= 2;
-  const subtitleOn = stage >= 3;
-  const attrOn = stage >= 4;
+  const taglineOn = stage >= 3;
+  const workshopOn = stage >= 4;
+  const speakerOn = stage >= 5;
 
-  // Reveal styles — share the same easeOutExpo curve used across the deck.
-  const liftStyle = (on: boolean, lift = 16): CSSProperties => ({
+  const lift = (on: boolean, dist = 16): CSSProperties => ({
     opacity: on ? 1 : 0,
-    transform: on ? "translateY(0)" : `translateY(${lift}px)`,
+    transform: on ? "translateY(0)" : `translateY(${dist}px)`,
     transition: "opacity 600ms var(--ease), transform 600ms var(--ease)",
     willChange: "opacity, transform",
   });
@@ -77,7 +51,7 @@ export function Title() {
       data-testid="slide-title"
       style={{ position: "absolute", inset: 0, overflow: "hidden" }}
     >
-      {/* Background — hero photo or fallback gradient. Cross-fades in. */}
+      {/* Hero photo — cross-fades in on mount. */}
       <div
         aria-hidden
         style={{
@@ -88,39 +62,50 @@ export function Title() {
           transition: "opacity 800ms ease-out",
         }}
       >
-        <HeroPhoto src={HERO_SRC} alt={C.heroAlt} vignetteSide="none" />
+        <HeroPhoto src={C.heroSrc} alt={C.heroAlt} vignetteSide="none" />
       </div>
 
-      {/* Dark wash — background is already dark, this just modulates
-          contrast against the centered display headline. */}
       <DarkenOverlay strength={C.darkenStrength} zIndex={15} />
 
-      {/* Centered headline + subtitle, vertically anchored at ~38% from
-          top via an inner absolute block. The slight lift (vs. true
-          center) keeps the composition from feeling top-heavy once the
-          attribution chip lands in the bottom-right. */}
+      {/* Left-side readability gradient — sits above the hero/darken layer
+          but below the title text. */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          zIndex: 17,
+          background:
+            "linear-gradient(90deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0.35) 25%, rgba(5,5,5,0) 55%)",
+        }}
+      />
+
+      {/* Title block — headline, tagline, workshop meta line, left-aligned
+          at left:80, anchored at ~32% from top. Max width keeps the tagline
+          from running into the right-side luminous focal point. */}
       <div
         style={{
           position: "absolute",
           left: 80,
-          right: 80,
-          top: "38%",
+          top: "32%",
           transform: "translateY(-50%)",
+          maxWidth: 760,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          gap: 28,
+          alignItems: "flex-start",
+          gap: 24,
           zIndex: 20,
         }}
       >
-        <div style={liftStyle(headlineOn)}>
+        <div style={lift(headlineOn)}>
           <DisplayTitle
-            size={92}
+            size={84}
             style={{
-              textAlign: "center",
+              textAlign: "left",
               lineHeight: 1.0,
-              letterSpacing: "-0.01em",
-              color: "var(--neutral-100)",
+              letterSpacing: "-0.015em",
+              color: "var(--neutral-50)",
             }}
           >
             {C.displayHeadline}
@@ -129,30 +114,66 @@ export function Title() {
 
         <p
           style={{
-            ...liftStyle(subtitleOn, 12),
+            ...lift(taglineOn, 12),
             fontFamily: "var(--serif)",
-            fontSize: 28,
-            color: "var(--neutral-300)",
+            fontStyle: "italic",
+            fontSize: 24,
+            color: "var(--neutral-200)",
             margin: 0,
-            textAlign: "center",
-            lineHeight: 1.3,
+            textAlign: "left",
+            lineHeight: 1.35,
+            maxWidth: 680,
+            fontWeight: 400,
           }}
         >
-          {C.subtitle}
+          {KW(C.tagline, C.taglineKw)}
         </p>
+
+        <div
+          data-testid="title-workshop-chip"
+          style={{
+            ...lift(workshopOn, 8),
+            marginTop: 2,
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.22em",
+            color: "var(--copper-400)",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {C.workshopChip}
+        </div>
       </div>
 
-      {/* Attribution chip — bottom-right, copper-400 caps. */}
+      {/* Bottom-left credit — mic glyph + facilitator, single line.
+          Shares the title block's left edge (left:80). */}
       <div
+        data-testid="title-facilitator-chip"
         style={{
-          ...liftStyle(attrOn, 8),
+          ...lift(speakerOn, 8),
           position: "absolute",
-          right: 0,
-          bottom: 0,
+          left: 80,
+          bottom: 80,
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          fontFamily: "var(--mono)",
+          fontSize: 12,
+          letterSpacing: "0.22em",
+          color: "var(--copper-400)",
+          textTransform: "uppercase",
+          whiteSpace: "nowrap",
           zIndex: 25,
         }}
       >
-        <AttributionChip text={C.attribution} />
+        <Mic
+          size={14}
+          strokeWidth={1.6}
+          aria-hidden
+          style={{ flexShrink: 0 }}
+        />
+        <span>{C.facilitator}</span>
       </div>
     </div>
   );
@@ -161,7 +182,7 @@ export function Title() {
 // ───────────────────── slide def ─────────────────────
 
 export const titleSlide: SlideDef = {
-  steps: 1, // 0 step-advances; "steps" is total slots — 1 = canonical-only.
+  steps: 1,
   canonicalPose: 0,
   animationMode: "static",
   surface: "dark",

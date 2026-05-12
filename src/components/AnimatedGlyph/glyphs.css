@@ -1,0 +1,1109 @@
+/* ========== AnimatedGlyph system · 26 glyph animations ========== */
+/* Pure CSS keyframes; copper palette; infinite loops; globally-managed reduced-motion */
+
+.glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── G.3 Capabilities (8 glyphs) ──────────────────────────────── */
+
+/* connectors — two arcs reaching toward each other, meeting, releasing */
+.glyph-connectors .arc-left,
+.glyph-connectors .arc-right {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+}
+.glyph-connectors .arc-left {
+  animation: glyph-connectors-arc-left 5s var(--ease) infinite;
+}
+.glyph-connectors .arc-right {
+  animation: glyph-connectors-arc-right 5s var(--ease) infinite;
+}
+@keyframes glyph-connectors-arc-left {
+  0%, 10%   { transform: translateX(-6px); opacity: 0.4; }
+  35%       { transform: translateX(0); opacity: 1; }
+  65%       { transform: translateX(0); opacity: 1; }
+  90%, 100% { transform: translateX(-6px); opacity: 0.4; }
+}
+@keyframes glyph-connectors-arc-right {
+  0%, 10%   { transform: translateX(6px); opacity: 0.4; }
+  35%       { transform: translateX(0); opacity: 1; }
+  65%       { transform: translateX(0); opacity: 1; }
+  90%, 100% { transform: translateX(6px); opacity: 0.4; }
+}
+
+/* plugins — puzzle piece sliding into slot */
+.glyph-plugins .piece {
+  fill: var(--copper-300);
+  animation: glyph-plugins-piece 4s var(--ease) infinite;
+}
+.glyph-plugins .slot {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+}
+@keyframes glyph-plugins-piece {
+  0%        { transform: translate(-20px, -20px); opacity: 0; }
+  20%       { transform: translate(0, 0); opacity: 1; }
+  80%       { transform: translate(0, 0); opacity: 1; }
+  100%      { transform: translate(-20px, -20px); opacity: 0; }
+}
+
+/* projects — 3 stacked folders, top rises and returns */
+.glyph-projects .folder {
+  fill: none;
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+}
+.glyph-projects .folder-1 {
+  animation: glyph-projects-rise 5s var(--ease) infinite;
+}
+@keyframes glyph-projects-rise {
+  0%, 20%   { transform: translateY(0); opacity: 1; }
+  40%       { transform: translateY(-8px); opacity: 0.7; }
+  60%       { transform: translateY(-8px); opacity: 0.7; }
+  85%, 100% { transform: translateY(0); opacity: 1; }
+}
+
+/* dispatch — dot with 3 expanding rings */
+.glyph-dispatch .center {
+  fill: var(--copper-200);
+}
+.glyph-dispatch .ring {
+  fill: none;
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+.glyph-dispatch .ring-1 {
+  animation: glyph-dispatch-ring 4s ease-out infinite;
+  animation-delay: 0s;
+}
+.glyph-dispatch .ring-2 {
+  animation: glyph-dispatch-ring 4s ease-out infinite;
+  animation-delay: 0.6s;
+}
+.glyph-dispatch .ring-3 {
+  animation: glyph-dispatch-ring 4s ease-out infinite;
+  animation-delay: 1.2s;
+}
+@keyframes glyph-dispatch-ring {
+  0%   { transform: scale(0.3); opacity: 0.8; }
+  60%  { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* schedules — clock arc rotating 360° */
+.glyph-schedules .face {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+}
+.glyph-schedules .arc {
+  stroke: var(--copper-200);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  animation: glyph-schedules-arc 6s linear infinite;
+}
+@keyframes glyph-schedules-arc {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* artifacts — rectangle drawing in via stroke-dashoffset */
+.glyph-artifacts .canvas {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: glyph-artifacts-draw 5s var(--ease) infinite;
+}
+@keyframes glyph-artifacts-draw {
+  0%, 10%   { stroke-dashoffset: 120; }
+  50%       { stroke-dashoffset: 0; }
+  90%, 100% { stroke-dashoffset: 120; }
+}
+
+/* diagrams — 4 nodes + connecting lines appearing in sequence */
+.glyph-diagrams .node {
+  fill: var(--copper-300);
+  opacity: 0;
+}
+.glyph-diagrams .line {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+.glyph-diagrams .node-1 { animation: glyph-diagrams-node 6s ease-in-out infinite; animation-delay: 0s; }
+.glyph-diagrams .node-2 { animation: glyph-diagrams-node 6s ease-in-out infinite; animation-delay: 0.4s; }
+.glyph-diagrams .node-3 { animation: glyph-diagrams-node 6s ease-in-out infinite; animation-delay: 0.8s; }
+.glyph-diagrams .node-4 { animation: glyph-diagrams-node 6s ease-in-out infinite; animation-delay: 1.2s; }
+.glyph-diagrams .line-1 { animation: glyph-diagrams-line 6s ease-in-out infinite; animation-delay: 0.2s; }
+.glyph-diagrams .line-2 { animation: glyph-diagrams-line 6s ease-in-out infinite; animation-delay: 0.6s; }
+.glyph-diagrams .line-3 { animation: glyph-diagrams-line 6s ease-in-out infinite; animation-delay: 1.0s; }
+@keyframes glyph-diagrams-node {
+  0%, 8%    { opacity: 0; transform: scale(0.5); }
+  14%       { opacity: 1; transform: scale(1); }
+  80%       { opacity: 1; transform: scale(1); }
+  90%, 100% { opacity: 0; transform: scale(0.5); }
+}
+@keyframes glyph-diagrams-line {
+  0%, 8%    { opacity: 0; }
+  14%       { opacity: 1; }
+  80%       { opacity: 1; }
+  90%, 100% { opacity: 0; }
+}
+
+/* design — 3×3 grid dashes appearing in sequence */
+.glyph-design .dash {
+  fill: var(--copper-300);
+  opacity: 0;
+}
+.glyph-design .dash-1 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 0.0s; }
+.glyph-design .dash-2 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 0.15s; }
+.glyph-design .dash-3 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 0.3s; }
+.glyph-design .dash-4 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 0.45s; }
+.glyph-design .dash-5 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 0.6s; }
+.glyph-design .dash-6 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 0.75s; }
+.glyph-design .dash-7 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 0.9s; }
+.glyph-design .dash-8 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 1.05s; }
+.glyph-design .dash-9 { animation: glyph-design-dash 5s ease-in-out infinite; animation-delay: 1.2s; }
+@keyframes glyph-design-dash {
+  0%, 12%   { opacity: 0; transform: scale(0.5); }
+  20%       { opacity: 1; transform: scale(1); }
+  80%       { opacity: 1; transform: scale(1); }
+  90%, 100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* ─── G.4 Built-in Tools & Commands (8 small glyphs, 20px) ────── */
+
+/* explore — horizontal scanning sweep */
+.glyph-explore .box {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+}
+.glyph-explore .sweep {
+  stroke: var(--copper-200);
+  stroke-width: 2;
+  opacity: 0.8;
+  animation: glyph-explore-sweep 4s linear infinite;
+}
+@keyframes glyph-explore-sweep {
+  0%   { transform: translateX(-10px); opacity: 0; }
+  50%  { opacity: 0.8; }
+  100% { transform: translateX(10px); opacity: 0; }
+}
+
+/* clear — 4 text lines fading out from top to bottom */
+.glyph-clear .line {
+  fill: var(--copper-300);
+}
+.glyph-clear .line-1 { animation: glyph-clear-line 4s ease-in-out infinite; animation-delay: 0s; }
+.glyph-clear .line-2 { animation: glyph-clear-line 4s ease-in-out infinite; animation-delay: 0.2s; }
+.glyph-clear .line-3 { animation: glyph-clear-line 4s ease-in-out infinite; animation-delay: 0.4s; }
+.glyph-clear .line-4 { animation: glyph-clear-line 4s ease-in-out infinite; animation-delay: 0.6s; }
+@keyframes glyph-clear-line {
+  0%, 10%   { opacity: 1; }
+  30%       { opacity: 0; }
+  90%, 100% { opacity: 1; }
+}
+
+/* rewind — clockwise arrow flipping to counter-clockwise */
+.glyph-rewind .arrow {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  animation: glyph-rewind-arrow 5s ease-in-out infinite;
+}
+@keyframes glyph-rewind-arrow {
+  0%, 20%   { transform: scaleX(1); }
+  50%       { transform: scaleX(-1); }
+  80%, 100% { transform: scaleX(1); }
+}
+
+/* compact — 5 bars compressing into 2 */
+.glyph-compact .bar {
+  fill: var(--copper-300);
+}
+.glyph-compact .bar-1,
+.glyph-compact .bar-2,
+.glyph-compact .bar-3,
+.glyph-compact .bar-4,
+.glyph-compact .bar-5 {
+  animation: glyph-compact-compress 5s var(--ease) infinite;
+}
+.glyph-compact .bar-1 { animation-delay: 0s; }
+.glyph-compact .bar-2 { animation-delay: 0.1s; }
+.glyph-compact .bar-3 { animation-delay: 0.2s; }
+.glyph-compact .bar-4 { animation-delay: 0.3s; }
+.glyph-compact .bar-5 { animation-delay: 0.4s; }
+@keyframes glyph-compact-compress {
+  0%, 20%   { opacity: 1; transform: scaleY(1); }
+  50%       { opacity: 0; transform: scaleY(0.2); }
+  55%       { opacity: 0; }
+  75%       { opacity: 1; transform: scaleY(1); }
+  100%      { opacity: 1; transform: scaleY(1); }
+}
+
+/* loop — circular arrow rotating */
+.glyph-loop .circle-arrow {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  animation: glyph-loop-rotate 6s linear infinite;
+}
+@keyframes glyph-loop-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* init — 4 squares forming L scaffold */
+.glyph-init .square {
+  fill: var(--copper-300);
+  opacity: 0;
+}
+.glyph-init .square-1 { animation: glyph-init-square 4s ease-in-out infinite; animation-delay: 0s; }
+.glyph-init .square-2 { animation: glyph-init-square 4s ease-in-out infinite; animation-delay: 0.2s; }
+.glyph-init .square-3 { animation: glyph-init-square 4s ease-in-out infinite; animation-delay: 0.4s; }
+.glyph-init .square-4 { animation: glyph-init-square 4s ease-in-out infinite; animation-delay: 0.6s; }
+@keyframes glyph-init-square {
+  0%, 8%    { opacity: 0; transform: scale(0.3); }
+  16%       { opacity: 1; transform: scale(1); }
+  80%       { opacity: 1; transform: scale(1); }
+  90%, 100% { opacity: 0; transform: scale(0.3); }
+}
+
+/* agents — center dot + 3 satellites pulsing */
+.glyph-agents .center {
+  fill: var(--copper-200);
+}
+.glyph-agents .satellite {
+  fill: var(--copper-300);
+  animation: glyph-agents-pulse 3s ease-in-out infinite;
+}
+.glyph-agents .satellite-1 { animation-delay: 0s; }
+.glyph-agents .satellite-2 { animation-delay: 0.3s; }
+.glyph-agents .satellite-3 { animation-delay: 0.6s; }
+@keyframes glyph-agents-pulse {
+  0%, 20%   { opacity: 0.4; transform: scale(0.8); }
+  40%       { opacity: 1; transform: scale(1); }
+  60%, 100% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* pretool — checkmark pulsing */
+.glyph-pretool .check {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  animation: glyph-pretool-pulse 3s ease-in-out infinite;
+}
+@keyframes glyph-pretool-pulse {
+  0%, 30%   { opacity: 0.5; transform: scale(0.9); }
+  50%       { opacity: 1; transform: scale(1); }
+  70%, 100% { opacity: 0.5; transform: scale(0.9); }
+}
+
+/* ─── G.5 Google (7 glyphs) ──────────────────────────────────── */
+
+/* notebooklm — document with citation line drawing */
+.glyph-notebooklm .doc {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+}
+.glyph-notebooklm .citation {
+  stroke: var(--copper-200);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: glyph-notebooklm-cite 4s var(--ease) infinite;
+}
+@keyframes glyph-notebooklm-cite {
+  0%, 15%   { stroke-dashoffset: 20; }
+  50%       { stroke-dashoffset: 0; }
+  85%, 100% { stroke-dashoffset: 20; }
+}
+
+/* workspace-studio — 3 app tiles linking via fading lines */
+.glyph-workspace-studio .tile {
+  fill: var(--copper-300);
+}
+.glyph-workspace-studio .link {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  opacity: 0;
+  animation: glyph-workspace-studio-link 5s ease-in-out infinite;
+}
+.glyph-workspace-studio .link-1 { animation-delay: 0s; }
+.glyph-workspace-studio .link-2 { animation-delay: 0.4s; }
+@keyframes glyph-workspace-studio-link {
+  0%, 15%   { opacity: 0; }
+  30%       { opacity: 1; }
+  70%       { opacity: 1; }
+  85%, 100% { opacity: 0; }
+}
+
+/* ai-studio — slider thumb moving across track */
+.glyph-ai-studio .track {
+  stroke: var(--copper-400);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.glyph-ai-studio .thumb {
+  fill: var(--copper-200);
+  animation: glyph-ai-studio-thumb 6s var(--ease) infinite;
+}
+@keyframes glyph-ai-studio-thumb {
+  0%, 10%   { transform: translateX(-12px); }
+  50%       { transform: translateX(12px); }
+  90%, 100% { transform: translateX(-12px); }
+}
+
+/* canvas — doc rectangle morphing into app frame */
+.glyph-canvas .shape {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+  animation: glyph-canvas-morph 6s var(--ease) infinite;
+}
+@keyframes glyph-canvas-morph {
+  0%, 20%   { rx: 2; width: 24px; height: 30px; }
+  50%       { rx: 4; width: 32px; height: 26px; }
+  80%, 100% { rx: 2; width: 24px; height: 30px; }
+}
+
+/* flow — 5 frames flickering in sequence */
+.glyph-flow .frame {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0;
+}
+.glyph-flow .frame-1 { animation: glyph-flow-frame 4s linear infinite; animation-delay: 0s; }
+.glyph-flow .frame-2 { animation: glyph-flow-frame 4s linear infinite; animation-delay: 0.2s; }
+.glyph-flow .frame-3 { animation: glyph-flow-frame 4s linear infinite; animation-delay: 0.4s; }
+.glyph-flow .frame-4 { animation: glyph-flow-frame 4s linear infinite; animation-delay: 0.6s; }
+.glyph-flow .frame-5 { animation: glyph-flow-frame 4s linear infinite; animation-delay: 0.8s; }
+@keyframes glyph-flow-frame {
+  0%, 8%    { opacity: 0; }
+  10%       { opacity: 1; }
+  18%       { opacity: 0; }
+  100%      { opacity: 0; }
+}
+
+/* stitch — wireframe layout building brick-by-brick */
+.glyph-stitch .brick {
+  fill: var(--copper-300);
+  opacity: 0;
+}
+.glyph-stitch .brick-1 { animation: glyph-stitch-brick 5s ease-in-out infinite; animation-delay: 0s; }
+.glyph-stitch .brick-2 { animation: glyph-stitch-brick 5s ease-in-out infinite; animation-delay: 0.2s; }
+.glyph-stitch .brick-3 { animation: glyph-stitch-brick 5s ease-in-out infinite; animation-delay: 0.4s; }
+.glyph-stitch .brick-4 { animation: glyph-stitch-brick 5s ease-in-out infinite; animation-delay: 0.6s; }
+.glyph-stitch .brick-5 { animation: glyph-stitch-brick 5s ease-in-out infinite; animation-delay: 0.8s; }
+.glyph-stitch .brick-6 { animation: glyph-stitch-brick 5s ease-in-out infinite; animation-delay: 1.0s; }
+@keyframes glyph-stitch-brick {
+  0%, 10%   { opacity: 0; transform: scale(0.7); }
+  18%       { opacity: 1; transform: scale(1); }
+  80%       { opacity: 1; transform: scale(1); }
+  90%, 100% { opacity: 0; transform: scale(0.7); }
+}
+
+/* gems — faceted diamond rotating */
+.glyph-gems .diamond {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: var(--copper-400);
+  fill-opacity: 0.2;
+  animation: glyph-gems-rotate 8s linear infinite;
+}
+@keyframes glyph-gems-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── G.6 OpenAI (3 glyphs) ────────────────────────────────────── */
+
+/* chatgpt — chat bubble pulsing */
+.glyph-chatgpt .bubble {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+  animation: glyph-chatgpt-pulse 3s ease-in-out infinite;
+}
+@keyframes glyph-chatgpt-pulse {
+  0%, 30%   { transform: scale(0.95); opacity: 0.7; }
+  50%       { transform: scale(1); opacity: 1; }
+  70%, 100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* codex — terminal cursor + code line streaming */
+.glyph-codex .cursor {
+  fill: var(--copper-200);
+  animation: glyph-codex-blink 1.5s step-end infinite;
+}
+.glyph-codex .code-line {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: glyph-codex-stream 4s var(--ease) infinite;
+}
+@keyframes glyph-codex-blink {
+  0%, 50%  { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+@keyframes glyph-codex-stream {
+  0%, 15%   { stroke-dashoffset: 20; }
+  60%       { stroke-dashoffset: 0; }
+  85%, 100% { stroke-dashoffset: 20; }
+}
+
+/* workspace-agents — circular orbit dot (24/7 loop) */
+.glyph-workspace-agents .orbit {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+}
+.glyph-workspace-agents .dot {
+  fill: var(--copper-200);
+  animation: glyph-workspace-agents-orbit 8s linear infinite;
+}
+@keyframes glyph-workspace-agents-orbit {
+  from { transform: rotate(0deg) translateX(12px); }
+  to   { transform: rotate(360deg) translateX(12px); }
+}
+
+/* ─── G.9 Workflow Stages (7 glyphs) ──────────────────────────── */
+
+/* magnifier-scan — lens with sweeping scan line */
+.glyph-magnifier-scan .lens {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  fill: none;
+}
+.glyph-magnifier-scan .handle {
+  stroke: var(--copper-400);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.glyph-magnifier-scan .scan {
+  stroke: var(--copper-200);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.7;
+  animation: glyph-magnifier-scan-sweep 4s var(--ease) infinite;
+}
+@keyframes glyph-magnifier-scan-sweep {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  20%  { opacity: 0.9; }
+  50%  { transform: translateY(6px); opacity: 0.9; }
+  80%  { opacity: 0; }
+  100% { transform: translateY(-6px); opacity: 0; }
+}
+
+/* lightbulb-pulse — bulb with rays pulsing outward */
+.glyph-lightbulb-pulse .bulb {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: var(--copper-400);
+  fill-opacity: 0.2;
+}
+.glyph-lightbulb-pulse .filament {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.glyph-lightbulb-pulse .ray {
+  fill: none;
+  stroke: var(--copper-200);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-origin: 20px 14px;
+}
+.glyph-lightbulb-pulse .ray-1 {
+  animation: glyph-lightbulb-pulse-ray 4s ease-out infinite;
+  animation-delay: 0s;
+}
+.glyph-lightbulb-pulse .ray-2 {
+  animation: glyph-lightbulb-pulse-ray 4s ease-out infinite;
+  animation-delay: 1.2s;
+}
+@keyframes glyph-lightbulb-pulse-ray {
+  0%   { transform: scale(0.4); opacity: 0.8; }
+  60%  { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* map-fold — folded map with route highlight tracing */
+.glyph-map-fold .map {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: var(--copper-400);
+  fill-opacity: 0.12;
+}
+.glyph-map-fold .crease {
+  stroke: var(--copper-400);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+.glyph-map-fold .route {
+  stroke: var(--copper-200);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: glyph-map-fold-route 5s var(--ease) infinite;
+}
+@keyframes glyph-map-fold-route {
+  0%, 12%   { stroke-dashoffset: 36; }
+  55%       { stroke-dashoffset: 0; }
+  88%, 100% { stroke-dashoffset: 36; }
+}
+
+/* pencil-grid — pencil drawing across faint grid */
+.glyph-pencil-grid .grid {
+  stroke: var(--copper-400);
+  stroke-width: 0.5;
+  opacity: 0.35;
+}
+.glyph-pencil-grid .pencil {
+  fill: var(--copper-300);
+  stroke: var(--copper-300);
+  stroke-width: 0.5;
+  animation: glyph-pencil-grid-draw 5s var(--ease) infinite;
+}
+.glyph-pencil-grid .tip {
+  fill: var(--copper-200);
+  animation: glyph-pencil-grid-draw 5s var(--ease) infinite;
+}
+@keyframes glyph-pencil-grid-draw {
+  0%        { transform: translate(-6px, 6px); }
+  50%       { transform: translate(2px, -2px); }
+  100%      { transform: translate(-6px, 6px); }
+}
+
+/* hammer-strike — hammer rotating to strike anvil */
+.glyph-hammer-strike .head {
+  fill: var(--copper-300);
+}
+.glyph-hammer-strike .handle {
+  fill: var(--copper-400);
+}
+.glyph-hammer-strike .hammer {
+  animation: glyph-hammer-strike-swing 3s var(--ease) infinite;
+}
+.glyph-hammer-strike .anvil {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+@keyframes glyph-hammer-strike-swing {
+  0%, 30%   { transform: rotate(-12deg); }
+  50%       { transform: rotate(6deg); }
+  60%       { transform: rotate(0deg); }
+  75%, 100% { transform: rotate(-12deg); }
+}
+
+/* flask-bubble — Erlenmeyer flask with bubbles rising */
+.glyph-flask-bubble .flask {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: var(--copper-400);
+  fill-opacity: 0.15;
+}
+.glyph-flask-bubble .neck {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.glyph-flask-bubble .bubble {
+  fill: var(--copper-200);
+  opacity: 0;
+}
+.glyph-flask-bubble .bubble-1 {
+  animation: glyph-flask-bubble-rise 4s ease-in-out infinite;
+  animation-delay: 0s;
+}
+.glyph-flask-bubble .bubble-2 {
+  animation: glyph-flask-bubble-rise 4s ease-in-out infinite;
+  animation-delay: 1.0s;
+}
+.glyph-flask-bubble .bubble-3 {
+  animation: glyph-flask-bubble-rise 4s ease-in-out infinite;
+  animation-delay: 2.0s;
+}
+@keyframes glyph-flask-bubble-rise {
+  0%   { transform: translateY(4px); opacity: 0; }
+  20%  { opacity: 0.9; }
+  80%  { transform: translateY(-8px); opacity: 0.6; }
+  100% { transform: translateY(-12px); opacity: 0; }
+}
+
+/* rocket-launch — rocket with flickering flame */
+.glyph-rocket-launch .body {
+  fill: var(--copper-400);
+  fill-opacity: 0.2;
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+}
+.glyph-rocket-launch .fin {
+  fill: var(--copper-300);
+}
+.glyph-rocket-launch .window {
+  fill: var(--copper-200);
+}
+.glyph-rocket-launch .rocket {
+  animation: glyph-rocket-launch-rise 4s var(--ease) infinite;
+}
+.glyph-rocket-launch .flame {
+  fill: var(--copper-200);
+}
+.glyph-rocket-launch .flame-1 {
+  animation: glyph-rocket-launch-flame 0.6s ease-in-out infinite alternate;
+}
+.glyph-rocket-launch .flame-2 {
+  fill: var(--copper-300);
+  animation: glyph-rocket-launch-flame 0.5s ease-in-out infinite alternate-reverse;
+}
+@keyframes glyph-rocket-launch-rise {
+  0%, 20%   { transform: translateY(2px); }
+  50%       { transform: translateY(-3px); }
+  80%, 100% { transform: translateY(2px); }
+}
+@keyframes glyph-rocket-launch-flame {
+  from { transform: scaleY(0.7); opacity: 0.6; }
+  to   { transform: scaleY(1.1); opacity: 1; }
+}
+
+/* ─── G.10 Brand Alternatives (3 glyphs) ─────────────────────── */
+
+/* openclaw — chat bubble with claw silhouette + dot indicator */
+.glyph-openclaw .bubble-out {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: none;
+}
+.glyph-openclaw .claw {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.glyph-openclaw .dot {
+  fill: var(--copper-200);
+  opacity: 0;
+}
+.glyph-openclaw .dot-1 { animation: glyph-openclaw-dot 3s ease-in-out infinite; animation-delay: 0s; }
+.glyph-openclaw .dot-2 { animation: glyph-openclaw-dot 3s ease-in-out infinite; animation-delay: 0.3s; }
+.glyph-openclaw .dot-3 { animation: glyph-openclaw-dot 3s ease-in-out infinite; animation-delay: 0.6s; }
+@keyframes glyph-openclaw-dot {
+  0%, 25%   { opacity: 0.2; }
+  40%       { opacity: 1; }
+  60%, 100% { opacity: 0.2; }
+}
+
+/* hermes — memory spiral spinning slowly (persistence) */
+.glyph-hermes .spiral {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  transform-origin: 20px 20px;
+  animation: glyph-hermes-rotate 8s linear infinite;
+}
+.glyph-hermes .core {
+  fill: var(--copper-200);
+}
+@keyframes glyph-hermes-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* n8n — workflow graph with edges firing in sequence */
+.glyph-n8n .node {
+  fill: var(--copper-300);
+}
+.glyph-n8n .edge {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  opacity: 0.3;
+}
+.glyph-n8n .edge-1 { animation: glyph-n8n-edge 4s ease-in-out infinite; animation-delay: 0s; }
+.glyph-n8n .edge-2 { animation: glyph-n8n-edge 4s ease-in-out infinite; animation-delay: 0.5s; }
+.glyph-n8n .edge-3 { animation: glyph-n8n-edge 4s ease-in-out infinite; animation-delay: 1.0s; }
+@keyframes glyph-n8n-edge {
+  0%, 15%   { opacity: 0.2; stroke: var(--copper-400); }
+  25%       { opacity: 1; stroke: var(--copper-200); }
+  45%       { opacity: 0.4; stroke: var(--copper-400); }
+  100%      { opacity: 0.3; stroke: var(--copper-400); }
+}
+
+/* ─── Section H · Pitfall glyphs (8 — chaotic / off-rhythm) ──── */
+
+/* vibe-coding — wavy scribble line draws then fades irregularly */
+.glyph-vibe-coding .scribble {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: glyph-vibe-coding-scribble 4.7s var(--ease) infinite;
+}
+@keyframes glyph-vibe-coding-scribble {
+  0%        { stroke-dashoffset: 50; opacity: 0.4; }
+  35%       { stroke-dashoffset: 0; opacity: 1; }
+  55%       { stroke-dashoffset: 0; opacity: 1; }
+  62%       { opacity: 0.3; }
+  68%       { opacity: 0.9; }
+  90%, 100% { stroke-dashoffset: 50; opacity: 0.4; }
+}
+
+/* prompt-pray — question mark pulsing erratically */
+.glyph-prompt-pray .mark {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+  transform-origin: 20px 19px;
+  animation: glyph-prompt-pray-mark 5.3s var(--ease) infinite;
+}
+.glyph-prompt-pray .dot {
+  fill: var(--copper-300);
+  animation: glyph-prompt-pray-dot 5.3s var(--ease) infinite;
+}
+@keyframes glyph-prompt-pray-mark {
+  0%        { transform: scale(0.85); opacity: 0.5; }
+  18%       { transform: scale(1.05); opacity: 1; }
+  28%       { transform: scale(0.9); opacity: 0.6; }
+  42%       { transform: scale(1.08); opacity: 1; }
+  55%       { transform: scale(0.95); opacity: 0.7; }
+  70%       { transform: scale(1.0); opacity: 0.9; }
+  100%      { transform: scale(0.85); opacity: 0.5; }
+}
+@keyframes glyph-prompt-pray-dot {
+  0%, 14%   { opacity: 0.5; }
+  20%       { opacity: 1; }
+  35%       { opacity: 0.4; }
+  50%       { opacity: 1; }
+  72%, 100% { opacity: 0.5; }
+}
+
+/* data-leak — droplets forming and falling from a vessel */
+.glyph-data-leak .vessel {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+}
+.glyph-data-leak .drop {
+  fill: var(--copper-200);
+  opacity: 0;
+}
+.glyph-data-leak .drop-1 {
+  animation: glyph-data-leak-drop 4.3s ease-in infinite;
+  animation-delay: 0s;
+}
+.glyph-data-leak .drop-2 {
+  animation: glyph-data-leak-drop 4.3s ease-in infinite;
+  animation-delay: 1.9s;
+}
+@keyframes glyph-data-leak-drop {
+  0%        { transform: translateY(0); opacity: 0; }
+  20%       { transform: translateY(0); opacity: 0.9; }
+  60%       { transform: translateY(6px); opacity: 0.6; }
+  85%, 100% { transform: translateY(10px); opacity: 0; }
+}
+
+/* tool-overload — grid of tiny cells jittering off-sync */
+.glyph-tool-overload .cell {
+  fill: var(--copper-300);
+  opacity: 0.8;
+}
+.glyph-tool-overload .cell-1 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 0s; }
+.glyph-tool-overload .cell-2 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 0.37s; }
+.glyph-tool-overload .cell-3 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 0.91s; }
+.glyph-tool-overload .cell-4 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 1.43s; }
+.glyph-tool-overload .cell-5 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 0.21s; }
+.glyph-tool-overload .cell-6 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 1.77s; }
+.glyph-tool-overload .cell-7 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 0.63s; }
+.glyph-tool-overload .cell-8 { animation: glyph-tool-overload-jitter 5.7s var(--ease) infinite; animation-delay: 1.11s; }
+@keyframes glyph-tool-overload-jitter {
+  0%, 40%   { transform: translate(0, 0); opacity: 0.85; }
+  46%       { transform: translate(0.7px, -0.6px); opacity: 0.55; }
+  52%       { transform: translate(-0.5px, 0.6px); opacity: 1; }
+  58%       { transform: translate(0.6px, 0.4px); opacity: 0.7; }
+  66%, 100% { transform: translate(0, 0); opacity: 0.85; }
+}
+
+/* hallucination — sine wave morphing between regular and chaotic */
+.glyph-hallucination .wave {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+  animation: glyph-hallucination-warp 6.1s var(--ease) infinite;
+}
+@keyframes glyph-hallucination-warp {
+  0%, 25%   { transform: scaleY(1); opacity: 0.9; }
+  40%       { transform: scaleY(1.6); opacity: 1; }
+  48%       { transform: scaleY(0.4); opacity: 0.7; }
+  56%       { transform: scaleY(1.8); opacity: 1; }
+  68%       { transform: scaleY(0.7); opacity: 0.8; }
+  85%, 100% { transform: scaleY(1); opacity: 0.9; }
+}
+
+/* stale-data — clock with one hand frozen, another spinning fast */
+.glyph-stale-data .face {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  fill: none;
+}
+.glyph-stale-data .hand-stuck {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+.glyph-stale-data .hand-spin {
+  stroke: var(--copper-200);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  animation: glyph-stale-data-spin 4.7s linear infinite;
+}
+@keyframes glyph-stale-data-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* over-engineering — 3 nested gears spinning at different rates */
+.glyph-over-engineering .gear {
+  fill: none;
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+}
+.glyph-over-engineering .gear circle:last-child {
+  fill: var(--copper-300);
+  stroke: none;
+}
+.glyph-over-engineering .gear-a {
+  animation: glyph-over-engineering-spin-a 5.3s linear infinite;
+}
+.glyph-over-engineering .gear-b {
+  animation: glyph-over-engineering-spin-b 6.7s linear infinite;
+}
+.glyph-over-engineering .gear-c {
+  animation: glyph-over-engineering-spin-c 4.3s linear infinite;
+}
+@keyframes glyph-over-engineering-spin-a {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes glyph-over-engineering-spin-b {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+@keyframes glyph-over-engineering-spin-c {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* context-rot — clean square decaying to noise dots */
+.glyph-context-rot .block {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+  animation: glyph-context-rot-decay 6.3s var(--ease) infinite;
+}
+.glyph-context-rot .noise {
+  fill: var(--copper-200);
+  opacity: 0;
+}
+.glyph-context-rot .noise-1 { animation: glyph-context-rot-noise 6.3s var(--ease) infinite; animation-delay: 0.1s; }
+.glyph-context-rot .noise-2 { animation: glyph-context-rot-noise 6.3s var(--ease) infinite; animation-delay: 0.4s; }
+.glyph-context-rot .noise-3 { animation: glyph-context-rot-noise 6.3s var(--ease) infinite; animation-delay: 0.8s; }
+.glyph-context-rot .noise-4 { animation: glyph-context-rot-noise 6.3s var(--ease) infinite; animation-delay: 1.1s; }
+.glyph-context-rot .noise-5 { animation: glyph-context-rot-noise 6.3s var(--ease) infinite; animation-delay: 1.5s; }
+.glyph-context-rot .noise-6 { animation: glyph-context-rot-noise 6.3s var(--ease) infinite; animation-delay: 1.9s; }
+@keyframes glyph-context-rot-decay {
+  0%, 15%   { opacity: 1; stroke-dasharray: 80 0; }
+  55%       { opacity: 0.25; stroke-dasharray: 2 4; }
+  85%, 100% { opacity: 1; stroke-dasharray: 80 0; }
+}
+@keyframes glyph-context-rot-noise {
+  0%, 20%   { opacity: 0; transform: scale(0.6); }
+  50%       { opacity: 0.95; transform: scale(1); }
+  75%       { opacity: 0.5; transform: scale(0.9); }
+  90%, 100% { opacity: 0; transform: scale(0.6); }
+}
+
+/* ─── Section H · Practice glyphs (8 — calm / rhythmic) ──────── */
+
+/* sharpen-axe — spark traveling along a blade edge */
+.glyph-sharpen-axe .blade {
+  stroke: var(--copper-400);
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+}
+.glyph-sharpen-axe .spark {
+  fill: var(--copper-200);
+  animation: glyph-sharpen-axe-spark 4s var(--ease) infinite;
+}
+@keyframes glyph-sharpen-axe-spark {
+  0%        { transform: translate(0, 0); opacity: 0; }
+  15%       { opacity: 1; }
+  85%       { transform: translate(20px, -12px); opacity: 1; }
+  100%      { transform: translate(20px, -12px); opacity: 0; }
+}
+
+/* goal-arrow — arrow drawing itself toward bullseye */
+.glyph-goal-arrow .bullseye-outer {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+}
+.glyph-goal-arrow .bullseye-inner {
+  fill: var(--copper-200);
+}
+.glyph-goal-arrow .arrow {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: glyph-goal-arrow-draw 5s var(--ease) infinite;
+}
+@keyframes glyph-goal-arrow-draw {
+  0%, 10%   { stroke-dashoffset: 36; }
+  55%       { stroke-dashoffset: 0; }
+  90%, 100% { stroke-dashoffset: 36; }
+}
+
+/* skill-block — 3 blocks stacking from bottom up */
+.glyph-skill-block .block {
+  fill: var(--copper-300);
+  opacity: 0;
+}
+.glyph-skill-block .block-1 { animation: glyph-skill-block-stack 6s var(--ease) infinite; animation-delay: 0s; }
+.glyph-skill-block .block-2 { animation: glyph-skill-block-stack 6s var(--ease) infinite; animation-delay: 0.5s; }
+.glyph-skill-block .block-3 { animation: glyph-skill-block-stack 6s var(--ease) infinite; animation-delay: 1.0s; }
+@keyframes glyph-skill-block-stack {
+  0%, 8%    { opacity: 0; transform: translateY(6px); }
+  20%       { opacity: 1; transform: translateY(0); }
+  80%       { opacity: 1; transform: translateY(0); }
+  92%, 100% { opacity: 0; transform: translateY(6px); }
+}
+
+/* human-loop — checkmark traveling around a circular track */
+.glyph-human-loop .track {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+.glyph-human-loop .check-orbit {
+  animation: glyph-human-loop-orbit 6s linear infinite;
+}
+.glyph-human-loop .check {
+  stroke: var(--copper-200);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes glyph-human-loop-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* context-window — rectangle wiped clean by a horizontal sweep */
+.glyph-context-window .window {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+}
+.glyph-context-window .wipe {
+  fill: var(--copper-200);
+  opacity: 0.7;
+  animation: glyph-context-window-wipe 4s var(--ease) infinite;
+}
+@keyframes glyph-context-window-wipe {
+  0%        { transform: translateX(0); opacity: 0.7; }
+  60%       { transform: translateX(16px); opacity: 0.7; }
+  75%       { transform: translateX(16px); opacity: 0; }
+  76%       { transform: translateX(0); opacity: 0; }
+  100%      { transform: translateX(0); opacity: 0.7; }
+}
+
+/* wheel-reuse — circle rotating with a notch tracking past a marker */
+.glyph-wheel-reuse .wheel {
+  stroke: var(--copper-300);
+  stroke-width: 1.5;
+  fill: none;
+  animation: glyph-wheel-reuse-spin 6s linear infinite;
+}
+.glyph-wheel-reuse .wheel .notch {
+  fill: var(--copper-200);
+  stroke: none;
+}
+.glyph-wheel-reuse .marker {
+  stroke: var(--copper-400);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+@keyframes glyph-wheel-reuse-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* eval-tick — checkmark drawing itself, holding, fading, redrawing */
+.glyph-eval-tick .tick {
+  stroke: var(--copper-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: glyph-eval-tick-draw 4s var(--ease) infinite;
+}
+@keyframes glyph-eval-tick-draw {
+  0%, 10%   { stroke-dashoffset: 32; opacity: 0.6; }
+  40%       { stroke-dashoffset: 0; opacity: 1; }
+  70%       { stroke-dashoffset: 0; opacity: 1; }
+  90%, 100% { stroke-dashoffset: 32; opacity: 0.6; }
+}
+
+/* foundation-stack — 3 horizontal bars stacking from bottom up */
+.glyph-foundation-stack .bar {
+  fill: var(--copper-300);
+  opacity: 0;
+}
+.glyph-foundation-stack .bar-1 { animation: glyph-foundation-stack-bar 6s var(--ease) infinite; animation-delay: 0s; }
+.glyph-foundation-stack .bar-2 { animation: glyph-foundation-stack-bar 6s var(--ease) infinite; animation-delay: 0.6s; }
+.glyph-foundation-stack .bar-3 { animation: glyph-foundation-stack-bar 6s var(--ease) infinite; animation-delay: 1.2s; }
+@keyframes glyph-foundation-stack-bar {
+  0%, 8%    { opacity: 0; transform: translateY(4px) scaleY(0.4); transform-origin: center bottom; }
+  22%       { opacity: 1; transform: translateY(0) scaleY(1); transform-origin: center bottom; }
+  82%       { opacity: 1; transform: translateY(0) scaleY(1); transform-origin: center bottom; }
+  94%, 100% { opacity: 0; transform: translateY(4px) scaleY(0.4); transform-origin: center bottom; }
+}
