@@ -2,7 +2,7 @@
 // canonical sub-agent orchestration patterns rendered on F.7.
 //
 // Used in two modes:
-//   - default: 280×180 viewport tile, four instances in a 2×2 grid
+//   - default: 180×110 viewport tile, four instances in a 2×2 grid
 //   - zoomed:  560×360 viewport with timing/dataflow callouts overlaid in
 //              italic serif copper-200 (per spec §10.4 ORCHESTRATION PATTERNS)
 //
@@ -36,14 +36,14 @@ export interface OrchestrationPatternProps {
 
 // ────────────────────── shared style tokens ──────────────────────
 
-const NODE_R = 16; // 32px diameter
+const NODE_R = 9; // 18px diameter (reduced from 12/24px)
 const NODE_FILL = "var(--neutral-900)";
 const NODE_STROKE = "var(--copper-700)";
-const NODE_STROKE_W = 1.5;
+const NODE_STROKE_W = 1.1;
 const NODE_TEXT = "var(--copper-200)";
 const EDGE_STROKE = "var(--copper-500)";
-const EDGE_W = 1.5;
-const PULSE_R = 4;
+const EDGE_W = 1.1;
+const PULSE_R = 2.5;
 const PULSE_FILL = "var(--copper-200)";
 
 const PULSE_DUR = 0.25; // 250ms — visually reads as ~200ms with ease
@@ -92,7 +92,7 @@ function Node({
         textAnchor="middle"
         dominantBaseline="middle"
         fill={NODE_TEXT}
-        fontSize={r >= 22 ? 13 : 11}
+        fontSize={r >= 22 ? 13 : 7.5}
         fontFamily="var(--mono)"
         letterSpacing="0.04em"
       >
@@ -215,19 +215,19 @@ function PulseDot({
 
 // ────────────────────── per-variant geometry ──────────────────────
 
-// 280×180 default viewport coordinate system.
-const W = 280;
-const H = 180;
+// 180×110 default viewport coordinate system (reduced from 220×140).
+const W = 180;
+const H = 110;
 
 // CENTRALIZED — planner [P] top center, workers [a][b][c] across bottom.
 // Sequential round-trip: P→a→P→b→P→c→P. Total cycle: 6 hops × 0.25s + gap.
 function CentralizedFigure({ on }: { on: boolean }) {
   const Px = W / 2;
-  const Py = 42;
-  const wy = 132;
-  const aX = 70;
-  const bX = 140;
-  const cX = 210;
+  const Py = 22;
+  const wy = 84;
+  const aX = 42;
+  const bX = 90;
+  const cX = 138;
 
   // 6 hops + LOOP_GAP padding
   const cycle = PULSE_DUR * 6 + LOOP_GAP;
@@ -308,10 +308,10 @@ function CentralizedFigure({ on }: { on: boolean }) {
 // Bidirectional pulses peer-to-peer; we stagger 6 directed pulses across
 // the cycle so the mesh feels alive without overcrowding.
 function DecentralizedFigure({ on }: { on: boolean }) {
-  const left = 70;
-  const right = 210;
-  const top = 50;
-  const bot = 130;
+  const left = 42;
+  const right = 138;
+  const top = 28;
+  const bot = 82;
   // Square corners: A(tl), B(tr), C(bl), D(br)
   const A = { x: left, y: top, label: "A" };
   const B = { x: right, y: top, label: "B" };
@@ -374,9 +374,9 @@ function DecentralizedFigure({ on }: { on: boolean }) {
 // CHAIN — A → B → C in a horizontal line. Single sequential pulse.
 function ChainFigure({ on }: { on: boolean }) {
   const y = H / 2;
-  const ax = 60;
-  const bx = 140;
-  const cx = 220;
+  const ax = 32;
+  const bx = 90;
+  const cx = 148;
 
   const cycle = PULSE_DUR * 2 + LOOP_GAP;
 
@@ -413,48 +413,42 @@ function ChainFigure({ on }: { on: boolean }) {
   );
 }
 
-// PARALLEL — top P → 3 workers → bottom P (merge). 3 simultaneous fan-out,
-// 3 simultaneous fan-in to merge.
+// PARALLEL — single top P planner → 3 workers fan-out, then pulses loop
+// BACK UP to the SAME top P (no bottom merge node). The planner pulses on
+// the return-trip arrival so it reads as "P dispatches, P receives back".
 function ParallelFigure({ on }: { on: boolean }) {
   const Ptx = W / 2;
-  const Pty = 28;
-  const wy = 90;
-  const Pbx = W / 2;
-  const Pby = 152;
-  const aX = 70;
-  const bX = 140;
-  const cX = 210;
+  const Pty = 22;
+  const wy = 72;
+  const aX = 42;
+  const bX = 90;
+  const cX = 138;
 
-  // Cycle: P pulse (0.2s) → fan-out (0.25s) → fan-in (0.25s) → gap
-  const cycle = PULSE_DUR * 3 + LOOP_GAP;
+  // Cycle: fan-out (0.25s) → fan-in back to same P (0.25s) → gap
+  const cycle = PULSE_DUR * 2 + LOOP_GAP;
 
   return (
     <>
-      {/* Fan-out edges */}
+      {/* Edges between top P and each worker — shared for fan-out + fan-in */}
       <Edge x1={Ptx} y1={Pty + NODE_R} x2={aX} y2={wy - NODE_R} />
       <Edge x1={Ptx} y1={Pty + NODE_R} x2={bX} y2={wy - NODE_R} />
       <Edge x1={Ptx} y1={Pty + NODE_R} x2={cX} y2={wy - NODE_R} />
-      {/* Fan-in edges */}
-      <Edge x1={aX} y1={wy + NODE_R} x2={Pbx} y2={Pby - NODE_R} />
-      <Edge x1={bX} y1={wy + NODE_R} x2={Pbx} y2={Pby - NODE_R} />
-      <Edge x1={cX} y1={wy + NODE_R} x2={Pbx} y2={Pby - NODE_R} />
 
-      {/* Nodes */}
+      {/* Nodes — single planner at top, 3 workers below. No bottom P. */}
       <Node cx={Ptx} cy={Pty} label="P" pulse={on} />
       <Node cx={aX} cy={wy} label="a" />
       <Node cx={bX} cy={wy} label="b" />
       <Node cx={cX} cy={wy} label="c" />
-      <Node cx={Pbx} cy={Pby} label="P" />
 
       {on ? (
         <>
-          {/* Fan-out (simultaneous) at begin = PULSE_DUR (after P pulse settle) */}
+          {/* Fan-out (simultaneous) — P → workers */}
           <PulseDot
             x1={Ptx}
             y1={Pty + NODE_R}
             x2={aX}
             y2={wy - NODE_R}
-            begin={PULSE_DUR}
+            begin={0}
             cycleDur={cycle}
           />
           <PulseDot
@@ -462,7 +456,7 @@ function ParallelFigure({ on }: { on: boolean }) {
             y1={Pty + NODE_R}
             x2={bX}
             y2={wy - NODE_R}
-            begin={PULSE_DUR}
+            begin={0}
             cycleDur={cycle}
           />
           <PulseDot
@@ -470,32 +464,32 @@ function ParallelFigure({ on }: { on: boolean }) {
             y1={Pty + NODE_R}
             x2={cX}
             y2={wy - NODE_R}
-            begin={PULSE_DUR}
+            begin={0}
             cycleDur={cycle}
           />
-          {/* Fan-in (simultaneous) at begin = PULSE_DUR * 2 */}
+          {/* Fan-in (simultaneous) — workers loop BACK to the SAME top P */}
           <PulseDot
             x1={aX}
-            y1={wy + NODE_R}
-            x2={Pbx}
-            y2={Pby - NODE_R}
-            begin={PULSE_DUR * 2}
+            y1={wy - NODE_R}
+            x2={Ptx}
+            y2={Pty + NODE_R}
+            begin={PULSE_DUR}
             cycleDur={cycle}
           />
           <PulseDot
             x1={bX}
-            y1={wy + NODE_R}
-            x2={Pbx}
-            y2={Pby - NODE_R}
-            begin={PULSE_DUR * 2}
+            y1={wy - NODE_R}
+            x2={Ptx}
+            y2={Pty + NODE_R}
+            begin={PULSE_DUR}
             cycleDur={cycle}
           />
           <PulseDot
             x1={cX}
-            y1={wy + NODE_R}
-            x2={Pbx}
-            y2={Pby - NODE_R}
-            begin={PULSE_DUR * 2}
+            y1={wy - NODE_R}
+            x2={Ptx}
+            y2={Pty + NODE_R}
+            begin={PULSE_DUR}
             cycleDur={cycle}
           />
         </>
@@ -539,10 +533,10 @@ export function OrchestrationPattern({
   animateOnReveal: _animateOnReveal = false,
   zoomed = false,
 }: OrchestrationPatternProps) {
-  const wrapW = zoomed ? 560 : 280;
-  const wrapH = zoomed ? 360 : 180;
+  const wrapW = zoomed ? 560 : 180;
+  const wrapH = zoomed ? 360 : 110;
 
-  // Scale factor relative to the canonical 280×180 figure coordinate space.
+  // Scale factor relative to the canonical figure coordinate space.
   const sx = zoomed ? wrapW / W : 1;
   const sy = zoomed ? (wrapH - 110) / H : 1; // leave room for callouts
 

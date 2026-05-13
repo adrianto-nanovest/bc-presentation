@@ -28,13 +28,13 @@
 //   how-it-works  → HowItWorksState (4-row anatomy with f-row-pulse-1..4)
 //   patterns      → PatternsState (2×2 orchestration grid; each tile glows
 //                   in turn via f-row-pulse-1..4)
-//   when-to-use   → WhenToUseState (4×4 tradeoff matrix; column-by-column
-//                   highlight via f-seq-pulse-1/2/3 + f-row-pulse-4)
+//   when-to-use   → WhenToUseState (4×4 tradeoff matrix; static, no
+//                   animation — renders fully visible immediately)
 //   example       → ExampleState (multi-agent workflow with flowing dot
 //                   travelling planner → workers → reviewer → output via
 //                   f-flow-dot on each edge)
 import { useState } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
@@ -45,16 +45,14 @@ import {
   OrchestrationPattern,
   type OrchestrationVariant,
 } from "./components/OrchestrationPattern";
+import { useFacetListBounds } from "./components/useFacetListBounds";
 import { f7Content as C } from "./content";
 
 // ───────────────────── shared layout constants (F-section canonical) ─────────────────────
 //
-// Mirror the FacetMenu's vertical rhythm so the right pane's content area
-// top-aligns with the left's first facet card top-border. See F.2 header
-// comment for the full pixel rationale.
+// Right pane width — top / bottom are measured at runtime via
+// `useFacetListBounds`.
 
-const PANE_TOP = 156;
-const PANE_BOTTOM = 80;
 const RIGHT_W = 660;
 
 // ───────────────────── slide ─────────────────────
@@ -72,6 +70,8 @@ export function F7SubagentsSpecialists() {
 
   const [activeFacet, setActiveFacet] = useState<string | null>(null);
   const effectiveFacet = hoverEnabled ? activeFacet : null;
+
+  const { top: paneTop, bottom: paneBottom } = useFacetListBounds();
 
   return (
     <>
@@ -101,56 +101,31 @@ export function F7SubagentsSpecialists() {
         showFooter={showFooter}
       />
 
-      {/* RIGHT — bordered box. Top/bottom borders align with FacetMenu's
-          top edge (PANE_TOP) and bottom edge (PANE_BOTTOM) exactly. */}
+      {/* RIGHT — transparent popover anchor. Top / bottom match the left
+          FacetMenu's card-stack extent exactly (measured at runtime). */}
       <div
         data-testid="f7-right-pane"
         style={{
           position: "absolute",
           right: 48,
-          top: PANE_TOP,
+          top: paneTop,
           width: RIGHT_W,
-          bottom: PANE_BOTTOM,
-          border: "1px solid var(--copper-700)",
-          background: "rgba(10,10,10,0.5)",
+          bottom: paneBottom,
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          pointerEvents: "none",
         }}
       >
-        {/* Invisible-visibility header strip — mirrors the left FacetMenu's
-            mono header + 12px gap + 1px copper rule + 16px gap so the right
-            pane's content area top aligns with the left's first facet card
-            top border exactly. Padding 16px matches the bordered box's gutter. */}
-        <div
-          aria-hidden
-          style={{
-            visibility: "hidden",
-            padding: "0 16px",
-            paddingTop: 16,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              display: "block",
-            }}
-          >
-            {C.header}
-          </span>
-          <div style={{ marginTop: 12, height: 1 }} />
-        </div>
-
         {/* Content area — DetailCanvas renders nothing until a facet hover. */}
         <div
           style={{
             position: "relative",
-            flex: 1,
-            margin: 16,
-            marginTop: 16,
+            width: "100%",
+            maxHeight: "100%",
+            height: "100%",
+            pointerEvents: "auto",
           }}
         >
           <DetailCanvas
@@ -169,58 +144,17 @@ export function F7SubagentsSpecialists() {
   );
 }
 
-// ───────────────────── shared sub-section header ─────────────────────
+// ───────────────────── shared atoms ─────────────────────
 //
-// Used by every facet hover state to label the illustration. Mono uppercase
-// label + italic serif caption underneath. Sits at the top of each state.
-
-interface FacetHeaderProps {
-  label: string;
-  caption: string;
-}
-
-function FacetHeader({ label, caption }: FacetHeaderProps) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          letterSpacing: "0.22em",
-          color: "var(--copper-300)",
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 13,
-          color: "var(--copper-200)",
-          lineHeight: 1.4,
-        }}
-      >
-        {caption}
-      </span>
-    </div>
-  );
-}
+// FacetHeader was removed in the popover refactor (Item 1).
 
 // ───────────────────── WHAT IT IS state ─────────────────────
 //
 // 1 overloaded generalist (sweat lines + 5 task bubbles) vs 4 calm specialists
 // each with a single task. Animation: generalist's sweat lines pulse
-// continuously via `f-pointer-pulse`; the 4 specialist task bubbles light up
-// sequentially via the shared `f-row-pulse-1..4` keyframes (~4s loop).
-
-const SPECIALIST_PULSE_CLASSES = [
-  "f-row-pulse-1",
-  "f-row-pulse-2",
-  "f-row-pulse-3",
-  "f-row-pulse-4",
-] as const;
+// continuously via `f-pointer-pulse`; the 4 specialist sub-cards cycle their
+// border/background highlight in left→right reading order via the deck-wide
+// `f-card-cycle` keyframe (4s cycle, 1s stagger between cards).
 
 function WhatItIsState() {
   return (
@@ -231,15 +165,11 @@ function WhatItIsState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHAT IT IS"
-        caption="specialists, not one overloaded generalist"
-      />
-
       <div
         style={{
           flex: 1,
@@ -456,16 +386,16 @@ function WhatItIsState() {
               <div
                 key={s.label}
                 data-testid={`f7-specialist-${i}`}
-                className={SPECIALIST_PULSE_CLASSES[i]}
+                className="f-card-cycle"
                 style={{
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   gap: 4,
                   padding: "8px 4px",
-                  border: "1px solid var(--copper-800)",
-                  background: "rgba(10,10,10,0.6)",
-                }}
+                  "--cycle-duration": "4s",
+                  "--cycle-delay": `${i}s`,
+                } as CSSProperties}
               >
                 <svg
                   viewBox="0 0 60 96"
@@ -582,21 +512,15 @@ function WhatItIsState() {
 // ───────────────────── HOW IT WORKS state ─────────────────────
 //
 // Anatomy of a sub-agent: 4 labeled rows (isolated context · role ·
-// permissions · returns). Each row glows in sequence via the shared
-// `f-row-pulse-1..4` keyframes (~4s loop, ~1s per row).
+// permissions · returns). Each row cycles its border/background highlight in
+// top→bottom reading order via the deck-wide `f-card-cycle` keyframe
+// (4s cycle, 1s stagger between rows).
 
 interface AnatomyRow {
   label: string;
   value: string;
   valueKw?: string[];
 }
-
-const ANATOMY_PULSE_CLASSES = [
-  "f-row-pulse-1",
-  "f-row-pulse-2",
-  "f-row-pulse-3",
-  "f-row-pulse-4",
-] as const;
 
 function HowItWorksState() {
   const rows: AnatomyRow[] = [
@@ -630,15 +554,11 @@ function HowItWorksState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="HOW SUB-AGENTS WORK"
-        caption="isolated context · specific role · own permissions"
-      />
-
       <div
         style={{
           flex: 1,
@@ -662,15 +582,16 @@ function HowItWorksState() {
             <div
               key={r.label}
               data-testid={`f7-anatomy-row-${i}`}
-              className={ANATOMY_PULSE_CLASSES[i]}
+              className="f-card-cycle"
               style={{
                 display: "grid",
                 gridTemplateColumns: "160px 1fr",
                 gap: 12,
                 alignItems: "baseline",
                 padding: "10px 12px",
-                border: "1px solid var(--copper-800)",
-              }}
+                "--cycle-duration": "4s",
+                "--cycle-delay": `${i}s`,
+              } as CSSProperties}
             >
               <span
                 style={{
@@ -707,16 +628,11 @@ function HowItWorksState() {
 // ───────────────────── ORCHESTRATION PATTERNS state ─────────────────────
 //
 // 2×2 grid of the four canonical patterns (centralized · decentralized · chain ·
-// parallel). Each tile glows sequentially via the shared `f-row-pulse-1..4`
-// keyframes (~4s loop). Each tile renders an OrchestrationPattern micro-diagram
-// in `on` mode so the SMIL motion plays continuously.
-
-const TILE_PULSE_CLASSES = [
-  "f-row-pulse-1",
-  "f-row-pulse-2",
-  "f-row-pulse-3",
-  "f-row-pulse-4",
-] as const;
+// parallel). Each tile cycles its border/background highlight in 2×2 reading
+// order (top-left → top-right → bottom-left → bottom-right) via the deck-wide
+// `f-card-cycle` keyframe (4s cycle, 1s stagger between tiles). The interior
+// OrchestrationPattern micro-diagram still drives its own SMIL pulse-flow on
+// edges/nodes — those are content, not card highlight.
 
 function PatternsState() {
   return (
@@ -727,15 +643,11 @@ function PatternsState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
-        padding: "8px 12px",
-        gap: 14,
+        justifyContent: "center",
+        padding: "6px 10px",
+        gap: 8,
       }}
     >
-      <FacetHeader
-        label="ORCHESTRATION PATTERNS"
-        caption="centralized · decentralized · chain · parallel"
-      />
-
       <div
         data-testid="f7-pattern-grid"
         style={{
@@ -743,7 +655,8 @@ function PatternsState() {
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
           gridTemplateRows: "1fr 1fr",
-          gap: 12,
+          columnGap: 8,
+          rowGap: 6,
           minHeight: 0,
         }}
       >
@@ -753,17 +666,17 @@ function PatternsState() {
             <div
               key={p.id}
               data-testid={`f7-pattern-tile-${p.id}`}
-              className={TILE_PULSE_CLASSES[i]}
+              className="f-card-cycle"
               style={{
-                border: "1px solid var(--copper-700)",
-                background: "rgba(10,10,10,0.5)",
-                padding: "10px 10px",
+                padding: "6px 8px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 6,
-              }}
+                gap: 4,
+                "--cycle-duration": "4s",
+                "--cycle-delay": `${i}s`,
+              } as CSSProperties}
             >
               <div
                 style={{
@@ -781,14 +694,14 @@ function PatternsState() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: 2,
+                  gap: 1,
                 }}
               >
                 <span
                   style={{
                     fontFamily: "var(--mono)",
-                    fontSize: 10.5,
-                    letterSpacing: "0.18em",
+                    fontSize: 9.5,
+                    letterSpacing: "0.16em",
                     color: "var(--copper-100)",
                     textTransform: "uppercase",
                   }}
@@ -799,8 +712,9 @@ function PatternsState() {
                   style={{
                     fontFamily: "var(--serif)",
                     fontStyle: "italic",
-                    fontSize: 11.5,
+                    fontSize: 11,
                     color: "var(--neutral-300)",
+                    lineHeight: 1.3,
                   }}
                 >
                   {highlight(p.essence, [...p.essenceKw])}
@@ -816,10 +730,9 @@ function PatternsState() {
 
 // ───────────────────── WHEN TO USE state ─────────────────────
 //
-// 4×4 tradeoff matrix. Each of the 4 metric columns highlights in sequence on
-// a ~4s loop via the shared `f-seq-pulse-1/2/3` + `f-row-pulse-4` keyframes
-// applied to each column's cells (header + 4 data cells share the same
-// pulse class so the whole column lights together).
+// 4×4 tradeoff matrix. Renders fully visible/static immediately — no row
+// stagger, no shimmer, no column pulse. Per the item-18 fix, all animation
+// hooks were removed so the comparison reads as a stable reference table.
 
 interface TradeoffCell {
   value: "Low" | "Medium" | "High";
@@ -828,13 +741,6 @@ interface TradeoffRow {
   pattern: string;
   cells: TradeoffCell[];
 }
-
-const COL_PULSE_CLASSES = [
-  "f-row-pulse-1",
-  "f-row-pulse-2",
-  "f-row-pulse-3",
-  "f-row-pulse-4",
-] as const;
 
 const TRADEOFF_COLS = [
   "Latency",
@@ -891,20 +797,18 @@ function WhenToUseState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHEN TO USE WHICH"
-        caption="tradeoff matrix — pick by what you need."
-      />
-
       <div
         role="table"
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1.4fr) repeat(4, minmax(0, 1fr))",
+          // PATTERN | LATENCY | ACCOUNTABILITY (wider) | PARALLELISM | COMPLEXITY
+          gridTemplateColumns:
+            "minmax(0, 1.2fr) minmax(0, 0.9fr) minmax(0, 1.3fr) minmax(0, 1.05fr) minmax(0, 0.95fr)",
           rowGap: 1,
           columnGap: 1,
           background: "var(--copper-800)",
@@ -917,7 +821,6 @@ function WhenToUseState() {
           <MatrixHeader
             key={c}
             label={c}
-            pulseClass={COL_PULSE_CLASSES[ci]}
             testId={`f7-tradeoff-col-header-${ci}`}
           />
         ))}
@@ -941,7 +844,6 @@ function WhenToUseState() {
               <MatrixCell
                 key={ci}
                 center
-                pulseClass={COL_PULSE_CLASSES[ci]}
                 testId={`f7-tradeoff-cell-${ri}-${ci}`}
               >
                 <span
@@ -975,27 +877,26 @@ function ColumnFragment({ children }: { children: ReactNode }) {
 function MatrixHeader({
   label,
   align = "center",
-  pulseClass,
   testId,
 }: {
   label: string;
   align?: "left" | "center";
-  pulseClass?: string;
   testId?: string;
 }) {
   return (
     <div
       data-testid={testId}
-      className={pulseClass}
       style={{
         background: "rgba(122,70,38,0.18)",
-        padding: "8px 10px",
+        padding: "8px 8px",
         fontFamily: "var(--mono)",
-        fontSize: 10,
-        letterSpacing: "0.18em",
+        fontSize: 9.5,
+        letterSpacing: "0.10em",
         color: "var(--copper-200)",
         textTransform: "uppercase",
         textAlign: align,
+        whiteSpace: "normal",
+        lineHeight: 1.2,
       }}
     >
       {label}
@@ -1005,19 +906,16 @@ function MatrixHeader({
 
 function MatrixCell({
   center = false,
-  pulseClass,
   testId,
   children,
 }: {
   center?: boolean;
-  pulseClass?: string;
   testId?: string;
   children: ReactNode;
 }) {
   return (
     <div
       data-testid={testId}
-      className={pulseClass}
       style={{
         background: "rgba(10,10,10,0.6)",
         padding: "10px 10px",
@@ -1059,15 +957,11 @@ function ExampleState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 10,
       }}
     >
-      <FacetHeader
-        label="EXAMPLE · monthly board pack"
-        caption="a multi-agent workflow — planner dispatches, reviewer checks"
-      />
-
       <div
         style={{
           flex: 1,

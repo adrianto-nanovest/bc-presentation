@@ -28,17 +28,22 @@
 //   • SkillMdPreview         — Typewriter streams body; post-completion the
 //                              block caret keeps blinking via the existing
 //                              tw-caret-block / tw-blink pair.
-//   • SkillProgressiveDisclosure — L1 / L2 / L3 bars share f-seq-pulse-1/2/3
-//                              so the highlight sweeps METADATA → INSTRUCTIONS
-//                              → RESOURCES on a ~2.5s loop.
+//   • SkillProgressiveDisclosure — L1 / L2 / L3 bars share the
+//                              f-card-cycle-border pattern (3s loop,
+//                              top→bottom index) so the border highlight
+//                              sweeps METADATA → INSTRUCTIONS → RESOURCES
+//                              while each level's own copper bg tint is
+//                              preserved across the cycle.
 //   • HowClaudePicks         — the three match-skill rows take turns
 //                              re-highlighting via f-seq-pulse-1/2/3.
 //   • TokenBudget            — the three stacked bar segments breathe via
 //                              the shared f-pointer-pulse keyframe.
 //   • ExampleBreakdown       — the L1 / L2 / L3 cards glow in sequence via
-//                              f-seq-pulse-1/2/3.
-import { useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+//                              the f-card-cycle-border pattern (3s loop,
+//                              top→bottom index). Border-only so each
+//                              card's own copper tint stays intact.
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
@@ -47,16 +52,15 @@ import { FacetMenu } from "./components/FacetMenu";
 import { DetailCanvas } from "./components/DetailCanvas";
 import { Typewriter } from "./components/Typewriter";
 import { LucideIcon } from "./components/LucideIcon";
+import { useFacetListBounds } from "./components/useFacetListBounds";
 import { f4Content as C } from "./content";
 
 // ───────────────────── shared layout constants (F-section canonical) ─────────────────────
 //
-// Mirror the FacetMenu's vertical rhythm so the right pane's content area
-// top-aligns with the left's first facet card top-border. See F.2 header
-// comment for the full pixel rationale.
+// Right pane width — top / bottom are measured at runtime via
+// `useFacetListBounds` so the wrapper aligns with the FacetMenu's card stack
+// exactly.
 
-const PANE_TOP = 156;
-const PANE_BOTTOM = 80;
 const RIGHT_W = 660;
 
 // ───────────────────── slide ─────────────────────
@@ -73,8 +77,9 @@ export function F4SkillsWriteOnce() {
   const showFooter = stepIndex >= 1;
 
   const [activeFacet, setActiveFacet] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
   const effectiveFacet = hoverEnabled ? activeFacet : null;
+
+  const { top: paneTop, bottom: paneBottom } = useFacetListBounds();
 
   return (
     <>
@@ -104,139 +109,78 @@ export function F4SkillsWriteOnce() {
         showFooter={showFooter}
       />
 
-      {/* RIGHT — bordered box. Top/bottom borders align with FacetMenu's
-          top edge (PANE_TOP) and bottom edge (PANE_BOTTOM) exactly. */}
+      {/* RIGHT — transparent popover anchor. Top / bottom match the left
+          FacetMenu's card-stack extent exactly (measured at runtime).
+          Content centers vertically within that range. */}
       <div
         data-testid="f4-right-pane"
         style={{
           position: "absolute",
           right: 48,
-          top: PANE_TOP,
+          top: paneTop,
           width: RIGHT_W,
-          bottom: PANE_BOTTOM,
-          border: "1px solid var(--copper-700)",
-          background: "rgba(10,10,10,0.5)",
+          bottom: paneBottom,
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          pointerEvents: "none",
         }}
       >
-        {/* Invisible-visibility header strip — mirrors the left FacetMenu's
-            mono header + 12px gap + 1px copper rule + 16px gap so the right
-            pane's content area top aligns with the left's first facet card
-            top border exactly. Padding 16px matches the bordered box's gutter. */}
-        <div
-          aria-hidden
-          style={{
-            visibility: "hidden",
-            padding: "0 16px",
-            paddingTop: 16,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              display: "block",
-            }}
-          >
-            {C.header}
-          </span>
-          <div style={{ marginTop: 12, height: 1 }} />
-        </div>
-
-        {/* Content area — DetailCanvas renders nothing until a facet hover. */}
+        {/* Content area — DetailCanvas renders nothing until a facet hover.
+            `maxHeight: 100%` constrains popover content to the FacetMenu's
+            card-stack vertical bounds. */}
         <div
           style={{
             position: "relative",
-            flex: 1,
-            margin: 16,
-            marginTop: 16,
+            width: "100%",
+            maxHeight: "100%",
+            height: "100%",
+            pointerEvents: "auto",
           }}
         >
           <DetailCanvas
             activeFacet={effectiveFacet}
             states={{
               "what-it-is": (
-                <WhatItIsState
-                  onExpand={() => setModalOpen(true)}
-                  active={effectiveFacet === "what-it-is"}
-                />
+                <WhatItIsState active={effectiveFacet === "what-it-is"} />
               ),
               "progressive-disclosure": <ProgressiveDisclosureState />,
-              "how-claude-picks": <HowClaudePicksState />,
-              "lean-context": <LeanContextState />,
+              "how-claude-picks": (
+                <HowClaudePicksState
+                  active={effectiveFacet === "how-claude-picks"}
+                />
+              ),
+              "lean-context": (
+                <LeanContextState active={effectiveFacet === "lean-context"} />
+              ),
               example: <ExampleState />,
             }}
           />
         </div>
       </div>
-
-      {/* SKILL.md full-content modal — opened from WHAT IT IS state */}
-      {modalOpen ? (
-        <SkillModal open onClose={() => setModalOpen(false)} />
-      ) : null}
     </>
   );
 }
 
-// ───────────────────── shared sub-section header ─────────────────────
+// ───────────────────── shared atoms ─────────────────────
 //
-// Used by every facet hover state to label the illustration. Mono uppercase
-// label + italic serif caption underneath. Sits at the top of each state.
-
-interface FacetHeaderProps {
-  label: string;
-  caption: string;
-}
-
-function FacetHeader({ label, caption }: FacetHeaderProps) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          letterSpacing: "0.22em",
-          color: "var(--copper-300)",
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 13,
-          color: "var(--copper-200)",
-          lineHeight: 1.4,
-        }}
-      >
-        {caption}
-      </span>
-    </div>
-  );
-}
+// FacetHeader was removed in the popover refactor (Item 1).
 
 // ───────────────────── WHAT IT IS state: SKILL.md preview ─────────────────────
 //
 // Mock file-editor frame: monospace font, dark bg with copper border, filename
-// strip at the top, Typewriter streams the SKILL.md preview body. The block
-// caret keeps blinking after streaming completes (caretWhen={active}) — that
-// gives the "live cursor on a finished file" steady-state. Expand → opens a
-// modal with the full SKILL.md.
+// strip at the top. The Typewriter streams the full SKILL.md preview body and
+// then loops back to the beginning — an infinite "Claude is responding" loop.
 
 interface WhatItIsStateProps {
-  onExpand: () => void;
   active: boolean;
 }
 
-function WhatItIsState({ onExpand, active }: WhatItIsStateProps) {
+function WhatItIsState({ active }: WhatItIsStateProps) {
   const text = C.skillMdPreview.body;
-  const duration = Math.min(2800, Math.max(900, text.length * 14));
+  // Slow enough to read the whole body once before it loops.
+  const duration = Math.min(7200, Math.max(2400, text.length * 32));
   return (
     <div
       data-testid="f4-what-it-is"
@@ -245,15 +189,11 @@ function WhatItIsState({ onExpand, active }: WhatItIsStateProps) {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHAT IT IS"
-        caption="a job description Claude follows perfectly"
-      />
-
       <div
         data-testid="f4-skill-md-preview"
         style={{
@@ -298,7 +238,7 @@ function WhatItIsState({ onExpand, active }: WhatItIsStateProps) {
             {C.skillMdPreview.filename}
           </span>
         </div>
-        {/* Streaming body — block caret keeps blinking after typing ends. */}
+        {/* Streaming body — loops indefinitely. */}
         <div
           style={{
             flex: 1,
@@ -314,6 +254,8 @@ function WhatItIsState({ onExpand, active }: WhatItIsStateProps) {
             duration={duration}
             caretStyle="block"
             caretWhen={active}
+            loop
+            loopPauseMs={1200}
             style={{
               fontFamily: "var(--mono)",
               fontSize: 11,
@@ -323,48 +265,6 @@ function WhatItIsState({ onExpand, active }: WhatItIsStateProps) {
               lineHeight: 1.55,
             }}
           />
-        </div>
-        {/* Expand → hint */}
-        <div
-          style={{
-            padding: "8px 14px",
-            borderTop: "1px solid var(--copper-800)",
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <button
-            type="button"
-            data-testid="f4-skill-md-expand"
-            onClick={onExpand}
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 10.5,
-              letterSpacing: "0.22em",
-              color: "var(--copper-200)",
-              textTransform: "uppercase",
-              background: "transparent",
-              border: "1px solid var(--copper-700)",
-              padding: "5px 10px",
-              cursor: "pointer",
-              transition:
-                "border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease)",
-            }}
-            onMouseEnter={(e) => {
-              const t = e.currentTarget;
-              t.style.borderColor = "var(--copper-200)";
-              t.style.background = "rgba(184,110,61,0.12)";
-              t.style.color = "var(--copper-100)";
-            }}
-            onMouseLeave={(e) => {
-              const t = e.currentTarget;
-              t.style.borderColor = "var(--copper-700)";
-              t.style.background = "transparent";
-              t.style.color = "var(--copper-200)";
-            }}
-          >
-            Expand &rarr;
-          </button>
         </div>
       </div>
     </div>
@@ -389,91 +289,54 @@ function ProgressiveDisclosureState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="PROGRESSIVE DISCLOSURE"
-        caption="metadata first · instructions when triggered · resources as needed"
-      />
-
+      {/* Replicated level ladder so we can apply per-row sequential pulse
+          glows without forking SkillProgressiveDisclosure. */}
       <div
         style={{
-          position: "relative",
-          flex: 1,
-          minHeight: 0,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {/* Replicated level ladder + callout so we can apply per-row
-            sequential pulse glows without forking SkillProgressiveDisclosure. */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {C.disclosure.map((lv, i) => {
-            const pulseClass = (
-              ["f-seq-pulse-1", "f-seq-pulse-2", "f-seq-pulse-3"] as const
-            )[i];
-            return (
-              <DisclosureLevelBar
-                key={lv.id}
-                level={lv}
-                isLast={i === C.disclosure.length - 1}
-                pulseClass={pulseClass}
-              />
-            );
-          })}
-
-          {/* LEAN CONTEXT callout */}
-          <div
-            data-testid="f4-disclosure-callout"
-            style={{
-              marginTop: 14,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
-            <div
-              style={{
-                height: 1,
-                background: "var(--copper-700)",
-                width: "100%",
-              }}
+        {C.disclosure.map((lv, i) => {
+          return (
+            <DisclosureLevelBar
+              key={lv.id}
+              level={lv}
+              isLast={i === C.disclosure.length - 1}
+              cycleIndex={i}
+              cycleDuration={C.disclosure.length}
             />
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 11,
-                letterSpacing: "0.22em",
-                color: "var(--copper-200)",
-                textTransform: "uppercase",
-              }}
-            >
-              {C.disclosureCallout.title}
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--serif)",
-                fontStyle: "italic",
-                fontSize: 12,
-                color: "var(--neutral-300)",
-                lineHeight: 1.4,
-              }}
-            >
-              {highlight(
-                C.disclosureCallout.body,
-                [...C.disclosureCallout.bodyKw],
-              )}
-            </span>
-          </div>
-        </div>
+          );
+        })}
       </div>
+
+      <div style={{ flex: 1 }} />
+
+      {/* Footer caption — relocated "Model invoked" line. Matches the
+          footer styling used by HOW CLAUDE PICKS / LEAN CONTEXT / EXAMPLE
+          (italic copper-200 serif). Tagged with the original callout
+          testid so existing tests keep passing. */}
+      <p
+        data-testid="f4-disclosure-callout"
+        style={{
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          fontSize: 12.5,
+          color: "var(--copper-200)",
+          margin: 0,
+          lineHeight: 1.4,
+        }}
+      >
+        {highlight(
+          C.disclosureCallout.body,
+          [...C.disclosureCallout.bodyKw],
+        )}
+      </p>
     </div>
   );
 }
@@ -491,33 +354,31 @@ interface DisclosureLevel {
 interface DisclosureLevelBarProps {
   level: DisclosureLevel;
   isLast: boolean;
-  pulseClass: "f-seq-pulse-1" | "f-seq-pulse-2" | "f-seq-pulse-3";
+  cycleIndex: number;
+  cycleDuration: number;
 }
 
 function DisclosureLevelBar({
   level,
   isLast,
-  pulseClass,
+  cycleIndex,
+  cycleDuration,
 }: DisclosureLevelBarProps) {
   // Same copper monochromatic stops as the standalone component (copper-700 /
-  // copper-500 / copper-200), just compacted to fit alongside FacetHeader.
-  const tints: Record<
-    1 | 2 | 3,
-    { bg: string; border: string; icon: string }
-  > = {
+  // copper-500 / copper-200), just compacted to fit alongside FacetHeader. The
+  // per-tint background is preserved across the cycle (border-only variant);
+  // only the outer border is driven by the shared f-card-cycle-border animation.
+  const tints: Record<1 | 2 | 3, { bg: string; icon: string }> = {
     1: {
-      bg: "rgba(122,70,38,0.30)",
-      border: "var(--copper-800)",
+      bg: "rgba(74,37,17,0.45)",
       icon: "FileText",
     },
     2: {
-      bg: "rgba(184,110,61,0.26)",
-      border: "var(--copper-700)",
+      bg: "rgba(184,110,61,0.28)",
       icon: "BookOpen",
     },
     3: {
-      bg: "rgba(232,196,160,0.20)",
-      border: "var(--copper-600)",
+      bg: "rgba(232,196,160,0.16)",
       icon: "Folder",
     },
   };
@@ -526,15 +387,16 @@ function DisclosureLevelBar({
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div
         data-testid={`f4-disclosure-level-${level.level}`}
-        className={pulseClass}
+        className="f-card-cycle-border"
         style={{
-          border: `1px solid ${tint.border}`,
           background: tint.bg,
           padding: "8px 12px",
           display: "flex",
           flexDirection: "column",
           gap: 4,
-        }}
+          ["--cycle-duration" as string]: `${cycleDuration}s`,
+          ["--cycle-delay" as string]: `${cycleIndex}s`,
+        } as CSSProperties}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <LucideIcon name={tint.icon} size={16} color="var(--copper-100)" />
@@ -621,9 +483,12 @@ function DisclosureLevelBar({
 
 // ───────────────────── HOW CLAUDE PICKS state ─────────────────────
 //
-// User query bar at top + Claude's match-engine dropdown showing 3 skills
-// with match-scores. The three rows take turns re-highlighting via the shared
-// f-seq-pulse-1/2/3 keyframes so the visual "scoring sweep" reads as a loop.
+// Horizontal bar chart of Claude's match scores. Each row:
+//   [ TITLE + description (fixed-width left column) ]
+//   [ BAR (track; inner fill scales 0 → score via f-bar-grow) ]
+//   [ NUMBER (right; counts up from 0 → score in sync with the bar) ]
+// All three bars start at the same x-position because the left column is a
+// fixed width — so the bars are left-aligned with each other.
 
 interface MatchSkill {
   name: string;
@@ -649,13 +514,15 @@ const MATCH_SKILLS: readonly MatchSkill[] = [
   },
 ];
 
-const MATCH_PULSE = [
-  "f-seq-pulse-1",
-  "f-seq-pulse-2",
-  "f-seq-pulse-3",
-] as const;
+// Bar/count animation duration in ms — kept in one place so the CSS bar and
+// the JS counter stay perfectly in sync.
+const PICK_BAR_DURATION_MS = 1100;
 
-function HowClaudePicksState() {
+interface HowClaudePicksStateProps {
+  active: boolean;
+}
+
+function HowClaudePicksState({ active }: HowClaudePicksStateProps) {
   return (
     <div
       data-testid="f4-how-claude-picks"
@@ -664,15 +531,11 @@ function HowClaudePicksState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="HOW CLAUDE PICKS"
-        caption="model-invoked · name + description match user intent"
-      />
-
       {/* User query */}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         <span
@@ -718,70 +581,17 @@ function HowClaudePicksState() {
         <div style={{ flex: 1, height: 1, background: "var(--copper-800)" }} />
       </div>
 
-      {/* Skill match rows — sequential pulse loop. */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {/* Horizontal bar-chart rows. */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {MATCH_SKILLS.map((s, i) => {
           const isTop = i === 0;
           return (
-            <div
+            <MatchSkillBarRow
               key={s.name}
-              data-testid={`match-skill-${s.name}`}
-              data-top={isTop ? "true" : "false"}
-              className={MATCH_PULSE[i]}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                padding: "10px 14px",
-                border: `1px solid ${
-                  isTop ? "var(--copper-200)" : "var(--copper-800)"
-                }`,
-                background: isTop
-                  ? "rgba(184,110,61,0.10)"
-                  : "rgba(10,10,10,0.6)",
-              }}
-            >
-              <div
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 2,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: 12,
-                    letterSpacing: "0.06em",
-                    color: isTop ? "var(--copper-100)" : "var(--neutral-200)",
-                  }}
-                >
-                  {s.name}
-                </span>
-                <span
-                  style={{
-                    fontFamily: "var(--serif)",
-                    fontStyle: "italic",
-                    fontSize: 11.5,
-                    color: "var(--neutral-400)",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {s.detail}
-                </span>
-              </div>
-              <span
-                style={{
-                  fontFamily: "var(--display)",
-                  fontSize: 22,
-                  color: isTop ? "var(--copper-200)" : "var(--neutral-400)",
-                  lineHeight: 1,
-                }}
-              >
-                {s.score.toFixed(2)}
-              </span>
-            </div>
+              skill={s}
+              isTop={isTop}
+              active={active}
+            />
           );
         })}
       </div>
@@ -807,17 +617,186 @@ function HowClaudePicksState() {
   );
 }
 
+interface MatchSkillBarRowProps {
+  skill: MatchSkill;
+  isTop: boolean;
+  active: boolean;
+}
+
+function MatchSkillBarRow({ skill, isTop, active }: MatchSkillBarRowProps) {
+  const fill = isTop ? "var(--copper-200)" : "var(--copper-700)";
+  const numColor = isTop ? "var(--copper-200)" : "var(--neutral-300)";
+  return (
+    <div
+      data-testid={`match-skill-${skill.name}`}
+      data-top={isTop ? "true" : "false"}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "220px 1fr 56px",
+        alignItems: "center",
+        gap: 14,
+      }}
+    >
+      {/* Left — title + description (fixed width). */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 12,
+            letterSpacing: "0.06em",
+            color: isTop ? "var(--copper-100)" : "var(--neutral-200)",
+          }}
+        >
+          {skill.name}
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--serif)",
+            fontStyle: "italic",
+            fontSize: 11,
+            color: "var(--neutral-400)",
+            lineHeight: 1.4,
+          }}
+        >
+          {skill.detail}
+        </span>
+      </div>
+
+      {/* Center — bar track. Inner fill scales from 0 → score (0–1). */}
+      <div
+        style={{
+          position: "relative",
+          height: 14,
+          background: "rgba(10,10,10,0.6)",
+          border: "1px solid var(--copper-800)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          className={active ? "f-bar-grow" : undefined}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: `${skill.score * 100}%`,
+            background: fill,
+            transformOrigin: "left center",
+            ...(active
+              ? ({
+                  ["--bar-duration" as string]: `${PICK_BAR_DURATION_MS}ms`,
+                } as CSSProperties)
+              : { transform: "scaleX(0)" }),
+          }}
+        />
+      </div>
+
+      {/* Right — count-up numeric value. */}
+      <CountUp
+        value={skill.score}
+        play={active}
+        duration={PICK_BAR_DURATION_MS}
+        decimals={2}
+        style={{
+          fontFamily: "var(--display)",
+          fontSize: 22,
+          color: numColor,
+          lineHeight: 1,
+          textAlign: "right",
+        }}
+      />
+    </div>
+  );
+}
+
+// ───────────────────── CountUp helper ─────────────────────
+//
+// Counts from 0 → `value` over `duration` ms using requestAnimationFrame. Used
+// by F.4's HOW CLAUDE PICKS bar chart so the numeric label stays in sync with
+// the bar fill keyframe.
+
+interface CountUpProps {
+  value: number;
+  play: boolean;
+  duration: number;
+  decimals?: number;
+  startDelayMs?: number;
+  suffix?: string;
+  style?: CSSProperties;
+}
+
+function CountUp({
+  value,
+  play,
+  duration,
+  decimals = 0,
+  startDelayMs = 0,
+  suffix = "",
+  style,
+}: CountUpProps) {
+  const [n, setN] = useState(play ? 0 : value);
+  const rafRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!play) {
+      setN(0);
+      return;
+    }
+    const launch = () => {
+      const start = performance.now();
+      const tick = (t: number) => {
+        const elapsed = t - start;
+        const frac = Math.min(1, elapsed / duration);
+        setN(frac * value);
+        if (frac < 1) {
+          rafRef.current = requestAnimationFrame(tick);
+        } else {
+          setN(value);
+        }
+      };
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    if (startDelayMs > 0) {
+      setN(0);
+      timeoutRef.current = setTimeout(launch, startDelayMs);
+    } else {
+      launch();
+    }
+    return () => {
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      if (timeoutRef.current != null) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [play, value, duration, startDelayMs]);
+
+  return (
+    <span style={style}>
+      {n.toFixed(decimals)}
+      {suffix}
+    </span>
+  );
+}
+
 // ───────────────────── LEAN CONTEXT state: token-budget viz ─────────────────────
 //
-// Horizontal stacked bar: skill metadata = 0.5% (copper-700), active skill
-// content = 4% (copper-500), available context = 95.5% (copper-200). The
-// three segments share the shared f-pointer-pulse keyframe so the bars
-// subtly breathe — emphasizing the "lean context, rich knowledge" payoff.
+// ONE horizontal context bar at the top of the popover representing 100% of
+// the 200K-token window, split into three copper segments
+// (metadata 0.5% / active 4.5% / on-disk knowledge 95.5%). Below the bar,
+// three description rows explain each segment.
+//
+// Stagger: each segment grows from 0 → target width via `f-bar-grow`, and
+// its description row fades in via `f-fade-up`. Each step waits for the
+// previous to finish via cumulative `animation-delay = N * duration`.
 
 interface TokenSegment {
   id: string;
   label: string;
   pct: number;
+  visualPct: number;
   color: string;
   desc: string;
 }
@@ -827,26 +806,38 @@ const TOKEN_SEGMENTS: readonly TokenSegment[] = [
     id: "metadata",
     label: "Skill metadata",
     pct: 0.5,
+    visualPct: 0.5,
     color: "var(--copper-700)",
     desc: "all skill names + descriptions loaded at session start",
   },
   {
     id: "active",
     label: "Active skill content",
-    pct: 4,
+    pct: 4.5,
+    visualPct: 4.5,
     color: "var(--copper-500)",
     desc: "the one skill Claude triggered for this turn",
   },
   {
     id: "rest",
-    label: "Available context",
-    pct: 95.5,
+    label: "On-disk knowledge",
+    pct: 95,
+    visualPct: 95,
     color: "var(--copper-200)",
-    desc: "free for your conversation, files, history",
+    desc: "reference files, scripts, examples — fetched only when needed",
   },
 ];
 
-function LeanContextState() {
+// Per-segment animation duration. Stagger delay for segment N = N * DUR.
+const LEAN_BAR_DURATION_MS = 700;
+// Bar geometry — single track holding the three segments side-by-side.
+const LEAN_BAR_HEIGHT = 22;
+
+interface LeanContextStateProps {
+  active: boolean;
+}
+
+function LeanContextState({ active }: LeanContextStateProps) {
   return (
     <div
       data-testid="f4-lean-context"
@@ -855,16 +846,12 @@ function LeanContextState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
-        gap: 14,
+        gap: 18,
       }}
     >
-      <FacetHeader
-        label="LEAN CONTEXT, RICH KNOWLEDGE"
-        caption="context budget protected · expertise unlimited"
-      />
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <span
           style={{
             fontFamily: "var(--mono)",
@@ -874,106 +861,64 @@ function LeanContextState() {
             textTransform: "uppercase",
           }}
         >
-          CONTEXT BUDGET
+          CONTEXT BUDGET &middot; 200K TOKENS
         </span>
-        <span
+
+        {/* Single segmented bar — three segments lay out left-to-right via
+            flex with widths in `flex-basis` percentages. Each segment grows
+            from 0 → its width via a horizontal scaleX with cumulative delay. */}
+        <div
           style={{
-            fontFamily: "var(--serif)",
-            fontStyle: "italic",
-            fontSize: 12.5,
-            color: "var(--copper-200)",
-            lineHeight: 1.4,
+            position: "relative",
+            display: "flex",
+            width: "100%",
+            height: LEAN_BAR_HEIGHT,
+            background: "rgba(10,10,10,0.6)",
+            border: "1px solid var(--copper-800)",
+            overflow: "hidden",
           }}
         >
-          One full context window &middot; 200K tokens
-        </span>
-      </div>
-
-      {/* Stacked bar — each segment breathes via f-pointer-pulse. */}
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          height: 44,
-          border: "1px solid var(--copper-800)",
-          overflow: "hidden",
-        }}
-      >
-        {TOKEN_SEGMENTS.map((seg) => (
-          <div
-            key={seg.id}
-            data-testid={`token-seg-${seg.id}`}
-            className="f-pointer-pulse"
-            style={{
-              flexBasis: `${seg.pct}%`,
-              minWidth: 2,
-              background: seg.color,
-              borderRight:
-                seg.id !== "rest" ? "1px solid var(--copper-900)" : "none",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Legend */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {TOKEN_SEGMENTS.map((seg) => (
-          <div
-            key={seg.id}
-            style={{ display: "flex", alignItems: "center", gap: 12 }}
-          >
-            <span
-              aria-hidden="true"
-              style={{
-                display: "inline-block",
-                width: 12,
-                height: 12,
-                background: seg.color,
-                border: "1px solid var(--copper-800)",
-              }}
-            />
+          {TOKEN_SEGMENTS.map((seg, i) => (
             <div
+              key={seg.id}
+              data-testid={`token-seg-${seg.id}`}
               style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
+                position: "relative",
+                flex: `0 0 ${seg.visualPct}%`,
+                height: "100%",
+                overflow: "hidden",
               }}
             >
-              <span
+              <div
+                className={active ? "f-bar-grow" : undefined}
                 style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 11,
-                  letterSpacing: "0.12em",
-                  color: "var(--copper-100)",
-                  textTransform: "uppercase",
+                  position: "absolute",
+                  inset: 0,
+                  background: seg.color,
+                  transformOrigin: "left center",
+                  ...(active
+                    ? ({
+                        ["--bar-duration" as string]: `${LEAN_BAR_DURATION_MS}ms`,
+                        ["--bar-delay" as string]: `${i * LEAN_BAR_DURATION_MS}ms`,
+                      } as CSSProperties)
+                    : { transform: "scaleX(0)" }),
                 }}
-              >
-                {seg.label}
-              </span>
-              <span
-                style={{
-                  fontFamily: "var(--serif)",
-                  fontStyle: "italic",
-                  fontSize: 11.5,
-                  color: "var(--neutral-300)",
-                  lineHeight: 1.4,
-                }}
-              >
-                {seg.desc}
-              </span>
+              />
             </div>
-            <span
-              style={{
-                fontFamily: "var(--display)",
-                fontSize: 19,
-                color: "var(--copper-200)",
-                lineHeight: 1,
-              }}
-            >
-              {seg.pct}%
-            </span>
-          </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Description rows — one per segment, fade in on the same cumulative
+          stagger as the corresponding bar segment. */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {TOKEN_SEGMENTS.map((seg, i) => (
+          <LeanContextDescriptionRow
+            key={seg.id}
+            seg={seg}
+            index={i}
+            active={active}
+          />
         ))}
       </div>
 
@@ -998,19 +943,102 @@ function LeanContextState() {
   );
 }
 
+interface LeanContextDescriptionRowProps {
+  seg: TokenSegment;
+  index: number;
+  active: boolean;
+}
+
+function LeanContextDescriptionRow({
+  seg,
+  index,
+  active,
+}: LeanContextDescriptionRowProps) {
+  const delay = index * LEAN_BAR_DURATION_MS;
+  return (
+    <div
+      className={active ? "f-fade-up" : undefined}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "12px 1fr 64px",
+        alignItems: "center",
+        gap: 12,
+        ...(active
+          ? ({
+              ["--fade-duration" as string]: `${LEAN_BAR_DURATION_MS}ms`,
+              ["--fade-delay" as string]: `${delay}ms`,
+            } as CSSProperties)
+          : { opacity: 0 }),
+      }}
+    >
+      {/* Color-key swatch — same copper stop as the bar segment. */}
+      <span
+        aria-hidden="true"
+        style={{
+          display: "inline-block",
+          width: 12,
+          height: 12,
+          background: seg.color,
+          border: "1px solid var(--copper-800)",
+        }}
+      />
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.12em",
+            color: "var(--copper-100)",
+            textTransform: "uppercase",
+          }}
+        >
+          {seg.label}
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--serif)",
+            fontStyle: "italic",
+            fontSize: 11.5,
+            color: "var(--neutral-300)",
+            lineHeight: 1.4,
+          }}
+        >
+          {seg.desc}
+        </span>
+      </div>
+
+      <CountUp
+        value={seg.pct}
+        play={active}
+        duration={LEAN_BAR_DURATION_MS}
+        startDelayMs={delay}
+        decimals={seg.pct < 1 ? 1 : 0}
+        suffix="%"
+        style={{
+          fontFamily: "var(--display)",
+          fontSize: 19,
+          color: "var(--copper-200)",
+          lineHeight: 1,
+          textAlign: "right",
+        }}
+      />
+    </div>
+  );
+}
+
 // ───────────────────── EXAMPLE state: L1/L2/L3 breakdown ─────────────────────
 //
 // Three stacked cards showing the same skill at each disclosure level. The
-// cards glow in sequence on the shared f-seq-pulse-1/2/3 loop.
+// cards glow in sequence on the shared f-card-cycle pattern (3s loop,
+// top→bottom index).
 
 interface ExampleCardSpec {
   level: 1 | 2 | 3;
   label: string;
   bodyKey: "l1" | "l2" | "l3";
-  border: string;
   bg: string;
   text: string;
-  pulseClass: "f-seq-pulse-1" | "f-seq-pulse-2" | "f-seq-pulse-3";
 }
 
 const EXAMPLE_CARDS: readonly ExampleCardSpec[] = [
@@ -1018,28 +1046,22 @@ const EXAMPLE_CARDS: readonly ExampleCardSpec[] = [
     level: 1,
     label: "L1 · METADATA",
     bodyKey: "l1",
-    border: "var(--copper-800)",
-    bg: "rgba(122,70,38,0.30)",
+    bg: "rgba(74,37,17,0.45)",
     text: "var(--copper-100)",
-    pulseClass: "f-seq-pulse-1",
   },
   {
     level: 2,
     label: "L2 · INSTRUCTIONS",
     bodyKey: "l2",
-    border: "var(--copper-700)",
-    bg: "rgba(184,110,61,0.24)",
+    bg: "rgba(184,110,61,0.28)",
     text: "var(--copper-100)",
-    pulseClass: "f-seq-pulse-2",
   },
   {
     level: 3,
     label: "L3 · RESOURCES",
     bodyKey: "l3",
-    border: "var(--copper-600)",
-    bg: "rgba(232,196,160,0.18)",
+    bg: "rgba(232,196,160,0.16)",
     text: "var(--neutral-50)",
-    pulseClass: "f-seq-pulse-3",
   },
 ];
 
@@ -1052,36 +1074,32 @@ function ExampleState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="EXAMPLE · weekly-report-author"
-        caption="the same skill, seen at each disclosure level."
-      />
-
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           gap: 10,
-          flex: 1,
         }}
       >
-        {EXAMPLE_CARDS.map((c) => (
+        {EXAMPLE_CARDS.map((c, i) => (
           <div
             key={c.level}
             data-testid={`example-card-l${c.level}`}
-            className={c.pulseClass}
+            className="f-card-cycle-border"
             style={{
-              border: `1px solid ${c.border}`,
               background: c.bg,
               padding: "10px 14px",
               display: "flex",
               flexDirection: "column",
               gap: 4,
-            }}
+              ["--cycle-duration" as string]: `${EXAMPLE_CARDS.length}s`,
+              ["--cycle-delay" as string]: `${i}s`,
+            } as CSSProperties}
           >
             <span
               style={{
@@ -1107,206 +1125,28 @@ function ExampleState() {
           </div>
         ))}
       </div>
-    </div>
-  );
-}
 
-// ───────────────────── SkillModal — full SKILL.md overlay ─────────────────────
-//
-// Fixed-positioned overlay with a dark backdrop and a centered content card.
-// Close via the X button OR clicking the backdrop. Content: the FULL SKILL.md
-// body as it would live on disk.
+      <div style={{ flex: 1 }} />
 
-interface SkillModalProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const FULL_SKILL_MD = `---
-name: weekly-report-author
-description: Drafts weekly status reports from project notes.
-allowed-tools: [Read, Glob, Grep]
----
-
-# Weekly Report Author
-
-You are a senior project manager preparing the Friday status report.
-
-## Audience
-8 cross-functional stakeholders. Tone: factual, no hedging, no marketing.
-
-## Sections
-1. What shipped this week
-   - bullets, each one outcome + owner + link
-2. What's at risk
-   - bullets, each one risk + mitigation + owner
-3. Next week's priorities
-   - max 5 bullets, ranked
-
-## Tone
-Factual, audience: 8 cross-functional stakeholders.
-Prefer plain verbs. Avoid: leverage, ecosystem, synergy.
-
-## Resources (loaded on demand)
-- examples/2026-Q1-weekly-template.md
-- examples/escalation-template.md
-- snippets/common-status-phrases.md
-
-## Workflow
-1. Read project notes from \`./notes/\` for the past 7 days.
-2. Group by section above.
-3. Compose draft in markdown. No headers above H2.
-4. Hand back to user for review.
-`;
-
-function SkillModal({ open, onClose }: SkillModalProps) {
-  if (!open) return null;
-  return (
-    <div
-      data-testid="f4-skill-modal-backdrop"
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.7)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 1000,
-      }}
-    >
-      <div
-        data-testid="f4-skill-modal"
-        onClick={(e) => e.stopPropagation()}
+      {/* Footer caption — matches HOW CLAUDE PICKS / LEAN CONTEXT footer
+          styling (italic copper-200 serif, ~12.5px). Crystallizes the
+          insight without restating the title. */}
+      <p
         style={{
-          width: "min(820px, 86vw)",
-          maxHeight: "82vh",
-          background: "rgba(15,15,15,0.98)",
-          border: "1px solid var(--copper-700)",
-          boxShadow:
-            "0 24px 60px -16px rgba(0,0,0,0.6), 0 0 0 1px var(--copper-800)",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-        }}
-      >
-        {/* Modal header */}
-        <ModalHeader onClose={onClose} />
-        {/* Modal body */}
-        <div
-          style={{
-            padding: "18px 22px",
-            overflow: "auto",
-          }}
-        >
-          <pre
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 12.5,
-              color: "var(--neutral-100)",
-              whiteSpace: "pre-wrap",
-              margin: 0,
-              lineHeight: 1.6,
-            }}
-          >
-            {FULL_SKILL_MD}
-          </pre>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ModalHeader({ onClose }: { onClose: () => void }): ReactNode {
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-        padding: "14px 20px",
-        borderBottom: "1px solid var(--copper-800)",
-        background: "rgba(122,70,38,0.18)",
-      }}
-    >
-      <span
-        aria-hidden="true"
-        style={{
-          display: "inline-block",
-          width: 10,
-          height: 10,
-          borderRadius: "50%",
-          background: "var(--copper-300)",
-        }}
-      />
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 12,
-          letterSpacing: "0.18em",
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          fontSize: 12.5,
           color: "var(--copper-200)",
-          textTransform: "uppercase",
+          margin: 0,
+          lineHeight: 1.4,
         }}
       >
-        weekly-report-author/SKILL.md
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.18em",
-          color: "var(--neutral-400)",
-          textTransform: "uppercase",
-          marginLeft: 12,
-        }}
-      >
-        full content
-      </span>
-      <CloseButton onClose={onClose} />
+        {highlight(
+          "Metadata stays loaded; body and resources fetched only on demand.",
+          ["fetched only on demand"],
+        )}
+      </p>
     </div>
-  );
-}
-
-interface CloseButtonProps {
-  onClose: () => void;
-}
-
-function CloseButton({ onClose }: CloseButtonProps) {
-  const base: CSSProperties = {
-    marginLeft: "auto",
-    fontFamily: "var(--mono)",
-    fontSize: 11,
-    letterSpacing: "0.22em",
-    color: "var(--copper-200)",
-    textTransform: "uppercase",
-    background: "transparent",
-    border: "1px solid var(--copper-700)",
-    padding: "6px 12px",
-    cursor: "pointer",
-    transition:
-      "border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease)",
-  };
-  return (
-    <button
-      type="button"
-      data-testid="f4-skill-modal-close"
-      onClick={onClose}
-      style={base}
-      onMouseEnter={(e) => {
-        const t = e.currentTarget;
-        t.style.borderColor = "var(--copper-200)";
-        t.style.background = "rgba(184,110,61,0.12)";
-        t.style.color = "var(--copper-100)";
-      }}
-      onMouseLeave={(e) => {
-        const t = e.currentTarget;
-        t.style.borderColor = "var(--copper-700)";
-        t.style.background = "transparent";
-        t.style.color = "var(--copper-200)";
-      }}
-    >
-      Close &times;
-    </button>
   );
 }
 

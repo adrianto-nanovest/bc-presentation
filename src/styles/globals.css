@@ -785,3 +785,199 @@ em.kw {
 .f-pill-pulse-4 { animation: f-pill-pulse-4 3.6s var(--ease) infinite; }
 .f-pill-pulse-5 { animation: f-pill-pulse-5 3.6s var(--ease) infinite; }
 .f-pill-pulse-6 { animation: f-pill-pulse-6 3.6s var(--ease) infinite; }
+
+/* Section F facet-popover state reveal — entry animation applied to the
+   newly-active state layer inside DetailCanvas. Matches the left FacetMenu
+   card hover easing exactly: 0.2s var(--ease) on opacity + transform. The
+   default direction is top→bottom (translateY from -8px to 0). The outer
+   700ms inter-state crossfade stays in DetailCanvas. */
+@keyframes f-state-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.f-state-reveal {
+  animation: f-state-reveal 0.2s var(--ease) both;
+}
+
+/* Unified card highlight cycle — replaces ad-hoc f-row-pulse / f-seq-pulse /
+   f-tree-line / etc. patterns across F2-F7 popover sub-cards. Border-color
+   and background-color match the left FacetMenu card hover style exactly
+   (copper-800 → copper-200, transparent → rgba(184,110,61,0.06)). Cycle is
+   parameterized via two CSS variables so one keyframe serves any stack size:
+     --cycle-duration: Ns       (where N = number of sub-cards)
+     --cycle-delay:    indexs   (0..N-1, in stack order)
+   For horizontal stacks use left→right index order; for vertical stacks use
+   top→bottom. Highlight ON window = 24% of cycle (between 8% and 32%), with
+   smooth easing in/out. Loops infinitely. */
+@keyframes f-card-highlight-cycle {
+  0% {
+    border-color: var(--copper-800);
+    background-color: transparent;
+  }
+  8% {
+    border-color: var(--copper-200);
+    background-color: rgba(184, 110, 61, 0.06);
+  }
+  24% {
+    border-color: var(--copper-200);
+    background-color: rgba(184, 110, 61, 0.06);
+  }
+  32% {
+    border-color: var(--copper-800);
+    background-color: transparent;
+  }
+  100% {
+    border-color: var(--copper-800);
+    background-color: transparent;
+  }
+}
+.f-card-cycle {
+  border: 1px solid var(--copper-800);
+  background-color: transparent;
+  animation: f-card-highlight-cycle var(--cycle-duration, 3s) var(--ease)
+    infinite;
+  animation-delay: var(--cycle-delay, 0s);
+}
+
+/* Border-only variant — for cards that carry their own meaningful background
+   tint (e.g. F4 L1/L2/L3 disclosure levels). Animates ONLY border-color so
+   the card's inherent background remains visible across the entire cycle.
+   Same parameterization (--cycle-duration / --cycle-delay). */
+@keyframes f-card-highlight-cycle-border {
+  0% { border-color: var(--copper-800); }
+  8% { border-color: var(--copper-200); }
+  24% { border-color: var(--copper-200); }
+  32% { border-color: var(--copper-800); }
+  100% { border-color: var(--copper-800); }
+}
+.f-card-cycle-border {
+  border: 1px solid var(--copper-800);
+  animation: f-card-highlight-cycle-border var(--cycle-duration, 3s)
+    var(--ease) infinite;
+  animation-delay: var(--cycle-delay, 0s);
+}
+
+/* F.6 ThreeHooks per-column entry — left→right stagger when the THREE HOOKS
+   facet state activates. 0.2s var(--ease), translateX(-8px → 0). Stagger
+   between sibling columns is applied via animationDelay inline (~100ms).
+   Matches R2-15 deck-wide rule for interior card entry animation. */
+@keyframes f6-hooks-col-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* F.3 WHAT'S INSIDE — primitive-column micro-illustrations. Each glyph has a
+   small looping CSS animation that symbolically represents the primitive
+   (Skills · Hooks · Agents · MCP · Commands). All loops run continuously. */
+
+/* Skills "brain" — two concentric rings expand/fade like a neural pulse. */
+@keyframes f-brain-ring-1 {
+  0%   { transform: scale(0.85); opacity: 0.85; }
+  60%  { transform: scale(1.18); opacity: 0; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+@keyframes f-brain-ring-2 {
+  0%   { transform: scale(0.85); opacity: 0; }
+  30%  { transform: scale(0.85); opacity: 0.85; }
+  90%  { transform: scale(1.25); opacity: 0; }
+  100% { transform: scale(1.25); opacity: 0; }
+}
+.f-brain-ring-1 { animation: f-brain-ring-1 2.4s var(--ease) infinite; }
+.f-brain-ring-2 { animation: f-brain-ring-2 2.4s var(--ease) infinite; }
+
+/* Hooks "guard" — clamp brackets close in from the sides on each cycle. */
+@keyframes f-guard-bracket-l {
+  0%, 100% { transform: translateX(-4px); opacity: 0.5; }
+  40%, 70% { transform: translateX(0);     opacity: 1; }
+}
+@keyframes f-guard-bracket-r {
+  0%, 100% { transform: translateX(4px);  opacity: 0.5; }
+  40%, 70% { transform: translateX(0);    opacity: 1; }
+}
+.f-guard-bracket-l { animation: f-guard-bracket-l 2s var(--ease) infinite; }
+.f-guard-bracket-r { animation: f-guard-bracket-r 2s var(--ease) infinite; }
+
+/* Agents "worker" — three task lines stream/refresh under the bot icon. */
+@keyframes f-worker-line-1 {
+  0%, 100% { transform: scaleX(0.2); transform-origin: left; opacity: 0.45; }
+  20%, 35% { transform: scaleX(1);   transform-origin: left; opacity: 1; }
+}
+@keyframes f-worker-line-2 {
+  0%, 100% { transform: scaleX(0.2); transform-origin: left; opacity: 0.45; }
+  40%, 55% { transform: scaleX(1);   transform-origin: left; opacity: 1; }
+}
+@keyframes f-worker-line-3 {
+  0%, 100% { transform: scaleX(0.2); transform-origin: left; opacity: 0.45; }
+  60%, 75% { transform: scaleX(1);   transform-origin: left; opacity: 1; }
+}
+.f-worker-line-1 { animation: f-worker-line-1 2.4s var(--ease) infinite; }
+.f-worker-line-2 { animation: f-worker-line-2 2.4s var(--ease) infinite; }
+.f-worker-line-3 { animation: f-worker-line-3 2.4s var(--ease) infinite; }
+
+/* Commands "shortcut" — slash holds steady, lightning bolt blinks/glows. */
+@keyframes f-shortcut-zap {
+  0%, 100% { opacity: 0.55; transform: translateY(0)    scale(1); }
+  40%, 60% { opacity: 1;    transform: translateY(-1px) scale(1.08); }
+}
+.f-shortcut-zap {
+  display: inline-flex;
+  animation: f-shortcut-zap 1.6s var(--ease) infinite;
+}
+
+/* F.3 HOW IT LOADS · CONTEXT-BUDGET — meter that fills on demand. The bar
+   ramps to ~70% then resets, mirroring the just-in-time loading metaphor. */
+@keyframes f-budget-fill {
+  0%   { width: 6%; }
+  60%  { width: 70%; }
+  85%  { width: 70%; }
+  100% { width: 6%; }
+}
+.f-budget-fill {
+  animation: f-budget-fill 3.2s var(--ease) infinite;
+}
+
+/* F.4 — horizontal-bar growth animation. Bars are positioned in a fixed-width
+   "track" column; the inner fill scales from 0 → target via `--bar-target`
+   CSS variable supplied per row. `f-bar-grow` is paired with a count-up
+   number that uses the same `--bar-duration` to stay in sync. */
+@keyframes f-bar-grow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+.f-bar-grow {
+  transform-origin: left center;
+  animation: f-bar-grow var(--bar-duration, 900ms) var(--ease) both;
+  animation-delay: var(--bar-delay, 0ms);
+}
+
+/* F.4 — fade-in companion for staggered descriptions / count numbers. */
+@keyframes f-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.f-fade-up {
+  animation: f-fade-up var(--fade-duration, 600ms) var(--ease) both;
+  animation-delay: var(--fade-delay, 0ms);
+}

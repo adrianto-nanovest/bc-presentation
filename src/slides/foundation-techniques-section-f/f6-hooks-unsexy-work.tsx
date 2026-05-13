@@ -22,15 +22,18 @@
 //   first facet card.
 //
 // Facet → state map (all hover-only, NO defaultState):
-//   what-it-is        → WhatItIsCanvas — bell→reflex pairs fire in sequence
-//                       via f-seq-pulse-1/2/3 (2.5s loop).
+//   what-it-is        → WhatItIsCanvas — bell→reflex pairs cycle through the
+//                       deck-wide f-card-cycle highlight loop top→bottom
+//                       (3 rows → 3s loop).
 //   lifecycle-events  → LifecycleCanvas — SVG timeline with a traveling
 //                       copper dot sweeping left→right via f-flow-dot (2s loop).
-//   three-hooks       → ThreeHooksCanvas — 3-column canonical sketch; once
-//                       assembled, columns take turns pulsing via
-//                       f-seq-pulse-1/2/3 (2.5s loop).
-//   example           → ExampleCanvas — 4-step horizontal flow, sequential
-//                       step-pulse via f-row-pulse-1..4 (4s loop).
+//   three-hooks       → ThreeHooksCanvas — 3-column canonical sketch; columns
+//                       participate in the f-card-cycle highlight loop
+//                       left→right (3 cols → 3s loop). One-time R2-15 entry
+//                       stagger stays on an outer wrapper.
+//   example           → ExampleCanvas — 4-step horizontal flow; steps
+//                       participate in the f-card-cycle highlight loop
+//                       left→right (4 steps → 4s loop).
 import { useState, type CSSProperties } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
@@ -39,12 +42,14 @@ import { highlight } from "@/components/highlight";
 import { FacetMenu } from "./components/FacetMenu";
 import { DetailCanvas } from "./components/DetailCanvas";
 import { HookColumn } from "./components/HookColumn";
+import { useFacetListBounds } from "./components/useFacetListBounds";
 import { f6Content as C } from "./content";
 
 // ───────────────────── shared layout constants (F-section canonical) ─────────────────────
+//
+// Right pane width — top / bottom are measured at runtime via
+// `useFacetListBounds`.
 
-const PANE_TOP = 156;
-const PANE_BOTTOM = 80;
 const RIGHT_W = 660;
 
 // ───────────────────── slide ─────────────────────
@@ -62,6 +67,8 @@ export function F6HooksUnsexyWork() {
 
   const [activeFacet, setActiveFacet] = useState<string | null>(null);
   const effectiveFacet = hoverEnabled ? activeFacet : null;
+
+  const { top: paneTop, bottom: paneBottom } = useFacetListBounds();
 
   return (
     <>
@@ -91,56 +98,31 @@ export function F6HooksUnsexyWork() {
         showFooter={showFooter}
       />
 
-      {/* RIGHT — bordered box. Top/bottom borders align with FacetMenu's
-          top edge (PANE_TOP) and bottom edge (PANE_BOTTOM) exactly. */}
+      {/* RIGHT — transparent popover anchor. Top / bottom match the left
+          FacetMenu's card-stack extent exactly (measured at runtime). */}
       <div
         data-testid="f6-right-pane"
         style={{
           position: "absolute",
           right: 48,
-          top: PANE_TOP,
+          top: paneTop,
           width: RIGHT_W,
-          bottom: PANE_BOTTOM,
-          border: "1px solid var(--copper-700)",
-          background: "rgba(10,10,10,0.5)",
+          bottom: paneBottom,
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          pointerEvents: "none",
         }}
       >
-        {/* Invisible-visibility header strip — mirrors the left FacetMenu's
-            mono header + 12px gap + 1px copper rule + 16px gap so the right
-            pane's content area top aligns with the left's first facet card
-            top border exactly. Padding 16px matches the bordered box's gutter. */}
-        <div
-          aria-hidden
-          style={{
-            visibility: "hidden",
-            padding: "0 16px",
-            paddingTop: 16,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              display: "block",
-            }}
-          >
-            {C.header}
-          </span>
-          <div style={{ marginTop: 12, height: 1 }} />
-        </div>
-
         {/* Content area — DetailCanvas renders nothing until a facet hover. */}
         <div
           style={{
             position: "relative",
-            flex: 1,
-            margin: 16,
-            marginTop: 16,
+            width: "100%",
+            maxHeight: "100%",
+            height: "100%",
+            pointerEvents: "auto",
           }}
         >
           <DetailCanvas
@@ -158,41 +140,7 @@ export function F6HooksUnsexyWork() {
   );
 }
 
-// ───────────────────── shared sub-section header (mirrors F.2) ─────────────────────
-
-interface FacetHeaderProps {
-  label: string;
-  caption: string;
-}
-
-function FacetHeader({ label, caption }: FacetHeaderProps) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          letterSpacing: "0.22em",
-          color: "var(--copper-300)",
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 13,
-          color: "var(--copper-200)",
-          lineHeight: 1.4,
-        }}
-      >
-        {caption}
-      </span>
-    </div>
-  );
-}
+// FacetHeader was removed in the popover refactor (Item 1).
 
 // ───────────────────── shared atoms ─────────────────────
 
@@ -253,14 +201,9 @@ function CheckIcon({ size = 22 }: { size?: number }) {
 }
 
 // ───────────────────── WHAT IT IS state ─────────────────────
-// Bell-icon → reflex pairs. Three event→reflex rows fire in sequence via
-// the shared f-seq-pulse-1/2/3 keyframes (2.5s loop).
-
-const WHAT_IT_IS_PULSE_CLASSES = [
-  "f-seq-pulse-1",
-  "f-seq-pulse-2",
-  "f-seq-pulse-3",
-] as const;
+// Bell-icon → reflex pairs. Three event→reflex rows participate in the
+// deck-wide `f-card-cycle` highlight loop (top→bottom). One card-width
+// border cycle per row; delays 0/1/2s on a 3s loop.
 
 function WhatItIsCanvas() {
   const rows: { reflex: string }[] = [
@@ -274,6 +217,7 @@ function WhatItIsCanvas() {
     fontSize: 14,
     color: "var(--neutral-200)",
   };
+  const total = rows.length;
   return (
     <div
       data-testid="f6-what-it-is"
@@ -282,15 +226,11 @@ function WhatItIsCanvas() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHAT IT IS"
-        caption="reflexes on events — a bell rings, an action fires"
-      />
-
       <div
         style={{
           flex: 1,
@@ -305,15 +245,15 @@ function WhatItIsCanvas() {
           <div
             key={i}
             data-testid={`f6-what-it-is-row-${i}`}
-            className={WHAT_IT_IS_PULSE_CLASSES[i]}
+            className="f-card-cycle"
             style={{
               display: "flex",
               alignItems: "center",
               gap: 16,
               padding: "10px 14px",
-              border: "1px solid var(--copper-700)",
-              background: "rgba(10,10,10,0.6)",
-            }}
+              "--cycle-duration": `${total}s`,
+              "--cycle-delay": `${i}s`,
+            } as CSSProperties}
           >
             {/* event side */}
             <div
@@ -383,15 +323,11 @@ function LifecycleCanvas() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="LIFECYCLE EVENTS"
-        caption="one session, many beats — hooks fire on these moments"
-      />
-
       <div
         style={{
           flex: 1,
@@ -481,15 +417,20 @@ function LifecycleCanvas() {
 // The 3-column canonical sketch. Columns reveal immediately on hover
 // (no stagger from a global step — the FacetMenu reveal handles slide-level
 // entrance; here the assembled columns are always visible inside the state).
-// Each column gets a sequential pulse via f-seq-pulse-1/2/3 (2.5s loop).
-
-const THREE_HOOKS_PULSE_CLASSES = [
-  "f-seq-pulse-1",
-  "f-seq-pulse-2",
-  "f-seq-pulse-3",
-] as const;
+// Each column participates in the deck-wide `f-card-cycle` highlight loop
+// (left→right; 3 columns → 3s loop, delays 0/1/2s).
+//
+// Two animation layers stack cleanly on separate DOM levels:
+//   • outer wrapper  → one-time R2-15 entry stagger (`f6-hooks-col-in`,
+//                       0.2s, animationDelay = i * 100ms). Replays each
+//                       time the state remounts via DetailCanvas's inner
+//                       key flip.
+//   • inner card     → infinite `f-card-cycle` border/background loop,
+//                       parameterized by --cycle-duration / --cycle-delay.
 
 function ThreeHooksCanvas() {
+  const types = ["SessionStart", "PostToolUse", "Stop"] as const;
+  const total = types.length;
   return (
     <div
       data-testid="f6-three-hooks"
@@ -498,39 +439,44 @@ function ThreeHooksCanvas() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
-        padding: "8px 12px",
-        gap: 14,
+        justifyContent: "center",
+        padding: "4px 10px",
+        gap: 6,
       }}
     >
-      <FacetHeader
-        label="THREE HOOKS"
-        caption="doing the unsexy work — quietly, in the background"
-      />
-
       <div
         style={{
           flex: 1,
           display: "flex",
           flexDirection: "row",
-          gap: 12,
+          gap: 10,
           justifyContent: "center",
-          alignItems: "flex-start",
+          alignItems: "center",
           minHeight: 0,
-          paddingTop: 4,
+          paddingTop: 0,
         }}
       >
-        {(["SessionStart", "PostToolUse", "Stop"] as const).map((type, i) => (
+        {types.map((type, i) => (
+          // Outer wrapper handles the one-time R2-15 entry stagger.
           <div
             key={type}
-            data-testid={`f6-three-hooks-col-${i}`}
-            className={THREE_HOOKS_PULSE_CLASSES[i]}
             style={{
-              padding: "8px 4px",
-              border: "1px solid var(--copper-700)",
-              background: "rgba(10,10,10,0.5)",
+              animation: `f6-hooks-col-in 0.2s var(--ease) both`,
+              animationDelay: `${i * 100}ms`,
             }}
           >
-            <HookColumn type={type} on={true} delay={0} />
+            {/* Inner card runs the infinite f-card-cycle border loop. */}
+            <div
+              data-testid={`f6-three-hooks-col-${i}`}
+              className="f-card-cycle"
+              style={{
+                padding: "6px 4px",
+                "--cycle-duration": `${total}s`,
+                "--cycle-delay": `${i}s`,
+              } as CSSProperties}
+            >
+              <HookColumn type={type} on={true} delay={0} />
+            </div>
           </div>
         ))}
       </div>
@@ -539,16 +485,9 @@ function ThreeHooksCanvas() {
 }
 
 // ───────────────────── EXAMPLE state ─────────────────────
-// 4-step horizontal auto-audit flow. Each step pulses in turn on a ~4s
-// loop using the shared f-row-pulse-1..4 keyframes (same family as F.2
-// WHEN TO REACH matrix and F.5 EXAMPLE). 1s per step.
-
-const EXAMPLE_PULSE_CLASSES = [
-  "f-row-pulse-1",
-  "f-row-pulse-2",
-  "f-row-pulse-3",
-  "f-row-pulse-4",
-] as const;
+// 4-step horizontal auto-audit flow. Each step participates in the
+// deck-wide `f-card-cycle` highlight loop (left→right; 4 steps → 4s loop,
+// delays 0/1/2/3s).
 
 function ExampleCanvas() {
   const steps = [
@@ -557,6 +496,7 @@ function ExampleCanvas() {
     { label: "AUDIT SCRIPT", sub: "runs in background" },
     { label: "FILE UPDATED", sub: "compliance timestamp" },
   ];
+  const total = steps.length;
   return (
     <div
       data-testid="f6-example"
@@ -566,23 +506,19 @@ function ExampleCanvas() {
         display: "flex",
         flexDirection: "column",
         padding: "8px 12px",
-        gap: 14,
       }}
     >
-      <FacetHeader
-        label="EXAMPLE · auto-audit"
-        caption="auto-audit on every weekly-report save"
-      />
+      {/* Top spacer — absorbs space above the diagram so the diagram sits at
+          the vertical midpoint of the popover. */}
+      <div style={{ flex: 1 }} />
 
       <div
         style={{
-          flex: 1,
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
           gap: 4,
-          minHeight: 0,
         }}
       >
         {steps.map((s, i) => (
@@ -596,17 +532,18 @@ function ExampleCanvas() {
           >
             <div
               data-testid={`f6-example-step-${i}`}
-              className={EXAMPLE_PULSE_CLASSES[i]}
+              className="f-card-cycle"
               style={{
                 width: 132,
                 padding: "12px 10px",
-                border: "1px solid var(--copper-800)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 gap: 6,
                 minHeight: 78,
-              }}
+                "--cycle-duration": `${total}s`,
+                "--cycle-delay": `${i}s`,
+              } as CSSProperties}
             >
               <div
                 style={{
@@ -638,18 +575,28 @@ function ExampleCanvas() {
         ))}
       </div>
 
-      <div
+      {/* Bottom spacer — symmetric with the top spacer so the diagram is
+          vertically centered between the popover top and the footer. */}
+      <div style={{ flex: 1 }} />
+
+      {/* Footer caption — matches F.4's ExampleState footer styling (italic
+          copper-200 serif, 12.5px). Crystallizes the insight without
+          restating the title. Pinned at the bottom of the popover. */}
+      <p
         style={{
           fontFamily: "var(--serif)",
           fontStyle: "italic",
           fontSize: 12.5,
           color: "var(--copper-200)",
-          textAlign: "center",
+          margin: 0,
           lineHeight: 1.4,
         }}
       >
-        the user never has to remember — the hook does it every time
-      </div>
+        {highlight(
+          "Hooks fire deterministically on every save — no LLM call, no forgetting.",
+          ["deterministically", "no LLM call"],
+        )}
+      </p>
     </div>
   );
 }

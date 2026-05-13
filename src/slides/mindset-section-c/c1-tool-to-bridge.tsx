@@ -277,9 +277,7 @@ function renderClarifier(text: string, word: string): ReactNode {
 
 // Render the "To: ..." copy with the italic copper accent on
 // `standing capability`. When `pulse` is true (canonical pose), wrap the
-// accent in AmbientPulse for the 4s copper-glow loop. We also paint a
-// subtle copper-500 underline that fades in on canonical pose so the
-// rhyme with C.5's underline-pulse reads.
+// accent in AmbientPulse for the 4s copper-glow loop.
 function renderToText(text: string, keywords: readonly string[], pulse: boolean): ReactNode {
   const kw = keywords[0];
   if (!kw) return text;
@@ -296,11 +294,6 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
         fontStyle: "italic",
         color: "var(--copper-400)",
         fontWeight: 400,
-        textDecorationLine: "underline",
-        textDecorationColor: pulse ? "var(--copper-500)" : "transparent",
-        textUnderlineOffset: "4px",
-        textDecorationThickness: "1px",
-        transition: "text-decoration-color 400ms var(--ease)",
       }}
     >
       {kw}

@@ -34,9 +34,9 @@
 //   step 3  Footer punchline reveals — "AI handles the typing.
 //           You handle the *thinking*." 4s ambient pulse on `thinking`.
 //
-// Cards: A.1 `CapabilityShape` card-mode style — bordered, copper glyph,
-// serif body. Sharp corners (radius 0), gentle hover lift to copper-300
-// border + 1.02 scale.
+// Cards: A.1 `CapabilityShape` chip-mode style — bordered, copper glyph,
+// serif body. Sharp corners (radius 0), hover swaps border copper-700 →
+// copper-200 and washes background with rgba(217,158,108,0.08).
 import { useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
@@ -142,25 +142,6 @@ export function C3ExecutorOrchestrator() {
       data-testid="slide-c3"
       style={{ position: "absolute", inset: 0, overflow: "hidden" }}
     >
-      {/* Scoped hover styles for capability cards. Kept here so the reveal
-          stagger (inline `transitionDelay` on opacity+transform of the OUTER
-          wrapper) cannot leak into the hover transitions on the inner card
-          (border-color / background / color / scale). */}
-      <style>{`
-        [data-testid="slide-c3"] .c3-card {
-          transition: border-color 200ms var(--ease),
-                      background-color 200ms var(--ease),
-                      color 200ms var(--ease),
-                      transform 200ms var(--ease);
-        }
-        [data-testid="slide-c3"] .c3-card:hover {
-          border-color: var(--copper-300);
-          background-color: rgba(217,158,108,0.10);
-          color: var(--copper-100);
-          transform: scale(1.02);
-        }
-      `}</style>
-
       {/* Background — plain neutral-950 + dot-grid (matches C.2). */}
       <div
         aria-hidden
@@ -478,8 +459,9 @@ function Section({
 }
 
 // ───────────────────── CapabilityCard ─────────────────────
-// Modeled on A.1 CapabilityShape `card` mode. Sharp corners, bordered,
-// copper glyph, serif body. Hover: copper-300 border + 1.02 scale.
+// Modeled on A.1 CapabilityShape chip hover. Sharp corners, bordered,
+// copper glyph, serif body. Hover: copper-200 border + copper-tinted
+// background wash + copper-100 text.
 
 interface CapabilityCardProps {
   on: boolean;
@@ -499,16 +481,14 @@ function CapabilityCard({
   testId,
 }: CapabilityCardProps) {
   const glyph = c3Icons[iconKey];
+  const [hovered, setHovered] = useState(false);
 
-  // Hover-delay fix (Task 25): the previous version applied `transitionDelay:
-  // ${delay}ms` to a `transition` shorthand that covered border-color / bg /
-  // color too — so later cards (delay up to ~400ms) felt sluggish on hover.
-  //
-  // Approach: outer wrapper owns the reveal (opacity + translateY only, with
-  // the stagger delay scoped to those two properties). Inner `.c3-card`
-  // element owns the hover affordance (border-color, background, color, and
-  // a scale transform) via a scoped `<style>` block — those transitions have
-  // ZERO delay regardless of which card you hover.
+  // Two-layer structure: the OUTER wrapper owns the reveal stagger (opacity
+  // + translateY with `transitionDelay: ${delay}ms`). The INNER card owns
+  // hover affordances driven by React state — transitions on border/bg/color
+  // run with zero delay regardless of which card you hover. Inline style
+  // wins over `:hover` rules from a <style> block, so hover MUST be applied
+  // via the same style prop to actually visibly change anything.
   return (
     <div
       data-testid={testId}
@@ -522,22 +502,25 @@ function CapabilityCard({
       }}
     >
       <div
-        className="c3-card"
+        data-hovered={hovered ? "true" : "false"}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         style={{
           display: "flex",
           alignItems: "center",
           gap: 10,
           padding: "8px 12px",
-          border: "1px solid var(--copper-800)",
+          border: `1px solid ${hovered ? "var(--copper-200)" : "var(--copper-700)"}`,
           borderRadius: 0,
-          background: "rgba(20,12,6,0.4)",
+          background: hovered ? "rgba(217,158,108,0.08)" : "rgba(10,10,10,0.4)",
           fontFamily: "var(--serif)",
           fontSize: 13,
-          color: "var(--neutral-200)",
+          color: hovered ? "var(--copper-100)" : "var(--neutral-200)",
           lineHeight: 1.25,
           boxSizing: "border-box",
-          transformOrigin: "center center",
           cursor: "default",
+          transition:
+            "border-color 200ms var(--ease), background-color 200ms var(--ease), color 200ms var(--ease)",
         }}
       >
         <span
@@ -680,7 +663,7 @@ function Hairline({
 // "AI handles the typing. You handle the *thinking*."
 //   • Source Serif italic 22px, neutral-200
 //   • "You handle the" bolded
-//   • "thinking" copper-400 italic + copper-500 underline + 4s pulse
+//   • "thinking" copper-400 italic + 4s ambient pulse (glow + opacity)
 
 function Punchline({
   text,
@@ -712,11 +695,6 @@ function Punchline({
         fontStyle: "italic",
         color: "var(--copper-400)",
         fontWeight: 400,
-        textDecorationLine: "underline",
-        textDecorationColor: pulse ? "var(--copper-500)" : "transparent",
-        textUnderlineOffset: "4px",
-        textDecorationThickness: "1px",
-        transition: "text-decoration-color 400ms var(--ease)",
       }}
     >
       {kw}

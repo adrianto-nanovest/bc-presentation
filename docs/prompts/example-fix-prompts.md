@@ -150,7 +150,40 @@ For better understanding on current codebase (src/ folder) and research content 
 
 ---------------
 
-Fix and improve section 
+fix slide F2 until F7:
+  1. Remove section box on the right side, along with the section title and subtitle in hover popover details
+  2. Then make the rest of hover popover details to be vertically center aligned with the left cards
+  3. Hover popover details top position should be not "ABOVE" the "first left card - top box border", and also not "BELOW" the "last card - bottom box border" once we did number 
+  2. If it happens, means we need to reduce the height of it.
+  
+  Now on the hover popover details on the given slide and left section card number:
+  4. F2, first card: [Image #7], zone titles should be close enough with small gap with the illustration.
+  5. F2, third card: on "Hybrid" part, ensure in second zone "Storage" illustration, it includes "keyword search" illustration (BM25) along with the "graph" RAG. It is ok to be
+  small, and we can reduce "markdown" files inside so we can have more room for others.
+  6. F2, fourth card: the table should have no animation, remove animation, it is confusing
+  7. F3, second card: it is mostly the same with first illustration, we can make it in 5 illustration per each (it is ok in 5 columns, with the column title (Skills, Hooks, etc)
+  and subtitle - please suggest the subtitles for each, but make it concise in 1 word that represent it like ("brain", "worker", etc). No need to mention which slide will deep 
+  dive each. Ensure the illustration nas animation loop
+  8. F3, fourth card: [Image #8], we have many many spaces per column, we can illustrate it with text-streaming content, or really animation loop illustration
+  9. F3, fifth card: the structure is wrong, follow this official ones [Image #9], but remove commands/ and make 2 skills folder examples inside with each SKILL.md, along with 2
+  agents examples inside agents/. Ensure the nesting is proper
+  10. F4, first card: remove the "Expand" button and section box, but make the text streaming continues to until the end, and loop back to the beginning, since we have absolute 
+  "chat" window
+  11. F4, third card: make the "Claude's Match Engine" using "horizontal bar chart" between the card title-description and the number. Make motion animation for the bar from 0 to 
+  the expected number, and make the number also follow it. Ensure the chart left position all are the same between those 3 cards.
+  12. F4, fourth card: make the bar chart and description using stagger reveal and motion animation. show "skill metadata" bar from 0 to 0.5, along with the description, then 
+  reveal the "Active skill content" bar from 0.5 to 4.5 (represent 4% width), along with the description, and so on.
+  13. F5, first card: make illustration better, make 3 MCPs is vertically stacks, with each have "connector with pulse animation" fan-in to claude box, and fan-out to other 3 MCPs
+  with connectors also. basically 3 columns / zones. Change MCP "..." with "3rd Party Tools"
+  14. F5, second card: make 3 additional cards for each columns and change "MCP Protocol" to "CLAUDE" and just make it written horizontally, not vertically.
+  15. F5, 3rd card: since we are using "hover", we cannot "click for details", so remove it from each card. But, i prefer to have Pros and Cons for each card, and listed in bullet
+  points for each. And if we have more spaces, we can have more points inside.
+  16. F5, fourth card: We can have illustration for each card, we can have in text-stream animation, or code block with function, whatever suitable
+  17. F7, third card: this is the most overflowing illustration, reduce each illustration size, and for the "parallel" one, do not make "P" node again in the bottom, just ensure
+  the pulse go back to the top "P" node
+  18. F7, fourth card: no need for animation for table, and fix overflow issue on "Accountability", see current [Image #10]
+  19. Generic for all hover details cards: if there is animation for cards, please MAKE "left to right" or "top to bottom" card animation, and the animation style is the same like
+  when we hover the left section cards
 
-create Tasks for all items to do (your TaskCreate tool), dispatch and delegate to your general-purpose agents to implement.
-You can dispatch explore agent (Haiku model) for codebase understanding.
+Create Tasks for all items to do (your TaskCreate tool), dispatch and delegate to your general-purpose agents to implement.
+Dispatch your Explore agents (Haiku model) for better codebase understanding.

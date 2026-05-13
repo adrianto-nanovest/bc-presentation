@@ -39,12 +39,19 @@ export function E4PromptMethodologies() {
   const showFooter = stepIndex >= 3;
 
   // Flatten cards across tiers so we can resolve `hoverId` → its full record.
-  const allCards: CardWithTier[] = C.tiers.flatMap((t) =>
-    t.cards.map((c) => ({ ...c, tier: t })),
+  // Tag each card with its tier index so we can suppress details for tiers
+  // that haven't been revealed yet (defensive against stale hoverId on
+  // backward navigation, and a belt-and-braces partner to the pointer-events
+  // gate on individual cards).
+  const allCards: (CardWithTier & { tierIndex: number })[] = C.tiers.flatMap(
+    (t, tierIndex) =>
+      t.cards.map((c) => ({ ...c, tier: t, tierIndex })),
   );
-  const hovered: CardWithTier | null = hoverId
+  const hoveredRaw = hoverId
     ? allCards.find((c) => c.id === hoverId) ?? null
     : null;
+  const hovered: CardWithTier | null =
+    hoveredRaw && stepIndex >= hoveredRaw.tierIndex ? hoveredRaw : null;
 
   return (
     <>
@@ -150,6 +157,7 @@ export function E4PromptMethodologies() {
                       : "none",
                     cursor: "default",
                     textAlign: "left",
+                    pointerEvents: revealed ? "auto" : "none",
                     transition:
                       "background 0.18s var(--ease), box-shadow 0.18s var(--ease)",
                   };
@@ -158,9 +166,16 @@ export function E4PromptMethodologies() {
                       key={c.id}
                       data-testid={`technique-card-${c.id}`}
                       data-active={active ? "true" : "false"}
-                      onMouseEnter={() => setHoverId(c.id)}
-                      onMouseLeave={() =>
-                        setHoverId((prev) => (prev === c.id ? null : prev))
+                      onMouseEnter={
+                        revealed ? () => setHoverId(c.id) : undefined
+                      }
+                      onMouseLeave={
+                        revealed
+                          ? () =>
+                              setHoverId((prev) =>
+                                prev === c.id ? null : prev,
+                              )
+                          : undefined
                       }
                       style={cardStyle}
                     >

@@ -25,7 +25,7 @@
 //                     pulse via shared `f-seq-pulse-*` keyframes + token widget.
 //   ◉ EXAMPLE       → ASCII file tree for `weekly-report-plugin/` with
 //                     row-by-row highlight loop.
-import { Fragment, type ReactNode, useState } from "react";
+import { type CSSProperties, Fragment, type ReactNode, useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
@@ -38,12 +38,15 @@ import {
   type MCPConnectorItem,
 } from "./components/MCPConnectors";
 import { LucideIcon } from "./components/LucideIcon";
+import { useFacetListBounds } from "./components/useFacetListBounds";
 import { f3Content as C } from "./content";
 
 // ───────────────────── shared layout constants (F-section canonical) ─────────────────────
+//
+// Right pane width — top / bottom are measured at runtime via
+// `useFacetListBounds` so the wrapper aligns with the FacetMenu's card stack
+// exactly.
 
-const PANE_TOP = 156;
-const PANE_BOTTOM = 80;
 const RIGHT_W = 660;
 
 // Map plain connector names → LucideIcon names. The content file carries
@@ -80,6 +83,8 @@ export function F3PluginsThePackage() {
   const [activeFacet, setActiveFacet] = useState<string | null>(null);
   const effectiveFacet = hoverEnabled ? activeFacet : null;
 
+  const { top: paneTop, bottom: paneBottom } = useFacetListBounds();
+
   const connectors = resolveConnectors([...C.mcpConnectors]);
 
   return (
@@ -110,56 +115,34 @@ export function F3PluginsThePackage() {
         showFooter={showFooter}
       />
 
-      {/* RIGHT — bordered box. Top/bottom borders align with FacetMenu's
-          top edge (PANE_TOP) and bottom edge (PANE_BOTTOM) exactly. */}
+      {/* RIGHT — transparent popover anchor. Top / bottom match the left
+          FacetMenu's card-stack extent exactly (measured at runtime).
+          Content centers vertically within that range. */}
       <div
         data-testid="f3-right-pane"
         style={{
           position: "absolute",
           right: 48,
-          top: PANE_TOP,
+          top: paneTop,
           width: RIGHT_W,
-          bottom: PANE_BOTTOM,
-          border: "1px solid var(--copper-700)",
-          background: "rgba(10,10,10,0.5)",
+          bottom: paneBottom,
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          pointerEvents: "none",
         }}
       >
-        {/* Invisible-visibility header strip — mirrors the left FacetMenu's
-            mono header + 12px gap + 1px copper rule + 16px gap so the right
-            pane's content area top aligns with the left's first facet card
-            top border exactly. */}
-        <div
-          aria-hidden
-          style={{
-            visibility: "hidden",
-            padding: "0 16px",
-            paddingTop: 16,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              display: "block",
-            }}
-          >
-            {C.header}
-          </span>
-          <div style={{ marginTop: 12, height: 1 }} />
-        </div>
-
-        {/* Content area — DetailCanvas renders nothing until a facet hover. */}
+        {/* Content area — DetailCanvas renders nothing until a facet hover.
+            `maxHeight: 100%` constrains popover content to the FacetMenu's
+            card-stack vertical bounds. */}
         <div
           style={{
             position: "relative",
-            flex: 1,
-            margin: 16,
-            marginTop: 16,
+            width: "100%",
+            maxHeight: "100%",
+            height: "100%",
+            pointerEvents: "auto",
           }}
         >
           <DetailCanvas
@@ -178,41 +161,9 @@ export function F3PluginsThePackage() {
   );
 }
 
-// ───────────────────── shared sub-section header (mirrors F.2) ─────────────────────
-
-interface FacetHeaderProps {
-  label: string;
-  caption: string;
-}
-
-function FacetHeader({ label, caption }: FacetHeaderProps) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          letterSpacing: "0.22em",
-          color: "var(--copper-300)",
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 13,
-          color: "var(--copper-200)",
-          lineHeight: 1.4,
-        }}
-      >
-        {caption}
-      </span>
-    </div>
-  );
-}
+// ───────────────────── shared atoms (mirrors F.2) ─────────────────────
+//
+// FacetHeader was removed in the popover refactor (Item 1).
 
 // Mono uppercase column title — used at the top of each column block.
 function ColumnTitle({ children }: { children: ReactNode }) {
@@ -242,13 +193,6 @@ interface WhatItIsStateProps {
   connectors: MCPConnectorItem[];
 }
 
-const CAKE_SHIMMER_BY_LAYER: Record<string, string> = {
-  "CLAUDE.md": "f-cake-shimmer-1",
-  HOOKS: "f-cake-shimmer-2",
-  SKILLS: "f-cake-shimmer-3",
-  AGENTS: "f-cake-shimmer-4",
-};
-
 function WhatItIsState({ connectors }: WhatItIsStateProps) {
   return (
     <div
@@ -258,15 +202,11 @@ function WhatItIsState({ connectors }: WhatItIsStateProps) {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHAT IT IS"
-        caption="your expertise, in a folder anyone can install"
-      />
-
       <div
         style={{
           flex: 1,
@@ -327,20 +267,19 @@ function CakeShimmerOverlay({ layers }: { layers: string[] }) {
         gap: GAP,
       }}
     >
-      {ordered.map((name) => (
+      {ordered.map((name, i) => (
         <div
           key={name}
           data-testid={`f3-cake-shimmer-${name}`}
-          className={CAKE_SHIMMER_BY_LAYER[name]}
+          className="f-card-cycle"
           style={{
             height: BAR_H,
             width: BAR_W,
             boxSizing: "border-box",
-            // Box-shadow is animated by the keyframe; transparent fill keeps
-            // the underlying LayerCake bar visible.
-            background: "transparent",
             borderRadius: 0,
-          }}
+            "--cycle-duration": `${4}s`,
+            "--cycle-delay": `${i}s`,
+          } as CSSProperties}
         />
       ))}
     </div>
@@ -349,16 +288,51 @@ function CakeShimmerOverlay({ layers }: { layers: string[] }) {
 
 // ───────────────────── WHAT'S INSIDE state ─────────────────────
 //
-// LayerCake in exploded mode with forward pointers. A small "+ MCP · F.5"
-// note pulses below the cake to indicate the MCP adjunct.
+// 5-column grid — each column represents one Claude Code primitive that
+// plugins package: Skills · Hooks · Agents · MCP · Commands. Each column has
+// a title, a 1-word subtitle, and a looping CSS illustration animation that
+// symbolically represents the primitive.
+
+interface InsidePrimitive {
+  id: string;
+  title: string;
+  word: string;
+  glyph: ReactNode;
+}
 
 function WhatsInsideState() {
-  const pointers: Record<string, string> = {
-    "CLAUDE.md": "the foundation",
-    HOOKS: "F.6",
-    SKILLS: "F.4",
-    AGENTS: "F.7",
-  };
+  const primitives: InsidePrimitive[] = [
+    {
+      id: "skills",
+      title: "Skills",
+      word: "brain",
+      glyph: <BrainGlyph />,
+    },
+    {
+      id: "hooks",
+      title: "Hooks",
+      word: "guard",
+      glyph: <GuardGlyph />,
+    },
+    {
+      id: "agents",
+      title: "Agents",
+      word: "worker",
+      glyph: <WorkerGlyph />,
+    },
+    {
+      id: "mcp",
+      title: "MCP",
+      word: "bridge",
+      glyph: <BridgeGlyph />,
+    },
+    {
+      id: "commands",
+      title: "Commands",
+      word: "shortcut",
+      glyph: <ShortcutGlyph />,
+    },
+  ];
   return (
     <div
       data-testid="f3-whats-inside"
@@ -367,56 +341,282 @@ function WhatsInsideState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHAT'S INSIDE"
-        caption="four layers + one adapter"
-      />
+      <div
+        style={{
+          flex: 1,
+          display: "grid",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          gap: 8,
+          alignItems: "stretch",
+          minHeight: 0,
+        }}
+      >
+        {primitives.map((p, i) => (
+          <InsidePrimitiveColumn key={p.id} prim={p} index={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
+function InsidePrimitiveColumn({
+  prim,
+  index,
+}: {
+  prim: InsidePrimitive;
+  index: number;
+}) {
+  return (
+    <div
+      data-testid={`f3-inside-${prim.id}`}
+      className="f-card-cycle"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: 10,
+        padding: "14px 8px",
+        background: "rgba(10,10,10,0.5)",
+        "--cycle-duration": `${5}s`,
+        "--cycle-delay": `${index}s`,
+      } as CSSProperties}
+    >
+      <div
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 11,
+          letterSpacing: "0.18em",
+          color: "var(--copper-100)",
+          textTransform: "uppercase",
+          lineHeight: 1.2,
+        }}
+      >
+        {prim.title}
+      </div>
+      <div
+        style={{
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          fontSize: 12,
+          color: "var(--copper-300)",
+          lineHeight: 1.2,
+        }}
+      >
+        {prim.word}
+      </div>
       <div
         style={{
           flex: 1,
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 14,
-          minHeight: 0,
+          width: "100%",
+          minHeight: 60,
         }}
       >
-        <LayerCake
-          layers={[...C.cakeLayers]}
-          mode="exploded"
-          pointers={pointers}
-          lit={[...C.cakeLayers]}
-        />
-        <div
-          className="f-pointer-pulse"
-          data-testid="f3-mcp-adjunct"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontFamily: "var(--serif)",
-            fontStyle: "italic",
-            fontSize: 13,
-            color: "var(--copper-200)",
-          }}
-        >
-          <span
-            style={{
-              display: "inline-block",
-              width: 18,
-              height: 1,
-              background: "var(--copper-500)",
-            }}
-          />
-          plus MCP connectors · {highlight("F.5", ["F.5"])}
-        </div>
+        {prim.glyph}
       </div>
+    </div>
+  );
+}
+
+// ── Inside-state primitive glyphs (looping CSS illustrations) ──
+
+// Skills → "brain". Concentric pulsing rings around a Brain icon (neural pulse).
+function BrainGlyph() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: 56,
+        height: 56,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      aria-hidden
+    >
+      <span
+        className="f-brain-ring-1"
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: "50%",
+          border: "1px solid var(--copper-500)",
+        }}
+      />
+      <span
+        className="f-brain-ring-2"
+        style={{
+          position: "absolute",
+          inset: 6,
+          borderRadius: "50%",
+          border: "1px solid var(--copper-400)",
+        }}
+      />
+      <LucideIcon name="Brain" size={26} color="var(--copper-200)" />
+    </div>
+  );
+}
+
+// Hooks → "guard". Shield icon with a clamping bracket animation around it.
+function GuardGlyph() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: 56,
+        height: 56,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      aria-hidden
+    >
+      <span
+        className="f-guard-bracket-l"
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 8,
+          bottom: 8,
+          width: 6,
+          borderLeft: "1px solid var(--copper-400)",
+          borderTop: "1px solid var(--copper-400)",
+          borderBottom: "1px solid var(--copper-400)",
+        }}
+      />
+      <span
+        className="f-guard-bracket-r"
+        style={{
+          position: "absolute",
+          right: 0,
+          top: 8,
+          bottom: 8,
+          width: 6,
+          borderRight: "1px solid var(--copper-400)",
+          borderTop: "1px solid var(--copper-400)",
+          borderBottom: "1px solid var(--copper-400)",
+        }}
+      />
+      <LucideIcon name="Shield" size={26} color="var(--copper-200)" />
+    </div>
+  );
+}
+
+// Agents → "worker". Bot icon with a small task-line stream below it.
+function WorkerGlyph() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: 56,
+        height: 56,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 4,
+      }}
+      aria-hidden
+    >
+      <LucideIcon name="Bot" size={26} color="var(--copper-200)" />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          gap: 2,
+          width: 36,
+        }}
+      >
+        <span
+          className="f-worker-line-1"
+          style={{
+            height: 2,
+            background: "var(--copper-500)",
+          }}
+        />
+        <span
+          className="f-worker-line-2"
+          style={{
+            height: 2,
+            background: "var(--copper-500)",
+          }}
+        />
+        <span
+          className="f-worker-line-3"
+          style={{
+            height: 2,
+            background: "var(--copper-500)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// MCP → "bridge". Two endpoints joined by a flowing dashed stroke.
+function BridgeGlyph() {
+  return (
+    <svg
+      width={72}
+      height={48}
+      viewBox="0 0 72 48"
+      aria-hidden
+      style={{ display: "block" }}
+    >
+      <circle cx={10} cy={24} r={6} fill="none" stroke="var(--copper-300)" strokeWidth={1} />
+      <circle cx={62} cy={24} r={6} fill="none" stroke="var(--copper-300)" strokeWidth={1} />
+      <line
+        x1={16}
+        y1={24}
+        x2={56}
+        y2={24}
+        stroke="var(--copper-400)"
+        strokeWidth={1}
+        className="f-arrow-stream"
+      />
+      <LucideIcon name="Plug" size={0} />
+    </svg>
+  );
+}
+
+// Commands → "shortcut". Lightning bolt blinking on a slash prompt baseline.
+function ShortcutGlyph() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: 56,
+        height: 56,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 4,
+      }}
+      aria-hidden
+    >
+      <span
+        className="f-shortcut-slash"
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 22,
+          color: "var(--copper-300)",
+          lineHeight: 1,
+        }}
+      >
+        /
+      </span>
+      <span className="f-shortcut-zap">
+        <LucideIcon name="Zap" size={22} color="var(--copper-200)" />
+      </span>
     </div>
   );
 }
@@ -475,15 +675,11 @@ function WhyPackageState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHY PACKAGE"
-        caption="single command · everyone gets it"
-      />
-
       <div
         style={{
           flex: 1,
@@ -593,16 +789,18 @@ function WhyPackageState() {
 
 // ───────────────────── HOW IT LOADS state ─────────────────────
 //
-// Three horizontal steps: discover → load → context-budget. Sequential pulse
-// via shared `f-seq-pulse-1/2/3` keyframes (same engine F.2's HOW IT WORKS
-// uses). Below the row: tiny token-counter widget.
+// Three columns — DISCOVER · LOAD · CONTEXT-BUDGET — each with a caption and
+// a continuously looping illustration that semantically fits its phase:
+//   DISCOVER  → streaming filesystem-scan log (typewriter-style lines)
+//   LOAD      → animated stack of metadata cards loading in
+//   CONTEXT-BUDGET → a copper meter that fills on demand + instruction chip
 
 interface LoadStep {
   n: number;
   label: string;
-  body: string;
+  caption: string;
   icon: string;
-  pulseClass: "f-seq-pulse-1" | "f-seq-pulse-2" | "f-seq-pulse-3";
+  illustration: ReactNode;
 }
 
 function HowItLoadsState() {
@@ -610,23 +808,23 @@ function HowItLoadsState() {
     {
       n: 1,
       label: "discover",
-      body: "Claude scans ~/.claude/plugins/",
+      caption: "Claude scans your plugin folders",
       icon: "Search",
-      pulseClass: "f-seq-pulse-1",
+      illustration: <DiscoverScanIllustration />,
     },
     {
       n: 2,
       label: "load",
-      body: "per-session metadata only",
+      caption: "per-session metadata only",
       icon: "Layers",
-      pulseClass: "f-seq-pulse-2",
+      illustration: <LoadStackIllustration />,
     },
     {
       n: 3,
       label: "context-budget",
-      body: "instructions on demand",
+      caption: "instructions on demand",
       icon: "Target",
-      pulseClass: "f-seq-pulse-3",
+      illustration: <BudgetMeterIllustration />,
     },
   ];
 
@@ -638,15 +836,11 @@ function HowItLoadsState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="HOW IT LOADS"
-        caption="discover → load → context-budget"
-      />
-
       <div
         style={{
           display: "flex",
@@ -658,87 +852,35 @@ function HowItLoadsState() {
       >
         {steps.map((s, i) => (
           <Fragment key={s.n}>
-            <LoadStepCard step={s} />
+            <LoadStepCard step={s} index={i} />
             {i < steps.length - 1 ? <PipeArrow /> : null}
           </Fragment>
         ))}
-      </div>
-
-      {/* Token-counter widget */}
-      <div
-        data-testid="f3-token-counter"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          padding: "8px 14px",
-          border: "1px solid var(--copper-700)",
-          background: "rgba(184,110,61,0.04)",
-          alignSelf: "flex-start",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 10,
-            letterSpacing: "0.18em",
-            color: "var(--copper-300)",
-            textTransform: "uppercase",
-          }}
-        >
-          tokens loaded
-        </span>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            gap: 4,
-            fontFamily: "var(--mono)",
-            fontSize: 13,
-            color: "var(--copper-100)",
-          }}
-        >
-          <span style={{ color: "var(--copper-100)" }}>100</span>
-          <span style={{ color: "var(--neutral-400)" }}>of</span>
-          <span style={{ color: "var(--neutral-300)" }}>5,000</span>
-        </div>
-        <div
-          style={{
-            position: "relative",
-            width: 90,
-            height: 4,
-            background: "var(--neutral-800)",
-            border: "1px solid var(--copper-800)",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "2%",
-              background: "var(--copper-400)",
-            }}
-          />
-        </div>
       </div>
     </div>
   );
 }
 
-function LoadStepCard({ step }: { step: LoadStep }) {
+// Fixed-height "illustration band" so all 3 columns share the same vertical
+// mid-line for their illustrations regardless of caption line-count.
+const LOAD_ILLUSTRATION_BAND_H = 130;
+
+function LoadStepCard({ step, index }: { step: LoadStep; index: number }) {
   return (
     <div
       data-testid={`f3-step-${step.label}`}
-      className={step.pulseClass}
+      className="f-card-cycle"
       style={{
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        gap: 8,
+        gap: 10,
         padding: 12,
-        border: "1px solid var(--copper-700)",
         background: "rgba(10,10,10,0.5)",
-      }}
+        minWidth: 0,
+        "--cycle-duration": `${3}s`,
+        "--cycle-delay": `${index}s`,
+      } as CSSProperties}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <div
@@ -781,7 +923,190 @@ function LoadStepCard({ step }: { step: LoadStep }) {
           lineHeight: 1.4,
         }}
       >
-        {step.body}
+        {step.caption}
+      </div>
+      {/* Illustration band — fixed-height container that centers its contents
+          so DISCOVER box, LOAD card-stack, and BUDGET meter share the same
+          vertical mid-line across all 3 columns regardless of caption
+          line-count differences above. */}
+      <div
+        data-testid={`f3-step-${step.label}-illustration-band`}
+        style={{
+          marginTop: "auto",
+          height: LOAD_ILLUSTRATION_BAND_H,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        {step.illustration}
+      </div>
+    </div>
+  );
+}
+
+// DISCOVER — streaming filesystem-scan log. Lines highlight in sequence to
+// suggest a continuous scan.
+function DiscoverScanIllustration() {
+  const lines = [
+    "scanning ~/.claude/plugins/",
+    "  + commit-helper/",
+    "  + pr-reviewer/",
+    "  + weekly-report/",
+    "found 3 plugins",
+  ];
+  return (
+    <div
+      data-testid="f3-discover-stream"
+      style={{
+        width: "100%",
+        fontFamily: "var(--mono)",
+        fontSize: 10.5,
+        lineHeight: 1.55,
+        color: "var(--neutral-300)",
+        padding: "8px 10px",
+        border: "1px solid var(--copper-800)",
+        background: "rgba(0,0,0,0.32)",
+        overflow: "hidden",
+      }}
+      aria-hidden
+    >
+      {lines.map((line, i) => (
+        <div
+          key={i}
+          className={`f-tree-line-${i + 1}`}
+          style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+        >
+          {i === 0 ? (
+            <span style={{ color: "var(--copper-300)" }}>$ </span>
+          ) : null}
+          {line}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// LOAD — stack of metadata cards loading in. Three small "card" rows fade up
+// in sequence then loop.
+function LoadStackIllustration() {
+  return (
+    <div
+      data-testid="f3-load-stack"
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        padding: "4px 2px",
+      }}
+      aria-hidden
+    >
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          className={`f-tree-line-${i + 1}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "5px 8px",
+            border: "1px solid var(--copper-700)",
+            background: "rgba(184,110,61,0.05)",
+            fontFamily: "var(--mono)",
+            fontSize: 9.5,
+            color: "var(--neutral-300)",
+            letterSpacing: "0.08em",
+          }}
+        >
+          <span
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: "var(--copper-400)",
+              flexShrink: 0,
+            }}
+          />
+          <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {i === 0
+              ? "plugin.json"
+              : i === 1
+                ? "SKILL.md · meta"
+                : "agent · meta"}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// CONTEXT-BUDGET — a meter that fills on demand + an "instructions" chip that
+// pulses each cycle to suggest just-in-time loading.
+function BudgetMeterIllustration() {
+  return (
+    <div
+      data-testid="f3-budget-meter"
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "stretch",
+        gap: 8,
+      }}
+      aria-hidden
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          fontFamily: "var(--mono)",
+          fontSize: 9.5,
+          letterSpacing: "0.14em",
+          color: "var(--copper-300)",
+          textTransform: "uppercase",
+        }}
+      >
+        <span>budget</span>
+        <span style={{ color: "var(--neutral-400)" }}>on demand</span>
+      </div>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: 8,
+          border: "1px solid var(--copper-700)",
+          background: "var(--neutral-800)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          className="f-budget-fill"
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            background: "var(--copper-400)",
+          }}
+        />
+      </div>
+      <div
+        className="f-pointer-pulse"
+        style={{
+          alignSelf: "flex-start",
+          padding: "3px 7px",
+          border: "1px solid var(--copper-500)",
+          background: "rgba(184,110,61,0.08)",
+          fontFamily: "var(--mono)",
+          fontSize: 9.5,
+          letterSpacing: "0.1em",
+          color: "var(--copper-100)",
+        }}
+      >
+        + instructions
       </div>
     </div>
   );
@@ -813,14 +1138,26 @@ function PipeArrow() {
 // rhythm without re-running the whole tree every hover.
 
 function ExampleState() {
+  // `weekly-report` plugin directory layout. Two skills (each a directory
+  // containing SKILL.md) and two agent example files. Tree connectors:
+  //   ├──  non-last child
+  //   └──  last child
+  //   │    vertical continuation at parent indent level
   const treeLines: ReadonlyArray<{ tree: string; name: string }> = [
-    { tree: "", name: "weekly-report-plugin/" },
-    { tree: "├── ", name: "SKILL.md" },
+    { tree: "", name: "weekly-report/" },
+    { tree: "├── ", name: ".claude-plugin/" },
+    { tree: "│   └── ", name: "plugin.json" },
+    { tree: "├── ", name: "skills/" },
+    { tree: "│   ├── ", name: "data-loader/" },
+    { tree: "│   │   └── ", name: "SKILL.md" },
+    { tree: "│   └── ", name: "chart-builder/" },
+    { tree: "│       └── ", name: "SKILL.md" },
+    { tree: "├── ", name: "agents/" },
+    { tree: "│   ├── ", name: "summarizer.md" },
+    { tree: "│   └── ", name: "publisher.md" },
     { tree: "├── ", name: "hooks/" },
-    { tree: "│   └── ", name: "post-tool-use.sh" },
-    { tree: "├── ", name: "mcp_servers.json" },
-    { tree: "└── ", name: "agents/" },
-    { tree: "    └── ", name: "reviewer.md" },
+    { tree: "│   └── ", name: "hooks.json" },
+    { tree: "└── ", name: ".mcp.json" },
   ];
   return (
     <div
@@ -830,35 +1167,50 @@ function ExampleState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="EXAMPLE · weekly-report plugin"
-        caption="a plugin is just a folder"
-      />
-
       <div
         style={{
           flex: 1,
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           minHeight: 0,
+          gap: 8,
         }}
       >
+        {/* Title — mono uppercase, copper-300, small margin to the tree box. */}
+        <div
+          data-testid="f3-example-title"
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.18em",
+            color: "var(--copper-300)",
+            textTransform: "uppercase",
+            lineHeight: 1.2,
+            alignSelf: "center",
+          }}
+        >
+          Plugin Structure
+        </div>
         <div
           style={{
             border: "1px solid var(--copper-700)",
             background: "rgba(0,0,0,0.32)",
-            padding: "18px 24px",
+            padding: "16px 22px",
             minWidth: 360,
           }}
         >
           {treeLines.map((line, i) => {
             const isRoot = i === 0;
-            const pulseClass = `f-tree-line-${i + 1}`;
+            // Only 7 f-tree-line-N keyframes exist; cycle them so all rows
+            // animate without bunching the pulses at the top.
+            const pulseClass = `f-tree-line-${(i % 7) + 1}`;
             return (
               <div
                 key={i}
@@ -866,8 +1218,9 @@ function ExampleState() {
                 className={pulseClass}
                 style={{
                   fontFamily: "var(--mono)",
-                  fontSize: 13,
-                  lineHeight: 1.7,
+                  fontSize: 12,
+                  lineHeight: 1.55,
+                  whiteSpace: "pre",
                 }}
               >
                 <span style={{ color: "var(--copper-300)" }}>{line.tree}</span>

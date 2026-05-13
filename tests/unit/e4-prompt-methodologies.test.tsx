@@ -149,6 +149,21 @@ test("mouse-leave on the hovered card clears TechniqueDetail back to placeholder
   expect(screen.getByTestId("technique-detail-empty")).toBeInTheDocument();
 });
 
+test("hovering an unrevealed-tier card at step 0 must not surface its detail", () => {
+  renderAtStep(0);
+
+  // Self-Consistency lives in INTERMEDIATE tier, which is not yet revealed.
+  const card = screen.getByTestId("technique-card-self-cons");
+  fireEvent.mouseEnter(card);
+
+  // No detail strip for the unrevealed card; placeholder still shown.
+  expect(card.getAttribute("data-active")).toBe("false");
+  expect(
+    screen.queryByTestId("technique-detail-self-cons"),
+  ).not.toBeInTheDocument();
+  expect(screen.getByTestId("technique-detail-empty")).toBeInTheDocument();
+});
+
 test("hovering a different card swaps the detail content", () => {
   renderAtStep(2);
 

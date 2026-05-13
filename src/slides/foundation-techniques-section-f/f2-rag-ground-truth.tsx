@@ -1,34 +1,32 @@
 // F.2 — GROUND TRUTH (RAG · Grounding in your facts)
 //
 // CANONICAL pattern for Section F facet slides (F.2–F.7). Two-step structure
-// with hover-only details and an aligned right-pane bordered box.
+// with hover-only details and an aligned right-pane popover anchor.
 //
 // Step axis (2 steps; canonical pose = 1):
 //   0 — All 5 facet cards stagger-reveal on the left. Hover is always on.
-//       Right pane shows the bordered box framing an empty content area.
-//       Hovering any facet card crossfades the matching illustration into
-//       the bordered box. Footer hidden.
+//       Right pane is empty until the user hovers a facet card. On hover
+//       the matching illustration crossfades in. Footer hidden.
 //   1 — Footer (italic copper-200 caption) fades in below the facet cards.
 //       Everything else stays revealed; hover continues to drive details.
 //
-// Border alignment (canonical):
-//   The right-pane bordered box uses the same `top: 156 / bottom: 80` as the
-//   left FacetMenu so the top and bottom borders align exactly with the
-//   FacetMenu's top edge (header baseline) and bottom edge. An invisible
-//   visibility section title inside the bordered box mirrors the left's
-//   mono header + 12px gap + CopperRule, so when a facet hover illustration
-//   crossfades in, its content top sits on the same baseline as the left's
-//   first facet card.
+// Right-pane geometry (Items 1-3 of the popover refactor):
+//   The right-pane wrapper has NO border / background of its own — it is a
+//   transparent popover anchor whose vertical extent matches the FacetMenu's
+//   card stack exactly (top/bottom measured at runtime via
+//   `useFacetListBounds`). Content is centered vertically inside that range
+//   with `justifyContent: center` and `maxHeight: 100%` so it never spills
+//   above the first card top or below the last card bottom.
 //
 // Hover behaviour:
-//   activeFacet === null         → bordered box shows; content area empty
+//   activeFacet === null         → right pane is empty
 //   activeFacet === "<facet-id>" → matching illustration crossfades in (700ms)
 //   Crossfade between facets is handled inside DetailCanvas.
 //
 // F.3–F.7 mirror this structure exactly: 2 steps, canonical pose 1, identical
-// border alignment, hover-only DetailCanvas with NO defaultState.
+// runtime bounds measurement, hover-only DetailCanvas with NO defaultState.
 import { Fragment, useEffect, useState } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
@@ -38,21 +36,15 @@ import { DetailCanvas } from "./components/DetailCanvas";
 import { RAGTypesCarousel } from "./components/RAGTypesCarousel";
 import { LucideIcon } from "./components/LucideIcon";
 import { Typewriter } from "./components/Typewriter";
+import { useFacetListBounds } from "./components/useFacetListBounds";
 import { f2Content as C } from "./content";
 
 // ───────────────────── shared layout constants (F-section canonical) ─────────────────────
 //
-// Mirror the FacetMenu's vertical rhythm so the right pane's content area
-// top-aligns with the left's first facet card top-border.
-//   header-line height ≈ 14px (mono 11px line-height 1.2-ish)
-//   marginTop: 12       → space between header and copper rule
-//   copper rule         → 1px
-//   marginTop: 16       → space between rule and first facet card
-// Total ≈ 43px. We bake the exact mirror in the right pane via an invisible
-// header strip so the alignment is automatic (no hand-tuned magic number).
+// Right pane width — kept stable across F.2–F.7. Top / bottom are measured at
+// runtime via `useFacetListBounds` so the wrapper aligns with the FacetMenu's
+// card stack exactly (independent of card count or footer visibility).
 
-const PANE_TOP = 156;
-const PANE_BOTTOM = 80;
 const RIGHT_W = 660;
 
 // ───────────────────── slide ─────────────────────
@@ -70,6 +62,8 @@ export function F2RagGroundTruth() {
 
   const [activeFacet, setActiveFacet] = useState<string | null>(null);
   const effectiveFacet = hoverEnabled ? activeFacet : null;
+
+  const { top: paneTop, bottom: paneBottom } = useFacetListBounds();
 
   return (
     <>
@@ -99,56 +93,35 @@ export function F2RagGroundTruth() {
         showFooter={showFooter}
       />
 
-      {/* RIGHT — bordered box. Top/bottom borders align with FacetMenu's
-          top edge (PANE_TOP) and bottom edge (PANE_BOTTOM) exactly. */}
+      {/* RIGHT — transparent popover anchor. Top / bottom match the left
+          FacetMenu's card-stack extent exactly (measured at runtime).
+          Content centers vertically within that range. */}
       <div
         data-testid="f2-right-pane"
         style={{
           position: "absolute",
           right: 48,
-          top: PANE_TOP,
+          top: paneTop,
           width: RIGHT_W,
-          bottom: PANE_BOTTOM,
-          border: "1px solid var(--copper-700)",
-          background: "rgba(10,10,10,0.5)",
+          bottom: paneBottom,
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          pointerEvents: "none",
         }}
       >
-        {/* Invisible-visibility header strip — mirrors the left FacetMenu's
-            mono header + 12px gap + 1px copper rule + 16px gap so the right
-            pane's content area top aligns with the left's first facet card
-            top border exactly. Padding 16px matches the bordered box's gutter. */}
-        <div
-          aria-hidden
-          style={{
-            visibility: "hidden",
-            padding: "0 16px",
-            paddingTop: 16,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              display: "block",
-            }}
-          >
-            {C.header}
-          </span>
-          <div style={{ marginTop: 12, height: 1 }} />
-        </div>
-
-        {/* Content area — DetailCanvas renders nothing until a facet hover. */}
+        {/* Content area — DetailCanvas renders nothing until a facet hover.
+            `maxHeight: 100%` + relative positioning constrains the canvas to
+            the FacetMenu's card-stack vertical bounds so popover content can
+            never overflow above the first card or below the last card. */}
         <div
           style={{
             position: "relative",
-            flex: 1,
-            margin: 16,
-            marginTop: 16,
+            width: "100%",
+            maxHeight: "100%",
+            height: "100%",
+            pointerEvents: "auto",
           }}
         >
           <DetailCanvas
@@ -167,44 +140,11 @@ export function F2RagGroundTruth() {
   );
 }
 
-// ───────────────────── shared sub-section header ─────────────────────
+// ───────────────────── shared atoms ─────────────────────
 //
-// Used by every facet hover state to label the illustration. Mono uppercase
-// label + italic serif caption underneath. Sits at the top of each state.
-
-interface FacetHeaderProps {
-  label: string;
-  caption: string;
-}
-
-function FacetHeader({ label, caption }: FacetHeaderProps) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          letterSpacing: "0.22em",
-          color: "var(--copper-300)",
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <span
-        style={{
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 13,
-          color: "var(--copper-200)",
-          lineHeight: 1.4,
-        }}
-      >
-        {caption}
-      </span>
-    </div>
-  );
-}
+// FacetHeader was removed in the popover refactor (Item 1) — facet states no
+// longer carry their own label/caption strip; the left FacetMenu card already
+// names the facet, so the popover focuses on the illustration alone.
 
 // Mono uppercase column title — used at the top of each column in 3-column
 // layouts (WHAT IT IS, THE TYPES). Per task spec: ~10–11px, copper-200,
@@ -233,6 +173,12 @@ function ColumnTitle({ children }: { children: ReactNode }) {
 // continuous flowing-dot animation. Column titles in mono uppercase.
 
 function WhatItIsState() {
+  // R2-1: outer wrapper centers content vertically inside the popover anchor;
+  // the inner grid uses an explicit row template so the title block and the
+  // illustration row are independent rows. The connector arrows sit on the
+  // *illustration row* with vertical-center alignment, which lands their
+  // midpoint at the vertical midpoint of the illustration (not below the
+  // title block as before).
   return (
     <div
       data-testid="f2-what-it-is"
@@ -241,58 +187,72 @@ function WhatItIsState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
-        padding: "8px 12px",
-        gap: 14,
+        justifyContent: "center",
+        padding: "4px 12px",
+        gap: 0,
       }}
     >
-      <FacetHeader
-        label="WHAT IT IS"
-        caption="a fact-checker reading the actual manual"
-      />
-
       <div
         style={{
-          flex: 1,
           display: "grid",
           gridTemplateColumns: "1fr 36px 1fr 36px 1fr",
-          alignItems: "stretch",
-          gap: 0,
+          gridTemplateRows: "auto auto",
+          // alignItems defaults to "stretch" — each cell fills its row's
+          // vertical extent. Row 1 cells (titles) hug top naturally via their
+          // own flex layout; row 2 cells (illustrations + arrows) use
+          // alignItems: center internally so the arrow lands at the
+          // illustration's vertical midpoint.
+          columnGap: 0,
+          rowGap: 20,
           minHeight: 0,
         }}
       >
-        <RagColumn
+        {/* Row 1 — title blocks (each horizontally centered inside its column). */}
+        <RagTitle
           title="UNSTRUCTURED SOURCES"
           subtitle="docs / PDFs / sheets"
-        >
+        />
+        <div aria-hidden="true" />
+        <RagTitle title="INDEXED KNOWLEDGE" subtitle="searchable corpus" />
+        <div aria-hidden="true" />
+        <RagTitle title="QUERY INTERFACE" subtitle="grounded answer" />
+
+        {/* Row 2 — illustrations + connector arrows, all vertically centered
+            within the row so the arrow sits at the illustration's midpoint. */}
+        <RagIllustration>
           <FilePile />
-        </RagColumn>
+        </RagIllustration>
         <FlowArrow testId="f2-arrow-1" />
-        <RagColumn title="INDEXED KNOWLEDGE" subtitle="searchable corpus">
+        <RagIllustration>
           <IndexBlock />
-        </RagColumn>
+        </RagIllustration>
         <FlowArrow testId="f2-arrow-2" />
-        <RagColumn title="QUERY INTERFACE" subtitle="grounded answer">
+        <RagIllustration>
           <QueryBlock />
-        </RagColumn>
+        </RagIllustration>
       </div>
     </div>
   );
 }
 
-interface RagColumnProps {
+interface RagTitleProps {
   title: string;
   subtitle: string;
-  children: ReactNode;
 }
 
-function RagColumn({ title, subtitle, children }: RagColumnProps) {
+// Title block (mono uppercase label + italic caption) — horizontally centered
+// inside its grid column so it shares a vertical center axis with the
+// illustration below it (R2-1 fix).
+function RagTitle({ title, subtitle }: RagTitleProps) {
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 8,
-        padding: "8px 6px",
+        alignItems: "center",
+        textAlign: "center",
+        gap: 4,
+        padding: "0 6px",
         minWidth: 0,
       }}
     >
@@ -308,17 +268,24 @@ function RagColumn({ title, subtitle, children }: RagColumnProps) {
       >
         {subtitle}
       </span>
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: 0,
-        }}
-      >
-        {children}
-      </div>
+    </div>
+  );
+}
+
+// Illustration cell — horizontally centered inside its grid column so its
+// midpoint sits directly under the title block's midpoint.
+function RagIllustration({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "0 6px",
+        minWidth: 0,
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -326,6 +293,10 @@ function RagColumn({ title, subtitle, children }: RagColumnProps) {
 // Continuous flowing-dot arrow between columns. The arrow itself is a static
 // horizontal line + arrowhead; a small copper dot loops along the line every
 // 2s via the `f-flow-dot` keyframe (CSS Motion Path).
+//
+// R2-1: arrow now lives on the illustration row (row 2 of the parent grid)
+// and aligns vertically to row center, so it lands at the illustration's
+// vertical midpoint rather than below it.
 interface FlowArrowProps {
   testId?: string;
 }
@@ -339,6 +310,7 @@ function FlowArrow({ testId }: FlowArrowProps) {
         alignItems: "center",
         justifyContent: "center",
         width: 36,
+        height: "100%",
       }}
       aria-hidden="true"
     >
@@ -623,15 +595,14 @@ function QueryBlock() {
 // ───────────────────── HOW IT WORKS state ─────────────────────
 //
 // 3-step pipe diagram: Retrieval → Augmentation → Generation. Apply the
-// canonical layout template (header + horizontal flow) and add a sequential
-// pulse loop highlighting each step in turn every ~2.5s.
+// canonical layout template (header + horizontal flow) and use the deck-wide
+// `f-card-cycle` highlight cycle (left→right) to sequence the three steps.
 
 interface PipeStep {
   id: string;
   label: string;
   caption: string;
   icon: string;
-  pulseClass: "f-seq-pulse-1" | "f-seq-pulse-2" | "f-seq-pulse-3";
   body: ReactNode;
 }
 
@@ -642,7 +613,6 @@ function HowItWorksState() {
       label: "Retrieval",
       caption: "search + top-K docs",
       icon: "Search",
-      pulseClass: "f-seq-pulse-1",
       body: (
         <div
           style={{
@@ -689,7 +659,6 @@ function HowItWorksState() {
       label: "Augmentation",
       caption: "docs into context",
       icon: "Layers",
-      pulseClass: "f-seq-pulse-2",
       body: (
         <div
           style={{
@@ -740,7 +709,6 @@ function HowItWorksState() {
       label: "Generation",
       caption: "Claude composes",
       icon: "Bot",
-      pulseClass: "f-seq-pulse-3",
       body: (
         <div
           style={{
@@ -799,15 +767,11 @@ function HowItWorksState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="HOW IT WORKS"
-        caption="retrieve → augment → generate"
-      />
-
       <div
         style={{
           display: "flex",
@@ -819,7 +783,7 @@ function HowItWorksState() {
       >
         {steps.map((s, i) => (
           <Fragment key={s.id}>
-            <PipeStepCard step={s} />
+            <PipeStepCard step={s} index={i} total={steps.length} />
             {i < steps.length - 1 && <PipeArrow />}
           </Fragment>
         ))}
@@ -828,20 +792,30 @@ function HowItWorksState() {
   );
 }
 
-function PipeStepCard({ step }: { step: PipeStep }) {
+function PipeStepCard({
+  step,
+  index,
+  total,
+}: {
+  step: PipeStep;
+  index: number;
+  total: number;
+}) {
   return (
     <div
       data-testid={`pipe-step-${step.id}`}
-      className={step.pulseClass}
-      style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        padding: 12,
-        border: "1px solid var(--copper-700)",
-        background: "rgba(10,10,10,0.5)",
-      }}
+      className="f-card-cycle"
+      style={
+        {
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          padding: 12,
+          "--cycle-duration": `${total}s`,
+          "--cycle-delay": `${index}s`,
+        } as CSSProperties
+      }
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <LucideIcon name={step.icon} size={16} color="var(--copper-200)" />
@@ -896,9 +870,9 @@ function PipeArrow() {
 //
 // Existing RAGTypesCarousel wrapped with the canonical header strip. The
 // carousel itself auto-cycles every 2.5s through vector → graph → file →
-// hybrid (smooth crossfade between platter variants). Column titles below
-// echo the three structural facets common to every type:
-//   INPUT SOURCES · STORAGE STRATEGY · RETRIEVAL
+// hybrid (smooth crossfade between platter variants). Zone titles
+// (SOURCES · STORAGE · RETRIEVAL) live inside <BridgeArtifact> itself, so we
+// don't repeat them here.
 
 function TheTypesState() {
   return (
@@ -909,32 +883,11 @@ function TheTypesState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 10,
       }}
     >
-      <FacetHeader
-        label="THE TYPES"
-        caption="vector · graph · file · hybrid"
-      />
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gap: 12,
-          paddingTop: 2,
-        }}
-      >
-        <ColumnTitle>INPUT SOURCES</ColumnTitle>
-        <div style={{ textAlign: "center" }}>
-          <ColumnTitle>STORAGE STRATEGY</ColumnTitle>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <ColumnTitle>RETRIEVAL</ColumnTitle>
-        </div>
-      </div>
-
       <div style={{ flex: 1, position: "relative", minHeight: 0 }}>
         <RAGTypesCarousel autoCycle />
       </div>
@@ -944,9 +897,10 @@ function TheTypesState() {
 
 // ───────────────────── WHEN TO REACH state ─────────────────────
 //
-// CANONICAL layout template — F.3–F.7 model their default-content matrices on
-// this composition: FacetHeader + 4×3 grid with row-by-row pulse loop
-// (~4s, each row ~1s of emphasis).
+// Static 4×3 decision matrix. Previously the rows used a `f-row-pulse-*`
+// highlight loop, but the moving emphasis was reported as confusing during
+// hover, so the table now renders fully static (no reveal stagger, no row
+// pulse, no shimmer). Keep styling only.
 
 interface MatrixRow {
   scenario: string;
@@ -982,13 +936,6 @@ const MATRIX_ROWS: readonly MatrixRow[] = [
   },
 ];
 
-const PULSE_CLASSES = [
-  "f-row-pulse-1",
-  "f-row-pulse-2",
-  "f-row-pulse-3",
-  "f-row-pulse-4",
-] as const;
-
 function WhenToReachState() {
   return (
     <div
@@ -998,15 +945,11 @@ function WhenToReachState() {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
         gap: 14,
       }}
     >
-      <FacetHeader
-        label="WHEN TO REACH"
-        caption="RAG vs long-context — pick the right tool."
-      />
-
       <div
         role="table"
         style={{
@@ -1023,37 +966,33 @@ function WhenToReachState() {
         <MatrixHeader label="RAG FITS" />
         <MatrixHeader label="LONG-CTX FITS" />
         <MatrixHeader label="EITHER" />
-        {/* Body rows — each row gets its own pulse class so the highlight
-            travels top → bottom across the 4s cycle. */}
-        {MATRIX_ROWS.map((r, i) => {
-          const pulse = PULSE_CLASSES[i];
-          return (
-            <Fragment key={r.scenario}>
-              <MatrixCell pulseClass={pulse}>
-                <span
-                  style={{
-                    fontFamily: "var(--serif)",
-                    fontStyle: "italic",
-                    fontSize: 12,
-                    color: "var(--neutral-100)",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {r.scenario}
-                </span>
-              </MatrixCell>
-              <MatrixCell center pulseClass={pulse}>
-                <MatrixMark mark={r.rag} />
-              </MatrixCell>
-              <MatrixCell center pulseClass={pulse}>
-                <MatrixMark mark={r.longCtx} />
-              </MatrixCell>
-              <MatrixCell center pulseClass={pulse}>
-                <MatrixMark mark={r.either} />
-              </MatrixCell>
-            </Fragment>
-          );
-        })}
+        {/* Body rows — fully static, no pulse class / reveal animation. */}
+        {MATRIX_ROWS.map((r) => (
+          <Fragment key={r.scenario}>
+            <MatrixCell>
+              <span
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontStyle: "italic",
+                  fontSize: 12,
+                  color: "var(--neutral-100)",
+                  lineHeight: 1.4,
+                }}
+              >
+                {r.scenario}
+              </span>
+            </MatrixCell>
+            <MatrixCell center>
+              <MatrixMark mark={r.rag} />
+            </MatrixCell>
+            <MatrixCell center>
+              <MatrixMark mark={r.longCtx} />
+            </MatrixCell>
+            <MatrixCell center>
+              <MatrixMark mark={r.either} />
+            </MatrixCell>
+          </Fragment>
+        ))}
       </div>
     </div>
   );
@@ -1086,16 +1025,13 @@ function MatrixHeader({
 
 function MatrixCell({
   center = false,
-  pulseClass,
   children,
 }: {
   center?: boolean;
-  pulseClass?: string;
   children: ReactNode;
 }) {
   return (
     <div
-      className={pulseClass}
       style={{
         background: "rgba(10,10,10,0.6)",
         padding: "10px 10px",
@@ -1191,6 +1127,22 @@ function ExampleState({ active }: ExampleStateProps) {
     };
   }, [active]);
 
+  // R2-3 + follow-up: boxes are sized absolutely from the start so that the
+  // Typewriter text streams INTO a fixed-size container rather than growing it.
+  // Sections are absolutely positioned inside a height-reserved inner wrapper;
+  // the wrapper is vertically centered by the outer flex. This eliminates the
+  // reflow/shift the user was seeing as content streams in.
+  const SECTION_QUESTION_TOP = 0;
+  const SECTION_QUESTION_HEIGHT = 60; // label(14) + gap(6) + box(40)
+  const SECTION_RETRIEVED_TOP = 72; // 60 + 12 gap
+  const SECTION_RETRIEVED_HEIGHT = 170; // label(14) + gap(6) + 2 × box(72) + gap(6)
+  const SECTION_ANSWER_TOP = 254; // 72 + 170 + 12 gap
+  const SECTION_ANSWER_HEIGHT = 88; // label(20) + gap(6) + box(62)
+  const INNER_TOTAL_HEIGHT = SECTION_ANSWER_TOP + SECTION_ANSWER_HEIGHT; // 342
+  const QUERY_BOX_HEIGHT = 40;
+  const SNIPPET_BOX_HEIGHT = 72;
+  const ANSWER_BOX_HEIGHT = 62;
+
   return (
     <div
       data-testid="f2-example"
@@ -1199,162 +1151,219 @@ function ExampleState({ active }: ExampleStateProps) {
         inset: 0,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         padding: "8px 12px",
-        gap: 10,
       }}
     >
-      <FacetHeader
-        label="EXAMPLE · company handbook"
-        caption="answer from the company handbook"
-      />
-
-      {/* Query bar */}
       <div
-        data-testid="f2-example-query"
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          padding: "10px 14px",
-          border: "1px solid var(--copper-500)",
-          background: "rgba(10,10,10,0.7)",
+          position: "relative",
+          width: "100%",
+          height: INNER_TOTAL_HEIGHT,
         }}
       >
-        <LucideIcon name="Search" size={16} color="var(--copper-200)" />
-        <Typewriter
-          text={`“${EXAMPLE_QUERY}”`}
-          play={stage >= 1}
-          duration={900}
+        {/* Question section — absolute top */}
+        <div
+          data-testid="f2-example-question-section"
           style={{
-            fontFamily: "var(--serif)",
-            fontStyle: "italic",
-            fontSize: 14,
-            color: "var(--neutral-100)",
-            lineHeight: 1.4,
-            margin: 0,
-            whiteSpace: "pre-wrap",
-          }}
-        />
-      </div>
-
-      {/* Retrieved snippets */}
-      <div
-        data-testid="f2-example-snippets"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 9.5,
-            letterSpacing: "0.22em",
-            color: "var(--copper-300)",
-            textTransform: "uppercase",
+            position: "absolute",
+            top: SECTION_QUESTION_TOP,
+            left: 0,
+            right: 0,
+            height: SECTION_QUESTION_HEIGHT,
           }}
         >
-          Retrieved
-        </span>
-        {EXAMPLE_SNIPPETS.map((s) => {
-          const snippetStage = s.id === 1 ? 2 : 3;
-          return (
-            <div
-              key={s.id}
-              data-testid={`f2-example-snippet-${s.id}`}
+          <span
+            data-testid="f2-example-question-label"
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 9.5,
+              letterSpacing: "0.22em",
+              color: "var(--copper-300)",
+              textTransform: "uppercase",
+              display: "block",
+              marginBottom: 6,
+            }}
+          >
+            Question
+          </span>
+          <div
+            data-testid="f2-example-query"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "0 14px",
+              height: QUERY_BOX_HEIGHT,
+              border: "1px solid var(--copper-500)",
+              background: "rgba(10,10,10,0.7)",
+              boxSizing: "border-box",
+            }}
+          >
+            <LucideIcon name="Search" size={16} color="var(--copper-200)" />
+            <Typewriter
+              text={`“${EXAMPLE_QUERY}”`}
+              play={stage >= 1}
+              duration={900}
               style={{
-                border: "1px solid var(--copper-800)",
-                background: "rgba(184,110,61,0.05)",
-                padding: "10px 14px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 4,
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: 14,
+                color: "var(--neutral-100)",
+                lineHeight: 1.4,
+                margin: 0,
+                whiteSpace: "pre-wrap",
               }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: 10,
-                    letterSpacing: "0.10em",
-                    color: "var(--copper-200)",
-                    border: "1px solid var(--copper-700)",
-                    padding: "1px 5px",
-                    lineHeight: 1,
-                  }}
-                >
-                  [{s.id}]
-                </span>
-                <span
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: 10,
-                    letterSpacing: "0.10em",
-                    color: "var(--neutral-400)",
-                  }}
-                >
-                  {s.source}
-                </span>
-              </div>
-              <Typewriter
-                text={`“${s.quote}”`}
-                play={stage >= snippetStage}
-                duration={1200}
-                style={{
-                  fontFamily: "var(--serif)",
-                  fontSize: 12.5,
-                  color: "var(--neutral-100)",
-                  lineHeight: 1.45,
-                  margin: 0,
-                  whiteSpace: "pre-wrap",
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
+            />
+          </div>
+        </div>
 
-      {/* Grounded answer */}
-      <div
-        data-testid="f2-example-answer"
-        style={{
-          marginTop: "auto",
-          border: "1px solid var(--copper-500)",
-          background: "rgba(184,110,61,0.10)",
-          padding: "12px 14px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 6,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <LucideIcon name="Bot" size={14} color="var(--copper-200)" />
+        {/* Retrieved section — absolute middle */}
+        <div
+          data-testid="f2-example-snippets"
+          style={{
+            position: "absolute",
+            top: SECTION_RETRIEVED_TOP,
+            left: 0,
+            right: 0,
+            height: SECTION_RETRIEVED_HEIGHT,
+          }}
+        >
           <span
             style={{
               fontFamily: "var(--mono)",
-              fontSize: 10,
-              letterSpacing: "0.18em",
-              color: "var(--copper-100)",
+              fontSize: 9.5,
+              letterSpacing: "0.22em",
+              color: "var(--copper-300)",
               textTransform: "uppercase",
+              display: "block",
+              marginBottom: 6,
             }}
           >
-            CLAUDE &middot; grounded answer
+            Retrieved
           </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {EXAMPLE_SNIPPETS.map((s) => {
+              const snippetStage = s.id === 1 ? 2 : 3;
+              return (
+                <div
+                  key={s.id}
+                  data-testid={`f2-example-snippet-${s.id}`}
+                  style={{
+                    border: "1px solid var(--copper-800)",
+                    background: "rgba(184,110,61,0.05)",
+                    padding: "10px 14px",
+                    height: SNIPPET_BOX_HEIGHT,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 4,
+                    boxSizing: "border-box",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span
+                      style={{
+                        fontFamily: "var(--mono)",
+                        fontSize: 10,
+                        letterSpacing: "0.10em",
+                        color: "var(--copper-200)",
+                        border: "1px solid var(--copper-700)",
+                        padding: "1px 5px",
+                        lineHeight: 1,
+                      }}
+                    >
+                      [{s.id}]
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: "var(--mono)",
+                        fontSize: 10,
+                        letterSpacing: "0.10em",
+                        color: "var(--neutral-400)",
+                      }}
+                    >
+                      {s.source}
+                    </span>
+                  </div>
+                  <Typewriter
+                    text={`“${s.quote}”`}
+                    play={stage >= snippetStage}
+                    duration={1200}
+                    style={{
+                      fontFamily: "var(--serif)",
+                      fontSize: 12.5,
+                      color: "var(--neutral-100)",
+                      lineHeight: 1.45,
+                      margin: 0,
+                      whiteSpace: "pre-wrap",
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <Typewriter
-          text={EXAMPLE_ANSWER}
-          play={stage >= 4}
-          duration={1500}
+
+        {/* Grounded answer section — absolute bottom */}
+        <div
+          data-testid="f2-example-answer-section"
           style={{
-            fontFamily: "var(--serif)",
-            fontSize: 13.5,
-            color: "var(--neutral-50)",
-            lineHeight: 1.5,
-            margin: 0,
-            whiteSpace: "pre-wrap",
+            position: "absolute",
+            top: SECTION_ANSWER_TOP,
+            left: 0,
+            right: 0,
+            height: SECTION_ANSWER_HEIGHT,
           }}
-        />
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 6,
+              height: 14,
+            }}
+          >
+            <LucideIcon name="Bot" size={14} color="var(--copper-300)" />
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 9.5,
+                letterSpacing: "0.22em",
+                color: "var(--copper-300)",
+                textTransform: "uppercase",
+              }}
+            >
+              Claude &middot; grounded answer
+            </span>
+          </div>
+          <div
+            data-testid="f2-example-answer"
+            style={{
+              border: "1px solid var(--copper-500)",
+              background: "rgba(184,110,61,0.10)",
+              padding: "12px 14px",
+              height: ANSWER_BOX_HEIGHT,
+              boxSizing: "border-box",
+              overflow: "hidden",
+            }}
+          >
+            <Typewriter
+              text={EXAMPLE_ANSWER}
+              play={stage >= 4}
+              duration={1500}
+              style={{
+                fontFamily: "var(--serif)",
+                fontSize: 13.5,
+                color: "var(--neutral-50)",
+                lineHeight: 1.5,
+                margin: 0,
+                whiteSpace: "pre-wrap",
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

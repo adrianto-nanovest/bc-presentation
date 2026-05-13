@@ -2,22 +2,37 @@
 //
 // Section opener · split-stage map (knowledge × capability). Both flagship
 // visuals (bridge-artifact + layer-cake) are previewed side-by-side. As the
-// reveal progresses, the subtitle motion-merges into the title, the
-// illustration band shifts upward, and each pillar lights up at FULL
-// brightness as it is named. The closing step adds a connector with a copper
-// shimmer that travels back and forth, plus a footer caption.
+// reveal progresses, the heroic title fades out and the subtitle motion-
+// promotes into the canonical slide-headline slot (top:80 / left:48 /
+// right:48, matching D.2's `.slide-headline.small`). The illustration band
+// shifts upward, and each pillar lights up at FULL brightness as it is
+// named. The closing step adds a connector with a copper shimmer that
+// travels back and forth, plus a footer caption.
 //
-// Layout — centered title block above two equal-width visual panels on the
-// 1280×720 stage. Title bar sits in the upper third until step 2, after
-// which the subtitle collapses into the title and the pillars slide up.
+// Layout — centered hero title above two equal-width visual panels on the
+// 1280×720 stage. Hero sits in the upper third until step 2, after which it
+// fades and the subtitle takes over as the slide-headline.
 //
 // 4 reveal steps (Adri-indexed; code stepIndex shown in parens):
-//   Step 1 (stepIndex 0) — title + subtitle visible; both pillars present at
-//                          low opacity (0.15 unlit baseline)
-//   Step 2 (stepIndex 1) — subtitle merges into title via coordinated
-//                          transform (font-size + position + letter-spacing
-//                          over 700ms). LEFT pillar (KNOWLEDGE) brightens to
-//                          full brightness. Illustration band shifts up ~96px.
+//   Step 1 (stepIndex 0) — hero title ("Two Pillars" 64px + copper rule) +
+//                          centered italic subtitle visible below; both
+//                          pillars present at low opacity (0.15 unlit
+//                          baseline)
+//   Step 2 (stepIndex 1) — hero title + rule fade out (opacity → 0,
+//                          translateY -12px). Subtitle motion-promotes via
+//                          a true translation: `top: 210→80` and
+//                          `left: 50% → 48px` with a paired
+//                          `transform: translateX(-50%) → translateX(0)`,
+//                          so the box actually traverses the stage from
+//                          center to top-left rather than snapping
+//                          alignment. Discrete typography (font-family
+//                          serif→display, font-style italic→normal) snaps
+//                          immediately at step 2 trigger — the text is in
+//                          its final display/non-italic shell before motion
+//                          begins. Resulting style matches D.2's
+//                          `.slide-headline.small`. LEFT pillar (KNOWLEDGE)
+//                          brightens to full brightness. Illustration band
+//                          shifts up ~96px.
 //   Step 3 (stepIndex 2) — RIGHT pillar (CAPABILITY) brightens to full
 //                          brightness. Illustration band remains shifted.
 //   Step 4 (stepIndex 3) — Faint copper ◯←→◯ connector reveals between
@@ -73,25 +88,30 @@ export function F1TwoPillars() {
     <>
       <FigLabel section="F" num={1} label="TWO PILLARS" />
 
-      {/* ───────────── Title block (centered, upper third) ─────────────
-          Two stacked lines whose typographic shells animate as one unit.
-          On step 2 the subtitle's font-size, color, letter-spacing, and
-          vertical position all retarget the title — making it read as a
-          motion-merge rather than a discrete fade. */}
+      {/* ───────────── Hero title (step 1 only — fades on step 2) ─────────────
+          The heroic "Two Pillars" + copper rule that anchors the section
+          opener. Once headerCollapsed flips, this whole block fades out
+          and lifts gently while the subtitle below promotes itself into
+          the canonical slide-headline slot. */}
       <div
-        data-testid="f1-title-block"
+        data-testid="f1-hero-title"
         data-collapsed={headerCollapsed ? "1" : "0"}
         style={{
           position: "absolute",
-          top: headerCollapsed ? 76 : 116,
+          top: 116,
           left: 0,
           right: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: headerCollapsed ? 6 : 14,
+          gap: 14,
+          opacity: headerCollapsed ? 0 : 1,
+          transform: headerCollapsed
+            ? "translateY(-12px)"
+            : "translateY(0)",
           transition:
-            "top 0.7s var(--ease), gap 0.7s var(--ease)",
+            "opacity 0.5s var(--ease), transform 0.7s var(--ease)",
+          pointerEvents: headerCollapsed ? "none" : "auto",
         }}
       >
         <Reveal on data-testid="f1-headline">
@@ -112,39 +132,62 @@ export function F1TwoPillars() {
 
         <div
           style={{
-            width: headerCollapsed ? "28%" : "40%",
+            width: "40%",
             display: "flex",
             justifyContent: "center",
-            transition: "width 0.7s var(--ease)",
           }}
         >
           <CopperRule on delay={200} width="100%" />
         </div>
+      </div>
 
-        {/* Subtitle — animates into the title via coordinated transform.
-            On step 2, font-size shrinks, letter-spacing tightens, color
-            shifts toward the title's neutral hue, and the line nudges up
-            so it visually tucks against the rule. Mirrors D.1's
-            stat-into-header collapse (foundation-core/d1-the-trap.tsx). */}
-        <Reveal on delay={350} data-testid="f1-subtitle">
+      {/* ───────────── Subtitle (motion-promotes into slide-headline) ─────────────
+          Step 1: stage-centered italic serif (copper-200, 22px) at top:210,
+          anchored via `left:50% + translateX(-50%)` so the text is truly
+          centered around the stage's vertical axis.
+          Step 2: smoothly translates to the canonical slide-headline anchor
+          at `top:80, left:48` (translateX(0)), then renders as D.2's
+          `.slide-headline.small`: display family, 40px, neutral-50,
+          letter-spacing -0.01em, left-aligned.
+
+          Because `left` and `transform` are both fully animatable, the box
+          actually travels across the stage rather than just snapping
+          alignment. Non-interpolatable typography properties (font-family,
+          font-style) are deliberately OMITTED from the transition list so
+          they snap immediately at step 2 trigger — the text is already in
+          its final display/non-italic shell before motion begins, which
+          avoids the awkward mid-transition italic→normal flip. */}
+      <div
+        data-testid="f1-subtitle-wrap"
+        data-collapsed={headerCollapsed ? "1" : "0"}
+        style={{
+          position: "absolute",
+          top: headerCollapsed ? 80 : 210,
+          left: headerCollapsed ? "48px" : "50%",
+          transform: headerCollapsed
+            ? "translateX(0)"
+            : "translateX(-50%)",
+          transition:
+            "top 0.7s var(--ease), left 0.7s var(--ease), transform 0.7s var(--ease)",
+        }}
+      >
+        <Reveal on delay={350}>
           <p
-            data-collapsed={headerCollapsed ? "1" : "0"}
+            data-testid="f1-subtitle"
             style={{
-              fontFamily: "var(--serif)",
-              fontStyle: "italic",
-              fontSize: headerCollapsed ? 16 : 22,
-              color: headerCollapsed
-                ? "var(--copper-300)"
-                : "var(--copper-200)",
-              letterSpacing: headerCollapsed ? "0.04em" : "normal",
               margin: 0,
-              textAlign: "center",
-              lineHeight: 1.2,
-              transform: headerCollapsed
-                ? "translateY(-4px)"
-                : "translateY(0)",
+              whiteSpace: "nowrap",
+              fontFamily: headerCollapsed ? "var(--display)" : "var(--serif)",
+              fontStyle: headerCollapsed ? "normal" : "italic",
+              fontWeight: 400,
+              fontSize: headerCollapsed ? 40 : 22,
+              lineHeight: headerCollapsed ? 1.05 : 1.2,
+              letterSpacing: headerCollapsed ? "-0.01em" : "normal",
+              color: headerCollapsed
+                ? "var(--neutral-50)"
+                : "var(--copper-200)",
               transition:
-                "font-size 0.7s var(--ease), color 0.7s var(--ease), letter-spacing 0.7s var(--ease), transform 0.7s var(--ease)",
+                "font-size 0.7s var(--ease), color 0.7s var(--ease), letter-spacing 0.7s var(--ease), line-height 0.7s var(--ease)",
             }}
           >
             {highlight(C.subtitle, C.subtitleKw)}

@@ -185,26 +185,16 @@ test("all five facet hover states are wired into DetailCanvas", () => {
   }
 });
 
-test("WHAT IT IS hover renders the SKILL.md preview frame with an Expand button", () => {
+test("WHAT IT IS hover renders the SKILL.md preview frame without an Expand button", () => {
   renderAtStep(0);
 
   const whatItIs = screen.getByTestId("facet-item-what-it-is");
   fireEvent.mouseEnter(whatItIs.firstChild as HTMLElement);
 
   expect(screen.getByTestId("f4-skill-md-preview")).toBeInTheDocument();
-  expect(screen.getByTestId("f4-skill-md-expand")).toBeInTheDocument();
-});
-
-test("clicking Expand → opens the SKILL.md modal; close button dismisses it", () => {
-  renderAtStep(0);
-
-  const whatItIs = screen.getByTestId("facet-item-what-it-is");
-  fireEvent.mouseEnter(whatItIs.firstChild as HTMLElement);
-
-  fireEvent.click(screen.getByTestId("f4-skill-md-expand"));
-  expect(screen.getByTestId("f4-skill-modal")).toBeInTheDocument();
-
-  fireEvent.click(screen.getByTestId("f4-skill-modal-close"));
+  // Expand button + modal have been removed in favor of a looping
+  // typewriter stream as the steady-state visualization.
+  expect(screen.queryByTestId("f4-skill-md-expand")).toBeNull();
   expect(screen.queryByTestId("f4-skill-modal")).toBeNull();
 });
 

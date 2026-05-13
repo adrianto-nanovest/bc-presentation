@@ -5,8 +5,8 @@
 //   3. Italic serif copper-200 tagline (13px) beneath
 //
 // Three column types (per spec §9.4 default state):
-//   - SessionStart: a hand drops PDF/DOCX/XLSX into a bucket → .md files
-//     emerge below. "auto-convert what Claude can't read"
+//   - SessionStart: put PDF/DOCX/XLSX into a bucket → .md files
+//     emerge below. "auto-convert to structured data"
 //   - PostToolUse: a clipboard with audit log lines showing Edit/Write entries
 //     in mono uppercase. "every action recorded"
 //   - Stop: a stylized owl with a thought-bubble containing
@@ -36,7 +36,7 @@ const COLUMN_INDEX: Record<HookColumnProps["type"], number> = {
 };
 
 const TAGLINES: Record<HookColumnProps["type"], string> = {
-  SessionStart: "auto-convert what Claude can't read",
+  SessionStart: "auto-convert to structured data",
   PostToolUse: "every action recorded",
   Stop: "human gate at session end",
 };
@@ -51,8 +51,9 @@ function SessionStartSketch() {
   return (
     <svg
       viewBox="0 0 180 140"
-      width="180"
-      height="140"
+      width="150"
+      height="100"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       stroke={STROKE}
       strokeWidth={1.5}
@@ -60,13 +61,6 @@ function SessionStartSketch() {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {/* hand — stylized, dropping documents */}
-      <g>
-        <path d="M22 26 Q26 18 34 20 L38 24 L42 22 L46 26 L50 32 L50 42 L44 46 L34 46 L26 42 Z" />
-        {/* fingers */}
-        <path d="M38 24 L40 18" />
-        <path d="M42 22 L44 16" />
-      </g>
 
       {/* falling document icons — PDF / DOCX / XLSX */}
       <g>
@@ -171,8 +165,9 @@ function PostToolUseSketch() {
   return (
     <svg
       viewBox="0 0 180 140"
-      width="180"
-      height="140"
+      width="150"
+      height="100"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       stroke={STROKE}
       strokeWidth={1.5}
@@ -244,8 +239,9 @@ function StopSketch() {
   return (
     <svg
       viewBox="0 0 180 140"
-      width="180"
-      height="140"
+      width="150"
+      height="100"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       stroke={STROKE}
       strokeWidth={1.5}
@@ -332,19 +328,19 @@ export function HookColumn({ type, on, delay = 0 }: HookColumnProps) {
       delay={delay}
       data-testid={`hook-column-${type}`}
       style={{
-        width: 200,
+        width: 180,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 10,
+        gap: 6,
       }}
     >
       {/* header — mono uppercase "COL N · <type>" */}
       <div
         style={{
           fontFamily: "var(--mono)",
-          fontSize: 11,
-          letterSpacing: "0.18em",
+          fontSize: 10,
+          letterSpacing: "0.16em",
           color: "var(--copper-300)",
           textTransform: "uppercase",
           textAlign: "center",
@@ -356,8 +352,8 @@ export function HookColumn({ type, on, delay = 0 }: HookColumnProps) {
       {/* sketch */}
       <div
         style={{
-          width: 180,
-          height: 140,
+          width: 150,
+          height: 100,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -371,11 +367,11 @@ export function HookColumn({ type, on, delay = 0 }: HookColumnProps) {
         style={{
           fontFamily: "var(--serif)",
           fontStyle: "italic",
-          fontSize: 13,
+          fontSize: 11,
           color: "var(--copper-200)",
           textAlign: "center",
-          lineHeight: 1.4,
-          maxWidth: 180,
+          lineHeight: 1.35,
+          maxWidth: 168,
         }}
       >
         {tagline}

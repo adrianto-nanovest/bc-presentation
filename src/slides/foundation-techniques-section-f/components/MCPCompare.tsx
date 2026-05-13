@@ -4,18 +4,21 @@
 //   • icon (GitBranch / Plug / Terminal)
 //   • mono uppercase column title
 //   • copper star ★ + underline below name if this column is the `highlight`
-//   • italic-serif tradeoff bullets (3-4 short lines)
-//   • sublabel "best for AI agents" beneath the highlighted column (copper-200)
+//   • per-option illustration (code block or text-stream) — Item 16
+//   • Pros: bullet list (copper-accent markers) — Item 15
+//   • Cons: bullet list (dim copper text) — Item 15
+//   • sublabel "best for AI agents" beneath the highlighted column
 //
-// Each column is hoverable (border shifts to copper-200, faint bg tint) and
-// clickable. Click opens a local `<ColumnModal>` overlay with the column's
-// detailed tradeoff breakdown (Rigidity / Portability / Security / Dev-effort
-// / Runtime-cost) rendered as serif bullets.
+// The previous "click for details" hover affordance was removed in Item 15 —
+// since the popover is hover-driven, "click" was misleading. The column-modal
+// machinery still exists in the props shape for back-compat but is no longer
+// surfaced in the UI.
 //
-// Per spec §3.2 `<MCPCompare highlight>` and §8.6 click-modal behavior.
+// Per spec §3.2 `<MCPCompare highlight>` (modals retained for compatibility).
 import { useState, type ReactNode } from "react";
 import { highlight as hl } from "@/components/highlight";
 import { LucideIcon } from "./LucideIcon";
+import { Typewriter } from "./Typewriter";
 
 export type CompareColumnId = "API" | "MCP" | "CLI";
 
@@ -26,7 +29,8 @@ export interface MCPCompareColumnModal {
 export interface MCPCompareProps {
   /** Which column to elevate with star + underline + sublabel. */
   highlight?: CompareColumnId;
-  /** Per-column click-modal payloads. */
+  /** Per-column click-modal payloads. Retained for API compatibility; no
+   *  longer rendered (the click-modal interaction was removed in Item 15). */
   modals: {
     api: MCPCompareColumnModal;
     mcp: MCPCompareColumnModal;
@@ -40,8 +44,9 @@ export interface MCPCompareProps {
   }>;
 }
 
-// Fallback short tradeoff bullets per column (italic serif). Matches spec
-// §8.4 essence copy when caller doesn't override.
+// Fallback short tradeoff bullets per column. The legacy `bullets` field is
+// no longer rendered directly — we now show Pros/Cons (below) — but we keep
+// it on the type so older callers still type-check.
 const DEFAULT_COLUMNS: Record<CompareColumnId, {
   bullets: string[];
   sublabel?: string;
@@ -70,6 +75,53 @@ const DEFAULT_COLUMNS: Record<CompareColumnId, {
   },
 };
 
+// ─────────────── Pros / Cons content (Item 15) ───────────────
+// 3–4 bullets per list. Copper-accent markers + dim copper text.
+
+const PROS_CONS: Record<CompareColumnId, { pros: string[]; cons: string[] }> = {
+  API: {
+    pros: [
+      "predictable contract",
+      "fine-grained control",
+      "strong typing per endpoint",
+      "battle-tested patterns",
+    ],
+    cons: [
+      "each integration coded by hand",
+      "rigid schema, brittle to changes",
+      "bespoke auth per vendor",
+      "low portability across systems",
+    ],
+  },
+  MCP: {
+    pros: [
+      "one protocol, many servers",
+      "install once, reuse everywhere",
+      "scoped permissions at boundary",
+      "swap servers without rewriting",
+    ],
+    cons: [
+      "small protocol overhead",
+      "still maturing ecosystem",
+      "depends on quality of server",
+    ],
+  },
+  CLI: {
+    pros: [
+      "maximum shell freedom",
+      "wraps existing tools quickly",
+      "ergonomic for power users",
+      "no extra protocol layer",
+    ],
+    cons: [
+      "machine-bound — local only",
+      "broad blast radius if mis-prompted",
+      "hard to audit cleanly",
+      "per-call shell spin-up cost",
+    ],
+  },
+};
+
 const ICONS: Record<CompareColumnId, string> = {
   API: "GitBranch",
   MCP: "Plug",
@@ -78,151 +130,192 @@ const ICONS: Record<CompareColumnId, string> = {
 
 const ORDER: CompareColumnId[] = ["API", "MCP", "CLI"];
 
-// ───────────────────────── ColumnModal ─────────────────────────
+// ─────────────── Per-column illustration (Item 16) ───────────────
 //
-// Local overlay component. Fixed-positioned backdrop rgba(0,0,0,0.7) +
-// centered card. Close on backdrop click, close button, or Escape.
-interface ColumnModalProps {
-  open: boolean;
-  onClose: () => void;
-  column: CompareColumnId;
-  bullets: string[];
-}
+// Each column gets a small framed illustration that visually represents
+// what the option *is*, so all 3 cards do not look identical:
+//   • API → code block (HTTP request snippet — the bespoke contract feel)
+//   • MCP → text-stream typewriter (server name streaming in, “install once”
+//          ergonomic feel)
+//   • CLI → code block (shell prompt — wrapping local tools)
 
-function ColumnModal({ open, onClose, column, bullets }: ColumnModalProps) {
-  if (!open) return null;
-
-  // Try to split each bullet on the first colon → label + body, so the
-  // tradeoff axes (Rigidity / Portability / etc.) render as a copper-mono
-  // label with a serif body line. If no colon, render the whole line as body.
-  const rows = bullets.map((b) => {
-    const colonIdx = b.indexOf(":");
-    if (colonIdx === -1) return { label: "", body: b };
-    return {
-      label: b.slice(0, colonIdx).trim(),
-      body: b.slice(colonIdx + 1).trim(),
-    };
-  });
-
+function ApiIllustration() {
   return (
-    <div
-      data-testid={`f-mcp-compare-modal-${column}`}
-      onClick={onClose}
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: "rgba(0,0,0,0.7)",
-        backdropFilter: "blur(2px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 20,
-        cursor: "pointer",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
+    <IllustrationFrame label="HTTP">
+      <pre
         style={{
-          width: 480,
-          maxWidth: "92%",
-          background: "var(--neutral-950, #0d0d0d)",
-          border: "1px solid var(--copper-700)",
-          padding: "24px 28px",
-          cursor: "default",
-          boxShadow: "0 12px 48px rgba(0,0,0,0.6)",
+          margin: 0,
+          fontFamily: "var(--mono)",
+          fontSize: 9.5,
+          lineHeight: 1.45,
+          color: "var(--neutral-200)",
+          whiteSpace: "pre",
         }}
       >
-        {/* Header row: mono title + close button */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 14,
-          }}
-        >
-          <div
+        <span style={{ color: "var(--copper-300)" }}>POST</span>{" "}
+        /v1/calendar/event{"\n"}
+        <span style={{ color: "var(--copper-400)" }}>Auth:</span>{" "}
+        Bearer ••••{"\n"}
+        <span style={{ color: "var(--copper-400)" }}>Body:</span>{" "}
+        {"{ \"title\":… }"}
+      </pre>
+    </IllustrationFrame>
+  );
+}
+
+function McpIllustration() {
+  return (
+    <IllustrationFrame label="STREAM">
+      <Typewriter
+        text={"mcp connect calendar-server ✓"}
+        play
+        loop
+        duration={1400}
+        loopPauseMs={1200}
+        caretStyle="thin"
+        style={{
+          margin: 0,
+          fontFamily: "var(--mono)",
+          fontSize: 9.5,
+          lineHeight: 1.45,
+          color: "var(--copper-100)",
+          whiteSpace: "pre-wrap",
+        }}
+      />
+    </IllustrationFrame>
+  );
+}
+
+function CliIllustration() {
+  return (
+    <IllustrationFrame label="SHELL">
+      <pre
+        style={{
+          margin: 0,
+          fontFamily: "var(--mono)",
+          fontSize: 9.5,
+          lineHeight: 1.45,
+          color: "var(--neutral-200)",
+          whiteSpace: "pre",
+        }}
+      >
+        <span style={{ color: "var(--copper-300)" }}>$</span> cal add{" "}
+        <span style={{ color: "var(--copper-400)" }}>--title</span> "…"{"\n"}
+        <span style={{ color: "var(--copper-300)" }}>$</span> mail send{" "}
+        <span style={{ color: "var(--copper-400)" }}>--to</span> a@b
+      </pre>
+    </IllustrationFrame>
+  );
+}
+
+interface IllustrationFrameProps {
+  label: string;
+  children: ReactNode;
+}
+function IllustrationFrame({ label, children }: IllustrationFrameProps) {
+  return (
+    <div
+      style={{
+        width: "100%",
+        border: "1px dashed var(--copper-700)",
+        background: "rgba(10,10,10,0.55)",
+        padding: "6px 8px",
+        position: "relative",
+        minHeight: 56,
+      }}
+    >
+      <span
+        style={{
+          position: "absolute",
+          top: -7,
+          left: 8,
+          padding: "0 6px",
+          background: "var(--neutral-950, #0d0d0d)",
+          fontFamily: "var(--mono)",
+          fontSize: 8.5,
+          letterSpacing: "0.22em",
+          color: "var(--copper-400)",
+          textTransform: "uppercase",
+        }}
+      >
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+const ILLUSTRATIONS: Record<CompareColumnId, () => ReactNode> = {
+  API: ApiIllustration,
+  MCP: McpIllustration,
+  CLI: CliIllustration,
+};
+
+// ─────────────── ProsConsList ───────────────
+
+interface ProsConsListProps {
+  label: "Pros" | "Cons";
+  items: string[];
+}
+function ProsConsList({ label, items }: ProsConsListProps) {
+  const isPros = label === "Pros";
+  return (
+    <div
+      data-testid={`f-mcp-compare-${label.toLowerCase()}`}
+      style={{ display: "flex", flexDirection: "column", gap: 3 }}
+    >
+      <span
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 9,
+          letterSpacing: "0.24em",
+          color: "var(--copper-200)",
+          textTransform: "uppercase",
+        }}
+      >
+        {label}
+      </span>
+      <ul
+        style={{
+          listStyle: "none",
+          padding: 0,
+          margin: 0,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}
+      >
+        {items.map((b, i) => (
+          <li
+            key={i}
             style={{
               display: "flex",
-              alignItems: "center",
-              gap: 10,
+              alignItems: "flex-start",
+              gap: 6,
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontSize: 11,
+              lineHeight: 1.35,
+              color: isPros ? "var(--neutral-200)" : "var(--copper-400)",
             }}
           >
-            <LucideIcon name={ICONS[column]} size={18} />
             <span
+              aria-hidden
               style={{
+                color: "var(--copper-300)",
                 fontFamily: "var(--mono)",
-                fontSize: 13,
-                letterSpacing: "0.22em",
-                color: "var(--copper-200)",
-                textTransform: "uppercase",
+                fontSize: 10,
+                lineHeight: 1.35,
+                flexShrink: 0,
+                marginTop: 1,
               }}
             >
-              {column} · tradeoffs
+              {isPros ? "+" : "–"}
             </span>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 14,
-              background: "transparent",
-              color: "var(--neutral-400)",
-              border: "1px solid var(--copper-800)",
-              padding: "2px 10px",
-              cursor: "pointer",
-              lineHeight: 1.2,
-            }}
-          >
-            ×
-          </button>
-        </div>
-
-        {/* Copper rule under header */}
-        <div
-          style={{
-            height: 1,
-            width: "30%",
-            background: "var(--copper-700)",
-            marginBottom: 18,
-          }}
-        />
-
-        {/* Tradeoff rows */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {rows.map((r, i) => (
-            <div key={i} style={{ display: "flex", flexDirection: "column" }}>
-              {r.label ? (
-                <span
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: 10,
-                    letterSpacing: "0.22em",
-                    color: "var(--copper-300)",
-                    textTransform: "uppercase",
-                    marginBottom: 2,
-                  }}
-                >
-                  {r.label}
-                </span>
-              ) : null}
-              <span
-                style={{
-                  fontFamily: "var(--serif)",
-                  fontStyle: "italic",
-                  fontSize: 14,
-                  lineHeight: 1.5,
-                  color: "var(--neutral-200)",
-                }}
-              >
-                {r.body}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+            <span>{b}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -231,11 +324,10 @@ function ColumnModal({ open, onClose, column, bullets }: ColumnModalProps) {
 
 export function MCPCompare({
   highlight,
-  modals,
+  modals: _modals,
   columns,
 }: MCPCompareProps): ReactNode {
   const [hoverCol, setHoverCol] = useState<CompareColumnId | null>(null);
-  const [openCol, setOpenCol] = useState<CompareColumnId | null>(null);
 
   // Build resolved per-column data (merge defaults with caller override).
   const resolved: Record<CompareColumnId, {
@@ -252,12 +344,6 @@ export function MCPCompare({
     }
   }
 
-  const modalsByCol: Record<CompareColumnId, MCPCompareColumnModal> = {
-    API: modals.api,
-    MCP: modals.mcp,
-    CLI: modals.cli,
-  };
-
   return (
     <div
       data-testid="f-mcp-compare"
@@ -267,7 +353,7 @@ export function MCPCompare({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "20px 8px",
+        padding: "12px 8px",
       }}
     >
       {/* Section header */}
@@ -276,7 +362,7 @@ export function MCPCompare({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marginBottom: 28,
+          marginBottom: 16,
         }}
       >
         <span
@@ -295,7 +381,7 @@ export function MCPCompare({
             height: 1,
             width: "32%",
             background: "var(--copper-700)",
-            marginTop: 10,
+            marginTop: 8,
           }}
         />
       </div>
@@ -305,7 +391,7 @@ export function MCPCompare({
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
-          gap: 16,
+          gap: 12,
           alignItems: "stretch",
         }}
       >
@@ -313,6 +399,8 @@ export function MCPCompare({
           const col = resolved[id];
           const isHighlight = highlight === id;
           const isHover = hoverCol === id;
+          const Illustration = ILLUSTRATIONS[id];
+          const pc = PROS_CONS[id];
           return (
             <div
               key={id}
@@ -321,13 +409,12 @@ export function MCPCompare({
               data-highlight={isHighlight ? "true" : "false"}
               onMouseEnter={() => setHoverCol(id)}
               onMouseLeave={() => setHoverCol(null)}
-              onClick={() => setOpenCol(id)}
               style={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
-                gap: 10,
-                padding: "16px 12px 18px",
+                alignItems: "stretch",
+                gap: 8,
+                padding: "12px 10px 12px",
                 border: "1px solid",
                 borderColor: isHover
                   ? "var(--copper-200)"
@@ -341,143 +428,84 @@ export function MCPCompare({
                   : "transparent",
                 transition:
                   "border-color 0.2s var(--ease), background 0.2s var(--ease)",
-                cursor: "pointer",
-                minHeight: 220,
               }}
             >
-              {/* Icon row */}
-              <div style={{ marginTop: 4 }}>
+              {/* Header row — icon + name + (★ if highlighted) */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
                 <LucideIcon
                   name={ICONS[id]}
-                  size={26}
+                  size={18}
                   color={
                     isHighlight ? "var(--copper-200)" : "var(--copper-400)"
                   }
                 />
-              </div>
-
-              {/* Column name */}
-              <div
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 14,
-                  letterSpacing: "0.22em",
-                  color: isHighlight
-                    ? "var(--copper-100)"
-                    : "var(--neutral-200)",
-                  textTransform: "uppercase",
-                  marginTop: 2,
-                }}
-              >
-                {id}
-              </div>
-
-              {/* Star + underline if highlighted */}
-              {isHighlight ? (
-                <div
+                <span
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 4,
-                    marginTop: 2,
+                    fontFamily: "var(--mono)",
+                    fontSize: 13,
+                    letterSpacing: "0.22em",
+                    color: isHighlight
+                      ? "var(--copper-100)"
+                      : "var(--neutral-200)",
+                    textTransform: "uppercase",
                   }}
                 >
+                  {id}
+                </span>
+                {isHighlight ? (
                   <span
+                    aria-hidden
                     style={{
                       color: "var(--copper-200)",
-                      fontSize: 14,
+                      fontSize: 13,
                       lineHeight: 1,
                     }}
                   >
                     ★
                   </span>
-                  <div
-                    style={{
-                      width: 40,
-                      height: 1,
-                      background: "var(--copper-300)",
-                    }}
-                  />
-                </div>
-              ) : (
-                // Maintain vertical rhythm across columns
-                <div style={{ height: 19 }} />
-              )}
+                ) : null}
+              </div>
 
-              {/* Tradeoff bullets — italic serif */}
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: "8px 0 0",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 6,
-                  textAlign: "center",
-                }}
-              >
-                {col.bullets.map((b, i) => (
-                  <li
-                    key={i}
-                    style={{
-                      fontFamily: "var(--serif)",
-                      fontStyle: "italic",
-                      fontSize: 13,
-                      lineHeight: 1.45,
-                      color: "var(--neutral-300)",
-                    }}
-                  >
-                    {b}
-                  </li>
-                ))}
-              </ul>
+              {/* R2-11: copper underline beneath the highlighted column
+                  title was removed — the star + border treatment is enough
+                  to signal "best for AI agents" without a redundant rule. */}
 
-              {/* Spacer to push sublabel to bottom */}
+              {/* Per-option illustration */}
+              <div style={{ marginTop: 2 }}>
+                <Illustration />
+              </div>
+
+              {/* Pros / Cons */}
+              <ProsConsList label="Pros" items={pc.pros} />
+              <ProsConsList label="Cons" items={pc.cons} />
+
+              {/* Spacer + sublabel */}
               <div style={{ flex: 1 }} />
-
-              {/* Sublabel — only on highlighted column */}
               {isHighlight && col.sublabel ? (
                 <div
                   style={{
                     fontFamily: "var(--serif)",
                     fontStyle: "italic",
-                    fontSize: 13,
+                    fontSize: 12,
                     color: "var(--copper-200)",
-                    marginTop: 8,
+                    marginTop: 4,
                     textAlign: "center",
                   }}
                 >
                   {hl(col.sublabel, ["AI agents"])}
                 </div>
               ) : null}
-
-              {/* Click-to-expand hint */}
-              <span
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 9,
-                  letterSpacing: "0.2em",
-                  color: "var(--copper-500)",
-                  textTransform: "uppercase",
-                  marginTop: 6,
-                  opacity: isHover ? 1 : 0.55,
-                  transition: "opacity 0.2s var(--ease)",
-                }}
-              >
-                click for details
-              </span>
             </div>
           );
         })}
       </div>
-
-      <ColumnModal
-        open={openCol !== null}
-        onClose={() => setOpenCol(null)}
-        column={openCol ?? "MCP"}
-        bullets={openCol ? modalsByCol[openCol].bullets : []}
-      />
     </div>
   );
 }

@@ -18,7 +18,7 @@
 export const f1Content = {
   headline: "Two Pillars",
   headlineKw: ["Two Pillars"],
-  subtitle: "what AI knows · what AI does",
+  subtitle: "What AI knows. What AI does.",
   subtitleKw: ["knows", "does"],
   pillars: [
     {
@@ -690,16 +690,21 @@ export const f8Content = {
   taglineKw: ["this is yours", "wherever you go, you carry it"],
 } as const;
 
-// ─────────────────── F.9 — NEXT (photographic bridge to G) ───────────────────
+// ─────────────────── F.9 — BRIDGE · CROSSED (photographic bridge to G) ───────────────────
 //
-// Photographic exhale closing Section F. Spec §12. Mirrors E.11 / D.5
-// template: hero photo, copper-light vignette, headline + copper rule + subline.
+// Photographic exhale closing Section F. Mirrors E.11 template: hero photo,
+// copper-light vignette, two-row headline + copper rule + italic subline.
+// 2-step reveal — beat1 (two stacked lines) → beat2 (italic copper).
 export const f9Content = {
-  // Hero photo prompt (per spec §12.3) — final asset drafted at implementation.
   heroPhotoPrompt:
     "Pre-dawn light over a cinematic landscape, copper sun catching distant horizon, editorial-serious tone, no people, wide angle, single light source from horizon. 16:9. Suggests 'dawn of new tools.'",
   vignetteSide: "bottom-left",
-  // Three reveal beats (per spec §12.4).
-  beat1: { text: "Techniques covered.", kw: ["Techniques covered"] },
-  beat2: { text: "Tools next.", kw: ["Tools next"] },
+  beat1: {
+    lineA: { text: "Seven techniques.", kw: ["Seven techniques"] },
+    lineB: { text: "The toolkit is open.", kw: ["toolkit"] },
+  },
+  beat2: {
+    text: "Next: the platforms that bring them to life.",
+    kw: ["platforms that bring them to life"],
+  },
 } as const;

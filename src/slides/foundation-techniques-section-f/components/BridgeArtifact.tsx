@@ -32,7 +32,18 @@ export interface BridgeArtifactProps {
 
 // Native viewBox; size prop scales via outer width. Height is ratio-locked.
 const VB_W = 580;
-const VB_H = 280;
+const VB_H = 248;
+
+// Shared vertical band for all three zones — files, platter, and agents are
+// each repositioned so their bounding boxes align inside [ZONE_TOP, ZONE_BOTTOM].
+// The platter keeps its flat aspect ratio and centers within the band; the file
+// stack and agent stack span the full band so all three columns read as equal
+// height. Title row sits ~15px above the band so titles read as labels on top
+// of each column rather than as a separate header strip.
+const TITLE_Y = 22;
+const ZONE_TOP = 38;
+const ZONE_BOTTOM = 218;
+const ZONE_CENTER_Y = (ZONE_TOP + ZONE_BOTTOM) / 2; // 128
 
 // Resolve the foreground variant — "default" maps to "file" per spec.
 function resolveMode(mode: BridgeMode): Exclude<BridgeMode, "default"> {
@@ -75,28 +86,36 @@ export function BridgeArtifact({
       role="img"
       aria-label="Bridge artifact: raw data files flow through the silver platter, agents consume distilled summaries."
     >
-      {/* ───────────── LEFT: chaotic raw data ───────────── */}
-      <g data-testid="bridge-left" transform="translate(40, 70)">
-        {/* Squiggly noise lines around the file stack */}
-        <g stroke={c.chaos} strokeWidth="1" fill="none" opacity="0.6">
-          <path d="M -18 18 q 6 -6 12 0 t 12 0" />
-          <path d="M -22 70 q 6 -6 12 0 t 12 0" />
-          <path d="M 78 32 q 6 -6 12 0 t 12 0" />
-          <path d="M 82 88 q 6 -6 12 0 t 12 0" />
-          <path d="M -10 130 q 6 -6 12 0 t 12 0" />
-        </g>
-        {/* 4 chaotic source files — slight rotations for hand-drawn feel */}
-        <FileIcon x={4} y={4} label=".csv" fill={c.chaosText} rotate={-4} />
-        <FileIcon x={36} y={28} label=".xlsx" fill={c.chaosText} rotate={3} />
-        <FileIcon x={6} y={62} label=".pdf" fill={c.chaosText} rotate={-2} />
-        <FileIcon x={40} y={96} label=".docx" fill={c.chaosText} rotate={5} />
+      {/* ───────────── Zone titles ───────────── */}
+      <g data-testid="bridge-titles">
+        <ZoneTitle x={80} label="SOURCES" c={c} />
+        <ZoneTitle x={290} label="STORAGE" c={c} />
+        <ZoneTitle x={515} label="RETRIEVAL" c={c} />
       </g>
 
-      {/* Arrow: left → platter */}
-      <Arrow x1={150} x2={195} y={140} color={c.accent} />
+      {/* ───────────── LEFT: chaotic raw data ───────────── */}
+      <g data-testid="bridge-left" transform={`translate(40, ${ZONE_TOP})`}>
+        {/* Squiggly noise lines around the file stack */}
+        <g stroke={c.chaos} strokeWidth="1" fill="none" opacity="0.6">
+          <path d="M -18 24 q 6 -6 12 0 t 12 0" />
+          <path d="M 78 40 q 6 -6 12 0 t 12 0" />
+          <path d="M -22 78 q 6 -6 12 0 t 12 0" />
+          <path d="M 82 122 q 6 -6 12 0 t 12 0" />
+          <path d="M -10 170 q 6 -6 12 0 t 12 0" />
+        </g>
+        {/* 4 chaotic source files — slight rotations for hand-drawn feel.
+            Y offsets stride 48px so the stack spans the full zone height. */}
+        <FileIcon x={4} y={0} label=".csv" fill={c.chaosText} rotate={-4} />
+        <FileIcon x={36} y={48} label=".xlsx" fill={c.chaosText} rotate={3} />
+        <FileIcon x={4} y={96} label=".pdf" fill={c.chaosText} rotate={-2} />
+        <FileIcon x={40} y={144} label=".docx" fill={c.chaosText} rotate={4} />
+      </g>
+
+      {/* Arrow: left → platter (ends at x=162, just outside platter rim at x=166) */}
+      <Arrow x1={128} x2={162} y={ZONE_CENTER_Y} color={c.accent} />
 
       {/* ───────────── MIDDLE: silver platter ───────────── */}
-      <g data-testid="bridge-platter" transform={`translate(${VB_W / 2}, ${VB_H / 2})`}>
+      <g data-testid="bridge-platter" transform={`translate(${VB_W / 2}, ${ZONE_CENTER_Y})`}>
         {/* Platter rim — flat ellipse with subtle inner shadow */}
         <defs>
           <radialGradient
@@ -151,14 +170,18 @@ export function BridgeArtifact({
         </g>
       </g>
 
-      {/* Arrow: platter → agents */}
-      <Arrow x1={425} x2={470} y={140} color={c.accent} />
+      {/* Arrow: platter → agents (starts at x=418, just past platter rim at x=414) */}
+      <Arrow x1={418} x2={485} y={ZONE_CENTER_Y} color={c.accent} />
 
-      {/* ───────────── RIGHT: agent consumers ───────────── */}
-      <g data-testid="bridge-right" transform="translate(485, 60)">
+      {/* ───────────── RIGHT: agent consumers ─────────────
+          Translate.y = ZONE_TOP − 8 so AgentBadge cy = y_prop + 30 puts the
+          first badge top at ZONE_TOP (badge r=22 → first cy = ZONE_TOP + 22).
+          With y_prop = 0 / 68 / 136 the three centers land at
+          (ZONE_TOP + 22), ZONE_CENTER_Y, (ZONE_BOTTOM − 22). */}
+      <g data-testid="bridge-right" transform={`translate(485, ${ZONE_TOP - 8})`}>
         <AgentBadge y={0} icon="Search" c={c} />
-        <AgentBadge y={70} icon="Bot" c={c} />
-        <AgentBadge y={140} icon="Settings" c={c} />
+        <AgentBadge y={68} icon="Bot" c={c} />
+        <AgentBadge y={136} icon="Settings" c={c} />
       </g>
     </svg>
   );
@@ -175,6 +198,30 @@ interface PaletteColors {
   muted: string;
   chaos: string;
   chaosText: string;
+}
+
+// Zone label rendered above each column — mono uppercase, copper-200, dims with
+// the artifact in `dim` mode via the shared palette's `muted` channel.
+interface ZoneTitleProps {
+  x: number;
+  label: string;
+  c: PaletteColors;
+}
+function ZoneTitle({ x, label, c }: ZoneTitleProps) {
+  return (
+    <text
+      x={x}
+      y={TITLE_Y}
+      textAnchor="middle"
+      fill={c.muted}
+      fontSize="10"
+      fontFamily="var(--mono)"
+      letterSpacing="2.4"
+      opacity="0.82"
+    >
+      {label}
+    </text>
+  );
 }
 
 // Small dog-eared file icon used for the chaotic left zone.
@@ -383,34 +430,73 @@ function PlatterGraph({ active, c }: PlatterVariantProps) {
   );
 }
 
-// "hybrid" mode — dot grid background with 2–3 .md overlays + keyword underlines.
+// "hybrid" mode — ALL FOUR retrieval primitives co-existing inside one
+// platter (R2-2):
+//   1. vector — subtle dot-grid pattern as the background wash
+//   2. graph  — compact node-edge cluster (top-left)
+//   3. file   — single .md card (bottom-center)
+//   4. BM25   — small search box + ranked text-line results (top-right)
+// The mix reads as "vector + graph + keyword + file" — the visual cue that
+// hybrid RAG blends multiple retrieval modalities. All four are sized to fit
+// within the platter's inner ellipse clip (rx≈115, ry≈68).
 function PlatterHybrid({ active, c }: PlatterVariantProps) {
-  const cols = 10;
-  const rows = 6;
-  const stepX = 18;
-  const stepY = 14;
-  const offsetX = -((cols - 1) * stepX) / 2;
-  const offsetY = -((rows - 1) * stepY) / 2;
-  const dots: React.ReactNode[] = [];
-  for (let r = 0; r < rows; r++) {
-    for (let col = 0; col < cols; col++) {
-      const x = offsetX + col * stepX;
-      const y = offsetY + r * stepY;
+  // ─── Top-left cluster: graph nodes + edges (compact) ───
+  const graphNodes = [
+    { x: -92, y: -42 },
+    { x: -66, y: -52 },
+    { x: -54, y: -28 },
+    { x: -82, y: -18 },
+  ];
+  const graphEdges: Array<[number, number]> = [
+    [0, 1],
+    [1, 2],
+    [2, 3],
+    [3, 0],
+    [0, 2],
+  ];
+
+  // ─── Top-right cluster: BM25 search box + 3 ranked result rows ───
+  // Reduced from 4 to 3 result rows so the panel fits alongside the graph
+  // cluster within the inner ellipse clip.
+  const bm25X = 32; // left edge of the BM25 panel inside the platter
+  const bm25Y = -52;
+  const resultRows = [
+    { w: 52, opacity: 1 },
+    { w: 44, opacity: 0.72 },
+    { w: 36, opacity: 0.5 },
+  ];
+
+  // ─── Background layer: vector dot grid (subtle) ───
+  // R2-2: re-added in round 2. Small dots + low opacity so it reads as a
+  // background wash behind graph/BM25/md, not as a focal element. Same 10×6
+  // lattice as PlatterVector, masked to the inner ellipse via the platter clip.
+  const vCols = 10;
+  const vRows = 6;
+  const vStepX = 18;
+  const vStepY = 14;
+  const vOffsetX = -((vCols - 1) * vStepX) / 2;
+  const vOffsetY = -((vRows - 1) * vStepY) / 2;
+  const vDots: React.ReactNode[] = [];
+  for (let r = 0; r < vRows; r++) {
+    for (let col = 0; col < vCols; col++) {
+      const x = vOffsetX + col * vStepX;
+      const y = vOffsetY + r * vStepY;
       const dx = x / 100;
       const dy = y / 56;
       if (dx * dx + dy * dy > 1) continue;
-      dots.push(
+      vDots.push(
         <circle
-          key={`${r}-${col}`}
+          key={`v-${r}-${col}`}
           cx={x}
           cy={y}
-          r="1.2"
+          r="1"
           fill={c.accent}
-          opacity="0.35"
+          opacity={0.18 + ((r + col) % 3) * 0.04}
         />,
       );
     }
   }
+
   return (
     <g
       data-testid="platter-hybrid"
@@ -419,10 +505,169 @@ function PlatterHybrid({ active, c }: PlatterVariantProps) {
         transition: "opacity 700ms var(--ease)",
       }}
     >
-      {dots}
-      <MdCard x={-58} y={-22} label="notes" c={c} highlight />
-      <MdCard x={4} y={-12} label="report" c={c} highlight />
-      <MdCard x={-32} y={28} label="decisions" c={c} highlight />
+      {/* BACKGROUND — vector dot grid (subtle wash) */}
+      <g data-testid="platter-hybrid-vector">{vDots}</g>
+
+      {/* TOP-LEFT — graph nodes + edges */}
+      <g data-testid="platter-hybrid-graph">
+        {graphEdges.map(([a, b], i) => (
+          <line
+            key={i}
+            x1={graphNodes[a].x}
+            y1={graphNodes[a].y}
+            x2={graphNodes[b].x}
+            y2={graphNodes[b].y}
+            stroke={c.accentDeep}
+            strokeWidth="0.7"
+            opacity="0.85"
+          />
+        ))}
+        {graphNodes.map((n, i) => (
+          <g key={i}>
+            <circle
+              cx={n.x}
+              cy={n.y}
+              r="3"
+              fill="rgba(38,38,38,0.92)"
+              stroke={c.accent}
+              strokeWidth="1"
+            />
+            <circle cx={n.x} cy={n.y} r="1" fill={c.fg} />
+          </g>
+        ))}
+      </g>
+
+      {/* BOTTOM-CENTER — single .md card (compact, sized to fit alongside
+          the graph/BM25 panels within the inner ellipse clip). */}
+      <g data-testid="platter-hybrid-md" transform="translate(-26, 14)">
+        <rect
+          x="0"
+          y="0"
+          width="52"
+          height="34"
+          rx="2"
+          fill="rgba(38,38,38,0.92)"
+          stroke={c.muted}
+          strokeWidth="1"
+        />
+        <text
+          x="5"
+          y="11"
+          fill={c.fg}
+          fontSize="6.5"
+          fontFamily="var(--mono)"
+          letterSpacing="0.04em"
+        >
+          .md
+        </text>
+        <text
+          x="5"
+          y="20"
+          fill={c.fg}
+          fontSize="5.5"
+          fontFamily="var(--mono)"
+          opacity="0.85"
+        >
+          notes
+        </text>
+        <line
+          x1="5"
+          y1="25"
+          x2="42"
+          y2="25"
+          stroke={c.muted}
+          strokeWidth="0.6"
+          opacity="0.7"
+        />
+        <line
+          x1="5"
+          y1="30"
+          x2="32"
+          y2="30"
+          stroke={c.accent}
+          strokeWidth="1.2"
+        />
+      </g>
+
+      {/* TOP-RIGHT — BM25 keyword-search box with ranked results */}
+      <g data-testid="platter-hybrid-bm25" transform={`translate(${bm25X}, ${bm25Y})`}>
+        {/* Search box */}
+        <rect
+          x="0"
+          y="0"
+          width="72"
+          height="14"
+          rx="1"
+          fill="rgba(38,38,38,0.7)"
+          stroke={c.muted}
+          strokeWidth="0.8"
+        />
+        {/* Magnifier icon */}
+        <circle
+          cx="6"
+          cy="7"
+          r="2.4"
+          fill="none"
+          stroke={c.accent}
+          strokeWidth="0.8"
+        />
+        <line
+          x1="8"
+          y1="9"
+          x2="10.5"
+          y2="11.5"
+          stroke={c.accent}
+          strokeWidth="0.8"
+        />
+        <text
+          x="14"
+          y="10"
+          fill={c.fg}
+          fontSize="6.5"
+          fontFamily="var(--mono)"
+          letterSpacing="0.06em"
+          opacity="0.85"
+        >
+          BM25
+        </text>
+        {/* Ranked result rows */}
+        {resultRows.map((row, i) => (
+          <g key={i} transform={`translate(0, ${20 + i * 9})`}>
+            {/* Rank pill */}
+            <rect
+              x="0"
+              y="0"
+              width="8"
+              height="6"
+              fill="none"
+              stroke={c.muted}
+              strokeWidth="0.6"
+              opacity={row.opacity}
+            />
+            <text
+              x="4"
+              y="4.8"
+              textAnchor="middle"
+              fill={c.muted}
+              fontSize="5"
+              fontFamily="var(--mono)"
+              opacity={row.opacity}
+            >
+              {i + 1}
+            </text>
+            {/* Result line */}
+            <line
+              x1="12"
+              y1="3"
+              x2={12 + row.w}
+              y2="3"
+              stroke={c.accent}
+              strokeWidth="1.2"
+              opacity={row.opacity}
+            />
+          </g>
+        ))}
+      </g>
     </g>
   );
 }

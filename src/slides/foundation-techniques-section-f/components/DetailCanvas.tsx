@@ -2,14 +2,19 @@
 //
 // CSS opacity crossfade (700ms via var(--ease)) between states based on
 // `activeFacet`. When `defaultState` is omitted (Section F canonical hover-only
-// pattern), no facet hover renders nothing inside the canvas — the slide-level
-// bordered box wrapper still draws its frame, but the content area is empty.
-// When `defaultState` is provided, it shows when no facet is hovered or when
-// the hovered facet has no matching state.
+// pattern), no facet hover renders nothing inside the canvas. When
+// `defaultState` is provided, it shows when no facet is hovered or when the
+// hovered facet has no matching state.
 //
 // All layers are stacked absolutely inside the canvas so the crossfade truly
 // happens in-place (no layout reflow). Inactive layers receive
 // `pointerEvents: 'none'` so hover doesn't get trapped on stale state.
+//
+// Reveal animation (Item 19, deck-wide consistency):
+//   Each time a state becomes active, an inner wrapper keyed on `activeFacet`
+//   re-mounts so the `.f-state-reveal` keyframe (0.2s var(--ease) on opacity
+//   + transform translateY -8px → 0) plays exactly once per hover. The outer
+//   700ms opacity crossfade between layers stays unchanged.
 //
 // Mirrors spec §3.2 (`<DetailCanvas activeFacet, defaultState, states>`) and
 // §3.3 motion-timing reference (700ms crossfade).
@@ -79,7 +84,18 @@ export function DetailCanvas({
               pointerEvents: isActive ? "auto" : "none",
             }}
           >
-            {node}
+            {/* Inner reveal wrapper — `key` flips between `active` and
+                `idle-<id>` so the .f-state-reveal entry animation replays
+                exactly once per fresh hover (mount of the keyed `active`
+                node). Children (`node`) stay mounted across hovers via
+                React's reconciliation on the inner ReactNode. */}
+            <div
+              key={isActive ? "active" : `idle-${id}`}
+              className={isActive ? "f-state-reveal" : undefined}
+              style={{ position: "absolute", inset: 0 }}
+            >
+              {node}
+            </div>
           </div>
         );
       })}

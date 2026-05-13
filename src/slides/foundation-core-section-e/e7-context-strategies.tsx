@@ -31,6 +31,12 @@ export function E7ContextStrategies() {
 
   const showFooter = stepIndex >= 5;
 
+  // A card at index `i` is revealed once stepIndex >= i + 1. Clamp the value
+  // we pass to FunnelAnimation so a stale `hover` (e.g. after stepping
+  // backward) can't keep an unrevealed ring glowing.
+  const effectiveHover =
+    hover !== null && stepIndex >= hover + 1 ? hover : null;
+
   return (
     <>
       <FigLabel section="E" num={7} label="CONTEXT STRATEGIES" />
@@ -54,7 +60,7 @@ export function E7ContextStrategies() {
           pointerEvents: "none",
         }}
       >
-        <FunnelAnimation hoveredIndex={hover} />
+        <FunnelAnimation hoveredIndex={effectiveHover} />
       </div>
 
       {/* Card row — 4×1 grid, padded to 10% so card centers align with the
@@ -75,7 +81,7 @@ export function E7ContextStrategies() {
       >
         {C.rings.map((r, i) => {
           const revealed = stepIndex >= i + 1;
-          const isHover = hover === i;
+          const isHover = effectiveHover === i;
           return (
             <Reveal
               key={r.id}
@@ -87,9 +93,11 @@ export function E7ContextStrategies() {
               style={{ display: "flex" }}
             >
               <div
-                onMouseEnter={() => setHover(i)}
-                onMouseLeave={() =>
-                  setHover((h) => (h === i ? null : h))
+                onMouseEnter={revealed ? () => setHover(i) : undefined}
+                onMouseLeave={
+                  revealed
+                    ? () => setHover((h) => (h === i ? null : h))
+                    : undefined
                 }
                 className="e7-card"
                 style={{
@@ -110,6 +118,7 @@ export function E7ContextStrategies() {
                   boxShadow: isHover
                     ? "0 0 0 1px var(--copper-300) inset"
                     : "none",
+                  pointerEvents: revealed ? "auto" : "none",
                   transition:
                     "background 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease)",
                   cursor: "pointer",

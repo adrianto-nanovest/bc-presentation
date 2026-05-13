@@ -155,6 +155,22 @@ test("step 5 → footer reveals", () => {
   }
 });
 
+test("hovering an unrevealed card at step 1 must not capture hover", () => {
+  renderAtStep(1);
+
+  const writeCard = screen.getByTestId("e7-card-write");
+  // SELECT (i=1) is not revealed yet at step 1 (only WRITE has revealed).
+  const selectCard = screen.getByTestId("e7-card-select");
+  expect(selectCard.getAttribute("data-revealed")).toBe("false");
+
+  fireEvent.mouseEnter(selectCard.firstChild as HTMLElement);
+  expect(selectCard.getAttribute("data-hover")).toBe("false");
+
+  // Hovering the revealed card still works.
+  fireEvent.mouseEnter(writeCard.firstChild as HTMLElement);
+  expect(writeCard.getAttribute("data-hover")).toBe("true");
+});
+
 test("hover card N → card captures hover state via data-hover", () => {
   renderAtStep(5);
 

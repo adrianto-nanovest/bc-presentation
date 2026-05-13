@@ -89,8 +89,6 @@ const LANE_HAIRLINE_FRAC = 0.36;
 export interface VWorkflowNode {
   label: string;
   caption: string;
-  /** Optional 2-line hover detail (per spec §3.4 hover behaviour). */
-  hoverLines?: readonly [string, string];
 }
 
 export interface VWorkflowDiagramProps {
@@ -266,12 +264,6 @@ export function VWorkflowDiagram({
     };
   }, []);
 
-  // hoveredNode tracks which of the four V-nodes is hovered (if any) so
-  // the diagram can surface a 2-line caption beside it.
-  const [hoveredNode, setHoveredNode] = useState<
-    "specify" | "generate" | "verify" | "ship" | null
-  >(null);
-
   return (
     <div
       data-testid="v-workflow-diagram"
@@ -320,15 +312,6 @@ export function VWorkflowDiagram({
           tone="human"
           icon="specify"
           testId="v-node-specify"
-          hovered={hoveredNode === "specify"}
-          onHoverChange={(h) => setHoveredNode(h ? "specify" : null)}
-          hoverLines={
-            specify?.hoverLines ?? [
-              "Write the brief: what & why.",
-              "Constraints, audience, success criteria.",
-            ]
-          }
-          hoverSide="right"
           revealOn={specOn}
         />
         {/* GENERATE node */}
@@ -341,15 +324,6 @@ export function VWorkflowDiagram({
           tone="ai"
           icon="generate"
           testId="v-node-generate"
-          hovered={hoveredNode === "generate"}
-          onHoverChange={(h) => setHoveredNode(h ? "generate" : null)}
-          hoverLines={
-            generate?.hoverLines ?? [
-              "Bulk drafting at speed.",
-              "AI produces the first 80% — you steer.",
-            ]
-          }
-          hoverSide="right"
           revealOn={genOn}
         />
         {/* VERIFY node */}
@@ -362,15 +336,6 @@ export function VWorkflowDiagram({
           tone="human"
           icon="verify"
           testId="v-node-verify"
-          hovered={hoveredNode === "verify"}
-          onHoverChange={(h) => setHoveredNode(h ? "verify" : null)}
-          hoverLines={
-            verify?.hoverLines ?? [
-              "Review, validate, judge.",
-              "The new core skill — verifiability beats fluency.",
-            ]
-          }
-          hoverSide="left"
           revealOn={verOn}
         />
         {/* SHIP IT node — a fourth state, paired with a sonar-ping ring
@@ -386,15 +351,6 @@ export function VWorkflowDiagram({
           tone="ship"
           icon="ship"
           testId="v-node-ship"
-          hovered={hoveredNode === "ship"}
-          onHoverChange={(h) => setHoveredNode(h ? "ship" : null)}
-          hoverLines={
-            ship?.hoverLines ?? [
-              "Ship the result.",
-              "Verified work goes out the door.",
-            ]
-          }
-          hoverSide="left"
           revealOn={shipOn}
         />
 
@@ -722,10 +678,6 @@ function VNode({
   tone,
   icon,
   testId,
-  hovered,
-  onHoverChange,
-  hoverLines,
-  hoverSide,
   revealOn = true,
 }: {
   nodeRef: React.RefObject<HTMLDivElement>;
@@ -736,10 +688,6 @@ function VNode({
   tone: "human" | "ai" | "ship";
   icon: NodeIconKind;
   testId: string;
-  hovered: boolean;
-  onHoverChange: (hovered: boolean) => void;
-  hoverLines: readonly [string, string];
-  hoverSide: "left" | "right";
   /** When false the node renders translucent (opacity 0) and lifted 8px
    *  below its final position; transitions to full opacity + 0 offset
    *  when toggled true. Default true keeps the node fully visible. */
@@ -781,8 +729,6 @@ function VNode({
     justifyContent: "center",
     gap: 4,
     boxShadow: tone === "human" ? "inset 0 0 0 1px rgba(122,70,38,0.18)" : "none",
-    pointerEvents: revealOn ? "auto" : "none",
-    cursor: "default",
     opacity: revealOn ? 1 : 0,
     transition:
       "opacity 400ms var(--ease), transform 400ms var(--ease)",
@@ -794,8 +740,6 @@ function VNode({
       ref={nodeRef}
       data-testid={testId}
       style={style}
-      onMouseEnter={() => onHoverChange(true)}
-      onMouseLeave={() => onHoverChange(false)}
     >
       <div
         style={{
@@ -834,38 +778,6 @@ function VNode({
           {caption}
         </span>
       )}
-
-      {/* 2-line hover caption — surfaces beside the node when hovered. */}
-      <div
-        data-testid={`${testId}-hover`}
-        style={{
-          position: "absolute",
-          top: "50%",
-          [hoverSide === "right" ? "left" : "right"]: "calc(100% + 12px)",
-          transform: `translateY(-50%) ${hovered ? "translateX(0)" : `translateX(${hoverSide === "right" ? "-4px" : "4px"})`}`,
-          minWidth: 180,
-          maxWidth: 240,
-          padding: "8px 12px",
-          background: "rgba(10,6,4,0.92)",
-          border: "1px solid var(--copper-700)",
-          fontFamily: "var(--serif)",
-          fontStyle: "italic",
-          fontSize: 12,
-          lineHeight: 1.35,
-          color: "var(--neutral-200)",
-          textAlign: hoverSide === "right" ? "left" : "right",
-          opacity: hovered ? 1 : 0,
-          pointerEvents: "none",
-          transition: "opacity 200ms var(--ease), transform 200ms var(--ease)",
-          zIndex: 2,
-          whiteSpace: "normal",
-        }}
-      >
-        <div>{hoverLines[0]}</div>
-        <div style={{ color: "var(--neutral-400)", marginTop: 2 }}>
-          {hoverLines[1]}
-        </div>
-      </div>
     </div>
   );
 }

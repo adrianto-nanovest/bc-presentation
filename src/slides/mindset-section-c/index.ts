@@ -4,7 +4,7 @@ import { c2Slide } from "./c2-replacement-multiplier";
 import { c3Slide } from "./c3-executor-orchestrator";
 import { c4Slide } from "./c4-v-bounce-workflow";
 import { c5Slide } from "./c5-role-trajectory";
-import { bridgeMindsetToMechanicsSlide } from "./bridge-mindset-to-mechanics";
+import { bridgeMindsetToMechanicsSlide } from "./c6-bridge-to-d";
 
 // Section C — locked order. Bridge slide closes the mindset arc and hands
 // off into Section D (Foundation Core).

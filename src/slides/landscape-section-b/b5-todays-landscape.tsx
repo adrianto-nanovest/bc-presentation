@@ -316,8 +316,8 @@ export function B5TodaysLandscape() {
       </div>
 
       {/* ───────────── Cliffhanger (step 3 — canonical) ─────────────
-          Centered below the bars, italic serif 36px with copper-400 underlined
-          keyword + 4s AmbientPulse on the multi-word "mental model". */}
+          Centered below the bars, italic serif 36px with copper-400 keyword
+          + 4s AmbientPulse on the multi-word "mental model". */}
       <div
         data-testid="b5-cliffhanger"
         style={{
@@ -502,9 +502,8 @@ function InverseBarRow({
 
 // ───────────────────── Cliffhanger ─────────────────────
 // Italic closing line. The single highlighted keyword (multi-word "mental
-// model") carries a copper underline + the deck-wide 4s AmbientPulse glow
-// once the line is visible. `text.indexOf(keyword)` handles multi-word
-// substrings natively.
+// model") carries the deck-wide 4s AmbientPulse glow once the line is
+// visible. `text.indexOf(keyword)` handles multi-word substrings natively.
 
 function Cliffhanger({
   text,
@@ -516,7 +515,7 @@ function Cliffhanger({
   on: boolean;
 }) {
   // Split text around the keyword so we can wrap only the keyword in
-  // AmbientPulse + underline styling without disturbing the surrounding
+  // AmbientPulse + accent styling without disturbing the surrounding
   // italic flow. indexOf works on multi-word substrings as-is.
   const idx = text.indexOf(keyword);
   let before: string = text;
@@ -540,8 +539,6 @@ function Cliffhanger({
   const kwStyle: CSSProperties = {
     color: "var(--copper-400)",
     fontStyle: "italic",
-    borderBottom: "1px solid var(--copper-400)",
-    paddingBottom: 1,
   };
 
   if (!hasKeyword) {
