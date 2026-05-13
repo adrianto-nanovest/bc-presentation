@@ -16,19 +16,20 @@
 //
 // Layout —
 //   • Photo full-bleed (or fallback gradient if image missing).
-//   • TOP-RIGHT: hand-rolled BRIDGE label (not standard FIG. X.N).
-//   • CENTER: 3 italic Instrument Serif sentence-lines vertically stacked.
-//   • BENEATH QUOTE: right-aligned attribution chip.
+//   • TOP-LEFT: canonical <FigLabel section="C" num={6} … /> (matches E.11).
+//   • CENTER: 3 italic Instrument Serif sentence-lines vertically stacked,
+//     each typed left-to-right via <TextStream> (typewriter effect).
+//   • BENEATH QUOTE: right-aligned attribution chip (normal fade, no stream).
 //   • LOWER-CENTER: small italic handoff line with copper ambient pulse
 //     on `how` (4s loop — rhymes with C.1 / C.5 closing pulses).
 //
 // Motion —
 //   load (mount-driven):  Photo cross-fades in SLOWLY (1500ms — slowest in
-//                         the deck). BRIDGE label fades in around the same
-//                         time so the slide settles before the user advances.
-//   stepIndex 0:          FIG label → sentence 1 → sentence 2 → sentence 3 →
-//                         attribution all fade in on a continuous ~2.4s
-//                         stagger (sentences ~400ms apart).
+//                         the deck). FigLabel renders instantly top-left.
+//   stepIndex 0:          Sentence 1 streams char-by-char, then sentence 2
+//                         streams, then sentence 3 streams, then attribution
+//                         fades in. ~25ms/char; delays chained so each line
+//                         starts ~250ms after the previous finishes.
 //   stepIndex 1 (canon):  Handoff line "From here, the how." fades in italic;
 //                         copper underline + 4s AmbientPulse on `how`.
 //
@@ -38,31 +39,32 @@
 // stepIndex 0 indefinitely. The handoff line simply never appears; the
 // audience reads the quote and the presenter advances to D.1.
 import { useEffect, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
+import { FigLabel } from "@/components/FigLabel";
 import { HeroPhoto } from "@/components/HeroPhoto";
 import { DarkenOverlay } from "@/components/DarkenOverlay";
 import { AmbientPulse } from "@/components/AmbientPulse";
 import { QuoteStack } from "./components/QuoteStack";
+import { TextStream } from "./components/TextStream";
 import { bridgeContent as C } from "./content";
 
 // Hero photo path lives in content.ts; HeroPhoto cross-fades it over the
 // fallback gradient on mount.
 const HERO_SRC: string | undefined = C.heroSrc;
 
-// Quote stagger calibration (per spec §3.5):
-//   FIG label   →   0ms after step 0 fires
-//   Sentence 1  → 200ms after
-//   Sentence 2  → 600ms after (sentence 1 + ~400ms)
-//   Sentence 3  → 1000ms after (sentence 2 + ~400ms)
-//   Attribution → 1400ms after (sentence 3 + ~400ms; chip arrives last)
-// Total stagger window: ~1.4s of staggered starts + ~600ms fade = ~2.0–2.4s.
-const FIG_DELAY = 0;
+// Streaming calibration (~25ms per character):
+//   Line 1 "Knowledge is power." (~19 chars) → ~475ms stream.
+//   Line 2 "Information is liberating." (~26 chars) → ~650ms stream.
+//   Line 3 "Education is the premise … every family." (~73 chars) → ~1825ms.
+// Each next line starts ~250ms after the previous finishes (breath beat);
+// attribution chip appears ~300ms after sentence 3 completes.
+const MS_PER_CHAR = 25;
 const LINE1_DELAY = 200;
-const LINE2_DELAY = 600;
-const LINE3_DELAY = 1000;
-const ATTRIBUTION_DELAY = 1400;
+const LINE2_DELAY = 925;   // 200 + 475 + 250
+const LINE3_DELAY = 1825;  // 925 + 650 + 250
+const ATTRIBUTION_DELAY = 3950; // 1825 + 1825 + 300
 
 // ───────────────────── slide ─────────────────────
 
@@ -77,8 +79,8 @@ export function BridgeMindsetToMechanics() {
     return () => window.clearTimeout(t);
   }, []);
 
-  // Step gates. stepIndex 0 reveals the quote (FIG + 3 lines + attribution
-  // on a continuous stagger). stepIndex 1 reveals the handoff line.
+  // Step gates. stepIndex 0 reveals the quote (3 streamed lines + attribution).
+  // stepIndex 1 reveals the handoff line.
   const quoteOn = stepIndex >= 0;
   const handoffOn = stepIndex >= 1;
   const pulseOn = stepIndex >= 1;
@@ -105,37 +107,8 @@ export function BridgeMindsetToMechanics() {
       {/* Strongest darken in the opener — long quote needs the legibility. */}
       <DarkenOverlay strength={C.darkenStrength} zIndex={15} />
 
-      {/* BRIDGE label — top-RIGHT, hand-rolled (not standard FIG. X.N). */}
-      <div
-        data-testid="bridge-fig-label"
-        className="fig-label"
-        style={{
-          position: "absolute",
-          top: 36,
-          right: 48,
-          left: "auto",
-          fontFamily: "var(--mono)",
-          fontSize: 12,
-          letterSpacing: "0.22em",
-          color: "var(--neutral-400)",
-          textTransform: "uppercase",
-          zIndex: 20,
-          opacity: quoteOn ? 1 : 0,
-          transform: quoteOn ? "translateY(0)" : "translateY(-4px)",
-          transition:
-            "opacity 400ms var(--ease), transform 400ms var(--ease)",
-          transitionDelay: quoteOn ? `${FIG_DELAY}ms` : "0ms",
-        }}
-      >
-        — BRIDGE
-        <span
-          className="dot"
-          style={{ color: "var(--copper-700)", margin: "0 8px" }}
-        >
-          ·
-        </span>
-        <span style={{ color: "var(--copper-200)" }}>{C.figLabel}</span>
-      </div>
+      {/* Canonical top-left FIG label — matches E.11's BRIDGE label. */}
+      <FigLabel section="C" num={6} label="BRIDGE · FROM MINDSET TO MECHANICS" />
 
       {/* CENTER — Kofi Annan epigraph. Vertically centered ~40–55% from top. */}
       <div
@@ -159,31 +132,46 @@ export function BridgeMindsetToMechanics() {
           attributionDelayMs={ATTRIBUTION_DELAY}
           lines={[
             {
-              content: renderLine(
-                C.quoteLines[0].text,
-                C.quoteLines[0].kw,
+              content: (
+                <TextStream
+                  text={C.quoteLines[0].text}
+                  keywords={C.quoteLines[0].kw}
+                  on={quoteOn}
+                  delayMs={LINE1_DELAY}
+                  msPerChar={MS_PER_CHAR}
+                />
               ),
               size: 52,
               visible: quoteOn,
-              delayMs: LINE1_DELAY,
+              delayMs: 0,
             },
             {
-              content: renderLine(
-                C.quoteLines[1].text,
-                C.quoteLines[1].kw,
+              content: (
+                <TextStream
+                  text={C.quoteLines[1].text}
+                  keywords={C.quoteLines[1].kw}
+                  on={quoteOn}
+                  delayMs={LINE2_DELAY}
+                  msPerChar={MS_PER_CHAR}
+                />
               ),
               size: 52,
               visible: quoteOn,
-              delayMs: LINE2_DELAY,
+              delayMs: 0,
             },
             {
-              content: renderLine(
-                C.quoteLines[2].text,
-                C.quoteLines[2].kw,
+              content: (
+                <TextStream
+                  text={C.quoteLines[2].text}
+                  keywords={C.quoteLines[2].kw}
+                  on={quoteOn}
+                  delayMs={LINE3_DELAY}
+                  msPerChar={MS_PER_CHAR}
+                />
               ),
               size: 44,
               visible: quoteOn,
-              delayMs: LINE3_DELAY,
+              delayMs: 0,
             },
           ]}
         />
@@ -226,35 +214,6 @@ export function BridgeMindsetToMechanics() {
 
 // ───────────────────── helpers ─────────────────────
 
-// Inline italic-keyword highlighter for the quote lines. The line itself is
-// already italic Instrument Serif neutral-100 (set by QuoteStack). Per
-// deck-wide keyword rule, the highlighted keyword becomes copper-400 italic
-// at the same weight — visually a color-only emphasis on a single word.
-function renderLine(text: string, keywords: readonly string[]): ReactNode {
-  if (!keywords.length) return text;
-  // Single-keyword case (all 3 Bridge lines have exactly 1 keyword).
-  const kw = keywords[0];
-  const idx = text.indexOf(kw);
-  if (idx === -1) return text;
-  const before = text.slice(0, idx);
-  const after = text.slice(idx + kw.length);
-  const accentStyle: CSSProperties = {
-    fontFamily: "var(--serif)",
-    fontStyle: "italic",
-    color: "var(--copper-400)",
-    fontWeight: 400,
-  };
-  return (
-    <>
-      {before}
-      <em data-testid={`bridge-kw-${kw}`} style={accentStyle}>
-        {kw}
-      </em>
-      {after}
-    </>
-  );
-}
-
 // Handoff line — italic Source Serif 4 neutral-300. The keyword `how` gets
 // copper-400 italic + copper-500 underline + 4s AmbientPulse on canonical pose.
 function renderHandoff(text: string, keywords: readonly string[], pulse: boolean): ReactNode {
@@ -273,7 +232,7 @@ function renderHandoff(text: string, keywords: readonly string[], pulse: boolean
         fontStyle: "italic",
         color: "var(--copper-400)",
         fontWeight: 400,
-        textDecoration: pulse ? "underline" : "none",
+        textDecorationLine: pulse ? "underline" : "none",
         textDecorationColor: pulse ? "var(--copper-500)" : "transparent",
         textUnderlineOffset: "4px",
         textDecorationThickness: "1px",

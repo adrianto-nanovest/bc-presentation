@@ -2,12 +2,12 @@
 //
 // The Bridge is the deepest reflective breath in the deck:
 //   - 2 steps · canonicalPose: 1
-//   - Step 0: quote stack staggers in (FIG + 3 lines + attribution)
+//   - Step 0: quote stack streams in (3 lines typewriter + attribution fade)
 //   - Step 1: handoff line "From here, the how." fades in italic, pulse on `how`
 //   - Hero photo fades at 1500ms (slowest in deck) — verified via the
 //     HeroPhoto <img> src (bridgeContent.heroSrc) and the slide root render.
 //   - NO hover handlers anywhere on the slide.
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, cleanup } from "@testing-library/react";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
 import {
   BridgeMindsetToMechanics,
@@ -41,14 +41,16 @@ test("Bridge declares 2 steps with canonicalPose=1 and section C", () => {
   expect(bridgeMindsetToMechanicsSlide.section).toBe("C");
 });
 
-test("Bridge renders the top-right BRIDGE label with the correct phrase", () => {
-  renderAtStep(0);
-  const label = screen.getByTestId("bridge-fig-label");
+test("Bridge renders the canonical top-left FIG.C.6 label", () => {
+  const { container } = renderAtStep(0);
+  const label = container.querySelector(".fig-label") as HTMLElement;
+  expect(label).not.toBeNull();
+  expect(label.textContent).toMatch(/— FIG\. C\.6/);
   expect(label.textContent).toMatch(/BRIDGE/);
   expect(label.textContent).toMatch(/FROM MINDSET TO MECHANICS/);
 });
 
-test("Bridge renders the hero photo from content and the strongest darken overlay 0.30", () => {
+test("Bridge renders the hero photo from content with a lighter darken overlay", () => {
   const { container } = renderAtStep(0);
   // HeroPhoto renders an <img> using bridgeContent.heroSrc — no fallback.
   expect(screen.queryByTestId("hero-fallback")).toBeNull();
@@ -57,7 +59,7 @@ test("Bridge renders the hero photo from content and the strongest darken overla
   expect(img?.getAttribute("src")).toBe(bridgeContent.heroSrc);
   expect(img?.getAttribute("alt")).toBe(bridgeContent.heroAlt);
   const darken = screen.getByTestId("darken-overlay");
-  expect(darken.getAttribute("data-strength")).toBe("0.3");
+  expect(darken.getAttribute("data-strength")).toBe(String(bridgeContent.darkenStrength));
 });
 
 test("Bridge renders all 3 quote lines and the Kofi Annan attribution at step 0", () => {
@@ -65,15 +67,12 @@ test("Bridge renders all 3 quote lines and the Kofi Annan attribution at step 0"
   const l0 = screen.getByTestId("bridge-quote-line-0");
   const l1 = screen.getByTestId("bridge-quote-line-1");
   const l2 = screen.getByTestId("bridge-quote-line-2");
+  // TextStream renders the full text into per-char spans (opacity-gated for
+  // typewriter reveal), so textContent contains the complete sentence even
+  // before the stream has played out.
   expect(l0.textContent).toMatch(bridgeContent.quoteLines[0].text);
   expect(l1.textContent).toMatch(bridgeContent.quoteLines[1].text);
   expect(l2.textContent).toMatch(bridgeContent.quoteLines[2].text);
-  // Italic copper keyword accent on each line.
-  expect(screen.getByTestId("bridge-kw-power").textContent).toBe("power");
-  expect(screen.getByTestId("bridge-kw-liberating").textContent).toBe(
-    "liberating",
-  );
-  expect(screen.getByTestId("bridge-kw-family").textContent).toBe("family");
   expect(screen.getByTestId("bridge-quote-attribution").textContent).toBe(
     bridgeContent.attribution,
   );
@@ -87,26 +86,18 @@ test("Bridge sentence 3 uses the smaller 44px size for the longer line", () => {
   expect(l2.style.fontSize).toBe("44px");
 });
 
-test("Bridge quote lines stagger ~400ms apart (200/600/1000ms delays)", () => {
-  renderAtStep(0);
-  const l0 = screen.getByTestId("bridge-quote-line-0");
-  const l1 = screen.getByTestId("bridge-quote-line-1");
-  const l2 = screen.getByTestId("bridge-quote-line-2");
-  expect(l0.style.transitionDelay).toBe("200ms");
-  expect(l1.style.transitionDelay).toBe("600ms");
-  expect(l2.style.transitionDelay).toBe("1000ms");
-});
-
 test("Bridge handoff line is hidden at step 0 and visible at canonicalPose (step 1)", () => {
   renderAtStep(0);
   const handoff0 = screen.getByTestId("bridge-handoff");
   expect(handoff0.style.opacity).toBe("0");
 
+  // Clean up the first render before mounting a second tree to avoid
+  // duplicate testids in document.body.
+  cleanup();
+
   // Re-render at canonical pose.
   renderAtStep(1);
-  const handoffs = screen.getAllByTestId("bridge-handoff");
-  // The most-recently rendered tree is last.
-  const handoff1 = handoffs[handoffs.length - 1];
+  const handoff1 = screen.getByTestId("bridge-handoff");
   expect(handoff1.style.opacity).toBe("1");
   expect(handoff1.textContent).toMatch(/From here, the/);
   expect(handoff1.textContent).toMatch(/how/);
@@ -118,7 +109,7 @@ test("Bridge applies copper underline + AmbientPulse on `how` at canonical pose"
   // Use the last-rendered tree's accent (most-recently rendered DOM tree).
   const kw = kws[kws.length - 1];
   expect(kw.textContent).toBe("how");
-  expect(kw.style.textDecoration.includes("underline")).toBe(true);
+  expect(kw.style.textDecorationLine.includes("underline")).toBe(true);
   // AmbientPulse wraps the accent with a `data-ambient-pulse` span on canonical pose.
   const pulse = kw.closest("[data-ambient-pulse]");
   expect(pulse).not.toBeNull();

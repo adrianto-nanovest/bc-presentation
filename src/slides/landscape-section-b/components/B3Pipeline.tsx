@@ -286,9 +286,8 @@ export function B3Pipeline({ mounted }: B3PipelineProps) {
                   style={{
                     display: "inline-block",
                     animation: typingDone
-                      ? "b3-input-pulse 1.2s var(--ease) infinite"
+                      ? `b3-input-pulse 1.2s var(--ease) ${i * 300}ms infinite`
                       : "none",
-                    animationDelay: typingDone ? `${i * 300}ms` : "0ms",
                   }}
                 >
                   {ch}

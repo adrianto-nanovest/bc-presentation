@@ -18,6 +18,7 @@ export interface C1Content {
   figLabel: string;
   slideTitle: string;
   headline: string;               // canonical .slide-headline.small text
+  headlineKw: readonly string[];  // KW() targets for canonical headline
   bigHeadline: string;            // body declaration with strikethrough — "AI is not a tool."
   strikethroughWord: string;      // word to strikethrough — "tool"
   clarifier: string;              // "It's a bridge."
@@ -36,6 +37,7 @@ export const c1Content: C1Content = {
   figLabel: "MINDSET 1 / 5",
   slideTitle: "From Tool to Bridge.",
   headline: "From Tool to Bridge.",
+  headlineKw: ["Tool", "Bridge"],
   bigHeadline: "AI is not a tool.",
   strikethroughWord: "tool",
   clarifier: "It's a bridge.",
@@ -66,6 +68,7 @@ export interface C2Card {
 export interface C2Content {
   figLabel: string;
   headline: string;               // canonical .slide-headline.small text
+  headlineKw: readonly string[];  // KW() targets for canonical headline
   recognition: string;
   recognitionItalicClause: string; // "That's a reasonable place to start."
   fearPanel: string;
@@ -73,11 +76,14 @@ export interface C2Content {
   leveragePanel: string;
   leverageSub: string;            // italic "So I learn to use it."
   cards: readonly C2Card[];
+  footer: string;                 // B4-style bottom-left italic 14px, new last step
+  footerKw: readonly string[];
 }
 
 export const c2Content: C2Content = {
   figLabel: "MINDSET 2 / 5",
   headline: "From Fear to Leverage.",
+  headlineKw: ["Fear", "Leverage"],
   recognition:
     "Most of us start with AI the way we started with Google — type, read, move on. That's a reasonable place to start.",
   recognitionItalicClause: "That's a reasonable place to start.",
@@ -87,7 +93,7 @@ export const c2Content: C2Content = {
   leverageSub: "So I learn to use it.",
   cards: [
     {
-      label: "LEVERAGE",
+      label: "MULTIPLIER",
       animKey: "leverage",
       bullets: [
         { text: "10× existing output", kw: ["10×"] },
@@ -113,7 +119,18 @@ export const c2Content: C2Content = {
         { text: "Domain expertise wins", kw: ["Domain expertise"] },
       ],
     },
+    {
+      label: "REACH",
+      animKey: "reach",
+      bullets: [
+        { text: "Beyond your team's headcount", kw: ["headcount"] },
+        { text: "Cross-domain in one head", kw: ["Cross-domain"] },
+        { text: "Output that travels with you", kw: ["travels"] },
+      ],
+    },
   ],
+  footer: "Move from fear to fluency. The cost of trying is now nearly zero.",
+  footerKw: ["fear", "fluency", "nearly zero"],
 };
 
 // ─── C.3 — Executor → Orchestrator ─────────────────────────────────────────
@@ -126,7 +143,9 @@ export interface C3Side {
 export interface C3Content {
   figLabel: string;
   headline: string;               // canonical .slide-headline.small text
+  headlineKw: readonly string[];  // KW() targets for canonical headline
   executor: C3Side;
+  executorSubtitle: string;       // "DO. DEBUG. REPEAT." — mono caps beneath EXECUTOR (parallels triadCaption)
   orchestrator: C3Side;
   triadCaption: string;           // "Direct. Verify. Decide." — mono caps beneath ORCHESTRATOR
   punchline: string;
@@ -136,6 +155,7 @@ export interface C3Content {
 export const c3Content: C3Content = {
   figLabel: "MINDSET 3 / 5",
   headline: "From Executor to Orchestrator.",
+  headlineKw: ["Executor", "Orchestrator"],
   executor: {
     label: "EXECUTOR",
     bullets: [
@@ -143,15 +163,18 @@ export const c3Content: C3Content = {
       "Debug manually",
       "Document everything",
       "Repetitive sub-tasks",
+      "Manual handoffs",
       "Time → typing",
     ],
   },
+  executorSubtitle: "DO. DEBUG. REPEAT.",
   orchestrator: {
     label: "ORCHESTRATOR",
     bullets: [
       "Design and architect",
       "Specify intent",
       "Verify and review",
+      "Set the guardrails",
       "Decide and own it",
       "Time → thinking",
     ],
@@ -177,6 +200,7 @@ export interface C4Distribution {
 export interface C4Content {
   figLabel: string;
   headline: string;               // canonical .slide-headline.small text
+  headlineKw: readonly string[];  // KW() targets for canonical headline
   nodes: readonly C4Node[];   // specify, generate, verify, ship
   humanCaption: string;
   aiCaption: string;
@@ -187,16 +211,19 @@ export interface C4Content {
   anchor: string;
   anchorKw: readonly string[];
   coreSkillKw: readonly string[]; // ambient-pulse target on the anchor line
+  footer: string;                 // B4-style bottom-left italic 14px
+  footerKw: readonly string[];
 }
 
 export const c4Content: C4Content = {
   figLabel: "MINDSET 4 / 5",
   headline: "The Shape of the New Work.",
+  headlineKw: ["Shape", "New Work"],
   nodes: [
     { label: "SPECIFY", caption: "what to build, why it's right" },
     { label: "GENERATE", caption: "bulk work — AI does this" },
     { label: "VERIFY", caption: "review, validate, judge" },
-    { label: "→ SHIP", caption: "" },
+    { label: "SHIP IT", caption: "result goes out the door" },
   ],
   humanCaption: "HUMAN WORK: SPECIFY + VERIFY",
   aiCaption: "AI WORK: GENERATE (bulk)",
@@ -207,6 +234,8 @@ export const c4Content: C4Content = {
   anchor: "Verification is the new core skill.",
   anchorKw: ["Verification is the new core skill"],
   coreSkillKw: ["core skill"],
+  footer: "More time on what to build and why it's right. Less time on how to type.",
+  footerKw: ["what to build", "why it's right", "how to type"],
 };
 
 // ─── C.5 — Role → Trajectory ───────────────────────────────────────────────
@@ -220,6 +249,7 @@ export interface C5Beat {
 export interface C5Content {
   figLabel: string;
   headline: string;               // canonical .slide-headline.small text
+  headlineKw: readonly string[];  // KW() targets for canonical headline
   bigHeadline: string;            // body declaration — "It's not a role you take."
   strikethroughWord: string;      // "role"
   clarifier: string;              // "It's a trajectory you build."
@@ -235,6 +265,7 @@ export interface C5Content {
 export const c5Content: C5Content = {
   figLabel: "MINDSET 5 / 5",
   headline: "From Role to Trajectory.",
+  headlineKw: ["Role", "Trajectory"],
   bigHeadline: "It's not a role you take.",
   strikethroughWord: "role",
   clarifier: "It's a trajectory you build.",
@@ -263,7 +294,7 @@ export const c5Content: C5Content = {
   ],
   closing:
     "The bridge from where you are to wherever you need to be.",
-  closingKw: ["wherever you need to be"],
+  closingKw: ["where you are"],
   heroSrc: "/heroes/c5-path.jpg",
   heroAlt: "Path leading into the distance",
   darkenStrength: 0.25,
@@ -303,5 +334,5 @@ export const bridgeContent: BridgeContent = {
   handoffKw: ["how"],
   heroSrc: "/heroes/bridge-foundation.jpg",
   heroAlt: "Foundation under construction at dawn",
-  darkenStrength: 0.3,
+  darkenStrength: 0.08,
 };

@@ -58,27 +58,7 @@ export function E9HarnessWhatWhy() {
           gap: 14,
         }}
       >
-        <Reveal on={showLeft} data-testid="e9-sub">
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              color: "var(--copper-300)",
-              textTransform: "uppercase",
-            }}
-          >
-            {C.sub}
-          </span>
-        </Reveal>
-
-        <CopperRule on={showLeft} width="40%" delay={120} />
-
-        <Reveal
-          on={showLeft}
-          delay={220}
-          data-testid="e9-definition"
-        >
+        <Reveal on={showLeft} data-testid="e9-definition">
           <p
             style={{
               fontFamily: "var(--serif)",
@@ -91,6 +71,8 @@ export function E9HarnessWhatWhy() {
             {highlight(C.definition, C.definitionKw)}
           </p>
         </Reveal>
+
+        <CopperRule on={showLeft} width="40%" delay={250} />
 
         <div style={{ height: 4 }} />
 

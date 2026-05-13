@@ -186,8 +186,7 @@ function ReasoningTrails({ cx, cy }: { cx: number; cy: number }) {
             strokeDasharray="8 4"
             opacity="0.5"
             style={{
-              animation: `g1-trail 6s ease-in-out infinite`,
-              animationDelay: `${i * 0.3}s`,
+              animation: `g1-trail 6s ease-in-out ${i * 0.3}s infinite`,
             }}
           />
         );
@@ -234,8 +233,7 @@ function HubAndSpoke({ cx, cy }: { cx: number; cy: number }) {
             r="2"
             fill="var(--copper-200)"
             style={{
-              animation: `g1-particle-inward 8s linear infinite`,
-              animationDelay: `${i * 0.4}s`,
+              animation: `g1-particle-inward 8s linear ${i * 0.4}s infinite`,
               transformOrigin: `${cx}px ${cy}px`,
               transformBox: "fill-box",
             }}
@@ -279,8 +277,7 @@ function ConcentricRipples({ cx, cy }: { cx: number; cy: number }) {
         stroke="var(--copper-400)"
         strokeWidth="1.5"
         style={{
-          animation: `g1-ripple-2 5s ease-out infinite`,
-          animationDelay: "1.6s",
+          animation: `g1-ripple-2 5s ease-out 1.6s infinite`,
         }}
       />
       <circle
@@ -291,8 +288,7 @@ function ConcentricRipples({ cx, cy }: { cx: number; cy: number }) {
         stroke="var(--copper-400)"
         strokeWidth="1.5"
         style={{
-          animation: `g1-ripple-3 5s ease-out infinite`,
-          animationDelay: "3.2s",
+          animation: `g1-ripple-3 5s ease-out 3.2s infinite`,
         }}
       />
     </g>

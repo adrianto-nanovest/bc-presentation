@@ -350,7 +350,7 @@ export const e9Content = {
     { text: "Multi‑agent harness designs lift completion by +90.2% over single‑agent.", kw: ["+90.2%"] },
     { text: "It automates the six context mitigations — so you don't have to each session.", kw: ["six context mitigations"] },
   ],
-  includesKicker: "What the harness automates · the six context mitigations",
+  includesKicker: "Six context mitigations · the harness automates",
   includes: [
     "Context Isolation",
     "Context Pruning",

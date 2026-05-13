@@ -41,12 +41,27 @@ export interface B3ParamTileProps {
   bullets: ReadonlyArray<B3ParamTileBulletInput>;
   /** Animation component rendered inside the 80px shell. */
   children: ReactNode;
+  /**
+   * Optional style overrides. Used by C.2 v2's 2×2 grid where the tile needs
+   * to stretch (`height: "100%"`, `width: "100%"`) inside a CSS Grid cell
+   * rather than the default fixed 180×205. Merged AFTER hover-driven props,
+   * so callers can override width/height while hover transitions still work.
+   */
+  style?: CSSProperties;
+  /**
+   * When `true`, bullets wrap to multiple lines instead of `whiteSpace:
+   * nowrap`. Used by narrower grid cells (e.g. C.2 v2's ~225px tiles) where
+   * some bullets exceed one line. Default `false` matches B.3 behavior.
+   */
+  allowBulletWrap?: boolean;
 }
 
 export function B3ParamTile({
   label,
   bullets,
   children,
+  style,
+  allowBulletWrap = false,
 }: B3ParamTileProps) {
   const [hovered, setHovered] = useState(false);
 
@@ -70,6 +85,9 @@ export function B3ParamTile({
     zIndex: hovered ? 20 : 1,
     cursor: "default",
     boxSizing: "border-box",
+    // Caller overrides (e.g. width/height for grid-stretch). Merged last so
+    // grid cells can stretch the tile beyond the default 180×205 footprint.
+    ...style,
   };
 
   return (
@@ -127,7 +145,10 @@ export function B3ParamTile({
               display: "flex",
               alignItems: "baseline",
               gap: 6,
-              height: 20,
+              // In wrap mode we drop the fixed line-box so multi-line bullets
+              // can grow vertically; default keeps the 20px row baseline used
+              // by B.3 for its symmetric padding math.
+              minHeight: 20,
               marginBottom: 0,
             }}
           >
@@ -149,7 +170,8 @@ export function B3ParamTile({
                 fontSize: 11,
                 color: "var(--neutral-200)",
                 lineHeight: "20px",
-                whiteSpace: "nowrap",
+                whiteSpace: allowBulletWrap ? "normal" : "nowrap",
+                wordWrap: allowBulletWrap ? "break-word" : "normal",
               }}
             >
               {KW(b.text, b.keywords)}

@@ -9,6 +9,8 @@
 //   - LeverageAnim   One short bar grows into a row of 10 progressively taller bars.
 //   - VelocityAnim   5 small filled squares appear sequentially, then pulse together.
 //   - JudgmentAnim   3 diamonds + a magnifier glide; 2 fade, middle gets a check.
+//   - ReachAnim      Copper-700 source dot at left emits 3 concentric copper-300
+//                    rings that expand rightward in staggered pulses (radar-like).
 
 import type { CSSProperties } from "react";
 
@@ -297,6 +299,82 @@ export function JudgmentAnim() {
             repeatCount="indefinite"
           />
         </polyline>
+      </svg>
+    </div>
+  );
+}
+
+// ── REACH ─────────────────────────────────────────────────────────────────
+// A copper-700 source dot at the left (x=15) emits three copper-300 rings
+// that expand rightward in staggered pulses. Each ring's radius animates
+// from 6 → 32 while opacity decays from 0.9 → 0, mimicking a radar/sonar
+// signal radiating outward from a single source. Staggered begin offsets
+// (0s, 0.8s, 1.6s) keep one ring always visible across the 2.4s loop.
+//
+// Viewbox matches the other three C2 anims (120 × 80), rendered at 100 × 60
+// inside SHELL_STYLE so it slots cleanly into B3ParamTile's 75px d3-anim
+// shell. SHELL_STYLE shared with Leverage/Velocity/Judgment for parity.
+export function ReachAnim() {
+  const SOURCE_X = 15;
+  const SOURCE_Y = 40;
+  const dur = "2.4s";
+  // Three rings, each begins at a different point in the loop.
+  const RING_BEGINS = ["0s", "0.8s", "1.6s"];
+  return (
+    <div data-testid="c2-anim-reach" style={SHELL_STYLE}>
+      <svg
+        width={100}
+        height={60}
+        viewBox="0 0 120 80"
+        style={{ overflow: "visible" }}
+      >
+        {/* Faint baseline guide — same copper-800 tick used by LeverageAnim
+            to anchor the eye horizontally without competing with the rings. */}
+        <line
+          x1={SOURCE_X}
+          x2={110}
+          y1={SOURCE_Y + 28}
+          y2={SOURCE_Y + 28}
+          stroke="var(--copper-800)"
+          strokeWidth={0.6}
+        />
+
+        {/* Source dot — copper-700, anchored at the left. */}
+        <circle
+          cx={SOURCE_X}
+          cy={SOURCE_Y}
+          r={4}
+          fill="var(--copper-700)"
+        />
+
+        {/* Three expanding rings, copper-300, radiating from the source. */}
+        {RING_BEGINS.map((begin, i) => (
+          <circle
+            key={i}
+            cx={SOURCE_X}
+            cy={SOURCE_Y}
+            r={6}
+            fill="none"
+            stroke="var(--copper-300)"
+            strokeWidth={1.2}
+            opacity={0}
+          >
+            <animate
+              attributeName="r"
+              values="6;32"
+              dur={dur}
+              begin={begin}
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0.9;0"
+              dur={dur}
+              begin={begin}
+              repeatCount="indefinite"
+            />
+          </circle>
+        ))}
       </svg>
     </div>
   );

@@ -92,27 +92,7 @@ export function E6ContextWhatWhy() {
           gap: 14,
         }}
       >
-        <Reveal on={showLeft} data-testid="e6-sub">
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              color: "var(--copper-300)",
-              textTransform: "uppercase",
-            }}
-          >
-            {C.sub}
-          </span>
-        </Reveal>
-
-        <CopperRule on={showLeft} width="40%" delay={120} />
-
-        <Reveal
-          on={showLeft}
-          delay={220}
-          data-testid="e6-definition"
-        >
+        <Reveal on={showLeft} data-testid="e6-definition">
           <p
             style={{
               fontFamily: "var(--serif)",
@@ -125,6 +105,8 @@ export function E6ContextWhatWhy() {
             {highlight(C.definition, C.definitionKw)}
           </p>
         </Reveal>
+
+        <CopperRule on={showLeft} width="40%" delay={250} />
 
         <div style={{ height: 4 }} />
 

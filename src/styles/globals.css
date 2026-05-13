@@ -304,6 +304,7 @@ em.kw {
 }
 .copper-rule {
   height: 1px;
+  flex-shrink: 0;
   background: var(--copper-700);
   transform-origin: left;
   transform: scaleX(0);
@@ -595,3 +596,192 @@ em.kw {
   14%, 92% { width: 8.3%; } /* 30 min / 360 min */
   100%     { width: 0; }
 }
+
+/* C.2 leverage-box pulse-glow — fires when stepIndex >= 4. Soft copper
+   halo (max 24px) + warmer copper-400 border at the peak. 4s cycle, eased
+   both directions, so it reads as a slow breathing emphasis around the
+   "Someone using AI will. / So I learn to use it." conclusion. */
+@keyframes c2BoxPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(217,158,108,0);    border-color: var(--copper-700); }
+  50%      { box-shadow: 0 0 24px rgba(217,158,108,0.35); border-color: var(--copper-400); }
+}
+
+/* ─────────────────── Section F — facet hover-state animation loops ───────
+   Shared primitives consumed by F.2–F.7 facet hover illustrations. The naming
+   prefix `f-` keeps them ergonomically reachable from any Section F slide. */
+
+/* Flowing dot along an arrow path — used by F.2 WHAT IT IS and elsewhere
+   to suggest a continuous data flow between columns. ~2s loop. */
+@keyframes f-flow-dot {
+  0%   { offset-distance: 0%;   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+.f-flow-dot {
+  animation: f-flow-dot 2s linear infinite;
+}
+
+/* Pipeline sequential pulse — three step cards take turns brightening.
+   2.5s loop with three phases. Used by F.2 HOW IT WORKS. */
+@keyframes f-seq-pulse-1 {
+  0%, 100% { box-shadow: 0 0 0 rgba(217,158,108,0);    border-color: var(--copper-700); }
+  10%, 30% { box-shadow: 0 0 16px rgba(217,158,108,0.30); border-color: var(--copper-300); }
+}
+@keyframes f-seq-pulse-2 {
+  0%, 100%  { box-shadow: 0 0 0 rgba(217,158,108,0);    border-color: var(--copper-700); }
+  43%, 63%  { box-shadow: 0 0 16px rgba(217,158,108,0.30); border-color: var(--copper-300); }
+}
+@keyframes f-seq-pulse-3 {
+  0%, 100%  { box-shadow: 0 0 0 rgba(217,158,108,0);    border-color: var(--copper-700); }
+  76%, 96%  { box-shadow: 0 0 16px rgba(217,158,108,0.30); border-color: var(--copper-300); }
+}
+.f-seq-pulse-1 { animation: f-seq-pulse-1 2.5s var(--ease) infinite; }
+.f-seq-pulse-2 { animation: f-seq-pulse-2 2.5s var(--ease) infinite; }
+.f-seq-pulse-3 { animation: f-seq-pulse-3 2.5s var(--ease) infinite; }
+
+/* Row-by-row brightness pulse — 4 rows take turns lighting up.
+   4s loop, ~1s per row. Used by F.2 WHEN TO REACH matrix. */
+@keyframes f-row-pulse-1 {
+  0%, 100% { background: rgba(10,10,10,0.6); }
+  6%, 19%  { background: rgba(184,110,61,0.10); }
+}
+@keyframes f-row-pulse-2 {
+  0%, 100%  { background: rgba(10,10,10,0.6); }
+  31%, 44%  { background: rgba(184,110,61,0.10); }
+}
+@keyframes f-row-pulse-3 {
+  0%, 100%  { background: rgba(10,10,10,0.6); }
+  56%, 69%  { background: rgba(184,110,61,0.10); }
+}
+@keyframes f-row-pulse-4 {
+  0%, 100%  { background: rgba(10,10,10,0.6); }
+  81%, 94%  { background: rgba(184,110,61,0.10); }
+}
+.f-row-pulse-1 { animation: f-row-pulse-1 4s var(--ease) infinite; }
+.f-row-pulse-2 { animation: f-row-pulse-2 4s var(--ease) infinite; }
+.f-row-pulse-3 { animation: f-row-pulse-3 4s var(--ease) infinite; }
+.f-row-pulse-4 { animation: f-row-pulse-4 4s var(--ease) infinite; }
+
+/* Continuous arrow stroke flow — used as a subtle steady-state on
+   connector lines between columns. */
+@keyframes f-arrow-stream {
+  0%   { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+.f-arrow-stream {
+  stroke-dasharray: 4 4;
+  animation: f-arrow-stream 1.6s linear infinite;
+}
+
+/* Layer-cake shimmer — 4 layers take turns brightening in a slow upward
+   sweep. Used by F.3 WHAT IT IS (default layer-cake + connectors). 3s loop. */
+@keyframes f-cake-shimmer-1 {
+  0%, 100% { box-shadow: 0 0 0 rgba(217,158,108,0); }
+  6%, 18%  { box-shadow: 0 0 14px rgba(217,158,108,0.35); }
+}
+@keyframes f-cake-shimmer-2 {
+  0%, 100%  { box-shadow: 0 0 0 rgba(217,158,108,0); }
+  31%, 43%  { box-shadow: 0 0 14px rgba(217,158,108,0.35); }
+}
+@keyframes f-cake-shimmer-3 {
+  0%, 100%  { box-shadow: 0 0 0 rgba(217,158,108,0); }
+  56%, 68%  { box-shadow: 0 0 14px rgba(217,158,108,0.35); }
+}
+@keyframes f-cake-shimmer-4 {
+  0%, 100%  { box-shadow: 0 0 0 rgba(217,158,108,0); }
+  81%, 93%  { box-shadow: 0 0 14px rgba(217,158,108,0.35); }
+}
+.f-cake-shimmer-1 { animation: f-cake-shimmer-1 3s var(--ease) infinite; }
+.f-cake-shimmer-2 { animation: f-cake-shimmer-2 3s var(--ease) infinite; }
+.f-cake-shimmer-3 { animation: f-cake-shimmer-3 3s var(--ease) infinite; }
+.f-cake-shimmer-4 { animation: f-cake-shimmer-4 3s var(--ease) infinite; }
+
+/* Exploded-cake highlight pulse — single subtle glow loop used on the
+   WhatsInsideState pointer labels. 2.5s loop. */
+@keyframes f-pointer-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.f-pointer-pulse {
+  animation: f-pointer-pulse 2.5s var(--ease) infinite;
+}
+
+/* Grid row sweep — 5 rows of 10 light up sequentially. Used by F.3
+   WHY PACKAGE (50-laptop install grid). 4s loop, ~800ms per row. */
+@keyframes f-grid-row-1 {
+  0%, 100% { opacity: 0.55; }
+  4%, 16%  { opacity: 1; }
+}
+@keyframes f-grid-row-2 {
+  0%, 100%  { opacity: 0.55; }
+  24%, 36%  { opacity: 1; }
+}
+@keyframes f-grid-row-3 {
+  0%, 100%  { opacity: 0.55; }
+  44%, 56%  { opacity: 1; }
+}
+@keyframes f-grid-row-4 {
+  0%, 100%  { opacity: 0.55; }
+  64%, 76%  { opacity: 1; }
+}
+@keyframes f-grid-row-5 {
+  0%, 100%  { opacity: 0.55; }
+  84%, 96%  { opacity: 1; }
+}
+.f-grid-row-1 { animation: f-grid-row-1 4s var(--ease) infinite; }
+.f-grid-row-2 { animation: f-grid-row-2 4s var(--ease) infinite; }
+.f-grid-row-3 { animation: f-grid-row-3 4s var(--ease) infinite; }
+.f-grid-row-4 { animation: f-grid-row-4 4s var(--ease) infinite; }
+.f-grid-row-5 { animation: f-grid-row-5 4s var(--ease) infinite; }
+
+/* Tree line highlight — file-tree rows take turns brightening. Used by
+   F.3 EXAMPLE (weekly-report-plugin/ tree). ~4.2s loop, 7 rows. */
+@keyframes f-tree-line-1 { 0%, 100% { color: var(--neutral-100); } 5%, 12%  { color: var(--copper-100); } }
+@keyframes f-tree-line-2 { 0%, 100% { color: var(--neutral-100); } 17%, 24% { color: var(--copper-100); } }
+@keyframes f-tree-line-3 { 0%, 100% { color: var(--neutral-100); } 29%, 36% { color: var(--copper-100); } }
+@keyframes f-tree-line-4 { 0%, 100% { color: var(--neutral-100); } 41%, 48% { color: var(--copper-100); } }
+@keyframes f-tree-line-5 { 0%, 100% { color: var(--neutral-100); } 53%, 60% { color: var(--copper-100); } }
+@keyframes f-tree-line-6 { 0%, 100% { color: var(--neutral-100); } 65%, 72% { color: var(--copper-100); } }
+@keyframes f-tree-line-7 { 0%, 100% { color: var(--neutral-100); } 77%, 84% { color: var(--copper-100); } }
+.f-tree-line-1 { animation: f-tree-line-1 4.2s var(--ease) infinite; }
+.f-tree-line-2 { animation: f-tree-line-2 4.2s var(--ease) infinite; }
+.f-tree-line-3 { animation: f-tree-line-3 4.2s var(--ease) infinite; }
+.f-tree-line-4 { animation: f-tree-line-4 4.2s var(--ease) infinite; }
+.f-tree-line-5 { animation: f-tree-line-5 4.2s var(--ease) infinite; }
+.f-tree-line-6 { animation: f-tree-line-6 4.2s var(--ease) infinite; }
+.f-tree-line-7 { animation: f-tree-line-7 4.2s var(--ease) infinite; }
+
+/* Six-pulse connector sweep — 6 pills take turns lighting up. Used by F.5
+   WHAT IT IS (USB-for-AI fanout to 6 connector pills). 3.6s loop, 600ms
+   per pill. Border + background lift on the active pill. */
+@keyframes f-pill-pulse-1 {
+  0%, 100% { border-color: var(--copper-800); background: rgba(184,110,61,0.03); }
+  5%, 13%  { border-color: var(--copper-300); background: rgba(184,110,61,0.12); }
+}
+@keyframes f-pill-pulse-2 {
+  0%, 100% { border-color: var(--copper-800); background: rgba(184,110,61,0.03); }
+  21%, 30% { border-color: var(--copper-300); background: rgba(184,110,61,0.12); }
+}
+@keyframes f-pill-pulse-3 {
+  0%, 100% { border-color: var(--copper-800); background: rgba(184,110,61,0.03); }
+  38%, 47% { border-color: var(--copper-300); background: rgba(184,110,61,0.12); }
+}
+@keyframes f-pill-pulse-4 {
+  0%, 100% { border-color: var(--copper-800); background: rgba(184,110,61,0.03); }
+  55%, 64% { border-color: var(--copper-300); background: rgba(184,110,61,0.12); }
+}
+@keyframes f-pill-pulse-5 {
+  0%, 100% { border-color: var(--copper-800); background: rgba(184,110,61,0.03); }
+  72%, 81% { border-color: var(--copper-300); background: rgba(184,110,61,0.12); }
+}
+@keyframes f-pill-pulse-6 {
+  0%, 100% { border-color: var(--copper-800); background: rgba(184,110,61,0.03); }
+  89%, 97% { border-color: var(--copper-300); background: rgba(184,110,61,0.12); }
+}
+.f-pill-pulse-1 { animation: f-pill-pulse-1 3.6s var(--ease) infinite; }
+.f-pill-pulse-2 { animation: f-pill-pulse-2 3.6s var(--ease) infinite; }
+.f-pill-pulse-3 { animation: f-pill-pulse-3 3.6s var(--ease) infinite; }
+.f-pill-pulse-4 { animation: f-pill-pulse-4 3.6s var(--ease) infinite; }
+.f-pill-pulse-5 { animation: f-pill-pulse-5 3.6s var(--ease) infinite; }
+.f-pill-pulse-6 { animation: f-pill-pulse-6 3.6s var(--ease) infinite; }

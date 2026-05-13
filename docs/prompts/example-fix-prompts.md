@@ -147,3 +147,10 @@ Fix and improve:
    
 create Tasks for all items to do (your TaskCreate tool), dispatch and delegate to your general-purpose agents to implement.
 For better understanding on current codebase (src/ folder) and research content (docs/researches/) or do web researches, you can dispatch your Explore agents (Haiku model)
+
+---------------
+
+Fix and improve section 
+
+create Tasks for all items to do (your TaskCreate tool), dispatch and delegate to your general-purpose agents to implement.
+You can dispatch explore agent (Haiku model) for codebase understanding.

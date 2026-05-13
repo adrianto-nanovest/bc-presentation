@@ -54,10 +54,7 @@ test("step 0 → left pane visible (definition + 4 why-points); right reveals hi
   expect(headline).not.toBeNull();
   expect(headline?.textContent).toMatch(/Harness/);
 
-  // Sub-kicker + definition revealed.
-  expect(screen.getByTestId("e9-sub").className).toMatch(/\bon\b/);
-  expect(screen.getByTestId("e9-sub").textContent).toMatch(e9Content.sub);
-
+  // Definition revealed.
   const definition = screen.getByTestId("e9-definition");
   expect(definition.className).toMatch(/\bon\b/);
   expect(definition.textContent).toMatch(/software around the model/);

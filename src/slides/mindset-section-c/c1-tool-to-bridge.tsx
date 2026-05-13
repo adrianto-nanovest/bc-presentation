@@ -6,8 +6,10 @@
 // it). The Bridge slide alone breaks the photographic embargo as the singular
 // "we've arrived" moment.
 //
-// Per spec §3.1, C.1 collapses to 2 steps. Its narrative is two declarations,
-// not five — one Space press per declaration. The strikethrough on `tool`
+// Per Task 23 (v3), C.1 is now a true 2-step slide. Step 0 is the load pose
+// (header only). Step 1 is the canonical pose — every other element reveals
+// together on the single Space press, with an internal ~1.5s stagger that
+// plays out the full declaration choreography. The strikethrough on `tool`
 // (copper-700, 400ms easeOutExpo) remains the visual hinge of the section
 // and is intentionally mirrored on C.5's `role`.
 //
@@ -17,24 +19,23 @@
 //   Italic clarifier directly beneath at top:400, centered.
 //   FromToBlock pinned to the lower-right (right:64, bottom:72).
 //
-// Motion —
-//   load (mount-driven):  FIG label + slide title fade in together (400ms).
-//   stepIndex 0:          Load pose — headline/clarifier/FromTo all hidden.
-//   stepIndex 1:          Declaration 1. Headline "AI is not a tool." fades
-//                         (300ms) → 300ms later strikethrough draws across
-//                         `tool` (400ms easeOutExpo) → 200ms after strike
-//                         completes the clarifier "It's a bridge." italic
-//                         copper-400 fades in.
-//   stepIndex 2 (canon):  Declaration 2. "From: ..." slides up from 12px
-//                         offset (400ms); 250ms later "To: ..." slides up
-//                         (400ms). 4s ambient copper-glow pulse begins on
-//                         `standing capability`.
+// Ambient background —
+//   A sparse field of drifting copper particles (C1ParticleField) sits above
+//   the dot-grid and below all foreground text. ~44 small soft-glowing dots
+//   loop left → right over 16–24s, with a slow vertical wobble for organic
+//   motion — quietly implying "passage across" the bridge. Pure CSS keyframes;
+//   honored by the deck-wide prefers-reduced-motion rule in globals.css.
 //
-// Hover (presenter detail layer) —
-//   `bridge` (clarifier word)      → "Something you cross daily, not
-//                                     something you reach for occasionally."
-//   `standing capability` (To text) → "Fluency that travels with you across
-//                                      contexts."
+// Motion —
+//   load / stepIndex 0:   FIG + slide title render instantly; on mount the
+//                         declaration cascade plays:
+//     T+0ms:    "AI is not a tool." (bigHeadline) fades + lifts (300ms).
+//     T+300ms:  Strikethrough draws across `tool` (400ms easeOutExpo).
+//     T+700ms:  "It's a bridge." italic copper-400 fades + lifts (300ms).
+//   stepIndex 1 (canon):  Space press reveals the From/To pair:
+//     T+0ms:    FROM line slides up 12px (400ms).
+//     T+250ms:  TO line slides up 12px (400ms) + 4s ambient copper pulse
+//               begins on `standing capability`.
 import { useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
@@ -43,8 +44,9 @@ import { FigLabel } from "@/components/FigLabel";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { AmbientPulse } from "@/components/AmbientPulse";
 import { StrikethroughAnimator } from "@/components/StrikethroughAnimator";
-import { HoverReveal } from "@/components/HoverReveal";
+import { highlight as KW } from "@/components/highlight";
 import { FromToBlock } from "./components/FromToBlock";
+import { C1ParticleField } from "./components/C1ParticleField";
 import { c1Content as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
@@ -52,44 +54,58 @@ import { c1Content as C } from "./content";
 export function C1ToolToBridge() {
   const { stepIndex } = useDeck();
 
-  // Mount-driven load: FIG label + slide title fade in together over 400ms.
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    const t = window.setTimeout(() => setLoaded(true), 80);
-    return () => window.clearTimeout(t);
-  }, []);
+  // Step-0 cascade (mount-driven): declaration plays once when the slide
+  // first appears. These latches persist for the slide's lifetime — there
+  // is no "earlier" step than 0, so stepping back doesn't hide them.
+  //
+  //   T+0ms    headline fades + lifts (300ms)
+  //   T+300ms  strikethrough draws across `tool` (400ms easeOutExpo)
+  //   T+700ms  clarifier "It's a bridge." fades + lifts (300ms)
+  //
+  // Step-1 cascade (stepIndex-driven): FROM/TO reveal on Space press.
+  //
+  //   T+0ms    FROM line slides up 12px (400ms)
+  //   T+250ms  TO line slides up 12px (400ms) + ambient pulse begins
+  const STAGGER_HEADLINE_MS = 0;
+  const STAGGER_STRIKE_MS = 300;
+  const STAGGER_CLARIFIER_MS = 700;
+  const STAGGER_FROM_MS = 0;
+  const STAGGER_TO_MS = 250;
 
-  // Step 1's internal stagger: headline reveals, then 300ms later the strike
-  // draws, then 200ms after the strike completes (~900ms after step 1 entered)
-  // the clarifier reveals. We chain these via local timers so the presenter
-  // advances on a single Space press and lets the choreography play.
   const [headlineOn, setHeadlineOn] = useState(false);
   const [strikeOn, setStrikeOn] = useState(false);
   const [clarifierOn, setClarifierOn] = useState(false);
+  const [fromOn, setFromOn] = useState(false);
+  const [toOn, setToOn] = useState(false);
+  const [pulseOn, setPulseOn] = useState(false);
 
   useEffect(() => {
-    // Reset all internal step-1 latches on every stepIndex change.
+    const timers: number[] = [];
+    timers.push(window.setTimeout(() => setHeadlineOn(true), STAGGER_HEADLINE_MS));
+    timers.push(window.setTimeout(() => setStrikeOn(true), STAGGER_STRIKE_MS));
+    timers.push(window.setTimeout(() => setClarifierOn(true), STAGGER_CLARIFIER_MS));
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+  }, []);
+
+  useEffect(() => {
     const timers: number[] = [];
     if (stepIndex >= 1) {
-      // Step 1: chained internal stagger.
-      timers.push(window.setTimeout(() => setHeadlineOn(true), 0));
-      timers.push(window.setTimeout(() => setStrikeOn(true), 300));
-      // Strike duration 400ms + 200ms wait = clarifier @ 900ms after step 1.
-      timers.push(window.setTimeout(() => setClarifierOn(true), 900));
+      timers.push(window.setTimeout(() => setFromOn(true), STAGGER_FROM_MS));
+      timers.push(window.setTimeout(() => {
+        setToOn(true);
+        setPulseOn(true);
+      }, STAGGER_TO_MS));
     } else {
-      setHeadlineOn(false);
-      setStrikeOn(false);
-      setClarifierOn(false);
+      setFromOn(false);
+      setToOn(false);
+      setPulseOn(false);
     }
     return () => {
       timers.forEach((t) => window.clearTimeout(t));
     };
   }, [stepIndex]);
-
-  // Step 2 gates: From slides up immediately, To slides up 250ms later.
-  const fromOn = stepIndex >= 2;
-  const toOn = stepIndex >= 2;
-  const pulseOn = stepIndex >= 2;
 
   // Reveal helper — shared easeOutExpo curve.
   const liftStyle = (on: boolean, lift = 12, duration = 400, delay = 0): CSSProperties => ({
@@ -99,26 +115,20 @@ export function C1ToolToBridge() {
     willChange: "opacity, transform",
   });
 
-  // FIG + slide title fade-in (no lift, just opacity over 400ms).
-  const headerFade: CSSProperties = {
-    opacity: loaded ? 1 : 0,
-    transition: "opacity 400ms var(--ease)",
-    willChange: "opacity",
-  };
-
   return (
     <div
       data-testid="slide-c1"
       style={{ position: "absolute", inset: 0, overflow: "hidden" }}
     >
+      {/* Ambient copper particle field — above dot-grid, below all text. */}
+      <C1ParticleField />
+
       {/* FIG label — canonical top-left position, via shared component. */}
-      <div style={headerFade}>
-        <FigLabel section="C" num={1} label={C.figLabel} />
-      </div>
+      <FigLabel section="C" num={1} label={C.figLabel} />
 
       {/* Slide title — canonical .slide-headline.small at top:80 left:48. */}
-      <div className="slide-headline-row" style={headerFade}>
-        <h1 className="slide-headline small">{C.headline}</h1>
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">{KW(C.headline, C.headlineKw)}</h1>
       </div>
 
       {/* Big headline — "AI is not a tool." centered horizontally at top:280. */}
@@ -176,7 +186,10 @@ export function C1ToolToBridge() {
         </p>
       </div>
 
-      {/* From/To pair — lower-right, slides up on stepIndex 2. */}
+      {/* From/To pair — lower-right. The container is visible on step 1 so
+          the FROM:/TO: labels appear with the cascade; the inner FROM and TO
+          text spans are individually gated via fromOn/toOn (set by the
+          stagger timers) so each line slides up at its scheduled offset. */}
       <div
         data-testid="c1-from-to"
         style={{
@@ -185,6 +198,9 @@ export function C1ToolToBridge() {
           bottom: 72,
           maxWidth: 540,
           zIndex: 20,
+          opacity: stepIndex >= 1 ? 1 : 0,
+          transition: "opacity 400ms var(--ease)",
+          pointerEvents: stepIndex >= 1 ? "auto" : "none",
         }}
       >
         <FromToBlock
@@ -198,7 +214,7 @@ export function C1ToolToBridge() {
           toText={
             <span
               style={{
-                ...liftStyle(toOn, 12, 400, 250),
+                ...liftStyle(toOn, 12, 400),
                 display: "inline-block",
               }}
             >
@@ -232,59 +248,28 @@ function renderHeadline(text: string, word: string, active: boolean): ReactNode 
   );
 }
 
-// Shared popover style block — reused for both `bridge` and `standing
-// capability` hovers so the visual treatment matches verbatim.
-function popoverSpan(text: string): ReactNode {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        background: "rgba(10,10,10,0.92)",
-        border: "1px solid var(--copper-700)",
-        padding: "10px 14px",
-        fontFamily: "var(--serif)",
-        fontStyle: "italic",
-        fontSize: 14,
-        color: "var(--neutral-200)",
-        lineHeight: 1.35,
-        maxWidth: 260,
-        whiteSpace: "normal",
-      }}
-    >
-      {text}
-    </span>
-  );
-}
-
-// Render the clarifier "It's a bridge." with the word `bridge` wrapped in
-// a HoverReveal. The popover surfaces the "cross daily" framing that used
-// to live on the `standing capability` keyword; in the rework each popover
-// matches its keyword's meaning.
+// Render the clarifier "It's a bridge." with the word `bridge` styled as
+// the italic copper accent. No hover popover — the clarifier reads on its
+// own as the section's headline pivot.
 function renderClarifier(text: string, word: string): ReactNode {
   const idx = text.indexOf(word);
   if (idx === -1) return text;
   const before = text.slice(0, idx);
   const after = text.slice(idx + word.length);
-  const trigger = (
-    <em
-      data-testid="c1-clarifier-keyword"
-      style={{
-        fontFamily: "var(--serif)",
-        fontStyle: "italic",
-        color: "var(--copper-400)",
-        fontWeight: 400,
-      }}
-    >
-      {word}
-    </em>
-  );
-  const popover = popoverSpan(
-    "Something you cross daily, not something you reach for occasionally.",
-  );
   return (
     <>
       {before}
-      <HoverReveal trigger={trigger} payload={popover} position="below" />
+      <em
+        data-testid="c1-clarifier-keyword"
+        style={{
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          color: "var(--copper-400)",
+          fontWeight: 400,
+        }}
+      >
+        {word}
+      </em>
       {after}
     </>
   );
@@ -311,7 +296,7 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
         fontStyle: "italic",
         color: "var(--copper-400)",
         fontWeight: 400,
-        textDecoration: pulse ? "underline" : "none",
+        textDecorationLine: "underline",
         textDecorationColor: pulse ? "var(--copper-500)" : "transparent",
         textUnderlineOffset: "4px",
         textDecorationThickness: "1px",
@@ -330,14 +315,10 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
     accent
   );
 
-  const popover = popoverSpan(
-    "Fluency that travels with you across contexts.",
-  );
-
   return (
     <>
       {before}
-      <HoverReveal trigger={trigger} payload={popover} position="below" />
+      {trigger}
       {after}
     </>
   );
@@ -347,7 +328,7 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
 
 export const c1Slide: SlideDef = {
   steps: 2,
-  canonicalPose: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",

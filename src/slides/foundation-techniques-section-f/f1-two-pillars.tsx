@@ -1,20 +1,29 @@
 // F.1 — TWO PILLARS (Section F opener)
 //
 // Section opener · split-stage map (knowledge × capability). Both flagship
-// visuals (bridge-artifact + layer-cake) are previewed *dim*, side-by-side,
-// without committing to either. Audience leaves F.1 knowing the section's
-// shape: what AI knows × what AI does.
+// visuals (bridge-artifact + layer-cake) are previewed side-by-side. As the
+// reveal progresses, the subtitle motion-merges into the title, the
+// illustration band shifts upward, and each pillar lights up at FULL
+// brightness as it is named. The closing step adds a connector with a copper
+// shimmer that travels back and forth, plus a footer caption.
 //
 // Layout — centered title block above two equal-width visual panels on the
-// 1280×720 stage. Title bar sits in the upper third; pillars occupy the
-// middle band; faint connecting ◯←→◯ animates between them on step 3.
+// 1280×720 stage. Title bar sits in the upper third until step 2, after
+// which the subtitle collapses into the title and the pillars slide up.
 //
-// 4 reveal steps (spec §4.3):
-//   0 — title + subtitle visible; both pillars present at low opacity (0.15)
-//   1 — LEFT pillar (KNOWLEDGE) brightens (→ 0.4); copper underline animates
-//       on label; tagline fades in
-//   2 — RIGHT pillar (CAPABILITY) brightens; copper underline; tagline fades
-//   3 — Faint copper connecting lines (◯←→◯) animate between pillar centers
+// 4 reveal steps (Adri-indexed; code stepIndex shown in parens):
+//   Step 1 (stepIndex 0) — title + subtitle visible; both pillars present at
+//                          low opacity (0.15 unlit baseline)
+//   Step 2 (stepIndex 1) — subtitle merges into title via coordinated
+//                          transform (font-size + position + letter-spacing
+//                          over 700ms). LEFT pillar (KNOWLEDGE) brightens to
+//                          full brightness. Illustration band shifts up ~96px.
+//   Step 3 (stepIndex 2) — RIGHT pillar (CAPABILITY) brightens to full
+//                          brightness. Illustration band remains shifted.
+//   Step 4 (stepIndex 3) — Faint copper ◯←→◯ connector reveals between
+//                          pillar centers; a copper dot shimmers back-and-
+//                          forth along the line on a continuous 2.4s loop.
+//                          Footer caption fades in at the bottom.
 //
 // Hover behavior (spec §4.4) — CSS-only tooltips on each pillar:
 //   LEFT  → "F.2 · grounding"
@@ -33,37 +42,56 @@ import { f1Content as C } from "./content";
 const STAGE_W = 1280;
 const PILLAR_W = 480;
 const PILLAR_H = 360;
-const PILLAR_TOP = 296;
+const PILLAR_TOP_BASE = 296;
+const PILLAR_TOP_SHIFTED = 200; // 96px upward shift once header collapses
 const PILLAR_GAP = 80; // gap between pillars where the ◯←→◯ connector sits
 const PILLAR_LEFT = (STAGE_W - PILLAR_W * 2 - PILLAR_GAP) / 2; // 120
 const PILLAR_RIGHT_LEFT = PILLAR_LEFT + PILLAR_W + PILLAR_GAP; // 680
+
+// All canonical cake layers — used to glow the LayerCake when the right
+// pillar is lit. (F.1 doesn't break out per-layer reveal; the whole cake
+// just brightens together.)
+const CAKE_LAYERS_LIT = ["CLAUDE.md", "HOOKS", "SKILLS", "AGENTS"];
 
 // ───────────────────── slide ─────────────────────
 
 export function F1TwoPillars() {
   const { stepIndex } = useDeck();
 
-  // Per-pillar brightness driven by step: 0.15 dim → 0.4 lit.
+  // stepIndex 0 = step 1 (initial). Subtitle merges into title once we hit
+  // stepIndex 1 (step 2) — and from that point on the illustration band
+  // also slides up.
+  const headerCollapsed = stepIndex >= 1;
   const leftLit = stepIndex >= 1;
   const rightLit = stepIndex >= 2;
   const showConnector = stepIndex >= 3;
+  const showFooter = stepIndex >= 3;
+
+  const pillarTop = headerCollapsed ? PILLAR_TOP_SHIFTED : PILLAR_TOP_BASE;
 
   return (
     <>
       <FigLabel section="F" num={1} label="TWO PILLARS" />
 
-      {/* ───────────── Title block (centered, upper third) ───────────── */}
+      {/* ───────────── Title block (centered, upper third) ─────────────
+          Two stacked lines whose typographic shells animate as one unit.
+          On step 2 the subtitle's font-size, color, letter-spacing, and
+          vertical position all retarget the title — making it read as a
+          motion-merge rather than a discrete fade. */}
       <div
         data-testid="f1-title-block"
+        data-collapsed={headerCollapsed ? "1" : "0"}
         style={{
           position: "absolute",
-          top: 116,
+          top: headerCollapsed ? 76 : 116,
           left: 0,
           right: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 14,
+          gap: headerCollapsed ? 6 : 14,
+          transition:
+            "top 0.7s var(--ease), gap 0.7s var(--ease)",
         }}
       >
         <Reveal on data-testid="f1-headline">
@@ -82,20 +110,41 @@ export function F1TwoPillars() {
           </h1>
         </Reveal>
 
-        <div style={{ width: "40%", display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            width: headerCollapsed ? "28%" : "40%",
+            display: "flex",
+            justifyContent: "center",
+            transition: "width 0.7s var(--ease)",
+          }}
+        >
           <CopperRule on delay={200} width="100%" />
         </div>
 
+        {/* Subtitle — animates into the title via coordinated transform.
+            On step 2, font-size shrinks, letter-spacing tightens, color
+            shifts toward the title's neutral hue, and the line nudges up
+            so it visually tucks against the rule. Mirrors D.1's
+            stat-into-header collapse (foundation-core/d1-the-trap.tsx). */}
         <Reveal on delay={350} data-testid="f1-subtitle">
           <p
+            data-collapsed={headerCollapsed ? "1" : "0"}
             style={{
               fontFamily: "var(--serif)",
               fontStyle: "italic",
-              fontSize: 22,
-              color: "var(--copper-200)",
+              fontSize: headerCollapsed ? 16 : 22,
+              color: headerCollapsed
+                ? "var(--copper-300)"
+                : "var(--copper-200)",
+              letterSpacing: headerCollapsed ? "0.04em" : "normal",
               margin: 0,
               textAlign: "center",
               lineHeight: 1.2,
+              transform: headerCollapsed
+                ? "translateY(-4px)"
+                : "translateY(0)",
+              transition:
+                "font-size 0.7s var(--ease), color 0.7s var(--ease), letter-spacing 0.7s var(--ease), transform 0.7s var(--ease)",
             }}
           >
             {highlight(C.subtitle, C.subtitleKw)}
@@ -103,14 +152,15 @@ export function F1TwoPillars() {
         </Reveal>
       </div>
 
-      {/* ───────────── Connector ◯←→◯ (step 3 only) ─────────────
+      {/* ───────────── Connector ◯←→◯ (step 4 only) ─────────────
           Sits centered between the two pillars, vertically aligned with
-          the illustration band. Two small circles + a horizontal line. */}
+          the illustration band. After the static reveal completes, a
+          copper shimmer dot travels back and forth along the line. */}
       <Connector
         on={showConnector}
         leftX={PILLAR_LEFT + PILLAR_W}
         rightX={PILLAR_RIGHT_LEFT}
-        y={PILLAR_TOP + PILLAR_H / 2}
+        y={pillarTop + PILLAR_H / 2}
       />
 
       {/* ───────────── LEFT pillar — KNOWLEDGE ───────────── */}
@@ -118,7 +168,7 @@ export function F1TwoPillars() {
         side="left"
         lit={leftLit}
         left={PILLAR_LEFT}
-        top={PILLAR_TOP}
+        top={pillarTop}
         width={PILLAR_W}
         height={PILLAR_H}
         label={C.pillars[0].label}
@@ -127,7 +177,7 @@ export function F1TwoPillars() {
         tooltip={C.pillars[0].tooltip}
         testId="f1-pillar-knowledge"
       >
-        <BridgeArtifact mode="default" dim size={420} />
+        <BridgeArtifact mode="default" dim={!leftLit} size={420} />
       </Pillar>
 
       {/* ───────────── RIGHT pillar — CAPABILITY ───────────── */}
@@ -135,7 +185,7 @@ export function F1TwoPillars() {
         side="right"
         lit={rightLit}
         left={PILLAR_RIGHT_LEFT}
-        top={PILLAR_TOP}
+        top={pillarTop}
         width={PILLAR_W}
         height={PILLAR_H}
         label={C.pillars[1].label}
@@ -144,8 +194,45 @@ export function F1TwoPillars() {
         tooltip={C.pillars[1].tooltip}
         testId="f1-pillar-capability"
       >
-        <LayerCake mode="compact" lit={[]} dim />
+        <LayerCake
+          mode="compact"
+          lit={rightLit ? CAKE_LAYERS_LIT : []}
+          dim={!rightLit}
+        />
       </Pillar>
+
+      {/* ───────────── Footer caption (step 4) ─────────────
+          Italic copper-200 mono, with copper-accent + italic highlight on
+          1–3 keywords (deck-wide rule). Mirrors E.4's footer reveal
+          (foundation-core-section-e/e4-prompt-methodologies.tsx:213-237). */}
+      {showFooter && (
+        <Reveal
+          on={showFooter}
+          delay={200}
+          data-testid="f1-footer"
+          style={{
+            position: "absolute",
+            left: 48,
+            right: 48,
+            bottom: 64,
+            textAlign: "center",
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "var(--mono)",
+              fontStyle: "italic",
+              fontSize: 14,
+              letterSpacing: "0.12em",
+              color: "var(--copper-200)",
+              margin: 0,
+              lineHeight: 1.4,
+            }}
+          >
+            {highlight(C.footer, C.footerKw)}
+          </p>
+        </Reveal>
+      )}
     </>
   );
 }
@@ -182,10 +269,11 @@ function Pillar({
   children,
 }: PillarProps) {
   // Whole-pillar dim → lit transition driven by stepIndex.
-  // 0.15 = mute dim (both pillars at step 0)
-  // 0.4  = lit teaser (after step 1/2 — still NOT full brightness; F.1 keeps
-  //         both flagship visuals previewed, not committed)
-  const pillarOpacity = lit ? 0.4 : 0.15;
+  // 0.15 = unlit baseline (still readable but clearly muted)
+  // 1.0  = full brightness once the pillar is lit (per task #1: pillars on
+  //         steps 2–4 should NOT pre-dim — they appear at full brightness
+  //         when lit, with only unlit pillars staying muted).
+  const pillarOpacity = lit ? 1 : 0.15;
 
   // Tooltip anchor — outside (above-outer for each side so it never overlaps
   // the connector zone). LEFT pillar → tooltip top-left corner. RIGHT pillar
@@ -225,6 +313,7 @@ function Pillar({
         flexDirection: "column",
         alignItems: "center",
         gap: 14,
+        transition: "top 0.7s var(--ease)",
       }}
     >
       {/* Tooltip (CSS-only — fades in on group :hover via inline class). */}
@@ -257,8 +346,9 @@ function Pillar({
         <CopperRule on={lit} width={56} />
       </div>
 
-      {/* Dim illustration zone — wrapped in opacity-controlled box so the
-          step-driven transition is on the whole illustration as a unit. */}
+      {/* Illustration zone — opacity tracks the lit state as a unit. Only
+          unlit pillars dim; lit pillars render at full brightness (no
+          pre-dim / slow-brighten anti-pattern). */}
       <div
         data-testid={`${testId}-art`}
         style={{
@@ -309,11 +399,19 @@ interface ConnectorProps {
   y: number;
 }
 
+// Continuous shimmer animation — copper dot travels back and forth between
+// the two circles. Component-scoped keyframes (namespaced to `f1-` so they
+// can't collide with global rules). The dot only animates AFTER the static
+// reveal completes (1000ms lead-in covers circles + line + arrow caps).
 function Connector({ on, leftX, rightX, y }: ConnectorProps) {
   // Two faint copper circles with a horizontal line between them. The line
-  // animates via scaleX on reveal (0 → 1), circles fade in.
+  // animates via scaleX on reveal (0 → 1), circles fade in, then a copper
+  // shimmer dot loops back-and-forth on a continuous 2.4s cycle.
   const width = rightX - leftX;
   const cR = 6;
+  // Shimmer path endpoints — just inside each circle's inner edge.
+  const shimmerX1 = cR * 2 + 8;
+  const shimmerX2 = width - cR * 2 - 8;
 
   const containerStyle: CSSProperties = {
     position: "absolute",
@@ -398,7 +496,35 @@ function Connector({ on, leftX, rightX, y }: ConnectorProps) {
             transitionDelay: on ? "560ms" : "0ms",
           }}
         />
+        {/* Shimmer dot — copper-200, glowing, travels back-and-forth on a
+            continuous 2.4s cycle. Starts AFTER the static reveal (1000ms
+            delay covers circles + line + arrow caps). The dot itself is
+            opacity-gated by the same `on` flag so it doesn't appear before
+            the connector is shown. */}
+        {on && (
+          <circle
+            data-testid="f1-connector-shimmer"
+            cx={shimmerX1}
+            cy={18}
+            r={3}
+            fill="var(--copper-200)"
+            style={{
+              filter: "drop-shadow(0 0 4px var(--copper-300))",
+              animation:
+                "f1-connector-shimmer 2.4s cubic-bezier(0.45, 0, 0.55, 1) 1s infinite",
+            }}
+          />
+        )}
       </svg>
+      <style>{`
+        @keyframes f1-connector-shimmer {
+          0%   { transform: translateX(0); opacity: 0; }
+          10%  { opacity: 1; }
+          50%  { transform: translateX(${shimmerX2 - shimmerX1}px); opacity: 1; }
+          90%  { opacity: 1; }
+          100% { transform: translateX(0); opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }

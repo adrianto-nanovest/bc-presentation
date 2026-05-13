@@ -36,6 +36,8 @@ export const f1Content = {
       tooltip: "F.3 – F.7 · the package",
     },
   ],
+  footer: "five techniques · one agentic stack",
+  footerKw: ["techniques", "agentic stack"],
 } as const;
 
 // ─────────────────── F.2 — GROUND TRUTH (RAG) ───────────────────

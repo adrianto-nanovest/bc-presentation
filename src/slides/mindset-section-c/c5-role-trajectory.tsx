@@ -2,73 +2,89 @@
 //
 // Section C closer. Lifts "I have a new role" → "I have a new trajectory" by
 // mirroring C.1's strikethrough idiom (now on `role`) and planting the Hook 2
-// seed `wherever you need to be` with a 4s ambient copper-underline pulse.
-// The pulse is a DELIBERATELY planted memory cue — when Section I.4 reveals
-// "I'm a TPM, not an engineer," it lands because the audience already
-// absorbed this phrase 90 minutes prior.
+// seed `where you are` with an italic-copper-400 highlight. (Per Task 27 v3
+// rework: prior ambient pulse removed; KW highlight is the sole emphasis.)
 //
-// Per spec §3.5: standard dark + dot-grid surface (no hero photo), canonical
-// FigLabel + .slide-headline.small header, E9-derived two-pane layout. The
-// LEFT pane carries the 4 trajectory beats under a "WHY NOW" section title;
-// the RIGHT pane carries the strikethrough declaration, italic clarifier, and
-// the closing line at the bottom. The implicit divider between panes IS the
-// bridge — the layout enacts the closing metaphor.
+// Per spec §3.5 (rev. v3): standard dark + dot-grid surface (no hero photo),
+// canonical FigLabel + .slide-headline.small header, E9-derived two-pane
+// layout. The LEFT pane carries the 4 trajectory beats as a CARD STACK under
+// a "WHY NOW" section title. The RIGHT pane carries the strikethrough
+// declaration, italic clarifier, 60% copper rule, and a SMALL closing line —
+// stacked compactly top-to-bottom (no flex spacer) and vertically centered
+// inside the right pane envelope so it sits centered against the left card
+// stack.
 //
 // Layout —
-//   FIG label + slide title at top-left (canonical, via FigLabel + .slide-headline-row).
+//   FIG label + slide title at top-left (canonical).
 //   LEFT pane (left:48 top:156 width:500 bottom:80):
-//     "WHY NOW" mono caps + 40% copper-700 rule + 4 stacked beats.
-//   RIGHT pane (right:48 top:156 width:540 bottom:80):
+//     "WHY NOW" mono caps + 40% copper-700 rule + 4 stacked beat cards.
+//   RIGHT pane (right:48 top:156 width:540 bottom:80), vertically centered:
 //     72px display "It's not a role you take." (strikethrough on `role`)
+//     ~18px gap
 //     44px italic copper-400 "It's a trajectory you build."
+//     ~18px gap
 //     60% copper-700 rule
-//     (flex spacer)
-//     32px italic closing line at bottom with pulse on `wherever you need to be`.
+//     ~18px gap
+//     22px italic closing line w/ italic-copper-400 KW on `where you are`.
 //
-// Motion (5 steps; canonicalPose: 4) —
-//   load (mount-driven):  FIG label + slide title + LEFT "WHY NOW" + 40% rule
-//                         fade in together (400ms).
-//   stepIndex 1:          LEFT 4 beats stagger-fade (130ms apart, matches E9's
-//                         whyPoints stagger).
-//   stepIndex 2:          RIGHT bigHeadline reveals → copper-700 strikethrough
-//                         draws on `role` (400ms easeOutExpo, mirrors C.1).
-//   stepIndex 3:          RIGHT "It's a trajectory you build." italic copper
-//                         reveals 300ms after strike completes; 60% copper rule
-//                         draws.
-//   stepIndex 4 (canon):  RIGHT closing line fades in italic + 4s ambient
-//                         copper pulse on `wherever you need to be`.
-//                         THE HOOK 2 DETONATOR.
+// Motion (2 steps; canonicalPose: 1) —
+//   load (stepIndex 0 = user's "step 1"): FIG label + slide title shown
+//                        instantly (no fade, matches C.1/C.2 header behavior).
+//                        LEFT "WHY NOW" + 40% rule fade in immediately, then
+//                        the 4 LEFT beat cards stagger-fade (130ms apart →
+//                        520ms span) on mount so they're all visible the first
+//                        time the slide is shown.
+//   stepIndex 1 (canon = user's "step 2"): RIGHT pane reveals with internal
+//                        stagger (~1.7s total):
+//                          T+200ms:  RIGHT bigHeadline reveals
+//                          T+600ms:  copper-700 strikethrough draws on `role`
+//                                    (400ms easeOutExpo)
+//                          T+1100ms: italic copper-400 clarifier reveals
+//                          T+1500ms: 60% copper-700 rule draws
+//                          T+1700ms: closing line reveals (italic 22px)
 //
-// Hover (presenter detail layer) —
-//   Hover any of the 4 beats → a small caption strip surfaces alongside.
+// Hover (presenter detail layer) — each card highlights its copper border
+// and scales 1.02 on hover to feel tactile.
 import { useEffect, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { AmbientPulse } from "@/components/AmbientPulse";
 import { StrikethroughAnimator } from "@/components/StrikethroughAnimator";
-import { highlight } from "@/components/highlight";
+import { highlight as KW } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
 import C5TwoPaneLayout from "./components/C5TwoPaneLayout";
+import {
+  CompetitiveAnim,
+  CapacityAnim,
+  CulturalAnim,
+  PersonalAnim,
+} from "./components/C5CardAnims";
 import { c5Content as C } from "./content";
 
-// Optional hover elaborations — kept short, presenter-detail-only. Keys
-// match `C.beats[i].label`. Empty string means "no popover for this beat."
-const BEAT_HOVER: Record<string, string> = {
-  COMPETITIVE: "Adjacent peers already compound. The gap widens quietly.",
-  CAPACITY: "One person's reach now matches what a small team used to do.",
-  CULTURAL: "AI-augmented work is the new floor, not the ceiling.",
-  PERSONAL: "Repetition shrinks. What's left is the judgement only you can bring.",
+// Map beat label → anim component. Order matches `c5Content.beats`.
+const BEAT_ANIMS: Record<string, () => ReactNode> = {
+  COMPETITIVE: CompetitiveAnim,
+  CAPACITY: CapacityAnim,
+  CULTURAL: CulturalAnim,
+  PERSONAL: PersonalAnim,
 };
+
+// Internal stagger timings (ms from stepIndex 1 entry).
+const T_BIGHEADLINE = 200;
+const T_STRIKE = 600;
+const T_CLARIFIER = 1100;
+const T_RULE = 1500;
+const T_CLOSING = 1700;
 
 // ───────────────────── slide ─────────────────────
 
 export function C5RoleTrajectory() {
   const { stepIndex } = useDeck();
 
-  // Mount-driven load: FIG label + slide title + LEFT "WHY NOW" + 40% rule
-  // fade in together over 400ms.
+  // Mount-driven load: LEFT "WHY NOW" + 40% rule + the 4 LEFT beat cards all
+  // reveal on the first viewing of the slide. The cards use staggered delays
+  // (i * 130ms) inside <Reveal>, gated by a single mount flag.
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const t = window.setTimeout(() => setLoaded(true), 80);
@@ -76,49 +92,51 @@ export function C5RoleTrajectory() {
   }, []);
 
   // Step gates.
-  const showLeftHeader = loaded;          // step 0 (load)
-  const beatsOn = stepIndex >= 1;         // step 1
-  const bigHeadlineOn = stepIndex >= 2;   // step 2 (headline + strikethrough)
-  const clarifierOn = stepIndex >= 3;     // step 3 (italic + 60% rule)
-  const closingOn = stepIndex >= 4;       // step 4 (canonical)
-  const pulseOn = stepIndex >= 4;
+  // LEFT side (header + cards) is mount-driven so it appears on stepIndex 0
+  // (user's "step 1"). RIGHT pane stays gated on stepIndex 1 (user's "step 2").
+  const showLeftHeader = loaded;
+  const beatsOn = loaded;
 
-  // Step 2 strikethrough has an internal short delay so the headline fades
-  // in first, then the line draws (matches C.1's choreography). Local timer
-  // gate so the strikethrough plays on a single Space press.
+  // stepIndex 1 has internal timing: all RIGHT pane elements chain off stepIndex >= 1.
+  const [bigHeadlineOn, setBigHeadlineOn] = useState(false);
   const [strikeOn, setStrikeOn] = useState(false);
+  const [clarifierOn, setClarifierOn] = useState(false);
+  const [ruleOn, setRuleOn] = useState(false);
+  const [closingOn, setClosingOn] = useState(false);
+
   useEffect(() => {
-    let t: number | undefined;
-    if (stepIndex >= 2) {
-      t = window.setTimeout(() => setStrikeOn(true), 300);
+    const timers: number[] = [];
+    if (stepIndex >= 1) {
+      timers.push(window.setTimeout(() => setBigHeadlineOn(true), T_BIGHEADLINE));
+      timers.push(window.setTimeout(() => setStrikeOn(true), T_STRIKE));
+      timers.push(window.setTimeout(() => setClarifierOn(true), T_CLARIFIER));
+      timers.push(window.setTimeout(() => setRuleOn(true), T_RULE));
+      timers.push(window.setTimeout(() => setClosingOn(true), T_CLOSING));
     } else {
+      setBigHeadlineOn(false);
       setStrikeOn(false);
+      setClarifierOn(false);
+      setRuleOn(false);
+      setClosingOn(false);
     }
     return () => {
-      if (t !== undefined) window.clearTimeout(t);
+      for (const t of timers) window.clearTimeout(t);
     };
   }, [stepIndex]);
-
-  // Header fade — no lift, opacity only, 400ms.
-  const headerFade: CSSProperties = {
-    opacity: loaded ? 1 : 0,
-    transition: "opacity 400ms var(--ease)",
-    willChange: "opacity",
-  };
 
   return (
     <div
       data-testid="slide-c5"
       style={{ position: "absolute", inset: 0, overflow: "hidden" }}
     >
-      {/* FIG label — canonical top-left position, via shared component. */}
-      <div style={headerFade}>
-        <FigLabel section="C" num={5} label={C.figLabel} />
-      </div>
+      {/* FIG label — canonical top-left position, via shared component.
+          Renders instantly with no opacity gate (matches C.1/C.2). */}
+      <FigLabel section="C" num={5} label={C.figLabel} />
 
-      {/* Slide title — canonical .slide-headline.small at top:80 left:48. */}
-      <div className="slide-headline-row" style={headerFade}>
-        <h1 className="slide-headline small">{C.headline}</h1>
+      {/* Slide title — canonical .slide-headline.small at top:80 left:48.
+          Renders instantly with no opacity gate (matches C.1/C.2). */}
+      <div className="slide-headline-row">
+        <h1 className="slide-headline small">{KW(C.headline, C.headlineKw)}</h1>
       </div>
 
       <C5TwoPaneLayout
@@ -128,8 +146,8 @@ export function C5RoleTrajectory() {
             bigHeadlineOn={bigHeadlineOn}
             strikeOn={strikeOn}
             clarifierOn={clarifierOn}
+            ruleOn={ruleOn}
             closingOn={closingOn}
-            pulseOn={pulseOn}
           />
         }
       />
@@ -163,36 +181,35 @@ function LeftPaneContent({ showHeader, beatsOn }: LeftPaneContentProps) {
 
       <div style={{ height: 10 }} />
       <CopperRule on={showHeader} width="40%" delay={120} />
-      <div style={{ height: 12 }} />
+      <div style={{ height: 16 }} />
 
-      <ul
+      <div
         data-testid="c5-beats"
         style={{
-          listStyle: "none",
-          padding: 0,
-          margin: 0,
           display: "flex",
           flexDirection: "column",
-          gap: 16,
+          gap: 12,
         }}
       >
-        {C.beats.map((beat, i) => (
-          <Reveal
-            key={beat.label}
-            on={beatsOn}
-            delay={i * 130}
-            as="li"
-            data-testid={`c5-beat-${beat.label.toLowerCase()}`}
-          >
-            <BeatRow
-              label={beat.label}
-              caption={beat.caption}
-              captionKw={beat.captionKw}
-              hoverText={BEAT_HOVER[beat.label]}
-            />
-          </Reveal>
-        ))}
-      </ul>
+        {C.beats.map((beat, i) => {
+          const Anim = BEAT_ANIMS[beat.label];
+          return (
+            <Reveal
+              key={beat.label}
+              on={beatsOn}
+              delay={i * 130}
+              data-testid={`c5-beat-${beat.label.toLowerCase()}`}
+            >
+              <BeatCard
+                label={beat.label}
+                caption={beat.caption}
+                captionKw={beat.captionKw}
+                anim={Anim ? <Anim /> : null}
+              />
+            </Reveal>
+          );
+        })}
+      </div>
     </>
   );
 }
@@ -203,19 +220,28 @@ interface RightPaneContentProps {
   bigHeadlineOn: boolean;
   strikeOn: boolean;
   clarifierOn: boolean;
+  ruleOn: boolean;
   closingOn: boolean;
-  pulseOn: boolean;
 }
 
 function RightPaneContent({
   bigHeadlineOn,
   strikeOn,
   clarifierOn,
+  ruleOn,
   closingOn,
-  pulseOn,
 }: RightPaneContentProps) {
+  // Vertically centered content wrapper — uses margin:auto inside the
+  // flex-column pane so the entire stack centers between the pane's
+  // top:156 and bottom:80, lining up against the LEFT card stack mid-line.
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        margin: "auto 0",
+      }}
+    >
       {/* Big headline — "It's not a role you take." (72px, strikethrough on `role`). */}
       <Reveal on={bigHeadlineOn} data-testid="c5-bigheadline">
         <h2
@@ -254,30 +280,29 @@ function RightPaneContent({
 
       <div style={{ height: 18 }} />
 
-      {/* 60% copper-700 rule. Draws in at step 3, after italic reveal. */}
-      <CopperRule on={clarifierOn} width="60%" delay={150} />
+      {/* 60% copper-700 rule. */}
+      <CopperRule on={ruleOn} width="60%" />
 
-      {/* Flex spacer pushes the closing line to the bottom of the pane. */}
-      <div style={{ flex: 1 }} />
+      <div style={{ height: 18 }} />
 
-      {/* Closing line — italic 32px with pulse on `wherever you need to be`.
-          THE HOOK 2 DETONATOR. */}
+      {/* Closing line — italic 22px with italic-copper-400 KW on `where you are`.
+          NO ambient pulse (removed per v3). KW highlight is the only emphasis. */}
       <Reveal on={closingOn} data-testid="c5-closing">
         <p
           style={{
             fontFamily: "var(--serif)",
             fontStyle: "italic",
-            fontSize: 32,
+            fontSize: 22,
             color: "var(--neutral-100)",
             margin: 0,
             lineHeight: 1.3,
             fontWeight: 400,
           }}
         >
-          {renderClosingLine(C.closing, C.closingKw, pulseOn)}
+          {KW(C.closing, C.closingKw)}
         </p>
       </Reveal>
-    </>
+    </div>
   );
 }
 
@@ -301,67 +326,23 @@ function renderBigHeadline(text: string, word: string, active: boolean): ReactNo
   );
 }
 
-// Closing line — italic with copper-400 accent on the Hook 2 phrase.
-// On canonical pose, the accent gets the 4s AmbientPulse + a copper-500
-// underline. Mirrors C.1's `standing capability` treatment.
-function renderClosingLine(text: string, keywords: readonly string[], pulse: boolean): ReactNode {
-  const kw = keywords[0];
-  if (!kw) return text;
-  const idx = text.indexOf(kw);
-  if (idx === -1) return text;
-  const before = text.slice(0, idx);
-  const after = text.slice(idx + kw.length);
+// ───────────────────── beat card ─────────────────────
 
-  const accent = (
-    <em
-      data-testid="c5-keyword-accent"
-      style={{
-        fontFamily: "var(--serif)",
-        fontStyle: "italic",
-        color: "var(--copper-400)",
-        fontWeight: 400,
-        textDecoration: pulse ? "underline" : "none",
-        textDecorationColor: pulse ? "var(--copper-500)" : "transparent",
-        textUnderlineOffset: "4px",
-        textDecorationThickness: "1px",
-        transition: "text-decoration-color 400ms var(--ease)",
-      }}
-    >
-      {kw}
-    </em>
-  );
-
-  return (
-    <>
-      {before}
-      {pulse ? (
-        <AmbientPulse periodSeconds={4} keyword={kw}>
-          {accent}
-        </AmbientPulse>
-      ) : (
-        accent
-      )}
-      {after}
-    </>
-  );
-}
-
-// ───────────────────── beat row + hover ─────────────────────
-
-interface BeatRowProps {
+interface BeatCardProps {
   label: string;
   caption: string;
   captionKw: readonly string[];
-  hoverText?: string;
+  anim: ReactNode;
 }
 
-// One beat: 6×6 copper-400 square glyph + mono caps label + Source Serif
-// caption with italic-copper highlight on keyword. Optional hover-right
-// elaboration strip surfaces on mouse-enter (presenter detail layer).
-function BeatRow({ label, caption, captionKw, hoverText }: BeatRowProps) {
+// One card: horizontal flex row, ~80px tall, 1px copper-800 border, 12×14
+// padding. Left side (~70% width): mono-caps label + Source Serif caption
+// with italic-copper highlight on keyword. Right side (~30% fixed at 90×56):
+// the matching anim component. Hover: copper-300 border + scale 1.02.
+function BeatCard({ label, caption, captionKw, anim }: BeatCardProps) {
   const [hover, setHover] = useState(false);
   const captionNode: ReactNode = captionKw.length
-    ? highlight(caption, captionKw)
+    ? KW(caption, captionKw)
     : caption;
 
   return (
@@ -370,24 +351,29 @@ function BeatRow({ label, caption, captionKw, hoverText }: BeatRowProps) {
       onMouseLeave={() => setHover(false)}
       style={{
         display: "flex",
-        alignItems: "flex-start",
-        gap: 12,
-        cursor: hoverText ? "default" : undefined,
+        alignItems: "center",
+        gap: 14,
+        minHeight: 80,
+        padding: "12px 14px",
+        border: `1px solid ${hover ? "var(--copper-300)" : "var(--copper-800)"}`,
+        background: "transparent",
+        transform: hover ? "scale(1.02)" : "scale(1)",
+        transformOrigin: "left center",
+        transition:
+          "border-color 200ms var(--ease), transform 200ms var(--ease)",
+        willChange: "transform",
       }}
     >
-      {/* 6×6 copper-400 filled square bullet glyph. */}
-      <span
-        aria-hidden
+      {/* LEFT: label + caption (~70% width). */}
+      <div
         style={{
-          width: 6,
-          height: 6,
-          background: "var(--copper-400)",
-          flexShrink: 0,
-          marginTop: 8,
+          flex: "1 1 70%",
+          minWidth: 0,
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
         }}
-      />
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
+      >
         <span
           style={{
             fontFamily: "var(--mono)",
@@ -402,36 +388,29 @@ function BeatRow({ label, caption, captionKw, hoverText }: BeatRowProps) {
         <span
           style={{
             fontFamily: "var(--serif)",
-            fontSize: 16,
+            fontSize: 15,
             color: "var(--neutral-300)",
-            lineHeight: 1.45,
+            lineHeight: 1.4,
           }}
         >
           {captionNode}
         </span>
       </div>
 
-      {hoverText && (
-        <span
-          aria-hidden={!hover}
-          style={{
-            flex: "1 1 auto",
-            alignSelf: "center",
-            fontFamily: "var(--serif)",
-            fontStyle: "italic",
-            fontSize: 13,
-            color: "var(--neutral-300)",
-            lineHeight: 1.35,
-            opacity: hover ? 1 : 0,
-            transform: hover ? "translateX(0)" : "translateX(-4px)",
-            transition:
-              "opacity 200ms var(--ease), transform 200ms var(--ease)",
-            pointerEvents: "none",
-          }}
-        >
-          {hoverText}
-        </span>
-      )}
+      {/* RIGHT: 90×56 anim slot. */}
+      <div
+        aria-hidden
+        style={{
+          flex: "0 0 90px",
+          width: 90,
+          height: 56,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {anim}
+      </div>
     </div>
   );
 }
@@ -439,8 +418,8 @@ function BeatRow({ label, caption, captionKw, hoverText }: BeatRowProps) {
 // ───────────────────── slide def ─────────────────────
 
 export const c5Slide: SlideDef = {
-  steps: 5,
-  canonicalPose: 4,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",

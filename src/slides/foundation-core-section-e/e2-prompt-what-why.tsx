@@ -65,30 +65,49 @@ export function E2PromptWhatWhy() {
           </p>
         </Reveal>
 
-        <CopperRule on={stepIndex >= 0} width="30%" delay={300} />
+        <CopperRule on={stepIndex >= 0} width="40%" delay={300} />
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <ul
+          data-testid="e2-outcome-list"
+          style={{
+            listStyle: "none",
+            padding: 0,
+            margin: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
           {C.outcomes.map((o, i) => (
             <Reveal
               key={i}
               on={stepIndex >= 0}
               delay={400 + i * 150}
+              as="li"
               data-testid={`e2-outcome-${i}`}
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                gap: 10,
+                fontFamily: "var(--serif)",
+                fontSize: 15,
+                color: "var(--neutral-300)",
+                lineHeight: 1.4,
+              }}
             >
-              <p
+              <span
                 style={{
-                  fontFamily: "var(--serif)",
-                  fontSize: 17,
-                  color: "var(--neutral-300)",
-                  margin: 0,
-                  lineHeight: 1.4,
+                  width: 6,
+                  height: 6,
+                  background: "var(--copper-400)",
+                  flexShrink: 0,
+                  transform: "translateY(-1px)",
                 }}
-              >
-                {highlight(o.text, o.kw)}
-              </p>
+              />
+              <span>{highlight(o.text, o.kw)}</span>
             </Reveal>
           ))}
-        </div>
+        </ul>
 
         <div style={{ flex: 1 }} />
 

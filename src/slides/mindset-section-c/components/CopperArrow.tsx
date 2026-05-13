@@ -11,6 +11,9 @@ export interface CopperArrowProps {
   on?: boolean;
   length?: number;
   duration?: number;
+  /** Optional delay (ms) before the stroke begins drawing — used on C.2
+   *  to stagger the arrow inside a combined step (T+300 after strike). */
+  delay?: number;
 }
 
 export function CopperArrow({
@@ -18,6 +21,7 @@ export function CopperArrow({
   on = true,
   length = 60,
   duration = 520,
+  delay = 0,
 }: CopperArrowProps) {
   const isHorizontal = direction === "right";
   const w = isHorizontal ? length : 12;
@@ -43,7 +47,7 @@ export function CopperArrow({
         strokeDasharray={1}
         strokeDashoffset={on ? 0 : 1}
         style={{
-          transition: `stroke-dashoffset ${duration}ms var(--ease)`,
+          transition: `stroke-dashoffset ${duration}ms var(--ease) ${delay}ms`,
         }}
       />
     </svg>
