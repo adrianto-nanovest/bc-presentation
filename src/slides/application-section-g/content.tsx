@@ -14,62 +14,145 @@ export const g1Content = {
   headlineKw: ["Specialization", "single winners"] as const,
   closingLine:
     "Pick the right tool for each task — never the right vendor for every task.",
-  closingLineKw: ["never the right vendor"] as const,
+  closingLineKw: ["right tool", "right vendor"] as const,
   vendors: [
     {
       id: "claude",
-      label: "Deep reasoning + agentic workflows",
+      name: "Claude",
+      tagline: "Deep reasoning + agentic workflows",
+      taglineKw: ["reasoning", "agentic"] as const,
+      capabilities: [
+        "Strongest coding + reasoning (CursorBench leader)",
+        "Agentic Cowork for knowledge work",
+        "Design system extraction → handoff",
+      ] as const,
+      capabilitiesKw: ["coding", "Cowork", "Design system"] as const,
       ringColor: "var(--copper-200)",
     },
     {
       id: "google",
-      label: "Integration + research",
+      name: "Google",
+      tagline: "Integration + research",
+      taglineKw: ["Integration", "research"] as const,
+      capabilities: [
+        "Native to Workspace (Gmail, Docs, Sheets)",
+        "NotebookLM: source-grounded research",
+        "Most generous free tier",
+      ] as const,
+      capabilitiesKw: ["Workspace", "NotebookLM", "free tier"] as const,
       ringColor: "var(--copper-300)",
     },
     {
       id: "openai",
-      label: "Accessibility + ecosystem",
+      name: "OpenAI",
+      tagline: "Accessibility + ecosystem",
+      taglineKw: ["Accessibility", "ecosystem"] as const,
+      capabilities: [
+        "Web search + most accessible UX",
+        "Workspace Agents — cloud, schedule-driven",
+        "Codex IDE with native git worktrees",
+      ] as const,
+      capabilitiesKw: ["Web search", "Workspace Agents", "Codex"] as const,
       ringColor: "var(--copper-400)",
     },
   ] as const,
 } as const;
 
 // ─────────────────── G.2 — CLAUDE PLATFORMS ───────────────────
+//
+// Four Claude platforms as horizontal cards (mirrors G.1 vendor cards).
+// Capabilities use a uniform `{ group, items }` shape:
+//   - group: null → flat bullet list rendered as one tier
+//   - group: string → nested rendering (group label + indented items)
+// Only Claude Desktop uses multiple groups; the rest use a single null-group.
 
 export const g2Content = {
-  headline: "Five surfaces. One Claude.",
-  headlineKw: ["Five surfaces", "One Claude"] as const,
-  columns: ["Platform", "Surface", "Audience", "Killer feature"] as const,
-  rows: [
+  headline: "Four platforms. One Claude.",
+  headlineKw: ["platforms", "Claude"] as const,
+  platforms: [
     {
-      platform: "Chat",
-      surface: "Web/Mobile",
-      audience: "Anyone",
-      killer: "Conversational AI with file upload + web search",
+      id: "web",
+      tag: "WEB",
+      name: "Claude Web",
+      tagline: "Browser-native. Zero install.",
+      taglineKw: ["Browser-native", "Zero install"] as const,
+      capabilities: [
+        {
+          group: null,
+          items: [
+            "Chat with Projects, Skills, Connectors, Artifacts",
+            "Design — system extraction to handoff",
+            "Code — lightweight in-browser editing",
+          ],
+        },
+      ] as const,
+      capabilitiesKw: ["Chat", "Design", "Code"] as const,
     },
     {
-      platform: "Cowork",
-      surface: "Desktop/Web",
-      audience: "Knowledge workers",
-      killer: "Autonomous task execution for non-engineers",
+      id: "desktop",
+      tag: "DESKTOP",
+      name: "Claude Desktop",
+      tagline: "Native client. Full power.",
+      taglineKw: ["Native client", "Full power"] as const,
+      capabilities: [
+        {
+          group: "Chat",
+          items: ["Projects", "Skills", "Connectors", "Artifacts"],
+        },
+        {
+          group: "Cowork",
+          items: [
+            "Plugins",
+            "Live Artifacts",
+            "Scheduled",
+            "Projects",
+            "Dispatch",
+          ],
+        },
+        {
+          group: "Code",
+          items: ["Routines", "Plugins", "Connectors"],
+        },
+      ] as const,
+      capabilitiesKw: ["Chat", "Cowork", "Code"] as const,
     },
     {
-      platform: "Code",
-      surface: "Desktop",
-      audience: "Developers",
-      killer: "Multi-pane IDE with parallel agent workflows",
+      id: "cli",
+      tag: "CLI",
+      name: "Claude Code CLI",
+      tagline: "Terminal-first. Scriptable.",
+      taglineKw: ["Terminal-first", "Scriptable"] as const,
+      capabilities: [
+        {
+          group: null,
+          items: [
+            "Universal across Linux, macOS, Windows",
+            "Plugins plus workspace settings",
+            "Pairs with cloud Routines",
+          ],
+        },
+      ] as const,
+      capabilitiesKw: ["Universal", "Plugins", "Routines"] as const,
     },
     {
-      platform: "CLI",
-      surface: "Terminal",
-      audience: "Developers + power users",
-      killer: "Fully scriptable Claude Code in your shell",
-    },
-    {
-      platform: "Web (Design + Code + Artifacts)",
-      surface: "Web",
-      audience: "Designers + builders",
-      killer: "Browser-based design-system extraction → production handoff",
+      id: "api",
+      tag: "API",
+      name: "API / SDK",
+      tagline: "Programmatic. Everywhere else.",
+      taglineKw: ["Programmatic", "Everywhere else"] as const,
+      capabilities: [
+        {
+          group: null,
+          items: [
+            "Prompt caching",
+            "Extended Thinking",
+            "Computer Use",
+            "Vision",
+            "Tool Use",
+          ],
+        },
+      ] as const,
+      capabilitiesKw: ["Prompt caching", "Extended Thinking", "Computer Use"] as const,
     },
   ] as const,
   footer: "Same Claude. Different shape for the surface you live in.",
@@ -81,7 +164,6 @@ export const g2Content = {
 export const g3Content = {
   headline: "Eight surfaces. Pick the ones you'll use.",
   headlineKw: ["Eight surfaces"] as const,
-  subhead: "All 8 cards have video walkthroughs. Two have feature comparisons.",
   cards: [
     {
       id: "connectors",
@@ -126,7 +208,7 @@ export const g3Content = {
     {
       id: "artifacts",
       name: "Web Artifacts",
-      desc: "Inline interactive output.",
+      desc: "Interactive visualization dashboard.",
       videoFile: "Claude Web - Artifacts.mp4",
       glyph: "artifacts",
       hasCompare: true,
@@ -148,8 +230,8 @@ export const g3Content = {
       hasCompare: false,
     },
   ] as const,
-  footer: "Each is a different shape of help. Pick by need, not novelty.",
-  footerKw: ["different shape", "Pick by need"] as const,
+  footer: "All eight ship video walkthroughs. Two open feature comparisons.",
+  footerKw: ["video walkthroughs", "feature comparisons"] as const,
 } as const;
 
 // G.3 compare overlays:
@@ -209,7 +291,7 @@ export const g3ArtifactsCompare = {
     {
       label: "What",
       cells: [
-        "Inline interactive output",
+        "Static interactive output",
         "Connector-backed auto-refresh interactive output",
       ],
     },
@@ -219,7 +301,7 @@ export const g3ArtifactsCompare = {
     },
     {
       label: "Who",
-      cells: ["Anyone in chat (demo, share)", "Team operations, dashboards, ops"],
+      cells: ["Anyone in chat (shareable)", "Personal dashboard (non-shareable)"],
     },
     {
       label: "Refresh",
@@ -228,13 +310,13 @@ export const g3ArtifactsCompare = {
     {
       label: "Source",
       cells: [
-        "In-chat code",
+        "In-chat code (JSON in HTML)",
         "Connector-backed (Asana, Slack, Jira, Salesforce)",
       ],
     },
     {
       label: "Use case",
-      cells: ["Demo, share, one-off tools", "Live KPI dashboard, project tracker"],
+      cells: ["Shared prototype, project summary", "Personal monitoring dashboard, project tracker"],
     },
   ] as const,
 } as const;

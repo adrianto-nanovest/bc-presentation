@@ -1,0 +1,84 @@
+/* ────────────────────────────────────────────────────────────────────
+ * G.1 — Ecosystem Overview · Vendor card styling
+ * Modeled on .g6-card; adapted for the logo-led card pattern with a
+ * tagline + horizontal rule + capability bullets.
+ * ──────────────────────────────────────────────────────────────────── */
+
+.g1-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 24px 26px;
+  border: 1px solid var(--copper-700);
+  background: rgba(10, 10, 10, 0.5);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+  height: 100%;
+  overflow: hidden;
+}
+
+.g1-card:hover {
+  border-color: var(--copper-200);
+  background: rgba(184, 110, 61, 0.06);
+  box-shadow: 0 4px 12px rgba(184, 110, 61, 0.08);
+}
+
+.g1-card-logo {
+  display: flex;
+  align-items: center;
+  height: 56px;
+}
+
+.g1-card-name {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--neutral-50);
+  line-height: 1.1;
+  margin-top: 4px;
+}
+
+.g1-card-tagline {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--copper-300);
+  line-height: 1.4;
+}
+
+.g1-card-rule {
+  width: 50%;
+  height: 1px;
+  background: var(--copper-700);
+  margin: 6px 0 4px;
+  border: 0;
+}
+
+.g1-card-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.g1-card-bullet {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--neutral-300);
+  padding-left: 14px;
+  position: relative;
+}
+
+.g1-card-bullet::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 1px;
+  background: var(--copper-400);
+}

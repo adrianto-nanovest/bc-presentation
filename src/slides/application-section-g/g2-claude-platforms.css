@@ -1,0 +1,135 @@
+/* ────────────────────────────────────────────────────────────────────
+ * G.2 — Claude Platforms · Platform card styling
+ * Mirrors .g1-card. Adds a small uppercase tag at the top (in place of
+ * a vendor logo) and a nested-group rendering pattern used only by the
+ * Desktop card (Chat / Cowork / Code sub-groups).
+ * ──────────────────────────────────────────────────────────────────── */
+
+.g2-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 22px 24px;
+  border: 1px solid var(--copper-700);
+  background: rgba(10, 10, 10, 0.5);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+  height: 100%;
+  overflow: hidden;
+}
+
+.g2-card:hover {
+  border-color: var(--copper-200);
+  background: rgba(184, 110, 61, 0.06);
+  box-shadow: 0 4px 12px rgba(184, 110, 61, 0.08);
+}
+
+.g2-card-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--copper-300);
+  line-height: 1;
+}
+
+.g2-card-name {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--neutral-50);
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.g2-card-tagline {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--copper-300);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.g2-card-rule {
+  width: 50%;
+  height: 1px;
+  background: var(--copper-700);
+  margin: 6px 0 4px;
+  border: 0;
+}
+
+/* ── Flat capability bullets (Web, CLI, API cards) ─────────────────── */
+
+.g2-card-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.g2-card-bullet {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--neutral-300);
+  padding-left: 14px;
+  position: relative;
+}
+
+.g2-card-bullet::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 1px;
+  background: var(--copper-400);
+}
+
+/* ── Nested groups (Desktop card only) ─────────────────────────────── */
+
+.g2-card-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.g2-card-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.g2-card-group-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--copper-200);
+  line-height: 1.2;
+}
+
+.g2-card-group-items {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--neutral-300);
+  padding-left: 14px;
+  position: relative;
+  margin: 0;
+}
+
+.g2-card-group-items::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 1px;
+  background: var(--copper-400);
+}

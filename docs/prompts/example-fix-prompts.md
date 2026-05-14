@@ -187,3 +187,9 @@ fix slide F2 until F7:
 
 Create Tasks for all items to do (your TaskCreate tool), dispatch and delegate to your general-purpose agents to implement.
 Dispatch your Explore agents (Haiku model) for better codebase understanding.
+
+------------
+
+Fix and improve slide F8 C based on docs/specs/2026-05-14-f8-agentic-os-monitor.md
+create Tasks for all items to do, delegate to your general-purpose agents to implement (do it sequencially if there are tight dependencies, otherwise do it in parallel)
+Dispatch your Explore agents (Haiku model) for better codebase understanding.

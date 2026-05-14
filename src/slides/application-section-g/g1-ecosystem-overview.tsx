@@ -1,35 +1,62 @@
 // G.1 — ECOSYSTEM OVERVIEW
 //
-// Section G opener · 3-vendor convergence motif. Three orbs arranged
-// horizontally center-stage, each with vendor-specific ambient particle
-// animation looping continuously. Establishes the ecosystem framing:
-// specialization, not single winners.
+// Section G opener · three vendor cards establishing "Specialization,
+// not single winners". Each card is logo-led with a tagline, copper rule,
+// and three capability bullets.
 //
-// Layout:
-//   Top: FigLabel + headline (always structural, no Reveal)
-//   Center: 3 vendor orbs (Claude, Google, OpenAI) with ambient loops
-//   Below orbs: per-vendor labels (step 1)
-//   Bottom: closing line (step 2)
-//
-// 3 reveal steps (spec §3.G.1):
-//   0 — All 3 orbs fade in with stagger (120ms / 200ms / 280ms); loops run
-//   1 — Per-vendor specialization labels appear beneath each orb
-//   2 — Closing line reveals at bottom
+// 2 reveal steps:
+//   0 — All 3 cards fade in left→right with stagger
+//   1 — Closing line reveals at bottom
+
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal } from "./components/Reveal";
-import { EcosystemMotif } from "./components/EcosystemMotif";
+import {
+  ClaudeLogo,
+  GoogleLogo,
+  OpenAILogo,
+} from "./components/VendorLogos";
 import { g1Content as C } from "./content";
+import "./g1-ecosystem.css";
+
+type Vendor = (typeof C.vendors)[number];
+
+function VendorLogoFor({ id }: { id: Vendor["id"] }) {
+  if (id === "claude") return <ClaudeLogo size={56} />;
+  if (id === "google") return <GoogleLogo size={56} />;
+  return <OpenAILogo size={56} />;
+}
+
+function VendorCard({ vendor }: { vendor: Vendor }) {
+  return (
+    <div className="g1-card">
+      <div className="g1-card-logo">
+        <VendorLogoFor id={vendor.id} />
+      </div>
+      <div className="g1-card-name">{vendor.name}</div>
+      <div className="g1-card-tagline">
+        {highlight(vendor.tagline, [...vendor.taglineKw])}
+      </div>
+      <hr className="g1-card-rule" />
+      <ul className="g1-card-bullets">
+        {vendor.capabilities.map((cap, i) => (
+          <li key={i} className="g1-card-bullet">
+            {highlight(cap, [...vendor.capabilitiesKw])}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 // ───────────────────── slide ─────────────────────
 
 export function G1EcosystemOverview() {
   const { stepIndex } = useDeck();
 
-  const showLabels = stepIndex >= 1;
-  const showClosing = stepIndex >= 2;
+  const showClosing = stepIndex >= 1;
 
   return (
     <>
@@ -44,60 +71,39 @@ export function G1EcosystemOverview() {
           left: 48,
           right: 48,
           margin: 0,
-          textAlign: "center",
         }}
       >
-        {highlight(C.headline, C.headlineKw)}
+        {highlight(C.headline, [...C.headlineKw])}
       </h1>
 
-      {/* ───────────── 3 vendor orbs (entry step 0, staggered) ───────────── */}
-      <Reveal on data-testid="g1-orb-claude" delay={120}>
-        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-          <EcosystemMotif />
-        </div>
-      </Reveal>
-
-      {/* ───────────── Per-vendor labels (step 1, beneath each orb) ─────── */}
+      {/* ───────────── 3 vendor cards (entry step 0, staggered) ──────────── */}
       <div
-        data-testid="g1-vendor-labels"
+        data-testid="g1-vendor-cards"
         style={{
           position: "absolute",
-          top: 470,
           left: 48,
           right: 48,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          gap: 80,
+          top: 200,
+          bottom: 140,
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 28,
         }}
       >
         {C.vendors.map((v, i) => (
           <Reveal
             key={v.id}
-            on={showLabels}
-            delay={100 + i * 100}
-            style={{
-              flex: 1,
-              textAlign: "center",
-            }}
+            on={true}
+            delay={120 + i * 140}
+            data-testid={`g1-card-${v.id}`}
+            style={{ height: "100%" }}
           >
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 11,
-                color: "var(--copper-300)",
-                textTransform: "uppercase",
-                letterSpacing: "0.18em",
-                lineHeight: 1.4,
-              }}
-            >
-              {v.label}
-            </span>
+            <VendorCard vendor={v} />
           </Reveal>
         ))}
       </div>
 
-      {/* ───────────── Closing line (step 2, bottom) ───────────── */}
+      {/* ───────────── Closing line (step 1, bottom) ─────────────────────── */}
       <Reveal
         on={showClosing}
         delay={120}
@@ -120,7 +126,7 @@ export function G1EcosystemOverview() {
             lineHeight: 1.3,
           }}
         >
-          {highlight(C.closingLine, C.closingLineKw)}
+          {highlight(C.closingLine, [...C.closingLineKw])}
         </p>
       </Reveal>
     </>
@@ -130,8 +136,8 @@ export function G1EcosystemOverview() {
 // ───────────────────── slide def ─────────────────────
 
 export const g1Slide: SlideDef = {
-  steps: 3,
-  canonicalPose: 2,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",

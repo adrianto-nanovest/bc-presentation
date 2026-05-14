@@ -1,91 +1,79 @@
 // G.2 — CLAUDE PLATFORMS
 //
-// Comparison table slide: 5 Claude platforms × 4 columns.
-// Structural header + data rows stagger in, killer-feature column highlights
-// at step 1, footer reveals at step 2. Row hover adds copper accent.
+// Mirrors G.1 visually: four horizontal platform cards, each with a small
+// uppercase platform tag (WEB · DESKTOP · CLI · API), display-font name,
+// mono tagline, copper rule, and capability list. The Desktop card carries
+// nested sub-groups (Chat / Cowork / Code); the other three cards render a
+// flat bullet list. Both shapes flow from the same `{ group, items }` union.
 //
-// 3 steps (spec §3.G.2):
-//   0 — Header instant; 5 rows stagger in (120 + i*80 ms)
-//   1 — Killer-feature column highlights (copper-100 + glow)
-//   2 — Footer line reveals
+// 2 reveal steps:
+//   0 — All 4 cards fade in left→right with stagger (120 + i*140 ms)
+//   1 — Closing line reveals at bottom
+
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal } from "./components/Reveal";
 import { g2Content as C } from "./content";
+import "./g2-claude-platforms.css";
+
+type Platform = (typeof C.platforms)[number];
+
+function PlatformCard({ platform }: { platform: Platform }) {
+  const kw = [...platform.capabilitiesKw];
+  // A card is "nested" if any capability group carries a non-null label.
+  const nested = platform.capabilities.some((g) => g.group !== null);
+
+  return (
+    <div className="g2-card">
+      <div className="g2-card-tag">{platform.tag}</div>
+      <div className="g2-card-name">{platform.name}</div>
+      <div className="g2-card-tagline">
+        {highlight(platform.tagline, [...platform.taglineKw])}
+      </div>
+      <hr className="g2-card-rule" />
+
+      {nested ? (
+        <div className="g2-card-groups">
+          {platform.capabilities.map((group, i) => (
+            <div key={i} className="g2-card-group">
+              {group.group && (
+                <div className="g2-card-group-label">
+                  {highlight(group.group, kw)}
+                </div>
+              )}
+              <div className="g2-card-group-items">
+                {group.items.join(" · ")}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <ul className="g2-card-bullets">
+          {platform.capabilities[0]?.items.map((item, i) => (
+            <li key={i} className="g2-card-bullet">
+              {highlight(item, kw)}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 // ───────────────────── slide ─────────────────────
 
 export function G2ClaudePlatforms() {
   const { stepIndex } = useDeck();
 
-  // Step reveals
-  const highlightKillerFeature = stepIndex >= 1;
-  const showFooter = stepIndex >= 2;
+  const showClosing = stepIndex >= 1;
 
   return (
     <>
-      <style>{`
-        .g2-row {
-          display: grid;
-          grid-template-columns: 200px 200px 220px 1fr;
-          transition: background 0.2s var(--ease);
-        }
-        .g2-row:hover {
-          background: rgba(184, 110, 61, 0.06);
-        }
-        .g2-row:hover .g2-cell-platform {
-          box-shadow: -3px 0 0 var(--copper-200);
-        }
-        .g2-cell {
-          padding: 14px 0;
-          vertical-align: top;
-        }
-        .g2-cell-platform {
-          font-family: var(--mono);
-          font-size: 14px;
-          color: var(--copper-300);
-          font-weight: 500;
-          transition: box-shadow 0.2s var(--ease);
-        }
-        .g2-cell-surface,
-        .g2-cell-audience {
-          font-family: var(--serif);
-          font-size: 14px;
-          color: var(--neutral-100);
-        }
-        .g2-cell-killer {
-          font-family: var(--serif);
-          font-size: 14px;
-          font-style: italic;
-          color: var(--copper-200);
-          transition: color 400ms var(--ease), text-shadow 400ms var(--ease);
-        }
-        .g2-cell-killer.highlight {
-          color: var(--copper-100);
-          text-shadow: 0 0 8px rgba(217, 158, 108, 0.35);
-        }
-        .g2-header-cell {
-          font-family: var(--mono);
-          font-size: 11px;
-          color: var(--copper-300);
-          text-transform: uppercase;
-          letter-spacing: 0.18em;
-          padding: 12px 0;
-          border-bottom: 1px solid var(--copper-700);
-        }
-        .g2-data-row {
-          border-bottom: 1px solid var(--copper-800);
-        }
-        .g2-data-row:last-of-type {
-          border-bottom: none;
-        }
-      `}</style>
-
       <FigLabel section="G" num={2} label="CLAUDE PLATFORMS" />
 
-      {/* ───────────── Headline (structural, always on) ───────────── */}
+      {/* ───────────── Headline (always structural, no Reveal) ───────────── */}
       <h1
         className="slide-headline small"
         style={{
@@ -99,61 +87,59 @@ export function G2ClaudePlatforms() {
         {highlight(C.headline, [...C.headlineKw])}
       </h1>
 
-      {/* ───────────── Table container (click-safe) ───────────── */}
+      {/* ───────────── 4 platform cards (entry step 0, staggered) ────────── */}
       <div
-        data-no-advance
+        data-testid="g2-platform-cards"
         style={{
           position: "absolute",
           left: 48,
           right: 48,
-          top: 156,
-          bottom: 80,
-          display: "flex",
-          flexDirection: "column",
+          top: 200,
+          bottom: 140,
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 24,
         }}
       >
-        {/* Header row — structural (no Reveal) */}
-        <div className="g2-row">
-          {C.columns.map((col) => (
-            <div key={col} className="g2-header-cell">
-              {col}
-            </div>
-          ))}
-        </div>
-
-        {/* Data rows — stagger in at step 0 */}
-        {C.rows.map((row, i) => (
-          <Reveal key={i} on={true} delay={120 + i * 80}>
-            <div className="g2-row g2-data-row">
-              <div className={`g2-cell g2-cell-platform`}>{row.platform}</div>
-              <div className={`g2-cell g2-cell-surface`}>{row.surface}</div>
-              <div className={`g2-cell g2-cell-audience`}>{row.audience}</div>
-              <div
-                className={`g2-cell g2-cell-killer ${highlightKillerFeature ? "highlight" : ""}`}
-              >
-                {row.killer}
-              </div>
-            </div>
+        {C.platforms.map((p, i) => (
+          <Reveal
+            key={p.id}
+            on={true}
+            delay={120 + i * 140}
+            data-testid={`g2-card-${p.id}`}
+            style={{ height: "100%" }}
+          >
+            <PlatformCard platform={p} />
           </Reveal>
         ))}
-
-        {/* Footer line (step 2) */}
-        <Reveal on={showFooter} delay={120}>
-          <p
-            style={{
-              fontFamily: "var(--display)",
-              fontStyle: "italic",
-              fontSize: 18,
-              color: "var(--copper-200)",
-              margin: "32px 0 0 0",
-              textAlign: "center",
-              lineHeight: 1.2,
-            }}
-          >
-            {highlight(C.footer, [...C.footerKw])}
-          </p>
-        </Reveal>
       </div>
+
+      {/* ───────────── Closing line (step 1, bottom) ─────────────────────── */}
+      <Reveal
+        on={showClosing}
+        delay={120}
+        data-testid="g2-closing"
+        style={{
+          position: "absolute",
+          bottom: 100,
+          left: 48,
+          right: 48,
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--display)",
+            fontStyle: "italic",
+            fontSize: 22,
+            color: "var(--copper-200)",
+            margin: 0,
+            lineHeight: 1.3,
+          }}
+        >
+          {highlight(C.footer, [...C.footerKw])}
+        </p>
+      </Reveal>
     </>
   );
 }
@@ -161,8 +147,8 @@ export function G2ClaudePlatforms() {
 // ───────────────────── slide def ─────────────────────
 
 export const g2Slide: SlideDef = {
-  steps: 3,
-  canonicalPose: 2,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",

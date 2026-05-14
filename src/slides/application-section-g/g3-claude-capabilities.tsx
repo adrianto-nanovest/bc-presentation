@@ -6,8 +6,8 @@
 // feature comparison overlay.
 //
 // Step structure:
-//   0 (entry) — 8 cards stagger in (120ms + i*80ms), subhead appears
-//   1         — footer line reveals
+//   0 (entry) — 8 cards stagger in (120ms + i*80ms)
+//   1         — footer caption reveals (mirrors G.2 closing-line style)
 
 import { useState } from "react";
 import type { SlideDef } from "@/deck/types";
@@ -107,23 +107,6 @@ export function G3ClaudeCapabilities() {
         </h1>
       </div>
 
-      {/* SUBHEAD — mono 11px, copper-400 */}
-      <div
-        style={{
-          position: "absolute",
-          top: 128,
-          left: 48,
-          right: 48,
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          color: "var(--copper-400)",
-          textTransform: "uppercase",
-          letterSpacing: "0.18em",
-        }}
-      >
-        {C.subhead}
-      </div>
-
       {/* CARD GRID — 4×2 layout, data-no-advance wrapper */}
       <div data-no-advance>
         <div
@@ -132,7 +115,7 @@ export function G3ClaudeCapabilities() {
             left: 48,
             right: 48,
             top: 172,
-            bottom: 120,
+            bottom: 140,
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
             gridTemplateRows: "1fr 1fr",
@@ -172,23 +155,30 @@ export function G3ClaudeCapabilities() {
         </div>
       </div>
 
-      {/* FOOTER — step 1 reveal */}
-      <Reveal on={stepIndex >= 1} delay={120}>
-        <div
+      {/* FOOTER CAPTION — step 1 reveal, mirrors G.2 closing-line style */}
+      <Reveal
+        on={stepIndex >= 1}
+        delay={120}
+        style={{
+          position: "absolute",
+          bottom: 100,
+          left: 48,
+          right: 48,
+          textAlign: "center",
+        }}
+      >
+        <p
           style={{
-            position: "absolute",
-            bottom: 64,
-            left: 48,
-            right: 48,
-            textAlign: "center",
-            fontFamily: "var(--serif)",
+            fontFamily: "var(--display)",
             fontStyle: "italic",
-            fontSize: 16,
+            fontSize: 22,
             color: "var(--copper-200)",
+            margin: 0,
+            lineHeight: 1.3,
           }}
         >
           {highlight(C.footer, [...C.footerKw])}
-        </div>
+        </p>
       </Reveal>
 
       {/* VIDEO OVERLAY */}
