@@ -19,6 +19,7 @@ import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "./components/Reveal";
+import { LucideIcon } from "./components/LucideIcon";
 import { e3Content as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
@@ -29,13 +30,19 @@ export function E3PromptStructure() {
   const { stepIndex } = useDeck();
   const [hoverFw, setHoverFw] = useState<string | null>(null);
   const [hoverSpine, setHoverSpine] = useState<string | null>(null);
+  const [pinnedSpine, setPinnedSpine] = useState<string | null>(null);
+  const [pinnedFw, setPinnedFw] = useState<string | null>(null);
 
-  // Spine indices "lit" by the currently hovered framework (steps ≥ 1).
+  // Click-to-pin: pinned value wins, else hover.
+  const activeSpine = pinnedSpine ?? hoverSpine;
+  const activeFw = pinnedFw ?? hoverFw;
+
+  // Spine indices "lit" by the currently active framework (steps ≥ 1).
   const lit = useMemo(() => {
-    if (!hoverFw) return new Set<number>();
-    const fw = C.frameworks.find((f) => f.id === hoverFw);
+    if (!activeFw) return new Set<number>();
+    const fw = C.frameworks.find((f) => f.id === activeFw);
     return new Set<number>(fw ? [...fw.hits] : []);
-  }, [hoverFw]);
+  }, [activeFw]);
 
   const showSpine = stepIndex >= 0;
   const showFrameworks = stepIndex >= 1;
@@ -44,8 +51,8 @@ export function E3PromptStructure() {
   // Popover only appears on step 0 — past that the right column is owned by
   // the framework grid.
   const popSpine: SpineEntry | null =
-    stepIndex === 0 && hoverSpine
-      ? C.spine.find((s) => s.id === hoverSpine) ?? null
+    stepIndex === 0 && activeSpine
+      ? C.spine.find((s) => s.id === activeSpine) ?? null
       : null;
 
   return (
@@ -127,8 +134,12 @@ export function E3PromptStructure() {
         {/* Rows 2–7, col 1 — spine cards. */}
         {C.spine.map((s, i) => {
           const isLit = lit.has(s.num);
+          // Pin and hover drive the visual independently: while one spine is
+          // pinned, hovering another still highlights the hovered one.
           const isHovered = stepIndex === 0 && hoverSpine === s.id;
-          const active = isLit || isHovered;
+          const isPinned = stepIndex === 0 && pinnedSpine === s.id;
+          const isActive = isHovered || isPinned;
+          const active = isLit || isActive;
           return (
             <Reveal
               key={s.id}
@@ -139,9 +150,17 @@ export function E3PromptStructure() {
               <div
                 data-testid={`spine-card-${s.id}`}
                 data-active={active ? "true" : "false"}
+                {...(stepIndex === 0 ? { "data-no-advance": "" } : {})}
                 onMouseEnter={() => setHoverSpine(s.id)}
                 onMouseLeave={() => setHoverSpine(null)}
+                onClick={
+                  stepIndex === 0
+                    ? () =>
+                        setPinnedSpine((cur) => (cur === s.id ? null : s.id))
+                    : undefined
+                }
                 style={{
+                  position: "relative",
                   flex: 1,
                   display: "flex",
                   alignItems: "center",
@@ -150,8 +169,23 @@ export function E3PromptStructure() {
                   border: `1px solid ${active ? "var(--copper-200)" : "var(--copper-800)"}`,
                   background: active ? "rgba(217,158,108,0.08)" : "transparent",
                   transition: "all 0.2s var(--ease)",
+                  cursor: stepIndex === 0 ? "pointer" : "default",
                 }}
               >
+                {isPinned && (
+                  <span
+                    aria-label="pinned"
+                    style={{
+                      position: "absolute",
+                      top: 4,
+                      right: 6,
+                      color: "var(--copper-200)",
+                      display: "inline-flex",
+                    }}
+                  >
+                    <LucideIcon name="Pin" size={11} color="currentColor" />
+                  </span>
+                )}
                 <span
                   style={{
                     fontFamily: "var(--display)",
@@ -210,6 +244,7 @@ export function E3PromptStructure() {
         {stepIndex >= 1 && (
           <div
             data-testid="e3-framework-grid"
+            {...(stepIndex === 1 ? { "data-no-advance": "" } : {})}
             style={{
               gridColumn: 3,
               gridRow: showFooter ? "2 / span 5" : "2 / span 6",
@@ -228,7 +263,13 @@ export function E3PromptStructure() {
               }}
             >
               {C.frameworks.map((f, i) => {
+                // Pin and hover drive the visual independently — same idiom
+                // as the spine cards above. The `lit` set on the left uses
+                // `activeFw` (pinned ?? hovered) so a pin keeps the spine
+                // highlight stable while you explore other tiles.
                 const isHovered = hoverFw === f.id;
+                const isPinned = pinnedFw === f.id && stepIndex === 1;
+                const isActive = isHovered || isPinned;
                 return (
                   <Reveal
                     key={f.id}
@@ -238,20 +279,47 @@ export function E3PromptStructure() {
                   >
                     <div
                       data-testid={`framework-tile-${f.id}`}
-                      data-hovered={isHovered ? "true" : "false"}
+                      data-hovered={isActive ? "true" : "false"}
                       onMouseEnter={() => setHoverFw(f.id)}
                       onMouseLeave={() => setHoverFw(null)}
+                      onClick={
+                        stepIndex === 1
+                          ? () =>
+                              setPinnedFw((cur) =>
+                                cur === f.id ? null : f.id,
+                              )
+                          : undefined
+                      }
                       style={{
+                        position: "relative",
                         flex: 1,
                         padding: "10px 14px",
-                        border: `1px solid ${isHovered ? "var(--copper-300)" : "var(--copper-800)"}`,
-                        background: isHovered
+                        border: `1px solid ${isActive ? "var(--copper-300)" : "var(--copper-800)"}`,
+                        background: isActive
                           ? "rgba(184,110,61,0.08)"
                           : "rgba(10,10,10,0.5)",
                         transition: "all 0.2s var(--ease)",
-                        cursor: "default",
+                        cursor: stepIndex === 1 ? "pointer" : "default",
                       }}
                     >
+                      {isPinned && (
+                        <span
+                          aria-label="pinned"
+                          style={{
+                            position: "absolute",
+                            top: 4,
+                            right: 6,
+                            color: "var(--copper-200)",
+                            display: "inline-flex",
+                          }}
+                        >
+                          <LucideIcon
+                            name="Pin"
+                            size={11}
+                            color="currentColor"
+                          />
+                        </span>
+                      )}
                       <div
                         style={{
                           fontFamily: "var(--display)",

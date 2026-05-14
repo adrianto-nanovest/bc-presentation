@@ -223,20 +223,19 @@
   90%, 100% { opacity: 1; }
 }
 
-/* rewind — inverse-loop arc; partial counter-clockwise tick with pauses (never a full revolution) */
+/* rewind — double left-pointing triangles, subtle sideways nudge (rewind motion) */
 .glyph-rewind .arrow {
-  stroke: var(--copper-300);
-  stroke-width: 2;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transform-origin: 20px 20px;
-  animation: glyph-rewind-arrow 4.5s ease-in-out infinite;
+  fill: var(--copper-300);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glyph-rewind-slide 2.4s ease-in-out infinite;
 }
-@keyframes glyph-rewind-arrow {
-  0%, 20%   { transform: rotate(0deg);   opacity: 0.7; }
-  45%, 65%  { transform: rotate(-40deg); opacity: 1;   }
-  85%, 100% { transform: rotate(0deg);   opacity: 0.7; }
+.glyph-rewind .arrow-2 {
+  animation-delay: 0.12s;
+}
+@keyframes glyph-rewind-slide {
+  0%, 100% { transform: translateX(0); opacity: 0.85; }
+  50%      { transform: translateX(-1.5px); opacity: 1; }
 }
 
 /* compact — 5 bars compressing into 2 */

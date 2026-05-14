@@ -5,11 +5,10 @@
 // AnimatedGlyph that loops on its own; the WorkflowPipeline component drives
 // the per-stage `active` pulse as the particle traverses left → right.
 //
-// 3 reveal steps:
-//   0 — All 7 stage cards stagger in (delay 120 + i*80); subhead reveals;
-//       pipeline particle starts immediately
+// 2 reveal steps:
+//   0 — All 7 stage cards stagger in (delay 120 + i*80); after the stagger
+//       settles, the pipeline particle begins traversing left → right.
 //   1 — "Keep orchestrator LEAN" maxim band fades in (rule animates 0→40%)
-//   2 — Footer line beneath the maxim reveals
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
@@ -25,7 +24,6 @@ export function G9Workflow() {
   const { stepIndex } = useDeck();
 
   const showMaxim = stepIndex >= 1;
-  const showFooter = stepIndex >= 2;
 
   // Adapt content stages → StageDef (preserves readonly typing).
   const stages: StageDef[] = C.stages.map((s) => ({
@@ -54,35 +52,17 @@ export function G9Workflow() {
         {highlight(C.headline, [...C.headlineKw])}
       </h1>
 
-      {/* Subhead — mono 11px copper-400, uppercase */}
-      <Reveal
-        on={true}
-        delay={80}
-        style={{
-          position: "absolute",
-          top: 128,
-          left: 48,
-          right: 48,
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: "var(--copper-400)",
-        }}
-      >
-        {C.subhead}
-      </Reveal>
-
       {/* Pipeline + maxim band — wrapped in data-no-advance */}
       <div data-no-advance>
-        {/* Pipeline region */}
+        {/* Pipeline region — top matches G.3's card-grid start (172) so the
+            headline has consistent breathing room across section G. */}
         <div
           style={{
             position: "absolute",
             left: 48,
             right: 48,
-            top: 156,
-            bottom: 160,
+            top: 172,
+            bottom: 140,
             display: "flex",
             alignItems: "stretch",
             justifyContent: "center",
@@ -94,13 +74,13 @@ export function G9Workflow() {
           <PipelineWithStagger stages={stages} />
         </div>
 
-        {/* Maxim band — 80px tall, sits above the bottom:80 inset */}
+        {/* Maxim band — 80px tall, anchored to the bottom inset */}
         <div
           style={{
             position: "absolute",
             left: 48,
             right: 48,
-            bottom: 80,
+            bottom: 48,
             height: 80,
             display: "flex",
             flexDirection: "column",
@@ -153,31 +133,11 @@ export function G9Workflow() {
                 lineHeight: 1.3,
               }}
             >
-              {C.maxim.caption}
+              {highlight(C.maxim.caption, [...C.maxim.captionKw])}
             </div>
           </Reveal>
         </div>
       </div>
-
-      {/* Footer line — step 2 reveal, italic display 18px copper-200 */}
-      <Reveal
-        on={showFooter}
-        delay={120}
-        style={{
-          position: "absolute",
-          bottom: 36,
-          left: 48,
-          right: 48,
-          textAlign: "center",
-          fontFamily: "var(--display)",
-          fontStyle: "italic",
-          fontSize: 18,
-          color: "var(--copper-200)",
-          lineHeight: 1.3,
-        }}
-      >
-        {highlight(C.footer, [...C.footerKw])}
-      </Reveal>
     </>
   );
 }
@@ -229,7 +189,10 @@ function PipelineWithStagger({ stages }: { stages: StageDef[] }) {
         }
       `}</style>
       <div className="g9-stagger" style={{ width: "100%", height: "100%" }}>
-        <WorkflowPipeline stages={stages} />
+        {/* startDelay matches the longest stagger tail (600ms delay + 360ms
+            animation) plus a small breathing pause so the pulse begins after
+            the final card has settled. */}
+        <WorkflowPipeline stages={stages} startDelay={1100} />
       </div>
     </div>
   );
@@ -238,8 +201,8 @@ function PipelineWithStagger({ stages }: { stages: StageDef[] }) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const g9Slide: SlideDef = {
-  steps: 3,
-  canonicalPose: 2,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",

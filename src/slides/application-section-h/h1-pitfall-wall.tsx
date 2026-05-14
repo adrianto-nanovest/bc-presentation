@@ -2,12 +2,12 @@
 //
 // Spec §H.1 (docs/specs/2026-05-12-slides-application-H-discipline.md, lines 56–116).
 //
-// 4×2 grid of 8 pitfall cards rendered via <TrapWall>, which also runs the
-// composition-level "warning pulse" loop (irregular flares, 1–2 cards at a
-// time). Hover overrides the loop; loop runs continuously regardless of step.
+// 4×2 grid of 8 pitfall cards rendered via <TrapWall>. Hover lights an
+// individual card (presenter-controlled detail layer); no composition-level
+// auto-flare.
 //
 // Step structure:
-//   0 (entry) — 8 pitfall cards stagger in (120 + i*80ms), subhead present
+//   0 (entry) — 8 pitfall cards stagger in (120 + i*80ms)
 //   1         — closing line reveals beneath grid
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
@@ -32,40 +32,26 @@ export function H1PitfallWall() {
         </h1>
       </div>
 
-      {/* Subhead — mono 11px copper-400, uppercase, sits beneath the headline */}
-      <Reveal
-        on={true}
-        delay={120}
-        style={{
-          position: "absolute",
-          top: 128,
-          left: 48,
-          right: 48,
-          fontFamily: "var(--mono)",
-          fontSize: 11,
-          color: "var(--copper-400)",
-          textTransform: "uppercase",
-          letterSpacing: "0.18em",
-        }}
-      >
-        {C.subhead}
-      </Reveal>
-
-      {/* Card grid — interactive region, no advance on click */}
+      {/* Card grid — interactive region, no advance on click.
+          Layout mirrors G6: top 148, bottom 112 to clear the footer at 56. */}
       <div
         data-no-advance
         style={{
           position: "absolute",
           left: 48,
           right: 48,
-          top: 156,
-          bottom: 80,
+          top: 148,
+          bottom: 112,
         }}
       >
         <TrapWall pitfalls={C.cards} />
       </div>
 
-      {/* Closing line — bottom strip, step 1 reveal */}
+      {/* Closing line — bottom strip, step 1 reveal.
+          NOTE: position: absolute lives on Reveal itself, not on a child —
+          .fade's transform creates a containing block, so an absolutely-
+          positioned child would resolve to Reveal (zero height) instead of
+          .stage-wrap and render above the canvas. Mirrors G6. */}
       <Reveal
         on={stepIndex >= 1}
         delay={200}
@@ -73,8 +59,7 @@ export function H1PitfallWall() {
           position: "absolute",
           left: 48,
           right: 48,
-          bottom: 30,
-          minHeight: 30,
+          bottom: 56,
           fontFamily: "var(--display)",
           fontStyle: "italic",
           fontSize: 22,

@@ -17,6 +17,7 @@
 // CopperRule are the shared T10 reveal primitives — no Framer Motion here.
 import { useState } from "react";
 import type { CSSProperties } from "react";
+import { Pin } from "lucide-react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
@@ -35,23 +36,27 @@ type ModalEntry = (typeof C.modal)[keyof typeof C.modal];
 export function E4PromptMethodologies() {
   const { stepIndex } = useDeck();
   const [hoverId, setHoverId] = useState<string | null>(null);
+  const [pinnedId, setPinnedId] = useState<string | null>(null);
 
   const showFooter = stepIndex >= 3;
 
-  // Flatten cards across tiers so we can resolve `hoverId` → its full record.
+  // Pin takes precedence over hover; together they drive the detail strip.
+  const activeId = pinnedId ?? hoverId;
+
+  // Flatten cards across tiers so we can resolve `activeId` → its full record.
   // Tag each card with its tier index so we can suppress details for tiers
-  // that haven't been revealed yet (defensive against stale hoverId on
+  // that haven't been revealed yet (defensive against stale hover/pin on
   // backward navigation, and a belt-and-braces partner to the pointer-events
   // gate on individual cards).
   const allCards: (CardWithTier & { tierIndex: number })[] = C.tiers.flatMap(
     (t, tierIndex) =>
       t.cards.map((c) => ({ ...c, tier: t, tierIndex })),
   );
-  const hoveredRaw = hoverId
-    ? allCards.find((c) => c.id === hoverId) ?? null
+  const activeRaw = activeId
+    ? allCards.find((c) => c.id === activeId) ?? null
     : null;
   const hovered: CardWithTier | null =
-    hoveredRaw && stepIndex >= hoveredRaw.tierIndex ? hoveredRaw : null;
+    activeRaw && stepIndex >= activeRaw.tierIndex ? activeRaw : null;
 
   return (
     <>
@@ -65,9 +70,12 @@ export function E4PromptMethodologies() {
 
       {/* Tier rows region — top:158, bottom:290 leaves a 190px detail strip
           (bottom:88 height:190) plus footer (bottom:50). Matches the design
-          source coordinates exactly. */}
+          source coordinates exactly.
+          `data-no-advance` keeps card clicks inside the menu (pin only).
+          Clicks elsewhere on the stage still advance via Slide.tsx. */}
       <div
         data-testid="e4-tiers"
+        data-no-advance=""
         style={{
           position: "absolute",
           left: 48,
@@ -140,8 +148,11 @@ export function E4PromptMethodologies() {
                 }}
               >
                 {tier.cards.map((c) => {
-                  const active = hoverId === c.id;
+                  const isHover = hoverId === c.id;
+                  const isPinned = pinnedId === c.id;
+                  const active = isHover || isPinned;
                   const cardStyle: CSSProperties = {
+                    position: "relative",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-start",
@@ -149,13 +160,17 @@ export function E4PromptMethodologies() {
                     gap: 6,
                     padding: "14px 16px",
                     border: `1px solid var(--${tier.copper})`,
-                    background: active
-                      ? "rgba(217,119,87,0.08)"
-                      : "rgba(10,10,10,0.7)",
-                    boxShadow: active
-                      ? `0 0 0 1px var(--${tier.copper}), 0 0 24px -8px var(--${tier.copper})`
-                      : "none",
-                    cursor: "default",
+                    background: isPinned
+                      ? "rgba(217,119,87,0.12)"
+                      : isHover
+                        ? "rgba(217,119,87,0.08)"
+                        : "rgba(10,10,10,0.7)",
+                    boxShadow: isPinned
+                      ? `inset 0 0 0 1px var(--${tier.copper}), 0 0 28px -6px var(--${tier.copper})`
+                      : isHover
+                        ? `0 0 0 1px var(--${tier.copper}), 0 0 24px -8px var(--${tier.copper})`
+                        : "none",
+                    cursor: revealed ? "pointer" : "default",
                     textAlign: "left",
                     pointerEvents: revealed ? "auto" : "none",
                     transition:
@@ -166,6 +181,7 @@ export function E4PromptMethodologies() {
                       key={c.id}
                       data-testid={`technique-card-${c.id}`}
                       data-active={active ? "true" : "false"}
+                      data-pinned={isPinned ? "true" : "false"}
                       onMouseEnter={
                         revealed ? () => setHoverId(c.id) : undefined
                       }
@@ -177,8 +193,35 @@ export function E4PromptMethodologies() {
                               )
                           : undefined
                       }
+                      onClick={
+                        revealed
+                          ? () =>
+                              setPinnedId((prev) =>
+                                prev === c.id ? null : c.id,
+                              )
+                          : undefined
+                      }
                       style={cardStyle}
                     >
+                      {isPinned && (
+                        <div
+                          aria-label="pinned"
+                          style={{
+                            position: "absolute",
+                            top: 6,
+                            right: 8,
+                            width: 14,
+                            height: 14,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: `var(--${tier.copper})`,
+                            pointerEvents: "none",
+                          }}
+                        >
+                          <Pin size={11} color="currentColor" strokeWidth={1.75} />
+                        </div>
+                      )}
                       <span
                         style={{
                           fontFamily: "var(--display)",

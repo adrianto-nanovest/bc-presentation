@@ -8,7 +8,7 @@
 // the Big Three.
 //
 // Step structure:
-//   0 (entry) — 3 cards stagger in (120ms + i*100ms), subhead reveals
+//   0 (entry) — 3 cards stagger in (120ms + i*100ms)
 //   1         — footer line reveals
 
 import type { SlideDef } from "../../deck/types";
@@ -24,23 +24,11 @@ import { g10Content as C } from "./content";
 // ─────────────────────────────────────────────────────────────────────────────
 
 const styles = `
-  .g10-subhead {
-    position: absolute;
-    top: 128px;
-    left: 48px;
-    right: 48px;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--copper-400);
-  }
-
   .g10-card {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 24px;
+    gap: 14px;
+    padding: 22px 24px;
     border: 1px solid var(--copper-700);
     background: rgba(10, 10, 10, 0.5);
     transition: border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease);
@@ -65,9 +53,13 @@ const styles = `
 
   .g10-card-desc {
     font-family: var(--serif);
-    font-size: 16px;
-    color: var(--neutral-100);
+    font-size: 15px;
+    color: var(--neutral-400);
     line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .g10-card-rule {
@@ -104,18 +96,6 @@ const styles = `
     letter-spacing: 0.12em;
     color: var(--copper-500);
   }
-
-  .g10-footer {
-    position: absolute;
-    bottom: 40px;
-    left: 48px;
-    right: 48px;
-    text-align: center;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 16px;
-    color: var(--copper-200);
-  }
 `;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -140,29 +120,26 @@ function G10BeyondBigThree() {
         {highlight(C.headline, [...C.headlineKw])}
       </h1>
 
-      {/* Subhead — mono 11px copper-400 uppercase */}
-      <Reveal on={true} delay={80} className="g10-subhead">
-        {C.subhead}
-      </Reveal>
-
-      {/* Cards region — 3 horizontal cards */}
+      {/* Cards region — 3 horizontal cards.
+          top: 172 matches G.3 / G.9 card-grid start so the headline has
+          consistent breathing room across section G. */}
       <div
         data-no-advance
         style={{
           position: "absolute",
           left: 48,
           right: 48,
-          top: 156,
-          bottom: 80,
+          top: 172,
+          bottom: 112,
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: 24,
         }}
       >
         {C.cards.map((card, i) => (
-          <Reveal key={card.tool} on={true} delay={120 + i * 100}>
+          <Reveal key={card.tool} on={true} delay={120 + i * 100} style={{ height: "100%" }}>
             <div className="g10-card">
-              <AnimatedGlyph kind={card.glyphKind as any} size={64} />
+              <AnimatedGlyph kind={card.glyphKind as any} size={48} />
               <div className="g10-card-name">{card.tool}</div>
               <div className="g10-card-desc">
                 {card.differentiator}. {card.description}
@@ -177,8 +154,26 @@ function G10BeyondBigThree() {
         ))}
       </div>
 
-      {/* Footer — revealed at step 1 */}
-      <Reveal on={stepIndex >= 1} delay={120} className="g10-footer">
+      {/* Footer — revealed at step 1.
+          NOTE: position: absolute lives on Reveal itself, not on a child —
+          .fade's transform creates a containing block, so an absolutely-
+          positioned child would resolve to Reveal (zero height) instead of
+          .stage-wrap and render above the canvas. Mirrors G6. */}
+      <Reveal
+        on={stepIndex >= 1}
+        delay={120}
+        style={{
+          position: "absolute",
+          bottom: 56,
+          left: 48,
+          right: 48,
+          fontFamily: "var(--serif)",
+          fontStyle: "italic",
+          fontSize: 16,
+          color: "var(--copper-200)",
+          textAlign: "center",
+        }}
+      >
         {highlight(C.footer, [...C.footerKw])}
       </Reveal>
     </>

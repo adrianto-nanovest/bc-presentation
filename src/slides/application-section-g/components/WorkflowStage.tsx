@@ -93,14 +93,17 @@ export function WorkflowStage({
         {name}
       </div>
 
-      {/* Purpose — serif 13px neutral-300 */}
+      {/* Purpose — serif 11px neutral-300, single line */}
       <div
         style={{
           fontFamily: "var(--serif)",
-          fontSize: 13,
+          fontSize: 11,
           color: "var(--neutral-300)",
           lineHeight: 1.3,
           fontStyle: "italic",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {purpose}
@@ -115,7 +118,7 @@ export function WorkflowStage({
         }}
       />
 
-      {/* Tool chips — mono 10px, one per line */}
+      {/* Tool chips — mono 10px, bulleted list */}
       <div
         style={{
           display: "flex",
@@ -127,6 +130,9 @@ export function WorkflowStage({
           <div
             key={tool}
             style={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: 6,
               fontFamily: "var(--mono)",
               fontSize: 10,
               letterSpacing: "0.08em",
@@ -135,7 +141,18 @@ export function WorkflowStage({
               lineHeight: 1.3,
             }}
           >
-            {tool}
+            <span
+              aria-hidden
+              style={{
+                flexShrink: 0,
+                lineHeight: 1,
+                color: lit ? "var(--copper-200)" : "var(--copper-600)",
+                transition: "color 0.2s var(--ease)",
+              }}
+            >
+              •
+            </span>
+            <span>{tool}</span>
           </div>
         ))}
       </div>

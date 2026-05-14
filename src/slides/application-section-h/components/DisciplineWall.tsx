@@ -8,24 +8,16 @@
 //   ├───────┼───────┼───────┼───────┤
 //   │ card5 │ card6 │ card7 │ card8 │
 //   └───────┴───────┴───────┴───────┘
-//   ─── copper rule ─── (step 2)
-//   RESOLVES WHAT?      (step 2 mono header)
-//   [pill A][pill B]…   (step 2, staggered in)
+//   ─── copper rule ─── (step 1)
+//   RESOLVES WHAT?      (step 1 mono header)
+//   [pill A][pill B]…   (step 1, staggered in)
 //
-// Composition loop (must feel CALM/ORDERED — opposite of H.1's chaos):
-//   Cards light copper-300 → copper-200 sequentially in row-major order
-//   (0→1→2→3→4→5→6→7) at ~1.25s cadence; each glow holds ~400ms then settles.
-//   After the 8th card settles, ~2s pause, then restart from index 0.
-//   Loop runs continuously regardless of stepIndex. Implemented via a chained
-//   setTimeout schedule keyed off mount.
-//
-// Cross-highlight:
-//   Slide-level state (hoveredPracticeId / hoveredPillId) drives a two-way
-//   spotlight. When a practice card is hovered, pills whose id ∈ card.resolves
-//   gain a copper-200 border + glow (200ms). When a pill is hovered, every
-//   practice card whose `resolves` contains that pill id glows copper-200.
-//   `flashAll` is a one-shot unison flare (step 0→1 transition).
-import { useEffect, useState } from "react";
+// Behaviour:
+//   • No auto-animation — the presenter drives attention by hovering.
+//   • Cross-highlight: hovering a practice card lights pills whose id is in
+//     `card.resolves` (and vice versa). Wiring lives at the slide level so
+//     state crosses the grid/pill-row boundary.
+import { useState } from "react";
 import { AnimatedGlyph, type GlyphKind } from "@/components/AnimatedGlyph";
 import { Reveal } from "../../foundation-core-section-e/components/Reveal";
 
@@ -59,29 +51,11 @@ interface DisciplineWallProps {
   resolvesHeader: string;
   pillsVisible: boolean;
   showResolves: boolean;
-  stepIndex: number;
   hoveredPracticeId: PracticeId | null;
   hoveredPillId: PitfallId | null;
   onPracticeHover: (id: PracticeId | null) => void;
   onPillHover: (id: PitfallId | null) => void;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Loop tunings — calm cadence; do not crank these without re-reading the spec.
-// ─────────────────────────────────────────────────────────────────────────────
-
-const CARD_COUNT = 8;
-const CARD_DURATION_MS = 1250; // gap between activations (~1.25s)
-const GLOW_HOLD_MS = 400; // how long each card stays "active" before settling
-const TAIL_PAUSE_MS = 2000; // breath after the last card settles
-// Total cycle: 8 × 1250 + 2000 = 12_000ms.
-const CYCLE_MS = CARD_COUNT * CARD_DURATION_MS + TAIL_PAUSE_MS;
-
-// One-time unison flare on step 0 → 1 transition.
-const FLASH_IN_MS = 200;
-const FLASH_HOLD_MS = 0;
-const FLASH_OUT_MS = 800;
-const FLASH_TOTAL_MS = FLASH_IN_MS + FLASH_HOLD_MS + FLASH_OUT_MS;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DisciplineWall
@@ -93,64 +67,11 @@ export function DisciplineWall({
   resolvesHeader,
   pillsVisible,
   showResolves,
-  stepIndex,
   hoveredPracticeId,
   hoveredPillId,
   onPracticeHover,
   onPillHover,
 }: DisciplineWallProps) {
-  // Composition loop — sequential glow over 8 cards.
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    const timeouts: ReturnType<typeof setTimeout>[] = [];
-
-    const scheduleCycle = () => {
-      if (cancelled) return;
-      for (let i = 0; i < CARD_COUNT; i++) {
-        // Activate card i.
-        timeouts.push(
-          setTimeout(() => {
-            if (!cancelled) setActiveIndex(i);
-          }, i * CARD_DURATION_MS),
-        );
-        // Settle card i after the glow hold; the next activation will overwrite
-        // before this fires for indices < CARD_COUNT - 1, which is fine —
-        // setActiveIndex(null) only "wins" if no successor has stamped a new i.
-        timeouts.push(
-          setTimeout(() => {
-            if (!cancelled) {
-              setActiveIndex((cur) => (cur === i ? null : cur));
-            }
-          }, i * CARD_DURATION_MS + GLOW_HOLD_MS),
-        );
-      }
-      timeouts.push(
-        setTimeout(() => {
-          if (!cancelled) scheduleCycle();
-        }, CYCLE_MS),
-      );
-    };
-
-    // Defer first cycle ~800ms so card stagger-in finishes first.
-    timeouts.push(setTimeout(scheduleCycle, 800));
-
-    return () => {
-      cancelled = true;
-      timeouts.forEach(clearTimeout);
-    };
-  }, []);
-
-  // One-shot unison flare when stepIndex transitions to 1.
-  const [flashAll, setFlashAll] = useState(false);
-  useEffect(() => {
-    if (stepIndex !== 1) return;
-    setFlashAll(true);
-    const t = setTimeout(() => setFlashAll(false), FLASH_TOTAL_MS);
-    return () => clearTimeout(t);
-  }, [stepIndex]);
-
   // Cross-highlight derivations.
   const hoveredPractice =
     hoveredPracticeId !== null
@@ -177,15 +98,17 @@ export function DisciplineWall({
         flexDirection: "column",
       }}
     >
-      {/* Practice grid — 4×2 */}
+      {/* Practice grid — 4×2. Rows size to content (no fixed height) so the
+          vertical card-to-card gap matches the horizontal column gap exactly;
+          a fixed height would force rows to 1fr and leave slack inside cards
+          that reads as an inflated vertical gap. */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
-          gridTemplateRows: "repeat(2, 1fr)",
+          gridAutoRows: "auto",
           gap: 18,
           flex: "0 0 auto",
-          height: 440,
         }}
       >
         {practices.map((card, i) => {
@@ -194,10 +117,7 @@ export function DisciplineWall({
             <Reveal key={id} on={true} delay={120 + i * 80}>
               <PracticeCard
                 practice={card}
-                index={i}
-                active={activeIndex === i}
                 crossHighlighted={crossHighlightedPracticeIds.has(id)}
-                flashAll={flashAll}
                 showResolves={showResolves}
                 onHoverChange={onPracticeHover}
               />
@@ -206,18 +126,41 @@ export function DisciplineWall({
         })}
       </div>
 
-      {/* Pitfall section — copper rule + header + pills (step 2) */}
+      {/* Pitfall section — header / copper rule / pills (step 1).
+          Header sits ABOVE the rule, so the pill row hugs the rule and stays
+          well clear of the bottom-right nav indicators. The 24px that used to
+          live as the section's marginTop is now spent on the header + its
+          breathing room, so the rule's vertical position is preserved. */}
       <div
         style={{
-          marginTop: 24,
           display: "flex",
           flexDirection: "column",
-          gap: 14,
           flex: "1 1 auto",
           minHeight: 0,
         }}
       >
-        {/* Copper rule — animates 0 → 100% width on step 2 */}
+        {/* RESOLVES WHAT? mono header — ABOVE the rule.
+            marginTop is the breathing room from the practice-grid row 2;
+            marginBottom is the tight header-to-rule gap (label hugs its
+            rule, content below the rule gets its own larger margin). */}
+        <Reveal
+          on={pillsVisible}
+          delay={300}
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            lineHeight: 1.4,
+            letterSpacing: "0.22em",
+            color: "var(--copper-300)",
+            textTransform: "uppercase",
+            marginTop: 28,
+            marginBottom: 6,
+          }}
+        >
+          {resolvesHeader}
+        </Reveal>
+
+        {/* Copper rule — animates 0 → 100% width on step 1 */}
         <div
           style={{
             height: 1,
@@ -230,28 +173,15 @@ export function DisciplineWall({
           }}
         />
 
-        {/* RESOLVES WHAT? mono header */}
-        <Reveal
-          on={pillsVisible}
-          delay={300}
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 11,
-            letterSpacing: "0.22em",
-            color: "var(--copper-300)",
-            textTransform: "uppercase",
-          }}
-        >
-          {resolvesHeader}
-        </Reveal>
-
-        {/* Pill row */}
-        <PitfallPillRow
-          pills={pills}
-          crossHighlightedIds={crossHighlightedPillIds}
-          visible={pillsVisible}
-          onHoverChange={onPillHover}
-        />
+        {/* Pill row — directly under the rule */}
+        <div style={{ marginTop: 14 }}>
+          <PitfallPillRow
+            pills={pills}
+            crossHighlightedIds={crossHighlightedPillIds}
+            visible={pillsVisible}
+            onHoverChange={onPillHover}
+          />
+        </div>
       </div>
     </div>
   );
@@ -263,25 +193,20 @@ export function DisciplineWall({
 
 interface PracticeCardProps {
   practice: PracticeCardData;
-  index: number;
-  active: boolean;
   crossHighlighted: boolean;
-  flashAll: boolean;
   showResolves: boolean;
   onHoverChange: (id: PracticeId | null) => void;
 }
 
 function PracticeCard({
   practice,
-  active,
   crossHighlighted,
-  flashAll,
   showResolves,
   onHoverChange,
 }: PracticeCardProps) {
   const [hover, setHover] = useState(false);
   const id = practice.num.toString();
-  const lit = hover || active || crossHighlighted || flashAll;
+  const lit = hover || crossHighlighted;
 
   return (
     <div
@@ -337,7 +262,7 @@ function PracticeCard({
         <AnimatedGlyph kind={practice.glyphKind} size={48} />
       </div>
 
-      {/* Name — display 18px neutral-50, uppercase */}
+      {/* Name — display 18px neutral-50, uppercase, single line */}
       <div
         style={{
           fontFamily: "var(--display)",
@@ -346,17 +271,18 @@ function PracticeCard({
           lineHeight: 1.1,
           letterSpacing: "0.02em",
           textTransform: "uppercase",
+          whiteSpace: "nowrap",
         }}
       >
         {practice.name}
       </div>
 
-      {/* Move — serif 14px neutral-100 */}
+      {/* Move — serif italic 13px neutral-300 (matches H.1 cost line) */}
       <div
         style={{
           fontFamily: "var(--serif)",
-          fontSize: 14,
-          color: "var(--neutral-100)",
+          fontSize: 13,
+          color: "var(--neutral-300)",
           lineHeight: 1.3,
           fontStyle: "italic",
         }}
@@ -364,7 +290,7 @@ function PracticeCard({
         {practice.move}
       </div>
 
-      {/* Resolves caption — mono 10px copper-400, hidden until step 2 */}
+      {/* Resolves caption — mono 10px copper-400, hidden until step 1 */}
       <div
         style={{
           fontFamily: "var(--mono)",

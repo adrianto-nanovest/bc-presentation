@@ -147,7 +147,8 @@ function getGlyph(kind: GlyphKind, tight = false): JSX.Element {
     case "rewind":
       return (
         <svg viewBox={viewBox}>
-          <path className="arrow" d="M 28 20 A 8 8 0 1 0 20 12 M 20 12 L 17 9 M 20 12 L 17 15" fill="none" />
+          <polygon className="arrow arrow-1" points="20,14 14,20 20,26" />
+          <polygon className="arrow arrow-2" points="26,14 20,20 26,26" />
         </svg>
       );
 

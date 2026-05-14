@@ -1,11 +1,12 @@
 // H.3 — BRIDGE · DISCIPLINE (final slide of Section H)
 //
-// Mirrors `src/slides/application-section-g/g11-bridge-to-h.tsx` exactly —
-// only the hero file path, beat text, attribution, and FIG label change.
+// Mirrors `src/slides/foundation-core-section-e/e11-bridge-to-f.tsx` —
+// same two-beat reveal cadence. Only the hero file path, headline text,
+// preview line, and FIG label differ.
 //
 // 2 steps:
-//   0 — beat 1 reveals (display-size headline + copper rule).
-//   1 — beat 2 reveals (italic copper subline) + mono attribution.
+//   0 — beat 1 reveals (two-line display-size headline + copper rule).
+//   1 — beat 2 reveals (italic copper "Next:" preview).
 //
 // Layout: full-bleed bridge hero photo with three layered gradients
 // (bottom-left vignette, top-left ellipse, top-edge gloom) overlaying
@@ -101,27 +102,46 @@ export function H3BridgeToI() {
           position: "absolute",
           left: 48,
           bottom: 110,
-          maxWidth: 760,
+          maxWidth: 1120,
           display: "flex",
           flexDirection: "column",
           gap: 24,
           zIndex: 20,
         }}
       >
-        <Reveal on={showBeat1} data-testid="h3-beat1">
-          <p
-            style={{
-              fontFamily: "var(--display)",
-              fontSize: 56,
-              color: "var(--neutral-50)",
-              margin: 0,
-              lineHeight: 1.05,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            {highlight(C.beat1.text, [...C.beat1.kw])}
-          </p>
-        </Reveal>
+        <div
+          data-testid="h3-beat1"
+          style={{ display: "flex", flexDirection: "column", gap: 10 }}
+        >
+          <Reveal on={showBeat1} delay={0} data-testid="h3-beat1-lineA">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 44,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineA.text, C.beat1.lineA.kw)}
+            </p>
+          </Reveal>
+          <Reveal on={showBeat1} delay={250} data-testid="h3-beat1-lineB">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 44,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineB.text, C.beat1.lineB.kw)}
+            </p>
+          </Reveal>
+        </div>
 
         <CopperRule on={showBeat1} width="30%" delay={400} />
 
@@ -130,28 +150,13 @@ export function H3BridgeToI() {
             style={{
               fontFamily: "var(--display)",
               fontStyle: "italic",
-              fontSize: 40,
+              fontSize: 32,
               color: "var(--copper-200)",
               margin: 0,
               lineHeight: 1.1,
             }}
           >
-            {highlight(C.beat2.text, [...C.beat2.kw])}
-          </p>
-        </Reveal>
-
-        <Reveal on={showBeat2} delay={300} data-testid="h3-attribution">
-          <p
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 10,
-              color: "var(--copper-400)",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              margin: 0,
-            }}
-          >
-            {C.attribution}
+            {highlight(C.beat2.text, C.beat2.kw)}
           </p>
         </Reveal>
       </div>

@@ -127,7 +127,7 @@ export function G3ClaudeCapabilities() {
               <div className="g3-card">
                 <AnimatedGlyph kind={card.glyph as any} size={48} />
                 <div className="g3-card-name">{card.name}</div>
-                <div className="g3-card-desc">{card.desc}</div>
+                <div className="g3-card-desc">{highlight(card.desc, [...card.descKw])}</div>
                 <div className="g3-card-actions">
                   <button
                     className="g3-card-btn"

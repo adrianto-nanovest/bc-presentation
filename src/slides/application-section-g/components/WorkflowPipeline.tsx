@@ -31,6 +31,9 @@ export interface StageDef {
 
 interface WorkflowPipelineProps {
   stages: readonly StageDef[];
+  // Delay (ms) before the pulse loop begins — lets the card stagger finish
+  // before the flow particle starts traversing.
+  startDelay?: number;
 }
 
 const STAGE_COUNT = 7;
@@ -39,8 +42,9 @@ const PAUSE_MS = 2200; // pause at end before re-spawn
 // Total cycle = 7 * 1400 + 2200 = 12000ms → matches CSS keyframe duration.
 const CYCLE_MS = STAGE_COUNT * STAGE_DURATION_MS + PAUSE_MS;
 
-export function WorkflowPipeline({ stages }: WorkflowPipelineProps) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+export function WorkflowPipeline({ stages, startDelay = 0 }: WorkflowPipelineProps) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [particleRunning, setParticleRunning] = useState(startDelay === 0);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,13 +74,18 @@ export function WorkflowPipeline({ stages }: WorkflowPipelineProps) {
       );
     };
 
-    scheduleCycle();
+    const kickoff = setTimeout(() => {
+      if (cancelled) return;
+      setParticleRunning(true);
+      scheduleCycle();
+    }, startDelay);
+    timeouts.push(kickoff);
 
     return () => {
       cancelled = true;
       timeouts.forEach(clearTimeout);
     };
-  }, []);
+  }, [startDelay]);
 
   return (
     <div
@@ -143,7 +152,10 @@ export function WorkflowPipeline({ stages }: WorkflowPipelineProps) {
             borderRadius: "50%",
             background: "var(--copper-200)",
             boxShadow: "0 0 6px var(--copper-200)",
-            animation: `g9-flow-particle ${CYCLE_MS}ms linear infinite`,
+            animation: particleRunning
+              ? `g9-flow-particle ${CYCLE_MS}ms linear infinite`
+              : "none",
+            opacity: particleRunning ? undefined : 0,
             willChange: "left, opacity",
           }}
         />

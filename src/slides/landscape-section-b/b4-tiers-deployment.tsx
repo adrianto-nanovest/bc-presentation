@@ -59,10 +59,16 @@ export function B4ModelsByCategory() {
   const showFooter = stepIndex >= 1;
 
   const [hoveredId, setHoveredId] = useState<B4CategoryId | null>(null);
+  const [pinnedId, setPinnedId] = useState<B4CategoryId | null>(null);
 
-  // Hover is the only driver of the right pane on step 0. Step 1 ignores it.
+  // `activeId` drives the card *hover* visual ONLY — it always reflects the
+  // raw `hoveredId`. The card's `pinned` visual comes from the separate
+  // `pinnedId` prop. This split means that while card A is pinned, hovering
+  // card B still highlights B (A keeps its pin styling).
+  // `effectiveId = pinned ?? hovered` drives the right pane content.
+  const effectiveId: B4CategoryId | null = pinnedId ?? hoveredId;
   const activeId: B4CategoryId | null = hoveredId;
-  const showDetailBox = !isSummary && activeId !== null;
+  const showDetailBox = !isSummary && effectiveId !== null;
 
   return (
     <div
@@ -107,8 +113,13 @@ export function B4ModelsByCategory() {
       </div>
 
       {/* ── LEFT COLUMN · Six category cards ──────────────────────────── */}
+      {/* `data-no-advance` is applied ONLY on step 0, where card clicks
+          mean "toggle pin". On step 1 it's removed so clicking a card
+          advances the deck normally (the qualitative summary is static,
+          no pin needed). */}
       <div
         data-testid="b4-left-column"
+        {...(stepIndex === 0 ? { "data-no-advance": "" } : {})}
         style={{
           position: "absolute",
           left: H,
@@ -128,7 +139,13 @@ export function B4ModelsByCategory() {
         <B4CategoryList
           categories={C.categories}
           activeId={activeId}
+          pinnedId={isSummary ? null : pinnedId}
           onHover={setHoveredId}
+          onClick={
+            isSummary
+              ? undefined
+              : (id) => setPinnedId((cur) => (cur === id ? null : id))
+          }
           showCards={showCards}
         />
       </div>
@@ -200,7 +217,7 @@ export function B4ModelsByCategory() {
                   overflow: "hidden",
                 }}
               >
-                <B4ModelDetailPanel key={activeId!} categoryId={activeId!} />
+                <B4ModelDetailPanel key={effectiveId!} categoryId={effectiveId!} />
               </div>
             ) : null}
           </PaneLayer>

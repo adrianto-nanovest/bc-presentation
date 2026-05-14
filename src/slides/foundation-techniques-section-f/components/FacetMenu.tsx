@@ -51,6 +51,19 @@ export interface FacetMenuProps {
   footer?: string;
   footerKw?: readonly string[];
   showFooter?: boolean;
+  /**
+   * Optional click-to-pin support. When `onPin` is provided, each card
+   * becomes clickable and toggles its id as the "pinned" facet (which the
+   * parent slide normally combines with `activeFacet` via
+   * `effectiveFacet = pinnedFacet ?? activeFacet`). The matching card paints
+   * a pin badge at its top-right plus a stronger border treatment.
+   *
+   * To avoid the deck's click-to-advance fighting with the pin click, the
+   * inner facet-list container gets `data-no-advance=""` whenever `onPin`
+   * is wired up — see `Slide.tsx:45-51` for the opt-out check.
+   */
+  pinnedFacet?: string | null;
+  onPin?: (id: string | null) => void;
 }
 
 export function FacetMenu({
@@ -63,6 +76,8 @@ export function FacetMenu({
   footer,
   footerKw,
   showFooter = false,
+  pinnedFacet = null,
+  onPin,
 }: FacetMenuProps) {
   return (
     <div
@@ -98,6 +113,7 @@ export function FacetMenu({
 
       <div
         data-testid="f-facet-list"
+        {...(onPin ? { "data-no-advance": "" } : {})}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -107,10 +123,23 @@ export function FacetMenu({
       >
         {items.map((item, i) => {
           const isHover = activeFacet === item.id;
+          const isPinned = pinnedFacet === item.id;
           const itemOn =
             revealUntilIndex !== undefined
               ? i <= revealUntilIndex
               : showCards;
+          // Pin wins over hover for the visual treatment so a pinned card
+          // stays clearly differentiated even while another card is hovered.
+          const borderColor = isPinned
+            ? "var(--copper-200)"
+            : isHover
+              ? "var(--copper-200)"
+              : "var(--copper-800)";
+          const background = isPinned
+            ? "rgba(184,110,61,0.10)"
+            : isHover
+              ? "rgba(184,110,61,0.06)"
+              : "transparent";
           return (
             <Reveal
               key={item.id}
@@ -118,27 +147,52 @@ export function FacetMenu({
               delay={120 + i * 90}
               data-testid={`facet-item-${item.id}`}
               data-active={isHover ? "true" : "false"}
+              data-pinned={isPinned ? "true" : "false"}
             >
               <div
+                className={isPinned ? "pinned" : undefined}
                 onMouseEnter={() => onHover(item.id)}
                 onMouseLeave={() => onHover(null)}
+                onClick={
+                  onPin
+                    ? () => onPin(isPinned ? null : item.id)
+                    : undefined
+                }
                 style={{
+                  position: "relative",
                   display: "flex",
                   alignItems: "flex-start",
                   gap: 12,
                   padding: "10px 12px",
                   border: "1px solid",
-                  borderColor: isHover
-                    ? "var(--copper-200)"
-                    : "var(--copper-800)",
-                  background: isHover
-                    ? "rgba(184,110,61,0.06)"
-                    : "transparent",
+                  borderColor,
+                  background,
+                  boxShadow: isPinned
+                    ? "inset 0 0 0 1px rgba(217,158,108,0.3)"
+                    : "none",
                   transition:
-                    "border-color 0.2s var(--ease), background 0.2s var(--ease)",
+                    "border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease)",
                   cursor: "pointer",
                 }}
               >
+                {isPinned ? (
+                  <div
+                    aria-label="pinned"
+                    data-testid={`facet-pin-${item.id}`}
+                    style={{
+                      position: "absolute",
+                      top: 6,
+                      right: 8,
+                      color: "var(--copper-200)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <LucideIcon name="Pin" size={11} color="currentColor" />
+                  </div>
+                ) : null}
                 <div style={{ marginTop: 2 }}>
                   <LucideIcon name={item.icon} size={20} />
                 </div>

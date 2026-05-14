@@ -31,12 +31,22 @@ export function D2TheConvergence() {
   // D2ListCards (which write it) AND the right column. On step 0 it drives
   // D2DetailPanel; on step 1+ it heats the matching D2Network arrow/satellite.
   const [hovered, setHovered] = useState<D2HoverKey>(null);
+  // Click-pinned key — only meaningful on step 0, where the right side is
+  // a detail panel that can stay "stuck". On step 1+ the right side becomes
+  // the network illustration (different mode) and pinning is disabled so
+  // clicks bubble up and advance the deck normally.
+  const [pinnedKey, setPinnedKey] = useState<D2HoverKey>(null);
 
   const showNetwork = stepIndex >= 1;
   const showSummary = stepIndex >= 2;
+  const pinEnabled = !showNetwork; // step 0 only
 
-  const hoverData = hovered
-    ? C.cards.find((c) => c.key === hovered) ?? null
+  // Step 0: pin overrides hover (so the panel sticks even when the cursor
+  // moves away). Step 1+: pin is ignored; only live hover heats arrows.
+  const effectiveKey: D2HoverKey = pinEnabled ? pinnedKey ?? hovered : hovered;
+
+  const hoverData = effectiveKey
+    ? C.cards.find((c) => c.key === effectiveKey) ?? null
     : null;
 
   return (
@@ -61,8 +71,13 @@ export function D2TheConvergence() {
           gap: 28,
         }}
       >
-        {/* LEFT — vertical card list (always visible, full height) */}
+        {/* LEFT — vertical card list (always visible, full height).
+            `data-no-advance` is applied ONLY on step 0 so card clicks pin
+            the detail panel. On step 1+ the attribute is removed and clicks
+            bubble up to advance the deck normally (the network is static —
+            no pin needed). */}
         <div
+          {...(pinEnabled ? { "data-no-advance": "" } : {})}
           style={{
             flex: "0 0 360px",
             display: "flex",
@@ -92,6 +107,15 @@ export function D2TheConvergence() {
               hovered={hovered}
               onHover={setHovered}
               delay={i * 90}
+              pinned={pinEnabled && pinnedKey === card.key}
+              onClick={
+                pinEnabled
+                  ? () =>
+                      setPinnedKey((cur) =>
+                        cur === card.key ? null : card.key,
+                      )
+                  : undefined
+              }
             />
           ))}
         </div>

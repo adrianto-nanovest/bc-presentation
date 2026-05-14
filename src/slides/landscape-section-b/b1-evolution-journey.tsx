@@ -30,6 +30,7 @@ import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight as KW } from "@/components/highlight";
 import { Reveal } from "@/slides/foundation-core-section-e/components/Reveal";
+import { LucideIcon } from "@/slides/foundation-core-section-e/components/LucideIcon";
 import { EraNode } from "./components/EraNode";
 import { TimelineRail } from "./components/TimelineRail";
 import { WeAreHereMarker } from "./components/WeAreHereMarker";
@@ -70,6 +71,10 @@ export function B1EvolutionJourney() {
   // Hover state — era key (or null). Drives both per-era highlight ring AND
   // the bottom popover slot.
   const [hoveredKey, setHoveredKey] = useState<B1EraKey | null>(null);
+  // Pin state — click an era to lock the popover open. Clicking the same era
+  // again toggles it off. activeKey = pinnedKey ?? hoveredKey.
+  const [pinnedKey, setPinnedKey] = useState<B1EraKey | null>(null);
+  const activeKey: B1EraKey | null = pinnedKey ?? hoveredKey;
 
   // Reveal gates.
   // - eraOn[i]: era i has finished loading (true after mount stagger fires).
@@ -96,9 +101,9 @@ export function B1EvolutionJourney() {
   const railProgress = solidSegments / 4;
   const railSolidLength = NODE_SPACING * 4; // node-1 → node-5
 
-  // Resolve hovered era data for the popover.
-  const hoveredEra = hoveredKey
-    ? C.eras.find((e) => e.key === hoveredKey) ?? null
+  // Resolve active era data for the popover (pinned takes precedence over hover).
+  const hoveredEra = activeKey
+    ? C.eras.find((e) => e.key === activeKey) ?? null
     : null;
 
   return (
@@ -156,7 +161,10 @@ export function B1EvolutionJourney() {
           dashedOn={dashedTailOn}
         />
 
-        {/* Era markers — circle + connector + label box. Position alternates. */}
+        {/* Era markers — circle + connector + label box. Position alternates.
+            Each EraGroup carries `data-no-advance` on its circle + label-box
+            wrappers so clicks on those targets pin/unpin instead of advancing
+            the deck. Clicks elsewhere on the stage advance normally. */}
         {C.eras.map((era, i) => {
           const cx = NODE_CENTERS[i];
           const isAgi = era.dimmed === true;
@@ -164,10 +172,18 @@ export function B1EvolutionJourney() {
           const bright = eraBright[i] ?? false;
           // Pre-reveal dim OR AGI dim (until step 5) OR AGI always-soft fill.
           const dimmed = !bright;
-          const highlighted = hoveredKey === era.key && bright;
+          // Highlight visual triggers from EITHER hover OR pin independently —
+          // so hovering a different era while one is pinned still highlights
+          // the hovered era (the pinned one remains highlighted via pinnedKey).
+          const highlighted =
+            (hoveredKey === era.key || pinnedKey === era.key) && bright;
+          const pinned = pinnedKey === era.key && bright;
           // Stagger delay for the mount-driven load. 80ms per node.
           const loadDelay = 200 + i * 80;
           const above = era.position === "above";
+          const togglePin = bright
+            ? () => setPinnedKey((cur) => (cur === era.key ? null : era.key))
+            : undefined;
 
           return (
             <EraGroup
@@ -196,6 +212,7 @@ export function B1EvolutionJourney() {
                           setHoveredKey((prev) => (prev === era.key ? null : prev))
                       : undefined
                   }
+                  onClick={togglePin}
                 />
               }
               labelBox={
@@ -205,6 +222,7 @@ export function B1EvolutionJourney() {
                   dimmed={dimmed}
                   isAgi={isAgi}
                   highlighted={highlighted}
+                  pinned={pinned}
                   onMouseEnter={bright ? () => setHoveredKey(era.key) : undefined}
                   onMouseLeave={
                     bright
@@ -212,6 +230,7 @@ export function B1EvolutionJourney() {
                           setHoveredKey((prev) => (prev === era.key ? null : prev))
                       : undefined
                   }
+                  onClick={togglePin}
                 />
               }
             />
@@ -350,8 +369,10 @@ function EraGroup({
 
   return (
     <>
-      {/* Circle — centered on (centerX, railY) */}
+      {/* Circle — centered on (centerX, railY). Scoped `data-no-advance` so
+          clicks pin instead of advancing the deck. */}
       <div
+        data-no-advance=""
         style={{
           position: "absolute",
           left: centerX,
@@ -382,8 +403,10 @@ function EraGroup({
         }}
       />
 
-      {/* Label box — alternating above/below */}
+      {/* Label box — alternating above/below. Scoped `data-no-advance` so
+          clicks pin instead of advancing the deck. */}
       <div
+        data-no-advance=""
         style={{
           position: "absolute",
           left: centerX,
@@ -414,8 +437,10 @@ interface LabelBoxProps {
   dimmed: boolean;
   isAgi: boolean;
   highlighted: boolean;
+  pinned?: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onClick?: () => void;
 }
 
 function LabelBox({
@@ -424,26 +449,33 @@ function LabelBox({
   dimmed,
   isAgi,
   highlighted,
+  pinned = false,
   onMouseEnter,
   onMouseLeave,
+  onClick,
 }: LabelBoxProps) {
   const baseBorder = "var(--copper-700)";
-  const border = highlighted ? "var(--copper-200)" : baseBorder;
+  const border = pinned || highlighted ? "var(--copper-200)" : baseBorder;
   // AGI label box stays slightly dimmer than other revealed boxes even at
   // full brightness — honest "not yet" framing.
   const opacity = dimmed ? 0.22 : isAgi ? 0.85 : 1;
-  const shadow = highlighted
-    ? "0 0 0 1px var(--copper-200), 0 0 18px -6px var(--copper-400)"
-    : "none";
+  const shadow = pinned
+    ? "0 0 0 1px var(--copper-200), inset 0 0 0 1px var(--copper-400), 0 0 18px -6px var(--copper-400)"
+    : highlighted
+      ? "0 0 0 1px var(--copper-200), 0 0 18px -6px var(--copper-400)"
+      : "none";
 
   return (
     <div
       data-testid="b1-label-box"
       data-dimmed={dimmed ? "1" : "0"}
       data-highlighted={highlighted ? "1" : "0"}
+      data-pinned={pinned ? "1" : "0"}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onClick={onClick}
       style={{
+        position: "relative",
         border: `1px solid ${border}`,
         background: "rgba(10,10,10,0.7)",
         padding: "8px 12px",
@@ -454,9 +486,26 @@ function LabelBox({
         display: "flex",
         flexDirection: "column",
         gap: 3,
-        cursor: onMouseEnter ? "default" : undefined,
+        cursor: onClick ? "pointer" : onMouseEnter ? "default" : undefined,
       }}
     >
+      {pinned && (
+        <div
+          aria-label="pinned"
+          style={{
+            position: "absolute",
+            top: 4,
+            right: 6,
+            color: "var(--copper-200)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+          }}
+        >
+          <LucideIcon name="Pin" size={11} color="currentColor" />
+        </div>
+      )}
       <span
         style={{
           fontFamily: "var(--mono)",

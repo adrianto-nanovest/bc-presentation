@@ -16,10 +16,10 @@ export function G4BuiltinTools() {
         .g4-quadrant {
           border: 1px solid var(--copper-700);
           background: rgba(10, 10, 10, 0.5);
-          padding: 12px 18px;
+          padding: 10px 16px 16px;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
           overflow: hidden;
           height: 100%;
           box-sizing: border-box;
@@ -32,26 +32,25 @@ export function G4BuiltinTools() {
         }
         .g4-quadrant-header {
           font-family: var(--mono);
-          font-size: 12px;
+          font-size: 11px;
           letter-spacing: 0.20em;
           color: var(--copper-300);
           text-transform: uppercase;
-          padding-bottom: 6px;
+          padding-bottom: 4px;
           border-bottom: 1px solid var(--copper-800);
-          margin-bottom: 4px;
+          margin-bottom: 2px;
         }
         .g4-quadrant-items {
           display: flex;
           flex-direction: column;
-          gap: 2px;
-          flex: 1;
+          gap: 0;
         }
         .g4-item {
           display: grid;
-          grid-template-columns: 28px 132px 1fr;
+          grid-template-columns: 22px 132px 1fr;
           gap: 10px;
           align-items: center;
-          padding: 2px 6px;
+          padding: 1px 6px;
           transition: background 0.18s var(--ease), color 0.18s var(--ease);
           cursor: default;
         }
@@ -62,12 +61,12 @@ export function G4BuiltinTools() {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 24px;
-          height: 24px;
+          width: 18px;
+          height: 18px;
         }
         .g4-item-name {
           font-family: var(--mono);
-          font-size: 11px;
+          font-size: 10.5px;
           color: var(--copper-100);
           letter-spacing: 0.05em;
         }
@@ -77,9 +76,9 @@ export function G4BuiltinTools() {
         .g4-item-essence {
           font-family: var(--serif);
           font-style: italic;
-          font-size: 12px;
+          font-size: 11px;
           color: var(--neutral-300);
-          line-height: 1.35;
+          line-height: 1.3;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -97,14 +96,15 @@ export function G4BuiltinTools() {
         data-no-advance
         style={{
           position: "absolute",
-          left: 48,
-          right: 48,
-          top: 156,
-          bottom: 140,
+          left: 32,
+          right: 32,
+          top: 148,
+          bottom: 158,
           display: "grid",
           gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
-          gridTemplateRows: "minmax(0, 1fr) minmax(0, 1fr)",
-          gap: 24,
+          gridTemplateRows: "auto auto",
+          gap: 14,
+          alignContent: "start",
         }}
       >
         {/* Q1 — Agents (step 0) */}
@@ -185,7 +185,16 @@ export function G4BuiltinTools() {
   );
 }
 
-function ItemRow({ item }: { item: { name: string; essence: string; glyph: string | null } }) {
+function ItemRow({
+  item,
+}: {
+  item: {
+    name: string;
+    essence: string;
+    essenceKw?: readonly string[];
+    glyph: string | null;
+  };
+}) {
   const isLucide = item.glyph?.startsWith("lucide:");
   return (
     <div className="g4-item">
@@ -193,16 +202,18 @@ function ItemRow({ item }: { item: { name: string; essence: string; glyph: strin
         {isLucide ? (
           <LucideIcon
             name={item.glyph!.slice(7)}
-            size={20}
+            size={14}
             color="var(--copper-300)"
             strokeWidth={1.5}
           />
         ) : (
-          <AnimatedGlyph kind={(item.glyph ?? "dash-pulse") as any} size={22} tight />
+          <AnimatedGlyph kind={(item.glyph ?? "dash-pulse") as any} size={16} tight />
         )}
       </div>
       <span className="g4-item-name">{item.name}</span>
-      <span className="g4-item-essence">{item.essence}</span>
+      <span className="g4-item-essence">
+        {highlight(item.essence, item.essenceKw ?? [])}
+      </span>
     </div>
   );
 }

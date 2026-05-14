@@ -22,6 +22,11 @@ export interface D2ListCardProps {
   onHover: D2HoverSetter;
   /** Stagger reveal delay (ms). */
   delay?: number;
+  /** Whether this card is currently click-pinned (step 0 only). */
+  pinned?: boolean;
+  /** Click handler — when provided, clicking toggles pin. When omitted,
+   *  the click bubbles to the deck so it advances normally. */
+  onClick?: () => void;
 }
 
 // Design source uses lowercase icon names ("workflow", "bot"...). Our
@@ -41,24 +46,34 @@ export function D2ListCard({
   hovered,
   onHover,
   delay = 0,
+  pinned = false,
+  onClick,
 }: D2ListCardProps) {
   const isHover = hovered === data.key;
   const accent = `var(--${data.copper})`;
+  // Pinned reads as a stronger "hover-locked" state — brighter border,
+  // slight inset glow, and a pin glyph in the top-right corner.
+  const isActive = isHover || pinned;
 
   const cardStyle: CSSProperties = {
+    position: "relative",
     flex: 1,
     minHeight: 0,
     display: "flex",
     alignItems: "center",
     gap: 14,
     padding: "10px 14px",
-    border: `1px solid ${isHover ? "var(--copper-200)" : accent}`,
-    background: isHover ? "rgba(184,110,61,0.10)" : "rgba(10,10,10,0.6)",
-    boxShadow: isHover
-      ? `0 0 0 1px ${accent} inset, 0 0 24px -10px ${accent}`
-      : "none",
+    border: `1px solid ${
+      pinned ? "var(--copper-200)" : isHover ? "var(--copper-200)" : accent
+    }`,
+    background: isActive ? "rgba(184,110,61,0.10)" : "rgba(10,10,10,0.6)",
+    boxShadow: pinned
+      ? `0 0 0 1px var(--copper-200) inset, 0 0 28px -8px ${accent}`
+      : isHover
+        ? `0 0 0 1px ${accent} inset, 0 0 24px -10px ${accent}`
+        : "none",
     transition: "all 0.2s var(--ease)",
-    cursor: "default",
+    cursor: onClick ? "pointer" : "default",
     animation: `fadeReveal 0.5s var(--ease) ${delay}ms both`,
   };
 
@@ -67,12 +82,31 @@ export function D2ListCard({
       data-testid="d2-list-card"
       data-key={data.key}
       data-hovered={isHover ? "true" : "false"}
+      data-pinned={pinned ? "true" : "false"}
       onMouseEnter={() => onHover(data.key)}
       onMouseLeave={() =>
         onHover((h) => (h === data.key ? null : h))
       }
+      onClick={onClick}
       style={cardStyle}
     >
+      {pinned && (
+        <div
+          aria-label="pinned"
+          style={{
+            position: "absolute",
+            top: 6,
+            right: 8,
+            color: "var(--copper-200)",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+          }}
+        >
+          <LucideIcon name="Pin" size={11} color="currentColor" />
+        </div>
+      )}
       <div
         style={{
           flex: "0 0 28px",

@@ -34,6 +34,8 @@ export function E8ContextTheWall() {
   const showFooter = stepIndex >= 1;
 
   const [activeKind, setActiveKind] = useState<PitfallKind | null>(null);
+  const [pinnedKind, setPinnedKind] = useState<PitfallKind | null>(null);
+  const effectiveKind = pinnedKind ?? activeKind;
 
   return (
     <>
@@ -78,6 +80,7 @@ export function E8ContextTheWall() {
 
         <div
           data-testid="e8-pitfall-list"
+          data-no-advance=""
           style={{
             display: "flex",
             flexDirection: "column",
@@ -87,7 +90,12 @@ export function E8ContextTheWall() {
         >
           {C.pitfalls.map((p, i) => {
             const kind = p.id as PitfallKind;
+            // Hover visual reads RAW `activeKind` (not effectiveKind) so
+            // hovering a card while another is pinned still highlights the
+            // hovered card; the pinned card keeps its pin styling from
+            // `isPinned`.
             const isHover = activeKind === kind;
+            const isPinned = pinnedKind === kind;
             return (
               <Reveal
                 key={p.id}
@@ -95,27 +103,50 @@ export function E8ContextTheWall() {
                 delay={120 + i * 90}
                 data-testid={`pitfall-item-${p.id}`}
                 data-active={isHover ? "true" : "false"}
+                data-pinned={isPinned ? "true" : "false"}
               >
                 <div
                   onMouseEnter={() => setActiveKind(kind)}
                   onMouseLeave={() => setActiveKind(null)}
+                  onClick={() =>
+                    setPinnedKind((cur) => (cur === kind ? null : kind))
+                  }
                   style={{
+                    position: "relative",
                     display: "flex",
                     alignItems: "flex-start",
                     gap: 12,
                     padding: "10px 12px",
                     border: "1px solid",
-                    borderColor: isHover
-                      ? "var(--copper-200)"
-                      : "var(--copper-800)",
+                    borderColor:
+                      isPinned || isHover
+                        ? "var(--copper-200)"
+                        : "var(--copper-800)",
                     background: isHover
                       ? "rgba(184,110,61,0.06)"
                       : "transparent",
+                    boxShadow: isPinned
+                      ? "inset 0 0 0 1px rgba(217,158,108,0.3)"
+                      : "none",
                     transition:
-                      "border-color 0.2s var(--ease), background 0.2s var(--ease)",
+                      "border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease)",
                     cursor: "pointer",
                   }}
                 >
+                  {isPinned && (
+                    <div
+                      aria-label="pinned"
+                      style={{
+                        position: "absolute",
+                        top: 6,
+                        right: 8,
+                        color: "var(--copper-200)",
+                        display: "flex",
+                      }}
+                    >
+                      <LucideIcon name="Pin" size={11} color="currentColor" />
+                    </div>
+                  )}
                   <div style={{ marginTop: 2 }}>
                     <LucideIcon name={p.icon} size={20} />
                   </div>
@@ -180,7 +211,7 @@ export function E8ContextTheWall() {
           flexDirection: "column",
         }}
       >
-        <PitfallCanvas activeKind={activeKind} />
+        <PitfallCanvas activeKind={effectiveKind} />
       </div>
     </>
   );

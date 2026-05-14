@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { SlideDef } from "../../deck/types";
 import { useDeck } from "../../deck/DeckContext";
 import { FigLabel } from "../../components/FigLabel";
@@ -173,7 +173,7 @@ export function G5Google() {
           <Reveal on delay={120} className="g5-hero">
             <Card
               name={C.hero.name}
-              desc={C.hero.desc}
+              desc={highlight(C.hero.desc, [...C.hero.descKw])}
               videoFile={C.hero.videoFile}
               glyph={C.hero.glyph}
               glyphSize={64}
@@ -189,7 +189,7 @@ export function G5Google() {
               <Reveal key={card.id} on delay={200 + i * 80} className={gridClass}>
                 <Card
                   name={card.name}
-                  desc={card.desc}
+                  desc={highlight(card.desc, [...card.descKw])}
                   videoFile={card.videoFile}
                   glyph={card.glyph}
                   glyphSize={28}
@@ -222,7 +222,7 @@ export function G5Google() {
 
 interface CardProps {
   name: string;
-  desc: string;
+  desc: ReactNode;
   videoFile: string;
   glyph: string;
   glyphSize: number;

@@ -64,7 +64,10 @@ export function F5McpTheAdapter() {
   const showFooter = stepIndex >= 1;
 
   const [activeFacet, setActiveFacet] = useState<string | null>(null);
-  const effectiveFacet = hoverEnabled ? activeFacet : null;
+  const [pinnedFacet, setPinnedFacet] = useState<string | null>(null);
+  // Pin wins over hover so a pinned facet remains the right-pane illustration
+  // even when the user mouses away (or onto another card pre-click).
+  const effectiveFacet = hoverEnabled ? (pinnedFacet ?? activeFacet) : null;
 
   const { top: paneTop, bottom: paneBottom } = useFacetListBounds();
 
@@ -119,8 +122,10 @@ export function F5McpTheAdapter() {
           essenceKw: f.essenceKw,
           icon: f.icon,
         }))}
-        activeFacet={effectiveFacet}
+        activeFacet={hoverEnabled ? activeFacet : null}
         onHover={hoverEnabled ? setActiveFacet : () => {}}
+        pinnedFacet={pinnedFacet}
+        onPin={setPinnedFacet}
         showCards={showCards}
         header={C.header}
         footer={C.footer}

@@ -27,6 +27,7 @@ export interface EraNodeProps {
   delay?: number;
   onMouseEnter?: MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
 const NODE_DIAMETER = 68;
@@ -41,6 +42,7 @@ export function EraNode({
   delay = 0,
   onMouseEnter,
   onMouseLeave,
+  onClick,
 }: EraNodeProps) {
   // Base stroke. Highlight overrides everything when on.
   const strokeColor = highlighted
@@ -84,7 +86,7 @@ export function EraNode({
       "opacity 500ms var(--ease), transform 500ms var(--ease), box-shadow 320ms var(--ease), border-color 320ms var(--ease), color 320ms var(--ease)",
     transitionDelay: on ? `${delay}ms` : "0ms",
     willChange: "opacity, transform",
-    cursor: onMouseEnter ? "default" : undefined,
+    cursor: onClick ? "pointer" : onMouseEnter ? "default" : undefined,
   };
 
   return (
@@ -97,6 +99,7 @@ export function EraNode({
       style={containerStyle}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onClick={onClick}
     >
       {glyph}
     </div>

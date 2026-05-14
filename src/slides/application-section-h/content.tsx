@@ -12,8 +12,6 @@ export const h1Content = {
   figLabel: "THE TRAP",
   headline: "What untrained use looks like.",
   headlineKw: ["untrained use"] as const,
-  subhead:
-    "Eight ways teams burn time, money, and trust. Same tool. Different operator.",
   closingLine: "Same tool. Same access. Different operator.",
   closingLineKw: ["Different operator"] as const,
   cards: [
@@ -109,7 +107,7 @@ export const h2Content = {
     },
     {
       num: 3,
-      name: "Build skills, not one-off prompts",
+      name: "Build skills, not prompts",
       move: "Reusable Claude Skills, MCP, Plugins",
       resolves: ["D", "H"] as const,
       glyphKind: "skill-block",
@@ -169,11 +167,13 @@ export const h2Content = {
 
 export const h3Content = {
   heroSrc: "/heroes/h3-bridge.jpg",
-  beat1: { text: "The competition is not AI.", kw: ["not AI"] as const },
-  beat2: {
-    text: "It's the colleague who learned the discipline first.",
-    kw: ["the discipline"] as const,
+  beat1: {
+    lineA: { text: "The competition is not AI.", kw: ["not AI"] },
+    lineB: {
+      text: "It's someone learning the discipline first.",
+      kw: ["the discipline"],
+    },
   },
-  attribution: "— Section I · Showcase",
+  beat2: { text: "Next: the discipline, in practice.", kw: ["in practice"] },
   figLabel: "BRIDGE · DISCIPLINE",
 } as const;
