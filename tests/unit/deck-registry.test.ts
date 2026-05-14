@@ -16,8 +16,8 @@ describe("deck registry", () => {
     });
   });
 
-  test("hexLadderDevSlide is the last entry so projection-test can target it via the slide-count tail", () => {
-    expect(deckSlides[deckSlides.length - 1]).toBe(hexLadderDevSlide);
+  test("hexLadderDevSlide is excluded from deckSlides so K1 remains the final audience slide", () => {
+    expect(deckSlides).not.toContain(hexLadderDevSlide);
   });
 
   test("every slide carries a valid section tag", () => {

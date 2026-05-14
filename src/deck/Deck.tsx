@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { DeckProvider, useDeck } from "./DeckContext";
 import { useKeyboardNav } from "./useKeyboardNav";
 import { Slide } from "./Slide";
-import { deckSlides } from "./registry";
+import { deckSlides, hexLadderDevSlide } from "./registry";
 
 declare global {
   interface Window {
@@ -41,6 +41,26 @@ function ActiveSlide() {
 }
 
 export function Deck() {
+  // Dev-only escape hatch: ?dev=hexladder renders the color-calibration
+  // swatch standalone for scripts/projection-test.mjs. Never reachable
+  // via NavBar/keyboard.
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("dev") === "hexladder") {
+      return (
+        <Slide
+          index={0}
+          animationMode={hexLadderDevSlide.animationMode}
+          canonicalPose={hexLadderDevSlide.canonicalPose}
+          surface={hexLadderDevSlide.surface ?? "dark"}
+          section={hexLadderDevSlide.section}
+        >
+          {hexLadderDevSlide.render()}
+        </Slide>
+      );
+    }
+  }
+
   return (
     <DeckProvider stepCounts={deckSlides.map((s) => s.steps)}>
       <ActiveSlide />

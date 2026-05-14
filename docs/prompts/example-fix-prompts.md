@@ -251,3 +251,18 @@ For the box content, make it based on this data:
 4. Dec 2025 - Build 3 AI agentic systems for Legal, Product, and Research Team
 5. Mar 2026 - Build 2 nanovest plugins for reusability (product and notebookLM plugin)                                                                                             
 3 months for foundational knowledge, 3 months build and fail, 3 months evaluate+correct mental model, 3 months build with harnesses and discipline
+
+----------------
+
+fix the current messy slide in I3 as per current [Image #3]
+It has a lot of content, 3 illustration + images (in varied aspect ratio) from workflows, and 2 illustration from plugins, and some wall text content from Tools and Workshops.
+I want to fix the structure first, where i think we can refer to F8 implementation (like making website inside the slide itself, containing my portfolio)
+1. Before we go there, we must fix all the illustration well [Image #4] [Image #5] [Image #6] [Image #7] [Image #8]. Overlap, overflowing, no connectors (or connectors not connect properly). I think we can simplify the diagram and make animation better. You can check other illustration built like in F7 card 5, F6 card 4, F2 card 1 & 3, E6 step 2, D2 step 2, D1 step 2.
+2. And for images, we need to find out the best way to display it in screen, for the workflows, how to make them can be reveal in a good way, either stack it, resize some so have same height, crop it, etc.
+3. Then as F8, I think we can have left menu, containing "Workflows", "Plugins", "Connectors", "Workshops", so 4 menu only, and we will not have right section like the current F8, so just left menu and content. We should have the click and hover interaction following also
+4. In connectors, we can have 9 MCPs: sentry, atlassian, datadog, google-workspace, n8n, figma, and the rest mention in this slide. Those unmentioned one, can be labeled as "unused" since official one already have it, therefore only 3 still in use. in F8, it has connectors tab, so we can have similar ones (but instead of "connected", we have "IN USE" and "NOT USED"
+5. Workshops we can have it like the "memory tab" just show in cards for the details with bullet points
+6. for workflows, we can use "agents" tab but it should have top tab of the workflows selection, and below it is the illustration which have toggle to change it to the "real output". so basically change the layout completely. and plugins will have the same manner, but without the switch of "real output"
+
+Create Tasks for all items to do, delegate to your general-purpose agents to implement (do it sequencially if there are tight dependencies, otherwise do it in parallel)
+Dispatch your Explore agents (Sonnet model) for better codebase / other slides understanding
