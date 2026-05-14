@@ -3,34 +3,158 @@
 // Editing copy here does not require touching slide components.
 
 export const i1Content = {
-  headlineParts: ["What you've been watching for the last ", "90 minutes", " — ", "facilitated with AI", "."],
-  subLine: "And here's the process that made it possible.",
-  subLineKeywords: ["process"] as const,
-  tagline: "Built with harnesses = production-grade result.",
-  taglineKeywords: ["harnesses", "production-grade result"] as const,
-  stages: [
-    { num: 1, label: "Research", sub: "14 parallel agents → topic deep-dives", keywords: ["parallel agents"] as const },
-    { num: 2, label: "Per-slide brainstorm", sub: "Structure → beats → content", keywords: ["beats"] as const },
-    { num: 3, label: "Design system", sub: "Typography · color · motion · components", keywords: ["Typography · color · motion · components"] as const },
-    { num: 4, label: "Plugins + Skills", sub: "frontend-slides · brainstorming · writing-plans", keywords: ["frontend-slides", "brainstorming", "writing-plans"] as const },
-    { num: 5, label: "MCP", sub: "NotebookLM · gemini-image-gen", keywords: ["NotebookLM", "gemini-image-gen"] as const },
-    { num: 6, label: "Deck generation", sub: "Scripted · reviewed · iterated", keywords: ["reviewed"] as const },
+  // Step 1 — two-line stagger (C1 pattern)
+  line1: { text: "What you've been watching so far.", keywords: ["watching"] as const },
+  line2: { text: "It was built entirely by AI.", keywords: ["built", "AI"] as const },
+  // Step 2 — mid-slide reveal that later morphs to section title in step 3
+  midLine: {
+    text: "And here's the process that made it possible.",
+    keywords: ["process"] as const,
+  },
+  // Step 4 — footer caption
+  footer: "Built with harnesses · production-grade result.",
+  footerKw: ["harnesses", "production-grade"] as const,
+  // Step 3 — four process cards (G9-style anatomy, G10-style hover)
+  cards: [
+    {
+      num: 1,
+      title: "Research & Preparation",
+      subtitle: "context · web · ground truth",
+      icon: "BookOpen",
+      todo: [
+        { text: "Pull context — BCE Plan, PIC chats, prior workshops (memory + Drive MCP)", keywords: ["Pull context", "memory", "MCP"] as const },
+        { text: "Web research — ideation, deep-dives, design refs (WebSearch + WebFetch Claude Tools)", keywords: ["Web research", "WebSearch", "WebFetch"] as const },
+        { text: "Ground truth — Claude · Gemini · OpenAI docs, trusted YT (NotebookLM RAG plugin)", keywords: ["Ground truth", "NotebookLM", "plugin"] as const },
+        { text: "All via parallel sub-agents", keywords: ["parallel sub-agents"] as const },
+      ],
+      results: [
+        { text: "30+ research markdown docs", keywords: ["30+"] as const },
+      ],
+    },
+    {
+      num: 2,
+      title: "Brainstorm & Plan",
+      subtitle: "objective · structure · system",
+      icon: "Brain",
+      todo: [
+        { text: "Deck objective discussion", keywords: ["objective"] as const },
+        { text: "Section outline structure", keywords: ["outline"] as const },
+        { text: "Design meta discussion", keywords: ["Design meta"] as const },
+        { text: "Per-slide content deep-dive", keywords: ["deep-dive"] as const },
+        { text: "Technical specs discussion", keywords: ["Technical specs"] as const },
+        { text: "All via brainstorming + writting-plans skills", keywords: ["skills"] as const },
+      ],
+      results: [
+        { text: "Full deck plan", keywords: ["deck plan"] as const },
+        { text: "Design system specs", keywords: ["Design system"] as const },
+        { text: "Dev project structure", keywords: ["project structure"] as const },
+      ],
+    },
+    {
+      num: 3,
+      title: "Prototype",
+      subtitle: "design system · low-fi mockup",
+      icon: "Layers",
+      todo: [
+        { text: "Build design system — motion · type · color · components", keywords: ["design system"] as const },
+        { text: "Prototype slide layouts on the system", keywords: ["layouts"] as const },
+        { text: "Generate background imagery", keywords: ["background imagery"] as const },
+        { text: "Via Claude Design + gemini-image-gen MCP", keywords: ["Claude Design","gemini-image-gen"] as const },
+      ],
+      results: [
+        { text: "Design system HTML reference", keywords: ["Design system"] as const },
+        { text: "Low-fi MVP deck", keywords: ["MVP deck"] as const },
+      ],
+    },
+    {
+      num: 4,
+      title: "Implementation",
+      subtitle: "agentic dev + human review",
+      icon: "Hammer",
+      todo: [
+        { text: "Development — unit tests, main code (Claude agents)", keywords: ["Development"] as const },
+        { text: "Review — spec compliance, code review (Claude agents)", keywords: ["Review"] as const },
+        { text: "Human-in-the-loop — manual test + feedback", keywords: ["Human-in-the-loop"] as const },
+        { text: "Via Claude Tasks + sub-agent driven dev", keywords: ["Claude Tasks", "sub-agent"] as const },
+      ],
+      results: [
+        { text: "This PRESENTATION SLIDES", keywords: ["PRESENTATION SLIDES"] as const },
+      ],
+    },
   ],
 };
 
 export const i2Content = {
   name: "ADRIANTO TEDJOKUSUMO",
-  role: { text: "Head of TPM @ Nanovest · AI Steering Committee Lead", keywords: ["Nanovest", "AI Steering Committee Lead"] as const },
-  delivery: { text: "13 years tech delivery. Zero formal AI training.", keywords: ["Zero formal AI training"] as const },
-  credentials: { text: "ITB Electrical Eng · Chosun M.S. Computer Vision · 8+ yrs PM (Toppan Ecquaria · Blibli)", keywords: ["Computer Vision"] as const },
+  role: { text: "AI Steering Committee Lead · Head of TPM @ Nanovest", keywords: ["AI Steering Committee", "TPM", "Nanovest"] as const },
+  delivery: { text: "13 years tech delivery. Zero formal AI training.", keywords: ["13 years", "Zero"] as const },
+  education: {
+    icon: "BookOpen",
+    title: "Education",
+    items: ["Electrical Eng. - ITB", "Computer Vision - Chosun Univ."] as const,
+  },
+  experience: {
+    icon: "Hammer",
+    title: "Work Experience",
+    items: ["Project Manager - Blibli", "Technical Manager - Toppan Ecquaria"] as const,
+  },
   timeline: {
+    title: "My Evolution Journey",
     anchors: [
-      { id: "mar2025", label: "Mar 2025", caption: "start", hover: "Started reading papers, daily Claude/ChatGPT use, no goals." },
-      { id: "sep2025", label: "Sep 2025", caption: "first deliverables", hover: "First MCPs + plugins shipped to internal team." },
-      { id: "today", label: "Today", caption: "still beginner", captionKeywords: ["still beginner"] as const, hover: "Active builds, still learning. This deck is one of them." },
-    ],
-    segmentLabel: "6mo foundation + experiment",
-    cvHover: "Master's thesis: image segmentation. Pre-LLM era.",
+      {
+        id: "mar2025",
+        label: "Mar 2025",
+        icon: "BookOpen",
+        bullets: [
+          { text: "Learned via articles + YouTube", keywords: ["Learned"] as const },
+          { text: "Daily Claude + Gemini use", keywords: ["Daily"] as const },
+          { text: "No goals — just experiment", keywords: ["experiment"] as const },
+        ] as const,
+      },
+      {
+        id: "jun2025",
+        label: "June 2025",
+        icon: "Hammer",
+        bullets: [
+          { text: "Built 9 MCPs for engineering", keywords: ["9 MCPs"] as const },
+          { text: "Scrapped 2-3 (vibe-code fails)", keywords: ["Scrapped"] as const },
+        ] as const,
+      },
+      {
+        id: "sep2025",
+        label: "Sep 2025",
+        icon: "Users",
+        bullets: [
+          { text: "AI Steering Committee formed", keywords: ["AI Steering Committee"] as const },
+          { text: "Appointed lead", keywords: ["lead"] as const },
+          { text: "Drive AI culture company-wide", keywords: ["AI culture"] as const },
+        ] as const,
+      },
+      {
+        id: "dec2025",
+        label: "Dec 2025",
+        icon: "Bot",
+        bullets: [
+          { text: "Built 3 agentic systems", keywords: ["3 agentic systems"] as const },
+          { text: "Legal, Product, Research teams", keywords: [] as const },
+        ] as const,
+      },
+      {
+        id: "mar2026",
+        label: "Mar 2026",
+        icon: "Package",
+        bullets: [
+          { text: "Built 2 Nanovest plugins", keywords: ["2 Nanovest plugins"] as const },
+          { text: "Product + NotebookLM", keywords: [] as const },
+        ] as const,
+      },
+    ] as const,
+    segments: [
+      "foundational & experiment",
+      "build & fail",
+      "evaluate & correct mental model",
+      "build with harnesses",
+    ] as const,
   },
 };
 
@@ -60,132 +184,230 @@ export const i3Content = {
 };
 
 export const i4Content = {
-  firstBeat: [
-    { text: "Foundation", durationMs: 250, keyword: true },
-    { text: "before", durationMs: 200 },
-    { text: "velocity", durationMs: 250, keyword: true },
-    { text: ".", durationMs: 80 },
-  ],
-  secondBeatA: "In a year, a Project Manager built this.",
-  secondBeatAKeywords: ["Project Manager"] as const,
-  secondBeatB: "— In a year, what could you build?",
-  secondBeatBKeywords: ["you"] as const,
-};
+  heroSrc: "/heroes/i4-dusk-horizon.jpg",
+  beat1: {
+    lineA: { text: "Foundation before velocity.", kw: ["Foundation", "velocity"] as const },
+    lineB: { text: "A Project Manager built this in a year.", kw: ["Project Manager"] as const },
+  },
+  beat2: {
+    text: "Next — the recipe that made it possible.",
+    kw: ["the recipe"] as const,
+  },
+  figLabel: "BRIDGE · RECIPE",
+} as const;
 
 export const j1Content = {
   line1: { text: "Still a beginner. A lot left to learn.", keywords: ["Still a beginner"] as const },
-  line2: { text: "But I've earned a few lessons — through experiments, through failures.", keywords: ["experiments", "failures"] as const },
-  line3: { text: "Here's some advice. So you don't repeat my mistakes.", keywords: ["repeat my mistakes"] as const },
+  line2: { text: "— Hard-earned lessons. So you skip my mistakes.", keywords: ["skip my mistakes"] as const },
 };
 
 export const j2Content = {
   headline: "Mindset before tools.",
-  headlineKeywords: ["Mindset before tools"] as const,
-  caption: "Hover any card for an example",
+  headlineKeywords: ["Mindset"] as const,
+  subtitle: "Five mindsets — earned the hard way.",
+  subtitleKeywords: ["earned the hard way"] as const,
+  footer: "Each one earned. Each one yours to skip past.",
+  footerKw: ["yours to skip past"] as const,
   cards: [
     {
       num: 1,
-      headline: "Foundation precedes velocity",
-      headlineKeywords: ["Foundation"] as const,
-      sub: "understand before you output",
-      hover: "Read the concept. Feel if it's relevant. Then experiment. Skip foundation — and you're just vibe-coding.",
+      title: "Foundation precedes velocity",
+      titleKw: ["Foundation"] as const,
+      subtitle: "understand before you output",
+      icon: "Triangle",
+      practice: [
+        { text: "Read the concept first", keywords: ["Read"] as const },
+        { text: "Feel if it fits your work", keywords: ["fits"] as const },
+        { text: "Then experiment and iterate", keywords: ["iterate"] as const },
+      ],
+      lesson: [
+        { text: "Skip foundation = vibe-coding without progress.", keywords: ["vibe-coding"] as const },
+      ],
     },
     {
       num: 2,
-      headline: "Reps before sophistication",
-      headlineKeywords: ["Reps"] as const,
-      sub: "daily use beats clever prompts",
-      hover: "Used Claude daily for months before trying to build anything.",
+      title: "Repetition before sophistication",
+      titleKw: ["Repetition"] as const,
+      subtitle: "daily use beats clever prompts",
+      icon: "Repeat",
+      practice: [
+        { text: "Use AI daily for any task", keywords: ["daily"] as const },
+        { text: "Drafting · summarizing · deciding", keywords: ["any task"] as const },
+        { text: "Reps build instinct first", keywords: ["instinct"] as const },
+      ],
+      lesson: [
+        { text: "Months of reps before my first build worked.", keywords: ["Months"] as const },
+      ],
     },
     {
       num: 3,
-      headline: "Stay current, don't chase",
-      headlineKeywords: ["Stay"] as const,
-      sub: "filter: does this serve my work?",
-      hover: "New AI features ship constantly. My filter: does this serve my work? Most don't.",
+      title: "Stay on current track, don't chase",
+      titleKw: ["current track"] as const,
+      subtitle: "filter: does this serve my work?",
+      icon: "Compass",
+      practice: [
+        { text: "New AI features ship constantly", keywords: ["constantly"] as const },
+        { text: "Filter: does this serve me?", keywords: ["Filter"] as const },
+        { text: "Skip the model-of-the-week race", keywords: ["Skip"] as const },
+      ],
+      lesson: [
+        { text: "Most flashy launches don't land in real work.", keywords: ["Most"] as const },
+      ],
     },
     {
       num: 4,
-      headline: "Build the smallest thing that matters",
-      headlineKeywords: ["smallest thing"] as const,
-      sub: "a prompt template, a Skill, a snippet",
-      hover: "First build was a prompt template. Took 30 minutes.",
+      title: "Build the smallest thing that matters",
+      titleKw: ["smallest thing"] as const,
+      subtitle: "a prompt, a Skill, a snippet",
+      icon: "Sparkles",
+      practice: [
+        { text: "Start with a prompt template", keywords: ["template"] as const },
+        { text: "Or a Skill / workflow snippet", keywords: ["Skill"] as const },
+        { text: "Something you'd reuse tomorrow", keywords: ["reuse"] as const },
+      ],
+      lesson: [
+        { text: "First build = prompt template. 30 minutes.", keywords: ["30 minutes"] as const },
+      ],
     },
     {
       num: 5,
-      headline: "Failure is the next iteration's blueprint",
-      headlineKeywords: ["Failure is the next iteration's blueprint"] as const,
-      sub: "improve before you ship",
-      hover: "Most first builds didn't work. Each one rebuilt the next.",
+      title: "Failure is the next iteration's blueprint",
+      titleKw: ["Failure"] as const,
+      subtitle: "improve before you ship",
+      icon: "Workflow",
+      practice: [
+        { text: "Ship rough, evaluate fast", keywords: ["evaluate"] as const },
+        { text: "Each break informs the next try", keywords: ["informs"] as const },
+        { text: "Iterate · don't perfect", keywords: ["Iterate"] as const },
+      ],
+      lesson: [
+        { text: "Most first builds didn't work. Each rebuilt the next.", keywords: ["rebuilt"] as const },
+      ],
     },
   ],
 };
 
 export const j3Content = {
-  headline: "Habits before output. Steps 1–3 of the recipe.",
-  headlineKeywords: ["Habits before output"] as const,
-  caption: "Hover any step for an example",
+  headline: "Habits before output.",
+  headlineKeywords: ["Habits", "output"] as const,
+  subtitle: "Three habits — the reps that make the rest possible.",
+  subtitleKeywords: ["reps"] as const,
+  footer: "Quiet habits now. Loud output later.",
+  footerKw: ["Quiet habits", "Loud output"] as const,
   cards: [
     {
       num: 1,
-      headline: "Read 1 thing a week about how AI works",
-      headlineKeywords: ["1 thing a week"] as const,
-      sub: "paper · post · well-written thread — anything conceptual",
-      hover: "What I read mattered less than building the habit. The first months are about absorbing concepts.",
+      title: "Read one thing a week about how AI works",
+      titleKw: ["one thing a week"] as const,
+      subtitle: "absorb concepts, not how-tos",
+      icon: "BookOpen",
+      practice: [
+        { text: "One article, paper, or thread per week", keywords: ["One"] as const },
+        { text: "Conceptual reads beat tutorials", keywords: ["Conceptual"] as const },
+        { text: "Notes optional — absorption matters", keywords: ["absorption"] as const },
+      ],
+      lesson: [
+        { text: "First months are about absorbing, not outputting.", keywords: ["absorbing"] as const },
+      ],
     },
     {
       num: 2,
-      headline: "Use AI daily for anything",
-      headlineKeywords: ["daily"] as const,
-      sub: "drafting · summarizing · brainstorming · deciding — any task, any role",
-      hover: "Months of daily use before I tried to build anything. Reps make later sophistication land.",
+      title: "Use AI daily for anything",
+      titleKw: ["daily"] as const,
+      subtitle: "any task, any role",
+      icon: "CalendarCheck",
+      practice: [
+        { text: "Drafting · summarizing · deciding", keywords: ["any task"] as const },
+        { text: "Even small tasks count as reps", keywords: ["small tasks"] as const },
+        { text: "Instinct grows before sophistication", keywords: ["Instinct"] as const },
+      ],
+      lesson: [
+        { text: "Months of daily reps before my first build worked.", keywords: ["Months"] as const },
+      ],
     },
     {
       num: 3,
-      headline: "Pick ONE tool, go deep before adding others",
-      headlineKeywords: ["ONE tool"] as const,
-      sub: "skip the toolchain race — mastery beats sampling",
-      hover: "Went deep on Claude. Skipped the LLM-of-the-week parade.",
+      title: "Pick ONE tool, go deep before adding others",
+      titleKw: ["ONE tool"] as const,
+      subtitle: "mastery beats sampling",
+      icon: "Target",
+      practice: [
+        { text: "Push one tool across every workflow", keywords: ["one tool"] as const },
+        { text: "Add a second only when the first limits you", keywords: ["limits you"] as const },
+        { text: "Skip the LLM-of-the-week race", keywords: ["Skip"] as const },
+      ],
+      lesson: [
+        { text: "Went deep on Claude. Skipped the parade.", keywords: ["deep"] as const },
+      ],
     },
   ],
 };
 
 export const j4Content = {
-  headline: "Artifacts that travel. Steps 4–6 of the recipe.",
-  headlineKeywords: ["Artifacts that travel"] as const,
-  caption: "Hover any step for an example",
+  headline: "Build before broadcast.",
+  headlineKeywords: ["Build", "broadcast"] as const,
+  subtitle: "Three moves — that turn a private build into shared leverage.",
+  subtitleKeywords: ["private build", "shared leverage"] as const,
+  footer: "Build for one. Sharpen by use. Share with many.",
+  footerKw: ["one", "use", "many"] as const,
   cards: [
     {
-      num: 4,
-      headline: "Find one recurring annoyance — AI-assist it 20% better",
-      headlineKeywords: ["recurring annoyance", "20% better"] as const,
-      sub: "your first build · prompt · skill · workflow snippet",
-      hover: "First build was a prompt template for status updates. 30 min. Used it daily after.",
+      num: 1,
+      title: "Find one recurring annoyance",
+      titleKw: ["recurring annoyance"] as const,
+      subtitle: "your first build · 20% better",
+      icon: "Wrench",
+      practice: [
+        { text: "Pick a weekly pain point", keywords: ["weekly"] as const },
+        { text: "Prompt · skill · workflow snippet", keywords: ["snippet"] as const },
+        { text: "Reuse it tomorrow", keywords: ["tomorrow"] as const },
+      ],
+      lesson: [
+        { text: "First build: status-update template. 30 min. Used daily after.", keywords: ["30 min"] as const },
+      ],
     },
     {
-      num: 5,
-      headline: "Evaluate ruthlessly",
-      headlineKeywords: ["Evaluate ruthlessly"] as const,
-      sub: "what's better? what still breaks? embrace failure — iterate",
-      hover: "First MCP didn't work for two weeks of evenings. Each broken version informed the next.",
+      num: 2,
+      title: "Evaluate ruthlessly",
+      titleKw: ["ruthlessly"] as const,
+      subtitle: "what's better? what still breaks?",
+      icon: "Search",
+      practice: [
+        { text: "Compare before vs. after", keywords: ["Compare"] as const },
+        { text: "Each break is signal", keywords: ["signal"] as const },
+        { text: "Iterate · don't polish", keywords: ["Iterate"] as const },
+      ],
+      lesson: [
+        { text: "First MCP took 2 weeks of evenings. Each break informed the next.", keywords: ["2 weeks"] as const },
+      ],
     },
     {
-      num: 6,
-      headline: "Once solid, share with many who have the same pain",
-      headlineKeywords: ["many"] as const,
-      sub: "their feedback is what makes it reusable for anyone",
-      hover: "Shared nanovest-product plugin with PMs at Nanovest. Their feedback turned it into a reusable system.",
+      num: 3,
+      title: "Share with the same pain",
+      titleKw: ["same pain"] as const,
+      subtitle: "feedback makes it reusable",
+      icon: "Share2",
+      practice: [
+        { text: "Hand it to others with the same problem", keywords: ["Hand it"] as const },
+        { text: "Their friction is your spec", keywords: ["friction"] as const },
+        { text: "Genericize · don't gatekeep", keywords: ["Genericize"] as const },
+      ],
+      lesson: [
+        { text: "Shared nanovest-product plugin. PM feedback turned it reusable.", keywords: ["reusable"] as const },
+      ],
     },
   ],
-  loopBackLabels: { five: "refine, iterate", six: "feedback from many" },
 };
 
 export const k1Content = {
-  headline: ["Theory ends.", "Hands begin."],
-  headlineKeywords: ["Theory ends. Hands begin"] as const,
-  body1: "Tools loaded. Skills ready. Dummy data set.",
-  body2: { text: "Open your laptop. Run the harnesses.", keywords: ["laptop"] as const },
-  body3: "I'll be here.",
-  tagline: "After this, the recipe is no longer theory.",
-  taglineKeywords: ["After this, the recipe is no longer theory"] as const,
-};
+  heroSrc: "/heroes/k1-morning-workspace.jpg",
+  beat1: {
+    lineA: { text: "From watching to building.", kw: ["building"] as const },
+    lineB: { text: "The recipe is yours now.", kw: ["yours now"] as const },
+  },
+  beat2: {
+    text: "Next — Practice Lab. I'll be with you.",
+    kw: ["Practice Lab"] as const,
+  },
+  figLabel: "PRACTICE · LAB",
+} as const;

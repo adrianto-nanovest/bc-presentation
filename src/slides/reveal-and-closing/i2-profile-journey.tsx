@@ -1,76 +1,168 @@
 // src/slides/reveal-and-closing/i2-profile-journey.tsx
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { HeroPhoto } from "@/components/HeroPhoto";
-import { Timeline, type TimelineAnchor } from "./components/Timeline";
+import {
+  JourneyTimeline,
+  type JourneyAnchor,
+} from "./components/JourneyTimeline";
 import { highlight } from "@/components/highlight";
-import { HoverReveal } from "@/components/HoverReveal";
 import { i2Content as C } from "./content";
+
+const TITLE_TO_CONTENT_DELAY_MS = 550;
+const PROFILE_STAGGER_MS = 150;
 
 export function I2ProfileJourney() {
   const { stepIndex } = useDeck();
-  const linesRevealed = stepIndex >= 1;
-  // Timeline reveal: Space 2 → axis + Mar; Space 3 → segment + Sep; Space 4 → Today.
-  const anchorsRevealed =
-    stepIndex >= 4 ? 3 : stepIndex >= 3 ? 2 : stepIndex >= 2 ? 1 : 0;
-  const lines = [
-    {
-      key: "name",
-      content: <span className="font-display tracking-wide text-neutral-50" style={{ fontSize: "3.6rem", lineHeight: 1.05 }}>{C.name}</span>,
-    },
-    {
-      key: "role",
-      content: <span className="font-display text-neutral-50" style={{ fontSize: "2.2rem", lineHeight: 1.2 }}>{highlight(C.role.text, C.role.keywords)}</span>,
-    },
-    {
-      key: "delivery",
-      content: <span className="font-serif text-neutral-50" style={{ fontSize: "2rem", lineHeight: 1.35 }}>{highlight(C.delivery.text, C.delivery.keywords)}</span>,
-    },
-    {
-      key: "credentials",
-      // The "Computer Vision" keyword also gets a HoverReveal per spec §4.2.
-      content: (
-        <span className="font-serif italic text-neutral-300" style={{ fontSize: "1.36rem", lineHeight: 1.4 }}>
-          ITB Electrical Eng · Chosun M.S.{" "}
-          <HoverReveal
-            trigger={<em className="text-copper-400 italic">Computer Vision</em>}
-            payload={<span className="block max-w-[320px] border border-copper-500 bg-neutral-900 p-4 font-serif italic text-neutral-100" style={{ fontSize: "0.9rem" }}>{C.timeline.cvHover}</span>}
-          />{" "}
-          · 8+ yrs PM (Toppan Ecquaria · Blibli)
-        </span>
-      ),
-    },
-  ];
-  const anchors: TimelineAnchor[] = C.timeline.anchors.map((a) => ({
+
+  // Step 2 reveal: title appears first, content (timeline animation) follows
+  // after TITLE_TO_CONTENT_DELAY_MS so the audience reads the title before
+  // the rail/circles draw attention.
+  const titleOn = stepIndex >= 1;
+  const [contentOn, setContentOn] = useState(false);
+  useEffect(() => {
+    if (!titleOn) {
+      setContentOn(false);
+      return;
+    }
+    const t = window.setTimeout(() => setContentOn(true), TITLE_TO_CONTENT_DELAY_MS);
+    return () => window.clearTimeout(t);
+  }, [titleOn]);
+
+  const anchors: JourneyAnchor[] = C.timeline.anchors.map((a) => ({
     id: a.id,
     label: a.label,
-    hover: a.hover,
-    caption: a.captionKeywords ? highlight(a.caption, a.captionKeywords) : a.caption,
+    icon: a.icon,
+    bullets: a.bullets,
   }));
+
   return (
     <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/i2-night-workspace.jpg" alt="" vignetteSide="bottom-left" />
+
+      {/* Darken overlay constrained to the timeline region — keeps the rail
+          and bullet text legible against the bright lamp/laptop area. */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 380,
+          bottom: 0,
+          background:
+            "linear-gradient(180deg, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.78) 35%, rgba(10,10,10,0.85) 100%)",
+          zIndex: 12,
+        }}
+      />
+
       <FigLabel section="I" num={2} label="THE JOURNEY" />
-      <div className="absolute bottom-12 left-12 z-20 flex max-w-[90%] flex-col gap-12">
-        <div className="flex flex-col gap-5">
-          {lines.map((l, i) => (
-            <motion.div
-              key={l.key}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: linesRevealed ? 1 : 0, y: linesRevealed ? 0 : 6 }}
-              transition={{ duration: 0.3, delay: linesRevealed ? i * 0.1 : 0 }}
-            >
-              {l.content}
-            </motion.div>
-          ))}
-        </div>
-        <Timeline
+
+      <div className="slide-headline-row" style={{ zIndex: 20 }}>
+        <h1 className="slide-headline small">
+          Who {highlight("am I", ["am I"] as const)}
+        </h1>
+      </div>
+
+      {/* Profile block — staggered entry on slide mount. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: 200,
+          zIndex: 20,
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="font-display tracking-wide text-neutral-50"
+          style={{ fontSize: "2.8rem", lineHeight: 1.05 }}
+        >
+          {C.name}
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.4,
+            delay: PROFILE_STAGGER_MS / 1000,
+            ease: "easeOut",
+          }}
+          className="font-display"
+          style={{
+            fontSize: "1.4rem",
+            lineHeight: 1.25,
+            color: "var(--neutral-300)",
+          }}
+        >
+          {highlight(C.role.text, C.role.keywords)}
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.4,
+            delay: (PROFILE_STAGGER_MS * 2) / 1000,
+            ease: "easeOut",
+          }}
+          className="font-serif"
+          style={{
+            fontSize: "1.3rem",
+            lineHeight: 1.3,
+            color: "var(--neutral-300)",
+          }}
+        >
+          {highlight(C.delivery.text, C.delivery.keywords)}
+        </motion.div>
+      </div>
+
+      {/* Timeline title — step 2 reveal, fades in BEFORE the timeline content. */}
+      <motion.div
+        initial={{ opacity: 0, y: -4 }}
+        animate={{ opacity: titleOn ? 1 : 0, y: titleOn ? 0 : -4 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: 388,
+          zIndex: 20,
+          fontFamily: "var(--mono)",
+          fontSize: 12,
+          letterSpacing: "0.22em",
+          color: "var(--copper-300)",
+          textTransform: "uppercase",
+        }}
+      >
+        — {C.timeline.title}
+      </motion.div>
+
+      {/* Journey timeline — content reveal lags the title by TITLE_TO_CONTENT_DELAY_MS. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 48,
+          right: 48,
+          top: 420,
+          bottom: 96,
+          zIndex: 20,
+        }}
+      >
+        <JourneyTimeline
           anchors={anchors}
-          segmentLabel={C.timeline.segmentLabel}
-          anchorsRevealed={anchorsRevealed}
-          ambient={anchorsRevealed >= 3}
+          segments={C.timeline.segments}
+          on={contentOn}
+          boxWidth={210}
+          highlight={highlight}
         />
       </div>
     </div>
@@ -78,9 +170,9 @@ export function I2ProfileJourney() {
 }
 
 export const i2Slide: SlideDef = {
-  steps: 5,
+  steps: 2,
   animationMode: "step-reveal",
-  canonicalPose: 4,
+  canonicalPose: 1,
   surface: "dark",
   section: "I",
   render: () => <I2ProfileJourney />,

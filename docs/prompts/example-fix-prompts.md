@@ -193,3 +193,61 @@ Dispatch your Explore agents (Haiku model) for better codebase understanding.
 Fix and improve slide F8 C based on docs/specs/2026-05-14-f8-agentic-os-monitor.md
 create Tasks for all items to do, delegate to your general-purpose agents to implement (do it sequencially if there are tight dependencies, otherwise do it in parallel)
 Dispatch your Explore agents (Haiku model) for better codebase understanding.
+
+
+-------------
+fix slide I1, current step 1 [Image #1], step 2 [Image #2], step 3 [Image #3], and step 4 footer caption reveal
+
+Per Steps Details
+1. For step 1, follow C1 step 1, Where it shows in 2 lines in animation stagger. First line is "What you've been watching so far." (kw: watching), second line is "It was built entirely by AI" (kw: built, AI)
+2.  For step 2, Move second line to be the slide title in header, follow the motion like in F1. it should move from the "middle" slide to the "header title" position below Fig label. Then it is also reveal "And here is the process that made it possible" (without underline style, and make the style is the same with the first line of step 1, (kw: process)).
+3. For step 3, similar motion like step 2, "And here is ...." move from the middle to the section title like this [Image #4] in G7 ("Five Categories"). And then reveal all the cards in stagger. And the card style could follow slide G9. where we use icon, title, subtitle, bullet points inside. But inside it, we have 2 section vertically stack, "TO DO" and "RESULTS"
+4. For step 4, as per current, reveal footer caption
+
+RULES: ALL CARDS inside CAN BE HOVERED with "animation highlight" like slide G10
+
+Now for each card content (make it brief, but still bring the complete details):
+1. Card 1 - Research & Preparation (please suggest subtitle) 
+   1. To Do:
+      1. Gathering context reference (BCE Workshop Plan, Discussion with BCE PIC, Previous workshop materials) - by pulling persistent memory, Google Drive MCP, 
+      2. Do web research (content ideation, topic deep-dives, design references, tech stack options) - by Claude buit-in WebSearch and WebFetch tool. 
+      3. Get ground truth information from official docs (Claude, Gemini, OpenAI, Trusted Youtube content) - by using RAG -> notebookLM plugin 
+      All using paralel sub-agents invocation in Claude
+   2. Results: 30+ research docs in markdown file
+2. Card 2 - Brainstorm & Plan (please suggest subtitle) - all of this using brainstorming skill
+   1. To Do:
+      1. Deck Objective Discussion
+      2. Outline Section Structure Discussion
+      3. Design Meta Discussion
+      4. Per-Slide Content Deep-dive Discussion
+      5. Tecnical specs discussion
+   2. Results:
+      1. Deck full plan
+      2. Design System specs
+      3. Development project structure
+3. Card 3 - Prototype (please suggest subtitle) - all of this using Claude Design + Gemini-image-gen MCP
+   1. To Do:
+      1. Build design system (motions, components, icons, typography, color)
+      2. Prototype some slides layout with design system
+      3. Create image background
+   2. Results: 
+      1. Design system reference in HTML
+      2. Deck MVP in low fidelity
+4. Card 4 - Implementation (please suggest subtitle) - using Claude Tasks and sub-agent driven development
+   1. To Do: 
+      1. Development (Unit test, main code) - by Claude agents
+      2. Review process (specs compliant, code review) - by Claude agents
+      3. Human in the loop (manual testing, feedback for umprovements)
+   2. Results: THIS DECK
+
+Create Tasks for all items to do, delegate to your general-purpose agents to implement (do it sequencially if there are tight dependencies, otherwise do it in parallel)
+Dispatch your Explore agents (Sonnet model) for better codebase / other slides understanding.
+
+----------------
+For the box content, make it based on this data:
+1. Mar 2025 - Started learning AI through web articles, youtube contents. Use Claude and Gemini Chat on daily use, no goals, just experiment
+2. June 2025 - Build 9 MCPs for engineering team, but scrap 2-3 projects (vibe code failure)
+3. Sep 2025 - AISC was formed, appointed as lead, to bring AI culture to the whole company
+4. Dec 2025 - Build 3 AI agentic systems for Legal, Product, and Research Team
+5. Mar 2026 - Build 2 nanovest plugins for reusability (product and notebookLM plugin)                                                                                             
+3 months for foundational knowledge, 3 months build and fail, 3 months evaluate+correct mental model, 3 months build with harnesses and discipline

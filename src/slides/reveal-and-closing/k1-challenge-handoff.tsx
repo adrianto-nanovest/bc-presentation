@@ -1,75 +1,172 @@
-import { motion } from "framer-motion";
+// K.1 — PRACTICE · LAB (final slide of the deck, bridges to the Practice Lab)
+//
+// Mirrors `i4-key-message-bridge.tsx` / `h3-bridge-to-i.tsx` exactly —
+// only the hero file path, beat text, and FIG label change. This is the
+// last slide before the facilitated hands-on Practice Lab.
+//
+// 2 steps:
+//   0 — beat 1 reveals (display-size headline + copper rule).
+//   1 — beat 2 reveals (italic copper "Next:" preview).
+//
+// Layout: full-bleed morning-workspace hero photo with three layered
+// gradients (bottom-left vignette, top-left ellipse, top-edge gloom)
+// overlaying the image to create text-readable areas around the
+// FigLabel and the bottom-left beats. The top-edge gloom is what
+// protects FigLabel readability against bright window light in the photo.
+//
+// Reveal / CopperRule are the shared T10 reveal primitives from Section E
+// — no Framer Motion. CSS vars only, no hex literals.
 import type { SlideDef } from "@/deck/types";
-import { StepReveal } from "@/motion/StepReveal";
+import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
-import { HeroPhoto } from "@/components/HeroPhoto";
-import { PulseGlow } from "@/components/PulseGlow";
 import { highlight } from "@/components/highlight";
+import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
 import { k1Content as C } from "./content";
 
+// ───────────────────── slide ─────────────────────
+
 export function K1ChallengeHandoff() {
+  const { stepIndex } = useDeck();
+
+  const showBeat1 = stepIndex >= 0;
+  const showBeat2 = stepIndex >= 1;
+
   return (
-    <div className="relative h-full w-full overflow-hidden">
-      <HeroPhoto src="/heroes/k1-morning-workspace.jpg" alt="" vignetteSide="bottom-left" />
-      <FigLabel section="K" num={1} label="NOW FEEL IT" />
-      <div className="absolute bottom-24 left-24 z-20 flex max-w-[68%] flex-col gap-10">
-        <StepReveal>
-          {/* Space 1 — headline (two beats) */}
-          <h1
-            className="font-display text-neutral-50"
-            style={{ fontSize: "4.4rem", lineHeight: 1.1 }}
+    <div
+      data-testid="k1-root"
+      style={{ position: "absolute", inset: 0, overflow: "hidden" }}
+    >
+      {/* Hero photo — full-bleed morning workspace. */}
+      <div
+        data-testid="k1-hero"
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: `url(${C.heroSrc})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+
+      {/* Vignette: bottom-left — anchors the headline against a dark mass. */}
+      <div
+        data-testid="k1-overlay-bottom-left"
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(to top right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 35%, rgba(10,10,10,0.0) 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Vignette: top-left ellipse — protects FigLabel readability
+          against the bright window region in the photo. */}
+      <div
+        data-testid="k1-overlay-top-left"
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse 520px 280px at top left, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.55) 35%, rgba(10,10,10,0.15) 70%, rgba(10,10,10,0) 100%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Soft top edge gloom — keeps the FigLabel band legible across
+          the full top of the slide. */}
+      <div
+        data-testid="k1-overlay-top-gloom"
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.18) 80px, rgba(10,10,10,0) 140px)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <FigLabel section="K" num={1} label={C.figLabel} />
+
+      {/* Bottom-left anchored beats. */}
+      <div
+        data-testid="k1-beats"
+        style={{
+          position: "absolute",
+          left: 48,
+          bottom: 110,
+          maxWidth: 1120,
+          display: "flex",
+          flexDirection: "column",
+          gap: 24,
+          zIndex: 20,
+        }}
+      >
+        <div
+          data-testid="k1-beat1"
+          style={{ display: "flex", flexDirection: "column", gap: 10 }}
+        >
+          <Reveal on={showBeat1} delay={0} data-testid="k1-beat1-lineA">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 56,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineA.text, [...C.beat1.lineA.kw])}
+            </p>
+          </Reveal>
+          <Reveal on={showBeat1} delay={250} data-testid="k1-beat1-lineB">
+            <p
+              style={{
+                fontFamily: "var(--display)",
+                fontSize: 56,
+                color: "var(--neutral-50)",
+                margin: 0,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {highlight(C.beat1.lineB.text, [...C.beat1.lineB.kw])}
+            </p>
+          </Reveal>
+        </div>
+
+        <CopperRule on={showBeat1} width="30%" delay={400} />
+
+        <Reveal on={showBeat2} delay={150} data-testid="k1-beat2">
+          <p
+            style={{
+              fontFamily: "var(--display)",
+              fontStyle: "italic",
+              fontSize: 40,
+              color: "var(--copper-200)",
+              margin: 0,
+              lineHeight: 1.1,
+            }}
           >
-            {highlight(`${C.headline[0]} ${C.headline[1]}`, C.headlineKeywords)}
-          </h1>
-          {/* Space 2 — three body lines (revealed together as one step group) */}
-          <div className="flex flex-col gap-6">
-            <p
-              className="font-serif text-neutral-50"
-              style={{ fontSize: "1.92rem", lineHeight: 1.5 }}
-            >
-              {C.body1}
-            </p>
-            <p
-              className="font-serif text-neutral-50"
-              style={{ fontSize: "1.92rem", lineHeight: 1.5 }}
-            >
-              {highlight(C.body2.text, C.body2.keywords)}
-            </p>
-            <p
-              className="font-serif italic text-neutral-50"
-              style={{ fontSize: "1.6rem", lineHeight: 1.4 }}
-            >
-              {C.body3}
-            </p>
-          </div>
-          {/* Space 3 — copper rule + tagline (with PulseGlow) */}
-          <div className="flex flex-col gap-6">
-            <motion.hr
-              className="w-[30%] border-0 border-t border-copper-700"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.4 }}
-              style={{ transformOrigin: "left center" }}
-            />
-            <PulseGlow periodSeconds={4.5}>
-              <p
-                className="font-serif italic text-neutral-50"
-                style={{ fontSize: "1.76rem", lineHeight: 1.4 }}
-              >
-                {highlight(C.tagline, C.taglineKeywords)}
-              </p>
-            </PulseGlow>
-          </div>
-        </StepReveal>
+            {highlight(C.beat2.text, [...C.beat2.kw])}
+          </p>
+        </Reveal>
       </div>
     </div>
   );
 }
 
+// ───────────────────── slide def ─────────────────────
+
 export const k1Slide: SlideDef = {
-  steps: 4,
+  steps: 2,
+  canonicalPose: 1,
   animationMode: "step-reveal",
-  canonicalPose: 3,
   surface: "dark",
   section: "K",
   render: () => <K1ChallengeHandoff />,
