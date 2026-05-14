@@ -36,7 +36,7 @@ export const f1Content = {
       tooltip: "F.3 – F.7 · the package",
     },
   ],
-  footer: "five techniques · one agentic stack",
+  footer: "seven techniques · one agentic stack",
   footerKw: ["techniques", "agentic stack"],
 } as const;
 
@@ -108,8 +108,8 @@ export const f3Content = {
     {
       id: "whats-inside",
       title: "WHAT'S INSIDE",
-      essence: "Skills · Hooks · MCP · Sub-agents · CLAUDE.md",
-      essenceKw: ["Skills", "Hooks", "MCP", "Sub-agents", "CLAUDE.md"],
+      essence: "Skills · Hooks · MCP · Sub-agents",
+      essenceKw: ["Skills", "Hooks", "MCP", "Sub-agents"],
       icon: "Layers",
     },
     {
@@ -137,7 +137,7 @@ export const f3Content = {
   footer: "expertise, packaged",
   footerKw: ["packaged"],
   // Canonical layer-cake stack (bottom → top) referenced by F.3 default canvas.
-  cakeLayers: ["CLAUDE.md", "HOOKS", "SKILLS", "AGENTS"],
+  cakeLayers: ["HOOKS", "SKILLS", "AGENTS"],
   // MCP connector adjunct icons fanning to the cake's right side (F.3 default).
   mcpConnectors: ["Notion", "GitHub", "Slack", "GDrive", "Mongo"],
 } as const;

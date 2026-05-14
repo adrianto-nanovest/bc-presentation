@@ -49,6 +49,11 @@ import { f3Content as C } from "./content";
 
 const RIGHT_W = 660;
 
+// LayerCake content-area height target for the WHAT IT IS hover. Equals the
+// content height of the original 4-bar cake (4×36 + 3×2 = 150) so the outer
+// ribbon stays at the original 206px outer height even with 3 bars inside.
+const CAKE_CONTENT_HEIGHT = 150;
+
 // Map plain connector names → LucideIcon names. The content file carries
 // connector names as plain strings; we resolve the icon here so the icon
 // vocabulary stays local to F.3's visual decisions.
@@ -227,11 +232,18 @@ function WhatItIsState({ connectors }: WhatItIsStateProps) {
             layers={[...C.cakeLayers]}
             ribbon
             lit={[...C.cakeLayers]}
+            // Force the ribbon box to the original 4-layer outer height
+            // (~206px) even though we now stack only 3 bars. The bars stay
+            // unchanged and center vertically inside the taller box.
+            size={{ height: CAKE_CONTENT_HEIGHT }}
           />
           <CakeShimmerOverlay layers={[...C.cakeLayers]} />
         </div>
 
-        <MCPConnectors logos={connectors} on cakeRightEdge={-32} />
+        {/* cakeRightEdge = -(parent flex gap) so the dashed connector strokes
+            terminate exactly at the PLUGIN ribbon's right edge instead of
+            floating 8px to its right. */}
+        <MCPConnectors logos={connectors} on cakeRightEdge={-40} />
       </div>
     </div>
   );
@@ -239,8 +251,9 @@ function WhatItIsState({ connectors }: WhatItIsStateProps) {
 
 // Transparent pulse-only overlay that sits on top of the rendered LayerCake.
 // Each box matches one layer-bar's bounding box and animates its box-shadow
-// via the shared `f-cake-shimmer-N` keyframes so the bars appear to shimmer
-// in sequence (CLAUDE.md → HOOKS → SKILLS → AGENTS) on a 3s loop.
+// via the shared `f-card-cycle` keyframe so the bars appear to shimmer in
+// sequence (HOOKS → SKILLS → AGENTS, bottom→top) on a loop whose period
+// equals the number of layers in seconds.
 function CakeShimmerOverlay({ layers }: { layers: string[] }) {
   // Geometry mirrors LayerCake's defaults: 340px wide, 36px tall bars, 2px
   // gap, 22px bottom padding + 32px top padding inside the ribbon. We render
@@ -248,9 +261,15 @@ function CakeShimmerOverlay({ layers }: { layers: string[] }) {
   // side.
   const BAR_H = 36;
   const GAP = 2;
-  const RIBBON_TOP_PAD = 32;
   const RIBBON_SIDE_PAD = 28;
   const BAR_W = 340;
+  // Bars are vertically centered inside the LayerCake's content area
+  // (height = CAKE_CONTENT_HEIGHT). Account for the extra space above the
+  // bars so the shimmer overlay stays glued to them instead of the ribbon's
+  // top padding edge.
+  const barsHeight = layers.length * BAR_H + Math.max(0, layers.length - 1) * GAP;
+  const extraSpaceAbove = Math.max(0, (CAKE_CONTENT_HEIGHT - barsHeight) / 2);
+  const RIBBON_TOP_PAD = 32 + extraSpaceAbove;
   // Top → bottom: layers reversed since LayerCake renders in displayOrder.
   const ordered = [...layers].reverse();
   return (
@@ -277,7 +296,7 @@ function CakeShimmerOverlay({ layers }: { layers: string[] }) {
             width: BAR_W,
             boxSizing: "border-box",
             borderRadius: 0,
-            "--cycle-duration": `${4}s`,
+            "--cycle-duration": `${ordered.length}s`,
             "--cycle-delay": `${i}s`,
           } as CSSProperties}
         />
@@ -288,10 +307,12 @@ function CakeShimmerOverlay({ layers }: { layers: string[] }) {
 
 // ───────────────────── WHAT'S INSIDE state ─────────────────────
 //
-// 5-column grid — each column represents one Claude Code primitive that
-// plugins package: Skills · Hooks · Agents · MCP · Commands. Each column has
-// a title, a 1-word subtitle, and a looping CSS illustration animation that
-// symbolically represents the primitive.
+// 4-column grid — each column represents one Claude Code primitive that
+// plugins package: Skills · Hooks · Agents · MCP. Each column has a title,
+// a 1-word subtitle, and a looping CSS illustration animation that
+// symbolically represents the primitive. A "Usable as commands" caption pins
+// to the popover's lower edge — Commands is the invocation surface for these
+// primitives, not a packaged primitive itself.
 
 interface InsidePrimitive {
   id: string;
@@ -326,12 +347,6 @@ function WhatsInsideState() {
       word: "bridge",
       glyph: <BridgeGlyph />,
     },
-    {
-      id: "commands",
-      title: "Commands",
-      word: "shortcut",
-      glyph: <ShortcutGlyph />,
-    },
   ];
   return (
     <div
@@ -350,7 +365,7 @@ function WhatsInsideState() {
         style={{
           flex: 1,
           display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
+          gridTemplateColumns: "repeat(4, 1fr)",
           gap: 8,
           alignItems: "stretch",
           minHeight: 0,
@@ -359,6 +374,30 @@ function WhatsInsideState() {
         {primitives.map((p, i) => (
           <InsidePrimitiveColumn key={p.id} prim={p} index={i} />
         ))}
+      </div>
+      <div
+        data-testid="f3-whats-inside-usable-as-commands"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+          paddingTop: 4,
+        }}
+      >
+        <LucideIcon name="Zap" size={12} color="var(--copper-300)" />
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 10.5,
+            letterSpacing: "0.18em",
+            color: "var(--copper-200)",
+            textTransform: "uppercase",
+            lineHeight: 1.2,
+          }}
+        >
+          Skills are usable as commands
+        </span>
       </div>
     </div>
   );
@@ -585,39 +624,6 @@ function BridgeGlyph() {
       />
       <LucideIcon name="Plug" size={0} />
     </svg>
-  );
-}
-
-// Commands → "shortcut". Lightning bolt blinking on a slash prompt baseline.
-function ShortcutGlyph() {
-  return (
-    <div
-      style={{
-        position: "relative",
-        width: 56,
-        height: 56,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 4,
-      }}
-      aria-hidden
-    >
-      <span
-        className="f-shortcut-slash"
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 22,
-          color: "var(--copper-300)",
-          lineHeight: 1,
-        }}
-      >
-        /
-      </span>
-      <span className="f-shortcut-zap">
-        <LucideIcon name="Zap" size={22} color="var(--copper-200)" />
-      </span>
-    </div>
   );
 }
 

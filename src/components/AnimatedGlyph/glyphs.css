@@ -223,18 +223,20 @@
   90%, 100% { opacity: 1; }
 }
 
-/* rewind — clockwise arrow flipping to counter-clockwise */
+/* rewind — inverse-loop arc; partial counter-clockwise tick with pauses (never a full revolution) */
 .glyph-rewind .arrow {
   stroke: var(--copper-300);
   stroke-width: 2;
   fill: none;
   stroke-linecap: round;
-  animation: glyph-rewind-arrow 5s ease-in-out infinite;
+  stroke-linejoin: round;
+  transform-origin: 20px 20px;
+  animation: glyph-rewind-arrow 4.5s ease-in-out infinite;
 }
 @keyframes glyph-rewind-arrow {
-  0%, 20%   { transform: scaleX(1); }
-  50%       { transform: scaleX(-1); }
-  80%, 100% { transform: scaleX(1); }
+  0%, 20%   { transform: rotate(0deg);   opacity: 0.7; }
+  45%, 65%  { transform: rotate(-40deg); opacity: 1;   }
+  85%, 100% { transform: rotate(0deg);   opacity: 0.7; }
 }
 
 /* compact — 5 bars compressing into 2 */
@@ -319,6 +321,17 @@
   0%, 30%   { opacity: 0.5; transform: scale(0.9); }
   50%       { opacity: 1; transform: scale(1); }
   70%, 100% { opacity: 0.5; transform: scale(0.9); }
+}
+
+/* dash-pulse — minimalist sweep for unglyphed rows */
+.glyph-dash-pulse .dash {
+  fill: var(--copper-400);
+  transform-origin: 10px 20px;
+  animation: glyph-dash-pulse 3.6s var(--ease) infinite;
+}
+@keyframes glyph-dash-pulse {
+  0%, 100% { transform: scaleX(0.4); opacity: 0.45; }
+  50%      { transform: scaleX(1);    opacity: 1; }
 }
 
 /* ─── G.5 Google (7 glyphs) ──────────────────────────────────── */

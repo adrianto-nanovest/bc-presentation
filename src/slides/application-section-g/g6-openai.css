@@ -1,15 +1,19 @@
 /* ────────────────────────────────────────────────────────────────────
  * G.6 — OpenAI · Card styling
+ * Mirrors the G.1 vendor card pattern (logo zone → name → tagline →
+ * rule → bullets) with an OpenAI-specific "Play video" action retained
+ * at the bottom of the card.
  * ──────────────────────────────────────────────────────────────────── */
 
 .g6-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   padding: 22px 24px;
   border: 1px solid var(--copper-700);
   background: rgba(10, 10, 10, 0.5);
-  transition: border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
   height: 100%;
   overflow: hidden;
 }
@@ -20,21 +24,64 @@
   box-shadow: 0 4px 12px rgba(184, 110, 61, 0.08);
 }
 
+.g6-card-logo {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
 .g6-card-name {
   font-family: var(--display);
   font-size: 26px;
   color: var(--neutral-50);
-  margin-top: 6px;
+  margin-top: 2px;
   line-height: 1.1;
 }
 
-.g6-card-desc {
+.g6-card-tagline {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--copper-300);
+  line-height: 1.4;
+}
+
+.g6-card-rule {
+  width: 50%;
+  height: 1px;
+  background: var(--copper-700);
+  margin: 4px 0 2px;
+  border: 0;
+}
+
+.g6-card-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.g6-card-bullet {
   font-family: var(--serif);
   font-style: italic;
   font-size: 14px;
+  line-height: 1.45;
   color: var(--neutral-300);
-  line-height: 1.5;
-  flex-grow: 1;
+  padding-left: 14px;
+  position: relative;
+}
+
+.g6-card-bullet::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 6px;
+  height: 1px;
+  background: var(--copper-400);
 }
 
 .g6-card-actions {

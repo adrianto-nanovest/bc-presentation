@@ -4,7 +4,7 @@ export type GlyphKind =
   | "connectors" | "plugins" | "projects" | "dispatch"
   | "schedules" | "artifacts" | "diagrams" | "design"
   | "explore" | "clear" | "rewind" | "compact"
-  | "loop" | "init" | "agents" | "pretool"
+  | "loop" | "init" | "agents" | "pretool" | "dash-pulse"
   | "notebooklm" | "workspace-studio" | "ai-studio" | "canvas"
   | "flow" | "stitch" | "gems"
   | "chatgpt" | "codex" | "workspace-agents"
@@ -23,10 +23,13 @@ export type GlyphKind =
 interface AnimatedGlyphProps {
   kind: GlyphKind;
   size?: number; // default 48
+  /** When true, uses a tighter viewBox so the glyph fills more of its size box —
+   *  match the visual weight of stroke-based icons like lucide-react. */
+  tight?: boolean;
 }
 
-export function AnimatedGlyph({ kind, size = 48 }: AnimatedGlyphProps) {
-  const glyph = getGlyph(kind);
+export function AnimatedGlyph({ kind, size = 48, tight = false }: AnimatedGlyphProps) {
+  const glyph = getGlyph(kind, tight);
 
   return (
     <div className={`glyph glyph-${kind}`} style={{ width: size, height: size }}>
@@ -35,8 +38,8 @@ export function AnimatedGlyph({ kind, size = 48 }: AnimatedGlyphProps) {
   );
 }
 
-function getGlyph(kind: GlyphKind): JSX.Element {
-  const viewBox = "0 0 40 40";
+function getGlyph(kind: GlyphKind, tight = false): JSX.Element {
+  const viewBox = tight ? "8 8 24 24" : "0 0 40 40";
 
   switch (kind) {
     // ─── G.3 Capabilities ─────────────────────────────────────
@@ -193,6 +196,13 @@ function getGlyph(kind: GlyphKind): JSX.Element {
       return (
         <svg viewBox={viewBox}>
           <path className="check" d="M 12 20 L 18 26 L 28 14" fill="none" />
+        </svg>
+      );
+
+    case "dash-pulse":
+      return (
+        <svg viewBox={viewBox}>
+          <rect className="dash" x="10" y="19" width="20" height="2" rx="1" />
         </svg>
       );
 

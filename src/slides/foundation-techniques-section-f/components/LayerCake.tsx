@@ -84,6 +84,9 @@ export function LayerCake({
     position: "relative",
     display: "inline-flex",
     flexDirection: "column",
+    // Center bars vertically when the box has extra height (size?.height
+    // override). No visual effect when content already fills the box.
+    justifyContent: "center",
     gap,
     padding: ribbon ? "32px 28px 22px" : 0,
     border: ribbon

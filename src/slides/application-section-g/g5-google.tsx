@@ -15,31 +15,27 @@ export function G5Google() {
   return (
     <div className="stage-wrap">
       <style>{`
-        .g5-subhead {
+        .g5-headline {
           position: absolute;
-          top: 128px;
+          top: 80px;
           left: 48px;
           right: 48px;
-          font-family: var(--mono);
-          font-size: 11px;
-          color: var(--copper-400);
-          text-transform: uppercase;
-          letter-spacing: 0.18em;
+          margin: 0;
         }
 
         .g5-card-region {
           position: absolute;
           left: 48px;
           right: 48px;
-          top: 172px;
-          bottom: 96px;
+          top: 148px;
+          bottom: 92px;
         }
 
         .g5-grid {
           display: grid;
           grid-template-columns: 1.4fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
-          gap: 18px;
+          gap: 12px;
           height: 100%;
           grid-template-areas:
             "hero ws ai"
@@ -50,8 +46,8 @@ export function G5Google() {
         .g5-card {
           display: flex;
           flex-direction: column;
-          gap: 8px;
-          padding: 14px 16px;
+          gap: 6px;
+          padding: 10px 14px;
           border: 1px solid var(--copper-700);
           background: rgba(10, 10, 10, 0.5);
           transition: border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease);
@@ -66,8 +62,8 @@ export function G5Google() {
         }
 
         .g5-card-hero {
-          padding: 24px 28px;
-          gap: 12px;
+          padding: 20px 24px;
+          gap: 10px;
         }
 
         .g5-hero {
@@ -100,28 +96,28 @@ export function G5Google() {
 
         .g5-card-name {
           font-family: var(--display);
-          font-size: 22px;
+          font-size: 18px;
           color: var(--neutral-50);
-          margin-top: 4px;
+          margin-top: 2px;
           line-height: 1.1;
         }
 
         .g5-card-hero .g5-card-name {
-          font-size: 38px;
-          margin-top: 8px;
+          font-size: 34px;
+          margin-top: 6px;
         }
 
         .g5-card-desc {
           font-family: var(--serif);
           font-style: italic;
-          font-size: 13px;
+          font-size: 12px;
           color: var(--neutral-300);
-          line-height: 1.4;
+          line-height: 1.35;
           flex-grow: 1;
         }
 
         .g5-card-hero .g5-card-desc {
-          font-size: 16px;
+          font-size: 15px;
           line-height: 1.5;
           max-width: 480px;
         }
@@ -134,12 +130,12 @@ export function G5Google() {
 
         .g5-card-btn {
           font-family: var(--mono);
-          font-size: 11px;
+          font-size: 10px;
           letter-spacing: 0.08em;
           color: var(--copper-300);
           background: transparent;
           border: 1px solid var(--copper-700);
-          padding: 6px 10px;
+          padding: 4px 8px;
           cursor: pointer;
           transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
         }
@@ -165,11 +161,10 @@ export function G5Google() {
       {/* FigLabel — always visible */}
       <FigLabel section="G" num={5} label="GOOGLE" />
 
-      {/* Headline — always visible */}
-      <h1 className="slide-headline small">{highlight(C.headline, [...C.headlineKw])}</h1>
-
-      {/* Subhead — always visible */}
-      <div className="g5-subhead">{C.subhead}</div>
+      {/* Headline — positioned below FigLabel (matches G2 convention) */}
+      <h1 className="slide-headline small g5-headline">
+        {highlight(C.headline, [...C.headlineKw])}
+      </h1>
 
       {/* Card region — wrapped in data-no-advance */}
       <div className="g5-card-region" data-no-advance>
@@ -197,7 +192,7 @@ export function G5Google() {
                   desc={card.desc}
                   videoFile={card.videoFile}
                   glyph={card.glyph}
-                  glyphSize={48}
+                  glyphSize={28}
                   isHero={false}
                   onPlayVideo={(src, caption) => setVideoOpen({ src, caption })}
                 />

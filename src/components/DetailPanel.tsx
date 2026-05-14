@@ -20,7 +20,7 @@ export interface DetailPanelProps {
 }
 
 export function DetailPanel({ comparison, fallback }: DetailPanelProps) {
-  const hasContent = comparison !== null;
+  const hasChrome = comparison !== null || fallback != null;
 
   return (
     <div
@@ -28,11 +28,11 @@ export function DetailPanel({ comparison, fallback }: DetailPanelProps) {
         width: "100%",
         height: "100%",
         boxSizing: "border-box",
-        padding: "24px",
-        border: hasContent
+        padding: "18px",
+        border: hasChrome
           ? "1px solid var(--copper-300)"
           : "1px solid transparent",
-        background: hasContent ? "rgba(20,12,6,0.85)" : "transparent",
+        background: hasChrome ? "rgba(20,12,6,0.85)" : "transparent",
         transition:
           "border-color 200ms var(--ease), background 200ms var(--ease)",
         overflow: "hidden",
@@ -62,20 +62,20 @@ function ComparisonMatrix({ comparison }: { comparison: ComparisonDef }) {
       }}
     >
       {/* Header row: empty top-left + each column name (with optional vendor) */}
-      <div style={{ paddingBottom: "12px" }} />
+      <div style={{ paddingBottom: "10px" }} />
       {columns.map((col, i) => (
         <div
           key={`col-${i}`}
           style={{
-            paddingBottom: "12px",
+            paddingBottom: "10px",
             borderBottom: "1px solid var(--copper-700)",
-            alignSelf: "start",
+            alignSelf: "stretch",
           }}
         >
           <div
             style={{
               fontFamily: "var(--mono)",
-              fontSize: "11px",
+              fontSize: "10px",
               color: "var(--copper-300)",
               textTransform: "uppercase",
               letterSpacing: "0.16em",
@@ -88,7 +88,7 @@ function ComparisonMatrix({ comparison }: { comparison: ComparisonDef }) {
             <div
               style={{
                 fontFamily: "var(--mono)",
-                fontSize: "9px",
+                fontSize: "8.5px",
                 color: "var(--copper-500)",
                 textTransform: "uppercase",
                 letterSpacing: "0.18em",
@@ -133,13 +133,13 @@ function RowFragment({
       <div
         style={{
           fontFamily: "var(--mono)",
-          fontSize: "11px",
+          fontSize: "10px",
           color: "var(--copper-300)",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
-          padding: "10px 0",
+          padding: "8px 0",
           borderBottom: divider,
-          alignSelf: "start",
+          alignSelf: "stretch",
         }}
       >
         {label}
@@ -149,12 +149,12 @@ function RowFragment({
           key={`cell-${cellIdx}`}
           style={{
             fontFamily: "var(--serif)",
-            fontSize: "13px",
+            fontSize: "11.5px",
             color: "var(--neutral-100)",
             lineHeight: 1.4,
-            padding: "10px 0",
+            padding: "8px 0",
             borderBottom: divider,
-            alignSelf: "start",
+            alignSelf: "stretch",
             verticalAlign: "top",
           }}
         >
