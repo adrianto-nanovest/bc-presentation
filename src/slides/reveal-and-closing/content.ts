@@ -181,6 +181,104 @@ export const i3Content = {
     { kind: "item" as const, id: "ai-sdlc", label: "AI-SDLC · Nanovest", weight: "light" as const },
     { kind: "item" as const, id: "pilot-workshop", label: "Pilot Workshop · Nanovest", weight: "light" as const },
   ],
+  // ── Workflows panel: 3 n8n harnesses (Indonesian-market intel). ──
+  workflows: [
+    {
+      id: "stocks-intel",
+      label: "stocks intel",
+      description: "Stocks News Sentiment Intelligence — AI-powered US stocks news pipeline: RSS aggregation, web scrapping, sentiment analysis, daily intelligence brief ",
+    },
+    {
+      id: "legal-docs",
+      label: "legal docs",
+      description: "Legal Docs Generation System - End-to-end legal document automation and approval workflow with AI-powered revision capability.",
+    },
+    {
+      id: "exchange-alerts",
+      label: "exchange alerts",
+      description: "3rd Parties Announcement Alert System — Automated monitoring with AI-powered classification and Opsgenie alerting.",
+    },
+  ] as const,
+  // ── Plugins panel: 2 Claude plugins shipped for internal use. ──
+  plugins: [
+    {
+      id: "nanovest-product",
+      label: "nanovest-product",
+      description: "End-to-end reusable plugin for Product Manager — Empowering product teams from ideation to requirements generation.",
+    },
+    {
+      id: "notebooklm",
+      label: "NotebookLM",
+      description: "Exploit the maximum capability of NotebookLM with portability over all AI platforms.",
+    },
+  ] as const,
+  // ── Connectors panel: 9 tiles. 3 in-use custom MCPs + 6 retired (now covered
+  // by Anthropic's official MCPs). Mirrors F8's connectors shape but uses
+  // `inUse: boolean` instead of `connected`. ──
+  connectors: [
+    { id: "gemini-image-gen", name: "gemini-image-gen", sublabel: "Image Gen",     lastUsed: "Generate image & video using state-of-the-art gemini models",   inUse: true,  popover: "Generates background imagery and design refs for slide builds. No official Anthropic MCP yet.",        kw: ["Image Gen"] as const },
+    { id: "sonarqube",        name: "Sonarqube",        sublabel: "Code Quality",  lastUsed: "Get analysis & statistics from code quality tools",     inUse: true,  popover: "Pulls static-analysis reports into review threads so the agent can act on hotspots directly.",         kw: ["static-analysis"] as const },
+    { id: "bitbucket",        name: "Bitbucket",        sublabel: "Development",   lastUsed: "Interact with our code repositories", inUse: true,  popover: "Reads PRs and branches and opens drafts on the team repo; merges still require human approval.",      kw: ["PRs"] as const },
+    { id: "sentry",           name: "Sentry",           sublabel: "Observability", lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Sentry MCP, which covers the same triage workflow.",                kw: ["Replaced"] as const },
+    { id: "atlassian",        name: "Atlassian",        sublabel: "Productivity",  lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Atlassian MCP — Jira and Confluence flows now route through it.",   kw: ["Replaced"] as const },
+    { id: "datadog",          name: "Datadog",          sublabel: "Observability", lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Datadog MCP. Custom build dropped to reduce maintenance load.",      kw: ["Replaced"] as const },
+    { id: "google-workspace", name: "Google Workspace", sublabel: "Productivity",  lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Google Workspace MCP covering Gmail, Drive, and Calendar.",          kw: ["Replaced"] as const },
+    { id: "n8n",              name: "n8n",              sublabel: "Automation",    lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official n8n MCP, which surfaces workflow runs and triggers natively.",       kw: ["Replaced"] as const },
+    { id: "figma",            name: "Figma",            sublabel: "Design",        lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Figma MCP — design-file reads now go through the supported path.",   kw: ["Replaced"] as const },
+  ] as const,
+  // ── Workshops panel: 2×2 grid of facilitated sessions. Workshop names are
+  // real artifacts so the audience can recognize them; bullets stay
+  // matter-of-fact and universal in tone. ──
+  workshops: [
+    {
+      id: "hr-group-ai",
+      heading: "AGENTIC ORGANIZATION · SINARMAS HR GROUP",
+      bullets: [
+        "'hardest part isn't the tools' — 70% is people and process",
+        "the agentic org — AISC plus six pillars around it",
+        "three honest failures — methodology, strategy, empowerment",
+        "four-pillar playbook — middle-out champions, problems-first",
+        "mindset flip — 'how to build?' → 'how to enable?'",
+      ] as const,
+      kw: ["people and process", "six pillars", "middle-out champions"] as const,
+    },
+    {
+      id: "townhall-aisc",
+      heading: "TOWNHALL AISC · NANOVEST",
+      bullets: [
+        "year one of the AI Steering Committee, recapped",
+        "flagship builds — Naura, alerts, sentiment, cinematic ads",
+        "every project framed — problem, solution, how, outcome",
+        "department journey — learn, experiment, build, integrate, own",
+        "AISC stance — enabler, not delivery team",
+      ] as const,
+      kw: ["AI Steering Committee", "department journey", "enabler, not delivery team"] as const,
+    },
+    {
+      id: "ai-sdlc",
+      heading: "AI-SDLC FOUNDATION · NANOVEST",
+      bullets: [
+        "productivity paradox — feels faster, measured 19% slower",
+        "the dumb zone — context past 60% degrades quality",
+        "plugin stack — commands, agents, skills, hooks, MCP",
+        "six-step loop — research, plan, implement, test, ship",
+        "V-bounce — engineer specifies + verifies, AI generates",
+      ] as const,
+      kw: ["dumb zone", "plugin stack", "V-bounce"] as const,
+    },
+    {
+      id: "pilot-workshop",
+      heading: "AI PILOT WORKSHOP · NANOVEST",
+      bullets: [
+        "reality check — basic prompting, scattered tools, fear",
+        "the AI mastery journey — foundation → agents in five stops",
+        "eight prompt techniques + the RACE structure",
+        "context engineering — write, select, compress, isolate",
+        "agent ladder — reactive → single → agentic systems",
+      ] as const,
+      kw: ["AI mastery journey", "context engineering", "agent ladder"] as const,
+    },
+  ] as const,
 };
 
 export const i4Content = {

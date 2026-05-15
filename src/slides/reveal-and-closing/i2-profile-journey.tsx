@@ -63,7 +63,7 @@ export function I2ProfileJourney() {
 
       <div className="slide-headline-row" style={{ zIndex: 20 }}>
         <h1 className="slide-headline small">
-          Who {highlight("am I", ["am I"] as const)}
+          {highlight("Introduction", ["Introduction"] as const)}. Who {highlight("am I", ["am I"] as const)}.
         </h1>
       </div>
 

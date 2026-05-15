@@ -266,3 +266,52 @@ I want to fix the structure first, where i think we can refer to F8 implementati
 
 Create Tasks for all items to do, delegate to your general-purpose agents to implement (do it sequencially if there are tight dependencies, otherwise do it in parallel)
 Dispatch your Explore agents (Sonnet model) for better codebase / other slides understanding
+
+
+-----------------
+From the current slide code (from section B to H, and J), i need to create 10 questions with 4 multiple choice answers (and provide the answer too)
+So event organizer of my presentation event, wants to ensure the whole audience is really understand on the material given by me.
+Ensure the quiz cover all the sections above, and make it in order.
+Please create it in docs/quiz (new folder), make it in markdown format. 
+Dispatch your Explore agents (Haiku model) for the codebase understanding.
+
+-----------------
+
+lets fix @src/slides/reveal-and-closing/simulations/StocksIntel.tsx, which currently [Image #1]
+  1. The current illustration, each diagram is currently too small, we must make it bigger for better visibility.
+  2. Here is the proper reference [Image #2]. We have daily schedule trigger, goes to first AI agent - Source Aggregator (consist of RSS Feeds (getting all raw news metadata),
+  then go to LLM to filter news based on relevance to stocks, output in valid news metadata). then goes to second AI agent - Batch Processing News (consist WebScraper, and LLM to
+  analyze each news, and resulting in news-ticker connection). then goes to 3rd AI Agent - Tickers generator agent (consist of Ticker extraction - cross check with Valid tickers
+  ground truth, LLM to analyze ticker (scoring importance, outlook determination), and get top 10 tickers). Then goes to 4th AI agent - Summary Generator (consist of LLM 
+  generating brief content details based on template, push the final structure to Slack and Google Sheets). So i Think we can show 4 big boxes of AI agent with llustration process
+  inside). We can have sources mentioned outside the main diagram. We can do fanout from AI agent 1 to AI agent 2 and fan in again in AI agent 3 (but still use 1 box for Ai Agent
+  2)
+  3. I think we can create Animation SVG loop for some boxes like "WHY PACKAGE state - 50 user laptops" in F3 [Image #3] or static ones like "FilePile, IndexBlock, QueryBlock" in
+  F2 [Image #4].
+
+-----------------
+let's fix @src/slides/reveal-and-closing/simulations/LegalDocs.tsx to mimic similarly on how @src/slides/reveal-and-closing/simulations/StocksIntel.tsx is build
+  1. The current illustration, each diagram is currently too small, we must make it bigger for better visibility
+  2. Animation loop, illustration of agents (inside the box illustration), should be improved. We can create several SVGs if needed
+  3. The flow: Slack Chat Trigger (with commands) -> filling slack built-in form & Submit -> Docs Generation Agent (no LLM / AI, just full process workflow; Folder creation in 
+  GDrive, extract payload from slack and create get docs template in GDrive -> write a new doc and store in GDrive -> inform in slack, update docs tracker in GSheet). Then goes to
+  Approval Workflow Agent (no AI/LLM also, Human in the loop decision, approval in Slack by Finance first then legal. If rejected by either of them goes to AI revision agent (get
+  the rejection reason -> LLM parse decline reason into structured JSON updated field -> update existing doc in GDrive -> restart approval workflow. If both finance and legal
+  approve, goes to E-Sign Automation Agent (no AI/LLM;create PDF from the doc, upload to Dropbox, send email to signer, wait for signature events, download signed docs from
+  dropbox, upload signed PDF to GDrive -> update project tracker in GSheets and inform done status in Slack). Simplify diagram example is in [Image #1]
+
+
+------------------
+ fix & improve @src/slides/reveal-and-closing/simulations/ExchangeAlerts.tsx  to mimic @src/slides/reveal-and-closing/simulations/StocksIntel.tsx, as currently [Image #18]
+  Reference simplified process as in [Image #17]
+  1. The current illustration, each diagram is currently too small, we must make it bigger for better visibility
+  2. Animation loop, illustration of agents (inside the box illustration), should be improved. We can create several SVGs if needed
+  3. The flow: Hourly cron -> Feeds Aggregation Agent (no LLM / AI, RSS Feeds of 6 providers  batch loop (getting all raw announcements metadata, including source from official
+  APIs, web scrapper, RSS, Telegram Channel) -> Announcement Filtering Agent (no LLM/AI, remove deduplication from all sources) -> AI Batch Classification Agent (clasify the
+  categories, alert priorities, feed relevance) -> Alert Generator agent (push Opsgenie alert in batch for the relevant alerts)
+
+  Create Tasks for all items to do, delegate to your general-purpose agents to implement (do it sequencially if there are tight dependencies, otherwise do it in parallel)
+  Dispatch your Explore agents (Sonnet model) for better codebase understanding
+  ENSURE WE CAN HAVE SIMILAR WIDTH AND HEIGHT for the whole illustration like the stocks one, we must fill corner to corner
+
+

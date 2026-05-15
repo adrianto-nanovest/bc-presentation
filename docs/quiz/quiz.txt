@@ -1,0 +1,125 @@
+BCE AI WORKSHOP — COMPREHENSION QUIZ
+Recommended time: ~12 minutes.
+
+=========================================================
+
+Q1: In Section B, AI terminology was presented as five concentric rings, where each inner ring is a subset of the outer one (not equal categories). Which option correctly orders the rings from BROADEST (outermost) to NARROWEST (innermost)?
+
+Options:
+A) Machine Learning -> Artificial Intelligence -> Deep Learning -> Generative AI -> Large Language Models
+B) Artificial Intelligence -> Machine Learning -> Deep Learning -> Generative AI -> Large Language Models
+C) Artificial Intelligence -> Deep Learning -> Machine Learning -> Large Language Models -> Generative AI
+D) Generative AI -> Large Language Models -> Deep Learning -> Machine Learning -> Artificial Intelligence
+
+Answer: B
+
+---------------------------------------------------------
+
+Q2: Section C describes the shape of human-AI collaboration as a four-stage workflow: Specify -> Generate -> Verify -> Ship It. Which option best captures WHO DOES WHAT in this new shape of work?
+
+Options:
+A) Humans specify, generate, and verify; AI only ships the result.
+B) Humans focus on Specify and Verify; AI handles the bulk of Generate.
+C) AI specifies and verifies; humans generate the actual content by hand.
+D) Humans and AI split every stage roughly 50/50.
+
+Answer: B
+
+---------------------------------------------------------
+
+Q3: Section D presented a five-question decision tree for choosing the right level of automation (BPM -> RPA -> IPA -> Agentic). A team walks the tree and finds: their process works today, they have already removed waste and bottlenecks, they have repetitive rule-based steps, BUT the steps do NOT need AI's core strengths (summarization, NLU, etc.). Which level is the correct fit?
+
+Options:
+A) BPM — go back and redesign the process.
+B) RPA — automate the rule-based steps; reclaim hours.
+C) IPA — layer AI's core strengths on top.
+D) Agentic — let an autonomous agent pursue the goal.
+
+Answer: B
+
+---------------------------------------------------------
+
+Q4: Section E introduced three nested engineering layers of AI system design, where each outer layer contains the inner ones. Which option lists them correctly from INNERMOST (the instructions) to OUTERMOST (the system around the model)?
+
+Options:
+A) Prompt -> Context -> Harness
+B) Context -> Prompt -> Harness
+C) Harness -> Context -> Prompt
+D) Prompt -> Harness -> Context
+
+Answer: A
+
+---------------------------------------------------------
+
+Q5: Section E's harness layer enumerates EIGHT practices that production-grade teams use to make agents reliable — things like orchestration, plugins, memory, observability, triggers, spec-driven development, human-in-the-loop, and autonomous retry loops. Which of the following is NOT one of those eight harness practices?
+
+Options:
+A) Orchestration
+B) Observability
+C) Tokenization
+D) Human-in-the-Loop
+
+Answer: C
+
+---------------------------------------------------------
+
+Q6: Section F introduced Skills as a way to package expertise that Claude can load on demand. The defining characteristic of a Skill is PROGRESSIVE DISCLOSURE — three levels of information loaded at different times to keep the context budget lean while keeping expertise unlimited. Which option correctly describes the progressive-disclosure model?
+
+Options:
+A) All three levels (metadata, instructions, resources) are fully loaded at the start of every session.
+B) Metadata is always loaded; instructions load only when the Skill is triggered; resources load only as needed.
+C) Resources are loaded first; instructions next; metadata is appended at the end of the session.
+D) A Skill loads its full contents in a fixed order regardless of whether the user invokes it.
+
+Answer: B
+
+---------------------------------------------------------
+
+Q7: Section F described FOUR canonical orchestration patterns for multi-agent workflows — each one a different shape of how sub-agents coordinate to finish a job. Which of the following is NOT one of those four patterns?
+
+Options:
+A) Centralized — a planner at the top dispatches to workers.
+B) Decentralized — peer mesh, agents coordinate among themselves.
+C) Chain — sequential hand-off, one agent feeds the next.
+D) Recursive — each agent spawns a copy of itself indefinitely.
+
+Answer: D
+
+---------------------------------------------------------
+
+Q8: Section G surveyed Claude, Google, and OpenAI ecosystems and closed with a guiding principle for choosing among them. Which statement matches the principle as presented?
+
+Options:
+A) Pick the most capable vendor and use it for everything.
+B) Open-source tools always beat frontier ones in the long run.
+C) Pick the right tool for each task — never the right vendor for every task.
+D) Always default to the cheapest tool that gets the job done.
+
+Answer: C
+
+---------------------------------------------------------
+
+Q9: Section H ("The Discipline") opened with EIGHT pitfalls of untrained AI use — things like vibe coding, prompt-and-pray, tool overload, context rot, and confidently-wrong. Which of the following was NOT listed as one of those untrained-use pitfalls?
+
+Options:
+A) Vibe coding
+B) Prompt-and-pray
+C) Context rot
+D) Spec-driven iteration
+
+Answer: D
+
+---------------------------------------------------------
+
+Q10: Section J closed the workshop with FIVE hard-earned mindset principles, framed as "Mindset before tools." Which of the following is one of those five principles, as it appeared on the slide?
+
+Options:
+A) Foundation precedes velocity — understand before you output.
+B) Always adopt the newest model the day it launches.
+C) Optimize for output first; refine the spec later.
+D) Solo builders should skip specs and ship by feel.
+
+Answer: A
+
+=========================================================
+END OF QUIZ
