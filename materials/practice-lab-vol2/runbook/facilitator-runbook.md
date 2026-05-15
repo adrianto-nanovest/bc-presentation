@@ -149,6 +149,8 @@ Team checks: does Claude cite sources? Does the Skill's structure appear in the 
 
 Based on seed validation, team revises one element of the system prompt (e.g., tighten the role statement, add a refusal rule, adjust the output format). Driver re-runs one question to confirm improvement.
 
+   - Use `cards/naive-vs-proper.md` as a quick reference if a team needs help upgrading a vague prompt into a structured one.
+
 **T+50** — *"Stage 2 closes. Drivers, leave your Project open — you're going to build the Artifact inside this same Project. Stage 3 starts now."*
 
 **Escape-hatch (Stage 2):** If a team is behind on prompt iteration, hand them the `cards/system-prompt-analyst.md` or `system-prompt-booster.md` "known-good" version and tell them to use it verbatim — skip iteration. This recovers ~5 min.
