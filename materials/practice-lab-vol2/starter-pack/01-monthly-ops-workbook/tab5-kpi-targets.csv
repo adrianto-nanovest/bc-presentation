@@ -1,0 +1,9 @@
+KPI,Target,Actual,Variance_pct,Direction,Owner
+Volume,100000,88000,-12.0,lower-is-worse,Section Head
+Yield_pct,95,88,-7pp,lower-is-worse,Section Head
+Defects_pct,3,5.2,+73,lower-is-worse,Team Leader
+Downtime_hrs,100,168,+68,lower-is-worse,Team Leader
+Energy_kWh_per_unit,0.65,0.66,+1.5,lower-is-worse,Section Head
+Vendor_on_time_pct,95,82,-13pp,lower-is-worse,Team Leader
+Safety_incidents,0,1,+1,lower-is-worse,Section Head
+Headcount_fill_pct,100,99,-1pp,flat-tolerable,Team Leader

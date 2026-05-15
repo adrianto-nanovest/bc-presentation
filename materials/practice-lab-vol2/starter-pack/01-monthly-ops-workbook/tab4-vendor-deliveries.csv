@@ -1,0 +1,41 @@
+Date,Vendor,Item,Qty_ordered,Qty_received,Status,Lag_days,Notes
+2026-05-01,Surya Logistik,Input materials A,500,500,Delivered,0,
+2026-05-01,Mitra Industri,Consumables B,300,300,Delivered,0,
+2026-05-02,Cipta Karya,Packaging supplies,800,800,Delivered,0,
+2026-05-03,Bumi Persada,Input materials C,400,400,Delivered,0,
+2026-05-03,Nusantara Parts,Spare parts kit,50,50,Delivered,0,
+2026-05-04,Surya Logistik,Input materials A,500,500,Delayed,1,1-day delay; no operational impact
+2026-05-05,Delta Pratama,Component set D,200,200,Delivered,0,
+2026-05-05,Mitra Industri,Consumables B,300,300,Delivered,0,
+2026-05-06,Cipta Karya,Packaging supplies,800,800,Delivered,0,
+2026-05-07,Bumi Persada,Input materials C,400,400,Delivered,0,
+2026-05-07,Nusantara Parts,Spare parts kit,50,50,Delivered,0,
+2026-05-08,Surya Logistik,Input materials A,500,500,Delivered,0,
+2026-05-08,Delta Pratama,Component set D,200,200,Delivered,0,
+2026-05-09,Mitra Industri,Consumables B,300,295,Partial — minor shortfall,1,Small under-delivery; within tolerance
+2026-05-09,Cipta Karya,Packaging supplies,800,800,Delivered,0,
+2026-05-10,Bumi Persada,Input materials C,400,400,Delivered,0,
+2026-05-10,Nusantara Parts,Spare parts kit,50,50,Delivered,0,
+2026-05-11,Surya Logistik,Input materials A,500,500,Delayed,1,1-day delay; within SLA
+2026-05-12,Delta Pratama,Component set D,200,200,Delivered,0,
+2026-05-12,Mitra Industri,Consumables B,300,300,Delivered,0,
+2026-05-13,Cipta Karya,Packaging supplies,800,800,Delivered,0,
+2026-05-13,Nusantara Parts,Spare parts kit,50,48,Partial — minor shortfall,2,2 units backordered; received May 15
+2026-05-14,Delta Pratama,Component set D,500,200,Partial — see Vendor Notice 04,5,60% shortfall; remaining 300 arrived May 19
+2026-05-14,Surya Logistik,Input materials A,500,500,Delivered,0,
+2026-05-14,Bumi Persada,Input materials C,400,400,Delivered,0,
+2026-05-15,Mitra Industri,Consumables B,300,300,Delivered,0,
+2026-05-15,Cipta Karya,Packaging supplies,800,800,Delivered,0,
+2026-05-16,Surya Logistik,Input materials A,500,500,Delivered,0,
+2026-05-17,Nusantara Parts,Spare parts kit,50,50,Delivered,0,
+2026-05-18,Bumi Persada,Input materials C,400,400,Delivered,0,
+2026-05-19,Delta Pratama,Component set D,300,300,Delivered,5,Backfill of May 14 shortfall
+2026-05-19,Mitra Industri,Consumables B,300,300,Delivered,0,
+2026-05-20,Cipta Karya,Packaging supplies,800,800,Delivered,0,
+2026-05-21,Surya Logistik,Input materials A,500,500,Delivered,0,
+2026-05-21,Nusantara Parts,Spare parts kit,50,50,Delivered,0,
+2026-05-22,Delta Pratama,Component set D,200,200,Delivered,0,
+2026-05-22,Bumi Persada,Input materials C,400,400,Delivered,0,
+2026-05-25,Mitra Industri,Consumables B,300,300,Delivered,0,
+2026-05-26,Cipta Karya,Packaging supplies,800,800,Delayed,1,1-day delay; no operational impact
+2026-05-28,Surya Logistik,Input materials A,500,500,Delivered,0,

@@ -1,0 +1,26 @@
+Date,Type,Severity,Resolution_time_hrs,Root_cause,Linked_vendor,Notes
+2026-05-01,Minor jam,Low,1,Operator-cleared,,
+2026-05-03,Material reject,Low,2,Out-of-spec batch,Surya Logistik,Batch SL-0430; resolved after re-check
+2026-05-05,Minor jam,Low,1,Operator-cleared,,
+2026-05-06,Downstream stall,Medium,3,Buffer overflow,,
+2026-05-07,Equipment fault,Medium,4,Sensor calibration drift,,Recalibrated; resumed normal
+2026-05-08,Minor jam,Low,1,Operator-cleared,,
+2026-05-09,Material reject,Medium,3,Out-of-spec batch,Mitra Industri,MI-0507; accepted after re-sort
+2026-05-10,Downstream stall,Medium,2,Scheduling conflict,,
+2026-05-11,Equipment fault,Medium,5,Bearing wear — preventive replacement,,Scheduled maintenance window used
+2026-05-12,Minor jam,Low,1,Operator-cleared,,
+2026-05-13,Downstream stall,Medium,3,Buffer overflow,,
+2026-05-14,Equipment fault,Medium,6,Input shortage — partial vendor delivery,Delta Pratama,Linked to DP delivery shortfall; see Tab 4
+2026-05-15,Equipment fault,Critical,11,Component failure — root cause traced to Apr 28 event,Delta Pratama,Apr 28 lineage confirmed; see Incident Brief
+2026-05-16,Downstream stall,Critical,14,Cascading stoppage following May 15 fault,Delta Pratama,Full-line stoppage 08:00–22:00
+2026-05-17,Material reject,Critical,13,High defect rate — degraded input quality,,Defects peaked at 9.1%; partial restart
+2026-05-18,Equipment fault,Medium,5,Secondary sensor fault — collateral from May 16,,Resolved after parts swap
+2026-05-19,Downstream stall,Medium,3,Post-incident buffer depletion,,Gradual recovery
+2026-05-20,Minor jam,Low,2,Operator-cleared,,
+2026-05-21,Equipment fault,Medium,4,Scheduled part replacement,,Planned window
+2026-05-22,Material reject,Medium,3,Out-of-spec batch,Cipta Karya,CK-0521; batch returned
+2026-05-23,Minor jam,Low,1,Operator-cleared,,
+2026-05-25,Downstream stall,Medium,2,Scheduling conflict,,
+2026-05-27,Equipment fault,Medium,3,Sensor calibration drift,,Recalibrated
+2026-05-29,Minor jam,Low,1,Operator-cleared,,
+2026-05-30,Material reject,Medium,2,Out-of-spec batch,Bumi Persada,BP-0529; accepted after re-sort
