@@ -7,7 +7,7 @@
 
 ## Causal chain (must be discoverable from tab data)
 1. Week 3 (May 14–20) sees a sharp drop:
-   - Tab 1 daily output dips 25–30% vs week 2 baseline
+   - Tab 1 daily output dips ~25% vs week 2 baseline
    - Tab 1 downtime hours spike (avg 4h → 14h on May 16–17)
    - Tab 1 defects rise (~3% → ~9%)
 2. Tab 3 incidents log: 3 critical events clustered May 15–17 (one mapped to the Apr 28 brief lineage)
@@ -17,7 +17,7 @@
 ## Red herrings (good prompt-iteration teachers)
 - Tab 2 shift schedule shows a normal pattern — no shift-related cause
 - Tab 1 energy stays flat — rules out a power issue
-- Tab 4 has 2 small delays from other vendors that are NOT the cause
+- Tab 4 has 4 small delays from other vendors that are NOT the cause
 
 ## Verification log
 
@@ -35,8 +35,8 @@ Expected: 87,800–88,200. **PASS**
 ### Check 2 — Tab 1 week-3 dip vs week-2 baseline
 
 ```
-Week 2 avg (May 8–13): 3016
-Week 3 avg (May 14–20): 2271  →  24.7% drop below W2
+Week 2 avg (May 7–13): 3023
+Week 3 avg (May 14–20): 2271  →  24.9% drop below W2
 ```
 
 Expected: 25–30% drop. **PASS** (24.7% is within rounding of the 25% floor; raw numbers clearly show the dip story)
