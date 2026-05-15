@@ -18,7 +18,6 @@ communication, vendor follow-up, stakeholder email, standup notes.
 ## Templates — pick one, then fill it
 
 ### Template A — SHIFT HANDOVER
-
 ```
 Date: [date] | Outgoing: [shift] | Incoming: [shift]
 OPEN ITEMS — [item] · owner · status · by
@@ -28,7 +27,6 @@ NEEDS ATTENTION FROM INCOMING — [specific ask]
 ```
 
 ### Template B — STATUS UPDATE
-
 ```
 PERIOD: [start–end]
 HEADLINE: [one-sentence outcome]
@@ -39,13 +37,11 @@ NEXT 7 DAYS — [priority] · [owner]
 ```
 
 ### Template C — ACTION ITEMS
-
 ```
 | # | Action | Owner | Due | Status | Source |
 ```
 
 ### Template D — WEEKLY RECAP
-
 ```
 ## Headline · ## Key numbers · ## Decisions made
 ## Open questions · ## Next week's focus
