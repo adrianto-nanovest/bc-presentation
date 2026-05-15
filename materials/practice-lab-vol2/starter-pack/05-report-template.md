@@ -38,18 +38,6 @@
 
 ---
 
-## Root Cause
-
-<!-- prompt: State the probable root cause in one sentence. Then list contributing factors (max 3). If the evidence strength for any factor is Weak, call that out explicitly — do not present Weak evidence as settled fact. If a prior-period event (e.g., an unresolved incident from last month) is part of the causal chain, name it here. -->
-
-- Probable root cause:
-- Contributing factor 1:
-- Contributing factor 2:
-- Contributing factor 3:
-- Evidence confidence note:
-
----
-
 ## Recommendations
 
 <!-- prompt: For each recommendation, name the action, its owner (Section Head or Team Leader), the expected impact on the affected metric, and what observable outcome would confirm the action worked. Keep to actions that can be completed within the next 30 days unless a longer window is explicitly justified. -->
