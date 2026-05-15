@@ -661,6 +661,7 @@ export const g7Content = {
       icon: "Brain",
       items: ["Gems", "Projects", "Workspace Agents"],
       description: "Persona, container, autonomous task — three shapes.",
+      descriptionKw: ["Persona", "container", "autonomous task"] as const,
       summary:
         "Persona / container / autonomous task. Three shapes of the same idea.",
     },
@@ -669,6 +670,7 @@ export const g7Content = {
       icon: "Layers",
       items: ["Stitch", "Claude Design"],
       description: "Visual-first vs prompt-first.",
+      descriptionKw: ["Visual-first", "prompt-first"] as const,
       summary: "Visual-first vs prompt-first. Sketch in your favorite tool.",
     },
     {
@@ -676,6 +678,7 @@ export const g7Content = {
       icon: "Sparkles",
       items: ["Canvas", "Live Artifacts"],
       description: "Doc-mode edits vs app-mode ships.",
+      descriptionKw: ["Doc-mode", "app-mode"] as const,
       summary: "Doc-mode vs app-mode. One edits, the other ships.",
     },
     {
@@ -683,6 +686,7 @@ export const g7Content = {
       icon: "Wrench",
       items: ["Claude Desktop", "Codex App"],
       description: "Both real IDEs — chat-canvas vs GUI-worktrees.",
+      descriptionKw: ["chat-canvas", "GUI-worktrees"] as const,
       summary:
         "Both real IDEs. Different shapes — chat-canvas vs GUI-worktrees.",
     },
@@ -691,6 +695,7 @@ export const g7Content = {
       icon: "Terminal",
       items: ["Claude Code CLI", "Codex CLI", "Gemini CLI"],
       description: "All three real CLIs. Pick by tool-calling needs.",
+      descriptionKw: ["tool-calling"] as const,
       summary: "All three are real CLIs. Pick by your team's tool-calling needs.",
     },
   ] as const,
@@ -914,24 +919,28 @@ export const g7Content = {
         "One shared workspace for a project → Projects",
         "A job that runs without you (24/7) → Workspace Agents",
       ],
+      bulletsKw: ["Gems", "Projects", "Workspace Agents"] as const,
     },
     {
       bullets: [
         "Visual-thinking designers → Stitch",
         "Codebase-aware, system-extracted → Claude Design",
       ],
+      bulletsKw: ["Stitch", "Claude Design"] as const,
     },
     {
       bullets: [
         "Collaborative draft + iteration → Canvas",
         "Live KPI dashboard, project tracker → Live Artifacts",
       ],
+      bulletsKw: ["Canvas", "Live Artifacts"] as const,
     },
     {
       bullets: [
         "Mobile-first async + tool-calling lead → Claude Desktop",
         "Desktop-heavy IDE workflow → Codex App",
       ],
+      bulletsKw: ["Claude Desktop", "Codex App"] as const,
     },
     {
       bullets: [
@@ -939,6 +948,7 @@ export const g7Content = {
         "Parallel git worktrees, GPT-5 reasoning → Codex",
         "Generous free tier, long context → Gemini",
       ],
+      bulletsKw: ["Claude Code", "Codex", "Gemini"] as const,
     },
   ] as const,
   footer: "Vendors rebrand. The five shapes won't.",
@@ -1082,7 +1092,9 @@ export const g10Content = {
       differentiator: "Open-source AI agent",
       description:
         "Messaging-first interface; self-host friendly.",
+      subtitleKw: ["Open-source", "self-host"] as const,
       useCase: "Privacy-sensitive deploys, enterprises, gov.",
+      useCaseKw: ["Privacy-sensitive", "gov"] as const,
       footnote: "~350K stars, MIT license.",
       glyphKind: "openclaw",
     },
@@ -1091,8 +1103,10 @@ export const g10Content = {
       differentiator: "Self-improving + persistent memory",
       description:
         "Learns from prior runs; persistent context across sessions.",
+      subtitleKw: ["Self-improving", "persistent memory"] as const,
       useCase:
         "Tasks where context across sessions matters more than raw capability.",
+      useCaseKw: ["context across sessions"] as const,
       footnote: "~64K stars.",
       glyphKind: "hermes",
     },
@@ -1101,8 +1115,10 @@ export const g10Content = {
       differentiator: "LLM-native workflow automation",
       description:
         "Workflow automation that turned LLM-native in 2026 (MCP integration).",
+      subtitleKw: ["LLM-native", "MCP integration"] as const,
       useCase:
         "Cross-app workflows, no-code AI orchestration for ops + IT teams.",
+      useCaseKw: ["no-code AI orchestration"] as const,
       footnote: "~80K stars; self-host or SaaS.",
       glyphKind: "n8n",
     },

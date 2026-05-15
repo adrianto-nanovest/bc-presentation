@@ -14,6 +14,7 @@
 //     it returns to the calm copper-700 baseline.
 import { useState } from "react";
 import { AnimatedGlyph } from "@/components/AnimatedGlyph";
+import { highlight } from "@/components/highlight";
 import { Reveal } from "../../foundation-core-section-e/components/Reveal";
 import type { h1Content } from "../content";
 
@@ -142,7 +143,7 @@ function PitfallCard({ pitfall, index }: PitfallCardProps) {
             marginTop: "auto",
           }}
         >
-          {pitfall.cost}
+          {highlight(pitfall.cost, [...pitfall.costKw])}
         </div>
       </div>
     </Reveal>

@@ -186,17 +186,20 @@ export const i3Content = {
     {
       id: "stocks-intel",
       label: "stocks intel",
-      description: "Stocks News Sentiment Intelligence — AI-powered US stocks news pipeline: RSS aggregation, web scrapping, sentiment analysis, daily intelligence brief ",
+      description: "Stocks News Sentiment Intelligence — AI-powered US stocks news pipeline: RSS aggregation, web scrapping, sentiment analysis, daily intelligence brief.",
+      kw: ["Stocks News Sentiment Intelligence", "RSS", "scrapping", "sentiment ", "intelligence"] as const,
     },
     {
       id: "legal-docs",
       label: "legal docs",
       description: "Legal Docs Generation System - End-to-end legal document automation and approval workflow with AI-powered revision capability.",
+      kw: ["Legal Docs Generation System", "approval workflow", "AI-powered revision"] as const,
     },
     {
       id: "exchange-alerts",
       label: "exchange alerts",
       description: "3rd Parties Announcement Alert System — Automated monitoring with AI-powered classification and Opsgenie alerting.",
+      kw: ["3rd Parties Announcement Alert System", "AI-powered classification", "Opsgenie"] as const,
     },
   ] as const,
   // ── Plugins panel: 2 Claude plugins shipped for internal use. ──
@@ -205,26 +208,29 @@ export const i3Content = {
       id: "nanovest-product",
       label: "nanovest-product",
       description: "End-to-end reusable plugin for Product Manager — Empowering product teams from ideation to requirements generation.",
+      kw: ["reusable plugin", "Product Manager", "ideation to requirements"] as const,
     },
     {
       id: "notebooklm",
       label: "NotebookLM",
       description: "Exploit the maximum capability of NotebookLM with portability over all AI platforms.",
+      kw: ["maximum capability", "portability"] as const,
     },
   ] as const,
   // ── Connectors panel: 9 tiles. 3 in-use custom MCPs + 6 retired (now covered
   // by Anthropic's official MCPs). Mirrors F8's connectors shape but uses
-  // `inUse: boolean` instead of `connected`. ──
+  // `inUse: boolean` instead of `connected`. `footer` is the italic line
+  // beneath the sublabel; `kw` highlights words inside `footer`. ──
   connectors: [
-    { id: "gemini-image-gen", name: "gemini-image-gen", sublabel: "Image Gen",     lastUsed: "Generate image & video using state-of-the-art gemini models",   inUse: true,  popover: "Generates background imagery and design refs for slide builds. No official Anthropic MCP yet.",        kw: ["Image Gen"] as const },
-    { id: "sonarqube",        name: "Sonarqube",        sublabel: "Code Quality",  lastUsed: "Get analysis & statistics from code quality tools",     inUse: true,  popover: "Pulls static-analysis reports into review threads so the agent can act on hotspots directly.",         kw: ["static-analysis"] as const },
-    { id: "bitbucket",        name: "Bitbucket",        sublabel: "Development",   lastUsed: "Interact with our code repositories", inUse: true,  popover: "Reads PRs and branches and opens drafts on the team repo; merges still require human approval.",      kw: ["PRs"] as const },
-    { id: "sentry",           name: "Sentry",           sublabel: "Observability", lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Sentry MCP, which covers the same triage workflow.",                kw: ["Replaced"] as const },
-    { id: "atlassian",        name: "Atlassian",        sublabel: "Productivity",  lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Atlassian MCP — Jira and Confluence flows now route through it.",   kw: ["Replaced"] as const },
-    { id: "datadog",          name: "Datadog",          sublabel: "Observability", lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Datadog MCP. Custom build dropped to reduce maintenance load.",      kw: ["Replaced"] as const },
-    { id: "google-workspace", name: "Google Workspace", sublabel: "Productivity",  lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Google Workspace MCP covering Gmail, Drive, and Calendar.",          kw: ["Replaced"] as const },
-    { id: "n8n",              name: "n8n",              sublabel: "Automation",    lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official n8n MCP, which surfaces workflow runs and triggers natively.",       kw: ["Replaced"] as const },
-    { id: "figma",            name: "Figma",            sublabel: "Design",        lastUsed: "Retired",                 inUse: false, popover: "Replaced by Anthropic's official Figma MCP — design-file reads now go through the supported path.",   kw: ["Replaced"] as const },
+    { id: "gemini-image-gen", name: "gemini-image-gen", sublabel: "Image Gen",     footer: "Generate image & video using state-of-the-art gemini models.",   inUse: true,  kw: ["image & video", "gemini models"] as const },
+    { id: "sonarqube",        name: "Sonarqube",        sublabel: "Code Quality",  footer: "Get analysis & statistics from code quality tools.",            inUse: true,  kw: ["analysis & statistics", "code quality"] as const },
+    { id: "bitbucket",        name: "Bitbucket",        sublabel: "Development",   footer: "Interact with our code repositories.",                          inUse: true,  kw: ["code repositories"] as const },
+    { id: "sentry",           name: "Sentry",           sublabel: "Observability", footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
+    { id: "atlassian",        name: "Atlassian",        sublabel: "Productivity",  footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
+    { id: "datadog",          name: "Datadog",          sublabel: "Observability", footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
+    { id: "google-workspace", name: "Google Workspace", sublabel: "Productivity",  footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
+    { id: "n8n",              name: "n8n",              sublabel: "Automation",    footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
+    { id: "figma",            name: "Figma",            sublabel: "Design",        footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
   ] as const,
   // ── Workshops panel: 2×2 grid of facilitated sessions. Workshop names are
   // real artifacts so the audience can recognize them; bullets stay

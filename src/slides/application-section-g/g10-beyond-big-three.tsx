@@ -142,11 +142,16 @@ function G10BeyondBigThree() {
               <AnimatedGlyph kind={card.glyphKind as any} size={48} />
               <div className="g10-card-name">{card.tool}</div>
               <div className="g10-card-desc">
-                {card.differentiator}. {card.description}
+                {highlight(
+                  `${card.differentiator}. ${card.description}`,
+                  [...card.subtitleKw],
+                )}
               </div>
               <hr className="g10-card-rule" />
               <div className="g10-card-for-label">FOR</div>
-              <div className="g10-card-usecase">{card.useCase}</div>
+              <div className="g10-card-usecase">
+                {highlight(card.useCase, [...card.useCaseKw])}
+              </div>
               <div className="g10-card-spacer" />
               <div className="g10-card-footnote">{card.footnote}</div>
             </div>

@@ -3,6 +3,7 @@
 // Structurally identical to WorkflowsPanel but with 2 sub-tabs and NO
 // "see it real" toggle (no real-screenshots are wired up for plugins yet).
 import { useState, type ReactNode } from "react";
+import { highlight } from "../../../../components/highlight";
 import { i3Content } from "../../content";
 import { NanovestProduct } from "../../simulations/NanovestProduct";
 import { NotebookLM } from "../../simulations/NotebookLM";
@@ -87,7 +88,7 @@ export function PluginsPanel() {
             lineHeight: 1.4,
           }}
         >
-          {activeMeta.description}
+          {highlight(activeMeta.description, activeMeta.kw)}
         </div>
       ) : null}
 

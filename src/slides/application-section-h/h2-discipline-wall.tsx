@@ -40,6 +40,7 @@ export function H2DisciplineWall() {
     num: c.num,
     name: c.name,
     move: c.move,
+    moveKw: c.moveKw,
     resolves: c.resolves,
     glyphKind: c.glyphKind,
   }));

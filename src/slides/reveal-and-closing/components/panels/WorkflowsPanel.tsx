@@ -6,6 +6,7 @@
 // real-product screenshots for the active workflow (the diagram stays
 // mounted underneath). Lightbox is closed and reset on every sub-tab change.
 import { useEffect, useState, type ReactNode } from "react";
+import { highlight } from "../../../../components/highlight";
 import { i3Content } from "../../content";
 import { StocksIntel } from "../../simulations/StocksIntel";
 import { LegalDocs } from "../../simulations/LegalDocs";
@@ -148,7 +149,7 @@ export function WorkflowsPanel() {
             lineHeight: 1.4,
           }}
         >
-          {activeMeta.description}
+          {highlight(activeMeta.description, activeMeta.kw)}
         </div>
       ) : null}
 

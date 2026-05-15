@@ -1,11 +1,13 @@
 // I.3 — ConnectorsPanel (custom MCPs built — 3 in-use, 6 retired)
 //
-// Mirrors F8's ConnectorsPanel pixel-for-pixel, with two divergences:
+// Mirrors F8's ConnectorsPanel pixel-for-pixel, with these divergences:
 //  • Uses `inUse: boolean` instead of `connected: boolean`.
 //  • Active pill reads "✓ IN USE" (copper-200 fill); inactive reads
 //    "NOT USED" (outlined copper-700 border, copper-200 text) — these are
 //    retired MCPs replaced by Anthropic's official MCPs.
 //  • Grid is 3 × 3 (9 tiles) instead of 4 × 2 (8 tiles).
+//  • No hover popover; the italic footer line carries the explanation
+//    (highlighted via `kw`).
 import { highlight } from "../../../../components/highlight";
 import { i3Content } from "../../content";
 
@@ -156,43 +158,14 @@ export function ConnectorsPanel() {
                   color: "var(--neutral-400)",
                 }}
               >
-                {c.lastUsed}
+                {highlight(c.footer, c.kw)}
               </span>
-            </div>
-            <div
-              className="i3-connector-popover"
-              role="tooltip"
-              style={{
-                position: "absolute",
-                bottom: "calc(100% + 8px)",
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: 220,
-                padding: "10px 12px",
-                background: "var(--neutral-900)",
-                border: "1px solid var(--copper-700)",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-                fontFamily: "var(--serif)",
-                fontStyle: "italic",
-                fontSize: 11.5,
-                lineHeight: 1.45,
-                color: "var(--neutral-200)",
-                opacity: 0,
-                pointerEvents: "none",
-                transition: "opacity 0.18s var(--ease)",
-                zIndex: 20,
-              }}
-            >
-              {c.kw && c.kw.length > 0
-                ? highlight(c.popover, c.kw)
-                : c.popover}
             </div>
           </button>
         ))}
       </div>
       <style>{`
         .i3-connector-tile:hover { border-color: var(--copper-200); box-shadow: 0 0 0 1px var(--copper-200), 0 0 16px rgba(184,110,61,0.12); }
-        .i3-connector-tile:hover .i3-connector-popover { opacity: 1; }
       `}</style>
     </div>
   );

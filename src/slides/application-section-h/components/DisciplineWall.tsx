@@ -19,6 +19,7 @@
 //     state crosses the grid/pill-row boundary.
 import { useState } from "react";
 import { AnimatedGlyph, type GlyphKind } from "@/components/AnimatedGlyph";
+import { highlight } from "@/components/highlight";
 import { Reveal } from "../../foundation-core-section-e/components/Reveal";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -36,6 +37,7 @@ export interface PracticeCardData {
   num: number;
   name: string;
   move: string;
+  moveKw: readonly string[];
   resolves: readonly PitfallId[];
   glyphKind: GlyphKind;
 }
@@ -287,7 +289,7 @@ function PracticeCard({
           fontStyle: "italic",
         }}
       >
-        {practice.move}
+        {highlight(practice.move, [...practice.moveKw])}
       </div>
 
       {/* Resolves caption — mono 10px copper-400, hidden until step 1 */}

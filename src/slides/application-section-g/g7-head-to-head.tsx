@@ -96,7 +96,7 @@ const styles = `
   font-family: var(--serif);
   font-style: italic;
   font-size: 11.5px;
-  color: var(--copper-200);
+  color: var(--neutral-400);
   line-height: 1.3;
   margin-top: 1px;
 }
@@ -206,7 +206,9 @@ function G7HeadToHead() {
           <div className="g7-recap-title">{card.title}</div>
           <ul className="g7-recap-list">
             {C.pickWhenSummaries[i].bullets.map((b) => (
-              <li key={b}>{b}</li>
+              <li key={b}>
+                {highlight(b, [...C.pickWhenSummaries[i].bulletsKw])}
+              </li>
             ))}
           </ul>
         </div>
@@ -313,7 +315,9 @@ function G7HeadToHead() {
                   <div className="g7-card-body">
                     <div className="g7-card-title">{card.title}</div>
                     <div className="g7-card-items">{card.items.join(" · ")}</div>
-                    <div className="g7-card-desc">{card.description}</div>
+                    <div className="g7-card-desc">
+                      {highlight(card.description, [...card.descriptionKw])}
+                    </div>
                   </div>
                 </div>
               </Reveal>
