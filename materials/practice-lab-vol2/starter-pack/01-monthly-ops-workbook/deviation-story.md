@@ -17,7 +17,7 @@
 ## Red herrings (good prompt-iteration teachers)
 - Tab 2 shift schedule shows a normal pattern — no shift-related cause
 - Tab 1 energy stays flat — rules out a power issue
-- Tab 4 has 4 small delays from other vendors that are NOT the cause
+- Tab 4 has 5 small delays from other vendors that are NOT the cause
 
 ## Verification log
 
@@ -31,6 +31,8 @@ Tab 1 volume sum: 87870
 ```
 
 Expected: 87,800–88,200. **PASS**
+
+Note: Tab 5 reports `Actual = 88,000` for the Volume KPI. The 130-unit gap vs Tab 1's daily sum (87,870) is a rounding/adjustment artefact — realistic for operational data where summary KPIs are reported in round figures but raw daily logs vary by minor measurement-cycle adjustments. Facilitators: if attendees flag this, the answer is "within rounding tolerance" — and noticing the gap is a strong signal of careful investigation.
 
 ### Check 2 — Tab 1 week-3 dip vs week-2 baseline
 
