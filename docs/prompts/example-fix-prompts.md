@@ -314,4 +314,16 @@ let's fix @src/slides/reveal-and-closing/simulations/LegalDocs.tsx to mimic simi
   Dispatch your Explore agents (Sonnet model) for better codebase understanding
   ENSURE WE CAN HAVE SIMILAR WIDTH AND HEIGHT for the whole illustration like the stocks one, we must fill corner to corner
 
+------------------
+
+/superpowers:brainstorming let's discuss on the practice labs use cases to be done during the workshop based on docs/references/deck-full-content-analysis.md
+  Some important notes:
+  1. We will not focus on concept, it is more on practical use cases using TOOLS
+  2. Total time for practice labs is 2 hours
+  3. The audience per session is around 40 people, and they will be separated in 8 groups. Per group, will have only 1 laptop in access for the hands-on. The group itself will be 
+  the team for competition later
+  4. There is uncertainty; the laptop used, most likely doesnt have admin access, so there is possibility the audience laptop cannot use Claude Desktop, so use case maybe limited 
+  on Claude Web
+  5. It would be great if we can use one long use cases, stitch between each others 
+
 
