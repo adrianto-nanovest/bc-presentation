@@ -81,7 +81,7 @@ test("J.2 cross-card alignment wrappers (title-block + practice-block) present o
   // rule, "In practice" label, and "Earned from" label across all 5 cards.
   // jsdom has no layout engine, so we verify by structure: every card
   // contains exactly one of each wrapper.
-  const { container } = renderJ2();
+  renderJ2();
   act(() => screen.getByTestId("goto").click());
   const cards = screen.getAllByTestId("j2-card");
   cards.forEach((card) => {

@@ -83,7 +83,7 @@ test("J.3 cross-card alignment wrapper (title-block) present on every card", () 
   // 3 cards. jsdom has no layout engine, so we verify by structure: every
   // card contains exactly one title-block wrapper. (Unlike J.2, J.3 only
   // needs the title-block floor — practice heights matched naturally.)
-  const { container } = renderJ3();
+  renderJ3();
   act(() => screen.getByTestId("goto").click());
   const cards = screen.getAllByTestId("j3-card");
   cards.forEach((card) => {
