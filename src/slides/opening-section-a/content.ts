@@ -31,7 +31,7 @@ export const titleContent: TitleContent = {
     "A working session on the AI stack, the mindset shift, and the new operator role — for everyone, not just engineers.",
   taglineKw: ["mindset shift", "operator role"],
   facilitator: "Adrianto Tedjokusumo · Nanovest",
-  workshopChip: "BCE AI Catalyst · Vol 2, Session 2",
+  workshopChip: "Berau AI Catalyst · Vol 2, Session 2",
   heroSrc: "/heroes/title-data-topology.jpg",
   heroAlt: "Abstract copper threads converging in deep space",
   darkenStrength: 0.18,
