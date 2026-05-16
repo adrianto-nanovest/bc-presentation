@@ -18,6 +18,7 @@ import { useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "./components/Reveal";
 import { LucideIcon } from "./components/LucideIcon";
@@ -63,19 +64,32 @@ export function E8ContextTheWall() {
           flexDirection: "column",
         }}
       >
-        <span
+        <div
           style={{
-            fontFamily: "var(--mono)",
-            fontSize: 11,
-            letterSpacing: "0.22em",
-            color: "var(--copper-300)",
-            textTransform: "uppercase",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 10,
+            position: "relative",
+            zIndex: 50,
           }}
         >
-          Four pitfalls
-        </span>
-        <div style={{ marginTop: 12 }}>
-          <CopperRule on width="40%" />
+          <div style={{ width: "fit-content" }}>
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                letterSpacing: "0.22em",
+                color: "var(--copper-300)",
+                textTransform: "uppercase",
+              }}
+            >
+              Four pitfalls
+            </span>
+            <div style={{ marginTop: 12 }}>
+              <CopperRule on width="100%" />
+            </div>
+          </div>
+          <HintIcon />
         </div>
 
         <div

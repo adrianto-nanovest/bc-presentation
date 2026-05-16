@@ -11,6 +11,7 @@ import { HeroPhoto } from "@/components/HeroPhoto";
 import { DarkenOverlay } from "@/components/DarkenOverlay";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { highlight as KW } from "@/components/highlight";
+import { TitleKeymap } from "./components/TitleKeymap";
 import { titleContent as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
@@ -174,6 +175,7 @@ export function Title() {
           style={{ flexShrink: 0 }}
         />
         <span>{C.facilitator}</span>
+        <TitleKeymap />
       </div>
     </div>
   );

@@ -28,6 +28,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight as KW } from "@/components/highlight";
 import { Reveal } from "@/slides/foundation-core-section-e/components/Reveal";
 import { LucideIcon } from "@/slides/foundation-core-section-e/components/LucideIcon";
@@ -137,6 +138,21 @@ export function B1EvolutionJourney() {
         <h1 className="slide-headline small">
           {KW(C.slideTitle, C.slideTitleKw)}
         </h1>
+      </div>
+
+      {/* Hint affordance — top-right of stage, vertically aligned with the
+          FIG label baseline. Visible all 7 steps; default text fits the
+          hover+pin model used on era nodes/labels. */}
+      <div
+        data-testid="b1-hint"
+        style={{
+          position: "absolute",
+          top: 30,
+          right: 48,
+          zIndex: 50,
+        }}
+      >
+        <HintIcon position="left" />
       </div>
 
       {/* Timeline stage — fades in on mount. Holds rail + nodes + label boxes. */}

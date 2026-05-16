@@ -14,6 +14,7 @@ import { useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight as KW } from "@/components/highlight";
 import { CopperRule } from "../foundation-core-section-e/components/Reveal";
 import { D2ListCard } from "./components/D2ListCard";
@@ -88,17 +89,30 @@ export function D2TheConvergence() {
         >
           <div
             style={{
-              fontFamily: "var(--mono)",
-              fontSize: 10,
-              letterSpacing: "0.22em",
-              color: "var(--copper-400)",
-              textTransform: "uppercase",
-              marginBottom: 4,
+              display: "flex",
+              alignItems: "flex-end",
+              gap: 10,
+              position: "relative",
+              zIndex: 50,
             }}
           >
-            Five disciplines
+            <div style={{ width: "fit-content" }}>
+              <div
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.22em",
+                  color: "var(--copper-400)",
+                  textTransform: "uppercase",
+                  marginBottom: 4,
+                }}
+              >
+                Five disciplines
+              </div>
+              <CopperRule on width="100%" />
+            </div>
+            {pinEnabled && <HintIcon />}
           </div>
-          <CopperRule on width="40%" />
           <div style={{ height: 6 }} />
           {C.cards.map((card, i) => (
             <D2ListCard

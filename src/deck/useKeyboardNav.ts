@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDeck } from "./DeckContext";
+import { deckSlides } from "./registry";
 
 // Spec §5.1 + plan §1.2 navigation contract:
 //   Space / Enter / ArrowDown   advance() — next step, spill to next slide on last step
@@ -8,12 +9,33 @@ import { useDeck } from "./DeckContext";
 //   ArrowLeft                   goTo(slide-1, 0) — previous slide, step 0
 //   r / R                       resetDeck() — only when no modifier held
 //   u / U                       resetStep() — only when no modifier held
+//   a-k / A-K                   goTo(firstSlideOf(section), 0) — section jump; r/u are
+//                                handled above and never reach this branch
 //
 // PageDown/PageUp are intentionally NOT bound — clickers can be configured to
 // emit Space/Backspace or arrows; binding PageDown invites surprises.
 //
-// Modifier gating on r/u protects Cmd+R (browser reload) and Cmd+U (view source)
-// — without it, a presenter mid-rehearsal hitting Cmd+R would silently reset.
+// Modifier gating on r/u/section-keys protects Cmd+R (browser reload), Cmd+U
+// (view source), and Cmd+letter shortcuts — without it, a presenter mid-rehearsal
+// hitting Cmd+R would silently reset.
+
+// Section → first-slide-index map. Built once at module load from the static
+// deck registry. Letters that don't have a section in the deck are absent
+// from the map (their key press is a no-op).
+//
+// Index 0 is the title slide — also tagged section "A" but acting as the
+// opening cover. It is excluded from the section map so pressing `A` jumps
+// to A.1 (the first body slide of section A), not the cover. Use `R` to
+// return to the cover.
+const SECTION_FIRST_INDEX: ReadonlyMap<string, number> = (() => {
+  const m = new Map<string, number>();
+  deckSlides.forEach((slide, i) => {
+    if (i === 0) return;
+    if (!m.has(slide.section)) m.set(slide.section, i);
+  });
+  return m;
+})();
+
 export function useKeyboardNav() {
   const {
     slideIndex,
@@ -68,6 +90,15 @@ export function useKeyboardNav() {
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         e.preventDefault();
         resetStep();
+      } else if (/^[A-Ka-k]$/.test(e.key)) {
+        // Section jump (A–K). Cmd/Ctrl/Alt combinations remain bound to
+        // their browser/OS shortcuts.
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const target = SECTION_FIRST_INDEX.get(e.key.toUpperCase());
+        if (target !== undefined) {
+          e.preventDefault();
+          goTo(target, 0);
+        }
       }
     };
     window.addEventListener("keydown", handler);

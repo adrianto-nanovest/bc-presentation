@@ -17,6 +17,7 @@ import type { CSSProperties } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "./components/Reveal";
 import { LucideIcon } from "./components/LucideIcon";
@@ -90,21 +91,26 @@ export function E3PromptStructure() {
         }}
       >
         {/* Row 1 — left header */}
-        <div style={{ gridColumn: 1, gridRow: 1 }}>
+        <div style={{ gridColumn: 1, gridRow: 1, position: "relative", zIndex: 50 }}>
           <div>
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.22em",
-                color: "var(--copper-400)",
-                textTransform: "uppercase",
-              }}
-            >
-              The Spine · 6 elements
-            </span>
-            <div style={{ height: 8 }} />
-            <CopperRule on width="40%" />
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+              <div style={{ width: "fit-content" }}>
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 10,
+                    letterSpacing: "0.22em",
+                    color: "var(--copper-400)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  The Spine · 6 elements
+                </span>
+                <div style={{ height: 8 }} />
+                <CopperRule on width="100%" />
+              </div>
+              {stepIndex === 0 && <HintIcon />}
+            </div>
             <div style={{ height: 14 }} />
           </div>
         </div>

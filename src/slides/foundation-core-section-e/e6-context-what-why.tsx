@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "./components/Reveal";
 import {
@@ -289,7 +290,10 @@ export function E6ContextWhatWhy() {
           style={{
             flex: "0 0 auto",
             marginBottom: 18,
-            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
           }}
         >
           <span
@@ -303,6 +307,13 @@ export function E6ContextWhatWhy() {
           >
             {highlight(C.reveal, C.revealKw)}
           </span>
+          {/* Hint affordance — visible at code stepIndex >= 1 (Adri Steps
+              2 and 3) alongside the kicker. Satellites are hover-only on
+              E6, so the copy reflects that (no pin/unpin). */}
+          <HintIcon
+            position="below"
+            text="Hover each component for details."
+          />
         </Reveal>
 
         <div

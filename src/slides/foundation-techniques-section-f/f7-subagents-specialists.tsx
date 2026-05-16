@@ -101,6 +101,7 @@ export function F7SubagentsSpecialists() {
         onPin={setPinnedFacet}
         showCards={showCards}
         header={C.header}
+        showHint
         footer={C.footer}
         footerKw={[...C.footerKw]}
         showFooter={showFooter}

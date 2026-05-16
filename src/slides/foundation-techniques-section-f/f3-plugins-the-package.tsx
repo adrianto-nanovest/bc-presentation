@@ -120,6 +120,7 @@ export function F3PluginsThePackage() {
         onPin={setPinnedFacet}
         showCards={showCards}
         header={C.header}
+        showHint
         footer={C.footer}
         footerKw={[...C.footerKw]}
         showFooter={showFooter}

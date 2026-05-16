@@ -21,6 +21,7 @@ import { Pin } from "lucide-react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { Reveal } from "./components/Reveal";
 import { Typewriter } from "./components/Typewriter";
@@ -66,6 +67,19 @@ export function E4PromptMethodologies() {
         <h1 className="slide-headline small">
           {highlight(C.headline, C.headlineKw)}
         </h1>
+      </div>
+
+      {/* Hint affordance — top-right of stage, visible all 4 steps. */}
+      <div
+        data-testid="e4-hint"
+        style={{
+          position: "absolute",
+          top: 30,
+          right: 48,
+          zIndex: 50,
+        }}
+      >
+        <HintIcon position="left" />
       </div>
 
       {/* Tier rows region — top:158, bottom:290 leaves a 190px detail strip
@@ -289,7 +303,7 @@ export function E4PromptMethodologies() {
               lineHeight: 1.4,
             }}
           >
-            {highlight(C.footer, C.footerKw)} Hover a card for details.
+            {highlight(C.footer, C.footerKw)}
           </p>
         </Reveal>
       )}

@@ -15,6 +15,7 @@
 // E.8's cascade timing. `data-active="true"|"false"` is applied per card based
 // on hover state so downstream tests can assert active facet.
 import { highlight } from "@/components/highlight";
+import { HintIcon } from "@/components/HintIcon";
 import { Reveal, CopperRule } from "./Reveal";
 import { LucideIcon } from "./LucideIcon";
 
@@ -47,6 +48,14 @@ export interface FacetMenuProps {
   revealUntilIndex?: number;
   /** e.g. "FIVE FACETS · RAG" — mono uppercase header above copper rule. */
   header?: string;
+  /**
+   * When true, renders a HintIcon beside the header (with tooltip describing
+   * the hover/pin interaction). The header + CopperRule are wrapped in a
+   * fit-content sub-stack so the rule does not extend under the icon. Defaults
+   * to false so existing consumers (e.g. F.1) keep the 40%-width rule baseline
+   * unchanged.
+   */
+  showHint?: boolean;
   /** Italic copper-200 footer copy. Reveal-gated by `showFooter`. */
   footer?: string;
   footerKw?: readonly string[];
@@ -73,6 +82,7 @@ export function FacetMenu({
   showCards,
   revealUntilIndex,
   header,
+  showHint = false,
   footer,
   footerKw,
   showFooter = false,
@@ -93,22 +103,46 @@ export function FacetMenu({
       }}
     >
       {header ? (
-        <>
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              color: "var(--copper-300)",
-              textTransform: "uppercase",
-            }}
-          >
-            {header}
-          </span>
-          <div style={{ marginTop: 12 }}>
-            <CopperRule on width="40%" />
+        showHint ? (
+          <div style={{ position: "relative", zIndex: 50 }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+              <div style={{ width: "fit-content" }}>
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 11,
+                    letterSpacing: "0.22em",
+                    color: "var(--copper-300)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {header}
+                </span>
+                <div style={{ marginTop: 12 }}>
+                  <CopperRule on width="100%" />
+                </div>
+              </div>
+              <HintIcon />
+            </div>
           </div>
-        </>
+        ) : (
+          <>
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                letterSpacing: "0.22em",
+                color: "var(--copper-300)",
+                textTransform: "uppercase",
+              }}
+            >
+              {header}
+            </span>
+            <div style={{ marginTop: 12 }}>
+              <CopperRule on width="40%" />
+            </div>
+          </>
+        )
       ) : null}
 
       <div

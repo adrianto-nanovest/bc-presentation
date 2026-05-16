@@ -14,6 +14,7 @@
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { AgenticOSMonitor } from "./components/AgenticOSMonitor";
 import { Reveal } from "./components/Reveal";
@@ -34,6 +35,21 @@ export function F8YourAgenticOs() {
         >
           {highlight(f8Content.headline, f8Content.headlineKw)}
         </h1>
+      </div>
+
+      <div
+        data-testid="f8-hint"
+        style={{
+          position: "absolute",
+          top: 30,
+          right: 48,
+          zIndex: 50,
+        }}
+      >
+        <HintIcon
+          position="left"
+          text="Click to swap models and switch panels on left rail, scroll inside any view."
+        />
       </div>
 
       <div className="slide-content">

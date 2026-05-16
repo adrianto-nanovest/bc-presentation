@@ -94,7 +94,6 @@ test("step 3 → footer caption reveals beneath the tier rows", () => {
   // `highlight()` splits keywords into their own spans — span across with
   // textContent.
   expect(footer.textContent).toMatch(/Higher tiers/);
-  expect(footer.textContent).toMatch(/Hover a card for details\./);
 });
 
 // Helper that flattens the readonly-tuple `tiers[].cards` into a plain array

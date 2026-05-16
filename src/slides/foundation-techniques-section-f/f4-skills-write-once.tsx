@@ -109,6 +109,7 @@ export function F4SkillsWriteOnce() {
         onPin={setPinnedFacet}
         showCards={showCards}
         header={C.header}
+        showHint
         footer={C.footer}
         footerKw={[...C.footerKw]}
         showFooter={showFooter}

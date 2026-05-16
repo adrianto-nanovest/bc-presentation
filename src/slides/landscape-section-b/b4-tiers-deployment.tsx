@@ -25,6 +25,7 @@ import { useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight as KW } from "@/components/highlight";
 import { Reveal } from "../foundation-core-section-e/components/Reveal";
 import { B4CategoryList } from "./components/B4CategoryCard";
@@ -131,8 +132,21 @@ export function B4ModelsByCategory() {
           flexDirection: "column",
         }}
       >
-        <Reveal on={showCards} data-testid="b4-left-title">
-          <SectionTitle label={C.leftSectionTitle} />
+        <Reveal
+          on={showCards}
+          data-testid="b4-left-title"
+          style={{ position: "relative", zIndex: 50 }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              gap: 10,
+            }}
+          >
+            <SectionTitle label={C.leftSectionTitle} />
+            {stepIndex === 0 && <HintIcon />}
+          </div>
         </Reveal>
         <div style={{ height: SECTION_TITLE_GAP }} />
 

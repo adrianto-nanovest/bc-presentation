@@ -13,6 +13,7 @@ import { useState } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { DetailPanel, type ComparisonDef } from "@/components/DetailPanel";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
@@ -247,10 +248,15 @@ function G7HeadToHead() {
         }}
       >
         {/* ROW 1 — Left column header */}
-        <div style={{ gridColumn: 1, gridRow: 1 }}>
-          <div className="g7-col-header-label">{C.leftHeader}</div>
-          <div style={{ height: 6 }} />
-          <CopperRule on width="40%" />
+        <div style={{ gridColumn: 1, gridRow: 1, position: "relative", zIndex: 50 }}>
+          <div style={{ display: "flex", alignItems: "flex-end", gap: 10 }}>
+            <div style={{ width: "fit-content" }}>
+              <div className="g7-col-header-label">{C.leftHeader}</div>
+              <div style={{ height: 6 }} />
+              <CopperRule on width="100%" />
+            </div>
+            {stepIndex === 0 && <HintIcon />}
+          </div>
         </div>
 
         {/* ROW 1 — Right column header (swaps text by step; hover-gated on step 1) */}

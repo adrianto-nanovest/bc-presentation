@@ -13,6 +13,7 @@ import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { Interactive } from "@/motion/Interactive";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { PortfolioMonitor } from "./components/PortfolioMonitor";
 import { Reveal } from "../foundation-techniques-section-f/components/Reveal";
@@ -33,6 +34,21 @@ export function I3Portfolio() {
         >
           {highlight(C.headline, ["Built", "Taught", "In production"])}
         </h1>
+      </div>
+
+      <div
+        data-testid="i3-hint"
+        style={{
+          position: "absolute",
+          top: 30,
+          right: 48,
+          zIndex: 50,
+        }}
+      >
+        <HintIcon
+          position="left"
+          text="Click left menu, top tabs, or 'see it real' to explore."
+        />
       </div>
 
       <div className="slide-content">
