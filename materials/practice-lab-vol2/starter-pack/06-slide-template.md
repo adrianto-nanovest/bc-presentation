@@ -27,8 +27,8 @@ background photo; accent color appears only in the rule and the presenter name l
 ## Slide 2 — Headline metric
 
 <!-- visual: one giant number centered on the slide — the actual output vs target, rendered as a
-large typographic figure (e.g., "88,000 / 100,000 units"); 1-line caption beneath in regular
-weight; a single variance indicator (e.g., "−12.0%") in the accent color or a muted red if
+large typographic figure (e.g., "87,870 / 100,000 units"); 1-line caption beneath in regular
+weight; a single variance indicator (e.g., "−12.1%") in the accent color or a muted red if
 negative; no chart — typography is the visual -->
 
 - Headline metric (target vs actual):

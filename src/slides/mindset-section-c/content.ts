@@ -294,7 +294,7 @@ export const c5Content: C5Content = {
   ],
   closing:
     "The bridge from where you are to wherever you need to be.",
-  closingKw: ["where you are"],
+  closingKw: ["where you are", "wherever you need to be"],
   heroSrc: "/heroes/c5-path.jpg",
   heroAlt: "Path leading into the distance",
   darkenStrength: 0.25,

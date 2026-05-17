@@ -1,0 +1,57 @@
+Sheet,Field,Explanation,Formula / Notes
+Daily Output,,,
+,Date,Calendar day of production,Format: YYYY-MM-DD
+,Volume,Good product output — units shipped after passing QC,Input (counted at end of line)
+,Downtime_hrs,"Total hours the line was stopped (all causes: maintenance, changeovers, breaks, incidents)",Input
+,Rejected_units,Units that failed QC at the output gate,Input
+,Scrap_units,"Units lost in-process before reaching QC (waste, rework)",Input
+,Defects_pct,Rejection rate at the QC gate,Rejected_units ÷ (Volume + Rejected_units) × 100
+,Yield_pct,Input-to-output conversion across the line,Volume ÷ (Volume + Rejected_units + Scrap_units) × 100
+,Energy_kWh,Total energy consumed that day,Input (meter reading)
+,Headcount,Operators on duty that day,Input (roster count)
+Shift Schedule,,,
+,Date,Calendar day,Format: YYYY-MM-DD
+,Shift,Time block,Morning (06–14) · Afternoon (14–22) · Night (22–06)
+,Team,Operator team,Alfa / Bravo / Cendana (round-robin)
+,"Start, End",Shift start and end times,Format: HH:MM
+,Hrs_planned,Scheduled hours,Always 8 in this dataset
+,Hrs_actual,Hours actually worked,Always 8 in this dataset
+,Notes,Free-text shift notes,Blank in this dataset
+Incidents,,,
+,Date,Calendar day of the incident,Format: YYYY-MM-DD
+,Type,Incident category,Minor jam · Material reject · Equipment fault · Downstream stall
+,Severity,Impact rating,"Low = operator-cleared < 2 hrs · Medium = contained 2–6 hrs · Critical = full-line or cascading, escalates per Process Manual"
+,Resolution_time_hrs,Hours from incident-open to incident-closed,Input (logged duration)
+,Root_cause,Description of the cause,Free text
+,Linked_vendor,Vendor named in root cause,Blank if not vendor-linked
+,Notes,Free-text — often carries lineage signal,"Look for phrases like ""[date] lineage confirmed"""
+Vendor Deliveries,,,
+,Date,Delivery date,Format: YYYY-MM-DD
+,Vendor,Supplier name,"6 vendors: Surya Logistik, Mitra Industri, Cipta Karya, Bumi Persada, Nusantara Parts, Delta Pratama"
+,Item,What was delivered,Input materials A/C · Components D · Consumables B · Packaging · Spare parts
+,Qty_ordered,Units ordered on the PO,Input
+,Qty_received,Units actually received,Input
+,Status,Fulfillment state,Delivered = on time and complete · Delayed = full quantity but late · Partial = short of ordered quantity
+,Lag_days,Business days late,0 = on time
+,Notes,Free-text on the delivery,"""Backfill of [date] shortfall"" indicates a backfill row"
+KPI Targets,,,
+,KPI,Name of the metric,8 KPIs total
+,Target,Monthly goal,Input (set by leadership)
+,Actual,Realized value for the month,Formula-backed where derivable — see per-KPI formulas below
+,Variance_pct,Actual vs Target as percent,(Actual − Target) ÷ Target × 100
+,Direction,How to interpret variance,lower-is-worse = negative variance is bad outcome · flat-tolerable = small movement either way is acceptable
+,Owner,Accountable role,Section Head or Team Leader
+KPI Actual formulas,,,
+,Volume,Monthly produced total,SUM of Daily Output Volume column
+,Yield_pct,Average daily yield,AVERAGE of Daily Output Yield_pct column
+,Defects_pct,Average daily defects,AVERAGE of Daily Output Defects_pct column
+,Downtime_hrs,Monthly downtime total,SUM of Daily Output Downtime_hrs column
+,Energy_kWh_per_unit,Energy intensity,SUM(Energy_kWh) ÷ SUM(Volume) across the month
+,Vendor_on_time_pct,Vendor SLA performance,Count(Status = Delivered AND Lag_days = 0) ÷ Total deliveries × 100
+,Safety_incidents,Monthly safety log count,Manual entry — source data is external to this workbook
+,Headcount_fill_pct,Staffing fulfillment vs plan,Manual entry — no planned-headcount column in this workbook
+Conventions (cross-tab),,,
+,Vendor input vs Volume,Why vendor delivery totals do not equal output Volume,"Different units of measure (one set or kg can produce many finished units), buffer stock from prior months is invisible here, MRO and packaging are not bill-of-materials inputs, deliveries are batched while output is daily. Vendor Deliveries is for SLA tracking, NOT material reconciliation."
+,Downtime vs Resolution,Why Daily Output Downtime_hrs does not equal the sum of Incidents Resolution_time_hrs,"Downtime counts ALL line stops (planned maintenance, changeovers, breaks, incidents). Resolution counts only logged incidents from open to close. They overlap but are not equivalent."
+,Backfill rows,How partial vendor deliveries are recorded,"Original date: row with Status = Partial and Lag_days reflecting when the backfill arrived. Backfill date: SEPARATE row with Status = Delivered and Notes = ""Backfill of [date] shortfall"". Examples: Delta Pratama May 14 → May 19 (300 units); Nusantara Parts May 13 → May 15 (2 units)."
+,Defects + Yield ≠ 100,Why the two percentages do not sum to 100,"They measure different stages. Defects_pct = rejected at the QC gate. Yield_pct = good ÷ total processed. The gap between them is Scrap_units — material lost in-process before reaching QC. Three independent buckets."

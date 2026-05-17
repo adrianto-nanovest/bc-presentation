@@ -12,7 +12,7 @@ The review closes with a signed-off report and an action list that has a named o
 ## Who runs the review
 
 **Section Head** — responsible for analysis and insight.
-- Reads and interprets the 5-tab workbook.
+- Reads and interprets the 6-tab workbook (Schema + 5 data tabs).
 - Investigates incidents and vendor issues that appear in the data.
 - Drafts the monthly report and the executive slide deck.
 - Makes a recommendation on the key deviation(s).
@@ -30,7 +30,8 @@ The review closes with a signed-off report and an action list that has a named o
 
 The review requires the following starter-pack files to be complete before the session begins:
 
-1. **Monthly Ops Workbook** (5 tabs):
+1. **Monthly Ops Workbook** (6 tabs):
+   - Schema — field-level documentation for all data tabs
    - Tab 1 — Daily output log
    - Tab 2 — Shift schedule
    - Tab 3 — Incidents log

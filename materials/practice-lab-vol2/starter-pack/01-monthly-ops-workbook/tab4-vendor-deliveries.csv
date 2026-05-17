@@ -24,6 +24,7 @@ Date,Vendor,Item,Qty_ordered,Qty_received,Status,Lag_days,Notes
 2026-05-14,Delta Pratama,Component set D,500,200,Partial — see Vendor Notice 04,5,60% shortfall; remaining 300 arrived May 19
 2026-05-14,Surya Logistik,Input materials A,500,500,Delivered,0,
 2026-05-14,Bumi Persada,Input materials C,400,400,Delivered,0,
+2026-05-15,Nusantara Parts,Spare parts kit,2,2,Delivered,2,Backfill of May 13 shortfall
 2026-05-15,Mitra Industri,Consumables B,300,300,Delivered,0,
 2026-05-15,Cipta Karya,Packaging supplies,800,800,Delivered,0,
 2026-05-16,Surya Logistik,Input materials A,500,500,Delivered,0,
