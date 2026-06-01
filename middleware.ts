@@ -321,14 +321,6 @@ const PAGE_HEAD = `<!doctype html><html lang="en"><head>
   }
   .privacy svg { flex:none; width:13px; height:13px; color:var(--copper-400); }
 
-  /* Bottom-right deck signature — balances the dark side of the frame. */
-  .mark {
-    position:fixed; right:clamp(24px,5vw,56px); bottom:clamp(22px,4vw,40px); z-index:6;
-    display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:11px;
-    font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:rgba(217,158,108,.62);
-  }
-  .mark svg { width:13px; height:13px; }
-
   /* ── Entrance motion (mirrors title.tsx staged reveals) ── */
   @keyframes kenburns { from { transform:scale(1.06); } to { transform:scale(1); } }
   @keyframes riseIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
@@ -341,7 +333,6 @@ const PAGE_HEAD = `<!doctype html><html lang="en"><head>
     h1 { font-size:clamp(34px,11vw,46px); max-width:none; }
     .col { padding:48px 26px; }
     .bg-readability { background:linear-gradient(180deg, rgba(5,5,5,.42) 0%, rgba(5,5,5,.78) 100%); }
-    .mark { display:none; }
   }
   @media (prefers-reduced-motion:reduce) {
     .bg-photo { animation:none; transform:none; }
@@ -361,10 +352,6 @@ const PAGE_HEAD = `<!doctype html><html lang="en"><head>
 <p class="credit anim d3">Facilitated by Adrianto Tedjokusumo · Nanovest</p>`;
 
 const PAGE_FOOT = `</div></main>
-<div class="mark anim d7">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-<span>Private Access</span>
-</div>
 </body></html>`;
 
 function loginPage(error?: string): string {
