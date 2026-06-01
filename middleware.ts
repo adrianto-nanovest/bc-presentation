@@ -150,90 +150,247 @@ function html(body: string, status: number): Response {
   });
 }
 
+// The login screen is composed to BE the deck's title slide, gated: a full-bleed
+// branded cover photo with a left-anchored editorial column (eyebrow → display
+// headline → credit → access form). The same photo paints the real title slide on
+// success, so the transition reads as one continuous frame. Pure inline CSS — this
+// string is served by the Edge before any app bundle exists.
 const PAGE_HEAD = `<!doctype html><html lang="en"><head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Berau Coal AI Workshop — Access</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#0a0a0a" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
 <!-- Warm berau's branded cover photo while the viewer types, so the title slide paints
      instantly on success. This path is un-gated (see config.matcher); it is just the
      decorative cover image, not deck content, so serving it publicly leaks nothing. -->
 <link rel="preload" as="image" type="image/jpeg" href="/heroes/title-data-topology.jpg" />
 <style>
-  :root { --copper:#b86e3d; --copper-400:#c98548; --copper-700:#7a4626; --ink:#f5f5f5; --bg:#0a0a0a; }
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
+  :root {
+    --copper-200:#e8c4a0; --copper-300:#d99e6c; --copper-400:#c98548;
+    --copper-500:#b86e3d; --copper-600:#9c5a30; --copper-700:#7a4626;
+    --ink:#f5f5f5; --neutral-300:#a3a3a3; --neutral-400:#737373;
+    --bg:#0a0a0a; --bg-deep:#050403; --field:#120d07;
+    --ease:cubic-bezier(0.16,1,0.3,1);
+    --display:'Instrument Serif',Georgia,serif;
+    --serif:'Source Serif 4',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; }
   body {
-    margin: 0; font-family: 'Source Serif 4', Georgia, serif; color: var(--ink);
-    background: radial-gradient(120% 120% at 70% 10%, #1c130a 0%, #0a0a0a 55%, #050403 100%);
-    display: grid; place-items: center; padding: 24px;
+    min-height:100vh; min-height:100svh; background:var(--bg-deep); color:var(--ink);
+    font-family:var(--serif); -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility; overflow-x:hidden;
   }
-  .card {
-    width: 100%; max-width: 380px; background: #15110c; border-radius: 16px;
-    padding: 40px 36px; box-shadow: 0 24px 60px rgba(0,0,0,.55);
-    border: 1px solid rgba(184,110,61,.28); border-top: 4px solid var(--copper);
-  }
-  .eyebrow { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px;
-    letter-spacing: .16em; text-transform: uppercase; color: var(--copper-400);
-    font-weight: 500; margin: 0 0 10px; }
-  h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: 30px; line-height: 1.15;
-    color: var(--ink); margin: 0 0 6px; font-weight: 400; }
-  .sub { font-size: 14px; color: rgba(245,245,245,.62); margin: 0 0 26px; }
-  label { display: block; font-family: 'Inter', system-ui, sans-serif; font-size: 12px;
-    font-weight: 600; color: rgba(245,245,245,.78); margin: 0 0 6px; letter-spacing: .02em; }
-  input[type=password], input[type=text] {
-    width: 100%; padding: 12px 46px 12px 14px; font-size: 15px;
-    font-family: 'Inter', system-ui, sans-serif; background: rgba(255,255,255,.04);
-    border: 1.5px solid rgba(245,245,245,.16); border-radius: 9px; color: var(--ink);
-    outline: none; transition: border-color .15s;
-  }
-  input[type=password]::placeholder, input[type=text]::placeholder { color: rgba(245,245,245,.35); }
-  input[type=password]:focus, input[type=text]:focus { border-color: var(--copper); }
-  .pw-wrap { position: relative; }
-  .pw-toggle {
-    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
-    display: grid; place-items: center; width: 34px; height: 34px; padding: 0;
-    border: 0; border-radius: 7px; background: transparent; color: rgba(245,245,245,.45); cursor: pointer;
-  }
-  .pw-toggle:hover { color: var(--copper-400); background: rgba(255,255,255,.06); }
-  .pw-toggle svg { width: 18px; height: 18px; }
-  .pw-toggle .icon-off { display: none; }
-  .pw-toggle.on .icon-on { display: none; }
-  .pw-toggle.on .icon-off { display: block; }
-  button[type="submit"] {
-    width: 100%; margin-top: 18px; padding: 12px 14px; font-size: 15px; font-weight: 700;
-    font-family: 'Inter', system-ui, sans-serif; color: #0a0a0a; background: var(--copper);
-    border: 0; border-radius: 9px; cursor: pointer; transition: background .15s;
-  }
-  button[type="submit"]:hover { background: var(--copper-400); }
-  .err { margin: 14px 0 0; font-size: 13px; color: #e2705a; font-weight: 600;
-    font-family: 'Inter', system-ui, sans-serif; }
-  .foot { margin: 22px 0 0; font-size: 11px; color: rgba(245,245,245,.4); text-align: center;
-    font-family: 'Inter', system-ui, sans-serif; }
-</style></head><body><div class="card">
-<p class="eyebrow">Berau AI Catalyst · Vol 2, Session 2</p>
-<h1>From AI Curiosity to AI Capability</h1>
-<p class="sub">Adrianto Tedjokusumo · Nanovest</p>`;
 
-const PAGE_FOOT = `<p class="foot">This presentation is private. Enter the password to continue.</p>
-</div></body></html>`;
+  /* ── Atmosphere: full-bleed cover photo + readability + grain + vignette ── */
+  .bg { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .bg-photo {
+    background:var(--bg-deep) url('/heroes/title-data-topology.jpg') 70% center / cover no-repeat;
+    transform:scale(1.06); transform-origin:60% 50%;
+    animation:kenburns 22s var(--ease) forwards;
+  }
+  /* Matches title.tsx darkenStrength (0.18) + its left readability gradient. */
+  .bg-darken { background:rgba(5,5,5,.2); }
+  .bg-readability {
+    background:linear-gradient(90deg,
+      rgba(5,5,5,.9) 0%, rgba(5,5,5,.7) 26%, rgba(5,5,5,.32) 52%,
+      rgba(5,5,5,.05) 78%, rgba(5,5,5,0) 100%);
+  }
+  .bg-grain {
+    opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .bg-vignette { box-shadow:inset 0 0 240px 60px rgba(0,0,0,.55); }
+  /* Brand chrome — thin copper hairline crowning the page. */
+  .topbar {
+    position:fixed; top:0; left:0; right:0; height:3px; z-index:6;
+    background:linear-gradient(90deg, var(--copper-700) 0%, var(--copper-400) 50%, var(--copper-700) 100%);
+  }
+
+  /* ── Editorial column (left-anchored, vertically centered) ── */
+  .col {
+    position:relative; z-index:5; min-height:100vh; min-height:100svh;
+    width:100%; max-width:1320px; margin:0 auto;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:64px clamp(28px,7vw,104px);
+  }
+  .inner { width:100%; max-width:476px; }
+
+  .eyebrow { display:flex; align-items:center; gap:13px; margin:0 0 22px; }
+  .eyebrow .tick { width:30px; height:2px; flex:none; background:var(--copper-500);
+    box-shadow:0 0 12px rgba(184,110,61,.55); }
+  .eyebrow span { font-family:var(--mono); font-size:12px; font-weight:500;
+    letter-spacing:.24em; text-transform:uppercase; color:var(--copper-400); }
+
+  h1 { font-family:var(--display); font-weight:400; margin:0 0 16px;
+    font-size:clamp(40px,6.6vw,70px); line-height:1.0; letter-spacing:-.015em;
+    color:var(--ink); max-width:13ch; }
+  h1 em { font-style:italic; color:var(--copper-300); }
+
+  .credit { font-family:var(--serif); font-style:italic; font-weight:400;
+    font-size:clamp(15px,1.9vw,19px); color:var(--neutral-300);
+    margin:0 0 40px; max-width:34ch; }
+
+  /* ── Access form ── */
+  form { width:100%; }
+  .formhead { display:flex; align-items:center; gap:14px; margin:0 0 12px; }
+  .formhead .lbl { font-family:var(--mono); font-size:11px; font-weight:500;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--copper-300);
+    white-space:nowrap; }
+  .formhead .rule { flex:1; height:1px;
+    background:linear-gradient(90deg, rgba(184,110,61,.55), rgba(184,110,61,0)); }
+
+  .field { position:relative; }
+  .field input {
+    width:100%; padding:16px 54px 16px 18px; font-family:var(--sans);
+    font-size:16px; font-weight:500; letter-spacing:.04em; color:var(--ink);
+    background:rgba(20,15,9,.6); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    border:1px solid rgba(217,158,108,.3); border-radius:13px; outline:none;
+    transition:border-color .2s var(--ease), box-shadow .25s var(--ease), background .2s var(--ease);
+  }
+  .field input::placeholder { color:rgba(245,245,245,.34); letter-spacing:.01em; font-weight:400; }
+  .field input:hover { border-color:rgba(217,158,108,.5); }
+  .field input:focus {
+    border-color:var(--copper-400); background:rgba(20,15,9,.82);
+    box-shadow:0 0 0 4px rgba(184,110,61,.16), 0 12px 36px -14px rgba(184,110,61,.55);
+  }
+  /* Kill the browser autofill (lavender/white) box — keep our dark field. */
+  .field input:-webkit-autofill,
+  .field input:-webkit-autofill:hover,
+  .field input:-webkit-autofill:focus {
+    -webkit-text-fill-color:var(--ink); caret-color:var(--ink);
+    -webkit-box-shadow:0 0 0 1000px var(--field) inset;
+    transition:background-color 9999s ease-in-out 0s;
+  }
+
+  .pw-toggle {
+    position:absolute; right:8px; top:50%; transform:translateY(-50%);
+    display:grid; place-items:center; width:36px; height:36px; padding:0;
+    border:0; border-radius:9px; background:transparent;
+    color:rgba(245,245,245,.42); cursor:pointer; transition:color .15s, background .15s;
+  }
+  .pw-toggle:hover { color:var(--copper-300); background:rgba(217,158,108,.1); }
+  .pw-toggle svg { width:18px; height:18px; }
+  .pw-toggle .icon-off { display:none; }
+  .pw-toggle.on .icon-on { display:none; }
+  .pw-toggle.on .icon-off { display:block; }
+
+  .submit {
+    position:relative; overflow:hidden; width:100%; margin-top:16px;
+    display:flex; align-items:center; justify-content:center; gap:11px;
+    padding:16px 18px; font-family:var(--sans); font-size:15px; font-weight:700;
+    letter-spacing:.01em; color:#1a1206; cursor:pointer; border:0; border-radius:13px;
+    background:linear-gradient(135deg, var(--copper-300) 0%, var(--copper-500) 56%, var(--copper-600) 100%);
+    box-shadow:0 12px 34px -12px rgba(184,110,61,.65), inset 0 1px 0 rgba(255,255,255,.28);
+    transition:transform .15s var(--ease), box-shadow .25s var(--ease);
+  }
+  .submit::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(115deg, transparent 32%, rgba(255,255,255,.4) 50%, transparent 68%);
+    transform:translateX(-130%); transition:transform .7s var(--ease);
+  }
+  .submit:hover { transform:translateY(-1px);
+    box-shadow:0 18px 44px -12px rgba(184,110,61,.75), inset 0 1px 0 rgba(255,255,255,.4); }
+  .submit:hover::after { transform:translateX(130%); }
+  .submit:active { transform:translateY(0); }
+  .submit:focus-visible { outline:2px solid var(--copper-200); outline-offset:3px; }
+  .submit .arrow { width:18px; height:18px; flex:none; transition:transform .2s var(--ease); }
+  .submit:hover .arrow { transform:translateX(4px); }
+
+  .err {
+    display:flex; align-items:center; gap:10px; margin:16px 0 0; padding:12px 15px;
+    font-family:var(--sans); font-size:13px; font-weight:500; line-height:1.4;
+    color:#f0a78f; background:rgba(226,112,90,.1);
+    border:1px solid rgba(226,112,90,.34); border-radius:11px;
+  }
+  .err::before { content:''; flex:none; width:7px; height:7px; border-radius:50%;
+    background:#e2705a; box-shadow:0 0 10px rgba(226,112,90,.85); }
+  .err code { font-family:var(--mono); font-size:12px; color:var(--copper-200);
+    background:rgba(217,158,108,.12); padding:1px 5px; border-radius:4px; }
+
+  .privacy {
+    display:flex; align-items:center; gap:9px; margin:22px 0 0;
+    font-family:var(--sans); font-size:12.5px; font-weight:400; line-height:1.4;
+    color:var(--neutral-400);
+  }
+  .privacy svg { flex:none; width:13px; height:13px; color:var(--copper-400); }
+
+  /* Bottom-right deck signature — balances the dark side of the frame. */
+  .mark {
+    position:fixed; right:clamp(24px,5vw,56px); bottom:clamp(22px,4vw,40px); z-index:6;
+    display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:11px;
+    font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:rgba(217,158,108,.62);
+  }
+  .mark svg { width:13px; height:13px; }
+
+  /* ── Entrance motion (mirrors title.tsx staged reveals) ── */
+  @keyframes kenburns { from { transform:scale(1.06); } to { transform:scale(1); } }
+  @keyframes riseIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  .anim { opacity:0; animation:riseIn .7s var(--ease) forwards; }
+  .d1 { animation-delay:.12s; } .d2 { animation-delay:.26s; } .d3 { animation-delay:.42s; }
+  .d4 { animation-delay:.58s; } .d5 { animation-delay:.7s; } .d6 { animation-delay:.82s; }
+  .d7 { animation-delay:.94s; }
+
+  @media (max-width:560px) {
+    h1 { font-size:clamp(34px,11vw,46px); max-width:none; }
+    .col { padding:48px 26px; }
+    .bg-readability { background:linear-gradient(180deg, rgba(5,5,5,.42) 0%, rgba(5,5,5,.78) 100%); }
+    .mark { display:none; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .bg-photo { animation:none; transform:none; }
+    .anim { opacity:1; animation:none; }
+    .submit, .submit::after, .submit .arrow, .field input { transition:none; }
+  }
+</style></head><body>
+<div class="bg bg-photo"></div>
+<div class="bg bg-darken"></div>
+<div class="bg bg-readability"></div>
+<div class="bg bg-grain"></div>
+<div class="bg bg-vignette"></div>
+<div class="topbar"></div>
+<main class="col"><div class="inner">
+<p class="eyebrow anim d1"><span class="tick"></span><span>Berau AI Catalyst · Vol 2, Session 2</span></p>
+<h1 class="anim d2">From AI Curiosity to AI <em>Capability</em></h1>
+<p class="credit anim d3">Facilitated by Adrianto Tedjokusumo · Nanovest</p>`;
+
+const PAGE_FOOT = `</div></main>
+<div class="mark anim d7">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+<span>Private Access</span>
+</div>
+</body></html>`;
 
 function loginPage(error?: string): string {
   return (
     PAGE_HEAD +
     `<form method="POST" action="${AUTH_PATH}">
-<label for="password">Password</label>
-<div class="pw-wrap">
-<input id="password" type="password" name="password" autofocus autocomplete="current-password" required />
+<div class="formhead anim d4">
+<label for="password" class="lbl">Enter password</label>
+<span class="rule"></span>
+</div>
+<div class="field anim d5">
+<input id="password" type="password" name="password" autofocus autocomplete="current-password" required placeholder="Shared workshop password" />
 <button type="button" id="pw-toggle" class="pw-toggle" aria-label="Show password" title="Show password">
 <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
 <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M6.06 6.06A18.45 18.45 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 4.94-1.06"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
 </button>
 </div>
-<button type="submit">View deck</button>
-${error ? `<p class="err">${escapeHtml(error)}</p>` : ''}
+<button type="submit" class="submit anim d6">
+<span>Enter the deck</span>
+<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+</button>
+${error ? `<p class="err anim" role="alert">${escapeHtml(error)}</p>` : ''}
+<p class="privacy anim d7">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+This deck is private. Your access is remembered for 7 days.
+</p>
 </form>
 <script>
 (function () {
@@ -258,8 +415,8 @@ ${error ? `<p class="err">${escapeHtml(error)}</p>` : ''}
 function notConfiguredPage(): string {
   return (
     PAGE_HEAD +
-    `<p class="err">Access is not configured. Set the <code>SITE_PASSWORD</code> and
-<code>AUTH_SECRET</code> environment variables in the Vercel project, then redeploy.</p>` +
+    `<div class="formhead anim d4"><span class="lbl">Access not configured</span><span class="rule"></span></div>
+<p class="err anim d5" role="alert">Set the <code>SITE_PASSWORD</code> and <code>AUTH_SECRET</code> environment variables in the Vercel project, then redeploy.</p>` +
     PAGE_FOOT
   );
 }

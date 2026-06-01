@@ -528,7 +528,7 @@ export const k2Content = {
       id: "case",
       num: 1,
       name: "The Case",
-      essence: "One month, one 12% miss",
+      essence: "Manufacturing industry, one month, 12% volume miss",
       pop: {
         desc: "May 2026 closed 12% under target — and the whole miss hides in a single week. Trace the causal chain, then turn it into a decision-ready recommendation for June.",
         descKw: ["a single week", "causal chain", "decision-ready recommendation"],
