@@ -2,7 +2,7 @@
 //   - Title slide: TitleKeymap trigger + legend
 //   - B1: HintIcon at top-right (all 7 steps)
 //   - E4: HintIcon at top-right (all 4 steps)
-//   - E6: HintIcon next to "6 COMPONENTS" kicker (stepIndex 1 and 2)
+//   - E7: HintIcon next to "6 COMPONENTS" kicker (stepIndex 1 and 2)
 //
 // Helpers walk to a target slide by `data-section` + slide-index attributes.
 // We avoid hard-coding slide indices so this test survives deck re-orders.
@@ -87,12 +87,12 @@ test("E4: HintIcon at top-right, visible all 4 steps; footer caption still appea
   await expect(page.locator('[data-testid="e4-footer"]')).toBeVisible();
 });
 
-test("E6: HintIcon hidden on step 0, visible at step 1 and step 2", async ({ page }) => {
-  await gotoSlideByTestId(page, "e6-left-pane");
+test("E7: HintIcon hidden on step 0, visible at step 1 and step 2", async ({ page }) => {
+  await gotoSlideByTestId(page, "e7-left-pane");
   // The HintIcon is inside the reveal-kicker Reveal which is faded out at
   // step 0 (showNetwork=false). Verify hidden via the kicker container's
   // `.fade.on` class absence.
-  const kicker = page.locator('[data-testid="e6-reveal-kicker"]');
+  const kicker = page.locator('[data-testid="e7-reveal-kicker"]');
   await expect(kicker).toHaveClass(/fade/);
   await expect(kicker).not.toHaveClass(/\bon\b/);
 

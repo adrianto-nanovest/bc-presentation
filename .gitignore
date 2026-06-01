@@ -30,6 +30,7 @@ htmlcov/
 
 # Credentials and secrets
 *.env
+.env*.local
 credentials/
 secrets/
 

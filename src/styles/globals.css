@@ -473,27 +473,27 @@ em.kw {
   border-color: var(--copper-300);
 }
 
-/* E5 — card hover highlights */
-.e5-card {
+/* E6 — card hover highlights (was E5 before the E5-examples insert) */
+.e6-card {
   transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
     box-shadow 0.2s var(--ease);
 }
-.e5-card:hover {
+.e6-card:hover {
   border-color: var(--copper-200) !important;
   background: rgba(184, 110, 61, 0.08);
   box-shadow: 0 0 0 1px var(--copper-300) inset;
 }
-.e5-constraint {
+.e6-constraint {
   transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
     color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
-.e5-constraint:hover {
+.e6-constraint:hover {
   border-color: var(--copper-200) !important;
   background: rgba(184, 110, 61, 0.12) !important;
   color: var(--neutral-100);
   box-shadow: 0 0 0 1px var(--copper-300) inset;
 }
-.e5-constraint:hover .e5-constraint-num {
+.e6-constraint:hover .e6-constraint-num {
   color: var(--copper-200) !important;
 }
 

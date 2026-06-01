@@ -18,6 +18,12 @@ Archived so each hero can be re-rendered without scraping the spec. Source: `doc
 
 > Editorial photograph at first light / dawn. Industrial-craft style workspace in a high-ceilinged room with tall windows. Warm copper-amber morning light streaming through windows, casting deep shadows. A pulled-out wooden chair beside a walnut desk. On the desk: a closed laptop, an open leather notebook with a clean page, a pen resting across the page. The room feels READY but EMPTY — set up for someone to arrive and begin work. No people visible. Mood: invitation, readiness, the threshold of a new task. Copper-amber accent palette. 16:9 widescreen. Suitable for slide background — bottom-left region intentionally darker for text overlay.
 
+## K.3 — Open horizon / threshold (`assets/heroes/k3-open-horizon.jpg`)
+
+> Editorial photograph, warm golden-hour light. View from inside a high-ceilinged industrial-craft room looking out through a large open doorway onto a bright, expansive horizon at sunrise — distant hills and open sky washed in copper-amber light. In the foreground interior, a simple wooden threshold and the edge of a walnut desk; the space reads as a point of departure, about to be stepped through. Deep interior shadows recede into matte near-black, especially the bottom-left corner. No people visible. Mood: departure, possibility, dignified onward motion — the threshold of what comes next. Copper-amber accent palette, single warm light source from the horizon. 16:9 widescreen, suitable as a slide background — bottom-left region intentionally darker and smooth for text overlay.
+>
+> Generated via `gemini-multimedia-gen` MCP (`generate_image`, gemini-3-pro-image, 16:9, 2K) → `sips` resample to 1920w JPG q78 (303 KB). Closing slide of the deck; bookends K.1's "ready & empty" workspace with the door thrown open.
+
 ## D.5 — Bridge to E (`assets/heroes/d5-bridge.jpg`)
 
 > Editorial photograph at first light or dawn. An industrial workspace inside a high-ceilinged room with tall windows. Warm copper-amber morning light streaming through, casting deep shadows. In middle distance: a wooden desk scattered with technical diagrams, hand-sketched flowcharts, and a closed laptop. The room feels like a war room mid-thinking — the strategic work is done, but the engineering work hasn't begun. No people visible. Mood: threshold, momentum, transition between planning and building. Copper-amber accent palette throughout. 16:9 widescreen. Suitable for slide background — bottom-left region intentionally darker for text overlay.

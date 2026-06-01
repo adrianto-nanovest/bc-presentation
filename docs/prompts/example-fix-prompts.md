@@ -327,3 +327,30 @@ let's fix @src/slides/reveal-and-closing/simulations/LegalDocs.tsx to mimic simi
   5. It would be great if we can use one long use cases, stitch between each others 
 
 
+------------------
+
+I want to add 1 slide inside section E, after slide E4 (and we need to re-number all slides afterwards it in section E (the file title also
+  the figLabel)
+  The new slide E5 should be Layer 1 - Examples. We want to give more examples of it.
+  Background: get feedback from the Berau management, the audiences need more examples on prompting, since this is the key area focus for
+  them, especially for audiences >50 years old, understand other slides is difficult, so at least they are "good enough" on prompt
+  engineering related.
+  For the layout, we can follow E3 stepIndex 0, where on the left slide is the list of use cases we want to cover, with icons, title, and 
+  subtitle, and when we hover it (support pin/unpin also), we show on the right side is the goal, the full prompt, also structures and 
+  techniques used in tags/pills like this [Image #2]. For the full prompt, use text-streaming animation. And if we hover on the prompt area, 
+  it will have highlight animation on tags/pills which basically explain "this sentence represents structure A". If it is using more than 1 
+  techniques, do the similar ways.
+  For structures, refer to E3 left side content, for techniques, refer to E4 content.
+  Total step is 2 only, the last step is only showing the footer part. please suggest for the footer, make it meaningful, not redudant with
+  the title (suggest also for the header title)
+  For prompt examples and use cases, use your explore agents (Sonnet model) to understand the gemini reference from
+  docs/references/prompting-guide-gemini.pdf. in the reference, structures used is Persona, Task, Context, and Format, use my structures
+  instead. it is from gemini, but make it model-agnostic for this slide. Again, this is just reference, make it MORE GENERIC for the use
+  cases, DO NOT MAKE IT COMPLEX, remember the background and audience target.
+  
+  Now your task: 
+  1. Use explore agents to understand the codebases also the references given (Sonnet model)
+  2. Make the plan for the changes, use Plan mode
+  3. While executing, use TaskCreate and TaskList, dispatch implementer agents for each task to do in fresh session.
+  
+  DO NOT USE SUPERPOWERS skill 

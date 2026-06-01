@@ -29,14 +29,14 @@ describe("deck registry", () => {
     });
   });
 
-  test("section progression matches deck order: A x2, B x5, C x6, D x5, E x11, F x9, I x4, J x4, K x1, K x1 (hexLadder)", () => {
+  test("section progression matches deck order: A x2, B x5, C x6, D x5, E x12, F x9, I x4, J x4, K x1, K x1 (hexLadder)", () => {
     // Title slide is grouped under section "A" (see opening-section-a/index.ts).
     const expected: SlideSection[] = [
       ...Array<SlideSection>(2).fill("A"),  // Title + A.1
       ...Array<SlideSection>(5).fill("B"),
       ...Array<SlideSection>(6).fill("C"),  // C.1–C.5 + bridge
       ...Array<SlideSection>(5).fill("D"),
-      ...Array<SlideSection>(11).fill("E"),
+      ...Array<SlideSection>(12).fill("E"),
       ...Array<SlideSection>(9).fill("F"),
       ...Array<SlideSection>(4).fill("I"),
       ...Array<SlideSection>(4).fill("J"),

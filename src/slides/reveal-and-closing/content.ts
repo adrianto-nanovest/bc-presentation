@@ -515,3 +515,85 @@ export const k1Content = {
   },
   figLabel: "PRACTICE · LAB",
 } as const;
+
+export const k2Content = {
+  figLabel: "THE PRACTICE LAB",
+  headline: "The Practice Lab, end to end.",
+  headlineKw: ["end to end"] as const,
+  leftHeader: "The Lab · 4 parts",
+  footer: "Same recipe, real data — and a method that travels.",
+  footerKw: ["a method that travels"] as const,
+  spine: [
+    {
+      id: "case",
+      num: 1,
+      name: "The Case",
+      essence: "One month, one 12% miss",
+      pop: {
+        desc: "May 2026 closed 12% under target — and the whole miss hides in a single week. Trace the causal chain, then turn it into a decision-ready recommendation for June.",
+        rows: [
+          { label: "The miss", items: ["87,870 / 100,000 units", "−12%", "all in Week 3 (May 14–20)"] },
+          { label: "The chain", items: ["Apr 28 — batch accepted, no QA hold", "May 14 — 200 of 500 delivered", "May 15–17 — three Critical incidents"] },
+          { label: "Vendor", items: ["Delta Pratama"] },
+        ],
+      },
+    },
+    {
+      id: "tracks",
+      num: 2,
+      name: "Two Tracks",
+      essence: "Same data, two disciplines",
+      pop: {
+        desc: "Everyone works the same dataset through one of two personas. Each runs a provided Skill built to cite its sources and refuse to fabricate.",
+        rows: [
+          { label: "Section Head · Analyst", items: ['"Why did this happen?"', "root-cause-investigator", "evidence-tracing"] },
+          { label: "Team Leader · Booster", items: ['"What do we communicate now?"', "ops-comms-drafter", "template-fidelity"] },
+        ],
+      },
+    },
+    {
+      id: "stages",
+      num: 3,
+      name: "Four Stages",
+      essence: "Ground → Reason → Visualize → Author",
+      pop: {
+        desc: "Ninety minutes, four tools, one chain — from raw data to a method you can reuse.",
+        rows: [
+          { label: "1 · Ground — NotebookLM", items: ["sources → cited field-guide report"] },
+          { label: "2 · Reason — Claude Project", items: ["persona system prompt + provided Skill"] },
+          { label: "3 · Visualize — Claude Design + Artifacts", items: ["diagram → design system → dashboard"] },
+          { label: "4 · Author — skill-creator", items: ["package the build as a reusable Skill"] },
+        ],
+      },
+    },
+    {
+      id: "outputs",
+      num: 4,
+      name: "The Outputs",
+      essence: "Eight artifacts, one dataset",
+      pop: {
+        desc: "One month of operational data becomes a stack of AI-augmented deliverables.",
+        rows: [
+          { label: "Slide deck", items: ["8-slide briefing — to decide or to execute"] },
+          { label: "Report", items: ["5-section field guide, fully cited"] },
+          { label: "Web dashboard", items: ["interactive HTML Artifact, shareable URL"] },
+          { label: "Design system", items: ["reusable HTML style guide"] },
+          { label: "Reusable skill", items: ["authored SKILL.md — 30 min → 10 min"] },
+        ],
+      },
+    },
+  ],
+} as const;
+
+export const k3Content = {
+  heroSrc: "/heroes/k3-open-horizon.jpg",
+  figLabel: "THANK YOU",
+  beat1: {
+    lineA: { text: "Thank you.", kw: [] as const },
+    lineB: { text: "The recipe travels with you.", kw: ["travels with you"] as const },
+  },
+  beat2: {
+    text: "Wherever the work goes next.",
+    kw: ["the work goes next"] as const,
+  },
+} as const;

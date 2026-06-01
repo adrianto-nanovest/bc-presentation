@@ -8,6 +8,8 @@ import { j2Slide } from "./j2-five-principles";
 import { j3Slide } from "./j3-recipe-buildup";
 import { j4Slide } from "./j4-recipe-ship";
 import { k1Slide } from "./k1-challenge-handoff";
+import { k2Slide } from "./k2-practice-lab-overview";
+import { k3Slide } from "./k3-thank-you";
 
 // Spec §1 final order.
 export const revealAndClosingSlides: SlideDef[] = [
@@ -20,4 +22,6 @@ export const revealAndClosingSlides: SlideDef[] = [
   j3Slide,
   j4Slide,
   k1Slide,
+  k2Slide,
+  k3Slide,
 ];

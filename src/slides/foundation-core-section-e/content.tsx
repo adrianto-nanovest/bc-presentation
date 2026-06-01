@@ -1,4 +1,4 @@
-// Single source of truth for all Section E slide copy (E.1–E.11).
+// Single source of truth for all Section E slide copy (E.1–E.12).
 //
 // Schema is ported verbatim from `claude-design-project/jsx/data.jsx` — the
 // design source — with two differences:
@@ -216,7 +216,138 @@ export const e4Content = {
   },
 } as const;
 
+// E5 — PROMPT · EXAMPLES (new slide; transcribed verbatim from
+// docs/specs/2026-06-01-e5-prompt-examples-spec.md §"Data Model Summary").
 export const e5Content = {
+  figLabel: "LAYER 1 · EXAMPLES",
+  headline: "The recipe, in real prompts.",
+  headlineKw: ["real prompts"],
+  footer: "Notice the pattern, not the wording. Every strong prompt is just these parts, assembled.",
+  footerKw: ["pattern", "assembled"],
+
+  useCases: [
+    // --- 1. email ---
+    {
+      id: "email",
+      icon: "Mail",
+      title: "Draft an Email",
+      subtitle: "Turn a rough idea into a polished message.",
+      goal: "Turn a rough idea into a properly toned, ready-to-send email without starting from scratch.",
+      segments: [
+        { text: "You are a professional business writer.", structure: "role" },
+        { text: "Draft a short email to a colleague asking to reschedule next Tuesday's check-in — I have a conflicting commitment that just came up.", structure: "instruction" },
+        { text: "Keep it friendly and under 80 words.", structure: "output" },
+      ],
+      structures: ["role", "instruction", "output"],
+      techniques: [
+        { id: "zero-shot", label: "Zero-Shot", refs: [] },
+      ],
+    },
+
+    // --- 2. summary ---
+    {
+      id: "summary",
+      icon: "FileText",
+      title: "Summarize a Report",
+      subtitle: "Compress a long document into a short briefing.",
+      goal: "Compress a lengthy report into a short, scannable briefing without reading every word yourself.",
+      segments: [
+        { text: "Summarize the following report", structure: "instruction" },
+        { text: "into a 5-bullet executive briefing.", structure: "output" },
+        { text: "The audience is senior management who have 2 minutes to read it, so lead with the most important finding and skip implementation detail.", structure: "context" },
+        { text: "[Paste report text here]", structure: "input" },
+      ],
+      structures: ["instruction", "output", "context", "input"],
+      techniques: [
+        { id: "zero-shot", label: "Zero-Shot", refs: [] },
+      ],
+    },
+
+    // --- 3. actions ---
+    {
+      id: "actions",
+      icon: "ListChecks",
+      title: "Meeting → Action Items",
+      subtitle: "Turn messy notes into a clear task list.",
+      goal: "Convert raw meeting notes into a clean, assigned action-item list without manually re-reading everything.",
+      segments: [
+        { text: "You are an efficient meeting coordinator.", structure: "role" },
+        { text: "Read the notes below and extract every action item. For each item, list: the task, the person responsible, and the due date if mentioned.", structure: "instruction" },
+        { text: "Format the result as a numbered list. If no owner or date is clear, write \"TBD.\"", structure: "output" },
+        { text: "[Paste meeting notes here]", structure: "input" },
+      ],
+      structures: ["role", "instruction", "output", "input"],
+      techniques: [
+        { id: "zero-shot", label: "Zero-Shot", refs: [] },
+      ],
+    },
+
+    // --- 4. compare ---
+    {
+      id: "compare",
+      icon: "Scale",
+      title: "Compare & Recommend",
+      subtitle: "Weigh options side-by-side, then pick one.",
+      goal: "Get a structured comparison of two or more options — and a final recommendation with clear reasoning — rather than a vague \"it depends.\"",
+      segments: [
+        { text: "I need to choose a tool for managing our team's weekly reporting: Option A is a shared spreadsheet, Option B is a project management app we already have a licence for.", structure: "input" },
+        { text: "Think through this step by step: first compare them on ease of use, visibility for stakeholders, and maintenance effort.", structure: "instruction" },
+        { text: "Then weigh those factors for a 12-person team where most members are not tech-savvy.", structure: "context" },
+        { text: "End with a single clear recommendation and a one-sentence reason.", structure: "output" },
+      ],
+      structures: ["input", "instruction", "context", "output"],
+      techniques: [
+        { id: "cot", label: "Chain-of-Thought", refs: ["instruction"] },
+      ],
+    },
+
+    // --- 5. timeline ---
+    {
+      id: "timeline",
+      icon: "Calendar",
+      title: "Plan a Project Timeline",
+      subtitle: "Break a goal into phases with dates.",
+      goal: "Break a high-level goal into a realistic, phased schedule with named milestones and target dates.",
+      segments: [
+        { text: "You are an experienced project planner.", structure: "role" },
+        { text: "I need a four-phase rollout plan for launching a new internal reporting process across a department of 60 people, starting 1 July.", structure: "context" },
+        { text: "Work through each phase in order: define the goal of the phase, who is involved, and the target completion date.", structure: "instruction" },
+        { text: "Write each phase in this format — Phase 1 — [Name]: [Goal]. Team: [who]. Done by: [date].", structure: "examples" },
+        { text: "Present the result as a short numbered list, one phase per line.", structure: "output" },
+      ],
+      structures: ["role", "context", "instruction", "examples", "output"],
+      techniques: [
+        { id: "cot",      label: "Chain-of-Thought", refs: ["instruction"] },
+        { id: "few-shot", label: "Few-Shot",          refs: ["examples"] },
+      ],
+    },
+
+    // --- 6. rewrite ---
+    {
+      id: "rewrite",
+      icon: "Users",
+      title: "Rewrite for an Audience",
+      subtitle: "Make technical text plain for non-experts.",
+      goal: "Transform jargon-heavy text into plain language that any non-specialist can understand and act on.",
+      segments: [
+        { text: "You are a plain-language editor.", structure: "role" },
+        { text: "Rewrite the paragraph below so that anyone unfamiliar with technical terms can understand it.", structure: "instruction" },
+        {
+          text: "Match the style of this example:\nBefore: \"The system will undergo scheduled maintenance to apply critical security patches and upgrade legacy middleware dependencies.\"\nAfter: \"We will briefly take the system offline to fix security issues and update some older software components.\"",
+          structure: "examples"
+        },
+        { text: "Keep the same meaning, use short sentences, and avoid any technical terms.", structure: "output" },
+        { text: "[Paste the paragraph to rewrite here]", structure: "input" },
+      ],
+      structures: ["role", "instruction", "examples", "output", "input"],
+      techniques: [
+        { id: "few-shot", label: "Few-Shot", refs: ["examples"] },
+      ],
+    },
+  ],
+} as const;
+
+export const e6Content = {
   headline: "A great prompt still has limits.",
   headlineKw: ["A great prompt", "limits"],
   bp: ["Be clear and concise", "Iterate and test", "Steer with detail", "Evaluate the output", "Set success metrics"],
@@ -235,7 +366,7 @@ export const e5Content = {
   closingKw: ["next layers"],
 } as const;
 
-export const e6Content = {
+export const e7Content = {
   headline: "Layer 2: Context — relevance.",
   headlineKw: ["Context"],
   sub: "What & Why",
@@ -309,7 +440,7 @@ export const e6Content = {
   nextKw: ["4 strategies"],
 } as const;
 
-export const e7Content = {
+export const e8Content = {
   headline: "Four strategies. Each one solves a context problem.",
   headlineKw: ["Each one solves a context problem"],
   footer: "When context grows, these four keep it useful.",
@@ -322,7 +453,7 @@ export const e7Content = {
   ],
 } as const;
 
-export const e8Content = {
+export const e9Content = {
   headline: "Context works. But you're orchestrating it every session.",
   headlineKw: ["you're orchestrating it"],
   pitfalls: [
@@ -333,12 +464,12 @@ export const e8Content = {
   ],
   // Mirrors `E8.satellites = E6.satellites` from the design source — same six
   // components rendered without the rich `hover` payload inside this slide.
-  satellites: e6Content.satellites,
+  satellites: e7Content.satellites,
   footer: "Each session, you fight all of this. There's a better way.",
   footerKw: ["you", "better way"],
 } as const;
 
-export const e9Content = {
+export const e10Content = {
   headline: "Layer 3: Harness — execution.",
   headlineKw: ["Harness"],
   sub: "What & Why",
@@ -366,7 +497,7 @@ export const e9Content = {
   tagline: "Build once. Use forever.",
 } as const;
 
-export const e10Content = {
+export const e11Content = {
   headline: "What good harness teams do: eight practices.",
   headlineKw: ["eight practices"],
   practices: [
@@ -455,7 +586,7 @@ export const e10Content = {
   footerKw: ["automates work you do by hand today"],
 } as const;
 
-export const e11Content = {
+export const e12Content = {
   beat1: {
     lineA: { text: "Three layers.", kw: ["Three layers"] },
     lineB: { text: "The fundamentals are built.", kw: ["fundamentals"] },
