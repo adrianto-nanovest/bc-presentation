@@ -1,0 +1,132 @@
+// E.6 — CONTEXT · WHAT & WHY · slide tests.
+//
+// Covers the new 3-step design ported from
+// `claude-design-project/jsx/slides-b.jsx:283-379`.
+//   0 — left panel reveals (definition + 3 why-points)
+//   1 — context network reveals + flow animation runs
+//   2 — next-pointer footer reveals
+//
+// Hover behavior: hovering a satellite surfaces its rich `hover` payload in
+// the left panel's hover details box.
+import { fireEvent, render, screen, act, waitFor } from "@testing-library/react";
+import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import {
+  E7ContextWhatWhy,
+  e7Slide,
+} from "@/slides/foundation-core-section-e/e7-context-what-why";
+import { e7Content } from "@/slides/foundation-core-section-e/content";
+
+function AdvanceTo({ step }: { step: number }) {
+  const { goTo } = useDeck();
+  return <button data-testid="goto" onClick={() => goTo(0, step)} />;
+}
+
+function renderAtStep(step: number) {
+  render(
+    <DeckProvider stepCounts={[e7Slide.steps]}>
+      <AdvanceTo step={step} />
+      <E7ContextWhatWhy />
+    </DeckProvider>,
+  );
+  act(() => {
+    screen.getByTestId("goto").click();
+  });
+}
+
+test("E.6 declares 3 steps with canonicalPose=2", () => {
+  expect(e7Slide.steps).toBe(3);
+  expect(e7Slide.canonicalPose).toBe(2);
+  expect(e7Slide.animationMode).toBe("step-reveal");
+  expect(e7Slide.section).toBe("E");
+  expect(e7Slide.surface).toBe("dark");
+});
+
+test("E.6 renders the FIG label `FIG. E.6 · LAYER 2 · CONTEXT`", () => {
+  renderAtStep(0);
+  const fig = document.querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.7.*LAYER 2.*CONTEXT/i);
+});
+
+test("step 0 → definition + 3 why-points reveal; network not rendered yet", () => {
+  renderAtStep(0);
+
+  // Definition + each why-point reveal mount in the `on` state.
+  expect(screen.getByTestId("e7-definition").className).toMatch(/\bon\b/);
+  for (let i = 0; i < e7Content.whyPoints.length; i++) {
+    expect(screen.getByTestId(`e7-why-${i}`).className).toMatch(/\bon\b/);
+  }
+  expect(screen.getAllByTestId(/^e7-why-\d+$/)).toHaveLength(
+    e7Content.whyPoints.length,
+  );
+
+  // The right-side reveal kicker hasn't entered the `on` state yet, and the
+  // network is not rendered (we gate the entire <ContextNetwork> on
+  // showNetwork → step >= 1).
+  expect(screen.getByTestId("e7-reveal-kicker").className).not.toMatch(
+    /\bon\b/,
+  );
+  expect(screen.queryByTestId("context-network")).toBeNull();
+
+  // Next-pointer not yet revealed.
+  expect(screen.getByTestId("e7-next").className).not.toMatch(/\bon\b/);
+});
+
+test("step 1 → ContextNetwork mounts; phase progresses to flow; 6 satellites render", async () => {
+  renderAtStep(1);
+
+  const network = await screen.findByTestId("context-network");
+  expect(network).toBeInTheDocument();
+
+  // 6 satellites — one per content entry.
+  const sats = screen.getAllByTestId(/^context-network-sat-/);
+  expect(sats).toHaveLength(6);
+  expect(sats).toHaveLength(e7Content.satellites.length);
+
+  // Phase machine eventually reaches `flow` (idle → hub → reveal → flow).
+  await waitFor(
+    () => {
+      const phase = network.getAttribute("data-phase");
+      expect(phase === "reveal" || phase === "flow").toBe(true);
+    },
+    { timeout: 2500 },
+  );
+
+  // Next-pointer still off until step 2.
+  expect(screen.getByTestId("e7-next").className).not.toMatch(/\bon\b/);
+});
+
+test("step 2 → next-pointer footer reveals", async () => {
+  renderAtStep(2);
+
+  const next = screen.getByTestId("e7-next");
+  expect(next.className).toMatch(/\bon\b/);
+  // `highlight()` splits keywords into separate spans — check via textContent.
+  expect(next.textContent).toMatch(/4 strategies/);
+
+  // Network still rendered.
+  expect(await screen.findByTestId("context-network")).toBeInTheDocument();
+});
+
+test("hover satellite → hover details box surfaces that satellite's rich payload", () => {
+  renderAtStep(2);
+
+  // Box starts inactive (data-active=false, opacity 0).
+  const box = screen.getByTestId("e7-hover-box");
+  expect(box.getAttribute("data-active")).toBe("false");
+
+  // Pick a satellite by id (first one — "user-prompt") and fire mouseenter.
+  const target = e7Content.satellites[0];
+  const sat = screen.getByTestId(`context-network-sat-${target.id}`);
+  fireEvent.mouseEnter(sat);
+
+  // Box becomes active and shows the satellite's hover payload.
+  expect(box.getAttribute("data-active")).toBe("true");
+  expect(box.textContent).toContain(target.label);
+  expect(box.textContent).toContain(target.hover.kicker);
+  expect(box.textContent).toContain(target.hover.body);
+  expect(box.textContent).toContain(target.hover.tag);
+
+  // Mouse-leave clears the active state.
+  fireEvent.mouseLeave(sat);
+  expect(box.getAttribute("data-active")).toBe("false");
+});
