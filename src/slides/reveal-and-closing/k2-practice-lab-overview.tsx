@@ -246,7 +246,10 @@ export function K2PracticeLabOverview() {
 // ───────────────────── LabPartPopover (hover / pin detail) ─────────────────────
 //
 // Rich-content popover mirroring the spine column on the right. Renders the
-// part's `pop` payload — `desc` plus an array of `rows[]{label, items}`.
+// part's `pop` payload — `desc` (keyword-highlighted via `descKw`) plus an
+// array of `rows[]{label, items, links?}`. Only the Two Tracks rows carry
+// `links` (each persona's runbook + Drive folders), rendered as a row of
+// clickable LinkChips beneath that row's skill chips.
 // Compact vertical rhythm so the densest part (Outputs · 5 rows) fits the
 // full-height slot without overflow. Inlined here (like E.3/E.5) — only K.2
 // uses this layout.
@@ -317,7 +320,7 @@ function LabPartPopover({ entry }: { entry: LabPart }) {
           lineHeight: 1.4,
         }}
       >
-        {entry.pop.desc}
+        {highlight(entry.pop.desc, [...entry.pop.descKw])}
       </p>
 
       <div style={{ height: 16 }} />
@@ -342,6 +345,16 @@ function LabPartPopover({ entry }: { entry: LabPart }) {
                 <Chip key={it} text={it} />
               ))}
             </div>
+            {/* Resource links (only the Two Tracks persona rows carry these). */}
+            {"links" in r && r.links.length > 0 && (
+              <div
+                style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}
+              >
+                {r.links.map((l) => (
+                  <LinkChip key={l.href} label={l.label} href={l.href} />
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -378,6 +391,46 @@ function Chip({ text }: { text: string }) {
     >
       {text}
     </span>
+  );
+}
+
+// ───────────────────── LinkChip (external resource link) ─────────────────────
+//
+// A clickable variant of Chip for the Two Tracks materials (runbooks + Drive
+// folders). Rendered as a real <a> so Slide.tsx's click-to-advance handler
+// skips it (it excludes `a`), and opened in a new tab. Copper-toned text +
+// trailing ↗ icon distinguish it from the neutral, non-interactive skill chips.
+// Usable once the card is pinned — hovering alone closes the popover on leave.
+function LinkChip({ label, href }: { label: string; href: string }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <a
+      data-testid="k2-linkchip"
+      data-lit={hover ? "true" : "false"}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 5,
+        fontFamily: "var(--mono)",
+        fontSize: 12,
+        color: hover ? "var(--copper-100)" : "var(--copper-300)",
+        textDecoration: "none",
+        padding: "4px 10px",
+        border: `1px solid ${hover ? "var(--copper-200)" : "var(--copper-700)"}`,
+        background: hover ? "rgba(217,158,108,0.16)" : "rgba(10,10,10,0.55)",
+        boxShadow: hover ? "0 0 14px rgba(217,158,108,0.3)" : "none",
+        transition: "all 0.18s var(--ease)",
+        cursor: "pointer",
+      }}
+    >
+      {label}
+      <LucideIcon name="ArrowUpRight" size={12} color="currentColor" />
+    </a>
   );
 }
 

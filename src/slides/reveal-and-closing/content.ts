@@ -531,6 +531,7 @@ export const k2Content = {
       essence: "One month, one 12% miss",
       pop: {
         desc: "May 2026 closed 12% under target — and the whole miss hides in a single week. Trace the causal chain, then turn it into a decision-ready recommendation for June.",
+        descKw: ["a single week", "causal chain", "decision-ready recommendation"],
         rows: [
           { label: "The miss", items: ["87,870 / 100,000 units", "−12%", "all in Week 3 (May 14–20)"] },
           { label: "The chain", items: ["Apr 28 — batch accepted, no QA hold", "May 14 — 200 of 500 delivered", "May 15–17 — three Critical incidents"] },
@@ -545,9 +546,26 @@ export const k2Content = {
       essence: "Same data, two disciplines",
       pop: {
         desc: "Everyone works the same dataset through one of two personas. Each runs a provided Skill built to cite its sources and refuse to fabricate.",
+        descKw: ["two personas", "cite its sources", "refuse to fabricate"],
         rows: [
-          { label: "Section Head · Analyst", items: ['"Why did this happen?"', "root-cause-investigator", "evidence-tracing"] },
-          { label: "Team Leader · Booster", items: ['"What do we communicate now?"', "ops-comms-drafter", "template-fidelity"] },
+          {
+            label: "Section Head · Analyst",
+            items: ['"Why did this happen?"', "root-cause-investigator", "evidence-tracing"],
+            links: [
+              { label: "Runbook", href: "https://docs.google.com/document/d/1tLBJMYK-Sj7Cl-yhLH0Sk7Z2mPTp9LRn/edit?usp=drive_link&ouid=111800124012810515564&rtpof=true&sd=true" },
+              { label: "Main folder", href: "https://drive.google.com/drive/folders/1n2vi3_kG-3wISHv9EhdwwCZz_G4vhR0n?usp=drive_link" },
+              { label: "Starter pack", href: "https://drive.google.com/drive/folders/1hECVKmwLLl84e1dOaworgkhU5cGzI8ns?usp=drive_link" },
+            ],
+          },
+          {
+            label: "Team Leader · Comms Booster",
+            items: ['"What do we communicate now?"', "ops-comms-drafter", "template-fidelity"],
+            links: [
+              { label: "Runbook", href: "https://docs.google.com/document/d/1tmKDFOEHiq789xXohxYMxBkngl94APL-/edit?usp=drive_link&ouid=111800124012810515564&rtpof=true&sd=true" },
+              { label: "Main folder", href: "https://drive.google.com/drive/folders/18Uwk89jClcWa7XrhPp9sQfvnYvmWJyPM?usp=drive_link" },
+              { label: "Starter pack", href: "https://drive.google.com/drive/folders/1CV5BB8rrkjd7uhW9RQaAsd--kEhhDRqT?usp=drive_link" },
+            ],
+          },
         ],
       },
     },
@@ -558,6 +576,7 @@ export const k2Content = {
       essence: "Ground → Reason → Visualize → Author",
       pop: {
         desc: "Ninety minutes, four tools, one chain — from raw data to a method you can reuse.",
+        descKw: ["four tools", "one chain", "a method you can reuse"],
         rows: [
           { label: "1 · Ground — NotebookLM", items: ["sources → cited field-guide report"] },
           { label: "2 · Reason — Claude Project", items: ["persona system prompt + provided Skill"] },
@@ -573,6 +592,7 @@ export const k2Content = {
       essence: "Eight artifacts, one dataset",
       pop: {
         desc: "One month of operational data becomes a stack of AI-augmented deliverables.",
+        descKw: ["AI-augmented deliverables"],
         rows: [
           { label: "Slide deck", items: ["8-slide briefing — to decide or to execute"] },
           { label: "Report", items: ["5-section field guide, fully cited"] },

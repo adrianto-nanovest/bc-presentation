@@ -23,6 +23,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
+import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "./components/Reveal";
 import { LucideIcon } from "./components/LucideIcon";
@@ -175,21 +176,36 @@ export function E5PromptExamples() {
           columnGap: 0,
         }}
       >
-        {/* Col 1, row 1 — section label */}
-        <div style={{ gridColumn: 1, gridRow: 1 }}>
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 10,
-              letterSpacing: "0.22em",
-              color: "var(--copper-400)",
-              textTransform: "uppercase",
-            }}
-          >
-            Use Cases
-          </span>
-          <div style={{ height: 8 }} />
-          <CopperRule on width="100%" />
+        {/* Col 1, row 1 — section label + hint. Mirrors E3's header scaffold:
+            a fit-content sub-stack (label + rule) sits BESIDE the HintIcon, so
+            CopperRule's width="100%" collapses to the label's width and the icon
+            tucks to its right. zIndex:50 on the wrapper sets the stacking context
+            so the tooltip paints above the use-case cards revealed below. */}
+        <div
+          style={{ gridColumn: 1, gridRow: 1, position: "relative", zIndex: 50 }}
+        >
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <div style={{ width: "fit-content" }}>
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.22em",
+                  color: "var(--copper-400)",
+                  textTransform: "uppercase",
+                }}
+              >
+                Use Cases
+              </span>
+              <div style={{ height: 8 }} />
+              <CopperRule on width="100%" />
+            </div>
+            {/* Scroll affordance: the Prompt box (overflow:auto) clips longer
+                prompts — this tells the room they can scroll it. Visible on both
+                steps since the scrollable popover persists across the footer
+                reveal. */}
+            <HintIcon text="Hover each card for details, click to pin/unpin. Scroll inside the prompt view." />
+          </div>
         </div>
 
         {/* Col 1, row 2 — use-case card list */}

@@ -227,6 +227,21 @@ test("step 0 → Zero-Shot technique (empty refs) lights nothing", () => {
   expect(zeroShot.getAttribute("data-lit")).toBe("false");
 });
 
+test("step 0 → hint icon renders beside the title with the scroll tooltip", () => {
+  renderAtStep(0);
+  expect(screen.getByTestId("hint-icon")).toBeInTheDocument();
+  expect(screen.getByTestId("hint-tooltip").textContent).toBe(
+    "Hover each card for details, click to pin/unpin. Scroll inside the prompt view.",
+  );
+});
+
+test("step 1 → hint icon persists (scrollable popover lives across steps)", () => {
+  renderAtStep(1);
+  expect(screen.getByTestId("hint-tooltip").textContent).toBe(
+    "Hover each card for details, click to pin/unpin. Scroll inside the prompt view.",
+  );
+});
+
 test("footer hidden at step 0, revealed at step 1", () => {
   renderAtStep(0);
   expect(screen.queryByTestId("e5-footer")).not.toBeInTheDocument();
