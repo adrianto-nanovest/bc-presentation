@@ -51,7 +51,7 @@ const SUBTITLE_KW: Record<string, string[]> = {
   email: ["polished message"],
   summary: ["short briefing"],
   actions: ["clear task list"],
-  compare: ["recommendation"],
+  compare: ["side-by-side"],
   timeline: ["phases with dates"],
   rewrite: ["non-experts"],
 };
