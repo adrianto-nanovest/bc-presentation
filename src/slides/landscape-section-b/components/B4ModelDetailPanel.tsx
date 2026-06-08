@@ -145,7 +145,8 @@ function R1Body({
   mounted: boolean;
 }) {
   const data: B4BenchmarkBlock = C.benchmarks[categoryId];
-  const maxScore = 65;
+  const maxScore = data.scaleMax;
+  const unit = data.unit ?? "";
 
   return (
     <div
@@ -166,6 +167,7 @@ function R1Body({
             name={row.name}
             score={row.score}
             max={maxScore}
+            unit={unit}
             tone="frontier"
             mounted={mounted}
             delay={80 + i * 80}
@@ -181,6 +183,7 @@ function R1Body({
           name={data.openWeight.name}
           score={data.openWeight.score}
           max={maxScore}
+          unit={unit}
           tone="open-weight"
           mounted={mounted}
           delay={80 + data.frontier.length * 80}
@@ -212,12 +215,14 @@ interface BarProps {
   name: string;
   score: number;
   max: number;
+  /** Unit suffix appended to the score label (e.g. "%" for MMMU). */
+  unit?: string;
   tone: "frontier" | "open-weight";
   mounted: boolean;
   delay: number;
 }
 
-function Bar({ name, score, max, tone, mounted, delay }: BarProps) {
+function Bar({ name, score, max, unit = "", tone, mounted, delay }: BarProps) {
   const fraction = Math.max(0.04, Math.min(1, score / max));
   const isFrontier = tone === "frontier";
 
@@ -275,7 +280,10 @@ function Bar({ name, score, max, tone, mounted, delay }: BarProps) {
       <div style={barTrackStyle}>
         <div style={barFillStyle} />
       </div>
-      <span style={scoreStyle}>{score}</span>
+      <span style={scoreStyle}>
+        {score.toFixed(1)}
+        {unit}
+      </span>
     </div>
   );
 }

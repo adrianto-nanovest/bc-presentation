@@ -7,7 +7,7 @@
 **Research inputs:**
 - `docs/researches/2026-05-11-foundation-model-landscape.md`
 - `docs/researches/2026-05-12-llm-mechanics-and-parameters.md`
-- `docs/researches/2026-05-12-llm-benchmarks-may-2026.md`
+- `docs/researches/2026-06-08-llm-benchmarks-june-2026.md`
 **Reference images:** `docs/examples/B3-how-llm-works.png` (pipeline structure), `docs/examples/section-A-B-C-current/B3.png` and `B4.png` (current implementations being replaced)
 
 ## 0. Scope
@@ -364,12 +364,12 @@ Pop-cards: copper-900 background, copper-700 1px border, copper-300 left accent 
 | Slide | Data source | Path |
 |---|---|---|
 | B.3 (parameter copy) | LLM mechanics & parameters research | `docs/researches/2026-05-12-llm-mechanics-and-parameters.md` |
-| B.4 (benchmark scores) | Artificial Analysis benchmarks May 2026 | `docs/researches/2026-05-12-llm-benchmarks-may-2026.md` |
+| B.4 (benchmark scores) | Artificial Analysis benchmarks 8 June 2026 | `docs/researches/2026-06-08-llm-benchmarks-june-2026.md` |
 | B.4 (open-weight framing) | Foundation model landscape | `docs/researches/2026-05-11-foundation-model-landscape.md` |
 
 ### 4.2 Benchmark numbers per category
 
-Pulled from research file (`2026-05-12-llm-benchmarks-may-2026.md`). Where the research marks data `[verify]`, implementation phase must either confirm against the current artificialanalysis.ai snapshot or substitute the nearest verified data point.
+Pulled from research file (`2026-06-08-llm-benchmarks-june-2026.md`). Where the research marks data `[verify]`, implementation phase must either confirm against the current artificialanalysis.ai snapshot or substitute the nearest verified data point.
 
 | Category | Frontier top 3 | Open-weight champion | Benchmark |
 |---|---|---|---|

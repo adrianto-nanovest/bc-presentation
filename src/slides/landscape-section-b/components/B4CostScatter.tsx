@@ -4,21 +4,21 @@
 // the most expensive frontier model to the cheapest open-weight near-peer,
 // and a single italic label parked along the arrow.
 //
-// Coordinate system: x = blended $/M (log scale $1 → $16); y = Intelligence
-// Index (linear 48 → 62). Dots are colored by `kind`:
+// Coordinate system: x = AA "Cost to Run Intelligence Index" (USD, log scale
+// $130 → $5,500); y = AA Intelligence Index (linear 48 → 62). Dots colored by
+// `kind`:
 //   • frontier   → copper-700 fill
 //   • open-weight → copper-300 fill (matches table highlight idiom)
 //
 // Label placement rules (Task 21):
 //   • Points in the right ~15% of the plot area render their label LEFT of
 //     the dot so they don't clip the SVG right edge.
-//   • Specific overlap pairs (GLM, Qwen 3.6) get vertical offsets + thin
-//     connector lines to avoid label-on-label clashes.
+//   • The Opus 4.8 / GPT-5.5 top-right cluster gets a vertical offset + a thin
+//     connector line to avoid label-on-label clashes.
 //
 // Annotation:
-//   • Curved SVG path that bows ABOVE the data so it never crosses the
-//     Gemini 3.1 Pro dot. Label parks in the upper-right whitespace with a
-//     neutral-950 halo so it stays legible over gridlines.
+//   • Curved SVG path that bows ABOVE the data. Label parks in the bowl below
+//     the apex with a neutral-950 halo so it stays legible over gridlines.
 import { useEffect, useRef, useState } from "react";
 import type { B4ScatterAnnotation, B4ScatterPoint } from "../content";
 
@@ -36,8 +36,8 @@ const PAD_R = 32;
 const PAD_T = 16;
 const PAD_B = 36;
 
-const X_MIN = 1.0;
-const X_MAX = 16.0;
+const X_MIN = 130;
+const X_MAX = 5500;
 const Y_MIN = 48;
 const Y_MAX = 62;
 
@@ -45,8 +45,13 @@ const Y_MAX = 62;
 // labels to the LEFT side of the dot to avoid clipping the SVG right edge.
 const RIGHT_FLIP_FRAC = 0.85;
 
-const X_TICKS: readonly number[] = [1, 2, 4, 8, 16];
+const X_TICKS: readonly number[] = [200, 500, 1000, 2000, 5000];
 const Y_TICKS: readonly number[] = [50, 54, 58, 62];
+
+// Format a USD cost-to-run tick: thousands abbreviated to "k" ($2000 → "$2k").
+function fmtCostTick(usd: number): string {
+  return usd >= 1000 ? `$${usd / 1000}k` : `$${usd}`;
+}
 
 function xToPx(cost: number): number {
   const t =
@@ -66,18 +71,18 @@ function yToPx(intel: number): number {
 // also center-anchor on the dot (textAnchor="middle"), with a thin vertical
 // connector line from the dot to the label.
 const LABEL_Y_OFFSET: Record<string, number> = {
-  GLM: -14,                  // above the dot
-  "Qwen 3.6": 14,            // below the dot
-  "Claude Opus 4.7": 14,     // below the dot
-  "GPT-5.5": 14,             // below the dot — would otherwise clip the right edge
+  // Opus 4.8 and GPT-5.5 cluster at the top-right. Opus 4.8 is the annotation's
+  // origin, so its label parks ABOVE the dot — otherwise it flips left into the
+  // arrow and the dashed path crosses the text. GPT-5.5 drops BELOW its dot to
+  // clear Opus 4.8.
+  "Claude Opus 4.8": -16,    // above the dot
+  "GPT-5.5": 14,             // below the dot
 };
 
 // Per-point label-side override — wins over the right-edge auto-flip. Use for
 // points that aren't near the right edge but still benefit from a manual side
 // (e.g. to avoid overlapping a sibling label cluster).
-const LABEL_SIDE_OVERRIDE: Record<string, "left" | "right"> = {
-  "Grok 4.3": "left",
-};
+const LABEL_SIDE_OVERRIDE: Record<string, "left" | "right"> = {};
 
 export function B4CostScatter({ points, annotation }: B4CostScatterProps) {
   // Mount gate so dots can transition from rest.
@@ -153,7 +158,7 @@ export function B4CostScatter({ points, annotation }: B4CostScatterProps) {
                 letterSpacing="0.14em"
                 fill="var(--copper-500)"
               >
-                ${t}
+                {fmtCostTick(t)}
               </text>
             </g>
           );
@@ -199,7 +204,7 @@ export function B4CostScatter({ points, annotation }: B4CostScatterProps) {
           letterSpacing="0.2em"
           fill="var(--copper-300)"
         >
-          BLENDED $/M (LOG)
+          COST TO RUN INDEX (USD, LOG)
         </text>
         <text
           x={-((PAD_T + VB_H - PAD_B) / 2)}
@@ -250,13 +255,17 @@ export function B4CostScatter({ points, annotation }: B4CostScatterProps) {
               // label that parks below it never clips the top of the SVG
               // viewBox.
               const ctrlX = (x1 + x2) / 2;
-              const ctrlY = Math.min(y1, y2) - 40;
+              // Clamp so the bow stays on-canvas even when the "from" point
+              // (now the top-ranked Opus 4.8) sits near the top edge.
+              const ctrlY = Math.max(PAD_T + 4, Math.min(y1, y2) - 40);
               const d = `M ${x1} ${y1} Q ${ctrlX} ${ctrlY} ${x2} ${y2}`;
 
-              // Label parks just below the apex of the curve so it sits
-              // inside the chart area instead of clipping the top edge.
+              // Label parks in the bowl below the apex. The top-ranked "from"
+              // point (Opus 4.8) sits near the top edge, so the apex clamps
+              // high — drop the label ~48px to clear the from-point's own
+              // (left-flipped) label instead of overlapping it.
               const labelX = ctrlX;
-              const labelY = ctrlY + 22;
+              const labelY = ctrlY + 48;
               const labelText = annotation.label;
 
               return (

@@ -514,8 +514,8 @@ export const f7Content = {
       id: "decentralized",
       variant: "decentralized",
       label: "DECENTRALIZED",
-      essence: "peer mesh",
-      essenceKw: ["peer mesh"],
+      essence: "peer mesh (Agent Teams)",
+      essenceKw: ["peer mesh (Agent Teams)"],
     },
     {
       id: "chain",

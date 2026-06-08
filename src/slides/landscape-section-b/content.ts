@@ -407,7 +407,7 @@ export const b3Content: B3Content = {
 // Replaces the previous "TIERS, COMPETITORS, AND WHERE THE WORK RUNS" content.
 // See:
 //   docs/specs/2026-05-12-slides-B3-B4-mechanics-and-models.md §3
-//   docs/researches/2026-05-12-llm-benchmarks-may-2026.md  (Artificial Analysis snapshot)
+//   docs/researches/2026-06-08-llm-benchmarks-june-2026.md  (Artificial Analysis snapshot)
 //   docs/researches/2026-05-11-foundation-model-landscape.md  (canonical model + tool names)
 //
 // Note on Moonshot model name: the spec text reads "Kimi K2.5" but the research
@@ -473,6 +473,11 @@ export interface B4BenchmarkBlock {
   frontier: readonly B4BenchmarkRow[];
   /** Single open-weight champion for this category. */
   openWeight: B4OpenWeightRow;
+  /** Bar full-width reference. Per-category because each AA index uses a
+   *  different scale (Intelligence ~0–65, Agentic ~0–85, MMMU 0–100%). */
+  scaleMax: number;
+  /** Optional unit suffix on each score label (e.g. "%" for MMMU). */
+  unit?: string;
 }
 
 /** R1 chart data, keyed by category id (only R1 categories appear here). */
@@ -573,44 +578,44 @@ export const b4Content: B4Content = {
       essence: "Drafting, summarising, and chain-of-thought reasoning.",
       essenceKw: ["chain-of-thought"],
       footnote:
-        "Frontier leads on reasoning; the open-weight gap is six points and shrinking.",
-      footnoteKw: ["six points"],
+        "Frontier leads on reasoning; the open-weight gap is 6.7 points and shrinking.",
+      footnoteKw: ["6.7 points"],
     },
     {
       id: "code",
       label: "CODE",
-      subLabel: "SWE-bench Verified",
+      subLabel: "AA Coding Index",
       layout: "R1",
       iconName: "Code2",
       essence: "Writing, refactoring, and debugging across whole repos.",
       essenceKw: ["whole repos"],
       footnote:
-        "Top frontier models clear most graded tasks; open-weight catches the rest with prompting.",
-      footnoteKw: ["open-weight catches"],
+        "Frontier still pulls clear on code — the best open-weight trails by 11.6 points.",
+      footnoteKw: ["11.6 points"],
     },
     {
       id: "agentic",
       label: "AGENTIC",
-      subLabel: "Tau-bench / Agentic",
+      subLabel: "AA Agentic Index",
       layout: "R1",
       iconName: "Wrench",
       essence: "Planning multi-step work, calling tools, finishing tasks.",
       essenceKw: ["calling tools"],
       footnote:
-        "Tool-calling reliability is the new battleground — open-weight is six points back.",
+        "Tool-calling reliability is the new battleground — open-weight is 9.2 points back.",
       footnoteKw: ["Tool-calling reliability"],
     },
     {
       id: "multimodal",
       label: "MULTIMODAL",
-      subLabel: "MMMU",
+      subLabel: "MMMU-Pro",
       layout: "R1",
       iconName: "Eye",
       essence: "Reading images, video, and speech alongside text.",
       essenceKw: ["images, video, and speech"],
       footnote:
-        "Only one open-weight model accepts video; the rest stop at text + image.",
-      footnoteKw: ["video"],
+        "On visual reasoning the gap is nearly gone — MiniMax-M3 matches GPT-5.5.",
+      footnoteKw: ["matches GPT-5.5"],
     },
     {
       id: "creative",
@@ -621,7 +626,7 @@ export const b4Content: B4Content = {
       essence: "Generating images, video, and voice — different model class.",
       essenceKw: ["different model class"],
       footnote:
-        "Different model class — different leaderboards. None of the named eight above compete here.",
+        "Different model class — different leaderboards. None of the language models above compete here.",
       footnoteKw: ["Different model class"],
     },
     {
@@ -637,69 +642,70 @@ export const b4Content: B4Content = {
     },
   ],
   benchmarks: {
-    // WRITE & REASON — AA Intelligence Index, May 2026.
-    // GPT-5.5 (xhigh) 60, Opus 4.7 57, Gemini 3.1 Pro 57, Kimi K2.6 54.
-    // (Spec drafted "Opus ~58 / Gemini ~56 [verify]"; AA snapshot in
-    // 2026-05-12-llm-benchmarks-may-2026.md tied both at 57.)
+    // WRITE & REASON — AA Intelligence Index v4.0 (8 June 2026 snapshot).
+    // Claude Opus 4.8 (max) 61.4 #1, GPT-5.5 (xhigh) 60.2, Gemini 3.1 Pro 57.2;
+    // open-weight contender MiniMax-M3 54.7 (6.7 pts off the lead).
+    // Source: 2026-06-08-llm-benchmarks-june-2026.md.
     "write-reason": {
+      scaleMax: 65,
       frontier: [
-        { name: "GPT-5.5", score: 60 },
-        { name: "Claude Opus 4.7", score: 57 },
-        { name: "Gemini 3.1 Pro", score: 57 },
+        { name: "Claude Opus 4.8", score: 61.4 },
+        { name: "GPT-5.5", score: 60.2 },
+        { name: "Gemini 3.1 Pro", score: 57.2 },
       ],
       openWeight: {
-        name: "Kimi K2.6",
-        score: 54,
-        tagline: "within 6 pts of leader",
+        name: "MiniMax-M3",
+        score: 54.7,
+        tagline: "6.7 pts off the lead",
       },
     },
-    // CODE — SWE-bench Verified / SciCode / Terminal-Bench composite.
-    // Research file: GPT-5.5, Opus 4.7, Grok 4.3 lead; DeepSeek V4 Pro is
-    // the open-weight champion. [verify] AA does not publish individual
-    // SWE-bench numbers separately — scores below are AA-composite
-    // approximations and must be confirmed against artificialanalysis.ai
-    // ≤14 days before delivery.
+    // CODE — AA Coding Index (Terminal-Bench Hard, SciCode), 8 June 2026.
+    // GPT-5.5 (xhigh) 59.1 leads, Claude Opus 4.8 (max) 56.7, Gemini 3.1 Pro
+    // 55.5; open-weight contender DeepSeek V4 Pro 47.5 (11.6 pts off the lead).
     code: {
+      scaleMax: 65,
       frontier: [
-        { name: "GPT-5.5", score: 60 }, // [verify] composite proxy
-        { name: "Claude Opus 4.7", score: 58 }, // [verify] composite proxy
-        { name: "Grok 4.3", score: 54 }, // [verify] composite proxy
+        { name: "GPT-5.5", score: 59.1 },
+        { name: "Claude Opus 4.8", score: 56.7 },
+        { name: "Gemini 3.1 Pro", score: 55.5 },
       ],
       openWeight: {
         name: "DeepSeek V4 Pro",
-        score: 52, // [verify] composite proxy
-        tagline: "within 8 pts of leader",
+        score: 47.5,
+        tagline: "11.6 pts off the lead",
       },
     },
-    // AGENTIC — Tau-bench / Terminal-Bench Hard / APEX-Agents composite.
-    // Research file: GPT-5.5, Gemini 3.1 Pro, Opus 4.7 lead; Kimi K2.6 open-weight.
-    // [verify] AA composite, individual Tau-bench numbers not published.
+    // AGENTIC — AA Agentic Index (GDPval-AA, τ²-Bench Telecom), 8 June 2026.
+    // Claude Opus 4.8 (max) 77.8 leads, GPT-5.5 (xhigh) 74.1, Gemini 3.5 Flash
+    // 70.4; open-weight contender MiniMax-M3 68.6 (9.2 pts off the lead).
     agentic: {
+      scaleMax: 85,
       frontier: [
-        { name: "GPT-5.5", score: 60 }, // [verify] composite proxy
-        { name: "Gemini 3.1 Pro", score: 57 }, // [verify] composite proxy
-        { name: "Claude Opus 4.7", score: 57 }, // [verify] composite proxy
+        { name: "Claude Opus 4.8", score: 77.8 },
+        { name: "GPT-5.5", score: 74.1 },
+        { name: "Gemini 3.5 Flash", score: 70.4 },
       ],
       openWeight: {
-        name: "Kimi K2.6",
-        score: 54, // [verify] composite proxy
-        tagline: "swarm-class agent, 6 pts back",
+        name: "MiniMax-M3",
+        score: 68.6,
+        tagline: "9.2 pts off the lead",
       },
     },
-    // MULTIMODAL — MMMU-Pro.
-    // Research file: Gemini 3.1 Pro leads on multimodal breadth (text + image
-    // + speech + video), then GPT-5.5, then Opus 4.7. Kimi K2.6 supports
-    // text + image + video among open-weights. [verify] MMMU numbers per model.
+    // MULTIMODAL — MMMU-Pro (visual reasoning), 8 June 2026; scores in %.
+    // Gemini 3.5 Flash 84% leads, GPT-5.5 (xhigh) 80%, Claude Opus 4.7 79%;
+    // open-weight MiniMax-M3 80% — ties GPT-5.5, edges Opus 4.7.
     multimodal: {
+      scaleMax: 100,
+      unit: "%",
       frontier: [
-        { name: "Gemini 3.1 Pro", score: 57 }, // [verify] MMMU proxy
-        { name: "GPT-5.5", score: 60 }, // [verify] MMMU proxy
-        { name: "Claude Opus 4.7", score: 57 }, // [verify] MMMU proxy
+        { name: "Gemini 3.5 Flash", score: 84 },
+        { name: "GPT-5.5", score: 80 },
+        { name: "Claude Opus 4.7", score: 79 },
       ],
       openWeight: {
-        name: "Kimi K2.6",
-        score: 54, // [verify] MMMU proxy
-        tagline: "only open-weight with video input",
+        name: "MiniMax-M3",
+        score: 80,
+        tagline: "ties GPT-5.5 — 4.0 pts off the lead",
       },
     },
   },
@@ -708,83 +714,68 @@ export const b4Content: B4Content = {
     video: ["Veo 3.1", "Kling 3.0", "Runway Gen-4"],
     voice: ["ElevenLabs", "Suno v5"],
     footnote:
-      "Different model class — different leaderboards. None of the named 8 above compete here.",
+      "Different model class — different leaderboards. None of the language models above compete here.",
   },
-  // R3 scatter — Cost × Intelligence. Cost is blended $/M tokens at 3:1
-  // input:output ratio per Artificial Analysis (May 2026). Source rows in
-  // 2026-05-12-llm-benchmarks-may-2026.md PART 5.
+  // R3 scatter — Cost × Intelligence. X = AA "Cost to Run Intelligence Index"
+  // (USD, log scale); Y = AA Intelligence Index. Source: artificialanalysis.ai
+  // model cards, 8 June 2026. Four frontier + four open-weight.
   scatter: [
-    { name: "GPT-5.5", intelligence: 60, cost: 15.0, kind: "frontier" },
-    { name: "Claude Opus 4.7", intelligence: 57, cost: 12.08, kind: "frontier" },
-    { name: "Gemini 3.1 Pro", intelligence: 57, cost: 4.5, kind: "frontier" },
-    { name: "Grok 4.3", intelligence: 53, cost: 1.75, kind: "frontier" },
-    { name: "Kimi K2.6", intelligence: 54, cost: 2.32, kind: "open-weight" },
-    { name: "DeepSeek V4", intelligence: 52, cost: 2.32, kind: "open-weight" },
-    // [verify] Qwen 3.6 and GLM blended costs are not published on AA as of
-    // May 2026 (AA tracks Qwen3.5 variants for speed/cost only). Values below
-    // are estimates from vendor pricing pages and must be confirmed before
-    // delivery; Intelligence Index scores are also unpublished — using 50 as
-    // a placeholder peg consistent with their tier on overall reasoning.
-    { name: "Qwen 3.6", intelligence: 50, cost: 1.5, kind: "open-weight" }, // [verify]
-    { name: "GLM", intelligence: 50, cost: 1.2, kind: "open-weight" }, // [verify]
+    { name: "Claude Opus 4.8", intelligence: 61, cost: 4685.85, kind: "frontier" },
+    { name: "GPT-5.5", intelligence: 60, cost: 3357.0, kind: "frontier" },
+    { name: "Gemini 3.1 Pro", intelligence: 57, cost: 892.28, kind: "frontier" },
+    { name: "Grok 4.3", intelligence: 53, cost: 395.17, kind: "frontier" },
+    { name: "MiniMax-M3", intelligence: 55, cost: 308.34, kind: "open-weight" },
+    { name: "Kimi K2.6", intelligence: 54, cost: 947.87, kind: "open-weight" },
+    { name: "DeepSeek V4 Pro", intelligence: 52, cost: 267.82, kind: "open-weight" },
+    { name: "MiMo-V2.5-Pro", intelligence: 54, cost: 160.82, kind: "open-weight" },
   ],
   scatterAnnotation: {
-    from: "GPT-5.5",
-    to: "Kimi K2.6",
-    label: "90% the intelligence, ⅕ the cost",
+    from: "Claude Opus 4.8",
+    to: "MiniMax-M3",
+    label: "90% the intelligence, 1/15th the cost",
   },
-  // R4 heatmap — 4 rows × 5 columns of 0–1 normalised scores.
-  // Columns: WRITE & REASON, CODE, AGENTIC, MULTIMODAL, COST.
-  // Per-column normalisation: each column's max = 1.0.
-  // COST column is INVERTED (cheaper = higher value), so the Kimi K2.6 row
-  // dominates COST while the three frontier rows dominate the other four.
-  // Derivations (rounded to 2dp):
-  //   WRITE & REASON  raw 60/57/57/54  → 1.00 / 0.95 / 0.95 / 0.90
-  //   CODE            raw 60/58/57/52  → 1.00 / 0.97 / 0.95 / 0.87 (Grok 54 not in heatmap)
-  //   AGENTIC         raw 60/57/57/54  → 1.00 / 0.95 / 0.95 / 0.90
-  //   MULTIMODAL      raw 60/57/57/54  → Gemini leads → 1.00 / 0.95 / 0.95 / 0.90
-  //   COST (inverted) blended $15 / $12.08 / $4.50 / $2.32
-  //                   inverse-of-cost normalised to Kimi=1.0 →
-  //                   0.155 / 0.192 / 0.516 / 1.00
+  // R4 heatmap — DEPRECATED, not rendered (the slide uses qualitativeSummary
+  // below). Retained for compat; row labels kept in sync with the
+  // qualitativeSummary model set so the file stays coherent. 4 rows × 5 cols,
+  // per-column normalised 0–1 (COST inverted: cheaper = higher, open-weight
+  // row = 1.0). Cost normalisation is illustrative pending the refreshed
+  // cost × intelligence numbers.
   heatmap: {
-    rows: ["GPT-5.5", "Claude Opus 4.7", "Gemini 3.1 Pro", "Kimi K2.6"],
+    rows: ["Claude Opus 4.8", "GPT-5.5", "Gemini 3.1 Pro", "MiniMax-M3"],
     columns: ["WRITE & REASON", "CODE", "AGENTIC", "MULTIMODAL", "COST"],
     scores: [
-      // GPT-5.5
-      [1.0, 1.0, 1.0, 1.0, 0.15],
-      // Claude Opus 4.7
-      [0.95, 0.97, 0.95, 0.95, 0.19],
-      // Gemini 3.1 Pro
-      [0.95, 0.95, 0.95, 1.0, 0.52],
-      // Kimi K2.6 (open-weight; wins COST, ~5× cheaper than GPT-5.5)
-      [0.9, 0.87, 0.9, 0.9, 1.0],
+      // Claude Opus 4.8 — leads reason + agentic
+      [1.0, 0.95, 1.0, 0.95, 0.17],
+      // GPT-5.5 — leads code
+      [0.95, 1.0, 0.95, 0.95, 0.16],
+      // Gemini — leads MULTIMODAL (3.5 Flash)
+      [0.95, 0.95, 0.95, 1.0, 0.4],
+      // MiniMax-M3 (open-weight; competitive agentic + multimodal, wins COST)
+      [0.9, 0.87, 0.95, 0.95, 1.0],
     ],
     descriptor:
-      "Frontier leads 4/5. Kimi K2.6 leads cost by 5×. The gap is fine-tunable.",
+      "Frontier leads 4/5. Open-weight wins cost. The gap is fine-tunable.",
   },
-  // Qualitative 4×5 matrix derived from `heatmap.scores` using the rule:
-  //   col-max         → "best"
-  //   ≥ 0.95 × max    → "good"
-  //   ≥ 0.85 × max    → "average"
-  //   below           → "weak"
-  // Pre-computed at content-time so render-side never re-derives.
-  // Reference scores (rows × cols):
-  //   GPT-5.5         [1.00, 1.00, 1.00, 1.00, 0.15]
-  //   Claude Opus 4.7 [0.95, 0.97, 0.95, 0.95, 0.19]
-  //   Gemini 3.1 Pro  [0.95, 0.95, 0.95, 1.00, 0.52]
-  //   Kimi K2.6       [0.90, 0.87, 0.90, 0.90, 1.00]
+  // Qualitative 4×5 matrix — relative strength per category, set from the AA
+  // category charts (8 June 2026). Exactly one "best" per column:
+  //   reason → Opus 4.8 (61.4) · code → GPT-5.5 (59.1) · agentic → Opus 4.8
+  //   (77.8) · multimodal → Gemini 3.5 Flash (84%) · cost → open-weight.
+  // The open-weight row is MiniMax-M3 — the through-line open contender (reason
+  // 54.7, agentic 68.6, multimodal 80% ties GPT-5.5). It reads "average" on
+  // reason/code (a clear step behind frontier; DeepSeek V4 Pro is the open code
+  // contender at 47.5) but "good" on agentic + multimodal, and wins cost.
   qualitativeSummary: {
-    rows: ["GPT-5.5", "Claude Opus 4.7", "Gemini 3.1 Pro", "Kimi K2.6"],
+    rows: ["Claude Opus 4.8", "GPT-5.5", "Gemini 3.1 Pro", "MiniMax-M3"],
     columns: ["WRITE & REASON", "CODE", "AGENTIC", "MULTIMODAL", "COST"],
     cells: [
-      // GPT-5.5
-      ["best",    "best",    "best",    "best",    "weak"],
-      // Claude Opus 4.7
-      ["good",    "good",    "good",    "good",    "weak"],
-      // Gemini 3.1 Pro (ties MULTIMODAL with GPT-5.5)
+      // Claude Opus 4.8 — leads reason + agentic
+      ["best",    "good",    "best",    "good",    "weak"],
+      // GPT-5.5 — leads code
+      ["good",    "best",    "good",    "good",    "weak"],
+      // Gemini — leads multimodal (3.5 Flash)
       ["good",    "good",    "good",    "best",    "weak"],
-      // Kimi K2.6 (open-weight; wins COST)
-      ["average", "average", "average", "average", "best"],
+      // MiniMax-M3 (open-weight; competitive agentic + multimodal, wins COST)
+      ["average", "average", "good",    "good",    "best"],
     ],
     header: "AT A GLANCE — RELATIVE STRENGTH",
     footer:
@@ -794,7 +785,7 @@ export const b4Content: B4Content = {
   footer:
     "Frontier wins on average. Fine-tuned open-weight wins on your work.",
   footerKw: ["Frontier", "Fine-tuned open-weight", "your work"],
-  freshness: "Benchmark data: Artificial Analysis · May 2026",
+  freshness: "Benchmark data: Artificial Analysis · 8 June 2026",
 };
 
 // ─── B.5 — Today's Landscape + Inverse Hook ────────────────────────────────

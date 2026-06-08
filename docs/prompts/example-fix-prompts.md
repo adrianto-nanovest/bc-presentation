@@ -102,7 +102,7 @@ For better understanding on current codebase (src/ folder) and research content 
 
 ---------------
 
-Fix and improve slide 6 (B4) based on reference doc in docs/researches/2026-05-12-llm-benchmarks-may-2026.md and current state in docs/examples/section-A-B-current/B4.png
+Fix and improve slide 6 (B4) based on reference doc in docs/researches/2026-06-08-llm-benchmarks-june-2026.md and current state in docs/examples/section-A-B-current/B4.png
 1. Fig label is repetitive, and Respect slide B2 and B3, where both have fig label and header title, please make a proper ones for both, and follow it consistently for the styling. We also need to have left and right section title, similar styling with B3.
 2. Do not use ladder card on the left section, Please follow slide A1 step 2 or E8 step 1, left box structure, with icon and description. The current description especially on "Cost x Intelligence" is not quite right, also on "Multimodal", but you can review it for all
 3. Step 1, should have "entry animation", stagger left box input from top to bottom

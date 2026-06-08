@@ -217,20 +217,20 @@ export const i3Content = {
       kw: ["maximum capability", "portability"] as const,
     },
   ] as const,
-  // ── Connectors panel: 9 tiles. 3 in-use custom MCPs + 6 retired (now covered
-  // by Anthropic's official MCPs). Mirrors F8's connectors shape but uses
+  // ── Connectors panel: 9 tiles. 2 in-use custom MCPs + 7 retired (now covered
+  // by third-party official MCPs). Mirrors F8's connectors shape but uses
   // `inUse: boolean` instead of `connected`. `footer` is the italic line
   // beneath the sublabel; `kw` highlights words inside `footer`. ──
   connectors: [
-    { id: "gemini-image-gen", name: "gemini-image-gen", sublabel: "Image Gen",     footer: "Generate image & video using state-of-the-art gemini models.",   inUse: true,  kw: ["image & video", "gemini models"] as const },
-    { id: "sonarqube",        name: "Sonarqube",        sublabel: "Code Quality",  footer: "Get analysis & statistics from code quality tools.",            inUse: true,  kw: ["analysis & statistics", "code quality"] as const },
+    { id: "gemini-image-gen", name: "gemini-image-gen", sublabel: "Image Gen",     footer: "Generate image & video using state-of-the-art gemini models.",  inUse: true,  kw: ["image & video", "gemini models"] as const },
     { id: "bitbucket",        name: "Bitbucket",        sublabel: "Development",   footer: "Interact with our code repositories.",                          inUse: true,  kw: ["code repositories"] as const },
-    { id: "sentry",           name: "Sentry",           sublabel: "Observability", footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
-    { id: "atlassian",        name: "Atlassian",        sublabel: "Productivity",  footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
-    { id: "datadog",          name: "Datadog",          sublabel: "Observability", footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
-    { id: "google-workspace", name: "Google Workspace", sublabel: "Productivity",  footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
-    { id: "n8n",              name: "n8n",              sublabel: "Automation",    footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
-    { id: "figma",            name: "Figma",            sublabel: "Design",        footer: "Replaced by Anthropic's official MCP.",                         inUse: false, kw: ["Replaced", "official MCP"] as const },
+    { id: "sonarqube",        name: "Sonarqube",        sublabel: "Code Quality",  footer: "Replaced by an authorized third-party MCP.",                    inUse: false, kw: ["Replaced", "third-party", "MCP"] as const },
+    { id: "sentry",           name: "Sentry",           sublabel: "Observability", footer: "Replaced by an authorized third-party MCP.",                    inUse: false, kw: ["Replaced", "third-party", "MCP"] as const },
+    { id: "atlassian",        name: "Atlassian",        sublabel: "Productivity",  footer: "Replaced by an authorized third-party MCP.",                    inUse: false, kw: ["Replaced", "third-party", "MCP"] as const },
+    { id: "datadog",          name: "Datadog",          sublabel: "Observability", footer: "Replaced by an authorized third-party MCP.",                    inUse: false, kw: ["Replaced", "third-party", "MCP"] as const },
+    { id: "google-workspace", name: "Google Workspace", sublabel: "Productivity",  footer: "Replaced by an authorized third-party MCP.",                    inUse: false, kw: ["Replaced", "third-party", "MCP"] as const },
+    { id: "n8n",              name: "n8n",              sublabel: "Automation",    footer: "Replaced by an authorized third-party MCP.",                    inUse: false, kw: ["Replaced", "third-party", "MCP"] as const },
+    { id: "figma",            name: "Figma",            sublabel: "Design",        footer: "Replaced by an authorized third-party MCP.",                    inUse: false, kw: ["Replaced", "third-party", "MCP"] as const },
   ] as const,
   // ── Workshops panel: 2×2 grid of facilitated sessions. Workshop names are
   // real artifacts so the audience can recognize them; bullets stay

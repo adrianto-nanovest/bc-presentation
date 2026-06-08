@@ -19,40 +19,40 @@ export const g1Content = {
     {
       id: "claude",
       name: "Claude",
-      tagline: "Deep reasoning + agentic workflows",
-      taglineKw: ["reasoning", "agentic"] as const,
+      tagline: "reasoning + agentic + ecosystem",
+      taglineKw: ["reasoning", "agentic", "ecosystem"] as const,
       capabilities: [
-        "Strongest coding + reasoning (CursorBench leader)",
+        "Best agentic coding + deepest reasoning",
         "Agentic Cowork for knowledge work",
         "Design system extraction → handoff",
       ] as const,
-      capabilitiesKw: ["coding", "Cowork", "Design system"] as const,
+      capabilitiesKw: ["coding", "reasoning", "Cowork", "Design system"] as const,
       ringColor: "var(--copper-200)",
     },
     {
       id: "google",
       name: "Google",
-      tagline: "Integration + research",
-      taglineKw: ["Integration", "research"] as const,
+      tagline: "integration + research",
+      taglineKw: ["integration", "research"] as const,
       capabilities: [
         "Native to Workspace (Gmail, Docs, Sheets)",
         "NotebookLM: source-grounded research",
-        "Most generous free tier",
+        "Free tier + lowest cost at scale",
       ] as const,
-      capabilitiesKw: ["Workspace", "NotebookLM", "free tier"] as const,
+      capabilitiesKw: ["Workspace", "NotebookLM", "lowest cost"] as const,
       ringColor: "var(--copper-300)",
     },
     {
       id: "openai",
       name: "OpenAI",
-      tagline: "Accessibility + ecosystem",
-      taglineKw: ["Accessibility", "ecosystem"] as const,
+      tagline: "jack of all trades",
+      taglineKw: ["jack of all trades"] as const,
       capabilities: [
-        "Web search + most accessible UX",
+        "GPT-5.5 — strongest raw coding model",
         "Workspace Agents — cloud, schedule-driven",
         "Codex IDE with native git worktrees",
       ] as const,
-      capabilitiesKw: ["Web search", "Workspace Agents", "Codex"] as const,
+      capabilitiesKw: ["GPT-5.5", "Workspace Agents", "Codex"] as const,
       ringColor: "var(--copper-400)",
     },
   ] as const,
@@ -245,7 +245,7 @@ export const g3Content = {
 // G.3 compare overlays:
 export const g3SchedulesCompare = {
   title: "Schedules vs Routines vs /loop",
-  columns: ["Cowork Schedules", "Code Routines", "/loop command"] as const,
+  columns: ["Desktop Code Routines", "Cowork Schedules", "/loop command"] as const,
   rows: [
     {
       label: "What",
@@ -261,7 +261,7 @@ export const g3SchedulesCompare = {
     },
     {
       label: "Who",
-      cells: ["Knowledge worker", "Power user / dev", "Active worker iterating"],
+      cells: ["Power user / dev", "Knowledge worker", "Active worker iterating"],
     },
     {
       label: "Needs machine on",

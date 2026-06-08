@@ -2,8 +2,21 @@
 ## Research Document for BCE Mining Industry Workshop
 
 **Created:** May 2026  
+**Updated:** June 8, 2026 (refresh pass — see changelog below)  
 **Audience:** ~400 Berau Coal Energy (BCE) employees, non-AI-native  
 **Context:** 120-min animated HTML deck + 120-min practice lab (Claude-focused with Google & OpenAI coverage)
+
+---
+
+## 0. June 8, 2026 Refresh — What Changed Since the May Draft
+
+> This callout records the deltas verified on June 8, 2026. Inline sections below have been updated to match; this list is the quick index.
+
+- **Coding — the key distinction (per `2026-06-08-llm-benchmarks-june-2026.md`, Artificial Analysis Intelligence Index v4.0):** Split the claim by *model* vs *harness*. **GPT-5.5 leads the raw Code Index (59.1)** ahead of Opus 4.8 (56.7) — OpenAI has the strongest raw coding *model*. But **Opus 4.8 leads the Agentic Index (77.8)** and Reasoning (61.4) — Claude has the strongest agentic-coding *harness/ecosystem* (Claude Code). LLM-wise OpenAI wins coding; harness-wise Claude wins agentic coding.
+- **Claude:** Latest flagship is now **Opus 4.8** (May 28, 2026) — supersedes Opus 4.7. Leads AA **Reasoning (61.4)** and **Agentic (77.8)**; best agentic-coding harness (Claude Code). [[Opus 4.8 release](https://www.anthropic.com/news/claude-opus-4-8)]
+- **Google:** "Most generous free tier" is **no longer accurate** — Google removed free Pro-model API access in **April 2026**; consumer free tiers are now roughly equal across the big three. Google's real 2026 edge is **lowest cost at scale** (Gemini Flash ≈ $0.15/1M tokens, ~85B API calls/mo). Latest models: **Gemini 3.1 Pro / 3.5 Flash**; Gemini 2.0 retired June 1, 2026. New: **Workspace Intelligence** (Apr 2026 semantic layer). [[Gemini free-tier change](https://help.apiyi.com/en/google-gemini-api-free-tier-changes-april-2026-guide-en.html)]
+- **OpenAI:** Specialization is **"jack of all trades" / generalist breadth** — broad across consumer, agents, and coding. Its one best-in-class crown is the **raw coding model: GPT-5.5 tops the AA Code Index (59.1)**. Other wins: **consumer reach** (1B monthly / 900M weekly users) and **AI web search**. Latest model: **GPT-5.5** (Apr 23, 2026); GPT-5.6/GPT-6 not released. **Sora (consumer) discontinued** Apr 26, 2026. [[Everything-Platform analysis](https://www.leoniscap.com/research/openai-building-the-everything-platform-in-ai)]
+- **Slide G.1 impact:** OpenAI tagline `coding + accessibility` → `jack of all trades`; OpenAI bullet 1 → `GPT-5.5 — strongest raw coding model` (raw-model coding crown); Claude bullet 1 `Strongest coding + reasoning (CursorBench leader)` → `Top agentic coding + deepest reasoning` (Claude = agentic/harness leader, not raw model); Google bullet 3 `Most generous free tier` → `Free tier + lowest cost at scale`.
 
 ---
 
@@ -11,9 +24,9 @@
 
 The AI tools landscape in early 2026 has matured into a **specialized, multi-vendor ecosystem** rather than a single winner. Three major players dominate:
 
-- **Claude (Anthropic):** Deep reasoning, code generation, and agentic workflows. Best-in-class for development (70% on CursorBench vs competitors). Strong product ecosystem (Code, Design, Cowork, Skills/MCP).
-- **Google (Gemini + Workspace):** Integrated into everyday productivity tools. NotebookLM is the standout research/analysis product. Free tier generous, but enterprise features less documented.
-- **OpenAI (ChatGPT + Workspace Agents):** Web search, multi-modal reasoning, and upcoming Workspace Agents. Most accessible for consumer use, but enterprise features less mature than Claude.
+- **Claude (Anthropic) — reasoning + agentic + ecosystem:** Deep reasoning and agentic workflows. **Leads the AA Reasoning (61.4) and Agentic (77.8) indices** and owns the best agentic-coding *harness* (Claude Code) — though **GPT-5.5 edges it on the raw Code Index** (59.1 vs 56.7). Strong product ecosystem (Code, Design, Cowork, Skills/MCP).
+- **Google (Gemini + Workspace) — integration + research:** Integrated into everyday productivity tools (Gmail, Docs, Sheets, Drive, Chat) and unified by Workspace Intelligence. NotebookLM is the standout source-grounded research product. **No longer the "most generous free tier"** (free Pro access removed April 2026); the real edge is now **lowest cost at scale** (Gemini Flash ≈ $0.15/1M).
+- **OpenAI (ChatGPT + Codex + Workspace Agents) — jack of all trades:** The generalist — strong across consumer chat, web search, agents, and coding. Its standout is the **raw coding model: GPT-5.5 tops the AA Code Index (59.1)**; Claude still leads *agentic* coding (the harness). Other wins: widest consumer reach (1B monthly users) and AI web search.
 
 **Key Finding:** No single tool dominates all use cases. The optimal strategy is **use-case-driven tool selection** combined with **cross-tool workflows** (e.g., Claude for code + Google NotebookLM for research + Workspace Gemini for writing).
 
@@ -23,9 +36,17 @@ The AI tools landscape in early 2026 has matured into a **specialized, multi-ven
 
 ## 2. Claude Capabilities Deep Dive
 
-### 2.1 Claude Models (Opus 4.7, Sonnet 4.6, Haiku 4.5)
+### 2.1 Claude Models (Opus 4.8, Sonnet 4.6, Haiku 4.5)
 
-**Claude Opus 4.7** (Latest, April 16, 2026)
+**Claude Opus 4.8** (Latest, May 28, 2026)
+- **Best for:** Complex reasoning, long-horizon agentic coding, high-autonomy work
+- **Context:** 1M tokens
+- **Pricing:** $5/input, $25/output (per million tokens)
+- **Standout:** Leads the AA Reasoning (61.4) and Agentic (77.8) indices (GPT-5.5 leads the raw Code Index, 59.1); ~4x less likely to let code flaws pass unremarked vs Opus 4.7
+- **When to use:** The hardest reasoning + multi-step agentic coding tasks
+- **Simple example:** "Audit this 12-file service for race conditions, propose fixes, and write regression tests."
+
+**Claude Opus 4.7** (Previous flagship, Jan 2026)
 - **Best for:** Complex reasoning, agentic coding, design handoffs
 - **Context:** 1M tokens (~555k words), 128k max output
 - **Pricing:** $5/input, $25/output (per million tokens)
@@ -49,7 +70,7 @@ The AI tools landscape in early 2026 has matured into a **specialized, multi-ven
 - **When to use:** Batch processing, API integrations, high-frequency queries
 - **Simple example:** "Classify 10,000 safety incident reports as critical/medium/low priority based on keywords."
 
-**Model Selection Rule:** Sonnet 4.6 is the "daily driver"; use Opus 4.7 for truly hard problems; Haiku 4.5 for volume and cost.
+**Model Selection Rule:** Sonnet 4.6 is the "daily driver"; use Opus 4.8 for truly hard problems; Haiku 4.5 for volume and cost.
 
 ---
 
@@ -216,16 +237,19 @@ Default integrations: Asana, Linear, Slack, Google Calendar, Gmail, Notion, Sale
 
 ### 3.1 Google Gemini Models & Availability
 
-**Gemini Lineup (Early 2026)**
-- **Gemini 3.1 Pro:** Latest, most capable reasoning model
-- **Gemini 3.1 Flash:** Fast, cost-effective alternative
-- **Integration:** Embedded in ALL Workspace apps (Gmail, Docs, Sheets, Slides, Drive, Meet, Chat)
+**Gemini Lineup (June 2026)**
+- **Gemini 3.1 Pro:** Most capable reasoning model
+- **Gemini 3.5 Flash:** Newest fast tier — the volume/cost leader (~$0.15/1M tokens)
+- **Gemini 3.1 Flash / Flash-Lite:** Fast, cost-effective alternatives
+- **Retired:** Gemini 2.0 support ended June 1, 2026
+- **Integration:** Embedded in ALL Workspace apps (Gmail, Docs, Sheets, Slides, Drive, Meet, Chat), unified by **Workspace Intelligence** (semantic layer, April 2026)
 
 **Pricing & Access**
 - **Gemini in Workspace:** Included in Business Standard+, Enterprise plans at no additional cost (since Jan 2025)
 - **Business Starter:** Limited daily prompts
-- **Free tier (Gemini.google.com):** Limited, no Workspace integration
+- **Free tier (Gemini.google.com):** Limited consumer access; **free Pro-model API access was removed April 2026** — only Flash models retain an API free tier
 - **Gemini Pro subscription:** $19.99/month (access to Gemini Advanced, ability to create Gems)
+- **⚠️ "Most generous free tier" no longer holds (June 2026):** consumer free tiers are now roughly equal across Claude/ChatGPT/Gemini. Google's pricing edge is **lowest cost at scale** (Gemini 3.5 Flash ≈ $0.15/1M), not a more generous free tier.
 
 ---
 
@@ -405,10 +429,14 @@ Default integrations: Asana, Linear, Slack, Google Calendar, Gmail, Notion, Sale
 
 ### 4.1 ChatGPT & Models
 
-**Latest Models (May 2026)**
-- **GPT-5.5:** Smartest model, complex multi-step reasoning
-- **GPT-5.4 Thinking:** Most capable reasoning model, explicit "thinking" before response
-- **GPT-5.3 Codex:** Agentic coding model (25% faster than previous)
+**Latest Models (June 2026)**
+- **GPT-5.5:** Current flagship (released April 23, 2026) — strong at coding, agents, computer use
+- **GPT-5.5 Pro:** Premium variant
+- **GPT-5.4 Thinking:** Previous-gen reasoning model with explicit "thinking" before response
+- **GPT-5.x Codex:** Agentic coding model line
+- _Note:_ GPT-5.6 / GPT-6 are **not released** (rumor only). **Sora (consumer app) was discontinued** April 26, 2026 — do not cite as a current capability.
+
+**Positioning (June 2026):** OpenAI is the **"jack of all trades"** — capable across consumer chat, web search, agents, and coding. Its one clear best-in-class crown is the **raw coding model**: GPT-5.5 tops the AA Coding Index (59.1), ahead of Opus 4.8 (56.7). But Claude leads the **Agentic** index (77.8) and reasoning — so OpenAI wins the *model*, Claude wins the *agentic harness*. Other moats: **consumer distribution** (1B monthly / 900M weekly users) and AI-native web search.
 
 **Key features:**
 - **Web browsing:** Real-time internet search with cited answers
@@ -466,7 +494,7 @@ Default integrations: Asana, Linear, Slack, Google Calendar, Gmail, Notion, Sale
 |---|---|---|---|
 | **Chat Q&A** | Sonnet 4.6 (fast, accurate) | Gemini 3.1 Pro (web search) | GPT-5.5 (web search, ecosystem) |
 | **Document analysis** | Opus 4.7 (vision 3x, reasoning) | NotebookLM (source-grounded) | GPT-5.4 Thinking |
-| **Code generation** | Sonnet 4.6 / Claude Code (70% CursorBench) | Antigravity (IDE, but 40% bench) | GPT-5.3 Codex (25% faster) |
+| **Code generation** | Claude Code (best agentic-coding *harness*) | Antigravity (IDE) | **GPT-5.5 / Codex** (best raw coding *model* — AA Code Index 59.1) |
 | **Prototype/Design** | Claude Design (design system extraction) | Stitch (visual design) + AI Studio (build) | No equivalent |
 | **Agentic workflow** | Claude Cowork (autonomous task) | Workspace Intelligence (multi-app) | Workspace Agents (cloud, scheduled) |
 | **Research** | Live Artifacts (data refresh) | NotebookLM (source citation) | ChatGPT (web search, broad) |
@@ -514,7 +542,7 @@ Default integrations: Asana, Linear, Slack, Google Calendar, Gmail, Notion, Sale
 
 ### For the opening (set context):
 - **"Three vendors. Specialization over single winners. Your job isn't to pick one; it's to pick the right tool for each task."**
-- **"Claude excels at thinking hard. Google excels at integrating everywhere. OpenAI excels at accessibility."**
+- **"Claude excels at thinking hard. Google excels at integrating everywhere. OpenAI is the versatile generalist — a jack of all trades with the widest reach."**
 
 ### For each tool intro:
 
@@ -527,6 +555,7 @@ Default integrations: Asana, Linear, Slack, Google Calendar, Gmail, Notion, Sale
 - _"NotebookLM: upload your mining safety reports, get a podcast-style summary in 2 minutes. No hallucinations—it cites your docs."_
 
 **OpenAI:**
+- _"ChatGPT is the everyman tool — it does a bit of everything: web search, agents, coding, images. Its GPT-5.5 model now tops raw coding benchmarks, and it's the one most people already have open."_
 - _"ChatGPT's web search means you're not limited to old training data. Ask about today's news, today's stock prices, today's mining regulations."_
 
 ### For decision-making:
@@ -622,7 +651,8 @@ Default integrations: Asana, Linear, Slack, Google Calendar, Gmail, Notion, Sale
 ## Document Metadata
 
 - **Research completed:** May 6, 2026
-- **Knowledge cutoff:** Early May 2026
+- **Refresh pass:** June 8, 2026 (model lineups, Google free-tier change, OpenAI "jack of all trades" positioning — see §0 changelog)
+- **Knowledge cutoff:** Early June 2026
 - **Geographic scope:** Global (primary focus on tools available in English-speaking regions)
 - **Industry relevance:** Mining operations, equipment monitoring, safety reporting, team collaboration
 - **Bias note:** Research prioritized publicly available information. Enterprise features for Google and OpenAI are less documented than Claude's.
