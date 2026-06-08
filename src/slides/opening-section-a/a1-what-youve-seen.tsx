@@ -35,6 +35,11 @@ const MORPH_TRANSITION = {
   damping: 28,
 };
 
+// The right-hand "Questions" column holds back until the left chip→card morph
+// (spring above + description fade) has visually settled, so the two columns
+// reveal in sequence rather than together.
+const RIGHT_REVEAL_DELAY = 650;
+
 // ───────────────────── slide ─────────────────────
 
 export function A1WhatYouveSeen() {
@@ -59,10 +64,23 @@ export function A1WhatYouveSeen() {
   const ruleMounted = stage >= 2;
   const chipsMounted = stage >= 3;
 
+  // Gate the right column behind the left morph. Re-arms on every nav change so
+  // stepping back to the opener and forward again replays left-then-right.
+  const [questionsReady, setQuestionsReady] = useState(false);
+  useEffect(() => {
+    if (stepIndex < 1) {
+      setQuestionsReady(false);
+      return;
+    }
+    if (questionsReady) return; // already revealed — don't re-delay on 1→2
+    const t = window.setTimeout(() => setQuestionsReady(true), RIGHT_REVEAL_DELAY);
+    return () => window.clearTimeout(t);
+  }, [stepIndex, questionsReady]);
+
   const showOpener = stepIndex === 0;
   const showCards = stepIndex >= 1;
-  const showQuestions = stepIndex >= 2;
-  const showFooter = stepIndex >= 3;
+  const showQuestions = stepIndex >= 1 && questionsReady;
+  const showFooter = stepIndex >= 2;
 
   const mode: ShapeMode = showCards ? "card" : "chip";
 
@@ -431,7 +449,7 @@ function CapabilityShape({
   );
 }
 
-// ───────────────────── STEP 2+ — Questions column ─────────────────────
+// ───────────────────── STEP 1+ — Questions column ─────────────────────
 
 function QuestionsColumn({ on }: { on: boolean }) {
   return (
@@ -562,8 +580,8 @@ function ColumnHeading({ on, label }: { on: boolean; label: string }) {
 // ───────────────────── slide def ─────────────────────
 
 export const a1Slide: SlideDef = {
-  steps: 4,
-  canonicalPose: 3,
+  steps: 3,
+  canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "A",
