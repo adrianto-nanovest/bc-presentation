@@ -12,7 +12,8 @@ import { DarkenOverlay } from "@/components/DarkenOverlay";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { highlight as KW } from "@/components/highlight";
 import { TitleKeymap } from "./components/TitleKeymap";
-import { titleContent as C } from "./content";
+import { titleContent as C, workshopChipGeneral } from "./content";
+import { VARIANT } from "@/variant";
 
 // ───────────────────── slide ─────────────────────
 
@@ -143,7 +144,7 @@ export function Title() {
             whiteSpace: "nowrap",
           }}
         >
-          {C.workshopChip}
+          {VARIANT === "general" ? workshopChipGeneral : C.workshopChip}
         </div>
       </div>
 

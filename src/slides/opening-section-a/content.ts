@@ -37,6 +37,9 @@ export const titleContent: TitleContent = {
   darkenStrength: 0.18,
 };
 
+/** General (non-Berau) variant: only the workshop identifier chip differs. */
+export const workshopChipGeneral = "AI Catalyst Workshop";
+
 // ─── A.1 — "What you've already seen" ──────────────────────────────────────
 
 export type A1IconName =
@@ -44,7 +47,8 @@ export type A1IconName =
   | "FileText"
   | "ScanSearch"
   | "Sparkles"
-  | "Map";
+  | "Map"
+  | "PenLine";
 
 export interface A1Capability {
   label: string;
@@ -67,6 +71,12 @@ export interface A1Content {
   slideTitleKw: readonly string[];
   tagline: string;
   taglineKw: readonly string[];
+  /** Step-0 centered rule-header above the chip strip. */
+  ruleHeader: string;
+  /** Step-1 left column heading (above the capability cards). */
+  leftHeading: string;
+  /** Step-1 right column heading (above the question cards). */
+  rightHeading: string;
   capabilities: readonly A1Capability[];
   questions: readonly A1Question[];
   footerCaption: string;
@@ -79,6 +89,9 @@ export const a1Content: A1Content = {
   slideTitleKw: ["capabilities"],
   tagline: "What you saw is real. And it opens some questions.",
   taglineKw: ["questions"],
+  ruleHeader: "Capabilities Covered",
+  leftHeading: "Five capabilities",
+  rightHeading: "Questions we'll answer",
   capabilities: [
     {
       label: "AI CHATBOT",
@@ -141,4 +154,59 @@ export const a1Content: A1Content = {
   ],
   footerCaption: "Five capabilities already in the room. Five questions still ahead.",
   footerCaptionKw: ["already", "ahead"],
+};
+
+// ─── A.1 (general variant) — "What we mostly know / don't know yet" ────────
+//
+// Non-Berau BUs have no Session-1 winners to point back at, so the hook trades
+// social proof ("your colleagues built this") for familiarity ("you already
+// use this daily") — same rhetorical job, different evidence. Structure and
+// animation are identical to the Berau A.1; only content differs.
+
+export const a1GeneralContent: A1Content = {
+  figLabel: "WHERE WE ALL START",
+  slideTitle: "The AI most of us already know.",
+  slideTitleKw: ["already know"],
+  tagline: "Most of this is familiar by now. And it opens some questions.",
+  taglineKw: ["questions"],
+  ruleHeader: "What We Mostly Know",
+  leftHeading: "What we mostly know",
+  rightHeading: "What we don't know yet",
+  capabilities: [
+    {
+      label: "AI CHATBOT",
+      iconName: "MessageSquare",
+      description: "Conversational interfaces that answer, ask back, and follow up.",
+      descriptionKw: ["ask back"],
+    },
+    {
+      label: "SUMMARIZATION",
+      iconName: "FileText",
+      description: "Distilling long content into the parts that actually matter.",
+      descriptionKw: ["actually matter"],
+    },
+    {
+      label: "DOCUMENT ANALYSIS",
+      iconName: "ScanSearch",
+      description: "Reading, parsing, and reasoning over files and forms.",
+      descriptionKw: ["reasoning"],
+    },
+    {
+      label: "DRAFTING & WRITING",
+      iconName: "PenLine",
+      description: "First passes of emails, reports, and messages in seconds.",
+      descriptionKw: ["First passes"],
+    },
+    {
+      label: "PROMPT ENGINEERING",
+      iconName: "Sparkles",
+      description: "Shaping the question so the model gives back what you need.",
+      descriptionKw: ["Shaping the question"],
+    },
+  ],
+  // Shared by reference: these cards ARE the D→H agenda, and sections D–H are
+  // identical across variants — sharing the object means an edit can't drift.
+  questions: a1Content.questions,
+  footerCaption: "Five things we mostly know. Five questions still ahead.",
+  footerCaptionKw: ["mostly know", "ahead"],
 };

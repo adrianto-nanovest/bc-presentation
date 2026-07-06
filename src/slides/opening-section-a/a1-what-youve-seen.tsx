@@ -5,7 +5,7 @@
 // rule-header that fades out during the morph.
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
-import { MessageSquare, FileText, ScanSearch, Sparkles, Map } from "lucide-react";
+import { MessageSquare, FileText, ScanSearch, Sparkles, Map, PenLine } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
@@ -13,7 +13,13 @@ import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight as KW } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
-import { a1Content as C, type A1IconName, type A1Capability } from "./content";
+import {
+  a1Content,
+  type A1Content,
+  type A1IconName,
+  type A1Capability,
+  type A1Question,
+} from "./content";
 
 const ICONS: Record<A1IconName, LucideIcon> = {
   MessageSquare,
@@ -21,6 +27,7 @@ const ICONS: Record<A1IconName, LucideIcon> = {
   ScanSearch,
   Sparkles,
   Map,
+  PenLine,
 };
 
 const COLUMN_TOP = 170;
@@ -42,7 +49,9 @@ const RIGHT_REVEAL_DELAY = 650;
 
 // ───────────────────── slide ─────────────────────
 
-export function A1WhatYouveSeen() {
+// Fully content-driven so the general variant (a1-general.tsx) reuses the
+// same morph/reveal mechanics with different copy.
+export function A1WhatYouveSeen({ content: C = a1Content }: { content?: A1Content }) {
   const { stepIndex } = useDeck();
 
   // Mount-driven entry stagger: tagline → rule → chips fade in on first mount.
@@ -95,6 +104,7 @@ export function A1WhatYouveSeen() {
       </div>
 
       <OpenerChrome
+        content={C}
         taglineOn={showOpener && taglineMounted}
         ruleOn={showOpener && ruleMounted}
       />
@@ -103,11 +113,15 @@ export function A1WhatYouveSeen() {
         {mode === "chip" ? (
           <ChipsRow on={chipsMounted} capabilities={C.capabilities} />
         ) : (
-          <CapabilitiesColumn on={showCards} capabilities={C.capabilities} />
+          <CapabilitiesColumn
+            on={showCards}
+            heading={C.leftHeading}
+            capabilities={C.capabilities}
+          />
         )}
       </LayoutGroup>
 
-      <QuestionsColumn on={showQuestions} />
+      <QuestionsColumn on={showQuestions} content={C} />
 
       <Reveal
         on={showFooter}
@@ -140,9 +154,11 @@ export function A1WhatYouveSeen() {
 // ───────────────────── STEP 0 chrome — rule header + tagline ─────────────────────
 
 function OpenerChrome({
+  content: C,
   taglineOn,
   ruleOn,
 }: {
+  content: A1Content;
   taglineOn: boolean;
   ruleOn: boolean;
 }) {
@@ -217,7 +233,7 @@ function OpenerChrome({
             transition: "opacity 360ms var(--ease) 320ms",
           }}
         >
-          Capabilities Covered
+          {C.ruleHeader}
         </div>
         <div
           style={{
@@ -281,9 +297,11 @@ function ChipsRow({
 
 function CapabilitiesColumn({
   on,
+  heading,
   capabilities,
 }: {
   on: boolean;
+  heading: string;
   capabilities: readonly A1Capability[];
 }) {
   return (
@@ -300,7 +318,7 @@ function CapabilitiesColumn({
         pointerEvents: on ? "auto" : "none",
       }}
     >
-      <ColumnHeading on={on} label="Five capabilities" />
+      <ColumnHeading on={on} label={heading} />
       <div style={{ height: 12 }} />
       <div
         style={{
@@ -451,7 +469,13 @@ function CapabilityShape({
 
 // ───────────────────── STEP 1+ — Questions column ─────────────────────
 
-function QuestionsColumn({ on }: { on: boolean }) {
+function QuestionsColumn({
+  on,
+  content: C,
+}: {
+  on: boolean;
+  content: A1Content;
+}) {
   return (
     <div
       data-testid="a1-questions-column"
@@ -469,7 +493,7 @@ function QuestionsColumn({ on }: { on: boolean }) {
         flexDirection: "column",
       }}
     >
-      <ColumnHeading on={on} label="Questions we'll answer" />
+      <ColumnHeading on={on} label={C.rightHeading} />
       <div style={{ height: 12 }} />
       <div
         style={{
@@ -496,7 +520,7 @@ function QuestionsColumn({ on }: { on: boolean }) {
   );
 }
 
-function QuestionCard({ q }: { q: (typeof C.questions)[number] }) {
+function QuestionCard({ q }: { q: A1Question }) {
   const [hovered, setHovered] = useState(false);
   return (
     <div

@@ -14,6 +14,11 @@ import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
 import { k3Content as C } from "./content";
+import { VARIANT } from "@/variant";
+
+// The general variant drops K.1/K.2 (no Practice Lab), so this closer is the
+// only K slide there and renumbers to K.1.
+const FIG_NUM = VARIANT === "general" ? 1 : 3;
 
 // ───────────────────── slide ─────────────────────
 
@@ -82,7 +87,7 @@ export function K3ThankYou() {
         }}
       />
 
-      <FigLabel section="K" num={3} label={C.figLabel} />
+      <FigLabel section="K" num={FIG_NUM} label={C.figLabel} />
 
       {/* Bottom-left anchored beats. */}
       <div

@@ -34,7 +34,32 @@ export const config = {
   matcher: '/((?!_vercel/|heroes/title-data-topology).*)',
 };
 
-const COOKIE = 'berau_session';
+// ── Variants ─────────────────────────────────────────────────────────────────
+// One deployment serves every variant; the request's hostname decides which
+// branding (and password) applies. The Berau production domain keeps its
+// existing cookie/copy untouched; every other host (the general BU domain,
+// Vercel preview URLs) gets the general variant.
+
+const BERAU_HOST = 'bc-presentation.vercel.app';
+
+interface VariantCopy {
+  cookie: string;
+  pageTitle: string;
+  eyebrow: string;
+}
+
+const BERAU: VariantCopy = {
+  cookie: 'berau_session',
+  pageTitle: 'Berau Coal AI Workshop — Access',
+  eyebrow: 'Berau AI Catalyst · Vol 2, Session 2',
+};
+
+const GENERAL: VariantCopy = {
+  cookie: 'general_session',
+  pageTitle: 'AI Catalyst Workshop — Access',
+  eyebrow: 'AI Catalyst Workshop',
+};
+
 const MAX_AGE_S = 60 * 60 * 24 * 7; // 7 days
 const MAX_AGE_MS = MAX_AGE_S * 1000;
 const AUTH_PATH = '/__auth';
@@ -42,15 +67,22 @@ const AUTH_PATH = '/__auth';
 const enc = new TextEncoder();
 
 export default async function middleware(request: Request): Promise<Response> {
-  const SITE_PASSWORD = process.env.SITE_PASSWORD;
+  const { pathname, hostname } = new URL(request.url);
+  const isBerau = hostname === BERAU_HOST;
+  const v = isBerau ? BERAU : GENERAL;
+
+  // Each variant has its own password. The general one falls back to
+  // SITE_PASSWORD so preview deployments keep working before
+  // SITE_PASSWORD_GENERAL is configured.
+  const SITE_PASSWORD = isBerau
+    ? process.env.SITE_PASSWORD
+    : (process.env.SITE_PASSWORD_GENERAL ?? process.env.SITE_PASSWORD);
   const AUTH_SECRET = process.env.AUTH_SECRET;
 
   // Fail closed — never expose the deck if the gate isn't configured.
   if (!SITE_PASSWORD || !AUTH_SECRET) {
-    return html(notConfiguredPage(), 503);
+    return html(notConfiguredPage(v), 503);
   }
-
-  const { pathname } = new URL(request.url);
 
   // ── Login submit ────────────────────────────────────────────────────────
   if (request.method === 'POST' && pathname === AUTH_PATH) {
@@ -62,21 +94,21 @@ export default async function middleware(request: Request): Promise<Response> {
         status: 303,
         headers: {
           Location: '/',
-          'Set-Cookie': `${COOKIE}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`,
+          'Set-Cookie': `${v.cookie}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`,
         },
       });
     }
-    return html(loginPage('Incorrect password — please try again.'), 401);
+    return html(loginPage(v, 'Incorrect password — please try again.'), 401);
   }
 
   // ── Existing session ─────────────────────────────────────────────────────
-  const token = readCookie(request.headers.get('cookie'), COOKIE);
+  const token = readCookie(request.headers.get('cookie'), v.cookie);
   if (token && (await verifyToken(token, AUTH_SECRET))) {
     return next(); // forward to the static origin — serve the deck
   }
 
   // ── Not authenticated → branded login page ───────────────────────────────
-  return html(loginPage(), 200);
+  return html(loginPage(v), 200);
 }
 
 // ── Crypto helpers (Web Crypto only) ─────────────────────────────────────────
@@ -155,10 +187,10 @@ function html(body: string, status: number): Response {
 // headline → credit → access form). The same photo paints the real title slide on
 // success, so the transition reads as one continuous frame. Pure inline CSS — this
 // string is served by the Edge before any app bundle exists.
-const PAGE_HEAD = `<!doctype html><html lang="en"><head>
+const pageHead = (v: VariantCopy) => `<!doctype html><html lang="en"><head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Berau Coal AI Workshop — Access</title>
+<title>${v.pageTitle}</title>
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#0a0a0a" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -347,16 +379,16 @@ const PAGE_HEAD = `<!doctype html><html lang="en"><head>
 <div class="bg bg-vignette"></div>
 <div class="topbar"></div>
 <main class="col"><div class="inner">
-<p class="eyebrow anim d1"><span class="tick"></span><span>Berau AI Catalyst · Vol 2, Session 2</span></p>
+<p class="eyebrow anim d1"><span class="tick"></span><span>${v.eyebrow}</span></p>
 <h1 class="anim d2">From AI Curiosity to AI <em>Capability</em></h1>
 <p class="credit anim d3">Facilitated by Adrianto Tedjokusumo · Nanovest</p>`;
 
 const PAGE_FOOT = `</div></main>
 </body></html>`;
 
-function loginPage(error?: string): string {
+function loginPage(v: VariantCopy, error?: string): string {
   return (
-    PAGE_HEAD +
+    pageHead(v) +
     `<form method="POST" action="${AUTH_PATH}">
 <div class="formhead anim d4">
 <label for="password" class="lbl">Enter password</label>
@@ -399,9 +431,9 @@ This deck is private. Your access is remembered for 7 days.
   );
 }
 
-function notConfiguredPage(): string {
+function notConfiguredPage(v: VariantCopy): string {
   return (
-    PAGE_HEAD +
+    pageHead(v) +
     `<div class="formhead anim d4"><span class="lbl">Access not configured</span><span class="rule"></span></div>
 <p class="err anim d5" role="alert">Set the <code>SITE_PASSWORD</code> and <code>AUTH_SECRET</code> environment variables in the Vercel project, then redeploy.</p>` +
     PAGE_FOOT
