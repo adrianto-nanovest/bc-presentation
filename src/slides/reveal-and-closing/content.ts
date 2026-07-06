@@ -22,7 +22,7 @@ export const i1Content = {
       subtitle: "context · web · ground truth",
       icon: "BookOpen",
       todo: [
-        { text: "Pull context — BCE Plan, PIC chats, prior workshops (memory + Drive MCP)", keywords: ["Pull context", "memory", "MCP"] as const },
+        { text: "Pull context — workshop plan, PIC chats, prior workshops (memory + Drive MCP)", keywords: ["Pull context", "memory", "MCP"] as const },
         { text: "Web research — ideation, deep-dives, design refs (WebSearch + WebFetch Claude Tools)", keywords: ["Web research", "WebSearch", "WebFetch"] as const },
         { text: "Ground truth — Claude · Gemini · OpenAI docs, trusted YT (NotebookLM RAG plugin)", keywords: ["Ground truth", "NotebookLM", "plugin"] as const },
         { text: "All via parallel sub-agents", keywords: ["parallel sub-agents"] as const },
