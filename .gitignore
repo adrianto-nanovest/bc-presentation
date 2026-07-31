@@ -45,3 +45,5 @@ exports/
 .mcp.json
 
 docs/kpi
+
+.playwright-cli

@@ -49,6 +49,7 @@ import { highlight } from "@/components/highlight";
 import { Reveal } from "../foundation-techniques-section-f/components/Reveal";
 import { LucideIcon } from "../foundation-core-section-e/components/LucideIcon";
 import { i1Content as C } from "./content";
+import { I1Backdrop } from "./components/I1Backdrop";
 
 // ───────────────────── styles ─────────────────────
 
@@ -175,6 +176,12 @@ export function I1MetaProcess() {
   return (
     <>
       <style>{styles}</style>
+
+      {/* Ambient grid-pulse backdrop for steps 1–2 (stepIndex 0–1), which
+          were otherwise a black stage behind two lines of type. First child
+          so it paints under everything; it fades out once the cards own the
+          stage. Dev-only alternates: `?proto=`, see I1Backdrop.tsx. */}
+      <I1Backdrop stepIndex={stepIndex} />
 
       <FigLabel section="I" num={1} label="THE PROCESS" />
 
