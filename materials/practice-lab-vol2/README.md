@@ -20,10 +20,24 @@ Workshop materials for the 90-min practice lab. Source-of-truth files live in th
 These are populated by the user-manual tasks (B14, C1):
 
 ```
-## Drive folder (deployed)
-- URL: <pending>
-- Created: <pending>
-- Permission: Anyone with link — Viewer
+## Drive folders (deployed) — Permission: Anyone with link — Viewer
+Berau · Section Head — Analyst
+- Main folder:  https://drive.google.com/drive/folders/1n2vi3_kG-3wISHv9EhdwwCZz_G4vhR0n
+- Runbook:      https://docs.google.com/document/d/1tLBJMYK-Sj7Cl-yhLH0Sk7Z2mPTp9LRn
+- Starter pack: https://drive.google.com/drive/folders/1hECVKmwLLl84e1dOaworgkhU5cGzI8ns
+
+Berau · Team Leader — Comms Booster
+- Main folder:  https://drive.google.com/drive/folders/18Uwk89jClcWa7XrhPp9sQfvnYvmWJyPM
+- Runbook:      https://docs.google.com/document/d/1tmKDFOEHiq789xXohxYMxBkngl94APL-
+- Starter pack: https://drive.google.com/drive/folders/1CV5BB8rrkjd7uhW9RQaAsd--kEhhDRqT
+
+GEMS · Analyst — one track for all (copy of the Berau Section Head set, same manufacturing case)
+- Main folder:  https://drive.google.com/drive/folders/1AIUJsU8usuj8TEIYN8yObN0iQDJ-v4FY
+- Runbook:      https://docs.google.com/document/d/1piHjL5Vm25mj3Nvv-_bN5u3cG3vPX1z3
+- Starter pack: https://drive.google.com/drive/folders/11aqVeWEXWqdwLu6FI3DYu2U6zv0apNeR
+
+These same URLs are rendered as K.2 link chips from `src/slides/reveal-and-closing/content.ts`
+(`k2Content`). Keep both places in step. Store canonical URLs only — no `usp`/`ouid` params.
 
 ## NotebookLM fallback workbook
 - URL: <pending>
