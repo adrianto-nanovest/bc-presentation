@@ -127,28 +127,28 @@ export const a1Content: A1Content = {
   // Order matches downstream section flow: D → E → F → G → H.
   questions: [
     {
-      text: "What if the upstream process was audited before automation?",
-      kw: ["upstream process"],
+      text: "What if you fixed the process before you automated it?",
+      kw: ["fixed the process"],
       sectionLabel: "SECTION D · PROCESS & METHODOLOGY",
     },
     {
-      text: "What if context wasn't a one-shot prompt but a standing memory?",
-      kw: ["standing memory"],
+      text: "What if you never had to re-explain your context again?",
+      kw: ["re-explain"],
       sectionLabel: "SECTION E · ENGINEERING FUNDAMENTALS",
     },
     {
-      text: "What if these tools could talk to each other?",
-      kw: ["talk to each other"],
+      text: "What if you could plug AI into your work, not just chat?",
+      kw: ["not just chat"],
       sectionLabel: "SECTION F · TECHNIQUES",
     },
     {
-      text: "What if a real workflow — not a demo — ran end-to-end?",
-      kw: ["end-to-end"],
+      text: "What if you knew which tool to use, when, and how?",
+      kw: ["when, and how"],
       sectionLabel: "SECTION G · TOOLS ECOSYSTEM",
     },
     {
-      text: "What if every solution became a skill others could fork?",
-      kw: ["skill others could fork"],
+      text: "What if one person's solution became everyone's tool?",
+      kw: ["everyone's tool"],
       sectionLabel: "SECTION H · PITFALLS & BEST PRACTICES",
     },
   ],

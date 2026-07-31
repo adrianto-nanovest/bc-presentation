@@ -47,11 +47,11 @@
 **Five "questions we'll answer" cards (right column):**
 | Question | Section pointer |
 |---|---|
-| "What if the *upstream process* was audited before automation?" | → SECTION D |
-| "What if context wasn't a one-shot prompt but a *standing memory*?" | → SECTION E |
-| "What if these tools could *talk to each other*?" | → SECTION F |
-| "What if a real workflow — not a demo — ran *end-to-end*?" | → SECTION G |
-| "What if every solution became a *skill others could fork*?" | → SECTION H |
+| "What if you *fixed the process* before you automated it?" | → SECTION D |
+| "What if you never had to *re-explain* your context again?" | → SECTION E |
+| "What if you could plug AI into your work, *not just chat*?" | → SECTION F |
+| "What if you knew which tool to use, *when, and how*?" | → SECTION G |
+| "What if one person's solution became *everyone's tool*?" | → SECTION H |
 
 **Footer:** "*Already* five capabilities in the room. Five questions still *ahead*."
 
