@@ -1,9 +1,9 @@
 # AI Tools Ecosystem 2026: Claude, Google, OpenAI
-## Research Document for BCE Mining Industry Workshop
+## Research Document for BC Mining Industry Workshop
 
 **Created:** May 2026  
 **Updated:** June 8, 2026 (refresh pass — see changelog below)  
-**Audience:** ~400 Berau Coal Energy (BCE) employees, non-AI-native  
+**Audience:** ~400 Berau Coal Energy (BC) employees, non-AI-native  
 **Context:** 120-min animated HTML deck + 120-min practice lab (Claude-focused with Google & OpenAI coverage)
 
 ---
@@ -30,7 +30,7 @@ The AI tools landscape in early 2026 has matured into a **specialized, multi-ven
 
 **Key Finding:** No single tool dominates all use cases. The optimal strategy is **use-case-driven tool selection** combined with **cross-tool workflows** (e.g., Claude for code + Google NotebookLM for research + Workspace Gemini for writing).
 
-**For BCE employees:** Start with Claude (committee provides accounts) for hands-on practice. Google Workspace AI is already integrated into your email/docs/sheets. OpenAI is optional for comparison.
+**For BC employees:** Start with Claude (committee provides accounts) for hands-on practice. Google Workspace AI is already integrated into your email/docs/sheets. OpenAI is optional for comparison.
 
 ---
 

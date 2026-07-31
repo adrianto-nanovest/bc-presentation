@@ -1,18 +1,18 @@
 # HR Group Agentic Organization Presentation: Reuse Research
 
-**Status**: High-priority BCE-approved content | **Prepared for**: Berau Coal Energy (BCE) AI Workshop  
+**Status**: High-priority BC-approved content | **Prepared for**: Berau Coal Energy (BC) AI Workshop  
 **Research Date**: May 6, 2026 | **Sources**: PDF + `/Users/macbook/Projects/_web_presentation/hr-group-agentic-org/`
 
 ---
 
 ## 1. Executive Summary: Top 5 Reusable Elements
 
-The HR Group presentation is a **21-slide narrative arc** that won BCE's confidence. Its core thesis — that organizational mindset and structure matter more than tools — is directly applicable to mining-industry adoption. Here are the five elements most likely to hook BCE participants:
+The HR Group presentation is a **21-slide narrative arc** that won BC's confidence. Its core thesis — that organizational mindset and structure matter more than tools — is directly applicable to mining-industry adoption. Here are the five elements most likely to hook BC participants:
 
 ### 1.1 **Core Narrative Hook: "The Hardest Part Isn't the Tools"**
 **Quote**: *"Why mindset and people determine AI adoption success"* (Slide 2)
 
-**Why it works**: Opens with a counterintuitive premise backed by research (70% of AI failures are people/process, not tech — BCG/McKinsey). For BCE staff (non-technical, skeptical of hype), this immediately positions the workshop as grounded in reality, not vendor promises.
+**Why it works**: Opens with a counterintuitive premise backed by research (70% of AI failures are people/process, not tech — BCG/McKinsey). For BC staff (non-technical, skeptical of hype), this immediately positions the workshop as grounded in reality, not vendor promises.
 
 **Reuse verdict**: ESSENTIAL. Adapt for mining: "Why mindset and process determine how coal operations adopt AI" — shifts focus from fear of replacement to organizational readiness.
 
@@ -26,7 +26,7 @@ The HR Group presentation is a **21-slide narrative arc** that won BCE's confide
 
 **Why it works**: Concrete, visually beautiful, and transferable. Shows how every role changes—not just "engineers."
 
-**Reuse verdict**: **GOLD STANDARD**. This is the framework BCE specifically mentioned liking. Entire section can drop into BCE deck with mining-specific examples (e.g., "Pit Manager as Specification-Writer," "HSSE Team as Verifier").
+**Reuse verdict**: **GOLD STANDARD**. This is the framework BC specifically mentioned liking. Entire section can drop into BC deck with mining-specific examples (e.g., "Pit Manager as Specification-Writer," "HSSE Team as Verifier").
 
 ---
 
@@ -52,7 +52,7 @@ A narrative progression showing what went wrong at Nanovest, distilled into thre
 
 **The Mindset Flip**: *"We stopped asking 'how do we build this?' and started asking 'how do we enable this?'"*
 
-**Why it works**: Captures the emotional and strategic arc. For 400 BCE staff, this is the "aha moment" that sticks.
+**Why it works**: Captures the emotional and strategic arc. For 400 BC staff, this is the "aha moment" that sticks.
 
 **Reuse verdict**: ESSENTIAL. This is storytelling gold. Use in both 120-min deck AND lab.
 
@@ -75,7 +75,7 @@ Four principles, each with research backing:
 
 ## 2. Agentic Organization Content Brief
 
-If BCE approves the "agentic organization" module for the main deck, **here's what to brief in**:
+If BC approves the "agentic organization" module for the main deck, **here's what to brief in**:
 
 ### 2.1 **What Is an Agentic Organization?**
 
@@ -116,7 +116,7 @@ Not a decision-making bottleneck. A **coordination hub** that:
 - Ensures governance and risk management
 - Sponsors champions and celebrates wins
 
-For BCE: Would be composed of mine-site reps, HSSE, ops, engineering. Meets monthly. Operates 2026 enablement roadmap (Learn → Experiment → Build → Integrate → Own).
+For BC: Would be composed of mine-site reps, HSSE, ops, engineering. Meets monthly. Operates 2026 enablement roadmap (Learn → Experiment → Build → Integrate → Own).
 
 ### 2.4 **Why the Middle Matters**
 
@@ -186,26 +186,26 @@ These are **pull-quotes and framing devices** that made the HR Group presentatio
 
 | # | Title | Content Type | Key Frames | Reuse Verdict | Notes |
 |---|-------|-------|-----------|----------|--------|
-| 1 | From Engineers to Everyone | Title | Nanovest logo, speaker name (Adrianto), inclusive illustration, social + careers CTA | **Medium** | Update speaker name / branding for BCE. Art style (diverse, warm) is excellent. |
-| 2 | The Hardest Part Isn't the Tools | Hook + Data | Split: People/Process (illustration) vs. Tech (icons). Quote: "70% of AI adoption failures..." BCG/McKinsey sourced. | **ESSENTIAL** | Core narrative hook. Reuse quote verbatim for BCE (change to coal context). |
-| 3 | The Agentic Organization | Framework | Hub-and-spoke (AISC center, 6 pillars), paradigm shift (70/30 → 30/70), stats (25–55%, 78% → 6%). Sources: Stanford AI Index, McKinsey. | **GOLD** | This is the marquee slide. BCE specifically mentioned this. Use as-is or adapt examples. |
-| 4 | Our Journey | Timeline | Q1 '25–Q1 '26, five milestones: Exploring → Finding Focus → Building Structure → Breakthrough → Scaling. Includes failures, successes, real numbers. | **High** | Narrative arc. For BCE, replace with BCE's own timeline (e.g., "Q1 '26–Q4 '26 Adoption Path"). Frame as hope + realism. |
-| 5 | Tools Without Direction | Lesson #1 | What happened: 5+ tools, no standard, "vibe coding," ambitious without foundation, limited sharing. Learned: "Tools Without Methodology Is Just Noise." | **ESSENTIAL** | Failure story #1. Perfect for BCE intro: "Here's what we did wrong." |
+| 1 | From Engineers to Everyone | Title | Nanovest logo, speaker name (Adrianto), inclusive illustration, social + careers CTA | **Medium** | Update speaker name / branding for BC. Art style (diverse, warm) is excellent. |
+| 2 | The Hardest Part Isn't the Tools | Hook + Data | Split: People/Process (illustration) vs. Tech (icons). Quote: "70% of AI adoption failures..." BCG/McKinsey sourced. | **ESSENTIAL** | Core narrative hook. Reuse quote verbatim for BC (change to coal context). |
+| 3 | The Agentic Organization | Framework | Hub-and-spoke (AISC center, 6 pillars), paradigm shift (70/30 → 30/70), stats (25–55%, 78% → 6%). Sources: Stanford AI Index, McKinsey. | **GOLD** | This is the marquee slide. BC specifically mentioned this. Use as-is or adapt examples. |
+| 4 | Our Journey | Timeline | Q1 '25–Q1 '26, five milestones: Exploring → Finding Focus → Building Structure → Breakthrough → Scaling. Includes failures, successes, real numbers. | **High** | Narrative arc. For BC, replace with BC's own timeline (e.g., "Q1 '26–Q4 '26 Adoption Path"). Frame as hope + realism. |
+| 5 | Tools Without Direction | Lesson #1 | What happened: 5+ tools, no standard, "vibe coding," ambitious without foundation, limited sharing. Learned: "Tools Without Methodology Is Just Noise." | **ESSENTIAL** | Failure story #1. Perfect for BC intro: "Here's what we did wrong." |
 | 6 | Building Without Strategy | Lesson #2 | Scrapped vs. Survived: custom KB (too ambitious) vs. AI connectors (real value). Learned: "Don't Reinvent the Wheel" + "Only Company-Specific Solutions Survived." | **ESSENTIAL** | Failure story #2. Teaches: research first, build only what's differentiated. |
 | 7 | Enabling Without Empowering | Lesson #3 | What we did vs. what happened: built FOR departments → they became consumers. Learned: "Build WITH People, Not FOR Them" + "Every Dept Needs a Champion." | **ESSENTIAL** | Failure story #3. The permission/ownership insight. Critical for org structure talk. |
 | 8 | The Pattern Emerges | Synthesis | Three lessons + the shift (Code → Knowledge, Implementors → Enablers). Mindset flip: "How do we build?" → "How do we enable?" | **GOLD** | The teaching moment. Summarizes Slides 5–7 into one arc. Use for closing learning section. |
 | 9 | Two Dimensions of AI Adoption | Framework | Individual (Prompt → Context → Harness eng.), Org (Perception → Change → Focus). Key: each must advance or adoption stalls. Real case: skill without org = siloed; org push without skill = consumers. | **ESSENTIAL** | Dual-dimension thinking. Mining: apply to engineers vs. shift supervisors. |
-| 10 | AI Adoption Frameworks | Theory | TAM (Technology Acceptance Model) + Kotter Change Model. Quote: "Without BELIEF people don't start; without SEQUENCE change doesn't STICK." | **High** | Academic grounding. Cite if BCE wants credibility, but visual is dense. Adapt for key takeaway only. |
-| 11 | The Middle-Out Insight | Org Behavior | Leadership (generic), Teams (authority-less), Champions (middle: deep + credible). Three approaches (top-down, bottom-up, middle-out). Key: middle drives both directions. | **GOLD** | Solves the "why aren't we adopting?" puzzle. For BCE: shift supervisors, senior engineers as middle-out champions. |
+| 10 | AI Adoption Frameworks | Theory | TAM (Technology Acceptance Model) + Kotter Change Model. Quote: "Without BELIEF people don't start; without SEQUENCE change doesn't STICK." | **High** | Academic grounding. Cite if BC wants credibility, but visual is dense. Adapt for key takeaway only. |
+| 11 | The Middle-Out Insight | Org Behavior | Leadership (generic), Teams (authority-less), Champions (middle: deep + credible). Three approaches (top-down, bottom-up, middle-out). Key: middle drives both directions. | **GOLD** | Solves the "why aren't we adopting?" puzzle. For BC: shift supervisors, senior engineers as middle-out champions. |
 | 12 | Sharpen the Axe | Principle | Lincoln quote: "70% preparation (research, design, context), 30% execution (vibe prompt)." Garbage in = garbage out. | **ESSENTIAL** | Forces mindset shift away from "throw it at AI." Mining example: "Plan the hole before drilling." |
 | 13 | Process First, AI Second | Framework | BPM → RPA → IPA spectrum. HR Onboarding case: 40% faster via IPA (AI layer on smart process). Formula: PROCESS first, AUTOMATION second, INTELLIGENCE last. | **ESSENTIAL** | Directly applicable to mining workflows (ore processing, safety audits, shift scheduling). Reuse framework. |
-| 14 | Nanovest AI Adoption Framework | Playbook | Four pillars (Mindset First, Foundations for Everyone, Middle-Out Champions, Solve Problems Over Capabilities). Each backed by research (Kotter, TAM, McKinsey, MIT). | **GOLD** | Proprietary framework. This is the answer to "How do we scale?" for BCE. Use as BCE's playbook. |
+| 14 | Nanovest AI Adoption Framework | Playbook | Four pillars (Mindset First, Foundations for Everyone, Middle-Out Champions, Solve Problems Over Capabilities). Each backed by research (Kotter, TAM, McKinsey, MIT). | **GOLD** | Proprietary framework. This is the answer to "How do we scale?" for BC. Use as BC's playbook. |
 | 15 | App Performance Improvement | Case Study | Proof: 6.9x overall perf, ~90% competitor gap closed, 10x faster homepage (iOS), 5x more targeted (2026). "Same codebase, same team—different discipline." | **Medium** | Technical case study (may be less relevant for coal ops). Reframe for mining ops impact. |
-| 16 | Naura—AI Chatbot | Case Study | Ops-led problem, engineering-delivered solution. 14,000+ conversations, 75% deflection, +10% usage growth. "Operations concept, AISC enabler, Engineering builder." | **High** | Process improvement example. For BCE: reframe as "Mine Safety Q&A" or "Ops Troubleshooting." |
+| 16 | Naura—AI Chatbot | Case Study | Ops-led problem, engineering-delivered solution. 14,000+ conversations, 75% deflection, +10% usage growth. "Operations concept, AISC enabler, Engineering builder." | **High** | Process improvement example. For BC: reframe as "Mine Safety Q&A" or "Ops Troubleshooting." |
 | 17 | What We Think ≠ Claude Thinks | Lesson | Finance budget tracker: easier than expected (right framework). Deck building: harder than expected (needed harness). Summary: right framework + tools = ships. | **Medium** | Meta-lesson on methodology. Good for workshop "lessons learned" segment. |
-| 18 | Our Enablement Model | Roadmap | Bottlenecks (Access, Non-Tech Gap, Resistance) → Pillars (Knowledge, Champions, Consultation, Tools). Tracks via dashboards + reviews. | **High** | Nanovest's 2026 journey (Learn → Experiment → Build → Integrate → Own). Reuse as BCE enablement roadmap. |
-| 19 | Group-Wide Enablement Playbook | Playbook | Baseline Survey → BU Champions → Needs Analysis → Foundation Workshop → Coaching + Co-design → Co-designs roadmap (Culture, Governance, Risk, Ethics). | **ESSENTIAL** | Org-wide implementation guide. This is BCE's blueprint if approved. |
-| 20 | Closing: Thank You | CTA | Social links, careers email, app download. | **Low** | Update for BCE. |
+| 18 | Our Enablement Model | Roadmap | Bottlenecks (Access, Non-Tech Gap, Resistance) → Pillars (Knowledge, Champions, Consultation, Tools). Tracks via dashboards + reviews. | **High** | Nanovest's 2026 journey (Learn → Experiment → Build → Integrate → Own). Reuse as BC enablement roadmap. |
+| 19 | Group-Wide Enablement Playbook | Playbook | Baseline Survey → BU Champions → Needs Analysis → Foundation Workshop → Coaching + Co-design → Co-designs roadmap (Culture, Governance, Risk, Ethics). | **ESSENTIAL** | Org-wide implementation guide. This is BC's blueprint if approved. |
+| 20 | Closing: Thank You | CTA | Social links, careers email, app download. | **Low** | Update for BC. |
 
 ---
 
@@ -391,11 +391,11 @@ Every content slide follows this template:
 
 ---
 
-## 6. BCE Topic Mapping
+## 6. BC Topic Mapping
 
-How the HR Group content aligns with the 9 BCE workshop topics:
+How the HR Group content aligns with the 9 BC workshop topics:
 
-| BCE Topic | Related HR Slides | Reusable Content | Action |
+| BC Topic | Related HR Slides | Reusable Content | Action |
 |-----------|----------|----------|--------|
 | **1. AI Evolution** | Slide 2 (adoption data), Slide 10 (TAM/Kotter) | 70% failure stat, frameworks, McKinsey data | Use as "Why AI Adoption Feels Hard" segment |
 | **2. AI Mindset** | Slide 8 (pattern), Slide 9 (dimensions), Slide 14 (framework) | Mindset-first principle, individual+org dual advancement | Core enablement section. Essential. |
@@ -404,7 +404,7 @@ How the HR Group content aligns with the 9 BCE workshop topics:
 | **5. AI Techniques (MCP/RAG/Skills/Orchestration)** | Slide 14 (tools & platform pillar), Slide 19 (tools roadmap) | Framework for tool selection, not tool-specific demos | Introduce after mindset/process (don't start with tools). |
 | **6. Tools Ecosystem (Claude/Google/OpenAI)** | Slide 2 (NOT tools), Slide 5 (tools without direction), Slide 14 | Anti-hype narrative: tools are last, not first. Ecosystem agnostic. | Use to calm fears. Show how to pick tools *after* process design. |
 | **7. Pitfalls** | Slides 5–7 (three failures), Slide 8 (pattern), Slide 9 (adoption stalls) | Failure catalog: methodology gap, research gap, empowerment gap. How to spot them. | "Lessons from Our Mistakes" section. Authenticity goldmine. |
-| **8. Best Practices** | Slide 14 (four pillars), Slide 18 (enablement model), Slide 19 (playbook) | Mindset-first, foundations-for-all, middle-out, problem-solving-led approach | Becomes BCE's enablement playbook. |
+| **8. Best Practices** | Slide 14 (four pillars), Slide 18 (enablement model), Slide 19 (playbook) | Mindset-first, foundations-for-all, middle-out, problem-solving-led approach | Becomes BC's enablement playbook. |
 | **9. How to Start Adopting** | Slide 4 (journey timeline), Slide 13 (process-first), Slide 18 (roadmap), Slide 19 (playbook) | Structured path: Learn → Experiment → Build → Integrate → Own. Champions + coaching model. | Final section. Concrete roadmap for Q3–Q4 '26. |
 
 ---
@@ -449,29 +449,29 @@ All research and frameworks in the HR Group presentation are backed by published
 
 ---
 
-## 8. Recommendations for BCE Integration
+## 8. Recommendations for BC Integration
 
 ### 8.1 **What to Adopt Verbatim**
 1. **Slide 2 hook** — "The Hardest Part Isn't the Tools" (reword for mining, keep data)
 2. **Agentic Organization framework** (Slide 3) — Core messaging, adapt examples to mining
 3. **Three-failure pattern** (Slides 5–7) — Structure, key lessons, adapt to mining context
-4. **Nanovest AI Adoption Framework** (Slide 14) — If approved by Mbak Ayu/Dyah, becomes BCE's official playbook
+4. **Nanovest AI Adoption Framework** (Slide 14) — If approved by Mbak Ayu/Dyah, becomes BC's official playbook
 5. **Enablement roadmap** (Slide 18) — Phase model (Learn → Experiment → Build → Integrate → Own)
 
 ### 8.2 **What to Adapt/Remix**
-1. **Timeline** (Slide 4) — Replace with BCE's realistic adoption timeline (Q3 '26 onward)
+1. **Timeline** (Slide 4) — Replace with BC's realistic adoption timeline (Q3 '26 onward)
 2. **Case studies** (Slides 15–16) — Keep structure, swap with mining examples (pit optimization, safety AI, shift scheduling)
-3. **Middle-Out Champions** (Slide 11) — Identify equivalent roles at BCE (shift supervisors, senior engineers, safety officers)
+3. **Middle-Out Champions** (Slide 11) — Identify equivalent roles at BC (shift supervisors, senior engineers, safety officers)
 4. **Process-First spectrum** (Slide 13) — Keep framework, apply to ore processing, equipment maintenance, HSSE workflows
 
 ### 8.3 **What to Add**
 1. **Mining-specific data**: Comparable AI adoption stats for mining/heavy industry (benchmark vs. oil & gas, manufacturing)
 2. **Local examples**: Mine-site case studies, shift supervisor profiles as champions, real pit-planning workflows
 3. **HSSE integration**: How AI adoption connects to safety culture, incident prevention, compliance
-4. **Financial framework**: Cost/benefit math for BCE (training costs, tools budget, productivity gains)
+4. **Financial framework**: Cost/benefit math for BC (training costs, tools budget, productivity gains)
 
 ### 8.4 **Design System Reuse**
-- **Color palette**: Keeps purple + gradient, but could adjust accent colors to match BCE branding (Berau Coal = warm earth tones?)
+- **Color palette**: Keeps purple + gradient, but could adjust accent colors to match BC branding (Berau Coal = warm earth tones?)
 - **Typography**: Keep Trebuchet/Century Gothic (readable, modern)
 - **Component library**: Use `helpers.js` functions directly (addCardPanel, addAccentLine, etc.) — pptxgenjs is agnostic to content
 - **Layout template**: Use `addSlideBase()` for all content slides, `addTitleSlide()` for opening
@@ -510,7 +510,7 @@ All research and frameworks in the HR Group presentation are backed by published
 ```
 
 ### Key Files for Reuse
-- **Design system**: `src/tokens.js` (copy to BCE repo for consistency)
+- **Design system**: `src/tokens.js` (copy to BC repo for consistency)
 - **Components**: `src/helpers.js` (all slide functions, directly reusable)
 - **Slide templates**: `src/slides/slide14-nanovest-framework.js` (exemplary implementation)
 
@@ -520,14 +520,14 @@ All research and frameworks in the HR Group presentation are backed by published
 
 ## 10. Conclusion
 
-The HR Group presentation is **high-value reusable IP** for the BCE workshop. Its core strength is not technical depth but **narrative credibility**: it admits failure, grounds advice in research, and shows a realistic 2-year journey from naive to mature. For 400 non-AI-native mining staff, this authenticity is more persuasive than hype.
+The HR Group presentation is **high-value reusable IP** for the BC workshop. Its core strength is not technical depth but **narrative credibility**: it admits failure, grounds advice in research, and shows a realistic 2-year journey from naive to mature. For 400 non-AI-native mining staff, this authenticity is more persuasive than hype.
 
 **Top 3 reuse opportunities:**
-1. **Agentic Organization framework** (6-pillar model) — becomes BCE's organizational north star
+1. **Agentic Organization framework** (6-pillar model) — becomes BC's organizational north star
 2. **Three-failure pattern** → **Pattern emerges** arc — mirrors the 120-min deck + 120-min lab progression perfectly
 3. **Nanovest AI Adoption Framework** (4 pillars + research backing) — ready-to-use playbook for enablement
 
-**Design system is production-ready**: pptxgenjs codebase, modular components, and consistent visual language can be ported to BCE's own presentation builds.
+**Design system is production-ready**: pptxgenjs codebase, modular components, and consistent visual language can be ported to BC's own presentation builds.
 
 **Pending approval** from Mbak Ayu/Dyah on the "agentic organization" section. Once approved, recommend:
 - Dedicate **~25–30 mins** of the 120-min deck to this content
@@ -535,7 +535,7 @@ The HR Group presentation is **high-value reusable IP** for the BCE workshop. It
 - Emphasize **middle-out champions** (relatable to shift supervisors, senior engineers)
 - Use **failure stories** (Slides 5–7) as credibility anchors—mining execs trust reality over promises
 
-**Next step**: Confirm BCE's final topic list, then map remaining 6 BCE topics (evolution, mindset, tools ecosystem, pitfalls, best practices, adoption roadmap) to HR Group slides for coverage gap analysis.
+**Next step**: Confirm BC's final topic list, then map remaining 6 BC topics (evolution, mindset, tools ecosystem, pitfalls, best practices, adoption roadmap) to HR Group slides for coverage gap analysis.
 
 ---
 

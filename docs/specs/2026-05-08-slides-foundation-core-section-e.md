@@ -755,7 +755,7 @@ When a speaker hovers any satellite, the icon-collapses-to-popover pattern trigg
 - A red zone labeled `〔THE DUMB ZONE〕` appears once tokens cross a threshold; performance line dives into it
 - Animation: tokens fill, performance line descends, threshold-cross moment glows briefly
 - Caption: *"Tokens compound. Performance degrades into the 〔dumb zone〕."*
-- Sub-line (italic, neutral-300): *"Example: after ~20 rounds of edits in one chat — answers start repeating, recent corrections get missed."*
+- Sub-line (italic, neutral-300): *"Example: after ~10 rounds of edits in one chat — answers start repeating, recent corrections get missed."*
 - Tag: `Mitigated by → Summarization · Context Offloading`
 
 **Content slot table (left pane):**

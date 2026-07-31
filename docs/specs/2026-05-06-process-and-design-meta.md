@@ -28,19 +28,19 @@ Explicitly NOT in scope (each gets its own brainstorm + spec downstream):
 
 ## 1. Project context
 
-Adri (Nanovest BU, Sinarmas Mining Group) is the primary facilitator for an AI workshop delivered to ~400 Berau Coal Energy (BCE) members. Format: **120-min presentation + Q&A**, plus **120-min practice lab**. Delivered in-person.
+Adri (Nanovest BU, Sinarmas Mining Group) is the primary facilitator for an AI workshop delivered to ~400 Berau Coal Energy (BC) members. Format: **120-min presentation + Q&A**, plus **120-min practice lab**. Delivered in-person.
 
-He was selected after an earlier HR Group "agentic organization" presentation that the BCE PIC liked. He brings Vol-2 / Session-2 — Vol-1 was a separate facilitator; Vol-2 / Session-1 features Vol-1 winners (whose materials BCE PIC will provide later for use in Hook 1).
+He was selected after an earlier HR Group "agentic organization" presentation that the BC PIC liked. He brings Vol-2 / Session-2 — Vol-1 was a separate facilitator; Vol-2 / Session-1 features Vol-1 winners (whose materials BC PIC will provide later for use in Hook 1).
 
-Audience: mining-industry professionals (engineers using AutoCAD/Surpac/Minescape + general office staff on Google Workspace). NOT AI-native. BCE management's stated demand: tangible prototype outputs from attendees, not mindset content alone.
+Audience: mining-industry professionals (engineers using AutoCAD/Surpac/Minescape + general office staff on Google Workspace). NOT AI-native. BC management's stated demand: tangible prototype outputs from attendees, not mindset content alone.
 
-Practice will primarily focus on **Claude** (committee provides accounts), with brief mention of OpenAI. Google Workspace AI also covered (BCE's daily reality).
+Practice will primarily focus on **Claude** (committee provides accounts), with brief mention of OpenAI. Google Workspace AI also covered (BC's daily reality).
 
 ## 2. Private context — NEVER in any deliverable
 
 Load-bearing for every design decision; **must NEVER appear** on slides, in speaker notes, in distributed materials, or be spoken aloud during delivery:
 
-> BCE is in rough times and may be sunset (coal-pollution pressure on the industry). Sinarmas Group owner plans to redeploy BCE talent — to other BUs in the group or to a new renewables venture. Adri's actual responsibility for this workshop is to ensure attendees are **READY TO MOVE** with AI-fluency as the universal adaptability multiplier. Wherever they land, AI is their portable capability.
+> BC is in rough times and may be sunset (coal-pollution pressure on the industry). Sinarmas Group owner plans to redeploy BC talent — to other BUs in the group or to a new renewables venture. Adri's actual responsibility for this workshop is to ensure attendees are **READY TO MOVE** with AI-fluency as the universal adaptability multiplier. Wherever they land, AI is their portable capability.
 
 This shapes:
 
@@ -67,7 +67,7 @@ Each sub-project's spec consumes the prior sub-project's outputs without re-liti
 
 ### 3.2 Research-first principle (recursively applied)
 
-Before any design or content decision, dispatch parallel research agents (Haiku, write-to-file) to gather inputs. Already applied to BCE-topic research, internal-deck extraction, and design-system meta. Will apply again before slide-content brainstorm and lab-curriculum brainstorm.
+Before any design or content decision, dispatch parallel research agents (Haiku, write-to-file) to gather inputs. Already applied to BC-topic research, internal-deck extraction, and design-system meta. Will apply again before slide-content brainstorm and lab-curriculum brainstorm.
 
 ### 3.3 Workspace conventions
 
@@ -154,7 +154,7 @@ Photography-anchored hero treatment for:
 
 - Title slide
 - Section dividers (between A↔B, B↔C, etc.)
-- Hook 1 (BCE Vol-1 Winner)
+- Hook 1 (BC Vol-1 Winner)
 - Section I (Showcase + Hook 2)
 
 Generated via nanobanana MCP; no stock photography.
@@ -236,7 +236,7 @@ Foundational. Slide-level content is a downstream spec.
 | # | Section | Purpose | Notes |
 |---|---------|---------|-------|
 | Title | Title slide | Workshop name, date, audience; **small bottom-corner attribution `Adri • Nanovest`** | No dedicated speaker-intro slide. Verbal intro during Hook 1 setup. |
-| **A** | **Hook 1: BCE Vol-1 Winner** | Celebrate the winner; raise the ceiling: *"They achieved A — imagine combining what they did with the foundation we'll build today"* | Content TBD; BCE PIC delivers winner materials. **Slot designed**: 4–6 slides, before/after framing, optional interactive comparator, photography-anchored. Never "they were naive, here's how to do it right." |
+| **A** | **Hook 1: BC Vol-1 Winner** | Celebrate the winner; raise the ceiling: *"They achieved A — imagine combining what they did with the foundation we'll build today"* | Content TBD; BC PIC delivers winner materials. **Slot designed**: 4–6 slides, before/after framing, optional interactive comparator, photography-anchored. Never "they were naive, here's how to do it right." |
 | B | AI evolution + landscape | The "B" Hook 1 gestures toward — what's possible right now | Use Indonesia 92%-adoption stat as relevance anchor; "79% say adopted, 11% in production, 40% risk cancellation by 2027" as inverse hook |
 | C | Mindset | AI as bridge / multiplier / portable adaptability | Throughline: *"AI is the bridge from where you are to wherever you need to be"* — never named as transition |
 | D | Process improvement | BPM / RPA / IPA / agentic | Use *"73% of automation projects fail because broken processes get automated unchanged"* as fix-the-spec hook |
@@ -250,7 +250,7 @@ Foundational. Slide-level content is a downstream spec.
 
 ### 9.1 Hook architecture (locked)
 
-- **Hook 1 — early** (Section A, immediately after title): celebrates BCE Vol-1 winner; earns relevance before speaker credibility is established.
+- **Hook 1 — early** (Section A, immediately after title): celebrates BC Vol-1 winner; earns relevance before speaker credibility is established.
 - **Hook 2 — late** (Section I, near end): reveals Adri's TPM-not-engineer profile + portfolio. **Mystery → reveal arc.** The deck's quality has been the credibility proof for ~90 minutes; the reveal weaponizes that proof against attendee excuses.
 - **Title-slide attribution only** (small footer): name + Nanovest. Verbal self-intro during Hook 1 setup. No dedicated intro slide.
 - **Foundation contingency:** late Hook 2 only works if Sections B–H are self-evidently strong. The downstream content brainstorm commits to a high quality bar accordingly.
@@ -261,7 +261,7 @@ Foundational. Slide-level content is a downstream spec.
 2. **Empowering tone.** Audience is talented professionals (private context: in transition). Tone radiates dignity + forward motion. Patronizing or playful framing is off the table.
 3. **Deck answers itself.** Every micro-design choice — animation richness, generated imagery, interactive demos — is *content* that proves AI capability. The deck *is* the credential.
 4. **Free-first stack.** No paid libraries, components, or fonts. If a need surfaces that free options can't cover, flag it — don't silently escalate.
-5. **Hidden context never surfaces.** BCE transition mission is load-bearing internally and invisible externally. Never on slide / speaker notes / spoken aloud.
+5. **Hidden context never surfaces.** BC transition mission is load-bearing internally and invisible externally. Never on slide / speaker notes / spoken aloud.
 6. **TBD slots are designed, not deferred.** Hook 1 and Hook 2 have their slot SHAPES locked here — number of slides, animation mode, narrative beats — even though content fills in later.
 
 ## 11. Risks + mitigations

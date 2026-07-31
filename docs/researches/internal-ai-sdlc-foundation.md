@@ -1,5 +1,5 @@
 # Nanovest AI SDLC Foundation: Content & Design Mining Report
-**For:** Berau Coal Energy (BCE) AI Workshop (~400 employees, 240 minutes)
+**For:** Berau Coal Energy (BC) AI Workshop (~400 employees, 240 minutes)
 **From:** Nanovest AI Foundation Presentation (26-slide deck) + Source Repository
 **Date:** 2026-05-06
 **Status:** Complete Research & Reusability Analysis
@@ -12,36 +12,36 @@
 
 **CONTENT REUSE:**
 
-1. **"The Dumb Zone" Concept** (Slides 4 → BCE Topic 1-4)
+1. **"The Dumb Zone" Concept** (Slides 4 → BC Topic 1-4)
    - Core insight: AI performance degrades past 60% context usage
    - Traffic light system (green/yellow/red) is immediately memorable
-   - Directly addresses BCE's "AI engineering fundamentals" topic
+   - Directly addresses BC's "AI engineering fundamentals" topic
    - **Verdict:** HIGHLY REUSABLE — foundational to all AI tooling training
 
-2. **Plugin Stack Architecture** (Slides 8-13 → BCE Topic 5)
+2. **Plugin Stack Architecture** (Slides 8-13 → BC Topic 5)
    - Layered framework: Commands (user-invoked) → Agents (delegated) → Skills (automatic) → Base (always loaded)
    - Progressive disclosure pattern for skills (metadata → instructions → resources)
    - Hooks + MCP integration examples
    - **Verdict:** CORE CONTENT — maps directly to "AI Techniques" and "Tools ecosystem" topics
 
-3. **6-Step AI Development Workflow** (Slide 14 → BCE Topic 3, 9)
+3. **6-Step AI Development Workflow** (Slide 14 → BC Topic 3, 9)
    - Research → Brainstorm → Plan → Implement → Test → Ship
    - Universal structure applicable across vibe coding, TDG, SDD, and Ralph Wiggum
    - Subagent offloading pattern reduces context bloat
-   - **Verdict:** FOUNDATIONAL PATTERN — works for BCE's process improvement angle
+   - **Verdict:** FOUNDATIONAL PATTERN — works for BC's process improvement angle
 
-4. **Ralph Wiggum Pattern (Autonomous Iteration)** (Slides 15-20 → BCE Topic 9)
+4. **Ralph Wiggum Pattern (Autonomous Iteration)** (Slides 15-20 → BC Topic 9)
    - Loop-based autonomous development with failure-driven learning
    - Artifact hierarchy: JTBD → Topics → Specs → Implementation Plan
    - Cost reduction: $50K MVP → $297 (99.4% savings)
    - Maps to Agile (Theme → Epic → Stories → Tasks)
    - **Verdict:** TRANSFORMATIVE PATTERN — demonstrates "how to start adopting AI" with concrete ROI
 
-5. **V-Bounce Human-AI Collaboration Model** (Slide 23 → BCE Topic 2, 8)
+5. **V-Bounce Human-AI Collaboration Model** (Slide 23 → BC Topic 2, 8)
    - Time shift: Specify (30%) → Generate (20%) → Verify (50%)
    - Developer as orchestrator, not executor
    - Mindset transformation for mining industry (process-oriented workers)
-   - **Verdict:** CRITICAL MINDSET SHIFT — aligns with BCE management's demand for "tangible prototype outputs"
+   - **Verdict:** CRITICAL MINDSET SHIFT — aligns with BC management's demand for "tangible prototype outputs"
 
 **DESIGN REUSE:**
 
@@ -68,13 +68,13 @@
 
 ## Slide-by-Slide Content Breakdown
 
-| # | Title | Core Point | BCE Topic Mapping | Reuse Verdict | Adaptation Notes |
+| # | Title | Core Point | BC Topic Mapping | Reuse Verdict | Adaptation Notes |
 |---|-------|-----------|-------------------|----------------|------------------|
 | 1 | Title: AI SDLC Foundation | Branding, audience setup | N/A (opening) | ADAPT | Change "Nanovest Engineering" to "Berau Coal Energy" |
 | 2 | The AI Productivity Paradox | Problem statement: developers feel faster but take 19% longer (METR Study) | Topic 2: Mindset transformation | REUSE | Quote METR study directly; mining context: "You use machines but aren't more productive?" |
 | 3 | The "Almost Right" Problem | 66% of developers' frustration: AI code works but needs 5-10 iterations | Topic 1, 3: AI landscape & process improvements | REUSE | Change examples from "Java service" to mining domain (equipment control systems, safety checks) |
 | 4 | The Dumb Zone — Compounding Effect | Traffic light system (0-30% peak, 30-60% acceptable, 60%+ dumb zone) | Topic 1, 4: AI evolution & AI engineering fundamentals | **HIGHLY REUSE** | Perfect visual for mining engineers; explain cost multiplier (pay full context every turn) |
-| 5 | Fix #1: Monitor Your Context | cc-statusline tool (version, model, context %, token count) | Topic 4: AI engineering fundamentals | REUSE + ADAPT | Tool exists; may need customization for BCE's Claude Code setup |
+| 5 | Fix #1: Monitor Your Context | cc-statusline tool (version, model, context %, token count) | Topic 4: AI engineering fundamentals | REUSE + ADAPT | Tool exists; may need customization for BC's Claude Code setup |
 | 6 | Fix #2: Offload to Subagents | Before/After: main agent bloated (85%) vs. orchestrator + subagents (20%) | Topic 4, 5: AI engineering & MCP/agent orchestration | REUSE | Directly applicable; mining parallel: delegate heavy tasks to specialists |
 | 7 | The Context Lifecycle | 6-stage cycle: START FRESH → WORK & MONITOR → OFFLOAD → COMPACT → CLEAR → AVOID DUMB ZONE | Topic 4: AI engineering fundamentals | REUSE | Turn into daily ritual/habit for miners using AI tools |
 | 8 | The Engineering Evolution | Three stages: Prompt Engineering → Context Engineering → **Harness Engineering** (plugins) | Topic 4, 5: AI engineering & AI techniques | REUSE | Frame as progression: "write better prompts" → "understand context" → "build infrastructure" |
@@ -82,20 +82,20 @@
 | 10 | Skills: Automatic Domain Knowledge | Progressive disclosure (Metadata→Instructions→Resources); java-backend example | Topic 4, 5: AI engineering & AI techniques | REUSE | Replace java-backend with mining-domain examples (geology, equipment, safety protocols) |
 | 11 | Agents & Commands: When to Use What | Commands (user-invoked, explicit) vs. Agents (Claude delegates) vs. Skills (automatic) | Topic 5: AI techniques | REUSE | Key insight: each agent has isolated context; perfect for explaining agent orchestration |
 | 12 | Hooks & MCP: Real Examples | JIRA integration walkthrough; PostToolUse, PreToolUse event automation | Topic 5, 6: AI techniques & tools ecosystem | REUSE | Replace JIRA with mining/logistics systems (equipment tracking, incident management) |
-| 13 | Nanovest Plugins: Ready to Use | nanovest-backend, nanovest-frontend, nanovest-qa available; installation steps | Topic 6: Tools ecosystem | ADAPT | Create BCE-specific plugins (mining-operations, safety-protocols, equipment-management) |
+| 13 | Nanovest Plugins: Ready to Use | nanovest-backend, nanovest-frontend, nanovest-qa available; installation steps | Topic 6: Tools ecosystem | ADAPT | Create BC-specific plugins (mining-operations, safety-protocols, equipment-management) |
 | 14 | The 6-Step AI Development Workflow | Research → Brainstorm → Plan → Implement → Test → Ship (with subagent offloading) | Topic 3, 9: Process improvements & adoption | **HIGHLY REUSE** | Universal; applies to any development task including process automation |
 | 15 | Simple AI Development Patterns | Vibe Coding (prototyping risk) vs. Test-Driven Generation (quality) | Topic 3: Process improvements | REUSE | Mining context: Vibe coding for safety checks is risky; TDG for compliance-critical work |
 | 16 | Spec-Driven Development (SDD) | Write spec → AI generates plan → human validates → AI implements → human verifies | Topic 3, 9: Process improvements & adoption | REUSE | "Specs are the new code" — perfect for mining SOP (Standard Operating Procedures) |
-| 17 | The Ralph Wiggum Pattern | Named persistence loop; `while :; do cat PROMPT.md \| claude-code ; done` | Topic 9: Adoption | **HIGHLY REUSE** | Cost examples ($50K→$297) resonate with BCE management; shows ROI |
+| 17 | The Ralph Wiggum Pattern | Named persistence loop; `while :; do cat PROMPT.md \| claude-code ; done` | Topic 9: Adoption | **HIGHLY REUSE** | Cost examples ($50K→$297) resonate with BC management; shows ROI |
 | 18 | The Artifact Hierarchy | JTBD → Topics → Specs → Implementation Plan (maps to Theme→Epic→Story→Task) | Topic 3, 9: Process improvements & adoption | REUSE | Mining parallel: Job → Areas of Work → Detailed Procedures → Task List |
 | 19 | How the Loop Works (Feedback Mechanism) | Promise-based (tests pass) + Iteration-based (--max-iterations N) safety nets | Topic 5, 9: AI techniques & adoption | REUSE | Emphasize: "fail predictably, learn, retry" culture shift |
 | 20 | Bringing It Together | SDD + Ralph + Plugins = Production-Ready SDLC (3-column: Human/Ralph/Plugins) | Topic 3, 5, 9: All technical topics | REUSE | Summary slide; shows integration of all concepts |
 | 21 | AI Enhances Agile | Same ceremonies, faster execution; "bolts" (hours/days) within sprints | Topic 2, 3: Mindset & process improvements | REUSE | Mining teams already do sprint cycles; show how AI accelerates build phase |
 | 22 | The Mindset Shift | Developer as EXECUTOR → ORCHESTRATOR; time shift (30% specify, 20% generate, 50% verify) | Topic 2, 8: Mindset transformation & best practices | **HIGHLY REUSE** | Critical for mining engineers moving from manual to AI-assisted work |
 | 23 | The V-Bounce | Human (Specify→Verify) + AI (Generate); productivity multiplier model | Topic 2, 8: Mindset transformation & best practices | **HIGHLY REUSE** | Visualizes the collaboration loop; helps non-technical staff understand roles |
-| 24 | Key Takeaways | 5 actionable items: Dumb Zone, Plugin Stack, Workflows, AI+Agile, Orchestrator role | Topic 8, 9: Best practices & adoption | REUSE | Adapt 5 points to BCE context |
-| 25 | What's Next | 4 parallel workstreams: Plugin Evolution, Zero-Friction MCP, Knowledge Infrastructure, Quality Automation | Topic 9: Adoption roadmap | ADAPT | Replace with BCE-specific roadmap; show what's coming in their AI ecosystem |
-| 26 | Handoff | Reja/Yohanes demo; resources & links | N/A (closing) | ADAPT | Point to BCE's equivalent demo/framework partners |
+| 24 | Key Takeaways | 5 actionable items: Dumb Zone, Plugin Stack, Workflows, AI+Agile, Orchestrator role | Topic 8, 9: Best practices & adoption | REUSE | Adapt 5 points to BC context |
+| 25 | What's Next | 4 parallel workstreams: Plugin Evolution, Zero-Friction MCP, Knowledge Infrastructure, Quality Automation | Topic 9: Adoption roadmap | ADAPT | Replace with BC-specific roadmap; show what's coming in their AI ecosystem |
+| 26 | Handoff | Reja/Yohanes demo; resources & links | N/A (closing) | ADAPT | Point to BC's equivalent demo/framework partners |
 
 ---
 
@@ -132,7 +132,7 @@ Each zone includes:
 - Status description ("Peak Performance" / "Plan/Compact" / "Clear Now")
 - Action text (color-coded)
 ```
-**BCE Application:** Use same system for equipment status (operational/maintenance/critical), mining sites (active/caution/halt)
+**BC Application:** Use same system for equipment status (operational/maintenance/critical), mining sites (active/caution/halt)
 
 #### Pattern 2: Before/After Comparison Cards
 **Used in:** Subagents, Mindset Shift, Agile Enhancement slides
@@ -147,7 +147,7 @@ Left column (orange accent):              Right column (green accent):
 │ Metric: 85%             │              │ Metric: 20%             │
 └─────────────────────────┘              └─────────────────────────┘
 ```
-**BCE Application:** Safety protocols (manual vs. AI-assisted), equipment maintenance (scheduled vs. predictive)
+**BC Application:** Safety protocols (manual vs. AI-assisted), equipment maintenance (scheduled vs. predictive)
 
 #### Pattern 3: Circular Flow Diagrams
 **Used in:** Context Lifecycle (6 nodes), Ralph Wiggum (4 stages), Feedback Loop (4 stages)
@@ -156,7 +156,7 @@ Left column (orange accent):              Right column (green accent):
 - Icons/labels in center or at nodes
 - Teal primary color for flow direction
 - Action text in boxes around the circle
-**BCE Application:** Mining process workflows (extraction → processing → safety checks → shipment)
+**BC Application:** Mining process workflows (extraction → processing → safety checks → shipment)
 
 #### Pattern 4: Layered Pyramid Structure
 **Used in:** Artifact Hierarchy (4 levels)
@@ -172,7 +172,7 @@ Level 4: Implementation Plan (widest)
 
 Right sidebar: Agile mapping + scoping test
 ```
-**BCE Application:** Organizational hierarchy or process decomposition (Strategic→Department→Team→Individual Task)
+**BC Application:** Organizational hierarchy or process decomposition (Strategic→Department→Team→Individual Task)
 
 #### Pattern 5: Three-Column Integration Layout
 **Used in:** "Bringing It Together" slide (YOU / RALPH / PLUGINS)
@@ -185,7 +185,7 @@ Right sidebar: Agile mapping + scoping test
 │ decisions   │ iteration    │ Quality gates│
 └─────────────┴──────────────┴──────────────┘
 ```
-**BCE Application:** Roles in mining automation (Engineer / Autonomous System / Safety Protocol)
+**BC Application:** Roles in mining automation (Engineer / Autonomous System / Safety Protocol)
 
 ### Image Assets & Specifications
 
@@ -280,7 +280,7 @@ Right sidebar: Agile mapping + scoping test
 4. **Scale/emphasis** — Important callouts grow slightly or shift position
 5. **Color fade** — Traffic light states changing (green→yellow→red)
 
-**Recommended Animation Libraries for BCE Deck:**
+**Recommended Animation Libraries for BC Deck:**
 - **Framer Motion** (React-based, smooth, beginner-friendly)
 - **Reveal.js** (presentation-specific, easy to implement)
 - **GSAP** (professional-grade, precise timing)
@@ -343,11 +343,11 @@ Right sidebar: Agile mapping + scoping test
 
 ---
 
-## BCE Topic Mapping Summary
+## BC Topic Mapping Summary
 
-### How Nanovest Content Maps to BCE's 9 Topics
+### How Nanovest Content Maps to BC's 9 Topics
 
-| BCE Topic | Nanovest Slides | Key Content | Reuse Level |
+| BC Topic | Nanovest Slides | Key Content | Reuse Level |
 |-----------|-----------------|------------|------------|
 | (1) AI evolution & landscapes | 2, 3, 4, 8 | Historical context (prompt → context → harness engineering); paradox study | REUSE |
 | (2) AI mindset transformation | 2, 6, 22, 23 | Dumb Zone cost model; Developer as orchestrator; V-Bounce human-AI flow | **HIGHLY REUSE** |
@@ -359,13 +359,13 @@ Right sidebar: Agile mapping + scoping test
 | (8) Best practices | 7, 14, 20, 24 | Context lifecycle discipline; 6-Step workflow; SDD; Plugin usage; Orchestrator mindset | REUSE |
 | (9) How to start adopting AI | 14, 17, 18, 19, 24, 25 | Ralph Wiggum pattern; Cost ROI ($50K→$297); JTBD artifact hierarchy; Key takeaways | **HIGHLY REUSE** |
 
-### Content Gaps (What BCE Needs to Add)
+### Content Gaps (What BC Needs to Add)
 
 1. **Mining-specific examples** — Replace Java/React with mining domain examples (equipment control, geology analysis, safety protocols)
 2. **Mining industry context** — References to mining operations, regulatory compliance (safety certifications, environmental standards)
-3. **Internal tools/systems** — Replace Nanovest plugins with BCE's systems (mining equipment tracking, logistics, safety management)
+3. **Internal tools/systems** — Replace Nanovest plugins with BC's systems (mining equipment tracking, logistics, safety management)
 4. **Localization** — References to Berau region, Indonesian context, local teams
-5. **Prototype outcomes** — Show actual mining automation prototypes built with AI (required by BCE management)
+5. **Prototype outcomes** — Show actual mining automation prototypes built with AI (required by BC management)
 
 ---
 
@@ -412,7 +412,7 @@ Right sidebar: Agile mapping + scoping test
 
 ---
 
-## Recommendations for BCE Deck
+## Recommendations for BC Deck
 
 ### What to Reuse Directly
 1. **Dumb Zone concept + traffic light system** (slides 4, 7)
@@ -428,12 +428,12 @@ Right sidebar: Agile mapping + scoping test
 2. Create mining-specific skills (geological-analysis, equipment-maintenance, safety-protocols)
 3. Adapt Ralph Wiggum cost example: Show mining operation ROI (e.g., $X → $Y savings)
 4. Use mining Agile ceremonies (shift planning, site briefings) in "AI Enhances Agile" section
-5. Replace Nanovest plugin stack with BCE's equivalent
+5. Replace Nanovest plugin stack with BC's equivalent
 
 ### What to Add for Tangible Prototype Outputs
 1. **Live demo segment** — Show AI-assisted mining operation automation in action
 2. **Prototype gallery** — Before/after mining process improvements (2–3 examples)
-3. **Cost calculator** — Interactive tool showing BCE's potential ROI
+3. **Cost calculator** — Interactive tool showing BC's potential ROI
 4. **Hands-on lab guide** — Step-by-step walkthrough for 120-min practice lab
 5. **Prompt library** — Mining-specific prompts engineers can use immediately
 
@@ -448,16 +448,16 @@ Right sidebar: Agile mapping + scoping test
 
 ## Conclusion
 
-The Nanovest AI SDLC Foundation deck is **highly reusable** for BCE's workshop, particularly for:
+The Nanovest AI SDLC Foundation deck is **highly reusable** for BC's workshop, particularly for:
 - Foundational concepts (Dumb Zone, context management)
 - Structural patterns (6-Step workflow, Ralph Wiggum, artifact hierarchy)
 - Mindset transformation (orchestrator role, V-Bounce collaboration)
 - Technical architecture (plugin stack, skills, agents)
 
-**Estimated reuse:** 70% of Nanovest content directly applicable to BCE with domain adaptation.
+**Estimated reuse:** 70% of Nanovest content directly applicable to BC with domain adaptation.
 **Estimated new content needed:** 30% (mining context, local examples, prototype demos).
 
-The combination of **rigorous technical depth** (Nanovest) + **mining domain focus** (BCE) + **tangible prototypes** (management requirement) will create a powerful, practical AI workshop for 400 mining employees.
+The combination of **rigorous technical depth** (Nanovest) + **mining domain focus** (BC) + **tangible prototypes** (management requirement) will create a powerful, practical AI workshop for 400 mining employees.
 
 ---
 

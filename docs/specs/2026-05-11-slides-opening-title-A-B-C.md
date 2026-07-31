@@ -86,7 +86,7 @@ The closing copper underline pulse on `wherever you need to be` in C.5 is the pl
 
 A *quiet* opener. Photographic hero treatment per meta-spec §6.3. The headline functions as a 1-sentence summary of the entire deck: *"From AI Curiosity to AI Capability."* "Curiosity" welcomes everyone (no prerequisite); "Capability" feels practically achievable (not "Mastery," which carries competitive connotation).
 
-The workshop name (`BCE AI Catalyst · Vol 2, Session 2`) is demoted to subtitle. Attribution chip (`Adri · Nanovest`) sits in bottom-right corner per meta-spec §9. **No date line** — the deck runs across 18-21 May, 26 May, 2-5 June, and one more JKT day; a single dateless asset deploys to every session.
+The workshop name (`BC AI Catalyst · Vol 2, Session 2`) is demoted to subtitle. Attribution chip (`Adri · Nanovest`) sits in bottom-right corner per meta-spec §9. **No date line** — the deck runs across 18-21 May, 26 May, 2-5 June, and one more JKT day; a single dateless asset deploys to every session.
 
 The background is **futuristic-modern**, not the bridge image (the bridge metaphor is reserved for Section C). This frees Title to feel forward-energy without telegraphing the throughline.
 
@@ -146,7 +146,7 @@ The honest framing of AGI ("not yet, but coming") is load-bearing for credibilit
 
 The deck's deepest breath. **One dedicated slide** marking the pivot from mindset (C) to engineering primer (D). Photographic hero + Kofi Annan epigraph.
 
-The Kofi Annan quote was chosen over Aristotle because it carries *family-level resonance* — *"in every society, in every family."* For a BCE audience who are parents thinking about their kids' generation, this lands with unusual weight. Aristotle's "more you know" is held as a speaker note for verbal use only.
+The Kofi Annan quote was chosen over Aristotle because it carries *family-level resonance* — *"in every society, in every family."* For a BC audience who are parents thinking about their kids' generation, this lands with unusual weight. Aristotle's "more you know" is held as a speaker note for verbal use only.
 
 The bridge slide is the **only true breath** in 13 slides of forward motion. The longest single fade (1.5s photo). The slowest stagger (~2.4s quote reveal). The strongest darken overlay (0.30). Every detail calibrated to slow the room down before D.1's "73% fail" diagnostic punch.
 
@@ -173,7 +173,7 @@ Apply `<DarkenOverlay strength={0.10}>` — background already dark, less overla
 | Slot | Content | Style |
 |---|---|---|
 | Display headline | `From AI Curiosity to AI Capability` | Instrument Serif ~92px, neutral-100, line-height 1.0, tracking -0.01em |
-| Workshop subtitle | `BCE AI Catalyst · Vol 2, Session 2` | Source Serif 4 ~28px, neutral-300 |
+| Workshop subtitle | `BC AI Catalyst · Vol 2, Session 2` | Source Serif 4 ~28px, neutral-300 |
 | Attribution chip | `Adri · Nanovest` | Inter ~12px caps, 0.22em letter-spacing, copper-400, bottom-right fixed |
 
 **Components:** `<HeroPhoto>` (futuristic-modern) · `<DarkenOverlay strength={0.10}>` · `<DisplayTitle>` · `<WorkshopSubtitle>` · `<AttributionChip>` (fixed corner)
@@ -783,7 +783,7 @@ Apply `<DarkenOverlay strength={0.30}>` — strongest darken in the opener; the 
 
 **Implementation notes:**
 - This is the **longest single-fade in the entire deck** (1.5s photo + 2.4s quote stagger). Honor the breath.
-- The 3 italic keywords (`power` / `liberating` / `family`) follow the deck-wide keyword highlighting rule. Family-level resonance is the slide's emotional payload — that one word does unusual work for a BCE audience who are parents.
+- The 3 italic keywords (`power` / `liberating` / `family`) follow the deck-wide keyword highlighting rule. Family-level resonance is the slide's emotional payload — that one word does unusual work for a BC audience who are parents.
 - `"From here, the how."` is deliberately small — a *whispered* transition, not an announcement.
 - **Skip-tolerance:** If a session runs short, this slide can be held at step 0 and never advanced past. The deck continues; the breath is just shallower.
 - Aristotle quote (*"The more you know, the more you realize you don't know."*) is held as a speaker note for verbal use only — not on slide.
@@ -798,7 +798,7 @@ Reminders specific to the opener:
 
 3. **C.2's recognition line is the audience-respect linchpin.** *"Most of us start with AI the way we started with Google — type, read, move on. That's a reasonable place to start."* — Acknowledges current behavior empathetically. NEVER diagnose attendees as "stuck in basic prompting" (the pilot's diagnostic framing).
 
-4. **NEVER mention BCE transition / sunset / redeployment.** Per meta-spec §2 private context, the entire deck radiates portable capability as personal empowerment, never as preparation-for-leaving. C.5's closing line *"wherever you need to be"* is the empowerment frame; never named as transition.
+4. **NEVER mention BC transition / sunset / redeployment.** Per meta-spec §2 private context, the entire deck radiates portable capability as personal empowerment, never as preparation-for-leaving. C.5's closing line *"wherever you need to be"* is the empowerment frame; never named as transition.
 
 5. **Body slides use generic knowledge-work examples** (per memory `feedback_generic_examples.md`) — Sections B and C draw on universal examples (document review, scheduling, drafting, decision support). Mining-specific framings live only in Hook moments (A and I), and even there as capability-class references, not winner-specific.
 
@@ -900,7 +900,7 @@ Reuse these patterns across all 4 photo slides for tone consistency.
 
 2. **Workshop date display on Title** — currently DROPPED per Adri's instruction. If a specific session needs date-stamped PDFs distributed, we can add a date as a corner caption on a session-specific build rather than the canonical slide.
 
-3. **Capability chip nouns in A.1** — placeholder list (AI Chatbot · Summarization · Document Analysis · Prompt Engineering · Geospatial AI) reflects winners' generic categories. Final list should be confirmed against BCE PIC's session-1 materials when delivered.
+3. **Capability chip nouns in A.1** — placeholder list (AI Chatbot · Summarization · Document Analysis · Prompt Engineering · Geospatial AI) reflects winners' generic categories. Final list should be confirmed against BC PIC's session-1 materials when delivered.
 
 4. **Q1-Q4 wording in A.1** — placeholder questions are aimed at the right *shape* (open invitation, copper-italic keyword, section pointer). Adri's final wording should preserve "What if..." opener and one italic-copper keyword per question.
 

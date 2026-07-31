@@ -1,7 +1,7 @@
 # AI Evolution Stages: Taxonomy Refresh for May 2026
 
 **Date:** 2026-05-11  
-**Purpose:** Audit existing 7-stage taxonomy against May 2026 reality; recommend updated framing for "The AI Evolution Journey" slide in BCE workshop.  
+**Purpose:** Audit existing 7-stage taxonomy against May 2026 reality; recommend updated framing for "The AI Evolution Journey" slide in BC workshop.  
 **Audience:** Mining-industry professionals (~400 attendees); no jargon; plain-language accessibility required.
 
 ---

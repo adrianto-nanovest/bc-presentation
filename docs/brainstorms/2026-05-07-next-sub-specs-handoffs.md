@@ -17,7 +17,7 @@ The slide-content brainstorm was decomposed into 4 sub-specs by narrative arc:
 | **Opening** | Title · B (AI evolution + landscape) · C (Mindset) | ⏳ Pending |
 | **Application** | G (Tools ecosystem) · H (Pitfalls + best practices) | ⏳ Pending |
 
-**Out of scope (separate spec, pending external input):** Section A (Hook 1 — BCE Vol-1 Winner) and Practice-lab curriculum.
+**Out of scope (separate spec, pending external input):** Section A (Hook 1 — BC Vol-1 Winner) and Practice-lab curriculum.
 
 ---
 
@@ -82,7 +82,7 @@ Section E MUST define "harness" clearly enough that when the audience reaches I.
 - docs/references/nanovest-pilot-workshop.pdf — **slides 20–31** (prompt + context engineering deep dive). Use the Read tool with the `pages` parameter to extract these specific slides.
 - docs/references/nanovest-ai-sdlc-foundation.pdf — **slide 9** (prompt - context - harness engineering evolution). Use the Read tool with `pages: "9"`.
 
-These are internal Nanovest decks Adri has delivered to engineers. The BCE workshop has a different audience (mining industry, not engineers), so the *exact content* should not transfer wholesale — but the *conceptual approach* and any successful explanatory frames should inform the E brainstorm. Treat as "how Adri has previously explained these concepts," not "what to copy."
+These are internal Nanovest decks Adri has delivered to engineers. The BC workshop has a different audience (mining industry, not engineers), so the *exact content* should not transfer wholesale — but the *conceptual approach* and any successful explanatory frames should inform the E brainstorm. Treat as "how Adri has previously explained these concepts," not "what to copy."
 
 **Cross-reference for harness vocabulary alignment:**
 - docs/specs/2026-05-07-slides-reveal-and-closing.md §4.3 (I.3 portfolio simulations) — confirm Section E's harness definition resolves cleanly to the simulations described there.
@@ -114,7 +114,7 @@ These are internal Nanovest decks Adri has delivered to engineers. The BCE works
 - Stay within the substrate locked by the parent meta-spec (shadcn + Tailwind + Framer Motion; copper-only palette; 0px corner; static photographic backgrounds for hero slides).
 - Honor cross-spec dependency: I.3's harness vocabulary must resolve to E's definitions.
 - Free-stack only.
-- Mining-audience plain-language framing — even though the reference PDFs were for an engineering audience, the BCE deck stays generic-but-accessible per the deck-wide "generic body, concentrated hooks" rule.
+- Mining-audience plain-language framing — even though the reference PDFs were for an engineering audience, the BC deck stays generic-but-accessible per the deck-wide "generic body, concentrated hooks" rule.
 - Editorial-serious tone (no playful, no consumer-luxury, no tech-bro).
 - The Russian-doll metaphor needs deliberate step-reveal pacing — each layer earns its reveal.
 - Match Section D's pacing: slow, deliberate, design-each-slide-right. Multi-sitting if needed.
@@ -202,7 +202,7 @@ Let's discuss on title slide & section A,B,C based on **Parent meta-spec:** docs
 The deck opener. Sets tone. Four pieces:
 
 - **Title slide** — workshop name, date, audience. Per meta-spec: small bottom-corner attribution `Adri • Nanovest`. NO dedicated speaker-intro slide (verbal intro happens during Hook 1 setup).
-- **Section A — Hook 1: BCE Vol-1 Winner**. All what winner delivered is good, the goal is to give questions of the improvement can be made, and the answer is by having proper foundational knowledge, as explained further in the deck (check first current implementation, find the gap, but NOT in the tone to do "correction", just make it as the "bridge" WHY we need this workshop.
+- **Section A — Hook 1: BC Vol-1 Winner**. All what winner delivered is good, the goal is to give questions of the improvement can be made, and the answer is by having proper foundational knowledge, as explained further in the deck (check first current implementation, find the gap, but NOT in the tone to do "correction", just make it as the "bridge" WHY we need this workshop.
 - **Section B — AI evolution + landscape**. The "B" Hook 1 gestures toward — what's possible right now. Use Indonesia 92%-adoption stat + "79% adopted, 11% in production, 40% risk cancellation by 2027" as inverse hooks (per meta-spec §9).
 - **Section C — Mindset**. AI as bridge / multiplier / portable adaptability. Throughline: *"AI is the bridge from where you are to wherever you need to be."* NEVER name as transition.
 

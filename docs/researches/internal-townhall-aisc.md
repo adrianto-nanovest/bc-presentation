@@ -1,13 +1,13 @@
 # Nanovest Townhall AISC Showcase Mining Report
 
-**Document Purpose:** Extract reusable content, framing patterns, and design components from the Nanovest internal AI Steering Committee (AISC) Townhall Q1 2026 presentation for adaptation to the Berau Coal Energy (BCE) AI workshop.
+**Document Purpose:** Extract reusable content, framing patterns, and design components from the Nanovest internal AI Steering Committee (AISC) Townhall Q1 2026 presentation for adaptation to the Berau Coal Energy (BC) AI workshop.
 
 **Source Materials:**
 - PDF: `/Users/macbook/Projects/_web_presentation/berau-presentation/docs/references/nanovest-townhall-aisc.pdf`
 - Repository: `/Users/macbook/Projects/_web_presentation/nanovest-townhall-presentation/` (pptxgenjs-based HTML slide generation)
 
 **Report Date:** May 6, 2026  
-**Generated For:** 400 BCE mining industry staff (non-AI-native), 120-min animated deck + 120-min lab
+**Generated For:** 400 BC mining industry staff (non-AI-native), 120-min animated deck + 120-min lab
 
 ---
 
@@ -16,7 +16,7 @@
 ### 1.1 "AI DNA" Framing
 **Pattern:** Positioning AI as organizational DNA rather than a tool department
 - **Quote:** "Building AI DNA across Nanovest — from engineering-led workshops to company-wide adoption"
-- **Application to BCE:** Reframe as "Building AI DNA at Berau Energy — mining operations to maintenance to safety"
+- **Application to BC:** Reframe as "Building AI DNA at Berau Energy — mining operations to maintenance to safety"
 - **Why it works:** Moves AI from "tech team responsibility" to "everyone's role," critical for mining staff skepticism
 - **Verdict:** HIGHLY REUSABLE — adapt narrative arc but preserve "DNA" metaphor
 
@@ -24,7 +24,7 @@
 **Pattern:** 5-stage maturity model visualized as linear progression
 - **Flow:** Learn → Experiment → Build → Integrate → Own
 - **AISC attributes:** NIC Sessions + AI Tools → Coaching + Sandbox → Champion + Dept Project → Workflow Embedding → Dept-Owned Solutions
-- **Application to BCE:** Adapt to mining context: Learn (classroom) → Experiment (lab prototypes) → Build (dept pilots) → Integrate (shift operations) → Own (team autonomy)
+- **Application to BC:** Adapt to mining context: Learn (classroom) → Experiment (lab prototypes) → Build (dept pilots) → Integrate (shift operations) → Own (team autonomy)
 - **Verdict:** HIGHLY REUSABLE — universal adoption pattern, minimal context change required
 
 ### 1.3 "Problem-Solution-How It Works" Showcase Template
@@ -35,21 +35,21 @@
   3. HOW IT WORKS (process flow diagram + tech stack)
 - **Metrics footer:** 3-4 KPIs (status, timeline, adoption rate)
 - **Examples from AISC:** Naura chatbot, 3rd Party Alerts, Stocks Sentiment, Cinematic Ads
-- **Application to BCE:** Perfect for mining use cases: predictive maintenance, safety alerts, equipment automation
+- **Application to BC:** Perfect for mining use cases: predictive maintenance, safety alerts, equipment automation
 - **Verdict:** HIGHLY REUSABLE — architecture is content-agnostic, directly adoptable
 
 ### 1.4 Multi-Agent System as Organizational Model
 **Pattern:** Abstract AI capability complexity via "agent personas" (Creative Director, Video Director, etc.) instead of technical specs
 - **AISC example:** Cinematic Ads multi-agent: Creative Director + Video Director + Prompt Engineer + Scene Planner + Video Editor
 - **Key insight:** Non-technical audiences understand roles better than architectures
-- **Application to BCE:** "Your mine has an AI safety team: Drill Analyst, Risk Assessor, Maintenance Predictor, Safety Officer"
+- **Application to BC:** "Your mine has an AI safety team: Drill Analyst, Risk Assessor, Maintenance Predictor, Safety Officer"
 - **Verdict:** HIGHLY REUSABLE — cognitive framework extremely effective for non-AI staff
 
 ### 1.5 "Enable-Not-Build" Organizational Narrative
 **Pattern:** AISC as catalyst, not delivery team — departments own solutions, AISC provides training + infrastructure
 - **Quote:** "AISC Enablement Pillars: Knowledge Programs + AI Tools & Infrastructure + Technical Consultation + Measurement & Reporting"
 - **2026 priorities:** AI-First Mindset, Department Ownership, Continuous Learning, Measurable Impact
-- **Application to BCE:** Nanovest internal program as model; position AI lab as enabling Berau teams to "own their safety solutions"
+- **Application to BC:** Nanovest internal program as model; position AI lab as enabling Berau teams to "own their safety solutions"
 - **Verdict:** HIGHLY REUSABLE — addresses mining resistance by making AI local, not headquarters-imposed
 
 ---
@@ -68,7 +68,7 @@
 - Slides 2-6: Show Live production projects with business metrics (14k conversations, 75% deflection rate, 113+ daily analyses)
 - Slide 8: Roadmap to "AI in Product" and "Competitive Advantage" → Long-term ROI framing
 - **Message:** "AI is not a pilot; it's operational now, delivering measurable value"
-- **Application to BCE:** Use same pattern: "X mines already deployed safety AI," "Y% reduction in incidents," "Z% faster equipment fixes"
+- **Application to BC:** Use same pattern: "X mines already deployed safety AI," "Y% reduction in incidents," "Z% faster equipment fixes"
 
 ### 2.3 Cross-Functional Democratization Language
 **Key phrases in AISC messaging:**
@@ -77,7 +77,7 @@
 - "Zero-dependency" solutions (highlighting self-service tooling)
 - "Department ownership" (depts own solutions, not AISC)
 - **Implication:** AI is accessible to non-engineers, lowers perceived barrier
-- **Application to BCE:** Critical for mining staff anxiety; emphasize "no coding required," real workers own the tools
+- **Application to BC:** Critical for mining staff anxiety; emphasize "no coding required," real workers own the tools
 
 ### 2.4 "Embedding Champions" Enablement Model
 **Structure from AISC Roadmap:**
@@ -86,7 +86,7 @@
 - Hands-on Coaching Clinics (per department, not centralized)
 - 80%+ adoption target tied to champions, not mandates
 - **Philosophy:** Peer learning beats top-down mandates
-- **Application to BCE:** Train Berau shift leads as "Safety AI Champions," monthly clinics per operation zone
+- **Application to BC:** Train Berau shift leads as "Safety AI Champions," monthly clinics per operation zone
 
 ### 2.5 "Scaling from Internal Automation to Product-Embedded AI"
 **Three-phase narrative:**
@@ -94,13 +94,13 @@
 2. **Phase 2 (Near-term):** Department-owned solutions (RPA/IPA across HR/Finance/Ops) → scale adoption
 3. **Phase 3 (Future):** AI-powered product features (competitive advantage) → customer/external value
 - **Why it matters:** Justifies workshop progression from "understanding AI" to "building AI" to "owning AI"
-- **Application to BCE:** Phase 1 = "Lab prototypes," Phase 2 = "Mine pilots," Phase 3 = "Company-wide deployment"
+- **Application to BC:** Phase 1 = "Lab prototypes," Phase 2 = "Mine pilots," Phase 3 = "Company-wide deployment"
 
 ---
 
-## 3. SLIDE-BY-SLIDE BREAKDOWN: Content Mapping to BCE Topics
+## 3. SLIDE-BY-SLIDE BREAKDOWN: Content Mapping to BC Topics
 
-| Slide # | AISC Title | Core Point | BCE Topic Mapping | Reuse Verdict | Specific Comments |
+| Slide # | AISC Title | Core Point | BC Topic Mapping | Reuse Verdict | Specific Comments |
 |---------|-----------|-----------|------------------|--------------|-------------------|
 | 1 | Cover: "AI Steering Committee" | Org-wide AI initiative, "Ready to Scale—Aligned to Win" | Topic 1: AI Evolution + Topic 8: Best Practices | HIGHLY REUSABLE | Replace Nanovest logo with Berau Energy/Sinarmas branding. Keep "Aligned to Win" tagline (universal). Background 3D "n" architecture → replace with mining/coal visual (pit, equipment, safety). |
 | 2 | Key Milestones & Achievements (Timeline + Solutions Grid) | "Building AI DNA": 4 workshops (Sep 2025–Feb 2026), 6 live projects, 10+ total, 50+ attendance, 8+ champions | Topic 1: AI Evolution + Topic 8: Best Practices + Topic 9: How to Start | HIGHLY REUSABLE | Timeline structure (Sep 2025 start) → adapt to workshop schedule. Solutions grid (status badges: Live/Testing) → shows adoption progression. Left-column timeline pattern **directly applicable**. Reuse left/right column layout for "Nanovest Journey vs. Berau Path." |
@@ -108,8 +108,8 @@
 | 4 | 3rd Party Alert System | Multi-source monitoring (RSS feeds) + AI classification (Gemini Pro) + alerting (Opsgenie). Problem: sudden API/third-party changes. Solution: hourly automation, deduplication, batch classification. | Topic 2: AI Mindset + Topic 3: Process Improvement (RPA) + Topic 5: AI Techniques (MCP/orchestration) + Topic 6: Tools | HIGHLY REUSABLE | **Reuse orchestration pattern:** Hourly Scheduler → Aggregation → Filtering → AI Classification → Alerting. Adapt to mining: sensor data (vibration, gas, temperature) → aggregation → anomaly detection → shift alerts. Problem statement "unexpected changes cause cascade failures" → same for equipment: "unexpected sensor changes = safety risk." |
 | 5 | Stocks Sentiment Intelligence | Daily RSS aggregation (10 sources) + AI filtering + web scraping (Crawl4AI) + sentiment analysis → Slack briefing. Multi-stage AI pipeline: filter relevance → analyze sentiment → rank by impact → summarize. 4 chained AI agents. | Topic 1: AI Evolution + Topic 5: AI Techniques (RAG, Orchestration, Skills) + Topic 6: Tools Ecosystem | HIGHLY REUSABLE | **Reuse AI agent chaining pattern:** This is a 4-agent pipeline (Filter Agent → News Analyzer → Ticker Analyzer → Summarizer). Directly adaptable to mining: Sensor Agent → Anomaly Agent → Risk Scorer → Maintenance Agent. Architecture is identical; content changes only. |
 | 6 | Cinematic Ads — AI Video Generator | Multi-agent system (Creative Director, Video Director, Prompt Engineer, Scene Planner, Editor) abstracts away complex prompt engineering via UI (Style + Emotion + Theme selectors). 5 influencer personas. Automated pipeline: storytelling → scenes → images → video → merge. | Topic 4: AI Engineering (Prompt/Context/Harness) + Topic 5: AI Techniques (Multi-Agent Orchestration) + Topic 6: Tools Ecosystem | HIGHLY REUSABLE | **Reuse multi-agent persona abstraction:** Don't expose "Veo 3.1 + Gemini" to non-technical users; instead, present as "Creative Team." For mining: "Safety Committee" of AI agents (Drill Inspector, Risk Officer, Safety Writer, Incident Logger). UI-first, architecture-last. Shows effective complexity abstraction. **Video generation technique** (automated storytelling) → adapt to training videos or safety briefing generation. |
-| 7 | Other Showcases & Implementations | 15+ projects across HR/Finance/Ops. 10+ non-engineering use cases (legal docs, reimbursement, asset requests, offboarding, Web3 alerts). 5+ departments, med-high adoption. Legal automation, Web3 price alerts, RPA/IPA patterns. | Topic 3: Process Improvement (BPA/RPA/IPA) + Topic 6: Tools Ecosystem + Topic 9: How to Start | HIGHLY REUSABLE | **Use as "expansion roadmap" slide:** Shows breadth of AI adoption beyond flagship projects. For BCE: "Safety + Equipment + Operations + HR + Supply Chain" → each gets its own AI capability over time. Non-engineering use cases (legal docs → equipment permits, reimbursement → maintenance budgets) show democratization. Reference this to show "AI is for everyone, not just engineers." |
-| 8 | Roadmap 2026: Two-Track AI Enablement | Dual-track: Personal Enablement (AI proficiency, self-service tools, decision-making) + Team Enablement (dept projects, champions, cross-team collab). 4 pillars: Knowledge Programs + AI Tools & Infrastructure + Technical Consultation + Measurement & Reporting. Department AI Journey: Learn → Experiment → Build → Integrate → Own. | Topic 8: Best Practices + Topic 9: How to Start | HIGHLY REUSABLE | **Department Journey flow is universal:** This is your workshop learning progression mapped to long-term adoption. Directly reuse as BCE "12-month roadmap" (workshop = Month 0, pilot projects = Months 1-3, integration = Months 4-9, ownership = Months 10-12). Pillars adapt identically (substitute "Knowledge Programs" with "Safety + Equipment + Operations clinics"). 80%+ adoption target is aspirational benchmark. |
+| 7 | Other Showcases & Implementations | 15+ projects across HR/Finance/Ops. 10+ non-engineering use cases (legal docs, reimbursement, asset requests, offboarding, Web3 alerts). 5+ departments, med-high adoption. Legal automation, Web3 price alerts, RPA/IPA patterns. | Topic 3: Process Improvement (BPA/RPA/IPA) + Topic 6: Tools Ecosystem + Topic 9: How to Start | HIGHLY REUSABLE | **Use as "expansion roadmap" slide:** Shows breadth of AI adoption beyond flagship projects. For BC: "Safety + Equipment + Operations + HR + Supply Chain" → each gets its own AI capability over time. Non-engineering use cases (legal docs → equipment permits, reimbursement → maintenance budgets) show democratization. Reference this to show "AI is for everyone, not just engineers." |
+| 8 | Roadmap 2026: Two-Track AI Enablement | Dual-track: Personal Enablement (AI proficiency, self-service tools, decision-making) + Team Enablement (dept projects, champions, cross-team collab). 4 pillars: Knowledge Programs + AI Tools & Infrastructure + Technical Consultation + Measurement & Reporting. Department AI Journey: Learn → Experiment → Build → Integrate → Own. | Topic 8: Best Practices + Topic 9: How to Start | HIGHLY REUSABLE | **Department Journey flow is universal:** This is your workshop learning progression mapped to long-term adoption. Directly reuse as BC "12-month roadmap" (workshop = Month 0, pilot projects = Months 1-3, integration = Months 4-9, ownership = Months 10-12). Pillars adapt identically (substitute "Knowledge Programs" with "Safety + Equipment + Operations clinics"). 80%+ adoption target is aspirational benchmark. |
 | 9 | Future Works: More Capabilities & Connectivity | 6 new capability areas (Product IDeas/PRD, UI/UX design, Data/Market Intelligence, HR Chatbot, Marketing SEO, Document Toolkit) + 5 MCPs (NotebookLM, BigQuery, Google Analytics, Playstore Review). 3 strategic pillars: Embed in Product, AI-Powered Features, Competitive Advantage. | Topic 5: AI Techniques (MCP/RAG) + Topic 6: Tools Ecosystem + Topic 9: How to Start | MODERATELY REUSABLE | **Show capability expansion without overwhelming:** Don't present this to mining staff in Week 1. Use as "next phase" vision (post-workshop). MCPs are valuable conceptually (show integrations reduce manual work) but tool-specific. Adapt capability areas: Product Ideation → Mine Scheduling, UI/UX → Equipment Dashboards, Data → Geological Intelligence, HR → Safety Certification, Marketing → Compliance Documentation, Docs → Safety Protocols. |
 | 10 | Closing: "Thank You" + "Aligned to Win" | Reinforces brand positioning and call-to-action (contact AISC team for implementation support) | Topic 9: How to Start | REUSABLE (CLOSING ONLY) | Keep tagline "Aligned to Win" or adapt to "Ready to Protect" (mining-centric). Replace with Berau contact: "Need help implementing AI in your operation? Contact the Berau AI Lab team." |
 
@@ -124,7 +124,7 @@
 - **Primary Accents:** Pink (E879F9), Orange (F28C28), Yellow (F59E0B), Green (4ADE80), Cyan (22D3EE), Red (FF6B6B), Purple (A78BFA)
 - **Neutrals:** Text Primary (FFFFFF), Secondary (E2D9F3), Tertiary (C0B8D9), Card BG (1A1025 @ 40% transparency)
 - **Design Philosophy:** High-saturation, vibrant accents on dark backgrounds; each accent color assigned to specific concept (Pink = calendar/community, Orange = alerts/tasks, Green = success/live, Cyan = features/integrations)
-- **Application to BCE:** Adopt same system but shift Orange (warning) to Red (mining safety), Green → Green (operations OK), Yellow → Yellow (caution). Reassign Pink/Cyan to Berau branding.
+- **Application to BC:** Adopt same system but shift Orange (warning) to Red (mining safety), Green → Green (operations OK), Yellow → Yellow (caution). Reassign Pink/Cyan to Berau branding.
 
 **Typography:**
 - **Category labels:** Calibri 10pt bold, 2.5pt char spacing (AISC classification on every slide)
@@ -156,7 +156,7 @@
   - Icon + colored value + label
   - Subtle border (FFFFFF @ 85% transparency)
 
-**Why effective for BCE:** Communicates adoption breadth (left timeline) and project status (right solutions) on one screen. Adaptable to "Timeline of Implementation" + "Pilot Projects Status."
+**Why effective for BC:** Communicates adoption breadth (left timeline) and project status (right solutions) on one screen. Adaptable to "Timeline of Implementation" + "Pilot Projects Status."
 
 #### Layout B: Project Showcase (3-Panel, Slides 2-6)
 **File:** `/Users/macbook/Projects/_web_presentation/nanovest-townhall-presentation/src/slides/slide2-naura.js` (pattern repeated for all showcase slides)
@@ -179,7 +179,7 @@
      - Tech stack footer lists tools/platforms used
 - **Bottom: 4 KPI cards** (green, orange, pink, cyan colors match problem/solution themes)
 
-**Why effective for BCE:** Separates "what's broken" from "how we fix it" to "prove it works." Visually scaffolds non-technical audiences through complex projects. Directly applicable to mine safety, equipment, operations projects.
+**Why effective for BC:** Separates "what's broken" from "how we fix it" to "prove it works." Visually scaffolds non-technical audiences through complex projects. Directly applicable to mine safety, equipment, operations projects.
 
 #### Layout C: Roadmap / Journey Flow (Slide 8)
 **File:** `/Users/macbook/Projects/_web_presentation/nanovest-townhall-presentation/src/slides/slide7-roadmap.js`
@@ -198,7 +198,7 @@
   - Icons for each stage (consistent with pillar system)
 - **4 KPI cards below:** Adoption targets (80%), team count, champion count, contributor count
 
-**Why effective for BCE:** Shows roadmap as learnable, sequential progression (not overwhelming all-at-once). Journey flow mirrors workshop agenda (Learn in classroom, Experiment in lab, Build in groups, etc.).
+**Why effective for BC:** Shows roadmap as learnable, sequential progression (not overwhelming all-at-once). Journey flow mirrors workshop agenda (Learn in classroom, Experiment in lab, Build in groups, etc.).
 
 ### 4.3 Icon System
 **File:** `/Users/macbook/Projects/_web_presentation/nanovest-townhall-presentation/src/icons.js` + `/src/generate.js` (lines 6-80 show icon preloading)
@@ -225,11 +225,11 @@
 ### 4.4 HTML/PPTX Generation Architecture
 **Technology stack:** pptxgenjs (Node.js library for .pptx generation)
 
-**Why relevant to BCE deck:**
+**Why relevant to BC deck:**
 - Separates content (data in .js files) from presentation (helpers, tokens)
 - Enables version control and templating (reuse slide structures across projects)
 - Allows animated output (slides can be converted to video/HTML with animation tools)
-- **Alternative:** Use this architecture for BCEAnimation-rich HTML deck instead of static PPT
+- **Alternative:** Use this architecture for BCAnimation-rich HTML deck instead of static PPT
 
 **Files to reference:**
 - `helpers.js` → reusable functions for cards, KPI components, section headers
@@ -245,18 +245,18 @@
 - **KPI cards** (bottom of showcase slides): appear with counter animation (value counts from 0 to target)
 - **Emphasis highlights** (subtitles with colored keywords): keywords scale or brighten as they're spoken
 
-**Recommendation for BCE deck:**
+**Recommendation for BC deck:**
 - If using HTML/animated approach: implement similar staggered reveals for step-by-step engagement
 - If using static PPT: use slide animations (wipe, fade) to simulate reveals
 - Key principle: **one idea per animation beat** (don't overwhelm with simultaneous animations)
 
 ---
 
-## 5. BCE TOPIC MAPPING SUMMARY
+## 5. BC TOPIC MAPPING SUMMARY
 
-**How AISC slides map to the 9 BCE topics:**
+**How AISC slides map to the 9 BC topics:**
 
-| BCE Topic | AISC Slides | Specific Patterns/Content Reusable | Depth in Workshop |
+| BC Topic | AISC Slides | Specific Patterns/Content Reusable | Depth in Workshop |
 |-----------|-------------|----------------------------------|-------------------|
 | **1. AI Evolution** | Slide 1 (timeline from Sep 2025 start), Slide 2 (Naura evolution) | "AI went from pilot to live production in 6 months" narrative; show progression through workshops | Opening 20 min |
 | **2. AI Mindset** | Slide 2-6 (problem-solution framing), Slide 8 (enablement pillars) | "Build vs. Buy" (Nanovest built internal tools); "Champion-led adoption" vs. top-down; "Democratization" (anyone can build) | 15-20 min, reinforce throughout |
@@ -266,7 +266,7 @@
 | **6. Tools Ecosystem (Claude/Google/OpenAI)** | Slide 2-6 (Gemini Pro, Gemini Flash, Dialogflow, Veo 3.1, n8n); Slide 9 (future tools: NotebookLM, BigQuery, Google Analytics) | Multi-model strategy (Gemini for classification, Veo for video, Claude/NotebookLM for knowledge); Platform agnostic (use best tool for task); Tool selection driven by use case, not vendor | 20-25 min, show tool options |
 | **7. Pitfalls** | Implicit in "Other Showcases" (Slide 7): show both live and testing status; 15 projects across depts | Pitfalls to avoid: over-engineering (use no-code/low-code), expecting perfect AI (need human escalation), building without champion (builds fail without adoption), not measuring ROI (15+ projects tracked) | 15 min, case studies |
 | **8. Best Practices** | Slide 1 (timeline of workshops + adoption metrics), Slide 8 (two-track enablement, champion embedding, measurement/reporting), Slide 9 (roadmap to product-embedded AI) | Best practices: start small (pilot projects), embed champions (not centralized), measure everything (adoption dashboards), plan multi-year (not a one-off workshop), link to business outcomes (from internal cost savings to product differentiation) | 20-25 min, closing section |
-| **9. How to Start** | Slide 8 (Department AI Journey: Learn → Experiment → Build → Integrate → Own), Slide 9 (roadmap phases), Slide 10 (contact AISC for support) | Exact roadmap for BCE: Months 0-1 (Learn = workshop + knowledge programs), Months 1-3 (Experiment = lab + coaching clinics), Months 4-6 (Build = pilot projects), Months 7-12 (Integrate + Own = department solutions). AISC model = Have champions, provide tools, measure adoption. | 30-40 min, action planning |
+| **9. How to Start** | Slide 8 (Department AI Journey: Learn → Experiment → Build → Integrate → Own), Slide 9 (roadmap phases), Slide 10 (contact AISC for support) | Exact roadmap for BC: Months 0-1 (Learn = workshop + knowledge programs), Months 1-3 (Experiment = lab + coaching clinics), Months 4-6 (Build = pilot projects), Months 7-12 (Integrate + Own = department solutions). AISC model = Have champions, provide tools, measure adoption. | 30-40 min, action planning |
 
 ---
 
@@ -309,21 +309,21 @@
 - **Organizational structure:** AISC as catalyst (not delivery team); departments own solutions; champions drive adoption
 - **Enablement pillars:** Knowledge Programs + AI Tools & Infrastructure + Technical Consultation + Measurement & Reporting
 
-### Cross-Reference to BCE Context
+### Cross-Reference to BC Context
 - **Mining industry specificity:** AISC content is fintech/crypto; must adapt language/examples to mining operations, safety, equipment maintenance
-- **Audience:** Nanovest ~200 staff (tech-enabled fintech company) vs. BCE ~400 staff (mining industry, lower AI literacy)
+- **Audience:** Nanovest ~200 staff (tech-enabled fintech company) vs. BC ~400 staff (mining industry, lower AI literacy)
 - **Adaptation requirement:** Strong; messaging works, examples don't; need mining-specific problem statements, projects, case studies
 - **Template reusability:** High; layout patterns, framing narratives, adoption models are industry-agnostic
 
 ---
 
-## 7. RECOMMENDATIONS FOR BCE ADAPTATION
+## 7. RECOMMENDATIONS FOR BC ADAPTATION
 
 ### High-Priority Reuse (Week 1 of Preparation)
 1. **Slide 1 structure** (Timeline + Solutions) → Adapt to "Nanovest Journey → Berau Path" showing parallel implementation
 2. **3-Panel showcase template** (Slides 2-6) → Create 2-3 mining-specific project showcases (Safety AI, Equipment Maintenance, Shift Optimization)
 3. **Department Journey flow** (Slide 8) → Make this your workshop curriculum outline (Learn/Experiment/Build/Integrate/Own = 120 min animation + 120 min lab)
-4. **Enablement pillars** (Slide 8) → Adapt to BCE: Knowledge Clinics + Mining AI Tools (Claude + Google) + Technical Support + Safety Dashboards
+4. **Enablement pillars** (Slide 8) → Adapt to BC: Knowledge Clinics + Mining AI Tools (Claude + Google) + Technical Support + Safety Dashboards
 
 ### Medium-Priority Reuse (Week 2-3)
 5. **Multi-agent persona abstraction** (Cinematic Ads pattern) → "Safety Assurance Team" of AI agents for mining, not exposed prompts
@@ -337,9 +337,9 @@
 
 ### Critical Adaptation Gaps
 - **Mining-specific examples:** No coal industry, no pit operations, no equipment monitoring in AISC deck; must create or find industry case studies
-- **Safety focus:** AISC is process/productivity-first; BCE is safety-first; reframe all examples through safety lens (incident prevention, worker protection)
-- **Audience tech literacy:** AISC assumes some AI familiarity; BCE likely has none; add more foundational context to "AI Techniques" section
-- **ROI metrics:** AISC shows cost savings (chatbot deflection rates) + engagement metrics; BCE needs safety metrics (incidents prevented, lives saved) + operational ROI
+- **Safety focus:** AISC is process/productivity-first; BC is safety-first; reframe all examples through safety lens (incident prevention, worker protection)
+- **Audience tech literacy:** AISC assumes some AI familiarity; BC likely has none; add more foundational context to "AI Techniques" section
+- **ROI metrics:** AISC shows cost savings (chatbot deflection rates) + engagement metrics; BC needs safety metrics (incidents prevented, lives saved) + operational ROI
 
 ---
 

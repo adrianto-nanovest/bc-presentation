@@ -2817,8 +2817,8 @@ await browser.close();
 const pptx = new PptxGenJS();
 // 16:9 widescreen at 13.333" × 7.5" — PowerPoint default for new decks.
 pptx.layout = "LAYOUT_WIDE";
-pptx.defineLayout({ name: "BCE", width: 13.333, height: 7.5 });
-pptx.layout = "BCE";
+pptx.defineLayout({ name: "BC", width: 13.333, height: 7.5 });
+pptx.layout = "BC";
 
 for (const png of screenshots) {
   const slide = pptx.addSlide();
@@ -3033,7 +3033,7 @@ git commit -m "feat: projection-test script + runbook for hex-ladder calibration
 ```markdown
 # Berau Coal Energy AI Workshop — Deck
 
-React + Tailwind + Framer Motion presentation deck for the BCE Vol-2 Session-2 workshop. See `docs/specs/2026-05-06-process-and-design-meta.md` for the design substrate decisions; see `docs/plans/2026-05-06-design-system-implementation.md` for the build plan that produced this scaffolding.
+React + Tailwind + Framer Motion presentation deck for the BC Vol-2 Session-2 workshop. See `docs/specs/2026-05-06-process-and-design-meta.md` for the design substrate decisions; see `docs/plans/2026-05-06-design-system-implementation.md` for the build plan that produced this scaffolding.
 
 ## Develop
 

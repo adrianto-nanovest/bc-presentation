@@ -1,10 +1,10 @@
-# Practice Lab Materials — BCE AI Catalyst Vol-2, Session 2 — Implementation Plan
+# Practice Lab Materials — BC AI Catalyst Vol-2, Session 2 — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Produce every workshop material the spec requires — provided Skills, 7-file starter pack, prompt/seed cards, facilitator runbook — so the 90-min practice lab is fully ready for both Day 1 (Section Head) and Day 2 (Team Leader) runs.
 
-**Architecture:** All materials live under `materials/practice-lab-vol2/` in this repo as the canonical source-of-truth (markdown, CSV, draft PDFs). Deployable copies are pushed to a Google Drive folder `BCE Lab — Starter Pack` (Sheets/Docs/Slides format) for attendee consumption. Skills are validated by uploading to a throwaway Claude Web Project and running the seed prompts before being declared lab-ready.
+**Architecture:** All materials live under `materials/practice-lab-vol2/` in this repo as the canonical source-of-truth (markdown, CSV, draft PDFs). Deployable copies are pushed to a Google Drive folder `BC Lab — Starter Pack` (Sheets/Docs/Slides format) for attendee consumption. Skills are validated by uploading to a throwaway Claude Web Project and running the seed prompts before being declared lab-ready.
 
 **Tech Stack:** Markdown (Skills, cards, runbook); CSV → Google Sheets (workbook); Markdown → Google Doc (templates); Markdown → Google Slides (slide template, via Drive paste); LibreOffice or Pages → PDF (vendor notice); Wikimedia/Unsplash free imagery (site snapshots); Claude Web Project + NotebookLM Web (validation surfaces).
 
@@ -289,7 +289,7 @@ This task is the validation step §13 silently skipped. Mandatory before declari
 
 - [ ] **Step 1: Open a throwaway Claude Web Project**
 
-Name: `BCE Lab Skill Validation`. Upload both `root-cause-investigator.md` and `ops-comms-drafter.md` as Project files.
+Name: `BC Lab Skill Validation`. Upload both `root-cause-investigator.md` and `ops-comms-drafter.md` as Project files.
 
 - [ ] **Step 2: Run Day 1 activation test**
 
@@ -740,7 +740,7 @@ git commit -m "feat(lab): add site snapshots (3 labeled stock images)"
 
 This is a deployment task — produces nothing in the repo but produces the artifact attendees touch.
 
-- [ ] **Step 1: Create Google Drive folder `BCE Lab — Starter Pack`**
+- [ ] **Step 1: Create Google Drive folder `BC Lab — Starter Pack`**
 
 Upload:
 - Workbook CSVs → import into one Google Sheet with 5 tabs.
@@ -755,7 +755,7 @@ Set folder share to **"Anyone with the link — Viewer"**. Copy share URL.
 
 - [ ] **Step 2: Zip backup**
 
-Run: `cd materials/practice-lab-vol2 && zip -r ~/Desktop/bce-lab-starter-pack-backup.zip starter-pack/`
+Run: `cd materials/practice-lab-vol2 && zip -r ~/Desktop/bc-lab-starter-pack-backup.zip starter-pack/`
 Copy zip to USB drive (committee deployment).
 
 - [ ] **Step 3: Record share URL in repo**
@@ -781,7 +781,7 @@ git commit -m "docs(lab): record Drive folder URL for starter pack"
 
 Deployment task. Insurance for if a team's NotebookLM upload fails.
 
-- [ ] **Step 1: Open NotebookLM (Web), create new notebook `BCE Lab — Monthly Review Starter (Fallback)`**
+- [ ] **Step 1: Open NotebookLM (Web), create new notebook `BC Lab — Monthly Review Starter (Fallback)`**
 
 - [ ] **Step 2: Add all 7 starter pack files as sources**
 

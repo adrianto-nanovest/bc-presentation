@@ -1,6 +1,6 @@
 # AI Terminology Nest — Tier Detail Content for B.2
 **Date:** 2026-05-12  
-**Audience:** BCE Workshop knowledge-work attendees (~400)  
+**Audience:** BC Workshop knowledge-work attendees (~400)  
 **Purpose:** Source content for B.2 slide right-panel details (concentric "Russian doll" diagram)
 
 ---

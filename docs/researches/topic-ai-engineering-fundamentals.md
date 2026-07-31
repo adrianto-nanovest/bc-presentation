@@ -1,5 +1,5 @@
 # The Trichotomy of AI Engineering: Prompt, Context, and Harness Engineering
-## Research Report for BCE Workshop (May 2026)
+## Research Report for BC Workshop (May 2026)
 
 ---
 
@@ -862,5 +862,5 @@ For a mining operation implementing AI systems (e.g., for daily reports, anomaly
 ---
 
 **Document prepared**: May 2026  
-**Audience**: Berau Coal Energy (BCE) AI Workshop ~400 participants  
+**Audience**: Berau Coal Energy (BC) AI Workshop ~400 participants  
 **Scope**: Non-technical explanation of AI engineering fundamentals for industry practitioners

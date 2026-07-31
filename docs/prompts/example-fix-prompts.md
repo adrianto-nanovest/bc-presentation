@@ -39,7 +39,7 @@ FYI, if need some reference on styles, components, animations, layouts, refer to
 Fix and improve opening sections (title, section A,B,C), based on docs/specs/2026-05-11-slides-opening-title-A-B-C.md
 For slide 1 (see current in docs/examples/section-A-B-C-current/title-slide.png)
 1. There is no background generated image yet, build the prompt (futuristic-modern but still keep the deck tone), and use the MCP to generate it
-2. "BCE AI Catalyst..." on the bottom right side, and my fullname (Adrianto Tedjokusumo) and company in the bottom left side with microphone icon/glyph and make it in 1 line. But, ensure it is not covering the navigation button
+2. "BC AI Catalyst..." on the bottom right side, and my fullname (Adrianto Tedjokusumo) and company in the bottom left side with microphone icon/glyph and make it in 1 line. But, ensure it is not covering the navigation button
 3. We need the proper subtitle to accompany the main title
 4. Consider the title subtitle position carefully, align it properly with the image generated. Left-aligned is also ok.
 
@@ -209,7 +209,7 @@ RULES: ALL CARDS inside CAN BE HOVERED with "animation highlight" like slide G10
 Now for each card content (make it brief, but still bring the complete details):
 1. Card 1 - Research & Preparation (please suggest subtitle) 
    1. To Do:
-      1. Gathering context reference (BCE Workshop Plan, Discussion with BCE PIC, Previous workshop materials) - by pulling persistent memory, Google Drive MCP, 
+      1. Gathering context reference (BC Workshop Plan, Discussion with BC PIC, Previous workshop materials) - by pulling persistent memory, Google Drive MCP, 
       2. Do web research (content ideation, topic deep-dives, design references, tech stack options) - by Claude buit-in WebSearch and WebFetch tool. 
       3. Get ground truth information from official docs (Claude, Gemini, OpenAI, Trusted Youtube content) - by using RAG -> notebookLM plugin 
       All using paralel sub-agents invocation in Claude

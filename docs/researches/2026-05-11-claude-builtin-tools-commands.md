@@ -430,7 +430,7 @@ If you don't write code professionally, here's why understanding Claude Code's c
 
 4. **Subagent:** Explore agent researches "foundation model landscape 2026" while you work on slides in main session
 
-5. **Memory:** CLAUDE.md contains "BCE context: real mission is portable adaptability training, never on slides" so Claude knows the framing
+5. **Memory:** CLAUDE.md contains "BC context: real mission is portable adaptability training, never on slides" so Claude knows the framing
 
 **Result:** You orchestrate complex knowledge work without writing code. You write instructions once, Claude follows them forever.
 

@@ -1,6 +1,6 @@
 # Berau Coal Energy AI Workshop — Deck
 
-React + Tailwind + Framer Motion presentation deck for the BCE Vol-2 Session-2 workshop. See `docs/specs/2026-05-06-process-and-design-meta.md` for the design substrate decisions; see `docs/plans/2026-05-06-design-system-implementation.md` for the build plan that produced this scaffolding.
+React + Tailwind + Framer Motion presentation deck for the BC Vol-2 Session-2 workshop. See `docs/specs/2026-05-06-process-and-design-meta.md` for the design substrate decisions; see `docs/plans/2026-05-06-design-system-implementation.md` for the build plan that produced this scaffolding.
 
 ## Develop
 

@@ -1,4 +1,4 @@
-# Practice Lab Design — BCE AI Catalyst Vol-2, Session 2
+# Practice Lab Design — BC AI Catalyst Vol-2, Session 2
 
 **Created:** 2026-05-16
 **Author:** Adri (Nanovest) + Claude (brainstorming session)
@@ -21,13 +21,13 @@ The lab teaches **tool-stitching across the Claude + Google ecosystems** through
 | Group size | 8 groups × 5 people |
 | Equipment per group | 1 laptop only (likely no admin access) |
 | Day cadence | Day 1 = Section Heads · Day 2 = Team Leaders (alternating; same workshop format) |
-| Total time | 90 min (per BCE PIC doc, authoritative) |
+| Total time | 90 min (per BC PIC doc, authoritative) |
 | Tool environment | Claude Web only (Desktop / CLI unavailable). Google ecosystem: NotebookLM, Gemini, Gems, Drive, Docs, Sheets, Slides. **No** OpenAI/Codex, **no** n8n, **no** MCP install on attendee laptops. |
 | Competition | Each group is a competition team; judging happens later (not inside the 90 min). |
 
 ### 2.1 Persona dichotomy
 
-Per BCE PIC document, attendees split into two roles that receive the same workshop on different days:
+Per BC PIC document, attendees split into two roles that receive the same workshop on different days:
 
 | Persona | Mission | GenAI emphasis |
 |---|---|---|
@@ -193,7 +193,7 @@ Every stage has a clear team decision → driver executes → team reviews loop.
 
 ### 6.2 Distribution
 
-- All 7 files live in one **Drive folder**: `BCE Lab — Starter Pack` (shareable link, view + copy)
+- All 7 files live in one **Drive folder**: `BC Lab — Starter Pack` (shareable link, view + copy)
 - Backup: same files zipped on a USB drive (for if Drive access is blocked)
 - One pre-built NotebookLM workbook (with all 7 files already ingested) as fallback: shareable link
 - Each group receives: Drive folder link + printed handouts (Process Manual + prompt cards + seed questions)
@@ -279,7 +279,7 @@ Mentioned at wrap. Facilitators offer to demo the Gem version one-on-one for any
 
 - **Audience framing:** no commit counts, no "solo" callouts, plain language (per memory `feedback_audience_framing.md`)
 - **Generic examples:** body of the lab uses universal knowledge-work framing; nothing mining-specific (per memory `feedback_generic_examples.md`)
-- **Portability priority:** every deliverable must survive past the workshop and across employers (per memory `project_bce_transition_context.md` — private context)
+- **Portability priority:** every deliverable must survive past the workshop and across employers (per memory `project_BC_transition_context.md` — private context)
 - **Free-stack only:** all tools/assets used must be free, no paid components (per memory `feedback_no_paid_components.md`)
 
 ## 13. Provided Skill markdowns (LOCKED — copy into facilitator runbook)

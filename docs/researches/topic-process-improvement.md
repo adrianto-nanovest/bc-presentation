@@ -1,6 +1,6 @@
 # Process Improvement Framework: BPA / RPA / IPA / APA
 
-Research compiled for Berau Coal Energy (BCE) AI Workshop | 400 mining-industry employees | May 2026
+Research compiled for Berau Coal Energy (BC) AI Workshop | 400 mining-industry employees | May 2026
 
 ---
 
@@ -271,7 +271,7 @@ START: Does process work today?
 
 ---
 
-## 8. Key Takeaways for BCE Mining Workshop
+## 8. Key Takeaways for BC Mining Workshop
 
 1. **Not all three are separate paths.** They stack: BPA (system integration) → RPA (bot layer) → IPA (AI layer) → APA (autonomous orchestration). Your mining operation may need different tools for different processes.
 

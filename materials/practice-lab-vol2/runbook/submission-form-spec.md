@@ -42,7 +42,7 @@
 | One response per team | Enforced by honor; committee flags duplicate Team name values in the response sheet |
 | Email collection | Off — no personal data needed |
 | Response confirmation | Show a confirmation message: *"Submitted. Your team's work is recorded. Well done."* |
-| Response destination | Linked Google Sheet: `BCE Vol-2 — Lab Submissions` |
+| Response destination | Linked Google Sheet: `BC Vol-2 — Lab Submissions` |
 
 ---
 

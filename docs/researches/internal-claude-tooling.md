@@ -1,5 +1,5 @@
 # Internal Claude Tooling: Design Learnings & Ecosystem Reference
-Mining Adri's Claude-tooling decks for BCE workshop topics 6 (Tools Ecosystem), 8 (Best Practices), and practice lab.
+Mining Adri's Claude-tooling decks for BC workshop topics 6 (Tools Ecosystem), 8 (Best Practices), and practice lab.
 
 ---
 
@@ -13,7 +13,7 @@ For a 400-person mining-industry workshop, these five elements from internal Cla
 
 3. **Cost Reality: Dual-Tool is <1% of Loaded Cost** — Even premium dual-tool setup ($120/dev/mo) is a rounding error against engineer salaries. Cost is not the blocker; *knowing when each tool actually pays off* is.
 
-4. **Design System First Discipline** — Lock tokens, type, components, voice before generating anything else. Token compounding is real: split sessions and you cut 60–80% per-message cost. For BCE: build a single design system, reuse it everywhere.
+4. **Design System First Discipline** — Lock tokens, type, components, voice before generating anything else. Token compounding is real: split sessions and you cut 60–80% per-message cost. For BC: build a single design system, reuse it everywhere.
 
 5. **The Overlap Zone: Where Both Tools Shine Together** — Cross-vendor code review, refactoring, test writing, documentation, architecture review. These are the compounding returns; this is where dual-tool justifies its complexity.
 
@@ -148,7 +148,7 @@ Lock the design system (tokens, type, components, voice) *before* any artifact g
 - Skipping this means every later generation drifts a little.
 - You end up paying tokens to fix consistency that should have been free.
 
-**For BCE:** Build one design system at deck start. Reuse across all 9 topics. Cost discipline: locking early cuts 60–80% of per-message waste.
+**For BC:** Build one design system at deck start. Reuse across all 9 topics. Cost discipline: locking early cuts 60–80% of per-message waste.
 
 ---
 
@@ -159,7 +159,7 @@ Cumulative session cost can hit 250K+ tokens by message 30 in a long session. Sp
 - Evidence: Splitting sessions cuts 60–80% of per-message cost.
 - This matters because of separate weekly limits (see "Watch the weekly limit" below).
 
-**For BCE:** Don't write the entire 9-topic deck in one Claude Design session. Break into: design system (session 1), topics 1–3 (session 2), topics 4–6 (session 3), topics 7–9 (session 4). Handoff between sessions is brief.
+**For BC:** Don't write the entire 9-topic deck in one Claude Design session. Break into: design system (session 1), topics 1–3 (session 2), topics 4–6 (session 3), topics 7–9 (session 4). Handoff between sessions is brief.
 
 ---
 
@@ -170,7 +170,7 @@ In-canvas tweaking (sliders, colour pickers, parameterised controls) is the most
 - Apply tweaks, *then explicitly ask* "update the result based on the tweaks I just applied" *before* moving to handoff.
 - Failure mode: broken WYSIWYG between the canvas and the handed-off code.
 
-**For BCE practice lab:** Use Tweak early and often; validate before handing off to Claude Code.
+**For BC practice lab:** Use Tweak early and often; validate before handing off to Claude Code.
 
 ---
 
@@ -181,7 +181,7 @@ Claude Design and Claude Code have separate weekly limits. If you cap out Design
 - Build the budget plan up front: how much do you want left in Code when Design is done?
 - Design's pool is distinct; Code's pool is shared with chat.
 
-**For BCE:** Allocate 60% of Code's weekly budget to the build phase; reserve 40% for live iterations during the workshop.
+**For BC:** Allocate 60% of Code's weekly budget to the build phase; reserve 40% for live iterations during the workshop.
 
 ---
 
@@ -203,7 +203,7 @@ Built-in export to PowerPoint produces output that doesn't match on-screen desig
 - PDF export is reliable.
 - If the destination is a slide deck, expect to rebuild in PowerPoint or render via your own pipeline (as Adri did with pptxgenjs then rasterization).
 
-**For BCE:** Export from Claude Design to PDF; Adri's code-based pipeline rasterizes at 2× DPI for lossless PPTX. We can do the same.
+**For BC:** Export from Claude Design to PDF; Adri's code-based pipeline rasterizes at 2× DPI for lossless PPTX. We can do the same.
 
 ---
 
@@ -260,7 +260,7 @@ Claude Design ships with a model picker (Haiku 4.5, Opus 4.7, Sonnet 4.6, Opus 4
 
 ---
 
-## 4. Reusable for BCE Topic 6 (Tools Ecosystem): Slide-Ready Snippets
+## 4. Reusable for BC Topic 6 (Tools Ecosystem): Slide-Ready Snippets
 
 ### Framing: Why Tools Matter
 
@@ -373,7 +373,7 @@ Claude Design ships with a model picker (Haiku 4.5, Opus 4.7, Sonnet 4.6, Opus 4
 
 ---
 
-## 5. Reusable for BCE Topic 8 (Best Practices): Slide-Ready Snippets
+## 5. Reusable for BC Topic 8 (Best Practices): Slide-Ready Snippets
 
 ### Snippet A: Operational Risks When Running Two Tools
 
@@ -569,7 +569,7 @@ Claude Design ships with a model picker (Haiku 4.5, Opus 4.7, Sonnet 4.6, Opus 4
 
 **Length:** 20 min (walk the checklist, show mitigation evidence).
 
-**Output:** A template risk register the BCE team can adapt.
+**Output:** A template risk register the BC team can adapt.
 
 ---
 

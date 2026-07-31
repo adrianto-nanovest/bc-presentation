@@ -5,7 +5,7 @@
 
 ## 1. Executive Summary
 
-Five key findings for BCE employees:
+Five key findings for BC employees:
 
 - **MCP is becoming the universal translator** between Claude/AI tools and your company's existing systems (email, calendar, data). Instead of building custom integrations, MCP creates a standard "plug-and-play" protocol so AI can safely access what it needs.
 
@@ -63,7 +63,7 @@ MCP is a **universal "plug-and-play" adapter**. It lets Claude or other AI tools
 
 ### Concrete Example for Mining Workers
 
-**Scenario:** A shift supervisor at BCE needs to check equipment availability before scheduling maintenance.
+**Scenario:** A shift supervisor at BC needs to check equipment availability before scheduling maintenance.
 
 *Without MCP:*
 - Manually log into three systems (equipment database, calendar, safety log)
@@ -210,8 +210,8 @@ Writing instructions (prompts) for Claude works great the first time. But if you
 # SKILL: Mine Safety Audit
 
 ## Role
-You are an expert BCE mine safety auditor trained on 
-XYZ Mining Code and BCE Standard Operating Procedures.
+You are an expert BC mine safety auditor trained on 
+XYZ Mining Code and BC Standard Operating Procedures.
 
 ## Task
 Audit a daily incident report or equipment checklist against 
@@ -263,7 +263,7 @@ When a safety officer uploads a report, they say "Use Mine Safety Audit skill," 
 
 ### Concrete Example for Mining Workers
 
-**Scenario:** BCE processes daily equipment check-in reports. Quality is inconsistent—some are thorough, others are sloppy. Managers spend 2 hours daily reviewing.
+**Scenario:** BC processes daily equipment check-in reports. Quality is inconsistent—some are thorough, others are sloppy. Managers spend 2 hours daily reviewing.
 
 *Without Skills:*
 - Manager manually prompts Claude: "Check this report for completeness, look for missing ventilation data, flag if repairs are documented..."
@@ -365,7 +365,7 @@ Works for simple tasks ("What's 2+2?"). Struggles with:
 
 ### Concrete Example for Mining Workers
 
-**Scenario:** BCE needs to plan next month's mining schedule considering equipment availability, operator certifications, equipment maintenance, safety rotation, and costs. This is too complex for one person or one AI.
+**Scenario:** BC needs to plan next month's mining schedule considering equipment availability, operator certifications, equipment maintenance, safety rotation, and costs. This is too complex for one person or one AI.
 
 *Single-agent approach (does poorly):*
 - Ask Claude: "Plan next month's schedule"
@@ -609,6 +609,6 @@ Use these for the 120-minute animated deck:
 ---
 
 **Document prepared:** May 2026  
-**Audience:** Berau Coal Energy (BCE) ~400 employees, non-AI-native  
+**Audience:** Berau Coal Energy (BC) ~400 employees, non-AI-native  
 **Workshop context:** 120-min animated HTML deck + 120-min practice lab  
 **Deck framework:** Plain-language intros + technical detail + 2026 ecosystem state + concrete mining examples per technique

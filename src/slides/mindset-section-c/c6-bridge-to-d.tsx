@@ -7,7 +7,7 @@
 //
 // Per spec §3.5:
 //   "The Kofi Annan quote was chosen over Aristotle because it carries
-//    family-level resonance — for a BCE audience who are parents thinking
+//    family-level resonance — for a BC audience who are parents thinking
 //    about their kids' generation, this lands with unusual weight."
 //
 // The italic copper-400 accent on `family` (sentence 3) is the emotional

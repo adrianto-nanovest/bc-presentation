@@ -20,7 +20,7 @@ Section D is fully specified below. Sections E and F are scaffolded with TBD mar
 
 Explicitly NOT in scope:
 
-- Section A (Hook 1 — BCE Vol-1 Winner; material pending from BCE PIC; separate spec later)
+- Section A (Hook 1 — BC Vol-1 Winner; material pending from BC PIC; separate spec later)
 - Sections B, C (Opening sub-spec)
 - Sections G, H (Application sub-spec)
 - Sections I, J, K (already specified in [Reveal + Closing sub-spec](2026-05-07-slides-reveal-and-closing.md))

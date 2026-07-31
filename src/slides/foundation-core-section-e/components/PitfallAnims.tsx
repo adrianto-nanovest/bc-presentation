@@ -46,7 +46,7 @@ export const PIT_DETAIL: Record<PitfallKind, PitDetail> = {
     kw: ["dumb zone"],
     mit: "Summarization · Context Offloading",
     example:
-      "After ~20 rounds of edits in one chat — answers start repeating, recent corrections get missed.",
+      "After ~10 rounds of edits in one chat — answers start repeating, recent corrections get missed.",
   },
 };
 

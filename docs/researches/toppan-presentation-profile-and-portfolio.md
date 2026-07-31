@@ -163,13 +163,13 @@ Core proof that Adri **architected a full enterprise AI platform alone**—not c
 
 ## Corrections from Adri (2026-05-07)
 
-The toppan repo is a snapshot in time. Some items the agent extracted are **out of scope or sunset** for the BCE Hook 2 showcase. Use this section as the canonical filter when composing Section I.
+The toppan repo is a snapshot in time. Some items the agent extracted are **out of scope or sunset** for the BC Hook 2 showcase. Use this section as the canonical filter when composing Section I.
 
 ### OUT — do NOT showcase
 
 - **Archon Platform** — sunset. RAG sync complexity + infra/LLM cost made it non-viable. Do not mention.
 - **Atlassian / Confluence Crawler** — sunset alongside Archon (same reason).
-- **Infrastructure tools** (MCP CLI installer, coding metrics tracker, Confluence crawler, Google Apps Script CLI) — too technical for the BCE audience; not narratable to mining-industry professionals. Skip entirely.
+- **Infrastructure tools** (MCP CLI installer, coding metrics tracker, Confluence crawler, Google Apps Script CLI) — too technical for the BC audience; not narratable to mining-industry professionals. Skip entirely.
 
 ### IN — confirmed showcase candidates
 

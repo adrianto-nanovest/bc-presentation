@@ -48,11 +48,11 @@ export const g1Content = {
       tagline: "jack of all trades",
       taglineKw: ["jack of all trades"] as const,
       capabilities: [
-        "GPT-5.5 — strongest raw coding model",
+        "GPT-5.6-sol — the \"best\" raw coding model",
         "Workspace Agents — cloud, schedule-driven",
         "Codex IDE with native git worktrees",
       ] as const,
-      capabilitiesKw: ["GPT-5.5", "Workspace Agents", "Codex"] as const,
+      capabilitiesKw: ["GPT-5.6-sol", "Workspace Agents", "Codex"] as const,
       ringColor: "var(--copper-400)",
     },
   ] as const,

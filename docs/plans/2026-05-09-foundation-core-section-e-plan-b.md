@@ -1420,7 +1420,7 @@ function DistractionCanvas() {
         className="text-center font-serif italic text-neutral-300"
         style={{ fontSize: "clamp(0.8rem, 1vw, 1rem)", lineHeight: 1.4 }}
       >
-        Example: after ~20 rounds of edits in one chat — answers start repeating, recent corrections get missed.
+        Example: after ~10 rounds of edits in one chat — answers start repeating, recent corrections get missed.
       </p>
     </>
   );

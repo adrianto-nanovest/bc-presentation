@@ -508,7 +508,7 @@ Update `tests/unit/f8-your-agentic-os.test.tsx`:
 - **Icon library:** Section F already uses `LucideIcon.tsx`. We reuse it. No new icon dependencies.
 - **Bundle size:** new components add ~5–7 KB gzipped. No new third-party libraries.
 - **Mining-specific content:** strictly **excluded** from F.8 (per audience-respect and generic-examples memory). All sample data is universal knowledge-work.
-- **BCE transition framing:** F.8 carries the "portable adaptability" subtext via the closing tagline only. The product fiction reinforces the message without speaking it: "this is *yours*, you carry it wherever you go" lands harder when the audience has just seen a vivid command center.
+- **BC transition framing:** F.8 carries the "portable adaptability" subtext via the closing tagline only. The product fiction reinforces the message without speaking it: "this is *yours*, you carry it wherever you go" lands harder when the audience has just seen a vivid command center.
 - **Hooks-into-Section-J:** the nav-rail shimmer at step 5 plus the *click to explore* affordance pre-figures Section J's "BUILD INCREMENTAL" theme without needing an explicit facet label.
 
 ---

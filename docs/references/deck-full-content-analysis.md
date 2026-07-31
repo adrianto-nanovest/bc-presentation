@@ -1,8 +1,8 @@
 # Deck Full Content Analysis
 
-> Reference document for practice-lab brainstorming. Captures the full content of the BCE AI Catalyst Vol-2 Session-2 deck (`src/slides/`), section by section, with quoted headlines and slide-by-slide breakdowns. Each section ends with a **Practice-lab extraction surface** flagging concepts that map cleanly to hands-on exercises.
+> Reference document for practice-lab brainstorming. Captures the full content of the BC AI Catalyst Vol-2 Session-2 deck (`src/slides/`), section by section, with quoted headlines and slide-by-slide breakdowns. Each section ends with a **Practice-lab extraction surface** flagging concepts that map cleanly to hands-on exercises.
 
-**Audience context:** ~400 mining-industry attendees, BCE AI workshop, facilitated by Adri (Nanovest). Body slides (B–H, J) use universal knowledge-work examples. Mining-specific framing lives only in the hooks (A, I).
+**Audience context:** ~400 mining-industry attendees, BC AI workshop, facilitated by Adri (Nanovest). Body slides (B–H, J) use universal knowledge-work examples. Mining-specific framing lives only in the hooks (A, I).
 
 **Deck arc:**
 - **A** Opening — what you've already seen / capabilities-in-the-room → questions to answer
@@ -25,7 +25,7 @@
 
 - **Headline:** "From AI Curiosity to AI Capability"
 - **Tagline (italic serif):** "A working session on the AI stack, the *mindset shift*, and the new *operator role* — for everyone, not just engineers."
-- **Workshop chip:** BCE AI Catalyst · Vol 2, Session 2
+- **Workshop chip:** BC AI Catalyst · Vol 2, Session 2
 - **Speaker chip:** Adrianto Tedjokusumo · Nanovest
 - **Hero photo:** Abstract copper threads converging in deep space
 

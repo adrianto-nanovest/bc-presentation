@@ -51,8 +51,8 @@ await browser.close();
 const pptx = new PptxGenJS();
 // 16:9 widescreen at 13.333" × 7.5" — PowerPoint default for new decks.
 pptx.layout = "LAYOUT_WIDE";
-pptx.defineLayout({ name: "BCE", width: 13.333, height: 7.5 });
-pptx.layout = "BCE";
+pptx.defineLayout({ name: "BC", width: 13.333, height: 7.5 });
+pptx.layout = "BC";
 
 for (const png of screenshots) {
   const slide = pptx.addSlide();

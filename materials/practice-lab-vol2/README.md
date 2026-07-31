@@ -1,4 +1,4 @@
-# Practice Lab — BCE AI Catalyst Vol-2, Session 2
+# Practice Lab — BC AI Catalyst Vol-2, Session 2
 
 Workshop materials for the 90-min practice lab. Source-of-truth files live in this directory; deployable copies are pushed to a Google Drive folder and a pre-built NotebookLM workbook (links below, filled at deployment).
 

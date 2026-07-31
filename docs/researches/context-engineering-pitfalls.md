@@ -8,7 +8,7 @@
 
 ## Introduction
 
-In AI systems, the "context window" is everything the model can see when generating a response: your instructions, the conversation history, retrieved documents, tool outputs. Context engineering is the discipline of managing what goes into that window — and what stays out. For the BCE workshop audience, the practical implication is this: what you give an AI shapes what it gives back, and giving it more is not automatically giving it better. These four pitfalls describe the most common ways a context window works against you.
+In AI systems, the "context window" is everything the model can see when generating a response: your instructions, the conversation history, retrieved documents, tool outputs. Context engineering is the discipline of managing what goes into that window — and what stays out. For the BC workshop audience, the practical implication is this: what you give an AI shapes what it gives back, and giving it more is not automatically giving it better. These four pitfalls describe the most common ways a context window works against you.
 
 ---
 

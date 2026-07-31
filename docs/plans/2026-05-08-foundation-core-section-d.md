@@ -3382,7 +3382,7 @@ Open items (spec §9) are deferred to implementation per the spec — none of th
 
 ## Out of scope (per spec §0 and §1.2)
 
-- Section A (Hook 1 — BCE Vol-1 Winner)
+- Section A (Hook 1 — BC Vol-1 Winner)
 - Sections B, C (Opening sub-spec)
 - Sections E, F (separate brainstorm session — spec §1.2 explicitly defers)
 - Sections G, H (Application sub-spec)

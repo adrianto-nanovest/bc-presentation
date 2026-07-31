@@ -1,5 +1,5 @@
 # AI Evolution & Landscape Research
-## For Berau Coal Energy (BCE) Workshop | May 2026
+## For Berau Coal Energy (BC) Workshop | May 2026
 
 ---
 
@@ -17,7 +17,7 @@ Adri's narrative arc should hit these five beats:
 
 5. **Agentic AI Now (2024–2026):** "AI stopped waiting for instructions. It plans, executes, adapts. Agents working 24/7 on your haul trucks, your predictive models, your safety systems—autonomously."
 
-**Why this matters for BCE staff:** Mining is shifting from "humans + machines" to "humans + AI agents managing machines." Safety, efficiency, and your job are all changing—understanding the *why* is the first step.
+**Why this matters for BC staff:** Mining is shifting from "humans + machines" to "humans + AI agents managing machines." Safety, efficiency, and your job are all changing—understanding the *why* is the first step.
 
 ---
 
@@ -146,11 +146,11 @@ Adri's narrative arc should hit these five beats:
 - Indonesia's hyperscale data center market: $3.49B (2025) → $7.96B by 2031 (doubling). Essential for cloud-based AI deployment (predictive models, digital twins).
 - Challenges: Rural connectivity gaps, low R&D investment, foundational skill gaps (3M talent shortfall), regulatory frameworks still developing.
 
-**What This Means for BCE:**
-- BCE employees already *familiar* with GenAI and mobile-first workflows (92% workplace adoption).
+**What This Means for BC:**
+- BC employees already *familiar* with GenAI and mobile-first workflows (92% workplace adoption).
 - Government education initiative (4th graders learning AI) signals long-term competitive pressure on manual roles.
 - Indonesia's rapid data center build-out enables real-time cloud ML deployment (predictive maintenance, digital twins) without major infrastructure investment.
-- ESG + energy transition + domestic processing mandates likely to accelerate BCE's AI adoption for compliance reporting & efficiency.
+- ESG + energy transition + domestic processing mandates likely to accelerate BC's AI adoption for compliance reporting & efficiency.
 
 ### **Southeast Asia Broader Trend**
 - Vietnam & Indonesia lead adoption at population level.
@@ -188,14 +188,14 @@ Use these in slides or oral narrative to land impact:
 ### **Mining Productivity Gains (Concrete ROI)**
 > "Rio Tinto achieved 30% production cost savings through automation at Gudai-Darri. Votorantim saved $5.5M in corrective maintenance costs alone. Autonomous trucks in Escondida Norte: 33 haul trucks + 11 drills running 24/7 with zero human drivers."
 
-**Why it lands:** Not hypothetical. Real money, real results, real mines mining companies BCE staff know or respect.
+**Why it lands:** Not hypothetical. Real money, real results, real mines mining companies BC staff know or respect.
 
 ---
 
 ### **Equipment Life & Downtime Impact (Operational Resonance)**
 > "Predictive maintenance cuts equipment life 20%, reduces downtime 22–28%, and cuts parts costs 10–15%. One coal mine's ML model: 'Machine learning processes operational data in real time to predict when equipment is about to fail—weeks or months in advance.'"
 
-**Why it lands:** Speaks to what BCE maintenance teams actually care about: keeping the fleet running.
+**Why it lands:** Speaks to what BC maintenance teams actually care about: keeping the fleet running.
 
 ---
 
@@ -209,7 +209,7 @@ Use these in slides or oral narrative to land impact:
 ### **Indonesia's Unique Position (Local Pride + Urgency)**
 > "92% of Indonesian knowledge workers already use generative AI—the highest adoption rate in the world. Starting next school year, 4th graders are learning AI and coding as elective subjects. Indonesia is not waiting."
 
-**Why it lands:** Makes it local, makes it real. Your kids' generation will expect AI-native work. BCE either leads or follows.
+**Why it lands:** Makes it local, makes it real. Your kids' generation will expect AI-native work. BC either leads or follows.
 
 ---
 
@@ -223,7 +223,7 @@ Use these in slides or oral narrative to land impact:
 ### **Dust and Danger (Mining-Specific Safety)**
 > "Smart ventilation systems with AI air-quality monitoring can shut down hazardous zones automatically. No more guessing. VR training with digital twins means operators can practice dangerous scenarios without risk. Rio Tinto's Gudai-Darri does this today."
 
-**Why it lands:** Speaks to safety culture BCE likely values. Shows AI isn't just efficiency—it's protection.
+**Why it lands:** Speaks to safety culture BC likely values. Shows AI isn't just efficiency—it's protection.
 
 ---
 

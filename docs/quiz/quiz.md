@@ -1,4 +1,4 @@
-# BCE AI Workshop — Comprehension Quiz
+# BC AI Workshop — Comprehension Quiz
 
 > **For event organizer use.** Ten multiple-choice questions covering Sections B through H and J, in order.
 > Each question has exactly one correct answer. The answer key is at the bottom of this file.

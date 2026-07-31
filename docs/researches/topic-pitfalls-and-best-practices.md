@@ -1,4 +1,4 @@
-# AI Pitfalls & Best Practices for BCE Workshop
+# AI Pitfalls & Best Practices for BC Workshop
 ## Research Document: Concrete Patterns for 400 Non-AI-Native Mining Professionals
 
 ---
@@ -601,7 +601,7 @@ Use these as callouts in the HTML deck:
 
 This document is **concrete and actionable**, designed for mining professionals with zero AI background. Every pitfall has a real cost (money, time, safety). Every best practice has a concrete implementation path.
 
-**Key takeaway for BCE leadership:**
+**Key takeaway for BC leadership:**
 - Bad AI = waste (reputation, money, people's time).
 - Good AI = force multiplier (faster decisions, higher quality, people freed to do judgment work).
 - The difference is **discipline, planning, and measurement**—not magic.

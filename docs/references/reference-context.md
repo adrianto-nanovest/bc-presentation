@@ -2,10 +2,10 @@
 
 ## Background
 
-I (Adri) from Nanovest (one of Sinarmas Mining Group's BU) is expected to be the primary facilitator for around 400 BCE (Berau Coal Energy) members (another BU), including presentation with Q&A (120mins) also practice lab (120 mins)
+I (Adri) from Nanovest (one of Sinarmas Mining Group's BU) is expected to be the primary facilitator for around 400 BC (Berau Coal Energy) members (another BU), including presentation with Q&A (120mins) also practice lab (120 mins)
 The reason why they want me, is because i did presentation to the whole HR Group as in docs/references/hr-group-presentation.pdf, and they like it
 Currently, Nanovest is the early adopters / most advancing BU on the AI related understanding and implementations.
-BCE wants to close the gap, therefore conducting the sessions.
+BC wants to close the gap, therefore conducting the sessions.
 The plan details is on docs/references/berau-presentation-plan.pdf (proposed by Berau PICs)
 They already conducted vol 1 session (different facilitators), and I will bring sessions for vol 2 (session 2, as session 1 is from the vol 1 competition winners)
 What they are expecting is in my session is on **SLIDE 3** from the plan details.

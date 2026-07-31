@@ -1,8 +1,8 @@
-# Nanovest Pilot Workshop Content Mining for Berau Coal Energy (BCE)
+# Nanovest Pilot Workshop Content Mining for Berau Coal Energy (BC)
 
 ## Executive Summary
 
-The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery") contains **highly reusable, production-grade content** across all 9 BCE topics. Key findings:
+The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery") contains **highly reusable, production-grade content** across all 9 BC topics. Key findings:
 
 1. **Immediate High-Value Reuse (Verbatim):** AI evolution journey (slides 11-13), prompt engineering fundamentals (20-26), context engineering layers (28), RAG/MCP architectures (34-37), agent/agentic AI progression (41-45). These transcend industry and need minimal adaptation.
 
@@ -12,20 +12,20 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 
 4. **Critical Gap:** No mining-specific case studies or process examples. Nanovest examples (legal contracts, bank reconciliation, HR onboarding, customer service) must be **recontextualized to mining workflows:** equipment maintenance tickets, ore grade prediction, safety incident reporting, equipment failure forecasting.
 
-5. **Operational Note:** Deck targets upskilling mid-career professionals in finance/tech; BCE audience is mining engineers + general workers. Tone/terminology consistent, but **anchor all technical concepts to tangible mining outputs** (production gains, safety reduction, cost per tonne).
+5. **Operational Note:** Deck targets upskilling mid-career professionals in finance/tech; BC audience is mining engineers + general workers. Tone/terminology consistent, but **anchor all technical concepts to tangible mining outputs** (production gains, safety reduction, cost per tonne).
 
 ---
 
 ## Slide-by-Slide Breakdown
 
-| Slide # | Title | Core Point | BCE Topic Map | Reuse Verdict | Adaptation Notes |
+| Slide # | Title | Core Point | BC Topic Map | Reuse Verdict | Adaptation Notes |
 |---------|-------|------------|---------------|-----------------|------------------|
-| 1-2 | Title + Nanovest AI Culture | "From Ethics to 10x Growth" — Culture as engine, AI as lever. "We choose to lead, not follow." | 1, 2, 8, 9 | **Adapt** | Reframe from Nanovest corporate values to BCE mining mission: safety, sustainability, production efficiency. Emphasize governance via DPIA, human-in-loop (relevant to high-consequence mining decisions). |
+| 1-2 | Title + Nanovest AI Culture | "From Ethics to 10x Growth" — Culture as engine, AI as lever. "We choose to lead, not follow." | 1, 2, 8, 9 | **Adapt** | Reframe from Nanovest corporate values to BC mining mission: safety, sustainability, production efficiency. Emphasize governance via DPIA, human-in-loop (relevant to high-consequence mining decisions). |
 | 3 | Current Reality Check | "Basic Prompting Only"; fears (pride, replacement, laziness); inconsistent results; low literacy → confusion. | 2, 7 | **Verbatim + Expand** | Exact diagnosis applies to mining teams. ADD mining-specific fears: job redundancy in logistics, equipment operation. Expand "productivity gains not expected" → quantify: mining ops stuck in manual shift logs, survey interpretation. |
 | 4 | Strategic Imperative (Why Now) | Competitive positioning, untapped potential (3x productivity), culture evolution, value shift from repetitive → creative problem-solving. | 2, 7, 8 | **Adapt** | For mining: competitive moat eroding (automation in commodity markets); untapped: ore grade prediction, maintenance forecasting, environmental monitoring. Culture shift: from "operator follows procedure" to "engineer uses AI to optimize extraction routes." |
 | 5 | The Gap We Need to Bridge | Ad-hoc AI → AI-Mature Org: individual chats vs. integrated workflows, context-less vs. context-aware, trial-error vs. strategic tool selection. | 2, 3, 5 | **Verbatim** | Perfect positioning for mining. Left state (ad-hoc) = foreman asking ChatGPT about schedule conflicts. Right state = integrated system flagging equipment wear, predicting maintenance windows, routing logistics. |
 | 6-8 | Quotations (Aristotle, Kofi Annan) | "The more you know, the more you realize you don't know." / "Knowledge is power, information liberating, education premise of progress." | 2 | **Keep as Transition Slides** | These work universally. Use to anchor mindset shift. No change needed. |
-| 9 | Your AI Mastery Journey (Roadmap) | 5 sequential stops: Foundation (10m), Interactions (30m), Process Automation (10m), Tools (30m), Agentic (10m). Visual: circular path with 5 location markers. | 1, 3, 4, 5, 6, 9 | **Verbatim** | Exact structure fits BCE. Sequence is pedagogically sound: learn evolution → master prompts → see automation potential → navigate tools → understand agents. Visual circular path conveys "journey" psychology. |
+| 9 | Your AI Mastery Journey (Roadmap) | 5 sequential stops: Foundation (10m), Interactions (30m), Process Automation (10m), Tools (30m), Agentic (10m). Visual: circular path with 5 location markers. | 1, 3, 4, 5, 6, 9 | **Verbatim** | Exact structure fits BC. Sequence is pedagogically sound: learn evolution → master prompts → see automation potential → navigate tools → understand agents. Visual circular path conveys "journey" psychology. |
 | 10 | AI Foundation & Landscape (Section Header) | Evolution, types, capabilities over 10 min. | 1 | **Visual Only** | Keep header + human evolution metaphor (ape → human → digital). Adapt background narrative to mining context: how has mine planning evolved? |
 | 11 | The AI Evolution Journey | 7-stage timeline: Rule-Based (1970s-80s) → Domain Expertise (2000s-10s) → Context Awareness (1990s-2000s) → Reasoning Machines (2010s-present, "we are here") → Artificial General Intelligence (future) → AI Singularity (speculative). | 1 | **Verbatim** | Exact historical narrative applies. No mining-specific framing needed; progression is universal. Consider adding mining capability snapshots: 1980s = pit mapping tools, 2000s = grade prediction models, now = real-time equipment diagnostics. |
 | 12 | AI Fields & Terminology | Comprehensive taxonomy: ML, NLP, CV, Neural Networks, Expert Systems, Robotics, Foundation Models, LLMs mapped to real-world use cases (Netflix, email, medical imaging, drones, chatbots). | 1, 6 | **Adapt** | Swap examples: Computer Vision → drone imagery of pit faces for geological assessment. Robotics → autonomous haul trucks. NLP → drill logs analysis. Expert Systems → equipment failure diagnostics. Keep taxonomy structure exactly. |
@@ -58,10 +58,10 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 | 41 | AI Agents Benefits & Challenges | Left: 6 benefits (Immense Research, Save Time, Simplify Complex, Enhance Productivity, Always-On Availability, eliminate repetitive). Right: 8 challenges (Data Quality, Algorithmic Bias, Integration, Scalability, Compliance, Cost, Continuous Learning, Understanding Context). | 5, 7, 8 | **Verbatim** | Benefits/challenges are domain-neutral. Mining adaptation: Benefits = "Reduce equipment downtime (always-on monitoring), eliminate repetitive shift reports, enhance pit planning." Challenges = "Data quality (inconsistent pit logs), cost of custom agents, regulatory compliance (safety decision logging)." Exact same framework. |
 | 42 | Agentic AI Patterns & Protocol Orchestration | 5 design patterns: Reflection (agent introspects, validates), Tool Use (agent calls external APIs), ReAct (Reasoning + Acting loop), Planning (multi-step orchestration), Multi-Agent (collaborative agents). Four protocol examples: ACP & MCP (agent control + protocols), A2A & MCP (agent-to-agent), ANP & MCP (agent network), ANP & A2A & ACP (full orchestration). | 5 | **Verbatim** | Patterns are architectural principles. Mining instantiation: Reflection = agent verifies pit safety reqs before proposing schedule. Tool Use = agent calls equipment API. ReAct = agent observes pit status, reasons about optimal shift, acts on scheduling system. Planning = agent coordinates 3 shift teams. Multi-Agent = equipment scheduler + safety auditor + cost optimizer working in concert. Diagrams unchanged; apply in architecture design. |
 | 43-44 | Agentic AI Examples (Customer Service & Video Generation) | Top: Customer Service Desk Today (chatbots/emails/calls → ticketing platform + human agents + resolution RPA). Bottom: Agentic Customer Service Desk (personalization layer, user interaction agents, RAG-based agents, reasoning-based planning, tools library). Second example: Video generation workflow (multi-step transformation: single image → multiple clips → combination → output). | 5 | **Recontextualize** | Customer service → Equipment Maintenance Requests (maintenance request → auto-classify urgency → schedule → parts procurement → execution → closeout). Video example → Multi-step pit optimization (pit image → extract geological data → run optimization model → generate equipment routes → simulate timeline → output recommended schedule). Keep visual flow structure; swap domain examples. |
-| 45 | What's Next for Nanovest? | Short-term (prompt libraries, 1-2 use cases, AI champions), Mid-term (integrate knowledge base, build RPA/IPA, department pilots, monitoring), Long-term (agentic AI, multi-entry, scalability, performance). | 9 | **Adapt** | Road map structure is perfect for BCE adoption plan. BCE version: Short-term (prompt library for pit engineers, 1-2 pilots in maintenance scheduling), Mid-term (integrate pit/equipment data, scale to 3 departments), Long-term (multi-agent orchestration for whole pit, performance optimization). Timeframes adjust per BCE readiness. |
+| 45 | What's Next for Nanovest? | Short-term (prompt libraries, 1-2 use cases, AI champions), Mid-term (integrate knowledge base, build RPA/IPA, department pilots, monitoring), Long-term (agentic AI, multi-entry, scalability, performance). | 9 | **Adapt** | Road map structure is perfect for BC adoption plan. BC version: Short-term (prompt library for pit engineers, 1-2 pilots in maintenance scheduling), Mid-term (integrate pit/equipment data, scale to 3 departments), Long-term (multi-agent orchestration for whole pit, performance optimization). Timeframes adjust per BC readiness. |
 | 46 | Nanovest: Trust by Design, Impact by Intent | Core message: "Putting Humans First in Every AI-Driven Decision." Pillars: **AI is Powerful but Ethics make it Purposeful** (embed ethical thinking), **Human-in-the-Loop by Default** (augment, not replace), **DPIA-by-Design** (data protection impact assessment), **Fairness, Transparency, Accountability** (bias detection, explainability, user rights), **Guardrails for Responsible AI** (RBAC, ethics review, data minimization). | 8, 9 | **Adapt** | Message is foundational. Mining framing: Ethics = equipment safety decisions must have human sign-off, not autonomous. Human-in-loop = AI forecasts equipment failure, engineer approves maintenance window. DPIA = protect worker privacy in shift logs. Fairness = ensure algorithm doesn't discriminate by equipment age. Guardrails = safety-critical decisions require audit trail. Same framework; mining context. |
 | 47 | Reference Sources | Comprehensive bibliography (Medium articles on AI evolution, BPM/RPA/IPA, prompt engineering, context engineering, RAG, MCP, Google ecosystem, agents). | — | **Keep + Supplement** | Useful for credibility. Add mining-specific sources (e.g., "How AI Transforms Open-Pit Mining Efficiency" if available). |
-| 48 | Thank You / Closing | Social media, careers, app download. | — | **Replace** | Substitute Nanovest contact with BCE AI team contact. Branding change. |
+| 48 | Thank You / Closing | Social media, careers, app download. | — | **Replace** | Substitute Nanovest contact with BC AI team contact. Branding change. |
 
 ---
 
@@ -70,7 +70,7 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 ### 1. **Circular Journey Maps** (Slide 9)
 - **Pattern:** Circular path with 5 location markers, each labeled with a topic + duration. Dashed path segments suggest progression but circularity implies "continuous learning loop."
 - **Why it works:** Psychological anchor that learning AI isn't linear destination; it's cyclical refinement.
-- **Mining adaptation:** Use for BCE pathway: Foundation (geology basics) → AI Understanding → Prompt Mastery → Hands-On Tools → Agent Design → Loop back to refine. Visual metaphor: pit optimization journey is circular (monitor → analyze → act → re-monitor).
+- **Mining adaptation:** Use for BC pathway: Foundation (geology basics) → AI Understanding → Prompt Mastery → Hands-On Tools → Agent Design → Loop back to refine. Visual metaphor: pit optimization journey is circular (monitor → analyze → act → re-monitor).
 
 ### 2. **Stage Progression Visualizations** (Slide 41: Reactive → Single Agents → Agentic)
 - **Pattern:** Three connected circles/stages with arrows, each showing increased capability. Comparison table below shows traits evolving across stages.
@@ -109,7 +109,7 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 
 ---
 
-## Content Gaps Relative to 9 BCE Topics
+## Content Gaps Relative to 9 BC Topics
 
 | Topic | Coverage in Nanovest Deck | Gap for Mining | Recommendation |
 |-------|--------------------------|---|---|
@@ -121,7 +121,7 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 | 6. Tools Ecosystem (Claude/Google/OpenAI) | **Good** (Slides 34-37, 13-14). Landscape taxonomy, Claude vs. Gemini comparison, Google ecosystem detail, AI assistant recommendations. | **NONE.** Vendors and frameworks are universal. | Use verbatim. Add mining-specific configuration: "Claude for technical analysis; Gemini for bulk pit log processing; Gems for team-wide 'Pit Geologist' personality." |
 | 7. Common Pitfalls | **Adequate** (Slide 27: 5 mistakes). Vague instructions, overcomplicated prompts, lack of context, ignoring limitations, failing to iterate. | **Minor gap:** Mining-specific pitfalls not listed. (E.g., "trusting AI grade prediction without site survey validation"; "using historical pit data in new geology zones"; "ignoring equipment safety constraints in scheduling.") | Add mining pitfall slide: (1) Over-trusting AI models without human verification, (2) Feeding inconsistent data (old surveys + new tech), (3) Ignoring safety/regulatory hard constraints, (4) Inadequate feedback loops (not learning from AI errors). Keep same structure as Slide 27; swap examples. |
 | 8. Best Practices | **Strong** (Slide 27: 5 practices). Be clear, iterative testing, detailed steering, feedback evaluation, success metrics. | **NONE.** Practices are universal. | Use verbatim. In mining context labs, emphasize: "Clear" = specify ore type, equipment constraints; "Testing" = validate AI output against known pit zones; "Metrics" = tonnes/hr, safety incidents, cost/tonne. |
-| 9. How to Start Adopting AI | **Decent** (Slide 45: Short/Mid/Long-term roadmap). Lists activities (prompt libraries, 1-2 use cases, pilots, integration, agentic scale). | **Gap:** Missing specific BCE adoption sequencing. Roadmap is abstract. Missing: executive buy-in strategy, resource allocation, training plan, success measurement. | Create BCE Adoption Roadmap: **Week 1-2** (awareness workshop + tool access). **Month 1** (2 pilot use cases in different departments + prompt library build). **Month 2-3** (integrate 1 data source, expand pilots). **Month 4-6** (scale to 3 processes, begin agent design). **Month 7-12** (deploy first agent, measure ROI, build culture of continuous improvement). Include governance, metrics, resource allocation. |
+| 9. How to Start Adopting AI | **Decent** (Slide 45: Short/Mid/Long-term roadmap). Lists activities (prompt libraries, 1-2 use cases, pilots, integration, agentic scale). | **Gap:** Missing specific BC adoption sequencing. Roadmap is abstract. Missing: executive buy-in strategy, resource allocation, training plan, success measurement. | Create BC Adoption Roadmap: **Week 1-2** (awareness workshop + tool access). **Month 1** (2 pilot use cases in different departments + prompt library build). **Month 2-3** (integrate 1 data source, expand pilots). **Month 4-6** (scale to 3 processes, begin agent design). **Month 7-12** (deploy first agent, measure ROI, build culture of continuous improvement). Include governance, metrics, resource allocation. |
 
 ---
 
@@ -174,9 +174,9 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 
 ---
 
-## Recommendations for BCE Deck Integration
+## Recommendations for BC Deck Integration
 
-1. **Use slides 1-2 (title) as-is but rebrand to BCE context.** Change "Nanovest" to "Berau Coal Energy" and subtitle to "From Mine Confusion to Mastery: 120-Min AI Workshop for 400 Employees."
+1. **Use slides 1-2 (title) as-is but rebrand to BC context.** Change "Nanovest" to "Berau Coal Energy" and subtitle to "From Mine Confusion to Mastery: 120-Min AI Workshop for 400 Employees."
 
 2. **Expand slides 3-5 (Current Reality + Strategic Imperative)** with mining-specific examples:
    - Fear factors: equipment operator redundancy, production delays from trial-error AI usage
@@ -191,7 +191,7 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 
 6. **Simplify slides 39-44 (Agents/Agentic Systems) for mining operations audience.** Use pit-focused examples: "Single Agent = equipment scheduler," "Agentic System = multi-agent pit orchestration (equipment + safety + logistics)."
 
-7. **Create new slide (mining adoption roadmap)** based on slide 45 structure, with 4-quarter timeline specific to BCE readiness, resource constraints, dependencies.
+7. **Create new slide (mining adoption roadmap)** based on slide 45 structure, with 4-quarter timeline specific to BC readiness, resource constraints, dependencies.
 
 8. **Add new "Mining Pitfalls" slide** parallel to slide 27 (best practices). Highlight: over-trusting AI, data inconsistency, ignoring safety constraints, inadequate feedback loops.
 
@@ -203,5 +203,5 @@ The Nanovest Pilot Workshop deck ("AI Workshop 2025: From Confusion to Mastery")
 
 ## Conclusion
 
-The Nanovest Pilot Workshop deck is **75% directly reusable for BCE**, with strategic adaptation for mining context. The framework (evolution → interactions → automation → tools → agents) is pedagogically sound and transcends industry. Content gaps are primarily **domain-specific examples and mining case studies**, not conceptual frameworks—these are cost-effective to create via localization. Visual patterns are excellent and should be preserved/emulated in the BCE deck. The biggest lift is creating mining-specific instantiations of processes (BPM/RPA/IPA), pitfalls, and adoption roadmap; the conceptual spine is already there.
+The Nanovest Pilot Workshop deck is **75% directly reusable for BC**, with strategic adaptation for mining context. The framework (evolution → interactions → automation → tools → agents) is pedagogically sound and transcends industry. Content gaps are primarily **domain-specific examples and mining case studies**, not conceptual frameworks—these are cost-effective to create via localization. Visual patterns are excellent and should be preserved/emulated in the BC deck. The biggest lift is creating mining-specific instantiations of processes (BPM/RPA/IPA), pitfalls, and adoption roadmap; the conceptual spine is already there.
 

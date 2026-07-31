@@ -19,7 +19,7 @@ Total: **9 slides**, ~17 logical advances (Space presses).
 
 Explicitly NOT in scope:
 
-- Section A (Hook 1 — BCE Vol-1 Winner; material pending from BCE PIC; separate spec later)
+- Section A (Hook 1 — BC Vol-1 Winner; material pending from BC PIC; separate spec later)
 - Sections B–H (handled in separate sub-specs: Opening, Foundation Core, Application)
 - Title slide (in Opening sub-spec)
 - Practice-lab curriculum (lab content / skills / prompts / dummy data — Adri prepares separately)

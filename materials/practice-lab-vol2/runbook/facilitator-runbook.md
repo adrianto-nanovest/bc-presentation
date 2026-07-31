@@ -1,4 +1,4 @@
-# Practice Lab Facilitator Runbook — BCE AI Catalyst Vol-2, Session 2
+# Practice Lab Facilitator Runbook — BC AI Catalyst Vol-2, Session 2
 
 > Covers both Day 1 (Section Head, Analyst persona) and Day 2 (Team Leader, Booster persona). The lab uses the same scenario, same starter pack, same 4-stage flow, same tools both days; only the persona prompts, Skill, and Artifact deliverable shape differ.
 

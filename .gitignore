@@ -43,3 +43,5 @@ exports/
 *.tsbuildinfo
 
 .mcp.json
+
+docs/kpi
