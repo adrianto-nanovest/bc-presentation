@@ -134,6 +134,24 @@ test("mouse leave → PitfallCanvas reverts to null (renders nothing)", () => {
   expect(screen.queryByTestId("pit-anim-distraction")).toBeNull();
 });
 
+test("distraction renders the shipped shared-axis figure, not the original SMIL anim", () => {
+  // gh#11 chose variant D. The original bar-and-curve anim is still in
+  // PitfallAnims (and reachable as the `current` dev alternate), so assert
+  // which figure the slide actually mounts.
+  renderAtStep(1);
+
+  fireEvent.mouseEnter(
+    screen.getByTestId("pitfall-item-distraction").firstChild as HTMLElement,
+  );
+
+  const figure = screen.getByTestId("pit-anim-distraction");
+  expect(figure.getAttribute("data-figure")).toBe("shared-axis");
+  // The original anim drove itself with SMIL; this one is clock-driven.
+  expect(figure.querySelector("animate")).toBeNull();
+  // Dev-only switcher must never mount as part of the slide itself.
+  expect(screen.queryByTestId("e9-proto-switcher")).toBeNull();
+});
+
 test("hover applies data-active on the hovered Reveal wrapper", () => {
   renderAtStep(1);
 

@@ -7,11 +7,11 @@
 import {
   ConflictAnim,
   ConfusionAnim,
-  DistractionAnim,
   PitCaption,
   PoisoningAnim,
   type PitfallKind,
 } from "./PitfallAnims";
+import { DistractionMotion } from "./E9DistractionMotion";
 
 interface PitfallCanvasProps {
   activeKind: PitfallKind | null;
@@ -45,7 +45,10 @@ export function PitfallCanvas({ activeKind }: PitfallCanvasProps) {
         {activeKind === "conflict" && <ConflictAnim />}
         {activeKind === "confusion" && <ConfusionAnim />}
         {activeKind === "poisoning" && <PoisoningAnim />}
-        {activeKind === "distraction" && <DistractionAnim />}
+        {/* Distraction has its own module: the compounding/degradation figure
+            is clock-driven rather than SMIL, and carries dev-only variant
+            switching (gh#11). See E9DistractionMotion.tsx. */}
+        {activeKind === "distraction" && <DistractionMotion />}
       </div>
       <PitCaption kind={activeKind} />
     </div>

@@ -122,6 +122,11 @@ export function PoisoningAnim() {
   );
 }
 
+// SUPERSEDED ON THE SLIDE. E.9 renders E9DistractionMotion.tsx instead (gh#11
+// wanted the multi-turn compounding shown, and the bar/curve pair here has no
+// notion of a turn). Retained as the `current` option in
+// E9DistractionAlternates.tsx and exercised by tests/unit/PitfallAnims.test.tsx;
+// `PitfallAnim` below still maps to it, and that wrapper is test-only surface.
 export function DistractionAnim() {
   // No loop. Progress bar and curve both finish at the same time; "DEGRADED"
   // appears top-right after they reach their end.
