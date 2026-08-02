@@ -578,7 +578,7 @@ export const e11Content = {
       bullets: [
         "Errors feed back into the next prompt",
         "Crosses context boundaries via checkpoints",
-        "Success criteria / goal defined (like Codex)",
+        "Success criteria / goal defined (like '/goal' on Claude Code & Codex CLI)",
       ],
     },
   ],

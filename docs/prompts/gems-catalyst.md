@@ -41,3 +41,12 @@ From Digitech, several suggestions given to me for my material:
 6. Consider to add "Loop Engineering" above "Harness Engineering" in section E, research first thoroughly before deciding (for all also).
 7. For all also, slide E9 (context distraction), improve the motion-animation which contains both of multi-turn token exponential growth (prompt1 -> response1 -> both included along prompt2 -> response2 -> and so on), while on the right side showing the the performance degradation chart "in-sync" with the compounding.
 8. For all also, slide I1 is step 0 and 1 is too blank, use similar particle motion animation as in /Users/macbook/Projects/_web_presentation/hr-group-agentic-org/web but follow the current color tone / design system.
+
+## Feedback from Event Committee for the Leadership Deck
+
+1. Clear objective & shape first of Agentic Organization; what it is, how is the ideal agentic org, how they can reach it?
+2. Must answer most of leadership concerns: investment perspective (ROI) and security perspective. WHy it is worth to invest in AI?
+3. Current conditions: no clear guidance & SOP (not limited to Culture, Risk, Governance, Ethics)
+4. Specifically on AI Tools subscription mechanism, mostly still individual (not company-managed) -> for claude better use team plan.
+5. Explain what are the best way to use AI tools (i.e. combine Claude - as orchestrator and chatGPT - as worker).
+6. Tips to keep it efficient (use sharing account - with risk of getting banned especially on claude, while in chatGPT seems to be not strict)
