@@ -1,0 +1,149 @@
+/* =====================================================================
+   PROTOTYPE gh#15 — global light theme via CSS-var swap. THROWAWAY.
+
+   Plan: three light token maps applied to the WHOLE deck, keyed off
+   `html[data-theme="light"][data-lt-variant="A|B|C"]`, switchable at
+   runtime via the floating bar (PrototypeGh15ThemeBar.tsx), `t` / `v`
+   keys, or `?theme=light&ltv=B` URL params.
+
+     A — "Copper on cream": full invert; deck copper ladder mirrored
+         (copper-N ↦ copper-(1000−N)) so the existing accent survives.
+     B — "Claude coral":    full invert; accent ladder re-anchored on
+         Claude coral #cc785c / active #a9583e (documented pairing).
+     C — "Coral + dark islands": coral light chrome, but the shared
+         dark-panel classes (.card/.pcard/.satellite/.hub) stay as
+         deliberate dark product cards (#181715) — Claude's own
+         cream↔dark pacing pattern.
+
+   Mechanism being proven: the deck's slides consume the CSS-var bridge
+   in globals.css (159/180 files), so a var swap on the root attribute
+   restyles nearly everything. Tailwind color utilities (4 files) and
+   hardcoded hex/rgba (21 files) do NOT respond — that residue is the
+   remediation list, surfaced honestly by variants A/B.
+
+   Island contract (all variants): `[data-dark-island]` on any element
+   re-establishes the dark-authored var values for its subtree, so a
+   dark-authored block renders as an intentional dark card on cream.
+   ===================================================================== */
+
+/* ---------- shared light chrome: neutral/surface remap (all variants) */
+html[data-theme="light"] {
+  /* Claude light tokens (docs/references/claude-design-system.md),
+     mapped by ROLE onto the deck's dark-authored var names:
+     bright-text vars become ink, dark-surface vars become cream. */
+  --surface-dark: #faf9f5;   /* canvas */
+  --surface-light: #141413;  /* mirrored; dormant — no surface:"light" slides today */
+  --neutral-0: #0a0a0a;      /* was pure-white highlight text */
+  --neutral-50: #141413;     /* ink — primary text (html/body color reads this) */
+  --neutral-100: #252523;    /* body strong */
+  --neutral-200: #3d3d3a;    /* body */
+  --neutral-300: #6c6a64;    /* muted */
+  --neutral-400: #8e8b82;    /* muted soft */
+  --neutral-500: #a8a49b;
+  --neutral-700: #e6dfd8;    /* hairline (was near-black border) */
+  --neutral-800: #efe9de;    /* cream card (was elevated dark surface) */
+  --neutral-900: #faf9f5;    /* canvas — .stage background reads this */
+  --neutral-950: #f5f0e8;    /* soft band */
+  --shadow-base: 0 16px 48px -8px rgba(20, 20, 19, 0.16);
+}
+
+/* ---------- variant A: copper ladder mirrored (copper-N ↦ copper-(1000−N)) */
+html[data-theme="light"][data-lt-variant="A"] {
+  --copper-50: #21130a;
+  --copper-100: #3d2413;
+  --copper-200: #5a341c;
+  --copper-300: #7a4626;  /* accent text role (fig-label, em.kw) */
+  --copper-400: #9c5a30;
+  --copper-500: #b86e3d;  /* anchor, unchanged */
+  --copper-600: #c98548;
+  --copper-700: #d99e6c;  /* border role → warm sand hairline */
+  --copper-800: #e8c4a0;
+  --copper-900: #f4e4d2;
+  --copper-950: #fbf6f1;
+}
+
+/* ---------- variants B + C: accent re-anchored on Claude coral */
+html[data-theme="light"][data-lt-variant="B"],
+html[data-theme="light"][data-lt-variant="C"] {
+  --copper-50: #2b1710;
+  --copper-100: #4a2417;
+  --copper-200: #7a3a24;
+  --copper-300: #a9583e;  /* accent text role — coral-active for 12px-mono legibility;
+                             raw #cc785c is ~3.1:1 on cream, too low for small labels */
+  --copper-400: #bc6248;
+  --copper-500: #cc785c;  /* Claude coral primary */
+  --copper-600: #d68d70;
+  --copper-700: #e0ac93;  /* border role */
+  --copper-800: #edcbb8;
+  --copper-900: #f6e3d7;
+  --copper-950: #fbf1ea;
+}
+
+/* ---------- chrome fixes: hardcoded colors in globals.css (all variants) */
+html[data-theme="light"] .viewport {
+  background: #e8e0d2; /* cream-strong letterbox so the canvas stage reads as a card */
+}
+html[data-theme="light"] .stage {
+  box-shadow: 0 2px 24px rgba(20, 20, 19, 0.12);
+}
+html[data-theme="light"] .nav-btn {
+  background: rgba(250, 249, 245, 0.88);
+}
+html[data-theme="light"] .nav-group-label {
+  color: var(--copper-500); /* mirrored copper-700 is too faint at 9px on cream */
+}
+
+/* ---------- full-invert card surfaces (variants A + B only) */
+html[data-theme="light"]:not([data-lt-variant="C"]) .card,
+html[data-theme="light"]:not([data-lt-variant="C"]) .pcard {
+  background: #efe9de;
+}
+html[data-theme="light"]:not([data-lt-variant="C"]) .satellite {
+  background: rgba(239, 233, 222, 0.92);
+}
+html[data-theme="light"]:not([data-lt-variant="C"]) .satellite.active {
+  background: rgba(244, 228, 210, 0.95);
+}
+
+/* ---------- dark islands ----------------------------------------------
+   [data-dark-island] (all variants) + the shared dark-panel classes
+   (variant C only): re-establish the dark-authored var values so the
+   subtree keeps its original contrast on top of its dark background. */
+html[data-theme="light"] [data-dark-island],
+html[data-theme="light"][data-lt-variant="C"] .card,
+html[data-theme="light"][data-lt-variant="C"] .pcard,
+html[data-theme="light"][data-lt-variant="C"] .satellite,
+html[data-theme="light"][data-lt-variant="C"] .hub {
+  --surface-dark: #181715;
+  --surface-light: #f5f5f5;
+  --neutral-0: #ffffff;
+  --neutral-50: #f5f5f5;
+  --neutral-100: #e5e5e5;
+  --neutral-200: #d4d4d4;
+  --neutral-300: #a3a3a3;
+  --neutral-400: #737373;
+  --neutral-500: #525252;
+  --neutral-700: #262626;
+  --neutral-800: #171717;
+  --neutral-900: #0a0a0a;
+  --neutral-950: #050505;
+  --copper-50: #fbf6f1;
+  --copper-100: #f4e4d2;
+  --copper-200: #e8c4a0;
+  --copper-300: #d99e6c;
+  --copper-400: #c98548;
+  --copper-500: #b86e3d;
+  --copper-600: #9c5a30;
+  --copper-700: #7a4626;
+  --copper-800: #5a341c;
+  --copper-900: #3d2413;
+  --copper-950: #21130a;
+}
+
+/* Variant C: lift the translucent near-black panels to Claude's opaque
+   dark card so they read as deliberate product surfaces, not leftovers. */
+html[data-theme="light"][data-lt-variant="C"] .card,
+html[data-theme="light"][data-lt-variant="C"] .pcard,
+html[data-theme="light"][data-lt-variant="C"] .satellite {
+  background: #181715;
+}
