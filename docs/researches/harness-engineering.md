@@ -22,7 +22,7 @@ A harness became necessary because frontier LLMs alone are designed for single-t
 - **Multi-agent delegation** to route specialized subtasks to focused subagents or skill modules.
 - **Observability** to log and audit every action the agent takes, enabling debugging and compliance.
 
-The mental model is important: **Agent = Model + Harness**. If you are not improving the frontier model itself, you are engineering the harness. The harness is where performance gains accumulate. As cited by Cursor's engineering team: *"A decent model with a great harness beats a great model with a bad harness."* This principle is validated empirically: holding the model constant while optimizing harness design alone (better tool descriptions, context policies, verification loops, planning splits) has been shown to raise task completion from 52.8% to 66.5% ⚠ — a 13.7 percentage point gain attributable entirely to harness engineering.
+The mental model is important: **Agent = Model + Harness**. If you are not improving the frontier model itself, you are engineering the harness. The harness is where performance gains accumulate. As cited by Cursor's engineering team: *"A decent model with a great harness beats a great model with a bad harness."* This principle is validated empirically: holding the model constant while optimizing harness design alone (better tool descriptions, context policies, verification loops, planning splits) has been shown to raise task completion from 52.8% to 66.5% on Terminal-Bench 2.0 with GPT-5.2-Codex held constant ([LangChain, 2026-02-17](https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering)) — a 13.7 percentage point gain attributable entirely to harness engineering. Verified 2026-08-03; see §6.2.
 
 ---
 
@@ -397,9 +397,11 @@ The harness combats this by:
 
 ### 6.2 Harness Optimization vs. Model Optimization
 
-**Claim** ⚠: Holding the model constant and optimizing harness design raises task completion from 52.8% to 66.5% (13.7 percentage point gain).
+**Claim** ✅ **verified 2026-08-03**: Holding the model constant and optimizing harness design raises task completion from 52.8% to 66.5% (13.7 percentage point gain).
 
-**Source**: Addy Osmani, "Agent Harness Engineering," citing multiple internal evaluations.
+**Source**: LangChain, "Improving Deep Agents with harness engineering," 2026-02-17 — https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering. Verbatim: *"We used a simple recipe to iteratively improve deepagents-cli (our coding agent) 13.7 points from 52.8 to 66.5 on Terminal Bench 2.0."* Benchmark: **Terminal-Bench 2.0** (89 tasks — ML, debugging, biology). Model held constant: **GPT-5.2-Codex**. Changes were harness-only: system prompts, tools, middleware, self-verification loops, environment context injection, anti-drift detection, tuned reasoning budgets.
+
+**Correction**: this document previously attributed the figures to *"Addy Osmani, 'Agent Harness Engineering,' citing multiple internal evaluations."* That attribution is wrong — the figures do not appear in Osmani's harness post (https://addyosmani.com/blog/agent-harness-engineering/). The claim itself stands on the LangChain primary source above.
 
 **Interpretation**: The harness accounts for >25% of observable agent capability when the model is held constant.
 
@@ -409,7 +411,9 @@ The harness combats this by:
 
 **Note**: Devin's harness includes sophisticated planning, long-term reasoning, persistent memory, and error recovery — not just model capability.
 
-**Recent metric** (Devin 2.0) ⚠: Completes **83% more** junior-level dev tasks per Agent Compute Unit vs. prior version, attributed to harness improvements (better planning, verification, memory).
+**Recent metric** (Devin 2.0) ⚠ **— checked 2026-08-03, DO NOT put on a slide**: the "**83% more** junior-level dev tasks per Agent Compute Unit" figure is a **vendor claim carried by secondary press only** (VentureBeat, Devin 2.0 launch coverage). It is **not present on Cognition's own Devin 2.0 post** (https://cognition.com/blog/devin-2), so no primary source was found and the measurement method is undisclosed.
+
+**Use these first-party figures instead** — Cognition, "Devin's 2025 Performance Review" (https://cognition.ai/blog/devin-annual-performance-review-2025): **67% of Devin's PRs merged, versus 34% the prior year**; ~4× faster at problem solving; ~2× more resource-efficient; the Claude-Sonnet-4.5 rebuild is ~2× faster and **12% better on Junior Developer Evals**. These are still vendor-reported, but they are first-party and current.
 
 ### 6.4 Token Efficiency and Scaling
 

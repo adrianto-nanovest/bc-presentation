@@ -1,6 +1,4 @@
-// E.10 — HARNESS · PRACTICES
-//
-// Ported from `claude-design-project/jsx/slides-c.jsx:103-164`.
+// E.11 — HARNESS · PRACTICES
 //
 // 2 steps:
 //   0 — 8 practice cards stagger in (auto via double-rAF mount trick)

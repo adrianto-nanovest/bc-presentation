@@ -1,6 +1,5 @@
 // E.1 — THREE LAYERS
 //
-// Ported from `claude-design-project/jsx/slides-a.jsx:36-184`.
 // 4 steps: 0=PROMPT focal, 1=CONTEXT focal, 2=HARNESS focal, 3=SUMMARY.
 //
 // Layout uses absolute coordinates against the 1280×720 stage (see

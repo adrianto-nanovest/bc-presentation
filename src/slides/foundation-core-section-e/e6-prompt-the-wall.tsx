@@ -1,6 +1,4 @@
-// E.5 — PROMPT · THE WALL
-//
-// Ported from `claude-design-project/jsx/slides-b.jsx:5-74`.
+// E.6 — PROMPT · THE WALL
 //
 // 4 steps:
 //   0 — BP card reveals (Best Practices, left)

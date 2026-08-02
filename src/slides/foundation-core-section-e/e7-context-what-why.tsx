@@ -1,6 +1,4 @@
-// E.6 — CONTEXT · WHAT & WHY
-//
-// Ported from `claude-design-project/jsx/slides-b.jsx:283-379`.
+// E.7 — CONTEXT · WHAT & WHY
 //
 // 3 steps:
 //   0 — left panel reveals (sub-kicker, copper rule, definition, 3 why-points)

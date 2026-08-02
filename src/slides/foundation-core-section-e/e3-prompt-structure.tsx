@@ -1,8 +1,5 @@
 // E.3 — PROMPT · STRUCTURE
 //
-// Ported from `claude-design-project/jsx/slides-a.jsx:426-600` (slide body
-// + the inlined `<SpinePopover>` sub-component).
-//
 // 3 steps:
 //   0 — spine cards on the left; right column shows the SpinePopover for the
 //        currently hovered spine entry (or stays blank if nothing is hovered)

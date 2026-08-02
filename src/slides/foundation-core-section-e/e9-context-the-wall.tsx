@@ -1,6 +1,4 @@
-// E.8 — CONTEXT · PITFALLS
-//
-// Ported from `claude-design-project/jsx/slides-b.jsx:460-636`.
+// E.9 — CONTEXT · PITFALLS
 //
 // 2 steps:
 //   0 — 4 pitfall cards visible (left col) + headline; right canvas is empty

@@ -1,6 +1,4 @@
-// E.11 — BRIDGE · BUILT (final slide of Section E)
-//
-// Ported from `claude-design-project/jsx/slides-c.jsx:167-196`.
+// E.12 — BRIDGE · BUILT (final slide of Section E)
 //
 // 2 steps:
 //   0 — beat 1 reveals (display-size headline + copper rule).

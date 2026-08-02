@@ -1,6 +1,5 @@
 // E.2 — PROMPT · WHAT & WHY
 //
-// Ported from `claude-design-project/jsx/slides-a.jsx:317-418`.
 // 6 steps:
 //   0 — left pane reveals (definition, rule, 3 outcomes)
 //   1 — Naive prompt streams in

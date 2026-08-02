@@ -1,6 +1,4 @@
-// E.9 — HARNESS · WHAT & WHY
-//
-// Ported from `claude-design-project/jsx/slides-c.jsx:5-98`.
+// E.10 — HARNESS · WHAT & WHY
 //
 // 5 steps:
 //   0 — left pane reveals (sub-kicker, copper rule, definition, 4 why-points)

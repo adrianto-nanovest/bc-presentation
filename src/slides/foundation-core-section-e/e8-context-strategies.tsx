@@ -1,6 +1,4 @@
-// E.7 — CONTEXT · STRATEGIES
-//
-// Ported from `claude-design-project/jsx/slides-b.jsx:384-448`.
+// E.8 — CONTEXT · STRATEGIES
 //
 // 6 steps:
 //   0 — headline + funnel canvas (rings always visible from step 0)

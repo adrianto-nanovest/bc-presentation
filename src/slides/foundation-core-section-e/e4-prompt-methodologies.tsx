@@ -1,8 +1,5 @@
 // E.4 — PROMPT · METHODOLOGIES
 //
-// Ported from `claude-design-project/jsx/slides-a.jsx:604-722` (slide body
-// + the inlined `<TechniqueDetail>` sub-component).
-//
 // 4 steps:
 //   0 — BASIC tier reveals (3 cards)
 //   1 — INTERMEDIATE tier reveals (2 cards)
