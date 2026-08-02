@@ -102,6 +102,31 @@ owner's.
 5. **Variant B (axis) has a lot of dead space** in its lower half and no
    metaphor for "climbing" — the phase strip carries direction alone.
 
-## Verdict
+## Verdict — 2026-08-03
 
-_To be filled in when the owner picks. Record which variant, and why._
+**A wins on both slides.** Owner's call, on a browser walkthrough of all six.
+Rationale was not stated beyond the preference; recorded as-is rather than
+invented.
+
+What that settles, question by question:
+
+| open question (gh#16) | answer |
+|---|---|
+| Does hub-and-spokes read at projection distance, or does a ladder / grid carry six pillars better? | **Hub-and-spokes.** The radial arrangement holds. B and C are dead. |
+| How does the focus walk dim the other five without the slide going dark? | **It does not dim them.** Inactive pillars keep full border and label; the active one *gains* copper fill, a thickened spoke and a halo. Attention is bought with added light, never subtracted. |
+| How does an asserted marker differ from an open question without a legend? | **By form, four ways at once:** solid chip vs hairline dashed chip; solid leader vs dashed leader; filled dot vs open ring; mono-uppercase-with-source vs serif-italic-ending-in-"?". |
+| Does the `web/` path-draw port cleanly into copper, or is a rebuilt geometry cheaper? | **The port wins.** One `<path>` plus text nodes, re-cut for 1280×720. The geometry was never the cost — only the cyan/violet colour coding had to be replaced, and form replaces it. |
+
+Constraints that survive into implementation:
+
+1. **Nine steps, not ~4**, for the pillar slide (finding 1 above). Variant A uses
+   the full six-beat walk, so the budget in #16 has to move.
+2. **Berau's `absence` line is required copy**, not a placeholder — the ladder
+   must state that MineTech has nothing comparable rather than leave the space
+   blank.
+3. **Watch the bottom pillar.** In A the lowest satellite sits at y≈620 (bottom
+   edge ≈658), close to the NavBar hover zone, and it grows on focus. The closer
+   had to be moved off the bottom strip into the right column because of it.
+   Re-check this when the slide is rebuilt for real.
+4. **Rewrite, do not lift.** This code was written under prototype rules — no
+   tests, no error handling, inline styles throughout.
