@@ -170,7 +170,7 @@ export function NotebookLM() {
                 <text
                   x={textX}
                   y={y}
-                  fill={row.italic ? "#a3a3a3" : "#f5f5f5"}
+                  fill={row.italic ? "var(--neutral-300)" : "var(--neutral-50)"}
                   fontFamily="JetBrains Mono"
                   fontStyle={row.italic ? "italic" : "normal"}
                   fontSize="9"

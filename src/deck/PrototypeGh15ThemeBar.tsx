@@ -17,10 +17,10 @@ import "../styles/prototype-gh15-light-theme.css";
 
 type Theme = "dark" | "light";
 
+// v2: variant C ("dark islands") dropped — rejected in first user review.
 const VARIANTS = [
   { key: "A", name: "Copper on cream" },
   { key: "B", name: "Claude coral" },
-  { key: "C", name: "Coral + dark islands" },
 ] as const;
 
 type VariantKey = (typeof VARIANTS)[number]["key"];

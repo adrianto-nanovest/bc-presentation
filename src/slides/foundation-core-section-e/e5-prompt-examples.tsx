@@ -451,10 +451,8 @@ function UseCaseDetail({
     );
   };
 
-  // PROTOTYPE gh#15: data-dark-island keeps this dark-authored panel a
-  // deliberate dark card in light theme (see prototype-gh15-light-theme.css)
   return (
-    <div data-testid={`e5-detail-${uc.id}`} style={popoverStyle} data-dark-island>
+    <div data-testid={`e5-detail-${uc.id}`} style={popoverStyle}>
       {/* GOAL */}
       <div
         style={{
