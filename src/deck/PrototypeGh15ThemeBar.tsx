@@ -34,10 +34,11 @@ function readInitial(): { theme: Theme; variant: VariantKey } {
       : localStorage.getItem("gh15-theme") === "light"
         ? "light"
         : "dark";
-  const rawVariant = params.get("ltv") ?? localStorage.getItem("gh15-ltv") ?? "A";
+  // Resolution: accent B (Claude coral) locked by author review — default.
+  const rawVariant = params.get("ltv") ?? localStorage.getItem("gh15-ltv") ?? "B";
   const variant = VARIANTS.some((v) => v.key === rawVariant)
     ? (rawVariant as VariantKey)
-    : "A";
+    : "B";
   return { theme, variant };
 }
 
