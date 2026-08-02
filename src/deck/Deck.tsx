@@ -3,6 +3,8 @@ import { DeckProvider, useDeck } from "./DeckContext";
 import { useKeyboardNav } from "./useKeyboardNav";
 import { Slide } from "./Slide";
 import { deckSlides, hexLadderDevSlide } from "./registry";
+// PROTOTYPE gh#17 — throwaway import; goes away with the prototype directory.
+import { Proto17Route } from "@/slides/prototype-gh17-e12-loop-canvas";
 
 declare global {
   interface Window {
@@ -46,6 +48,10 @@ export function Deck() {
   // via NavBar/keyboard.
   if (typeof window !== "undefined") {
     const params = new URLSearchParams(window.location.search);
+    // PROTOTYPE gh#17 — throwaway. Remove with the prototype directory.
+    if (import.meta.env.DEV && params.get("dev") === "proto17") {
+      return <Proto17Route />;
+    }
     if (params.get("dev") === "hexladder") {
       return (
         <Slide
