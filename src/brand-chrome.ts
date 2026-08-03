@@ -5,16 +5,7 @@
 // matches the resolver's default, and every other brand overwrites it here.
 // Kept out of `main.tsx` so it is reachable from a unit test — importing
 // `main.tsx` would mount the whole app.
-import { BRANDS, type Brand } from "./deck-variants";
-
-/**
- * A `<link rel="icon">` whose `type` contradicts the file is skipped by some
- * browsers, and the brand favicons are not all PNG — so the hint is re-derived
- * from the path rather than left at `index.html`'s value.
- */
-function faviconType(path: string): string {
-  return path.endsWith(".svg") ? "image/svg+xml" : "image/png";
-}
+import { BRANDS, faviconType, type Brand } from "./deck-variants";
 
 export function applyBrandChrome(brand: Brand, doc: Document): void {
   const { label, favicon } = BRANDS[brand];

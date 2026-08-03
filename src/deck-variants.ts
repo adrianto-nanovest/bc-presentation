@@ -2,18 +2,17 @@
 // deck set a request is serving. Spec §1 (docs/specs/2026-08-03-gems-catalyst-
 // implementation-spec.md), resolved on #5, amended by #6 and #8.
 //
-// TWO CONSUMERS, ONE RULE:
-//   - `src/variant.ts` — the client resolver, reading `window.location`. Live.
+// TWO CONSUMERS, ONE RULE (both live):
+//   - `src/variant.ts` — the client resolver, reading `window.location`.
 //   - `middleware.ts`  — the Vercel Edge password gate, reading the request URL.
-//     NOT yet a consumer: it still carries its own two-variant copy, and gh#23
-//     moves it onto this table. Its brand-level columns (`cookie`,
-//     `passwordEnv`) and `loginTitle` are here for it, unread until then.
+//     It takes its cookie name, password env var, login title, eyebrow and
+//     favicon from the rows below (gh#23).
 //
-// The Edge consumer will import this file by a RELATIVE path, because the `@/`
-// alias does not resolve in Vercel's middleware build. So this module MUST stay
-// plain data — **no imports at all**, no React, no DOM access at module scope.
-// A unit test asserts that, because an import added here would break the Edge
-// build rather than the app build, and so would not surface until deploy.
+// The Edge consumer imports this file by a RELATIVE path, because the `@/` alias
+// does not resolve in Vercel's middleware build. So this module MUST stay plain
+// data — **no imports at all**, no React, no DOM access at module scope. A unit
+// test asserts that, because an import added here would break the Edge build
+// rather than the app build, and so would not surface until deploy.
 //
 // Branding and auth are BRAND-level; slide composition is DECK-SET-level.
 
@@ -146,7 +145,7 @@ export function resolveVariant({ variantParam, hostname }: VariantRequest): Vari
   // `hasOwnProperty`, not a bare lookup: a hostname of `__proto__` or
   // `constructor` is a legal URL host, and a bare lookup would return an
   // inherited member instead of falling through to the default. Reachable from
-  // a request `Host` header once middleware.ts shares this rule.
+  // a request `Host` header, since middleware.ts shares this rule.
   const byHost =
     hostname != null && Object.prototype.hasOwnProperty.call(VARIANT_BY_HOST, hostname)
       ? VARIANT_BY_HOST[hostname]
@@ -166,4 +165,14 @@ export function variantLabel({ brand, deckSet }: Pick<Variant, "brand" | "deckSe
 /** The pre-auth login page's `<title>`. Brand-level, so never suffixed. */
 export function loginTitle(brand: Brand): string {
   return `${BRANDS[brand].label} — Access`;
+}
+
+/**
+ * The `type` hint for a `<link rel="icon">`. Some browsers skip an icon whose
+ * declared type contradicts the file, and the brand favicons are not all PNG —
+ * so both consumers (`brand-chrome.ts` in the app, the Edge login page) derive
+ * the hint from the path here rather than each carrying its own copy.
+ */
+export function faviconType(path: string): string {
+  return path.endsWith(".svg") ? "image/svg+xml" : "image/png";
 }

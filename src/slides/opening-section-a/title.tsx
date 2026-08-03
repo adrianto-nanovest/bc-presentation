@@ -146,9 +146,8 @@ export function Title() {
           }}
         >
           {/* Brand label plus the deck set's suffix. The login page's eyebrow
-              is to derive from the same call (gh#23), so that the gated login
-              and the title slide read as one continuous frame; until it does,
-              middleware.ts still prints its own hardcoded eyebrow. */}
+              derives from the same call at the Edge (gh#23), so the gated login
+              and the title slide read as one continuous frame. */}
           {variantLabel(VARIANT)}
         </div>
       </div>

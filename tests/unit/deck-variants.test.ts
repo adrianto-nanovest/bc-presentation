@@ -100,10 +100,10 @@ describe("BRANDS × DECK_SETS table", () => {
   });
 
   test("stays plain data — no imports, no React, no DOM at module scope", () => {
-    // `middleware.ts` is to import this module by a relative path (gh#23), and
-    // the `@/` alias does not resolve in Vercel's middleware build. An import
-    // added here would break that build, not this one — so assert there are
-    // none, rather than wait for a deploy to say so.
+    // `middleware.ts` imports this module by a relative path (gh#23), and the
+    // `@/` alias does not resolve in Vercel's middleware build. An import added
+    // here would break that build, not this one — so assert there are none,
+    // rather than wait for a deploy to say so.
     const src = readFileSync(
       resolvePath(__dirname, "../../src/deck-variants.ts"),
       "utf8",

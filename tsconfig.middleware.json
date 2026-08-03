@@ -25,5 +25,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["middleware.ts"]
+  // `src/deck-variants.ts` is listed because the gate imports it (gh#23) and a
+  // composite project must list every file in its program. It is also part of
+  // the app project — deliberate: the table is the one thing both sides share,
+  // so it is checked twice, and here with `types: []`, which is what catches a
+  // Node- or Vite-ambient dependency creeping into it. DOM types ARE in scope
+  // here (the `lib` above), so DOM misuse is caught by the import-free test in
+  // `tests/unit/deck-variants.test.ts`, not by this project.
+  "include": ["middleware.ts", "src/deck-variants.ts"]
 }

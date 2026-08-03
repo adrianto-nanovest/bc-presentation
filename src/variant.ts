@@ -1,7 +1,7 @@
 // Client-side variant resolution. The rule and the table live in
-// `./deck-variants`, which `middleware.ts` is to share from gh#23; this file
-// only supplies the browser's half of the input — `?variant=` and the hostname
-// — so the rule itself stays testable without a DOM.
+// `./deck-variants`, which `middleware.ts` shares at the Edge; this file only
+// supplies the browser's half of the input — `?variant=` and the hostname — so
+// the rule itself stays testable without a DOM.
 //
 // One build serves every variant; the domain decides. `?variant=` overrides the
 // host rule so any variant can be checked on localhost or a preview deployment

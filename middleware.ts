@@ -8,7 +8,8 @@
  * environment branching; the gate exists only where Vercel runs it.
  *
  * Security model (server-side, password never reaches the client bundle):
- *   - The shared password lives only in the `SITE_PASSWORD` env var.
+ *   - Each brand's shared password lives only in an env var:
+ *     `SITE_PASSWORD_<BRAND> ?? SITE_PASSWORD` (the legacy default, retired last).
  *   - On success we mint an HMAC-SHA256-signed token `"<exp>.<sig>"` (signed with
  *     `AUTH_SECRET`) and store it in an HttpOnly, Secure, SameSite=Lax cookie.
  *   - Every later request re-verifies the signature + embedded expiry server-side.
@@ -20,45 +21,52 @@
  */
 
 import { next } from '@vercel/functions';
+// RELATIVE path, not the `@/` alias: the alias does not resolve in Vercel's
+// middleware build. `src/deck-variants.ts` is plain data with no imports, so the
+// Edge bundle stays this file plus one table (a unit test guards that).
+import {
+  BRANDS,
+  faviconType,
+  isVariantId,
+  loginTitle,
+  resolveVariant,
+  variantLabel,
+  type Variant,
+} from './src/deck-variants';
 
 // `process.env` is injected by Vercel for env vars; ambient-declare it so this
-// file (intentionally outside tsconfig `include`) stays self-contained.
+// file (intentionally outside `tsconfig.json`'s `include`) stays self-contained.
+// `tsconfig.middleware.json` type-checks it against the Edge's globals only.
 declare const process: { env: Record<string, string | undefined> };
 
 export const config = {
-  // Run on every app path so JS/assets never leak pre-auth. Skip Vercel internals
-  // AND the decorative cover hero (`/heroes/title-data-topology*`) so the login
-  // page can preload it while unauthenticated — the deck then paints seamlessly
-  // the instant the password is correct. That image is just berau's branded cover
-  // photo (decorative), not deck content, so serving it publicly leaks nothing.
-  matcher: '/((?!_vercel/|heroes/title-data-topology).*)',
+  // Run on every app path so JS/assets never leak pre-auth. Three exclusions:
+  //   - Vercel internals (`_vercel/`);
+  //   - `brand/` — the brand favicons, so the PRE-AUTH login page can render its
+  //     own icon (the request would otherwise be answered with login HTML). One
+  //     stable prefix, so this security-critical regex never needs editing when a
+  //     brand is added;
+  //   - the decorative cover hero (`heroes/title-data-topology*`), preloaded by
+  //     the login page so the deck's title slide paints seamlessly the instant
+  //     the password is correct.
+  // A logo and an abstract copper photo are not deck content; serving them
+  // publicly leaks nothing.
+  matcher: '/((?!_vercel/|brand/|heroes/title-data-topology).*)',
 };
 
 // ── Variants ─────────────────────────────────────────────────────────────────
-// One deployment serves every variant; the request's hostname decides which
-// branding (and password) applies. The Berau production domain keeps its
-// existing cookie/copy untouched; every other host (the general BU domain,
-// Vercel preview URLs) gets the general variant.
-
-const BERAU_HOST = 'bc-presentation.vercel.app';
-
-interface VariantCopy {
-  cookie: string;
-  pageTitle: string;
-  eyebrow: string;
-}
-
-const BERAU: VariantCopy = {
-  cookie: 'berau_session',
-  pageTitle: 'Berau Coal AI Workshop — Access',
-  eyebrow: 'Berau AI Catalyst · Vol 2, Session 2',
-};
-
-const GENERAL: VariantCopy = {
-  cookie: 'general_session',
-  pageTitle: 'AI Catalyst Workshop — Access',
-  eyebrow: 'AI Catalyst Workshop',
-};
+// One deployment serves every variant. The request decides which, by the SAME
+// rule as the client (`src/variant.ts`): explicit `?variant=` → explicit host →
+// `general`. Branding, password and cookie are BRAND-level; only the eyebrow's
+// label suffix comes from the deck set.
+//
+// KNOWN GAP, deliberate: `?variant=` only reaches the gate on requests that
+// carry it — the document. Sub-resource requests (`/assets/*.js`) do not, so on
+// a host with no row of its own (a Vercel preview) they resolve to `general` and
+// need general's cookie too. Verifying a non-default variant on a preview URL
+// therefore means logging in at bare `/` first; on `localhost` the gate never
+// runs at all. Closing that would need a variant cookie, which would make the
+// Edge rule differ from the client's — a worse trade than the extra login.
 
 const MAX_AGE_S = 60 * 60 * 24 * 7; // 7 days
 const MAX_AGE_MS = MAX_AGE_S * 1000;
@@ -67,21 +75,26 @@ const AUTH_PATH = '/__auth';
 const enc = new TextEncoder();
 
 export default async function middleware(request: Request): Promise<Response> {
-  const { pathname, hostname } = new URL(request.url);
-  const isBerau = hostname === BERAU_HOST;
-  const v = isBerau ? BERAU : GENERAL;
+  const { pathname, hostname, searchParams } = new URL(request.url);
+  const variantParam = searchParams.get('variant');
+  const variant = resolveVariant({ variantParam, hostname });
+  const brand = BRANDS[variant.brand];
 
-  // Each variant has its own password. The general one falls back to
-  // SITE_PASSWORD so preview deployments keep working before
-  // SITE_PASSWORD_GENERAL is configured.
-  const SITE_PASSWORD = isBerau
-    ? process.env.SITE_PASSWORD
-    : (process.env.SITE_PASSWORD_GENERAL ?? process.env.SITE_PASSWORD);
+  // An explicit override must survive the round trip, or the POST would resolve
+  // by host and check the WRONG brand's password. Re-serialized from the
+  // resolved id (a table key), never echoed from the request — an unknown value
+  // resolved by host, so it is dropped here too.
+  const query = isVariantId(variantParam) ? `?variant=${variant.id}` : '';
+
+  // Uniform for every brand: the brand's own var, else the legacy shared one
+  // (which still holds berau's password until the migration retires it — spec
+  // §2.2). Fail closed only when BOTH are missing.
+  const SITE_PASSWORD = process.env[brand.passwordEnv] ?? process.env.SITE_PASSWORD;
   const AUTH_SECRET = process.env.AUTH_SECRET;
 
   // Fail closed — never expose the deck if the gate isn't configured.
   if (!SITE_PASSWORD || !AUTH_SECRET) {
-    return html(notConfiguredPage(v), 503);
+    return html(notConfiguredPage(variant, brand.passwordEnv), 503);
   }
 
   // ── Login submit ────────────────────────────────────────────────────────
@@ -89,26 +102,28 @@ export default async function middleware(request: Request): Promise<Response> {
     const form = await request.formData();
     const submitted = String(form.get('password') ?? '');
     if (timingSafeEqual(submitted, SITE_PASSWORD)) {
+      // Token minting is deliberately unchanged here (brand-bound tokens are
+      // their own ticket — they invalidate every live session).
       const token = await mintToken(AUTH_SECRET);
       return new Response(null, {
         status: 303,
         headers: {
-          Location: '/',
-          'Set-Cookie': `${v.cookie}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`,
+          Location: `/${query}`,
+          'Set-Cookie': `${brand.cookie}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`,
         },
       });
     }
-    return html(loginPage(v, 'Incorrect password — please try again.'), 401);
+    return html(loginPage(variant, query, 'Incorrect password — please try again.'), 401);
   }
 
   // ── Existing session ─────────────────────────────────────────────────────
-  const token = readCookie(request.headers.get('cookie'), v.cookie);
+  const token = readCookie(request.headers.get('cookie'), brand.cookie);
   if (token && (await verifyToken(token, AUTH_SECRET))) {
     return next(); // forward to the static origin — serve the deck
   }
 
   // ── Not authenticated → branded login page ───────────────────────────────
-  return html(loginPage(v), 200);
+  return html(loginPage(variant, query), 200);
 }
 
 // ── Crypto helpers (Web Crypto only) ─────────────────────────────────────────
@@ -187,16 +202,22 @@ function html(body: string, status: number): Response {
 // headline → credit → access form). The same photo paints the real title slide on
 // success, so the transition reads as one continuous frame. Pure inline CSS — this
 // string is served by the Edge before any app bundle exists.
-const pageHead = (v: VariantCopy) => `<!doctype html><html lang="en"><head>
+//
+// Every brand-varying string is derived from the table: the title, the eyebrow
+// (the only place the deck set's `· Leadership` suffix appears) and the favicon.
+// The hero is shared by all five variants — abstract copper, brand-neutral.
+const pageHead = (v: Variant) => `<!doctype html><html lang="en"><head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>${v.pageTitle}</title>
+<title>${loginTitle(v.brand)}</title>
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#0a0a0a" />
+<!-- The brand favicon. config.matcher exempts the brand/ prefix, so this loads pre-auth. -->
+<link rel="icon" type="${faviconType(BRANDS[v.brand].favicon)}" href="${BRANDS[v.brand].favicon}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
-<!-- Warm berau's branded cover photo while the viewer types, so the title slide paints
+<!-- Warm the shared cover photo while the viewer types, so the title slide paints
      instantly on success. This path is un-gated (see config.matcher); it is just the
      decorative cover image, not deck content, so serving it publicly leaks nothing. -->
 <link rel="preload" as="image" type="image/jpeg" href="/heroes/title-data-topology.jpg" />
@@ -379,17 +400,17 @@ const pageHead = (v: VariantCopy) => `<!doctype html><html lang="en"><head>
 <div class="bg bg-vignette"></div>
 <div class="topbar"></div>
 <main class="col"><div class="inner">
-<p class="eyebrow anim d1"><span class="tick"></span><span>${v.eyebrow}</span></p>
+<p class="eyebrow anim d1"><span class="tick"></span><span>${variantLabel(v)}</span></p>
 <h1 class="anim d2">From AI Curiosity to AI <em>Capability</em></h1>
 <p class="credit anim d3">Facilitated by Adrianto Tedjokusumo · Nanovest</p>`;
 
 const PAGE_FOOT = `</div></main>
 </body></html>`;
 
-function loginPage(v: VariantCopy, error?: string): string {
+function loginPage(v: Variant, query: string, error?: string): string {
   return (
     pageHead(v) +
-    `<form method="POST" action="${AUTH_PATH}">
+    `<form method="POST" action="${AUTH_PATH}${query}">
 <div class="formhead anim d4">
 <label for="password" class="lbl">Enter password</label>
 <span class="rule"></span>
@@ -431,11 +452,12 @@ This deck is private. Your access is remembered for 7 days.
   );
 }
 
-function notConfiguredPage(v: VariantCopy): string {
+/** `passwordEnv` is named so the 503 says which var THIS brand is missing. */
+function notConfiguredPage(v: Variant, passwordEnv: string): string {
   return (
     pageHead(v) +
     `<div class="formhead anim d4"><span class="lbl">Access not configured</span><span class="rule"></span></div>
-<p class="err anim d5" role="alert">Set the <code>SITE_PASSWORD</code> and <code>AUTH_SECRET</code> environment variables in the Vercel project, then redeploy.</p>` +
+<p class="err anim d5" role="alert">Set the <code>${passwordEnv}</code> (or <code>SITE_PASSWORD</code>) and <code>AUTH_SECRET</code> environment variables in the Vercel project, then redeploy.</p>` +
     PAGE_FOOT
   );
 }

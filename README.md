@@ -53,8 +53,10 @@ Opens the HexLadder slide. See `docs/runbooks/projection-test.md` for the full p
 
 ## Deploy — environment variables and domains
 
-One Vercel project, one `main` branch, five hostnames. The request's hostname
-picks the brand, its copy, its cookie, and its password.
+One Vercel project, one `main` branch, five hostnames. Both the client and the
+Edge gate resolve the variant by one rule — **`?variant=` → hostname →
+`general`** — and the brand then carries the copy, the cookie, the favicon and
+the password.
 
 | host | variant | brand |
 |---|---|---|
@@ -85,11 +87,11 @@ variable of its own falls back to `SITE_PASSWORD`.
 If `AUTH_SECRET` or the resolved password is missing, the middleware fails
 closed: HTTP 503 and the "Access not configured" page. It never shows the deck.
 
-> Uniform resolution across all three brands lands with the middleware
-> brand-resolution ticket (#23). Until that deploys, `middleware.ts` resolves
-> only two variants: the berau host reads `SITE_PASSWORD`, and every other host
-> reads `SITE_PASSWORD_GENERAL ?? SITE_PASSWORD`. `SITE_PASSWORD_BERAU` and
-> `SITE_PASSWORD_GEMS` are provisioned but not yet read.
+Resolution is uniform across all three brands (#23): the gate resolves the
+brand from the shared table — `?variant=` → host → `general` — and then reads
+that brand's variable, so `SITE_PASSWORD_BERAU` and `SITE_PASSWORD_GEMS` are now
+live. **Merged, not yet deployed**: verify every domain at its door on the first
+deploy after this lands.
 
 ### Retirement order for `SITE_PASSWORD`
 
@@ -108,9 +110,17 @@ Steps 1 and 2 are done. Step 3 is pending, so step 4 must wait.
 
 Brand logos and favicons live in `assets/brand/` (`bce-logo.png`,
 `gems-logo.svg`, `general-ai-logo.png`) and are served from `/brand/…`, because
-`vite.config.ts` sets `publicDir: "assets"`. A logo used by the pre-auth login
-page also needs a `config.matcher` exemption in `middleware.ts`; the post-auth
-favicon does not.
+`vite.config.ts` sets `publicDir: "assets"`. The pre-auth login page renders its
+brand favicon, so `config.matcher` in `middleware.ts` exempts the whole `brand/`
+prefix — one stable exemption, so adding a brand never edits that regex.
+
+### Checking a variant on a preview URL
+
+`?variant=` reaches the gate only on requests that carry it — the document, not
+`/assets/*.js`. On a host with no row of its own (a Vercel preview) those
+sub-resources resolve to `general`, so log in at bare `/` first, then open
+`/?variant=<id>` and log in again as that brand. On `localhost` the gate never
+runs, so `?variant=` alone is enough.
 
 ## Layout
 
