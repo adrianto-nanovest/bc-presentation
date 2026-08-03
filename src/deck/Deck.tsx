@@ -7,6 +7,8 @@ import { deckSlides, hexLadderDevSlide } from "./registry";
 import { Proto16Route } from "@/slides/prototype-gh16-leader-slides";
 // PROTOTYPE gh#17 — throwaway import; goes away with the prototype directory.
 import { Proto17Route } from "@/slides/prototype-gh17-e12-loop-canvas";
+// PROTOTYPE gh#18 — throwaway import; goes away with the prototype directory.
+import { Proto18Route } from "@/slides/prototype-gh18-e12-open-form";
 
 declare global {
   interface Window {
@@ -57,6 +59,10 @@ export function Deck() {
     // PROTOTYPE gh#17 — throwaway. Remove with the prototype directory.
     if (import.meta.env.DEV && params.get("dev") === "proto17") {
       return <Proto17Route />;
+    }
+    // PROTOTYPE gh#18 — throwaway. Remove with the prototype directory.
+    if (import.meta.env.DEV && params.get("dev") === "proto18") {
+      return <Proto18Route />;
     }
     if (params.get("dev") === "hexladder") {
       return (
