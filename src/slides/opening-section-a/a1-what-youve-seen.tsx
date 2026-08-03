@@ -5,7 +5,17 @@
 // rule-header that fades out during the morph.
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
-import { MessageSquare, FileText, ScanSearch, Sparkles, Map, PenLine } from "lucide-react";
+import {
+  MessageSquare,
+  FileText,
+  ScanSearch,
+  Sparkles,
+  Map,
+  PenLine,
+  Camera,
+  Truck,
+  FileSignature,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
@@ -21,6 +31,9 @@ import {
   type A1Question,
 } from "./content";
 
+// One registry for every variant, so a GEMS chip is drawn by the same
+// `<Icon size={...} strokeWidth={1.5}>` call as a berau one and cannot drift in
+// weight or size.
 const ICONS: Record<A1IconName, LucideIcon> = {
   MessageSquare,
   FileText,
@@ -28,6 +41,9 @@ const ICONS: Record<A1IconName, LucideIcon> = {
   Sparkles,
   Map,
   PenLine,
+  Camera,
+  Truck,
+  FileSignature,
 };
 
 const COLUMN_TOP = 170;

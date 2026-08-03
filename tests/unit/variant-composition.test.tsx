@@ -62,30 +62,40 @@ describe("title-slide workshop chip", () => {
 
 async function openingFor(id: VariantId) {
   useVariant(id);
-  const [opening, berauA1, generalA1] = await Promise.all([
+  const [opening, berauA1, generalA1, gemsA1] = await Promise.all([
     import("@/slides/opening-section-a"),
     import("@/slides/opening-section-a/a1-what-youve-seen"),
     import("@/slides/opening-section-a/a1-general"),
+    import("@/slides/opening-section-a/a1-gems"),
   ]);
   return {
     slides: opening.openingSectionASlides,
     a1Slide: berauA1.a1Slide,
     a1GeneralSlide: generalA1.a1GeneralSlide,
+    a1GemsSlide: gemsA1.a1GemsSlide,
   };
 }
 
 describe("A.1 hook selection", () => {
-  test("general gets the familiarity hook; berau and gems get the winners hook", async () => {
+  test("each brand gets its own hook: berau the winners, gems the portfolio, general familiarity", async () => {
     for (const id of ["berau-middle-mgmt", "berau-leader"] as VariantId[]) {
-      const { slides, a1Slide } = await openingFor(id);
+      const { slides, a1Slide, a1GemsSlide } = await openingFor(id);
       expect(slides[1], id).toBe(a1Slide);
+      expect(slides[1], id).not.toBe(a1GemsSlide);
     }
+    // Both GEMS deck sets, since §5 ships every brand delta to `gems-leader`
+    // too — leaders run the same practice lab (gh#25). The negative assertions
+    // are not implied by the positives: were the three slide defs ever aliased
+    // to one object, every positive here would still pass.
     for (const id of ["gems-middle-mgmt", "gems-leader"] as VariantId[]) {
-      const { slides, a1Slide } = await openingFor(id);
-      expect(slides[1], id).toBe(a1Slide);
+      const { slides, a1GemsSlide, a1Slide, a1GeneralSlide } = await openingFor(id);
+      expect(slides[1], id).toBe(a1GemsSlide);
+      expect(slides[1], id).not.toBe(a1Slide);
+      expect(slides[1], id).not.toBe(a1GeneralSlide);
     }
-    const { slides, a1GeneralSlide } = await openingFor("general");
+    const { slides, a1GeneralSlide, a1GemsSlide } = await openingFor("general");
     expect(slides[1]).toBe(a1GeneralSlide);
+    expect(slides[1]).not.toBe(a1GemsSlide);
   });
 
   test("the opening is always the cover plus exactly one A.1", async () => {
