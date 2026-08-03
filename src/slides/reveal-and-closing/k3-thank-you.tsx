@@ -14,11 +14,13 @@ import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
 import { k3Content as C } from "./content";
+import { BRANDS } from "@/deck-variants";
 import { VARIANT } from "@/variant";
 
-// The general variant drops K.1/K.2 (no Practice Lab), so this closer is the
-// only K slide there and renumbers to K.1.
-const FIG_NUM = VARIANT === "general" ? 1 : 3;
+// A brand without a Practice Lab drops K.1/K.2, so this closer is the only K
+// slide there and renumbers to K.1. (Phase 3 derives every figure number from
+// the composed deck and deletes this constant — spec §3.5.)
+const FIG_NUM = BRANDS[VARIANT.brand].practiceLab ? 3 : 1;
 
 // ───────────────────── slide ─────────────────────
 

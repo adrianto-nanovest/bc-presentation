@@ -14,6 +14,20 @@ Navigation:
 - `←` previous slide
 - `Space` next animation step within the current slide
 
+### Which variant localhost serves
+
+`localhost` and `127.0.0.1` resolve to **`general`** — the same default as any
+unmatched host. Append `?variant=<id>` to see another one:
+
+```
+http://localhost:5173/?variant=gems-middle-mgmt
+```
+
+Ids are the five in the host table below. The override also works on Vercel
+preview URLs, which is the only way to check a hostname rule before its domain
+is assigned. `general` has no Practice Lab, so `?variant=` is also how you reach
+K.1 / K.2 locally.
+
 ## Test
 
 ```bash

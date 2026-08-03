@@ -1,21 +1,22 @@
-// Deck variant selection — one build serves every variant; the domain decides.
-// bc-presentation.vercel.app (and local dev) → "berau"; any other host (the
-// general BU domain, Vercel preview URLs) → "general". A `?variant=` query
-// param overrides the host rule so either variant can be checked on localhost
-// or a preview deployment — without it, hostname-based logic would only be
-// testable in production.
-export type DeckVariant = "berau" | "general";
+// Client-side variant resolution. The rule and the table live in
+// `./deck-variants`, which `middleware.ts` is to share from gh#23; this file
+// only supplies the browser's half of the input — `?variant=` and the hostname
+// — so the rule itself stays testable without a DOM.
+//
+// One build serves every variant; the domain decides. `?variant=` overrides the
+// host rule so any variant can be checked on localhost or a preview deployment
+// — without it, hostname-based logic would only be testable in production.
+import { resolveVariant, type Variant } from "./deck-variants";
 
-function resolve(): DeckVariant {
-  if (typeof window === "undefined") return "berau"; // node (unit tests)
-  const override = new URLSearchParams(window.location.search).get("variant");
-  if (override === "berau" || override === "general") return override;
-  const host = window.location.hostname;
-  return host === "bc-presentation.vercel.app" ||
-    host === "localhost" ||
-    host === "127.0.0.1"
-    ? "berau"
-    : "general";
+export function resolveClientVariant(): Variant {
+  // node (unit tests, export scripts): no location to read, so the shared
+  // default applies — `general`.
+  if (typeof window === "undefined") return resolveVariant({});
+  return resolveVariant({
+    variantParam: new URLSearchParams(window.location.search).get("variant"),
+    hostname: window.location.hostname,
+  });
 }
 
-export const VARIANT: DeckVariant = resolve();
+/** The variant this page is serving: `{ id, brand, deckSet }`. */
+export const VARIANT: Variant = resolveClientVariant();

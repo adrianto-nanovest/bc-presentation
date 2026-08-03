@@ -12,7 +12,8 @@ import { DarkenOverlay } from "@/components/DarkenOverlay";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { highlight as KW } from "@/components/highlight";
 import { TitleKeymap } from "./components/TitleKeymap";
-import { titleContent as C, workshopChipGeneral } from "./content";
+import { titleContent as C } from "./content";
+import { variantLabel } from "@/deck-variants";
 import { VARIANT } from "@/variant";
 
 // ───────────────────── slide ─────────────────────
@@ -144,7 +145,11 @@ export function Title() {
             whiteSpace: "nowrap",
           }}
         >
-          {VARIANT === "general" ? workshopChipGeneral : C.workshopChip}
+          {/* Brand label plus the deck set's suffix. The login page's eyebrow
+              is to derive from the same call (gh#23), so that the gated login
+              and the title slide read as one continuous frame; until it does,
+              middleware.ts still prints its own hardcoded eyebrow. */}
+          {variantLabel(VARIANT)}
         </div>
       </div>
 

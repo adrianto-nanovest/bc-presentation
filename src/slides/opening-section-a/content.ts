@@ -17,8 +17,6 @@ export interface TitleContent {
   taglineKw: readonly string[];
   /** Bottom-left credit chip — facilitator name + org, single line. */
   facilitator: string;
-  /** Bottom-right workshop identifier chip. */
-  workshopChip: string;
   heroSrc: string;
   heroAlt: string;
   darkenStrength: number;
@@ -31,14 +29,14 @@ export const titleContent: TitleContent = {
     "A working session on the AI stack, the mindset shift, and the new operator role — for everyone, not just engineers.",
   taglineKw: ["mindset shift", "operator role"],
   facilitator: "Adrianto Tedjokusumo · Nanovest",
-  workshopChip: "Berau AI Catalyst · Vol 2, Session 2",
   heroSrc: "/heroes/title-data-topology.jpg",
   heroAlt: "Abstract copper threads converging in deep space",
   darkenStrength: 0.18,
 };
 
-/** General (non-Berau) variant: only the workshop identifier chip differs. */
-export const workshopChipGeneral = "AI Catalyst Workshop";
+// The workshop chip is NOT authored here: it is the brand label plus the deck
+// set's label suffix, derived by `variantLabel` in src/deck-variants.ts. Once
+// gh#23 puts the login eyebrow on that same call, the two cannot drift apart.
 
 // ─── A.1 — "What you've already seen" ──────────────────────────────────────
 
