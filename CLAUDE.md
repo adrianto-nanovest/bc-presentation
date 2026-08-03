@@ -18,6 +18,6 @@ Prompting best-practices can be checked on: /Users/macbook/Projects/knowledge-ca
 </codex-cli-notes>
 
 <tools>
-For web verification, use playwright-cli CLI; while on deployment related tasks, use vercel CLI. Both are installed.
+For web verification (even Codex agents), use playwright-cli CLI; while on deployment related tasks, use vercel CLI. Both are installed.
 For vercel, it is already linked to github (CI/CD when pushing to main branch).
 </tools>
