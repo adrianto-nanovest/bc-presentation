@@ -9,7 +9,8 @@
 // the matching anim inside <PitfallCanvas>. Mouse leave clears activeKind, and
 // the canvas reverts to rendering nothing (per T9 — no `defaultIllustration`).
 import { fireEvent, render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E9ContextTheWall,
   e9Slide,
@@ -23,10 +24,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e9Slide.steps]}>
+    <SlideHarness def={e9Slide}>
       <AdvanceTo step={step} />
       <E9ContextTheWall />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

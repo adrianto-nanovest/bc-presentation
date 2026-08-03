@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { j2Content } from "@/slides/reveal-and-closing/content";
 import {
   J2FivePrinciples,
@@ -15,10 +16,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderJ2(advanceToStep = j2Slide.canonicalPose) {
   return render(
-    <DeckProvider stepCounts={[j2Slide.steps]}>
+    <SlideHarness def={j2Slide}>
       <AdvanceTo step={advanceToStep} />
       <J2FivePrinciples />
-    </DeckProvider>,
+    </SlideHarness>,
   );
 }
 

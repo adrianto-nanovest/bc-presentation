@@ -15,7 +15,8 @@
 //      for GEMS means cloning the array first.
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { a1Slide } from "@/slides/opening-section-a/a1-what-youve-seen";
 import { a1GemsSlide } from "@/slides/opening-section-a/a1-gems";
 import {
@@ -36,12 +37,19 @@ function AdvanceTo({ step }: { step: number }) {
  * calls, so injecting the content here would let a1-gems.tsx point at the wrong
  * object with every assertion below still passing.
  */
+// GEMS' A.1 replaces the default deck's A.1, so `general` — the variant unit
+// tests resolve to — does not carry it and there is no composed row to look up.
+// It occupies section A's first numbered position in the deck that does run it;
+// that the GEMS deck really prints A.1 there is proved from rendered output, for
+// all three brands, by `deck-numbering-fixture.test.tsx`.
+const A1_IN_GEMS_DECK = { letter: "A", num: 1, sectionKey: "opening" } as const;
+
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[a1GemsSlide.steps]}>
+    <SlideHarness def={a1GemsSlide} at={A1_IN_GEMS_DECK}>
       <AdvanceTo step={step} />
       {a1GemsSlide.render()}
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

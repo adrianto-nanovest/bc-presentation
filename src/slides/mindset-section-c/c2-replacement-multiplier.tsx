@@ -193,7 +193,7 @@ export function C2ReplacementMultiplier() {
 
       {/* Canonical FIG label — `<FigLabel>` defaults to top:36 left:48.
           Renders instantly with no opacity gate (Task 30 v4). */}
-      <FigLabel section="C" num={2} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Canonical slide title — `.slide-headline.small` at top:80 left:48.
           KW() highlights "Fear" + "Leverage" per c2Content.headlineKw.

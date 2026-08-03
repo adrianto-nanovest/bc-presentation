@@ -7,7 +7,8 @@
 //   2 — "WHERE PROMPT ENDS" wall section + 3-col constraint grid reveals
 //   3 — italic closing line reveals
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E6PromptTheWall,
   e6Slide,
@@ -21,10 +22,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e6Slide.steps]}>
+    <SlideHarness def={e6Slide}>
       <AdvanceTo step={step} />
       <E6PromptTheWall />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

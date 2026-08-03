@@ -1,6 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Slide } from "@/deck/Slide";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { FigLabel } from "@/components/FigLabel";
+
+// The composed position these tests stand at. `<Slide>` requires one; which
+// one is irrelevant to the stage, click and NavBar behaviour asserted below.
+const AT_E11 = { letter: "E", num: 11, sectionKey: "fundamentals" } as const;
 
 const wrap = (ui: React.ReactNode) => (
   <DeckProvider stepCounts={[2, 2]}>{ui}</DeckProvider>
@@ -13,7 +18,7 @@ test("Slide annotates animation mode and canonical pose as data attrs on the sta
         animationMode="step-reveal"
         canonicalPose={2}
         index={0}
-        section="E"
+        section="E" {...AT_E11}
       >
         hi
       </Slide>,
@@ -35,7 +40,7 @@ test("Slide stage has fixed 1280x720 dimensions (via CSS classes)", () => {
   // tests/e2e/viewport-fit.spec.ts.
   const { container } = render(
     wrap(
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
         hi
       </Slide>,
     ),
@@ -49,7 +54,7 @@ test("Slide stage has fixed 1280x720 dimensions (via CSS classes)", () => {
 test("Slide stage has cursor: pointer", () => {
   render(
     wrap(
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
         hi
       </Slide>,
     ),
@@ -75,7 +80,7 @@ function StateProbe() {
 test("clicking the stage advances the deck (animationMode=static)", () => {
   render(
     <DeckProvider stepCounts={[2, 2]}>
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
         <span>body</span>
       </Slide>
       <StateProbe />
@@ -93,7 +98,7 @@ test("clicking the stage advances the deck (animationMode=step-reveal)", () => {
         animationMode="step-reveal"
         canonicalPose={0}
         index={0}
-        section="E"
+        section="E" {...AT_E11}
       >
         <span>body</span>
       </Slide>
@@ -108,7 +113,7 @@ test("clicking the stage advances the deck (animationMode=step-reveal)", () => {
 test("clicking a <button> inside the stage does NOT advance", () => {
   render(
     <DeckProvider stepCounts={[2, 2]}>
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
         <button type="button">no-op</button>
       </Slide>
       <StateProbe />
@@ -124,7 +129,7 @@ test("clicking a <button> inside the stage does NOT advance", () => {
 test("clicking an element marked data-no-advance does NOT advance", () => {
   render(
     <DeckProvider stepCounts={[2, 2]}>
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
         <div data-no-advance data-testid="opt-out">
           shielded
         </div>
@@ -140,7 +145,7 @@ test("clicking an element marked data-no-advance does NOT advance", () => {
 test("Slide renders NavBar inside the stage with the section tag", () => {
   render(
     wrap(
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E">
+      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
         hi
       </Slide>,
     ),
@@ -150,4 +155,27 @@ test("Slide renders NavBar inside the stage with the section tag", () => {
   expect(tag).toBeInTheDocument();
   const stage = screen.getByTestId("slide");
   expect(stage.contains(tag)).toBe(true);
+});
+
+// §3.5 — Slide is the publisher of the derived figure number. A FigLabel mounted
+// anywhere inside it prints that number without being handed it, which is the
+// whole point: the slide's own render tree names no letter and no number.
+test("Slide publishes its composed number to the chrome inside it", () => {
+  render(
+    wrap(
+      <Slide
+        animationMode="static"
+        canonicalPose={0}
+        index={0}
+        section="E"
+        letter="E"
+        num={11}
+        sectionKey="fundamentals"
+      >
+        <FigLabel label="READING THE OUTPUT" />
+      </Slide>,
+    ),
+  );
+  const fig = screen.getByTestId("slide").querySelector(".fig-label");
+  expect(fig?.textContent).toMatch(/— FIG\. E\.11\s*·\s*READING THE OUTPUT/);
 });

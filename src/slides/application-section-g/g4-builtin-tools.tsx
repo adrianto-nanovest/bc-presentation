@@ -85,7 +85,7 @@ export function G4BuiltinTools() {
         }
       `}</style>
 
-      <FigLabel section="G" num={4} label="BUILT-IN TOOLS & COMMANDS" />
+      <FigLabel label="BUILT-IN TOOLS & COMMANDS" />
       <div className="slide-headline-row">
         <h1 className="slide-headline small">
           {highlight(C.headline, [...C.headlineKw])}

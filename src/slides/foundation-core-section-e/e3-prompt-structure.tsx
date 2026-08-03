@@ -55,7 +55,7 @@ export function E3PromptStructure() {
 
   return (
     <>
-      <FigLabel section="E" num={3} label="LAYER 1 · STRUCTURE" />
+      <FigLabel label="LAYER 1 · STRUCTURE" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

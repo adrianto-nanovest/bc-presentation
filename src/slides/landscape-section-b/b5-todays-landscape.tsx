@@ -99,7 +99,7 @@ export function B5TodaysLandscape() {
         }}
       />
 
-      <FigLabel section="B" num={5} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* ───────────── Combined stat + tagline group ─────────────
           Single element that morphs from center-pose (step 0) to header-pose

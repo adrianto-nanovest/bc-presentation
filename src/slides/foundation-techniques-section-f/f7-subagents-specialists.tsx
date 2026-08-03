@@ -78,7 +78,7 @@ export function F7SubagentsSpecialists() {
 
   return (
     <>
-      <FigLabel section="F" num={7} label="SPECIALISTS" />
+      <FigLabel label="SPECIALISTS" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

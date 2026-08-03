@@ -24,7 +24,7 @@ export function I3Portfolio() {
 
   return (
     <>
-      <FigLabel section="I" num={3} label="THE PORTFOLIO" />
+      <FigLabel label="THE PORTFOLIO" />
 
       <div className="slide-headline-row">
         <h1

@@ -86,7 +86,7 @@ export function F1TwoPillars() {
 
   return (
     <>
-      <FigLabel section="F" num={1} label="TWO PILLARS" />
+      <FigLabel label="TWO PILLARS" />
 
       {/* ───────────── Hero title (step 1 only — fades on step 2) ─────────────
           The heroic "Two Pillars" + copper rule that anchors the section

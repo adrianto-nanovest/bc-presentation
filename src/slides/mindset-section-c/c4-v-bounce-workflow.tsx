@@ -139,7 +139,7 @@ export function C4VBounceWorkflow() {
 
       {/* FIG label — canonical top-left position, via shared component.
           Renders instantly (no fade) — matches C.1's header pattern. */}
-      <FigLabel section="C" num={4} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Slide title — canonical .slide-headline.small at top:80 left:48.
           Renders instantly (no fade). KW highlights surface "Shape" and

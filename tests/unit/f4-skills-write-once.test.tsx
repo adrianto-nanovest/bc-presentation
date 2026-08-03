@@ -13,7 +13,8 @@
 // Additionally verifies that all five facet hover states are wired into
 // DetailCanvas (per the canonical F.2 hover-only pattern with NO defaultState).
 import { fireEvent, render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   F4SkillsWriteOnce,
   f4Slide,
@@ -27,10 +28,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[f4Slide.steps]}>
+    <SlideHarness def={f4Slide}>
       <AdvanceTo step={step} />
       <F4SkillsWriteOnce />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

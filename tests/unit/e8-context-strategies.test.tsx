@@ -11,7 +11,8 @@
 //
 // Hover behavior: hovering card N captures hover=N (via data-hover).
 import { fireEvent, render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E8ContextStrategies,
   e8Slide,
@@ -25,10 +26,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e8Slide.steps]}>
+    <SlideHarness def={e8Slide}>
       <AdvanceTo step={step} />
       <E8ContextStrategies />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

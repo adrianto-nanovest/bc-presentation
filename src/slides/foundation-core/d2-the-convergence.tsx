@@ -52,7 +52,7 @@ export function D2TheConvergence() {
 
   return (
     <>
-      <FigLabel section="D" num={2} label="THE CONVERGENCE" />
+      <FigLabel label="THE CONVERGENCE" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

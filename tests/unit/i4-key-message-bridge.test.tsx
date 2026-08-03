@@ -1,5 +1,6 @@
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { I4KeyMessageBridge, i4Slide } from "@/slides/reveal-and-closing/i4-key-message-bridge";
 
 test("I.4 declares 2 steps with canonicalPose=1", () => {
@@ -16,10 +17,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 test("I.4 renders FigLabel, both beat-1 lines, and the recipe bridge line", () => {
   render(
-    <DeckProvider stepCounts={[i4Slide.steps]}>
+    <SlideHarness def={i4Slide}>
       <AdvanceTo step={i4Slide.canonicalPose} />
       <I4KeyMessageBridge />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => screen.getByTestId("goto").click());
   const fig = document.querySelector(".fig-label");

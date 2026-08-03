@@ -2,7 +2,12 @@ import { useEffect } from "react";
 import { DeckProvider, useDeck } from "./DeckContext";
 import { useKeyboardNav } from "./useKeyboardNav";
 import { Slide } from "./Slide";
-import { deckSlides, hexLadderDevSlide } from "./registry";
+import {
+  composedDeck,
+  deckSlides,
+  hexLadderComposedDeck,
+  hexLadderDevSlide,
+} from "./registry";
 // PROTOTYPE gh#16 — throwaway import; goes away with the prototype directory.
 import { Proto16Route } from "@/slides/prototype-gh16-leader-slides";
 // PROTOTYPE gh#17 — throwaway import; goes away with the prototype directory.
@@ -37,6 +42,10 @@ function ActiveSlide() {
   }, []);
 
   const def = deckSlides[slideIndex];
+  // The letter and number this slide PRINTS come from its position in the
+  // composed deck (§3.5), never from the slide itself. Same index, same array
+  // order — `deck-composed-numbering.test.ts` holds the two decks aligned.
+  const composed = composedDeck.slides[slideIndex];
   return (
     <Slide
       index={slideIndex}
@@ -44,6 +53,9 @@ function ActiveSlide() {
       canonicalPose={def.canonicalPose}
       surface={def.surface ?? "dark"}
       section={def.section}
+      letter={composed.letter}
+      num={composed.num}
+      sectionKey={composed.sectionKey}
     >
       {def.render()}
     </Slide>
@@ -77,6 +89,7 @@ export function Deck() {
       return <Proto19bRoute />;
     }
     if (params.get("dev") === "hexladder") {
+      const composed = hexLadderComposedDeck.slides[0];
       return (
         <Slide
           index={0}
@@ -84,6 +97,9 @@ export function Deck() {
           canonicalPose={hexLadderDevSlide.canonicalPose}
           surface={hexLadderDevSlide.surface ?? "dark"}
           section={hexLadderDevSlide.section}
+          letter={composed.letter}
+          num={composed.num}
+          sectionKey={composed.sectionKey}
         >
           {hexLadderDevSlide.render()}
         </Slide>

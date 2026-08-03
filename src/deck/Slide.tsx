@@ -2,7 +2,9 @@ import { type CSSProperties, type ReactNode } from "react";
 import { useDeck } from "./DeckContext";
 import { useViewportScale } from "./useViewportScale";
 import { NavBar } from "./NavBar";
+import { SlideNumberProvider } from "./SlideNumberContext";
 import type { SlideSection } from "./types";
+import type { SectionKey } from "./sections";
 
 export type AnimationMode =
   | "interactive"
@@ -18,6 +20,13 @@ export interface SlideProps {
   canonicalPose: number;
   surface?: "dark" | "light";
   section: SlideSection;
+  // The slide's DERIVED position, published to its chrome via
+  // SlideNumberContext so no slide has to name its own figure number (§3.5).
+  // Required, not optional: the caller reads them off the composed deck, and a
+  // default here would silently print a wrong number instead of failing.
+  letter: string;
+  num: number | null;
+  sectionKey: SectionKey;
   children: ReactNode;
 }
 
@@ -46,6 +55,9 @@ export function Slide({
   canonicalPose,
   surface = "dark",
   section,
+  letter,
+  num,
+  sectionKey,
   children,
 }: SlideProps) {
   const scale = useViewportScale();
@@ -79,8 +91,13 @@ export function Slide({
           style={stageStyle}
           onClick={handleClick}
         >
-          {children}
-          <NavBar section={section} />
+          {/* NavBar sits inside the provider too. It still reads `section` and
+              nothing about it changes here; §3.5 moves the nav chrome onto these
+              same derived values next, and it should not have to be re-wired. */}
+          <SlideNumberProvider value={{ letter, num, sectionKey }}>
+            {children}
+            <NavBar section={section} />
+          </SlideNumberProvider>
         </div>
       </div>
     </div>

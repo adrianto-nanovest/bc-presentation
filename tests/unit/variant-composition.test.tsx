@@ -187,15 +187,34 @@ describe("leader deck sets, before Phase 4", () => {
 
 // ── The closer's figure number follows that same flag ────────────────────────
 
+// The closer's number is DERIVED as of §3.5 (gh#35) — `k3-thank-you.tsx` used to
+// compute it from `BRANDS[VARIANT.brand].practiceLab`, and now prints whatever
+// its position in that brand's composed deck gives it. So this reads the number
+// out of the same brand-specific composed deck the app would, and the K.3/K.1
+// split below is the composer's own output rather than a restated flag.
+//
+// FOUR MODULES, ONE EPOCH — including `SlideNumberContext`. A React context is
+// an object identity, so importing the provider from outside this epoch would
+// hand `K3ThankYou` a different context than its `FigLabel` reads, and the
+// render would throw "outside a provider".
 async function closerFigLabelFor(id: VariantId): Promise<string> {
   useVariant(id);
-  const [{ DeckProvider }, { K3ThankYou, k3Slide }] = await Promise.all([
-    import("@/deck/DeckContext"),
-    import("@/slides/reveal-and-closing/k3-thank-you"),
-  ]);
+  const [{ DeckProvider }, { SlideNumberProvider }, { composedDeck }, { K3ThankYou, k3Slide }] =
+    await Promise.all([
+      import("@/deck/DeckContext"),
+      import("@/deck/SlideNumberContext"),
+      import("@/deck/registry"),
+      import("@/slides/reveal-and-closing/k3-thank-you"),
+    ]);
+  const row = composedDeck.slides.find((s) => s.def === k3Slide);
+  if (!row) throw new Error(`the closer is not in ${id}'s composed deck`);
   const { container } = render(
     <DeckProvider stepCounts={[k3Slide.steps]}>
-      <K3ThankYou />
+      <SlideNumberProvider
+        value={{ letter: row.letter, num: row.num, sectionKey: row.sectionKey }}
+      >
+        <K3ThankYou />
+      </SlideNumberProvider>
     </DeckProvider>,
   );
   return container.querySelector(".fig-label")?.textContent ?? "";

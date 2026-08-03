@@ -9,7 +9,8 @@
 // Hover-to-detail (NOT click-to-modal): hovering any card fills the bottom
 // 190px region with a TechniqueDetail. Mouse-leave clears it.
 import { render, screen, act, fireEvent, within } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E4PromptMethodologies,
   e4Slide,
@@ -23,10 +24,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e4Slide.steps]}>
+    <SlideHarness def={e4Slide}>
       <AdvanceTo step={step} />
       <E4PromptMethodologies />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

@@ -32,7 +32,7 @@ export function PillarsStack({ brand }: { brand: Brand }) {
 
   return (
     <>
-      <FigLabel section={B.fig.section} num={B.fig.num} label={B.fig.label} />
+      <FigLabel label={B.fig.label} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">{KW(B.headline, [...B.headlineKw])}</h1>

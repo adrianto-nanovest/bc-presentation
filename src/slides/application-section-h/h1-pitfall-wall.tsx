@@ -23,7 +23,7 @@ export function H1PitfallWall() {
   return (
     <div data-testid="h1-root" style={{ position: "absolute", inset: 0 }}>
       {/* FigLabel — auto-positioned by component (top-left) */}
-      <FigLabel section="H" num={1} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Headline — uses shared .slide-headline-row (top:80px) */}
       <div className="slide-headline-row">

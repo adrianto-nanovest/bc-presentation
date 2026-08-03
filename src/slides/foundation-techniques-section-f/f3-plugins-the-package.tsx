@@ -97,7 +97,7 @@ export function F3PluginsThePackage() {
 
   return (
     <>
-      <FigLabel section="F" num={3} label="THE PACKAGE" />
+      <FigLabel label="THE PACKAGE" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

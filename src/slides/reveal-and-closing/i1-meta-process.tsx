@@ -183,7 +183,7 @@ export function I1MetaProcess() {
           stage. Dev-only alternates: `?proto=`, see I1Backdrop.tsx. */}
       <I1Backdrop stepIndex={stepIndex} />
 
-      <FigLabel section="I" num={1} label="THE PROCESS" />
+      <FigLabel label="THE PROCESS" />
 
       {/* ───────────── Line 1 (step 1 only — fades out on step 2) ─────────────
           Centered display headline. Fades out as soon as headerCollapsed

@@ -1,5 +1,6 @@
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { J1HumilityIntro, j1Slide } from "@/slides/reveal-and-closing/j1-humility-intro";
 
 function AdvanceTo({ step }: { step: number }) {
@@ -15,10 +16,10 @@ test("J.1 declares 2 steps with canonicalPose=1", () => {
 
 test("J.1 renders the FIG label, headline humility line, and the brief earned-lessons punchline", () => {
   render(
-    <DeckProvider stepCounts={[j1Slide.steps]}>
+    <SlideHarness def={j1Slide}>
       <AdvanceTo step={j1Slide.canonicalPose} />
       <J1HumilityIntro />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => screen.getByTestId("goto").click());
   const fig = document.querySelector(".fig-label");

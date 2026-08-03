@@ -37,7 +37,7 @@ export function E1ThreeLayers() {
 
   return (
     <>
-      <FigLabel section="E" num={1} label="THE THREE LAYERS" />
+      <FigLabel label="THE THREE LAYERS" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline">

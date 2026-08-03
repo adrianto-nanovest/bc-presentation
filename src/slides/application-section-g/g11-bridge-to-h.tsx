@@ -88,7 +88,7 @@ export function G11BridgeToH() {
         }}
       />
 
-      <FigLabel section="G" num={11} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Bottom-left anchored beats. */}
       <div

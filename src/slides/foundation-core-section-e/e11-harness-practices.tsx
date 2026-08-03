@@ -58,7 +58,7 @@ export function E11HarnessPractices() {
 
   return (
     <>
-      <FigLabel section="E" num={11} label="HARNESS · PRACTICES" />
+      <FigLabel label="HARNESS · PRACTICES" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

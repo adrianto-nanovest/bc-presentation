@@ -26,7 +26,7 @@ export function E6PromptTheWall() {
 
   return (
     <>
-      <FigLabel section="E" num={6} label="LIMITS OF PROMPTING" />
+      <FigLabel label="LIMITS OF PROMPTING" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

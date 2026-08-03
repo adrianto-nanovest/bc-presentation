@@ -10,7 +10,8 @@
 // crossfades the matching illustration into the bordered box. Mouse-leave
 // clears activeFacet; the bordered box renders empty again.
 import { fireEvent, render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   F2RagGroundTruth,
   f2Slide,
@@ -24,10 +25,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[f2Slide.steps]}>
+    <SlideHarness def={f2Slide}>
       <AdvanceTo step={step} />
       <F2RagGroundTruth />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

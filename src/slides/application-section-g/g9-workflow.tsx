@@ -36,7 +36,7 @@ export function G9Workflow() {
 
   return (
     <>
-      <FigLabel section="G" num={9} label="THE WORKFLOW" />
+      <FigLabel label="THE WORKFLOW" />
 
       {/* Headline (always structural) */}
       <h1

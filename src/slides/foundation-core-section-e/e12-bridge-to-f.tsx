@@ -85,7 +85,7 @@ export function E12BridgeToF() {
         }}
       />
 
-      <FigLabel section="E" num={12} label="BRIDGE · BUILT" />
+      <FigLabel label="BRIDGE · BUILT" />
 
       {/* Bottom-left anchored beats. */}
       <div

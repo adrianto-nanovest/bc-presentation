@@ -65,7 +65,7 @@ export function E7ContextWhatWhy() {
 
   return (
     <>
-      <FigLabel section="E" num={7} label="LAYER 2 · CONTEXT" />
+      <FigLabel label="LAYER 2 · CONTEXT" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

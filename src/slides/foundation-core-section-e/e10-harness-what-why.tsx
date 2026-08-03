@@ -31,7 +31,7 @@ export function E10HarnessWhatWhy() {
 
   return (
     <>
-      <FigLabel section="E" num={10} label="LAYER 3 · HARNESS" />
+      <FigLabel label="LAYER 3 · HARNESS" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

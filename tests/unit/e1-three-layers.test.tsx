@@ -3,7 +3,8 @@
 // Covers the new 4-step design (0=PROMPT, 1=CONTEXT, 2=HARNESS, 3=SUMMARY)
 // ported from `claude-design-project/jsx/slides-a.jsx:36-184`.
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E1ThreeLayers,
   e1Slide,
@@ -16,10 +17,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e1Slide.steps]}>
+    <SlideHarness def={e1Slide}>
       <AdvanceTo step={step} />
       <E1ThreeLayers />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

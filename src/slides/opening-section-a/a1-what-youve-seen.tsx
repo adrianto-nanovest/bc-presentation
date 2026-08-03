@@ -111,7 +111,7 @@ export function A1WhatYouveSeen({ content: C = a1Content }: { content?: A1Conten
 
   return (
     <>
-      <FigLabel section="A" num={1} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

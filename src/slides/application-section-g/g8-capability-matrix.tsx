@@ -242,7 +242,7 @@ function G8CapabilityMatrix() {
       <style>{styles}</style>
 
       {/* STRUCTURAL — FigLabel + Headline (always present) */}
-      <FigLabel section="G" num={8} label="CAPABILITY MATRIX" />
+      <FigLabel label="CAPABILITY MATRIX" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

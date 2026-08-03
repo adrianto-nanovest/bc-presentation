@@ -154,7 +154,7 @@ export function J3RecipeBuildup() {
     <>
       <style>{styles}</style>
 
-      <FigLabel section="J" num={3} label="BUILDING YOURSELF UP" />
+      <FigLabel label="BUILDING YOURSELF UP" />
 
       {/* Slide headline at the canonical headline anchor (top:80 left:48). */}
       <p

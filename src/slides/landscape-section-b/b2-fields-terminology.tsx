@@ -66,7 +66,7 @@ export function B2FieldsTerminology() {
         }}
       />
 
-      <FigLabel section="B" num={2} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

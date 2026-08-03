@@ -47,7 +47,7 @@ export function D4DecisionPattern() {
 
   return (
     <>
-      <FigLabel section="D" num={4} label="WHICH LEVEL · WHEN" />
+      <FigLabel label="WHICH LEVEL · WHEN" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

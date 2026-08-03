@@ -26,7 +26,7 @@ export function J1HumilityIntro() {
   return (
     <div className="relative h-full w-full overflow-hidden">
       <HeroPhoto src="/heroes/j1-notebook-study.jpg" alt="" vignetteSide="bottom-left" />
-      <FigLabel section="J" num={1} label="THE RECIPE" />
+      <FigLabel label="THE RECIPE" />
 
       <div
         data-testid="j1-beats"

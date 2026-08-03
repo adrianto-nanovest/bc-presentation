@@ -70,7 +70,7 @@ export function F2RagGroundTruth() {
 
   return (
     <>
-      <FigLabel section="F" num={2} label="GROUND TRUTH" />
+      <FigLabel label="GROUND TRUTH" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

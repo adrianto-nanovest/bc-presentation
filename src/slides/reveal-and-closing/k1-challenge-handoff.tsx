@@ -90,7 +90,7 @@ export function K1ChallengeHandoff() {
         }}
       />
 
-      <FigLabel section="K" num={1} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Bottom-left anchored beats. */}
       <div

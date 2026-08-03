@@ -105,7 +105,7 @@ export function B4ModelsByCategory() {
         }}
       />
 
-      <FigLabel section="B" num={4} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

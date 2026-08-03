@@ -9,7 +9,8 @@
 // vignette, top-left ellipse, top-edge gloom) on top of the e11-bridge
 // photo — no <HeroPhoto>.
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E12BridgeToF,
   e12Slide,
@@ -23,10 +24,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e12Slide.steps]}>
+    <SlideHarness def={e12Slide}>
       <AdvanceTo step={step} />
       <E12BridgeToF />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

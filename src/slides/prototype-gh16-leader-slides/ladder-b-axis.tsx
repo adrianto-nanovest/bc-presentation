@@ -48,7 +48,7 @@ export function LadderAxis({ brand }: { brand: Brand }) {
 
   return (
     <>
-      <FigLabel section={L.fig.section} num={L.fig.num} label={L.fig.label} />
+      <FigLabel label={L.fig.label} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">{KW(L.headline, [...L.headlineKw])}</h1>

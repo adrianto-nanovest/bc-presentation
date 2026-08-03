@@ -144,7 +144,7 @@ export function E5PromptExamples() {
 
   return (
     <>
-      <FigLabel section="E" num={5} label="LAYER 1 · EXAMPLES" />
+      <FigLabel label="LAYER 1 · EXAMPLES" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

@@ -121,7 +121,7 @@ export function B3MechanicsLandscape() {
         }}
       />
 
-      <FigLabel section="B" num={3} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

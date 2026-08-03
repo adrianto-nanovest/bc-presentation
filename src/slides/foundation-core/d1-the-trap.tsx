@@ -26,7 +26,7 @@ export function D1TheTrap() {
 
   return (
     <>
-      <FigLabel section="D" num={1} label="THE TRAP" />
+      <FigLabel label="THE TRAP" />
 
       {/* The big stat — full-bleed at step 0; shrinks into header style at step 1+ */}
       <div

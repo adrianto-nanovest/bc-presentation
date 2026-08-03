@@ -51,7 +51,7 @@ export function H2DisciplineWall() {
 
   return (
     <div data-testid="h2-root" style={{ position: "absolute", inset: 0 }}>
-      <FigLabel section="H" num={2} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Headline (always structural) */}
       <h1

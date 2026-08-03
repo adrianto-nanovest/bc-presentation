@@ -222,7 +222,7 @@ function G7HeadToHead() {
       <style>{styles}</style>
 
       {/* STRUCTURAL — FigLabel + Headline */}
-      <FigLabel section="G" num={7} label="HEAD-TO-HEAD" />
+      <FigLabel label="HEAD-TO-HEAD" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

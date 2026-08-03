@@ -155,7 +155,7 @@ export function J4RecipeShip() {
     <>
       <style>{styles}</style>
 
-      <FigLabel section="J" num={4} label="BUILDING SOMETHING THAT SHIPS" />
+      <FigLabel label="BUILDING SOMETHING THAT SHIPS" />
 
       {/* Slide headline — same anchor as J.2 (top:80 left:48). */}
       <p

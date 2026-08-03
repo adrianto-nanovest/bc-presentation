@@ -25,7 +25,7 @@ export function F8YourAgenticOs() {
 
   return (
     <>
-      <FigLabel section="F" num={8} label="YOUR AGENTIC OS" />
+      <FigLabel label="YOUR AGENTIC OS" />
 
       <div className="slide-headline-row">
         <h1

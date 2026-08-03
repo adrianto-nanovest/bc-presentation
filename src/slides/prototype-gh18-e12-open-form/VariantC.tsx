@@ -39,7 +39,7 @@ export function VariantC() {
 
   return (
     <>
-      <FigLabel {...B.fig} />
+      <FigLabel label={B.fig.label} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

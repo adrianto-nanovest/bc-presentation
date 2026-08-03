@@ -52,7 +52,7 @@ export function K2PracticeLabOverview({
 
   return (
     <>
-      <FigLabel section="K" num={2} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

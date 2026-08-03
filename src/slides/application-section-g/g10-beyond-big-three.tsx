@@ -110,7 +110,7 @@ function G10BeyondBigThree() {
       <style>{styles}</style>
 
       {/* FigLabel — always visible */}
-      <FigLabel section="G" num={10} label="BEYOND THE BIG THREE" />
+      <FigLabel label="BEYOND THE BIG THREE" />
 
       {/* Headline — always visible, structural */}
       <h1

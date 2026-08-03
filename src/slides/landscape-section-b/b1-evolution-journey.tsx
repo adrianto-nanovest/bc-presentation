@@ -132,7 +132,7 @@ export function B1EvolutionJourney() {
         }}
       />
 
-      <FigLabel section="B" num={1} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

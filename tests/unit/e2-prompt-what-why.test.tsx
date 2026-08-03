@@ -9,7 +9,8 @@
 //   4 — Proper result streams in
 //   5 — Bridge text reveals
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E2PromptWhatWhy,
   e2Slide,
@@ -22,10 +23,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e2Slide.steps]}>
+    <SlideHarness def={e2Slide}>
       <AdvanceTo step={step} />
       <E2PromptWhatWhy />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

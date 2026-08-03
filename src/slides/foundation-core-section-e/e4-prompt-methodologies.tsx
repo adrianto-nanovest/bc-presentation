@@ -58,7 +58,7 @@ export function E4PromptMethodologies() {
 
   return (
     <>
-      <FigLabel section="E" num={4} label="LAYER 1 · METHODOLOGIES" />
+      <FigLabel label="LAYER 1 · METHODOLOGIES" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

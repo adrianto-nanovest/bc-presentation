@@ -9,7 +9,8 @@
 // Hover behavior: hovering a satellite surfaces its rich `hover` payload in
 // the left panel's hover details box.
 import { fireEvent, render, screen, act, waitFor } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E7ContextWhatWhy,
   e7Slide,
@@ -23,10 +24,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e7Slide.steps]}>
+    <SlideHarness def={e7Slide}>
       <AdvanceTo step={step} />
       <E7ContextWhatWhy />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

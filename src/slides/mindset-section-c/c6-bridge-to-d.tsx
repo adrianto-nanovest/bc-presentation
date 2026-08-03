@@ -16,7 +16,7 @@
 //
 // Layout —
 //   • Photo full-bleed (or fallback gradient if image missing).
-//   • TOP-LEFT: canonical <FigLabel section="C" num={6} … /> (matches E.11).
+//   • TOP-LEFT: canonical <FigLabel … /> (matches E.11).
 //   • CENTER: 3 italic Instrument Serif sentence-lines vertically stacked,
 //     each typed left-to-right via <TextStream> (typewriter effect).
 //   • BENEATH QUOTE: right-aligned attribution chip (normal fade, no stream).
@@ -120,7 +120,7 @@ export function BridgeMindsetToMechanics() {
       <DarkenOverlay strength={C.darkenStrength} zIndex={15} />
 
       {/* Canonical top-left FIG label — matches E.11's BRIDGE label. */}
-      <FigLabel section="C" num={6} label="BRIDGE · FROM MINDSET TO MECHANICS" />
+      <FigLabel label="BRIDGE · FROM MINDSET TO MECHANICS" />
 
       {/* CENTER — Kofi Annan epigraph. Vertically centered ~40–55% from top. */}
       <div

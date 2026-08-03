@@ -14,7 +14,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   F8YourAgenticOs,
   f8Slide,
@@ -33,10 +34,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const utils = render(
-    <DeckProvider stepCounts={[f8Slide.steps]}>
+    <SlideHarness def={f8Slide}>
       <AdvanceTo step={step} />
       <F8YourAgenticOs />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

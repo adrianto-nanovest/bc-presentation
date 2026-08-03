@@ -78,7 +78,7 @@ export function D5BridgeToE() {
         }}
       />
 
-      <FigLabel section="D" num={5} label="THE NEXT QUESTION" />
+      <FigLabel label="THE NEXT QUESTION" />
 
       {/* Bottom-left anchored beats. */}
       <div

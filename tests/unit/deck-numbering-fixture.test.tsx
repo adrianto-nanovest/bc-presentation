@@ -49,9 +49,9 @@ const OBSERVED_SLIDES: Record<Brand, number> = {
 };
 
 /** The closer each brand prints today. `general` runs no Practice Lab, so its
- *  K run is the closer alone and it renumbers itself to K.1 — the `FIG_NUM`
- *  hack at `src/slides/reveal-and-closing/k3-thank-you.tsx:21` that Phase 3
- *  deletes in favour of a derived number. */
+ *  K run is the closer alone and it renumbers itself to K.1. That used to be a
+ *  `FIG_NUM` hack inside `k3-thank-you.tsx`, reading the brand's `practiceLab`
+ *  flag; gh#35 deleted it and the K.1 below is now the composer's own output. */
 const OBSERVED_CLOSER: Record<Brand, string> = {
   berau: "K.3",
   gems: "K.3",

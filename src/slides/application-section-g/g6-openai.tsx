@@ -18,7 +18,7 @@ function G6OpenAI() {
   return (
     <div className="slide-wrap g6-slide">
       {/* FigLabel — always visible */}
-      <FigLabel section="G" num={6} label="OPENAI" />
+      <FigLabel label="OPENAI" />
 
       {/* Headline — always visible, structural */}
       <h1

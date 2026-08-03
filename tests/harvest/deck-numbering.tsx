@@ -28,6 +28,17 @@ import type { SlideDef } from "@/deck/types";
 /** `DeckProvider` as imported from a brand's own module epoch. */
 type DeckProviderComponent = (typeof import("@/deck/DeckContext"))["DeckProvider"];
 
+/** `SlideNumberProvider` from that same epoch. A React context is an object
+ *  identity, so an epoch-crossing import here would hand the slides a DIFFERENT
+ *  context than their `FigLabel` reads and every `useSlideNumber()` would throw
+ *  "outside a provider" — the same trap the file header calls out for
+ *  `DeckProvider`. */
+type SlideNumberProviderComponent =
+  (typeof import("@/deck/SlideNumberContext"))["SlideNumberProvider"];
+
+/** The composed row a slide is mounted at — its DERIVED letter and number. */
+type ComposedRow = (typeof import("@/deck/registry"))["composedDeck"]["slides"][number];
+
 /** One slide's printed figure label. Keyed by deck INDEX, not by `SlideDef.id`
  *  (which gh#34 added): the fixture was recorded before ids existed, and re-keying
  *  it would rewrite the golden record this phase is measured against. Index is
@@ -109,13 +120,23 @@ function readFigLabel(container: HTMLElement, at: string): Pick<NumberingRow, "f
  */
 function harvestSlide(
   def: SlideDef,
-  index: number,
+  composed: ComposedRow,
   DeckProvider: DeckProviderComponent,
+  SlideNumberProvider: SlideNumberProviderComponent,
   at: string,
 ): NumberingRow {
+  const { index, letter, num, sectionKey } = composed;
   try {
     const { container } = render(
-      <DeckProvider stepCounts={[def.steps]}>{def.render()}</DeckProvider>,
+      <DeckProvider stepCounts={[def.steps]}>
+        {/* `<Slide>` publishes this in the app (§3.5); the harvest stands in for
+            it with the SAME composed row `Deck.tsx` would read, and nothing
+            else. What is read back out of the DOM is still whatever the slide
+            actually printed. */}
+        <SlideNumberProvider value={{ letter, num, sectionKey }}>
+          {def.render()}
+        </SlideNumberProvider>
+      </DeckProvider>,
     );
     return { index, ...readFigLabel(container, at) };
   } finally {
@@ -140,18 +161,24 @@ export async function harvestDeck(brand: Brand): Promise<NumberingRow[]> {
   const variant = standardVariantFor(brand);
   pointLocationAt(variant);
   vi.resetModules();
-  // Same epoch, both of them. See the file header.
-  const [{ deckSlides }, { DeckProvider }] = await Promise.all([
+  // Same epoch, all three. See the file header.
+  const [{ composedDeck }, { DeckProvider }, { SlideNumberProvider }] = await Promise.all([
     import("@/deck/registry"),
     import("@/deck/DeckContext"),
+    import("@/deck/SlideNumberContext"),
   ]);
 
   const rows: NumberingRow[] = [];
   const failures: string[] = [];
-  deckSlides.forEach((def, index) => {
+  // Walked as the COMPOSED deck rather than as `deckSlides`, because the figure
+  // a slide prints is now a function of its composed row (§3.5). The two are the
+  // same slides in the same order — `deck-composed-numbering.test.ts` asserts
+  // exactly that, so reading the composed list loses nothing.
+  composedDeck.slides.forEach((composed) => {
+    const { def, index } = composed;
     const at = `${variant} slide ${index} (${def.section})`;
     try {
-      rows.push(harvestSlide(def, index, DeckProvider, at));
+      rows.push(harvestSlide(def, composed, DeckProvider, SlideNumberProvider, at));
     } catch (err) {
       failures.push(`${at}: ${err instanceof Error ? err.message : String(err)}`);
     }

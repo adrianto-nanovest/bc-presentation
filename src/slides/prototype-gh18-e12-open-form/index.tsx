@@ -33,6 +33,7 @@ import { useEffect, useState } from "react";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
 import { useKeyboardNav } from "@/deck/useKeyboardNav";
 import { Slide } from "@/deck/Slide";
+import { brief } from "./brief";
 import { PrototypeSwitcher } from "./PrototypeSwitcher";
 import { VariantA, variantAName } from "./VariantA";
 import { VariantB, variantBName } from "./VariantB";
@@ -76,12 +77,17 @@ function PrototypeStage() {
 
   return (
     <>
+      {/* PROTOTYPE — publishes its own brief's figure so the variants' FigLabel
+          keeps rendering off the number context (§3.5). Goes with this dir. */}
       <Slide
         index={0}
         animationMode="step-reveal"
         canonicalPose={1}
         surface="dark"
         section="E"
+        letter={brief.fig.section}
+        num={brief.fig.num}
+        sectionKey="fundamentals"
       >
         {variant === "A" && <VariantA />}
         {variant === "B" && <VariantB />}

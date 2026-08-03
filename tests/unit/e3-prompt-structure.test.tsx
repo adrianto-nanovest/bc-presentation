@@ -8,7 +8,8 @@
 //        framework tile lights up the spine entries listed in `f.hits`
 //   2 — footer caption reveals beneath the framework grid
 import { render, screen, act, fireEvent, within } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E3PromptStructure,
   e3Slide,
@@ -22,10 +23,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e3Slide.steps]}>
+    <SlideHarness def={e3Slide}>
       <AdvanceTo step={step} />
       <E3PromptStructure />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

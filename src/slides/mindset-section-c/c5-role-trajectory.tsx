@@ -131,7 +131,7 @@ export function C5RoleTrajectory() {
     >
       {/* FIG label — canonical top-left position, via shared component.
           Renders instantly with no opacity gate (matches C.1/C.2). */}
-      <FigLabel section="C" num={5} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Slide title — canonical .slide-headline.small at top:80 left:48.
           Renders instantly with no opacity gate (matches C.1/C.2). */}

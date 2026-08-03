@@ -121,8 +121,19 @@ function ProtoSlide() {
 
   return (
     <>
-      <Slide index={0} animationMode="step-reveal" canonicalPose={2} surface="dark" section="E">
-        <FigLabel {...content.fig} />
+      {/* PROTOTYPE — publishes its own content's figure so its FigLabel keeps
+          rendering off the number context (§3.5). Goes with this directory. */}
+      <Slide
+        index={0}
+        animationMode="step-reveal"
+        canonicalPose={2}
+        surface="dark"
+        section="E"
+        letter={content.fig.section}
+        num={content.fig.num}
+        sectionKey="fundamentals"
+      >
+        <FigLabel label={content.fig.label} />
 
         <div className="slide-headline-row">
           <h1 className="slide-headline small">{highlight(content.headline, content.headlineKw)}</h1>

@@ -99,7 +99,7 @@ export function G3ClaudeCapabilities() {
       <style>{styles}</style>
 
       {/* STRUCTURAL — FigLabel + Headline (always present) */}
-      <FigLabel section="G" num={3} label="CLAUDE CAPABILITIES" />
+      <FigLabel label="CLAUDE CAPABILITIES" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

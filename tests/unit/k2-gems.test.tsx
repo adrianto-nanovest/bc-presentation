@@ -8,7 +8,7 @@
 //   - the word "track" appears in no string GEMS can see — the reason the
 //     override exists at all.
 import { act, render, screen } from "@testing-library/react";
-import { DeckProvider } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { k2Content, k2GemsContent } from "@/slides/reveal-and-closing/content";
 import { k2Slide } from "@/slides/reveal-and-closing/k2-practice-lab-overview";
 import { k2GemsSlide } from "@/slides/reveal-and-closing/k2-gems";
@@ -34,11 +34,17 @@ const CANONICAL_LINK =
 // proves the def hands the GEMS content over. Rendering
 // `<K2PracticeLabOverview content={k2GemsContent} />` here would pass even if
 // k2-gems.tsx forgot the prop and fell back to the shared spine.
+// K.2 exists only where the Practice Lab runs, and `general` — the variant unit
+// tests resolve to — drops it, so there is no composed row to look up. That a
+// practiceLab deck really prints K.2 here is proved from rendered output by
+// `deck-numbering-fixture.test.tsx`.
+const K2_IN_PRACTICE_LAB_DECK = { letter: "K", num: 2, sectionKey: "lab" } as const;
+
 function renderGems() {
   return render(
-    <DeckProvider stepCounts={[k2GemsSlide.steps]}>
+    <SlideHarness def={k2GemsSlide} at={K2_IN_PRACTICE_LAB_DECK}>
       {k2GemsSlide.render()}
-    </DeckProvider>,
+    </SlideHarness>,
   );
 }
 

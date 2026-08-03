@@ -4,7 +4,8 @@
 // footer caption) ported from
 // `claude-design-section-d/jsx/slides-d.jsx:921-1095`.
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   D4DecisionPattern,
   d4Slide,
@@ -17,10 +18,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[d4Slide.steps]}>
+    <SlideHarness def={d4Slide}>
       <AdvanceTo step={step} />
       <D4DecisionPattern />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

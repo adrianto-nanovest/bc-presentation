@@ -47,10 +47,12 @@ export const deckSlides: SlideDef[] = [
 ];
 
 // The same deck, carrying the letter and page number DERIVED from each slide's
-// position (§3.4). Nothing renders from it yet — the chrome still prints the
-// hardcoded `<FigLabel section= num=>` props, and `tests/unit/deck-composed-numbering.test.ts`
-// holds the two side by side and requires them to agree. Later tickets in this
-// phase move the chrome onto these values and delete the hardcoded pairs.
+// position (§3.4). THIS IS WHAT THE SCREEN PRINTS as of §3.5: `Deck.tsx` reads
+// the row for the showing index and publishes it through `SlideNumberContext`,
+// and `FigLabel` renders from that and from nothing else. No slide names a
+// letter or a number any more, so a cut, insert or reorder cannot leave a gap.
+// `tests/unit/deck-composed-numbering.test.ts` holds these derived pairs against
+// the pre-refactor record in `tests/fixtures/deck-numbering.json`.
 //
 // COMPOSED AT MODULE SCOPE, on purpose and exactly once, because `deckSlides`
 // already resolves `VARIANT` at module scope — one module epoch holds exactly
@@ -58,3 +60,11 @@ export const deckSlides: SlideDef[] = [
 // makes R4 (a section key may form only one run) a load-time error rather than
 // a first-paint one.
 export const composedDeck: ComposedDeck<SlideDef> = composeDeck(deckSlides);
+
+// The dev route renders the hex ladder ALONE, so that route is its own one-slide
+// deck and composes as one. It prints no FigLabel, so these values never reach
+// the screen — but `<Slide>` publishes a number for whatever it shows, and
+// deriving this one keeps the audience-facing paths free of a hardcoded
+// letter/number pair. (The five dev-only prototype routes still pass their own
+// hardcoded figures in; they are deleted with their directories in Phases 5–8.)
+export const hexLadderComposedDeck: ComposedDeck<SlideDef> = composeDeck([hexLadderDevSlide]);

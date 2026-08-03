@@ -75,7 +75,7 @@ export function F6HooksUnsexyWork() {
 
   return (
     <>
-      <FigLabel section="F" num={6} label="THE UNSEXY WORK" />
+      <FigLabel label="THE UNSEXY WORK" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

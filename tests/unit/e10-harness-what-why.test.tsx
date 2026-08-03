@@ -8,7 +8,8 @@
 //   3 — 4-line stanza reveals.
 //   4 — tagline reveals.
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E10HarnessWhatWhy,
   e10Slide,
@@ -22,10 +23,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e10Slide.steps]}>
+    <SlideHarness def={e10Slide}>
       <AdvanceTo step={step} />
       <E10HarnessWhatWhy />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

@@ -159,7 +159,7 @@ export function G5Google() {
       `}</style>
 
       {/* FigLabel — always visible */}
-      <FigLabel section="G" num={5} label="GOOGLE" />
+      <FigLabel label="GOOGLE" />
 
       {/* Headline — positioned below FigLabel (matches G2 convention) */}
       <h1 className="slide-headline small g5-headline">

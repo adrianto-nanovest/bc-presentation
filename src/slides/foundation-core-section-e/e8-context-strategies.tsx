@@ -37,7 +37,7 @@ export function E8ContextStrategies() {
 
   return (
     <>
-      <FigLabel section="E" num={8} label="CONTEXT STRATEGIES" />
+      <FigLabel label="CONTEXT STRATEGIES" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

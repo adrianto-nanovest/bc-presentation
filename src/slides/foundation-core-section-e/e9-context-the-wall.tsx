@@ -38,7 +38,7 @@ export function E9ContextTheWall() {
 
   return (
     <>
-      <FigLabel section="E" num={9} label="CONTEXT · PITFALLS" />
+      <FigLabel label="CONTEXT · PITFALLS" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

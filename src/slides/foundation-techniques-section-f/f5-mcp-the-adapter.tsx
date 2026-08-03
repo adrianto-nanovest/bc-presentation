@@ -105,7 +105,7 @@ export function F5McpTheAdapter() {
 
   return (
     <>
-      <FigLabel section="F" num={5} label="THE ADAPTER" />
+      <FigLabel label="THE ADAPTER" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

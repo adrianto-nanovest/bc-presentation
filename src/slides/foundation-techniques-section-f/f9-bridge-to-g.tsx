@@ -82,7 +82,7 @@ export function F9BridgeToG() {
         }}
       />
 
-      <FigLabel section="F" num={9} label="BRIDGE · CROSSED" />
+      <FigLabel label="BRIDGE · CROSSED" />
 
       {/* Bottom-left anchored beats. */}
       <div

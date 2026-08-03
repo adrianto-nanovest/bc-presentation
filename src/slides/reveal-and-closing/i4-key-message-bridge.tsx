@@ -89,7 +89,7 @@ export function I4KeyMessageBridge() {
         }}
       />
 
-      <FigLabel section="I" num={4} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Bottom-left anchored beats. */}
       <div

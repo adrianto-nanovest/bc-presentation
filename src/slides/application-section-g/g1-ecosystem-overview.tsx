@@ -60,7 +60,7 @@ export function G1EcosystemOverview() {
 
   return (
     <>
-      <FigLabel section="G" num={1} label="ECOSYSTEM" />
+      <FigLabel label="ECOSYSTEM" />
 
       {/* ───────────── Headline (always structural, no Reveal) ───────────── */}
       <h1

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { DeckProvider } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { I3Portfolio, i3Slide } from "@/slides/reveal-and-closing/i3-portfolio";
 
 test("I.3 declares 5 steps with canonicalPose=4 and interactive mode", () => {
@@ -10,9 +10,9 @@ test("I.3 declares 5 steps with canonicalPose=4 and interactive mode", () => {
 
 test("I.3 renders FIG label, headline, caption, and the categorized list", () => {
   render(
-    <DeckProvider stepCounts={[i3Slide.steps]}>
+    <SlideHarness def={i3Slide}>
       <I3Portfolio />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   const fig = document.querySelector(".fig-label");
   expect(fig?.textContent).toMatch(/FIG\.\s*I\.3.*THE PORTFOLIO/i);
@@ -25,9 +25,9 @@ test("I.3 renders FIG label, headline, caption, and the categorized list", () =>
 
 test("I.3 swaps canvas content when a heavy item is clicked", () => {
   render(
-    <DeckProvider stepCounts={[i3Slide.steps]}>
+    <SlideHarness def={i3Slide}>
       <I3Portfolio />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   // Default canvas first.
   expect(screen.getByText(/MAIN AGENT/)).toBeInTheDocument();
@@ -38,9 +38,9 @@ test("I.3 swaps canvas content when a heavy item is clicked", () => {
 
 test("I.3 swaps canvas to a light panel when a light item is clicked", () => {
   render(
-    <DeckProvider stepCounts={[i3Slide.steps]}>
+    <SlideHarness def={i3Slide}>
       <I3Portfolio />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   fireEvent.click(screen.getByText("Sonarqube"));
   expect(screen.getByText(/Code-quality APIs/i)).toBeInTheDocument();
@@ -48,9 +48,9 @@ test("I.3 swaps canvas to a light panel when a light item is clicked", () => {
 
 test("I.3 see-it-real toggle swaps the canvas to a screenshot grid", () => {
   render(
-    <DeckProvider stepCounts={[i3Slide.steps]}>
+    <SlideHarness def={i3Slide}>
       <I3Portfolio />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   fireEvent.click(screen.getByText("stocks intel"));
   fireEvent.click(screen.getByText(/see it real/));

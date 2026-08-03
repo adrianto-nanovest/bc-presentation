@@ -124,7 +124,7 @@ export function C1ToolToBridge() {
       <C1ParticleField />
 
       {/* FIG label — canonical top-left position, via shared component. */}
-      <FigLabel section="C" num={1} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Slide title — canonical .slide-headline.small at top:80 left:48. */}
       <div className="slide-headline-row">

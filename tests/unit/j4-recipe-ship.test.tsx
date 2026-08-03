@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { j4Content } from "@/slides/reveal-and-closing/content";
 import {
   J4RecipeShip,
@@ -15,10 +16,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderJ4(advanceToStep = j4Slide.canonicalPose) {
   return render(
-    <DeckProvider stepCounts={[j4Slide.steps]}>
+    <SlideHarness def={j4Slide}>
       <AdvanceTo step={advanceToStep} />
       <J4RecipeShip />
-    </DeckProvider>,
+    </SlideHarness>,
   );
 }
 

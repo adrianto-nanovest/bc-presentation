@@ -28,7 +28,7 @@ export function E2PromptWhatWhy() {
 
   return (
     <>
-      <FigLabel section="E" num={2} label="LAYER 1 · PROMPT" />
+      <FigLabel label="LAYER 1 · PROMPT" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

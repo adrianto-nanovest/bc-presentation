@@ -8,7 +8,8 @@
 // The previous click-to-expand-shrink interaction has been dropped — these
 // are static cards now.
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   E11HarnessPractices,
   e11Slide,
@@ -22,10 +23,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <DeckProvider stepCounts={[e11Slide.steps]}>
+    <SlideHarness def={e11Slide}>
       <AdvanceTo step={step} />
       <E11HarnessPractices />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();
@@ -151,11 +152,11 @@ test("backward navigation 0 → 1 → 0 re-arms the card stagger", () => {
 
   try {
     render(
-      <DeckProvider stepCounts={[e11Slide.steps]}>
+      <SlideHarness def={e11Slide}>
         <GoTo slide={0} step={0} />
         <GoTo slide={0} step={1} />
         <E11HarnessPractices />
-      </DeckProvider>,
+      </SlideHarness>,
     );
 
     const firstCardId = `practice-card-${e11Content.practices[0].id}`;

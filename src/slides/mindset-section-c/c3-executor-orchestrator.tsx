@@ -166,7 +166,7 @@ export function C3ExecutorOrchestrator() {
       />
 
       {/* FIG label */}
-      <FigLabel section="C" num={3} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Canonical slide headline with keyword highlight */}
       <div className="slide-headline-row">

@@ -35,7 +35,7 @@
 import { useCallback, useEffect, useState, type JSX, type ReactNode } from "react";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
 import { Slide } from "@/deck/Slide";
-import type { Brand } from "./brief";
+import { ladderBrief, pillarBrief, type Brand } from "./brief";
 
 import { PillarsOrbit } from "./pillars-a-orbit";
 import { PillarsStack } from "./pillars-b-stack";
@@ -64,11 +64,20 @@ const LADDER_STEPS = 5; // 0 rungs · 1 asserted · 2 open · 3 aside+closer · 
 
 const SLIDES: Record<
   SlideKey,
-  { steps: number; label: string; variants: Record<VariantKey, ProtoVariant> }
+  {
+    steps: number;
+    label: string;
+    // The prototype's own hardcoded figure, lifted from its brief. Published
+    // through the number context (§3.5) so the variants' FigLabel can read it;
+    // these are leader-deck roman numerals, not production letters.
+    fig: { section: string; num: number; label: string };
+    variants: Record<VariantKey, ProtoVariant>;
+  }
 > = {
   pillars: {
     steps: PILLAR_STEPS,
     label: "Agentic Org",
+    fig: pillarBrief.fig,
     variants: {
       a: { name: "Orbit — hub & spokes", render: (b) => <PillarsOrbit brand={b} /> },
       b: { name: "Stack — decision ledger", render: (b) => <PillarsStack brand={b} /> },
@@ -78,6 +87,7 @@ const SLIDES: Record<
   ladder: {
     steps: LADDER_STEPS,
     label: "Capability Ladder",
+    fig: ladderBrief.fig,
     variants: {
       a: { name: "Staircase — port", render: (b) => <LadderStaircase brand={b} /> },
       b: { name: "Axis — above/below", render: (b) => <LadderAxis brand={b} /> },
@@ -152,6 +162,9 @@ export function Proto16Route() {
         canonicalPose={def.steps - 1}
         surface="dark"
         section="A"
+        letter={def.fig.section}
+        num={def.fig.num}
+        sectionKey="opening"
       >
         {def.variants[variant].render(brand)}
       </Slide>

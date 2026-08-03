@@ -218,8 +218,20 @@ function ProtoSlide({
 
   return (
     <>
-      <Slide index={0} animationMode="step-reveal" canonicalPose={1} surface="dark" section="E">
-        <FigLabel section="E" num={12} label="THE LOOP" />
+      {/* PROTOTYPE — publishes its own hardcoded figure so its FigLabel keeps
+          rendering E.12 off the number context (§3.5). Not a production number;
+          thrown away with this directory. */}
+      <Slide
+        index={0}
+        animationMode="step-reveal"
+        canonicalPose={1}
+        surface="dark"
+        section="E"
+        letter="E"
+        num={12}
+        sectionKey="fundamentals"
+      >
+        <FigLabel label="THE LOOP" />
 
         <div className="slide-headline-row">
           <h1 className="slide-headline small">{HEADLINE}</h1>

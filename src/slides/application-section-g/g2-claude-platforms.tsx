@@ -71,7 +71,7 @@ export function G2ClaudePlatforms() {
 
   return (
     <>
-      <FigLabel section="G" num={2} label="CLAUDE PLATFORMS" />
+      <FigLabel label="CLAUDE PLATFORMS" />
 
       {/* ───────────── Headline (always structural, no Reveal) ───────────── */}
       <h1

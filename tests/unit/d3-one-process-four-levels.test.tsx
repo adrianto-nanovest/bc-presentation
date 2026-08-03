@@ -4,7 +4,8 @@
 // reveals capstone + unlocks hover) ported from
 // `claude-design-section-d/jsx/slides-d.jsx:626-910`.
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   D3OneProcessFourLevels,
   d3Slide,
@@ -18,10 +19,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[d3Slide.steps]}>
+    <SlideHarness def={d3Slide}>
       <AdvanceTo step={step} />
       <D3OneProcessFourLevels />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

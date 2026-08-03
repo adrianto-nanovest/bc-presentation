@@ -12,7 +12,8 @@
 //   docs/references/artificialanalysis/2026-07-31-{text-to-image,text-to-video,
 //                                                  text-to-speech,vocal}.png
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   B4ModelsByCategory,
   b4Slide,
@@ -38,10 +39,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[b4Slide.steps]}>
+    <SlideHarness def={b4Slide}>
       <AdvanceTo step={step} />
       <B4ModelsByCategory />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

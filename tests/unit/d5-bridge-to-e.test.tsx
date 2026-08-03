@@ -4,7 +4,8 @@
 //   step 0 — beat1 (two display lines) + copper rule
 //   step 1 — beat2 (italic copper subline)
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   D5BridgeToE,
   d5Slide,
@@ -18,10 +19,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[d5Slide.steps]}>
+    <SlideHarness def={d5Slide}>
       <AdvanceTo step={step} />
       <D5BridgeToE />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

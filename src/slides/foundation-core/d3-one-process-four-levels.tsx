@@ -56,7 +56,7 @@ export function D3OneProcessFourLevels() {
 
   return (
     <>
-      <FigLabel section="D" num={3} label="ONE PROCESS · FOUR LEVELS" />
+      <FigLabel label="ONE PROCESS · FOUR LEVELS" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

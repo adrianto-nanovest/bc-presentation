@@ -166,7 +166,7 @@ export function J2FivePrinciples() {
     <>
       <style>{styles}</style>
 
-      <FigLabel section="J" num={2} label="FIVE PRINCIPLES" />
+      <FigLabel label="FIVE PRINCIPLES" />
 
       {/* Slide headline at the canonical headline anchor (top:80 left:48). */}
       <p

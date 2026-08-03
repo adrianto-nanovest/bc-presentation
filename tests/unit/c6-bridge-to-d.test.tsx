@@ -8,7 +8,8 @@
 //     HeroPhoto <img> src (bridgeContent.heroSrc) and the slide root render.
 //   - NO hover handlers anywhere on the slide.
 import { render, screen, act, cleanup } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   BridgeMindsetToMechanics,
   bridgeMindsetToMechanicsSlide,
@@ -22,10 +23,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[bridgeMindsetToMechanicsSlide.steps]}>
+    <SlideHarness def={bridgeMindsetToMechanicsSlide}>
       <AdvanceTo step={step} />
       <BridgeMindsetToMechanics />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

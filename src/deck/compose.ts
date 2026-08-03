@@ -1,12 +1,12 @@
 // Spec §3.4 — the deck composer.
 //
-// Turns an ordered slide list into display letters and page numbers. Once the
-// chrome reads them (§3.5, a later ticket) no slide needs to hardcode
-// `section="E" num={11}`, and a cut, insert or reorder can no longer leave a
-// visible gap. `src/deck/registry.tsx` composes the live deck through this
-// (gh#34), but NOTHING RENDERS FROM IT YET — the chrome still prints its own
-// hardcoded props, and the two are held equal by
-// `tests/unit/deck-composed-numbering.test.ts`.
+// Turns an ordered slide list into display letters and page numbers.
+// `src/deck/registry.tsx` composes the live deck through this (gh#34), and as of
+// §3.5 (gh#35) THIS IS WHAT THE SCREEN PRINTS: `Deck.tsx` publishes each row
+// through `SlideNumberContext` and `FigLabel` renders from it, so no slide
+// hardcodes `section="E" num={11}` any more and a cut, insert or reorder can no
+// longer leave a visible gap. What it derives is held against the pre-refactor
+// record by `tests/unit/deck-composed-numbering.test.ts`.
 //
 // Pure: a function over plain data. No React, no DOM, no work at module scope.
 

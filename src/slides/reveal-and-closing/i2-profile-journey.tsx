@@ -59,7 +59,7 @@ export function I2ProfileJourney() {
         }}
       />
 
-      <FigLabel section="I" num={2} label="THE JOURNEY" />
+      <FigLabel label="THE JOURNEY" />
 
       <div className="slide-headline-row" style={{ zIndex: 20 }}>
         <h1 className="slide-headline small">

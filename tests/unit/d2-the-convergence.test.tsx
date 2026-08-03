@@ -4,7 +4,8 @@
 // 2=summary band) ported from
 // `claude-design-section-d/jsx/slides-d.jsx:265-624`.
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   D2TheConvergence,
   d2Slide,
@@ -18,10 +19,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[d2Slide.steps]}>
+    <SlideHarness def={d2Slide}>
       <AdvanceTo step={step} />
       <D2TheConvergence />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

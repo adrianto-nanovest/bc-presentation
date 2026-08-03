@@ -14,13 +14,6 @@ import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
 import { k3Content as C } from "./content";
-import { BRANDS } from "@/deck-variants";
-import { VARIANT } from "@/variant";
-
-// A brand without a Practice Lab drops K.1/K.2, so this closer is the only K
-// slide there and renumbers to K.1. (Phase 3 derives every figure number from
-// the composed deck and deletes this constant — spec §3.5.)
-const FIG_NUM = BRANDS[VARIANT.brand].practiceLab ? 3 : 1;
 
 // ───────────────────── slide ─────────────────────
 
@@ -89,7 +82,7 @@ export function K3ThankYou() {
         }}
       />
 
-      <FigLabel section="K" num={FIG_NUM} label={C.figLabel} />
+      <FigLabel label={C.figLabel} />
 
       {/* Bottom-left anchored beats. */}
       <div

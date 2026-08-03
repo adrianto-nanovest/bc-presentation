@@ -1,6 +1,6 @@
 // tests/unit/i2-profile-journey.test.tsx
 import { render, screen } from "@testing-library/react";
-import { DeckProvider } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import {
   I2ProfileJourney,
   i2Slide,
@@ -8,9 +8,9 @@ import {
 
 function renderSlide() {
   return render(
-    <DeckProvider stepCounts={[i2Slide.steps]}>
+    <SlideHarness def={i2Slide}>
       <I2ProfileJourney />
-    </DeckProvider>,
+    </SlideHarness>,
   );
 }
 

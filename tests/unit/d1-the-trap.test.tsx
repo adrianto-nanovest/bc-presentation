@@ -4,7 +4,8 @@
 // AutomationLoop, 2=prescription) ported from
 // `claude-design-section-d/jsx/slides-d.jsx:143-257`.
 import { render, screen, act } from "@testing-library/react";
-import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { useDeck } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { D1TheTrap, d1Slide } from "@/slides/foundation-core/d1-the-trap";
 
 function AdvanceTo({ step }: { step: number }) {
@@ -14,10 +15,10 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   const result = render(
-    <DeckProvider stepCounts={[d1Slide.steps]}>
+    <SlideHarness def={d1Slide}>
       <AdvanceTo step={step} />
       <D1TheTrap />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   act(() => {
     screen.getByTestId("goto").click();

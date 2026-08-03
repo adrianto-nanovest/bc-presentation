@@ -86,7 +86,7 @@ export function F4SkillsWriteOnce() {
 
   return (
     <>
-      <FigLabel section="F" num={4} label="WRITE ONCE" />
+      <FigLabel label="WRITE ONCE" />
 
       <div className="slide-headline-row">
         <h1 className="slide-headline small">

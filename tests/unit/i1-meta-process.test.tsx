@@ -1,6 +1,6 @@
 // tests/unit/i1-meta-process.test.tsx
 import { render, screen } from "@testing-library/react";
-import { DeckProvider } from "@/deck/DeckContext";
+import { SlideHarness } from "../support/slide-harness";
 import { I1MetaProcess, i1Slide } from "@/slides/reveal-and-closing/i1-meta-process";
 import { I1Backdrop } from "@/slides/reveal-and-closing/components/I1Backdrop";
 
@@ -11,9 +11,9 @@ test("I.1 declares 4 steps with canonicalPose=3", () => {
 
 test("I.1 renders the FIG label, two stagger lines, mid line, and four cards", () => {
   render(
-    <DeckProvider stepCounts={[i1Slide.steps]}>
+    <SlideHarness def={i1Slide}>
       <I1MetaProcess />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   const fig = document.querySelector(".fig-label");
   expect(fig?.textContent).toMatch(/FIG\.\s*I\.1.*THE PROCESS/i);
@@ -38,9 +38,9 @@ test("I.1 renders the FIG label, two stagger lines, mid line, and four cards", (
 
 test("I.1 mounts the grid-pulse backdrop, visible at step 0 and hidden once the cards land", () => {
   const { rerender } = render(
-    <DeckProvider stepCounts={[i1Slide.steps]}>
+    <SlideHarness def={i1Slide}>
       <I1MetaProcess />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   const backdrop = screen.getByTestId("i1-backdrop");
   expect(backdrop).toHaveAttribute("data-sim", "C");
@@ -49,9 +49,9 @@ test("I.1 mounts the grid-pulse backdrop, visible at step 0 and hidden once the 
   // DeckProvider starts at step 0; drive the fade through the component's own
   // prop rather than the deck, which has no test-facing step setter.
   rerender(
-    <DeckProvider stepCounts={[i1Slide.steps]}>
+    <SlideHarness def={i1Slide}>
       <I1Backdrop stepIndex={2} />
-    </DeckProvider>,
+    </SlideHarness>,
   );
   expect(screen.getByTestId("i1-backdrop")).toHaveStyle({ opacity: "0" });
 });
