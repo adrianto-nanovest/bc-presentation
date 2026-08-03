@@ -27,6 +27,19 @@ const stageStyle: CSSProperties = {
   cursor: "pointer",
 };
 
+// PROTOTYPE gh#15 — slides that stay fully dark in light theme (user call:
+// title, every BRIDGE slide, I.2). Indices match the current registry order.
+const GH15_DARK_SLIDES = new Set([
+  0,  // Title
+  12, // C.6  BRIDGE · FROM MINDSET TO MECHANICS
+  29, // E.12 BRIDGE · BUILT
+  38, // F.9  BRIDGE · CROSSED
+  49, // G.11 BRIDGE · WIELD
+  52, // H.3  BRIDGE · DISCIPLINE
+  54, // I.2  THE JOURNEY
+  56, // I.4  BRIDGE · RECIPE
+]);
+
 export function Slide({
   index,
   animationMode,
@@ -60,6 +73,7 @@ export function Slide({
           data-animation-mode={animationMode}
           data-canonical-pose={canonicalPose}
           data-surface={surface}
+          data-gh15-dark={GH15_DARK_SLIDES.has(index) ? "" : undefined}
           style={stageStyle}
           onClick={handleClick}
         >

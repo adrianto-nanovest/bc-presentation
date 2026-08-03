@@ -1,0 +1,214 @@
+/* =====================================================================
+   PROTOTYPE gh#15 — global light theme via CSS-var swap. THROWAWAY. v2.
+
+   v2 after first user reaction:
+   - Direction locked: FULL INVERT — every dark-authored box goes cream.
+     The "dark island" panels were rejected (dark cards on cream: no).
+   - Except: title / all BRIDGE slides / I.2 stay entirely dark, via a
+     per-slide opt-out attribute (data-gh15-dark on .stage, Slide.tsx).
+   - Variant C dropped. A = copper accent, B = Claude coral accent.
+   - Hardcoded inline dark backgrounds (rgba(10,10,10,α) & friends) are
+     overridden by [style*=…] attribute selectors — React serializes the
+     inline style attribute, so the literals are matchable. Stylesheet
+     dark cards (.g1-card etc.) overridden by class.
+   - Muted text ramp darkened one step (contrast complaint).
+   - Chips/tables that use copper-100/200 as LIGHT TINT backgrounds keep
+     their tint + dark ink (the mirror ladder inverted them into the
+     "dark brown tables" the user flagged).
+
+   Toggle: t key, v cycles A/B, ?theme= & ?ltv=, localStorage.
+   ===================================================================== */
+
+/* ---------- shared light chrome: neutral/surface remap (all variants) */
+html[data-theme="light"] {
+  --surface-dark: #faf9f5;   /* canvas */
+  --surface-light: #141413;  /* mirrored; dormant — no surface:"light" slides today */
+  --neutral-0: #0a0a0a;      /* was pure-white highlight text */
+  --neutral-50: #141413;     /* ink — primary text */
+  --neutral-100: #252523;    /* body strong */
+  --neutral-200: #3d3d3a;    /* body */
+  --neutral-300: #5f5c55;    /* muted — one step darker than Claude's #6c6a64 (user: too faint) */
+  --neutral-400: #6f6c65;    /* muted soft, darkened */
+  --neutral-500: #8a8680;
+  --neutral-700: #e6dfd8;    /* hairline */
+  --neutral-800: #efe9de;    /* cream card */
+  --neutral-900: #faf9f5;    /* canvas — .stage background reads this */
+  --neutral-950: #f5f0e8;    /* soft band */
+  --shadow-base: 0 16px 48px -8px rgba(20, 20, 19, 0.16);
+}
+
+/* ---------- variant A: copper ladder mirrored (copper-N ↦ copper-(1000−N)) */
+html[data-theme="light"][data-lt-variant="A"] {
+  --copper-50: #21130a;
+  --copper-100: #3d2413;
+  --copper-200: #5a341c;
+  --copper-300: #7a4626;  /* accent text role (fig-label, em.kw) */
+  --copper-400: #9c5a30;
+  --copper-500: #b86e3d;
+  --copper-600: #c98548;
+  --copper-700: #d99e6c;  /* border role → warm sand hairline */
+  --copper-800: #e8c4a0;
+  --copper-900: #f4e4d2;
+  --copper-950: #fbf6f1;
+}
+
+/* ---------- variant B: accent re-anchored on Claude coral */
+html[data-theme="light"][data-lt-variant="B"] {
+  --copper-50: #2b1710;
+  --copper-100: #4a2417;
+  --copper-200: #7a3a24;
+  --copper-300: #a9583e;  /* accent text role — coral-active for small-mono legibility */
+  --copper-400: #bc6248;
+  --copper-500: #cc785c;  /* Claude coral primary */
+  --copper-600: #d68d70;
+  --copper-700: #e0ac93;  /* border role */
+  --copper-800: #edcbb8;
+  --copper-900: #f6e3d7;
+  --copper-950: #fbf1ea;
+}
+
+/* ---------- chrome fixes: hardcoded colors in globals.css ------------- */
+html[data-theme="light"] .viewport {
+  background: #e8e0d2; /* cream-strong letterbox so the stage reads as a card */
+}
+html[data-theme="light"] .stage {
+  box-shadow: 0 2px 24px rgba(20, 20, 19, 0.12);
+}
+html[data-theme="light"] .stage:not([data-gh15-dark]) .nav-btn {
+  background: rgba(250, 249, 245, 0.88);
+}
+html[data-theme="light"] .stage:not([data-gh15-dark]) .nav-group-label {
+  color: var(--copper-500);
+}
+
+/* ---------- shared-class dark cards → cream (globals.css classes) ----- */
+html[data-theme="light"] .stage:not([data-gh15-dark]) .card,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .pcard {
+  background: #efe9de;
+}
+html[data-theme="light"] .stage:not([data-gh15-dark]) .satellite {
+  background: rgba(239, 233, 222, 0.92);
+}
+html[data-theme="light"] .stage:not([data-gh15-dark]) .satellite.active {
+  background: rgba(244, 228, 210, 0.95);
+}
+
+/* ---------- slide-authored stylesheet dark cards → cream --------------
+   Classes found carrying `background: rgba(10,10,10,…)` in <style> blocks
+   or slide CSS files (G sections, J recipe cards, I.1 process cards). */
+html[data-theme="light"] .stage:not([data-gh15-dark]) .g1-card,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .g4-quadrant,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .g7-card,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .g7-recap-tile,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .j2-card,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .j3-card,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .j4-card,
+html[data-theme="light"] .stage:not([data-gh15-dark]) .i1-card {
+  background: #efe9de;
+}
+
+/* ---------- inline dark backgrounds → cream ---------------------------
+   React serializes style objects into the style attribute in canonical
+   rgba(r, g, b, a) form, so the literals are targetable. !important is
+   required to beat the inline style. Property name included in the match
+   so borders/box-shadows carrying the same color don't false-positive.
+   rgba(15,15,15) is deliberately absent — that's HintIcon's tooltip,
+   which stays dark (normal pattern for tooltips on light UI). */
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgba(10, 10, 10,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background-color: rgba(10, 10, 10,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgba(0, 0, 0,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background-color: rgba(0, 0, 0,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgb(10, 10, 10)"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgb(23, 23, 23)"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgb(5, 5, 5)"] {
+  background: #efe9de !important;
+}
+/* warm-dark family (panels, popovers) — one step lighter for nesting
+   contrast against the #efe9de boxes they usually contain */
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgba(20, 12, 6,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background-color: rgba(20, 12, 6,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgba(10, 6, 4,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: rgba(74, 37, 17,"] {
+  background: #f5f0e8 !important;
+}
+
+/* ---------- light-tint chips keep their tint + dark ink ---------------
+   Elements whose inline background is var(--copper-100|200) were LIGHT
+   tan chips in the dark theme (table headers, bar fills, level tags).
+   The variant ladders would invert them into dark blocks; re-pin the
+   tint on the element and the dark ink values for its subtree. */
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: var(--copper-1"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background-color: var(--copper-1"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background: var(--copper-2"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [style*="background-color: var(--copper-2"] {
+  --copper-100: #f4e4d2;
+  --copper-200: #e8c4a0;
+  --copper-800: #5a341c;
+  --copper-900: #3d2413;
+  --copper-950: #21130a;
+  --neutral-800: #171717;
+  --neutral-900: #0a0a0a;
+  --neutral-950: #050505;
+  --surface-dark: #0a0a0a;
+}
+
+/* ---------- sim SVG hexes (I.3 diagrams) -------------------------------
+   The I-section simulations hardcode exactly these ladder hexes as SVG
+   fill/stroke presentation attributes. Stylesheet declarations beat
+   presentation attributes, so remap them here; inline style occurrences
+   are swapped to vars in the TSX (perl pass, see branch commit). */
+html[data-theme="light"] .stage:not([data-gh15-dark]) [fill="#f5f5f5"] { fill: var(--neutral-50); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [fill="#a3a3a3"] { fill: var(--neutral-300); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [fill="#d99e6c"] { fill: var(--copper-300); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [fill="#b86e3d"] { fill: var(--copper-500); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [stroke="#f5f5f5"] { stroke: var(--neutral-50); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [stroke="#a3a3a3"] { stroke: var(--neutral-300); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [stroke="#d99e6c"] { stroke: var(--copper-300); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [stroke="#b86e3d"] { stroke: var(--copper-500); }
+html[data-theme="light"] .stage:not([data-gh15-dark]) [stroke="#7a4626"] { stroke: var(--copper-700); }
+
+/* dark SVG rect fills (B.3 token chips etc.) — presentation attributes,
+   authored verbatim so no serialization spaces. !important beats the
+   fill-pulse keyframe animations (pulse visual is lost, acceptable). */
+html[data-theme="light"] .stage:not([data-gh15-dark]) [fill^="rgba(10,10,10,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [fill^="rgba(38,38,38,"] {
+  fill: #efe9de !important;
+}
+html[data-theme="light"] .stage:not([data-gh15-dark]) [stroke^="rgba(10,10,10,"],
+html[data-theme="light"] .stage:not([data-gh15-dark]) [stroke^="rgb(10,10,10)"] {
+  stroke: var(--neutral-700) !important;
+}
+
+/* ---------- per-slide dark opt-out + explicit island hook -------------
+   .stage[data-gh15-dark] (title, bridges, I.2 — set in Slide.tsx) and
+   any [data-dark-island] element re-establish the dark-authored values
+   for their whole subtree: the slide renders exactly as in dark theme,
+   floating on the cream letterbox. */
+html[data-theme="light"] [data-dark-island],
+html[data-theme="light"] .stage[data-gh15-dark] {
+  --surface-dark: #0a0a0a;
+  --surface-light: #f5f5f5;
+  --neutral-0: #ffffff;
+  --neutral-50: #f5f5f5;
+  --neutral-100: #e5e5e5;
+  --neutral-200: #d4d4d4;
+  --neutral-300: #a3a3a3;
+  --neutral-400: #737373;
+  --neutral-500: #525252;
+  --neutral-700: #262626;
+  --neutral-800: #171717;
+  --neutral-900: #0a0a0a;
+  --neutral-950: #050505;
+  --copper-50: #fbf6f1;
+  --copper-100: #f4e4d2;
+  --copper-200: #e8c4a0;
+  --copper-300: #d99e6c;
+  --copper-400: #c98548;
+  --copper-500: #b86e3d;
+  --copper-600: #9c5a30;
+  --copper-700: #7a4626;
+  --copper-800: #5a341c;
+  --copper-900: #3d2413;
+  --copper-950: #21130a;
+  --shadow-base: 0 16px 48px -8px rgba(0, 0, 0, 0.45);
+}

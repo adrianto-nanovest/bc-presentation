@@ -1,0 +1,11 @@
+import { chromium } from "@playwright/test";
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto("http://localhost:5199/?slide=26&theme=light&ltv=B", { waitUntil: "networkidle" });
+await page.keyboard.press("Space");
+await page.waitForTimeout(400);
+await page.locator("text=CONTEXT CONFLICT").first().hover();
+await page.waitForTimeout(2000);
+await page.screenshot({ path: "prototype-gh15-shots/s26-e9-hover--light-B.png" });
+await browser.close();
+console.log("done");
