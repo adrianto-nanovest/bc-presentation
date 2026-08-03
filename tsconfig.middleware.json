@@ -1,0 +1,29 @@
+{
+  // `middleware.ts` sits at the repo root, runs on Vercel's Edge runtime, and is
+  // never imported by the app — so `tsconfig.json`'s `include` (`["src","tests"]`)
+  // misses it, and widening that to the root would drag in `vite.config.ts` &c.
+  // Hence its own project, describing the Edge runtime rather than the app:
+  //   - `types: []` — no @types/* in scope, so the file's own `process`
+  //     declaration is the only one, exactly as it is when Vercel runs it;
+  //   - `lib: ["ES2022","DOM"]` — supplies precisely the globals it uses
+  //     (`crypto.subtle`, `btoa`, `TextEncoder`, `Request`/`Response`, `URL`),
+  //     with no Node or app ambients to lean on by accident.
+  // Referenced from `tsconfig.json`, so `npm run typecheck` (`tsc -b`) covers it
+  // and it cannot silently fall out of the checked set again.
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./node_modules/.tmp/tsconfig-middleware",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "types": [],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["middleware.ts"]
+}

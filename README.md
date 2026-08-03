@@ -19,6 +19,7 @@ Navigation:
 ```bash
 npm test             # vitest unit + integration
 npm run e2e          # playwright e2e (viewport, keyboard, exports)
+npm run typecheck    # tsc -b — app, vite config, and the Edge middleware
 ```
 
 ## Export
