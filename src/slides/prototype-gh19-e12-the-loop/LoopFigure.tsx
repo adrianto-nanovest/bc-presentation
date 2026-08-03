@@ -3,23 +3,37 @@
 // step 0  the curve is an Archimedean spiral, drawn lap by lap, each lap
 //         slower and HEAVIER than the last. Every human turn fires on ONE
 //         radial spoke, so your turns are collinear — one per lap — and a
-//         hairline spoke makes that collinearity a drawn fact.
+//         hairline spoke makes that collinearity a drawn fact. The turns are
+//         human GLYPHS: step 0's claim is that the turn is yours, and a dot
+//         does not say whose it is.
 // step 1  every point's radius is interpolated toward one constant. The spiral
-//         becomes an exact circle, and the stacked human turns merge into TWO
-//         — the entry and the gate. Then the figure docks right. Hovering a
-//         row MOUNTS that row's apparatus, one group at a time, on an
-//         otherwise clean canvas.
-// step 2  the whole apparatus is mounted at once, labelled with the Friday
-//         4 PM run. Hover now promotes a group instead of revealing it.
+//         becomes an exact circle, and the stacked people merge into TWO — the
+//         entry and the gate. Then the figure docks right. Hovering a row
+//         MOUNTS that row's apparatus, one group at a time, on an otherwise
+//         clean canvas.
+// step 2  the whole apparatus is mounted at once, labelled with the weekly
+//         client-update run. Hover now promotes a group instead of revealing.
 //
-// The insertion mechanic, used on BOTH ends of the axis:
+// The insertion mechanic, and what is connected WHEN:
 //
-//   step 1   YOU set ─────────▶ START ○ ring ○ CHECK ─────────▶ YOU signs
-//   step 2   YOU set ▶ [16:00] ▶ START ○ ring ○ CHECK ▶ ◇ ▶ STOP ▶ YOU signs
+//   idle        YOU set ───────────▶ PLAN ○ ring ○ VERIFY          YOU signs
+//   +CONDITION  YOU set ───────────▶ PLAN ○ ring ○ VERIFY ▶ ◇ ▶ STOP ▶ YOU
+//   +TRIGGER    YOU set ▶ (clock) ▶ PLAN ○ ring ○ VERIFY
 //
-// The clock and the condition do not appear BESIDE the humans; they push into
-// the arrows and take the middle. That is what draws "nobody presses start"
-// and "work stops and waits for a person" without captioning either.
+// The east chain does not exist before CONDITION does: an arrow from VERIFY to
+// the human on every lap draws a gate that fires every lap, which is
+// turn-by-turn with extra steps. Step 1 therefore shows a closed loop with a
+// person at each end and no way out yet.
+//
+// The clock is hover-only, on TRIGGER, and carries NO time text. `FRI 16:00`
+// stamped one specific Friday onto a canvas with no other times on it and read
+// as a riddle. The glyph is the word.
+//
+// The ring is four phases of ONE LAP OF WORK: PLAN · EXECUTE · VERIFY · REMEMBER.
+// `START` is gone — it is the entry, not a phase, and it was both a station
+// and the arrow's target. `SHIP` is gone — it sat on the NO branch, and every
+// source ships on the YES branch. The node writes state, so it is REMEMBER, and
+// the loop ships once, off-ring, at STOP.
 //
 // Rules this file obeys, from the gh#19 grilling session:
 //   - Nothing unrevealed is drawn. No ghosts, ever. An element is absent from
@@ -33,7 +47,7 @@
 import type { CSSProperties } from "react";
 import {
   C0,
-  CHECK_NODE,
+  VERIFY_NODE,
   CLOCK,
   CLOCK_R,
   DIAMOND_C,
@@ -43,19 +57,21 @@ import {
   GAUGE_CAP,
   GAUGE_FROM,
   GAUGE_IDLE,
+  GAUGE_LEADER_DEG,
   GAUGE_OVERRUN,
   PHASE_ANGLE,
+  PLAN_NODE,
   R_FIN,
   R_GAUGE,
   R_INNER,
   R_PHASE_LABEL,
+  REMEMBER_NODE,
   RING_ARCS,
-  SHIP_NODE,
-  START_NODE,
   STATE_FILE,
   STOP_BOX,
   aiTheta,
   arcPath,
+  chevronPath,
   curvePath,
   curvePoint,
   lapSegments,
@@ -139,17 +155,32 @@ export function LoopFigure({
   const lit = (id: DecisionId) => active === id;
   /** Mounted: everything at step 2, one group at a time before that. */
   const show = (id: DecisionId) => ringOn && (apparatusOn || active === id);
-  const strokeOf = (on: boolean) => (on ? "var(--copper-200)" : "var(--copper-700)");
-  const textOf = (on: boolean) => (on ? "var(--copper-100)" : "var(--copper-500)");
+
+  // THREE tiers, not two. At step 2 idle every group used to sit at one weight
+  // and the composition had no spine — and idle is the pose the room stares at
+  // for minutes. The AXIS (you → clock → ring → ◇ → stop → you) is the
+  // sentence; MEMORY and BUDGET are annotations hanging off it. Rank is stroke
+  // weight and colour tier, never opacity, so this survives a projector.
+  type Tier = "axis" | "annot";
+  const strokeOf = (on: boolean, tier: Tier = "annot") =>
+    on ? "var(--copper-200)" : tier === "axis" ? "var(--copper-500)" : "var(--copper-700)";
+  const textOf = (on: boolean, tier: Tier = "annot") =>
+    on ? "var(--copper-100)" : tier === "axis" ? "var(--copper-300)" : "var(--copper-500)";
   const wOf = (on: boolean, base = 1.4) => (on ? base + 1 : base);
-  const arrow = (on: boolean) => (on ? "url(#p19-arrow)" : "url(#p19-arrow-dim)");
+  const arrow = (on: boolean, tier: Tier = "annot") =>
+    on ? "url(#p19-arrow)" : tier === "axis" ? "url(#p19-arrow-axis)" : "url(#p19-arrow-dim)";
 
   const youFirst = curvePoint(s, youTheta(0), q, d);
   const youLast = curvePoint(s, youTheta(laps - 1), q, d);
   const aiFirst = curvePoint(s, aiTheta(0), q, d);
   const aiLast = curvePoint(s, aiTheta(laps - 1), q, d);
 
-  const showTrigger = show("trigger");
+  // The clock is HOVER-ONLY — it does not mount with the apparatus at step 2
+  // the way the other groups do. It is the one element that answers "who
+  // starts it", and it lands when the row that owns that question is pointed
+  // at. The idle canvas therefore never claims a schedule it is not showing;
+  // step 1's caption was rewritten to match ("…and you set it once").
+  const showTrigger = ringOn && lit("trigger");
   const showCond = show("condition");
 
   return (
@@ -167,6 +198,9 @@ export function LoopFigure({
       <defs>
         <marker id="p19-arrow" viewBox="0 0 8 8" refX={7} refY={4} markerWidth={5} markerHeight={5} orient="auto">
           <path d="M 0 0 L 8 4 L 0 8 z" fill="var(--copper-300)" />
+        </marker>
+        <marker id="p19-arrow-axis" viewBox="0 0 8 8" refX={7} refY={4} markerWidth={4.8} markerHeight={4.8} orient="auto">
+          <path d="M 0 0 L 8 4 L 0 8 z" fill="var(--copper-500)" />
         </marker>
         <marker id="p19-arrow-dim" viewBox="0 0 8 8" refX={7} refY={4} markerWidth={4.5} markerHeight={4.5} orient="auto">
           <path d="M 0 0 L 8 4 L 0 8 z" fill="var(--copper-600)" />
@@ -217,9 +251,15 @@ export function LoopFigure({
         </g>
       )}
 
-      {/* ── hero: the time origin ───────────────────────────────────────────
+      {/* ── hero: the origin ────────────────────────────────────────────────
           The stamp sits in the spiral's hollow, where nothing else can be, and
-          a hairline ties it to the point where the first lap actually begins. */}
+          a hairline ties it to the point where the first lap actually begins.
+
+          It reads SESSION START, not FRI 16:00. Step 0 is the manual
+          before-state — you, opening a chat, doing the turns. Friday 4 PM is
+          the schedule the LOOP runs on, and it belongs to the clock at step 2.
+          Stamping the hero with it labelled turn-by-turn work as a scheduled
+          run, which is the one thing step 0 is not. */}
       {heroOn && q === 0 && drawn > 0.02 && (
         <g style={{ opacity: 1 }}>
           <path d={`M ${C0[0] + 34} ${C0[1]} L ${C0[0] + R_INNER - 6} ${C0[1]}`} stroke="var(--copper-800)" strokeWidth={1} />
@@ -249,7 +289,14 @@ export function LoopFigure({
       {/* ── your turns ──────────────────────────────────────────────────────
           One per lap. During the dock the FIRST and the LAST travel to the two
           ends of the axis; the ones between dissolve. Three become two, which
-          is the closer, performed rather than captioned. */}
+          is the closer, performed rather than captioned.
+
+          They are HUMAN GLYPHS, not dots. A dot said a turn happened; it did
+          not say who took it, and step 0's whole claim is that the turn is
+          yours. The glyph is also the same one the two survivors become at
+          step 1, so the merge is now literal — four people become two people,
+          not four dots become two people. Each carries a surface plate so the
+          dashed spoke passes behind it rather than through its face. */}
       {!ringOn &&
         Array.from({ length: laps }, (_, i) => {
           const th = youTheta(i);
@@ -266,13 +313,21 @@ export function LoopFigure({
           if (gone && q >= 1) return null;
           return (
             <g key={`you-${i}`} style={{ opacity: gone ? 0 : 1, transition: FADE }}>
-              <circle cx={p[0]} cy={p[1]} r={6.4} fill="var(--copper-100)" />
+              <circle cx={p[0]} cy={p[1]} r={13} fill={SURFACE} />
+              <Human p={p} on />
               {q === 0 && (
-                <Tag x={p[0] - 15} y={p[1] + 4} text={B.hero.youSpoke[i] ?? `TASK ${i + 1}`} fill="var(--copper-100)" anchor="end" />
+                <Tag x={p[0] - 18} y={p[1] + 4} text={B.hero.youSpoke[i] ?? `TASK ${i + 1}`} fill="var(--copper-100)" anchor="end" />
               )}
             </g>
           );
         })}
+
+      {/* The word, to go with the drawing. Mirrors `AI RUNS` on the opposite
+          spoke, and sits one step further out than the last TASK label so the
+          two plates cannot collide. */}
+      {heroOn && q === 0 && laps > 0 && youTheta(laps - 1) <= theta && (
+        <Tag x={youLast[0] - 22} y={youLast[1] - 24} text={B.hero.youSpokeLabel} fill="var(--copper-300)" anchor="end" />
+      )}
 
       {/* ── the ring ───────────────────────────────────────────────────────
           Four notched arcs, never a hoop. gh#18's finding: a continuous band
@@ -280,7 +335,7 @@ export function LoopFigure({
       {ringOn && (
         <g style={{ opacity: 1 }}>
           {RING_ARCS.map(([a0, a1], i) => {
-            // Arc 2 is CHECK → SHIP: the way round when the answer is NO.
+            // Arc 2 is VERIFY → REMEMBER: the way round when the answer is NO.
             const onArc = i === 2 && lit("condition");
             return (
               <path
@@ -295,8 +350,23 @@ export function LoopFigure({
             );
           })}
 
-          {/* Node → row: START is the trigger's target, RUN is where spend
-              accrues, CHECK is the condition, SHIP is what writes state. */}
+          {/* Direction, in a still frame. The comet below gives rotation while
+              it animates; a screenshot, a PDF export, or a projector paused
+              between animations has none. One chevron mid-arc, on the ring. */}
+          {RING_ARCS.map(([a0, a1], i) => (
+            <path
+              key={`chev-${i}`}
+              d={chevronPath(R_FIN, (a0 + a1) / 2)}
+              fill="none"
+              stroke="var(--copper-300)"
+              strokeWidth={1.8}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          ))}
+
+          {/* Node → row: PLAN is the trigger's target, RUN is where spend
+              accrues, VERIFY is the condition, REMEMBER is what writes state. */}
           {PHASE_ANGLE.map((a, i) => {
             const owner: DecisionId = (["trigger", "budget", "condition", "memory"] as const)[i];
             const on = lit(owner);
@@ -347,29 +417,33 @@ export function LoopFigure({
         </g>
       )}
 
-      {/* ── WEST end · YOU sets it ──────────────────────────────────────────
-          The arrow spans the whole gap at step 1. When TRIGGER mounts, the
-          clock takes the middle of it. */}
+      {/* ── WEST end · YOU sets it, the clock starts it ─────────────────────
+          The clock is on from step 1, not step 2 (see `showTrigger`). With a
+          person arrowed straight into PLAN and nothing between, the idle step-1
+          pose said "a person presses start" while its caption said "it starts
+          itself". The clock in the middle of that arrow is the whole fix. */}
       {ringOn && (
         <g data-testid="p19-west">
           <path
-            d={`M ${ENTRY_HUMAN[0] + 16} 400 L ${showTrigger ? CLOCK[0] - CLOCK_R - 4 : START_NODE[0] - 8} 400`}
-            stroke={strokeOf(lit("trigger"))}
-            strokeWidth={wOf(lit("trigger"))}
-            markerEnd={arrow(lit("trigger"))}
+            d={`M ${ENTRY_HUMAN[0] + 16} 400 L ${showTrigger ? CLOCK[0] - CLOCK_R - 4 : PLAN_NODE[0] - 8} 400`}
+            stroke={strokeOf(lit("trigger"), "axis")}
+            strokeWidth={wOf(lit("trigger"), 1.6)}
+            markerEnd={arrow(lit("trigger"), "axis")}
             fill="none"
             style={{ transition: "stroke 240ms var(--ease)" }}
           />
           {showTrigger && (
             <g data-testid="p19-clock" style={{ opacity: 1 }}>
-              <circle cx={CLOCK[0]} cy={CLOCK[1]} r={CLOCK_R} fill={SURFACE} stroke={strokeOf(lit("trigger"))} strokeWidth={wOf(lit("trigger"), 1.6)} style={{ transition: "stroke 240ms var(--ease)" }} />
-              <path d={`M ${CLOCK[0]} ${CLOCK[1] - 9} L ${CLOCK[0]} ${CLOCK[1]} L ${CLOCK[0] + 7} ${CLOCK[1] + 3}`} fill="none" stroke={strokeOf(lit("trigger"))} strokeWidth={wOf(lit("trigger"), 1.4)} strokeLinecap="round" />
-              <path d={`M ${CLOCK[0] + CLOCK_R + 4} 400 L ${START_NODE[0] - 8} 400`} stroke={strokeOf(lit("trigger"))} strokeWidth={wOf(lit("trigger"))} markerEnd={arrow(lit("trigger"))} fill="none" style={{ transition: "stroke 240ms var(--ease)" }} />
-              <Tag x={CLOCK[0]} y={CLOCK[1] + 34} text={L.clock} fill={textOf(lit("trigger"))} anchor="middle" />
+              <circle cx={CLOCK[0]} cy={CLOCK[1]} r={CLOCK_R} fill={SURFACE} stroke={strokeOf(lit("trigger"), "axis")} strokeWidth={wOf(lit("trigger"), 1.8)} style={{ transition: "stroke 240ms var(--ease)" }} />
+              <path d={`M ${CLOCK[0]} ${CLOCK[1] - 9} L ${CLOCK[0]} ${CLOCK[1]} L ${CLOCK[0] + 7} ${CLOCK[1] + 3}`} fill="none" stroke={strokeOf(lit("trigger"), "axis")} strokeWidth={wOf(lit("trigger"), 1.6)} strokeLinecap="round" />
+              <path d={`M ${CLOCK[0] + CLOCK_R + 4} 400 L ${PLAN_NODE[0] - 8} 400`} stroke={strokeOf(lit("trigger"), "axis")} strokeWidth={wOf(lit("trigger"), 1.6)} markerEnd={arrow(lit("trigger"), "axis")} fill="none" style={{ transition: "stroke 240ms var(--ease)" }} />
+              {/* No text under the clock. `FRI 16:00` stamped one specific
+                  Friday onto a canvas with no other times on it, and read as
+                  a riddle rather than a schedule. The glyph is the word. */}
             </g>
           )}
           <Human p={ENTRY_HUMAN} on={lit("trigger")} />
-          <text x={ENTRY_HUMAN[0]} y={ENTRY_HUMAN[1] - 26} textAnchor="middle" style={mono(11, 2.4)} fill={textOf(lit("trigger"))}>
+          <text x={ENTRY_HUMAN[0]} y={ENTRY_HUMAN[1] - 26} textAnchor="middle" style={mono(11, 2.4)} fill={textOf(lit("trigger"), "axis")}>
             {L.you}
           </text>
           <text x={ENTRY_HUMAN[0]} y={ENTRY_HUMAN[1] + 32} textAnchor="middle" style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 11.5 }} fill="var(--neutral-400)">
@@ -379,21 +453,36 @@ export function LoopFigure({
       )}
 
       {/* ── EAST end · the condition, then YOU signs ────────────────────────
-          Same mechanic: one arrow at step 1, and the diamond plus STOP push
-          into it when CONDITION mounts. The gate is AFTER the stop, because a
-          gate that fires every lap is not a loop. */}
+          The whole chain arrives with CONDITION. Nothing connects CHECK to the
+          human before that. The gate is AFTER the stop, because a gate that
+          fires every lap is not a loop.
+
+          The human STAYS. Dropping it was considered and rejected: it is the
+          east terminus of "You were in every cycle. Now you're at both ends",
+          it is GATE's only referent, and the sources put a person there —
+          Osmani's outer loop (constraints in, verdict out), and the reference
+          decks' own "You — the human gate · only the risky calls come to you,
+          for approval · you do not type each turn." */}
       {ringOn && (
         <g data-testid="p19-east">
-          <path
-            d={`M ${CHECK_NODE[0] + 8} 400 L ${showCond ? DIAMOND_C[0] - DIAMOND_R.w - 4 : GATE_HUMAN[0] - 20} 400`}
-            stroke={strokeOf(showCond ? lit("condition") : lit("gate"))}
-            strokeWidth={wOf(showCond ? lit("condition") : lit("gate"))}
-            markerEnd={arrow(showCond ? lit("condition") : lit("gate"))}
-            fill="none"
-            style={{ transition: "stroke 240ms var(--ease)" }}
-          />
           {showCond && (
             <g data-testid="p19-condition" style={{ opacity: 1 }}>
+              {/* CHECK → the diamond. This arrow does NOT exist before the
+                  condition does. It used to run straight from CHECK to the
+                  human at step 1, which draws the check reaching a person on
+                  EVERY lap — a gate that fires every lap is turn-by-turn with
+                  extra steps, the exact thing this slide attacks. Step 1 now
+                  shows a closed loop with a person at each end and no path out
+                  yet, and "how does it ever reach them?" is what step 2
+                  answers. */}
+              <path
+                d={`M ${VERIFY_NODE[0] + 8} 400 L ${DIAMOND_C[0] - DIAMOND_R.w - 4} 400`}
+                stroke={strokeOf(lit("condition"), "axis")}
+                strokeWidth={wOf(lit("condition"), 1.6)}
+                markerEnd={arrow(lit("condition"), "axis")}
+                fill="none"
+                style={{ transition: "stroke 240ms var(--ease)" }}
+              />
               <path
                 d={`M ${DIAMOND_C[0]} ${DIAMOND_C[1] - DIAMOND_R.h} L ${DIAMOND_C[0] + DIAMOND_R.w} ${DIAMOND_C[1]} L ${DIAMOND_C[0]} ${DIAMOND_C[1] + DIAMOND_R.h} L ${DIAMOND_C[0] - DIAMOND_R.w} ${DIAMOND_C[1]} Z`}
                 fill={SURFACE}
@@ -404,18 +493,29 @@ export function LoopFigure({
               <Tag x={DIAMOND_C[0]} y={DIAMOND_C[1] - 32} text={L.check} size={10} track={1.6} fill={textOf(lit("condition"))} anchor="middle" />
               <Tag x={DIAMOND_C[0]} y={DIAMOND_C[1] + 46} text={L.stopCondition} size={9} track={0.8} fill={textOf(lit("condition"))} anchor="middle" />
               <path d={`M ${DIAMOND_C[0] + DIAMOND_R.w + 4} 400 L ${STOP_BOX.x - 8} 400`} fill="none" stroke={strokeOf(lit("condition"))} strokeWidth={wOf(lit("condition"))} markerEnd={arrow(lit("condition"))} style={{ transition: "stroke 240ms var(--ease)" }} />
-              <Tag x={(DIAMOND_C[0] + DIAMOND_R.w + STOP_BOX.x) / 2} y={384} text={L.yes} size={9.5} track={1.4} fill={textOf(lit("condition"))} anchor="middle" />
+              <Tag x={(DIAMOND_C[0] + DIAMOND_R.w + STOP_BOX.x) / 2} y={384} text={L.yes} size={10} track={1.6} fill={textOf(lit("condition"), "axis")} anchor="middle" />
               <rect x={STOP_BOX.x} y={STOP_BOX.y} width={STOP_BOX.w} height={STOP_BOX.h} fill={SURFACE} stroke={strokeOf(lit("condition"))} strokeWidth={wOf(lit("condition"), 1.2)} style={{ transition: "stroke 240ms var(--ease)" }} />
               <text x={STOP_BOX.x + STOP_BOX.w / 2} y={STOP_BOX.y + 20} textAnchor="middle" style={mono(10.5, 2)} fill={textOf(lit("condition"))}>
                 {L.stop}
               </text>
-              <Tag x={polar(166, 33)[0]} y={polar(166, 33)[1]} text={L.no} size={9.5} track={1.4} fill={textOf(lit("condition"))} anchor="middle" />
+              {/* NO is the loop. It was a 9.5 px tag floating near the ring
+                  with nothing tying it to the arc it names, while YES got a
+                  diamond, a box and two arrows. Same size as YES now, and a
+                  leader onto the arc it belongs to — the one that runs CHECK →
+                  REMEMBER → PLAN and goes round again. */}
+              <path
+                d={`M ${polar(R_FIN + 5, 45)[0]} ${polar(R_FIN + 5, 45)[1]} L ${polar(R_FIN + 20, 45)[0]} ${polar(R_FIN + 20, 45)[1]}`}
+                stroke={strokeOf(lit("condition"), "axis")}
+                strokeWidth={1.4}
+                style={{ transition: "stroke 240ms var(--ease)" }}
+              />
+              <Tag x={polar(R_FIN + 44, 45)[0]} y={polar(R_FIN + 44, 45)[1]} text={L.no} size={10} track={1.6} fill={textOf(lit("condition"), "axis")} anchor="middle" />
               {/* STOP → the gate. Only exists once STOP does. */}
-              <path d={`M ${STOP_BOX.x + STOP_BOX.w + 4} 400 L ${GATE_HUMAN[0] - 20} 400`} fill="none" stroke={strokeOf(lit("gate"))} strokeWidth={wOf(lit("gate"))} markerEnd={arrow(lit("gate"))} style={{ transition: "stroke 240ms var(--ease)" }} />
+              <path d={`M ${STOP_BOX.x + STOP_BOX.w + 4} 400 L ${GATE_HUMAN[0] - 20} 400`} fill="none" stroke={strokeOf(lit("gate"), "axis")} strokeWidth={wOf(lit("gate"), 1.6)} markerEnd={arrow(lit("gate"), "axis")} style={{ transition: "stroke 240ms var(--ease)" }} />
             </g>
           )}
           <Human p={GATE_HUMAN} on={lit("gate")} />
-          <text x={GATE_HUMAN[0]} y={GATE_HUMAN[1] - 26} textAnchor="middle" style={mono(11, 2.4)} fill={textOf(lit("gate"))}>
+          <text x={GATE_HUMAN[0]} y={GATE_HUMAN[1] - 26} textAnchor="middle" style={mono(11, 2.4)} fill={textOf(lit("gate"), "axis")}>
             {L.gateHuman}
           </text>
           <text x={GATE_HUMAN[0]} y={GATE_HUMAN[1] + 32} textAnchor="middle" style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 11.5 }} fill="var(--neutral-400)">
@@ -424,11 +524,13 @@ export function LoopFigure({
         </g>
       )}
 
-      {/* ── SOUTH · MEMORY — written after SHIP, read before START. ──────── */}
+      {/* ── SOUTH · MEMORY — written at REMEMBER, read before PLAN. ───────────
+          The spine: "read first, written last". An annotation on the axis, so
+          it holds the lower tier at idle and only comes forward on hover. */}
       {show("memory") && (
         <g data-testid="p19-memory" style={{ opacity: 1 }}>
           <path
-            d={`M ${SHIP_NODE[0] - 6} ${SHIP_NODE[1] + 6} C 792 580, 736 582, ${STATE_FILE[0] + 22} ${STATE_FILE[1] + 6}`}
+            d={`M ${REMEMBER_NODE[0] - 6} ${REMEMBER_NODE[1] + 6} C 792 580, 736 582, ${STATE_FILE[0] + 22} ${STATE_FILE[1] + 6}`}
             fill="none"
             stroke={strokeOf(lit("memory"))}
             strokeWidth={wOf(lit("memory"))}
@@ -436,7 +538,7 @@ export function LoopFigure({
             style={{ transition: "stroke 240ms var(--ease)" }}
           />
           <path
-            d={`M ${STATE_FILE[0] - 4} ${STATE_FILE[1] - 22} C 668 492, 692 452, ${START_NODE[0] - 4} 412`}
+            d={`M ${STATE_FILE[0] - 4} ${STATE_FILE[1] - 22} C 668 492, 692 452, ${PLAN_NODE[0] - 4} 412`}
             fill="none"
             stroke={strokeOf(lit("memory"))}
             strokeWidth={wOf(lit("memory"), 1.2)}
@@ -446,7 +548,9 @@ export function LoopFigure({
           />
           <StateFile p={STATE_FILE} on={lit("memory")} />
           <Tag x={768} y={600} text={L.writeAfter} size={9.5} track={1.4} fill={textOf(lit("memory"))} anchor="middle" />
-          <Tag x={620} y={472} text={L.readBefore} size={9.5} track={1.4} fill={textOf(lit("memory"))} anchor="end" />
+          {/* Sat 44 px clear of the curve it names and read as a loose word on
+              the stage. Tucked against the dashed edge instead. */}
+          <Tag x={652} y={476} text={L.readBefore} size={9.5} track={1.4} fill={textOf(lit("memory"))} anchor="end" />
           <Tag x={STATE_FILE[0]} y={STATE_FILE[1] + 42} text={L.stateFile} size={10} track={1.2} fill={textOf(lit("memory"))} anchor="middle" />
         </g>
       )}
@@ -459,6 +563,17 @@ export function LoopFigure({
           recovered as motion instead of a twin. */}
       {show("budget") && (
         <g data-testid="p19-budget" style={{ opacity: 1 }}>
+          {/* Tie the gauge to the RUN node. Unconnected, a concentric arc
+              beside the ring reads as a second, broken ring at projector
+              distance — the exact "second ring with no stop" image #19 item 3
+              cut. One radial leader makes it an annotation of RUN: spend
+              accrues while it runs. */}
+          <path
+            d={`M ${polar(R_FIN + 5, GAUGE_LEADER_DEG)[0]} ${polar(R_FIN + 5, GAUGE_LEADER_DEG)[1]} L ${polar(R_GAUGE - 5, GAUGE_LEADER_DEG)[0]} ${polar(R_GAUGE - 5, GAUGE_LEADER_DEG)[1]}`}
+            stroke={lit("budget") ? "var(--copper-200)" : "var(--copper-700)"}
+            strokeWidth={lit("budget") ? 2 : 1.3}
+            style={{ transition: "all 240ms var(--ease)" }}
+          />
           <path d={arcPath(R_GAUGE, GAUGE_FROM, GAUGE_CAP)} fill="none" stroke="var(--copper-800)" strokeWidth={5} strokeLinecap="butt" />
           <path
             d={arcPath(R_GAUGE, GAUGE_FROM, lit("budget") ? GAUGE_CAP : GAUGE_IDLE)}

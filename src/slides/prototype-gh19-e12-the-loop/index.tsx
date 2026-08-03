@@ -12,20 +12,37 @@
 //   STEPS     3, not 2. canonicalPose 2.
 //     step 0  FULL-STAGE HERO. An Archimedean spiral draws lap by lap, each
 //             lap slower than the last. Every human turn fires on ONE radial
-//             spoke, so your turns are collinear — one per lap.
+//             spoke, so your turns are collinear — one per lap. The turns are
+//             human GLYPHS, labelled YOUR TURN against the machine's AI RUNS.
 //     step 1  Every point's radius is interpolated toward one constant: the
-//             spiral becomes an exact circle, and the stacked human turns
-//             merge into TWO — the entry and the gate. Then the figure docks
-//             right and the five rows write in.
-//     step 2  The apparatus mounts, labelled with the Friday 4 PM run. The
-//             tagline lands bottom-left.
+//             spiral becomes an exact circle, and the stacked people merge
+//             into TWO — the entry and the gate. Then the figure docks right
+//             and the five rows write in. Nothing connects VERIFY to the east
+//             human yet, and no clock is drawn until TRIGGER is pointed at.
+//     step 2  The apparatus mounts, labelled with the weekly client-update
+//             run. The tagline lands bottom-left.
+//
+//   RING      PLAN · EXECUTE · VERIFY · REMEMBER — four phases of one lap of
+//             work, three of them the sources' own verbs. Not START (that is
+//             the entry, not a phase) and not SHIP (it sat on the NO branch;
+//             every source ships on YES, and this loop ships once, off-ring,
+//             at STOP). Four, not five: the composition needs the entry and
+//             the exit 180° apart, and five labels do not fit the hollow.
+//   ROWS      TRIGGER · BUDGET · CONDITION · MEMORY · GATE — ONE LAP, in the
+//             order it happens. Hovering down the column goes in at the west,
+//             clockwise round the ring, then out at the exit. MEMORY is fourth
+//             because the ledger is written at the END of a lap and read at
+//             the start of the next.
 //
 // ─────────────────────────────────────────────────────────────────────────────
 // RULES THIS BUILD OBEYS (from the session, not invented here)
 //
 //   - Nothing unrevealed is drawn. No ghosts, ever. An element is absent from
 //     the SVG, or it is at full strength. Opacity is only an entry cross-fade.
-//   - Rank is stroke weight and colour tier. Never opacity.
+//   - Rank is stroke weight and colour tier. Never opacity. THREE tiers: the
+//     axis holds copper-500 at idle, annotations (memory, budget) copper-700,
+//     the active group copper-200. Step-2 idle needs a spine — it is the pose
+//     the room looks at for minutes.
 //   - Hover is live from step 1 (words only) and full at step 2. Un-hover
 //     RELEASES. Click pins. — this closes #19's last open item.
 //   - The worked example is not a card: it is the apparatus' labels.

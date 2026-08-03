@@ -143,6 +143,24 @@ export function polar(r: number, deg: number): Pt {
   return [C1[0] + r * Math.cos(a), C1[1] + r * Math.sin(a)];
 }
 
+/** A chevron sitting ON the ring at `deg`, pointing the way the lap travels
+ *  (clockwise). The running comet gives direction in motion; a still frame —
+ *  a screenshot, a PDF export, a projector between animations — has none
+ *  without this. */
+export function chevronPath(r: number, deg: number, size = 5): string {
+  const a = deg * DEG;
+  // Tangent (clockwise) and outward normal at this point on the circle.
+  const tx = -Math.sin(a);
+  const ty = Math.cos(a);
+  const nx = Math.cos(a);
+  const ny = Math.sin(a);
+  const [px, py] = polar(r, deg);
+  const tip: Pt = [px + tx * size, py + ty * size];
+  const a1: Pt = [px - tx * size * 0.55 + nx * size * 0.78, py - ty * size * 0.55 + ny * size * 0.78];
+  const a2: Pt = [px - tx * size * 0.55 - nx * size * 0.78, py - ty * size * 0.55 - ny * size * 0.78];
+  return `M ${a1[0].toFixed(2)} ${a1[1].toFixed(2)} L ${tip[0].toFixed(2)} ${tip[1].toFixed(2)} L ${a2[0].toFixed(2)} ${a2[1].toFixed(2)}`;
+}
+
 export function arcPath(r: number, a0: number, a1: number): string {
   const [x0, y0] = polar(r, a0);
   const [x1, y1] = polar(r, a1);
@@ -151,13 +169,23 @@ export function arcPath(r: number, a0: number, a1: number): string {
   return `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r} ${r} 0 ${large} ${sweep} ${x1.toFixed(2)} ${y1.toFixed(2)}`;
 }
 
-/** Clockwise from the west. START is at 180° so the entry axis is horizontal. */
+/** Clockwise from the west. PLAN is at 180° so the entry axis is horizontal.
+ *
+ *  The four stations are the four phases of ONE LAP OF WORK: plan it, run it,
+ *  check it, write down what happened. `START` was removed — it is not a phase
+ *  of work, it is the entry, and it was doing that job twice (a station inside
+ *  the ring AND the target of the entry arrow). Every source ring agrees:
+ *  Plan · Execute · Verify · Learn (Article A; the practitioner doc §2.2). */
 export const PHASE_ANGLE = [180, 270, 360, 450];
 /** Radius the four phase labels sit at — INSIDE the ring, so the whole outer
  *  band is free for the apparatus. */
 export const R_PHASE_LABEL = 98;
 
-const NOTCH = 3.6;
+/** 3.6° cut a gap of ~8.5 px at R_FIN — and the phase node, a 10 px disc, sits
+ *  in the middle of it and filled it. The build claimed gh#18's finding and
+ *  drew a hoop anyway. 5.5° cuts ~26 px, which clears the node with ~8 px of
+ *  dark either side, so the four phases read as four. */
+const NOTCH = 5.5;
 /** Four notched arcs, not one hoop. gh#18's only load-bearing finding: a
  *  continuous band reads as a single thick hoop and buries the count. */
 export const RING_ARCS: [number, number][] = [0, 1, 2, 3].map((i) => [
@@ -182,10 +210,17 @@ export const RING_ARCS: [number, number][] = [0, 1, 2, 3].map((i) => [
 export const ENTRY_HUMAN: Pt = [560, 400];
 export const CLOCK: Pt = [630, 400];
 export const CLOCK_R = 15;
-export const START_NODE = polar(R_FIN, 180);
-export const RUN_NODE = polar(R_FIN, 270);
-export const CHECK_NODE = polar(R_FIN, 0);
-export const SHIP_NODE = polar(R_FIN, 90);
+export const PLAN_NODE = polar(R_FIN, 180);
+export const EXECUTE_NODE = polar(R_FIN, 270);
+export const VERIFY_NODE = polar(R_FIN, 0);
+/** Formerly `SHIP_NODE`. It sits on the RETURN leg — `VERIFY → here → PLAN`,
+ *  which is the way round when the answer is NO. Shipping on the fail branch
+ *  is wrong in every source: Article A ("if the result passes the check, ship
+ *  it"), the practitioner doc §2.2 (`VERIFY → yes → SHIP`). What actually
+ *  happens on this node is what the memory group has always hung off it —
+ *  the run writes down what it did. So it is REMEMBER, and the loop ships
+ *  once, off-ring, at STOP. */
+export const REMEMBER_NODE = polar(R_FIN, 90);
 
 export const STATE_FILE: Pt = [654, 552];
 
@@ -211,6 +246,11 @@ export const R_GAUGE = 158;
 export const GAUGE_FROM = 195;
 export const GAUGE_CAP = 315;
 export const GAUGE_IDLE = 285;
+/** A radial leader from the EXECUTE node out to the gauge. Without it the gauge is
+ *  a second concentric arc floating beside the ring, and at projector distance
+ *  that reads as a rival ring — exactly the "second ring" image #19 item 3
+ *  cut. Tied to RUN, it reads as one annotation: spend accrues while it runs. */
+export const GAUGE_LEADER_DEG = 270;
 /** How far past the cap tick the dashed "no cap" overrun reaches. Bounded so
  *  it stops clear of the CHECK diamond. */
 export const GAUGE_OVERRUN = 338;
