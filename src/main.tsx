@@ -11,7 +11,7 @@ if (VARIANT === "general") {
   document.title = "AI Catalyst Workshop";
   document
     .querySelector<HTMLLinkElement>('link[rel="icon"]')
-    ?.setAttribute("href", "/general-ai-logo.png");
+    ?.setAttribute("href", "/brand/general-ai-logo.png");
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
