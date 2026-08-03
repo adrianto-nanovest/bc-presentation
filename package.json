@@ -13,6 +13,7 @@
     "preview": "vite preview --port 5174 --strictPort",
     "test": "vitest run",
     "test:watch": "vitest",
+    "harvest:numbering": "UPDATE_DECK_NUMBERING=1 vitest run tests/unit/deck-numbering-fixture.test.tsx",
     "e2e": "playwright test",
     "export:pdf": "node scripts/export-pdf.mjs exports/smoke-deck.pdf",
     "export:pptx": "node scripts/export-pptx.mjs exports/smoke-deck.pptx",

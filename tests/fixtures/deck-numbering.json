@@ -1,0 +1,958 @@
+{
+  "berau": [
+    {
+      "index": 0,
+      "fig": null,
+      "label": null
+    },
+    {
+      "index": 1,
+      "fig": "A.1",
+      "label": "WHAT YOU'VE ALREADY SEEN"
+    },
+    {
+      "index": 2,
+      "fig": "B.1",
+      "label": "FROM RULES TO REASONING"
+    },
+    {
+      "index": 3,
+      "fig": "B.2",
+      "label": "NESTED, NOT EQUAL"
+    },
+    {
+      "index": 4,
+      "fig": "B.3",
+      "label": "MECHANICS & CONTROLS"
+    },
+    {
+      "index": 5,
+      "fig": "B.4",
+      "label": "MODELS BY CATEGORY"
+    },
+    {
+      "index": 6,
+      "fig": "B.5",
+      "label": "AI LANDSCAPE PARADOX"
+    },
+    {
+      "index": 7,
+      "fig": "C.1",
+      "label": "MINDSET 1 / 5"
+    },
+    {
+      "index": 8,
+      "fig": "C.2",
+      "label": "MINDSET 2 / 5"
+    },
+    {
+      "index": 9,
+      "fig": "C.3",
+      "label": "MINDSET 3 / 5"
+    },
+    {
+      "index": 10,
+      "fig": "C.4",
+      "label": "MINDSET 4 / 5"
+    },
+    {
+      "index": 11,
+      "fig": "C.5",
+      "label": "MINDSET 5 / 5"
+    },
+    {
+      "index": 12,
+      "fig": "C.6",
+      "label": "BRIDGE · FROM MINDSET TO MECHANICS"
+    },
+    {
+      "index": 13,
+      "fig": "D.1",
+      "label": "THE TRAP"
+    },
+    {
+      "index": 14,
+      "fig": "D.2",
+      "label": "THE CONVERGENCE"
+    },
+    {
+      "index": 15,
+      "fig": "D.3",
+      "label": "ONE PROCESS · FOUR LEVELS"
+    },
+    {
+      "index": 16,
+      "fig": "D.4",
+      "label": "WHICH LEVEL · WHEN"
+    },
+    {
+      "index": 17,
+      "fig": "D.5",
+      "label": "THE NEXT QUESTION"
+    },
+    {
+      "index": 18,
+      "fig": "E.1",
+      "label": "THE THREE LAYERS"
+    },
+    {
+      "index": 19,
+      "fig": "E.2",
+      "label": "LAYER 1 · PROMPT"
+    },
+    {
+      "index": 20,
+      "fig": "E.3",
+      "label": "LAYER 1 · STRUCTURE"
+    },
+    {
+      "index": 21,
+      "fig": "E.4",
+      "label": "LAYER 1 · METHODOLOGIES"
+    },
+    {
+      "index": 22,
+      "fig": "E.5",
+      "label": "LAYER 1 · EXAMPLES"
+    },
+    {
+      "index": 23,
+      "fig": "E.6",
+      "label": "LIMITS OF PROMPTING"
+    },
+    {
+      "index": 24,
+      "fig": "E.7",
+      "label": "LAYER 2 · CONTEXT"
+    },
+    {
+      "index": 25,
+      "fig": "E.8",
+      "label": "CONTEXT STRATEGIES"
+    },
+    {
+      "index": 26,
+      "fig": "E.9",
+      "label": "CONTEXT · PITFALLS"
+    },
+    {
+      "index": 27,
+      "fig": "E.10",
+      "label": "LAYER 3 · HARNESS"
+    },
+    {
+      "index": 28,
+      "fig": "E.11",
+      "label": "HARNESS · PRACTICES"
+    },
+    {
+      "index": 29,
+      "fig": "E.12",
+      "label": "BRIDGE · BUILT"
+    },
+    {
+      "index": 30,
+      "fig": "F.1",
+      "label": "TWO PILLARS"
+    },
+    {
+      "index": 31,
+      "fig": "F.2",
+      "label": "GROUND TRUTH"
+    },
+    {
+      "index": 32,
+      "fig": "F.3",
+      "label": "THE PACKAGE"
+    },
+    {
+      "index": 33,
+      "fig": "F.4",
+      "label": "WRITE ONCE"
+    },
+    {
+      "index": 34,
+      "fig": "F.5",
+      "label": "THE ADAPTER"
+    },
+    {
+      "index": 35,
+      "fig": "F.6",
+      "label": "THE UNSEXY WORK"
+    },
+    {
+      "index": 36,
+      "fig": "F.7",
+      "label": "SPECIALISTS"
+    },
+    {
+      "index": 37,
+      "fig": "F.8",
+      "label": "YOUR AGENTIC OS"
+    },
+    {
+      "index": 38,
+      "fig": "F.9",
+      "label": "BRIDGE · CROSSED"
+    },
+    {
+      "index": 39,
+      "fig": "G.1",
+      "label": "ECOSYSTEM"
+    },
+    {
+      "index": 40,
+      "fig": "G.2",
+      "label": "CLAUDE PLATFORMS"
+    },
+    {
+      "index": 41,
+      "fig": "G.3",
+      "label": "CLAUDE CAPABILITIES"
+    },
+    {
+      "index": 42,
+      "fig": "G.4",
+      "label": "BUILT-IN TOOLS & COMMANDS"
+    },
+    {
+      "index": 43,
+      "fig": "G.5",
+      "label": "GOOGLE"
+    },
+    {
+      "index": 44,
+      "fig": "G.6",
+      "label": "OPENAI"
+    },
+    {
+      "index": 45,
+      "fig": "G.7",
+      "label": "HEAD-TO-HEAD"
+    },
+    {
+      "index": 46,
+      "fig": "G.8",
+      "label": "CAPABILITY MATRIX"
+    },
+    {
+      "index": 47,
+      "fig": "G.9",
+      "label": "THE WORKFLOW"
+    },
+    {
+      "index": 48,
+      "fig": "G.10",
+      "label": "BEYOND THE BIG THREE"
+    },
+    {
+      "index": 49,
+      "fig": "G.11",
+      "label": "BRIDGE · WIELD"
+    },
+    {
+      "index": 50,
+      "fig": "H.1",
+      "label": "THE TRAP"
+    },
+    {
+      "index": 51,
+      "fig": "H.2",
+      "label": "THE DISCIPLINE"
+    },
+    {
+      "index": 52,
+      "fig": "H.3",
+      "label": "BRIDGE · DISCIPLINE"
+    },
+    {
+      "index": 53,
+      "fig": "I.1",
+      "label": "THE PROCESS"
+    },
+    {
+      "index": 54,
+      "fig": "I.2",
+      "label": "THE JOURNEY"
+    },
+    {
+      "index": 55,
+      "fig": "I.3",
+      "label": "THE PORTFOLIO"
+    },
+    {
+      "index": 56,
+      "fig": "I.4",
+      "label": "BRIDGE · RECIPE"
+    },
+    {
+      "index": 57,
+      "fig": "J.1",
+      "label": "THE RECIPE"
+    },
+    {
+      "index": 58,
+      "fig": "J.2",
+      "label": "FIVE PRINCIPLES"
+    },
+    {
+      "index": 59,
+      "fig": "J.3",
+      "label": "BUILDING YOURSELF UP"
+    },
+    {
+      "index": 60,
+      "fig": "J.4",
+      "label": "BUILDING SOMETHING THAT SHIPS"
+    },
+    {
+      "index": 61,
+      "fig": "K.1",
+      "label": "PRACTICE · LAB"
+    },
+    {
+      "index": 62,
+      "fig": "K.2",
+      "label": "THE PRACTICE LAB"
+    },
+    {
+      "index": 63,
+      "fig": "K.3",
+      "label": "THANK YOU"
+    }
+  ],
+  "gems": [
+    {
+      "index": 0,
+      "fig": null,
+      "label": null
+    },
+    {
+      "index": 1,
+      "fig": "A.1",
+      "label": "WHAT GEMS ALREADY RUNS"
+    },
+    {
+      "index": 2,
+      "fig": "B.1",
+      "label": "FROM RULES TO REASONING"
+    },
+    {
+      "index": 3,
+      "fig": "B.2",
+      "label": "NESTED, NOT EQUAL"
+    },
+    {
+      "index": 4,
+      "fig": "B.3",
+      "label": "MECHANICS & CONTROLS"
+    },
+    {
+      "index": 5,
+      "fig": "B.4",
+      "label": "MODELS BY CATEGORY"
+    },
+    {
+      "index": 6,
+      "fig": "B.5",
+      "label": "AI LANDSCAPE PARADOX"
+    },
+    {
+      "index": 7,
+      "fig": "C.1",
+      "label": "MINDSET 1 / 5"
+    },
+    {
+      "index": 8,
+      "fig": "C.2",
+      "label": "MINDSET 2 / 5"
+    },
+    {
+      "index": 9,
+      "fig": "C.3",
+      "label": "MINDSET 3 / 5"
+    },
+    {
+      "index": 10,
+      "fig": "C.4",
+      "label": "MINDSET 4 / 5"
+    },
+    {
+      "index": 11,
+      "fig": "C.5",
+      "label": "MINDSET 5 / 5"
+    },
+    {
+      "index": 12,
+      "fig": "C.6",
+      "label": "BRIDGE · FROM MINDSET TO MECHANICS"
+    },
+    {
+      "index": 13,
+      "fig": "D.1",
+      "label": "THE TRAP"
+    },
+    {
+      "index": 14,
+      "fig": "D.2",
+      "label": "THE CONVERGENCE"
+    },
+    {
+      "index": 15,
+      "fig": "D.3",
+      "label": "ONE PROCESS · FOUR LEVELS"
+    },
+    {
+      "index": 16,
+      "fig": "D.4",
+      "label": "WHICH LEVEL · WHEN"
+    },
+    {
+      "index": 17,
+      "fig": "D.5",
+      "label": "THE NEXT QUESTION"
+    },
+    {
+      "index": 18,
+      "fig": "E.1",
+      "label": "THE THREE LAYERS"
+    },
+    {
+      "index": 19,
+      "fig": "E.2",
+      "label": "LAYER 1 · PROMPT"
+    },
+    {
+      "index": 20,
+      "fig": "E.3",
+      "label": "LAYER 1 · STRUCTURE"
+    },
+    {
+      "index": 21,
+      "fig": "E.4",
+      "label": "LAYER 1 · METHODOLOGIES"
+    },
+    {
+      "index": 22,
+      "fig": "E.5",
+      "label": "LAYER 1 · EXAMPLES"
+    },
+    {
+      "index": 23,
+      "fig": "E.6",
+      "label": "LIMITS OF PROMPTING"
+    },
+    {
+      "index": 24,
+      "fig": "E.7",
+      "label": "LAYER 2 · CONTEXT"
+    },
+    {
+      "index": 25,
+      "fig": "E.8",
+      "label": "CONTEXT STRATEGIES"
+    },
+    {
+      "index": 26,
+      "fig": "E.9",
+      "label": "CONTEXT · PITFALLS"
+    },
+    {
+      "index": 27,
+      "fig": "E.10",
+      "label": "LAYER 3 · HARNESS"
+    },
+    {
+      "index": 28,
+      "fig": "E.11",
+      "label": "HARNESS · PRACTICES"
+    },
+    {
+      "index": 29,
+      "fig": "E.12",
+      "label": "BRIDGE · BUILT"
+    },
+    {
+      "index": 30,
+      "fig": "F.1",
+      "label": "TWO PILLARS"
+    },
+    {
+      "index": 31,
+      "fig": "F.2",
+      "label": "GROUND TRUTH"
+    },
+    {
+      "index": 32,
+      "fig": "F.3",
+      "label": "THE PACKAGE"
+    },
+    {
+      "index": 33,
+      "fig": "F.4",
+      "label": "WRITE ONCE"
+    },
+    {
+      "index": 34,
+      "fig": "F.5",
+      "label": "THE ADAPTER"
+    },
+    {
+      "index": 35,
+      "fig": "F.6",
+      "label": "THE UNSEXY WORK"
+    },
+    {
+      "index": 36,
+      "fig": "F.7",
+      "label": "SPECIALISTS"
+    },
+    {
+      "index": 37,
+      "fig": "F.8",
+      "label": "YOUR AGENTIC OS"
+    },
+    {
+      "index": 38,
+      "fig": "F.9",
+      "label": "BRIDGE · CROSSED"
+    },
+    {
+      "index": 39,
+      "fig": "G.1",
+      "label": "ECOSYSTEM"
+    },
+    {
+      "index": 40,
+      "fig": "G.2",
+      "label": "CLAUDE PLATFORMS"
+    },
+    {
+      "index": 41,
+      "fig": "G.3",
+      "label": "CLAUDE CAPABILITIES"
+    },
+    {
+      "index": 42,
+      "fig": "G.4",
+      "label": "BUILT-IN TOOLS & COMMANDS"
+    },
+    {
+      "index": 43,
+      "fig": "G.5",
+      "label": "GOOGLE"
+    },
+    {
+      "index": 44,
+      "fig": "G.6",
+      "label": "OPENAI"
+    },
+    {
+      "index": 45,
+      "fig": "G.7",
+      "label": "HEAD-TO-HEAD"
+    },
+    {
+      "index": 46,
+      "fig": "G.8",
+      "label": "CAPABILITY MATRIX"
+    },
+    {
+      "index": 47,
+      "fig": "G.9",
+      "label": "THE WORKFLOW"
+    },
+    {
+      "index": 48,
+      "fig": "G.10",
+      "label": "BEYOND THE BIG THREE"
+    },
+    {
+      "index": 49,
+      "fig": "G.11",
+      "label": "BRIDGE · WIELD"
+    },
+    {
+      "index": 50,
+      "fig": "H.1",
+      "label": "THE TRAP"
+    },
+    {
+      "index": 51,
+      "fig": "H.2",
+      "label": "THE DISCIPLINE"
+    },
+    {
+      "index": 52,
+      "fig": "H.3",
+      "label": "BRIDGE · DISCIPLINE"
+    },
+    {
+      "index": 53,
+      "fig": "I.1",
+      "label": "THE PROCESS"
+    },
+    {
+      "index": 54,
+      "fig": "I.2",
+      "label": "THE JOURNEY"
+    },
+    {
+      "index": 55,
+      "fig": "I.3",
+      "label": "THE PORTFOLIO"
+    },
+    {
+      "index": 56,
+      "fig": "I.4",
+      "label": "BRIDGE · RECIPE"
+    },
+    {
+      "index": 57,
+      "fig": "J.1",
+      "label": "THE RECIPE"
+    },
+    {
+      "index": 58,
+      "fig": "J.2",
+      "label": "FIVE PRINCIPLES"
+    },
+    {
+      "index": 59,
+      "fig": "J.3",
+      "label": "BUILDING YOURSELF UP"
+    },
+    {
+      "index": 60,
+      "fig": "J.4",
+      "label": "BUILDING SOMETHING THAT SHIPS"
+    },
+    {
+      "index": 61,
+      "fig": "K.1",
+      "label": "PRACTICE · LAB"
+    },
+    {
+      "index": 62,
+      "fig": "K.2",
+      "label": "THE PRACTICE LAB"
+    },
+    {
+      "index": 63,
+      "fig": "K.3",
+      "label": "THANK YOU"
+    }
+  ],
+  "general": [
+    {
+      "index": 0,
+      "fig": null,
+      "label": null
+    },
+    {
+      "index": 1,
+      "fig": "A.1",
+      "label": "WHERE WE ALL START"
+    },
+    {
+      "index": 2,
+      "fig": "B.1",
+      "label": "FROM RULES TO REASONING"
+    },
+    {
+      "index": 3,
+      "fig": "B.2",
+      "label": "NESTED, NOT EQUAL"
+    },
+    {
+      "index": 4,
+      "fig": "B.3",
+      "label": "MECHANICS & CONTROLS"
+    },
+    {
+      "index": 5,
+      "fig": "B.4",
+      "label": "MODELS BY CATEGORY"
+    },
+    {
+      "index": 6,
+      "fig": "B.5",
+      "label": "AI LANDSCAPE PARADOX"
+    },
+    {
+      "index": 7,
+      "fig": "C.1",
+      "label": "MINDSET 1 / 5"
+    },
+    {
+      "index": 8,
+      "fig": "C.2",
+      "label": "MINDSET 2 / 5"
+    },
+    {
+      "index": 9,
+      "fig": "C.3",
+      "label": "MINDSET 3 / 5"
+    },
+    {
+      "index": 10,
+      "fig": "C.4",
+      "label": "MINDSET 4 / 5"
+    },
+    {
+      "index": 11,
+      "fig": "C.5",
+      "label": "MINDSET 5 / 5"
+    },
+    {
+      "index": 12,
+      "fig": "C.6",
+      "label": "BRIDGE · FROM MINDSET TO MECHANICS"
+    },
+    {
+      "index": 13,
+      "fig": "D.1",
+      "label": "THE TRAP"
+    },
+    {
+      "index": 14,
+      "fig": "D.2",
+      "label": "THE CONVERGENCE"
+    },
+    {
+      "index": 15,
+      "fig": "D.3",
+      "label": "ONE PROCESS · FOUR LEVELS"
+    },
+    {
+      "index": 16,
+      "fig": "D.4",
+      "label": "WHICH LEVEL · WHEN"
+    },
+    {
+      "index": 17,
+      "fig": "D.5",
+      "label": "THE NEXT QUESTION"
+    },
+    {
+      "index": 18,
+      "fig": "E.1",
+      "label": "THE THREE LAYERS"
+    },
+    {
+      "index": 19,
+      "fig": "E.2",
+      "label": "LAYER 1 · PROMPT"
+    },
+    {
+      "index": 20,
+      "fig": "E.3",
+      "label": "LAYER 1 · STRUCTURE"
+    },
+    {
+      "index": 21,
+      "fig": "E.4",
+      "label": "LAYER 1 · METHODOLOGIES"
+    },
+    {
+      "index": 22,
+      "fig": "E.5",
+      "label": "LAYER 1 · EXAMPLES"
+    },
+    {
+      "index": 23,
+      "fig": "E.6",
+      "label": "LIMITS OF PROMPTING"
+    },
+    {
+      "index": 24,
+      "fig": "E.7",
+      "label": "LAYER 2 · CONTEXT"
+    },
+    {
+      "index": 25,
+      "fig": "E.8",
+      "label": "CONTEXT STRATEGIES"
+    },
+    {
+      "index": 26,
+      "fig": "E.9",
+      "label": "CONTEXT · PITFALLS"
+    },
+    {
+      "index": 27,
+      "fig": "E.10",
+      "label": "LAYER 3 · HARNESS"
+    },
+    {
+      "index": 28,
+      "fig": "E.11",
+      "label": "HARNESS · PRACTICES"
+    },
+    {
+      "index": 29,
+      "fig": "E.12",
+      "label": "BRIDGE · BUILT"
+    },
+    {
+      "index": 30,
+      "fig": "F.1",
+      "label": "TWO PILLARS"
+    },
+    {
+      "index": 31,
+      "fig": "F.2",
+      "label": "GROUND TRUTH"
+    },
+    {
+      "index": 32,
+      "fig": "F.3",
+      "label": "THE PACKAGE"
+    },
+    {
+      "index": 33,
+      "fig": "F.4",
+      "label": "WRITE ONCE"
+    },
+    {
+      "index": 34,
+      "fig": "F.5",
+      "label": "THE ADAPTER"
+    },
+    {
+      "index": 35,
+      "fig": "F.6",
+      "label": "THE UNSEXY WORK"
+    },
+    {
+      "index": 36,
+      "fig": "F.7",
+      "label": "SPECIALISTS"
+    },
+    {
+      "index": 37,
+      "fig": "F.8",
+      "label": "YOUR AGENTIC OS"
+    },
+    {
+      "index": 38,
+      "fig": "F.9",
+      "label": "BRIDGE · CROSSED"
+    },
+    {
+      "index": 39,
+      "fig": "G.1",
+      "label": "ECOSYSTEM"
+    },
+    {
+      "index": 40,
+      "fig": "G.2",
+      "label": "CLAUDE PLATFORMS"
+    },
+    {
+      "index": 41,
+      "fig": "G.3",
+      "label": "CLAUDE CAPABILITIES"
+    },
+    {
+      "index": 42,
+      "fig": "G.4",
+      "label": "BUILT-IN TOOLS & COMMANDS"
+    },
+    {
+      "index": 43,
+      "fig": "G.5",
+      "label": "GOOGLE"
+    },
+    {
+      "index": 44,
+      "fig": "G.6",
+      "label": "OPENAI"
+    },
+    {
+      "index": 45,
+      "fig": "G.7",
+      "label": "HEAD-TO-HEAD"
+    },
+    {
+      "index": 46,
+      "fig": "G.8",
+      "label": "CAPABILITY MATRIX"
+    },
+    {
+      "index": 47,
+      "fig": "G.9",
+      "label": "THE WORKFLOW"
+    },
+    {
+      "index": 48,
+      "fig": "G.10",
+      "label": "BEYOND THE BIG THREE"
+    },
+    {
+      "index": 49,
+      "fig": "G.11",
+      "label": "BRIDGE · WIELD"
+    },
+    {
+      "index": 50,
+      "fig": "H.1",
+      "label": "THE TRAP"
+    },
+    {
+      "index": 51,
+      "fig": "H.2",
+      "label": "THE DISCIPLINE"
+    },
+    {
+      "index": 52,
+      "fig": "H.3",
+      "label": "BRIDGE · DISCIPLINE"
+    },
+    {
+      "index": 53,
+      "fig": "I.1",
+      "label": "THE PROCESS"
+    },
+    {
+      "index": 54,
+      "fig": "I.2",
+      "label": "THE JOURNEY"
+    },
+    {
+      "index": 55,
+      "fig": "I.3",
+      "label": "THE PORTFOLIO"
+    },
+    {
+      "index": 56,
+      "fig": "I.4",
+      "label": "BRIDGE · RECIPE"
+    },
+    {
+      "index": 57,
+      "fig": "J.1",
+      "label": "THE RECIPE"
+    },
+    {
+      "index": 58,
+      "fig": "J.2",
+      "label": "FIVE PRINCIPLES"
+    },
+    {
+      "index": 59,
+      "fig": "J.3",
+      "label": "BUILDING YOURSELF UP"
+    },
+    {
+      "index": 60,
+      "fig": "J.4",
+      "label": "BUILDING SOMETHING THAT SHIPS"
+    },
+    {
+      "index": 61,
+      "fig": "K.1",
+      "label": "THANK YOU"
+    }
+  ]
+}
