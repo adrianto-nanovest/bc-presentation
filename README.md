@@ -135,11 +135,37 @@ prefix — one stable exemption, so adding a brand never edits that regex.
 
 ### Checking a variant on a preview URL
 
-`?variant=` reaches the gate only on requests that carry it — the document, not
-`/assets/*.js`. On a host with no row of its own (a Vercel preview) those
-sub-resources resolve to `general`, so log in at bare `/` first, then open
-`/?variant=<id>` and log in again as that brand. On `localhost` the gate never
-runs, so `?variant=` alone is enough.
+Open `/?variant=<id>` and log in once, as that brand. On `localhost` the gate
+never runs, so `?variant=` alone is enough.
+
+One login is enough because of the **selector cookie** (#30). `?variant=`
+reaches the gate only on requests that carry it — the document, not
+`/assets/*.js` — so on a host with no row of its own (a preview URL) those
+sub-resources used to resolve to `general`, be gated by `general_session`, and be
+answered with login HTML while the document was gated by the overridden brand.
+The app never booted, and checking a variant took two logins.
+
+So a request that proves a brand on such a host — a successful login carrying a
+valid `?variant=`, or a **valid session** opening one — also gets `variant=<id>`,
+and the Edge order becomes **`?variant=` → host → selector cookie → `general`**.
+It is not a credential: it only chooses *which* brand's session cookie is
+demanded, so forging it forwards nothing without that brand's signed token. Three
+limits keep it narrow:
+
+- **Mapped hosts ignore it**, so every host with a row behaves exactly as before
+  and still emits one `Set-Cookie` per login.
+- **Documents ignore it** (`Sec-Fetch-Dest`), so the client resolver — which
+  cannot read cookies — never disagrees with the gate about who the viewer is.
+- A login **without** `?variant=` clears it, so the last login wins.
+
+An older session already in your browser needs no second login either: the
+forward path re-issues the cookie the first time that session opens
+`/?variant=<id>`.
+
+One thing the brand boundary does **not** give you: content confidentiality. One
+build ships every variant and the client selects, so any authenticated brand can
+fetch the shared bundle and read another brand's slides out of it. The password
+per brand gates the door and the rendered deck, not the bytes.
 
 ## Layout
 

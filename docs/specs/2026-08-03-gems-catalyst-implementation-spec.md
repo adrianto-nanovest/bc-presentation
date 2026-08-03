@@ -147,6 +147,62 @@ Host map is `Record<hostname, VariantId>` (many hosts → one variant), so alias
   middle-management participant can read the leader deck via `?variant=gems-leader`.
   **Accepted deliberately** (#5).
 
+#### 1.3.1 Amendment — the Edge has ONE extra step for sub-resources (#30, IMPLEMENTED)
+
+"Identically on both sides" now reads: **identical for documents; the Edge has one extra,
+non-authoritative step for sub-resources on unmapped hosts.** Edge order is
+**`?variant=` → host row → selector cookie → `general`**; the client keeps the three-step
+rule, because it cannot see the cookie and does not need to.
+
+Why the asymmetry is unavoidable *once the defect is fixed at all* (option B, keeping the
+two logins, was the alternative): `?variant=` reaches the gate only on requests that carry
+it — the document. `/assets/index-*.js` carries no query string, so on a host with **no
+row** (a Vercel preview) it resolved to `general`, was gated by `general_session`, and the
+gate answered the script request with login HTML while the document behind it had been
+gated by the overridden brand. The app never booted, and verifying a variant on a preview
+took **two logins** — a tax on every variant ticket, since §2.1 rule 1 makes preview
+verification the pre-merge step.
+
+The extra step, and the four properties that bound it:
+
+- **Issued only against proof of the brand, on an unmapped host.** Two writers: a
+  successful login whose request carried a **valid** `?variant=`, and the forward path when
+  a **valid session token** opens an explicit `?variant=` (see the migration note below).
+  The value is always a table key re-serialized from the resolved variant, never an echoed
+  request string; `Secure; SameSite=Lax; Path=/`, same `Max-Age` as the session, no
+  `HttpOnly` (it is not a credential and no script reads it). A login **without** an
+  override clears it (`Max-Age=0`), so the last login on that host decides and a stale
+  value cannot outlive the session it came with.
+- **No authority.** It only chooses *which brand's session cookie is demanded*. Forging it
+  forwards nothing without that brand's signed token, and §1.4's brand-bound check still
+  rejects a foreign brand's token. Fail-closed as before. Duplicates are first-wins, which
+  at worst demands the wrong brand's door — it never opens one.
+- **Mapped hosts never read or write it**, so every host with a row is unchanged — this is
+  preview-only machinery, and a production login still emits exactly one `Set-Cookie`.
+- **Read only for non-document requests** (`Sec-Fetch-Dest` present and not
+  `document`/`iframe`/`frame`/`fencedframe`/`embed`/`object`), so no document ever resolves
+  differently from the client. An absent header is treated as unknown → old behaviour, not
+  divergence.
+
+**Migration note.** The login branch alone would have left the defect live for 7 more days
+per session: a viewer holding a valid token never reaches it, because the document forwards
+on the token. Hence the second writer — the forward path re-issues the selector when a
+valid token opens an explicit `?variant=` on an unmapped host. The brand written is the one
+whose token just verified, never one the request asserted.
+
+Rejected: accepting *any* brand's valid token on an unmapped host. That would let a Berau
+participant holding only `berau_session` open `?variant=gems-*` on a preview and be served
+the **rendered GEMS deck** without GEMS' password. A regression test asserts it is not
+taken.
+
+**What this does NOT buy — read before treating the brand as a confidentiality boundary.**
+One build serves every variant and the client selects, so `registry.tsx` compiles every
+brand's content into the one shared bundle. Any authenticated brand can fetch that bundle
+and read another brand's strings out of it — before or after this ticket. The brand
+boundary is a boundary on **doors and rendered decks**, not on bytes. Making GEMS-only
+content unreadable to a Berau holder would need brand-separated artifacts, which is an
+architecture decision this spec has not taken.
+
 ### 1.4 Auth fix — brand-bound tokens (security, not cosmetic) — IMPLEMENTED (#24)
 
 `mintToken` signed only the expiry and all brands share one `AUTH_SECRET`, so **a valid berau

@@ -126,6 +126,19 @@ export function isVariantId(value: unknown): value is VariantId {
   return typeof value === "string" && Object.prototype.hasOwnProperty.call(VARIANTS, value);
 }
 
+/**
+ * Does this hostname have a row of its own?
+ *
+ * `resolveVariant` needs the row; the Edge gate needs the *answer*, because its
+ * one extra step (the selector cookie for sub-resources, gh#30) applies only to
+ * hosts with no row — a Vercel preview. Sharing the predicate keeps the
+ * `hasOwnProperty` guard in one place; a bare lookup would treat a `__proto__`
+ * or `constructor` Host header as mapped.
+ */
+export function isMappedHost(hostname?: string | null): boolean {
+  return hostname != null && Object.prototype.hasOwnProperty.call(VARIANT_BY_HOST, hostname);
+}
+
 export interface VariantRequest {
   /** The `?variant=` query param, verbatim. Unknown values are ignored. */
   variantParam?: string | null;
@@ -142,14 +155,11 @@ export interface VariantRequest {
  */
 export function resolveVariant({ variantParam, hostname }: VariantRequest): Variant {
   if (isVariantId(variantParam)) return VARIANTS[variantParam];
-  // `hasOwnProperty`, not a bare lookup: a hostname of `__proto__` or
-  // `constructor` is a legal URL host, and a bare lookup would return an
-  // inherited member instead of falling through to the default. Reachable from
-  // a request `Host` header, since middleware.ts shares this rule.
-  const byHost =
-    hostname != null && Object.prototype.hasOwnProperty.call(VARIANT_BY_HOST, hostname)
-      ? VARIANT_BY_HOST[hostname]
-      : undefined;
+  // `isMappedHost` (i.e. `hasOwnProperty`), not a bare lookup: a hostname of
+  // `__proto__` or `constructor` is a legal URL host, and a bare lookup would
+  // return an inherited member instead of falling through to the default.
+  // Reachable from a request `Host` header, since middleware.ts shares this rule.
+  const byHost = isMappedHost(hostname) ? VARIANT_BY_HOST[hostname as string] : undefined;
   return VARIANTS[byHost ?? DEFAULT_VARIANT_ID];
 }
 

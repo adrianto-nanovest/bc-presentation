@@ -87,6 +87,13 @@ const SECRET = "test-auth-secret-do-not-ship";
 
 const MAX_AGE_S = 60 * 60 * 24 * 7;
 
+/**
+ * The gate's non-credential brand selector (gh#30), restated as a literal for
+ * the same reason the copy is: importing the name would make these tests agree
+ * with a rename, including one that breaks every browser's existing cookie.
+ */
+const SELECTOR_COOKIE = "variant";
+
 // ── Env harness ──────────────────────────────────────────────────────────────
 // The gate reads `process.env` per request, so tests just stub it. Stubbing a
 // var to `undefined` DELETES it rather than setting the string "undefined",
@@ -162,10 +169,37 @@ function submitPassword(origin: string, password: string, query = ""): Request {
   });
 }
 
+/**
+ * A sub-resource request: no query string (browsers do not append one to the
+ * `<script src>` the document names) and a non-document `Sec-Fetch-Dest`, which
+ * is the signal the gate keys its one extra step off (gh#30).
+ */
+function getSubresource(
+  origin: string,
+  path = "/assets/index-abc123.js",
+  cookie?: string,
+  dest: string | null = "script",
+): Request {
+  const headers: Record<string, string> = {};
+  if (cookie) headers.cookie = cookie;
+  if (dest !== null) headers["sec-fetch-dest"] = dest;
+  return new Request(origin + path, { headers });
+}
+
 function setCookieHeader(res: Response): string {
   const header = res.headers.get("set-cookie");
   expect(header).not.toBeNull();
   return header as string;
+}
+
+/** Each `Set-Cookie` separately — the gate may send two (session + selector). */
+function setCookies(res: Response): string[] {
+  return res.headers.getSetCookie();
+}
+
+/** The session `Set-Cookie` reduced to the `"name=value"` a browser would send back. */
+function cookiePair(header: string): string {
+  return header.slice(0, header.indexOf(";"));
 }
 
 /** `"name=value; Attr; Attr"` → `"value"`. */
@@ -849,6 +883,475 @@ describe("brand-bound tokens", () => {
 
     expect(wasForwarded(await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`)))).toBe(
       false,
+    );
+  });
+});
+
+// ── The selector cookie (gh#30) ──────────────────────────────────────────────
+//
+// THE DEFECT: `?variant=` reaches the gate only on the document. A sub-resource
+// request carries no query string, so on an unmapped host (a Vercel preview) it
+// resolved to `general` while the document that referenced it was gated by the
+// overridden brand — the gate answered `/assets/index-*.js` with login HTML and
+// the app never booted. Verifying a variant on a preview took TWO logins.
+//
+// THE FIX is the Edge's one extra, non-authoritative step: `?variant=` → host row
+// → selector cookie → `general`, consulted only for non-document requests on an
+// unmapped host. Spec §1.3 records the asymmetry; these tests fence it in, since
+// the cookie is the only input to the gate that the client resolver cannot see.
+
+describe("selector cookie — resolution order", () => {
+  const selector = (id: VariantId) => `${SELECTOR_COOKIE}=${id}`;
+
+  test("a sub-resource on a preview resolves by the selector, not by the host default", async () => {
+    // THE BUG, from the other side: with gems' session and the selector present,
+    // the script request is forwarded instead of being answered with login HTML.
+    const cookie = `gems_session=${await mintToken("gems", FUTURE())}; ${selector("gems-leader")}`;
+
+    expect(wasForwarded(await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", cookie)))).toBe(
+      true,
+    );
+  });
+
+  test.each(["script", "style", "image", "font", "empty"])(
+    "every non-document destination (%s) consults it",
+    async (dest) => {
+      const cookie = `gems_session=${await mintToken("gems", FUTURE())}; ${selector("gems-leader")}`;
+      const res = await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", cookie, dest));
+      expect(wasForwarded(res), dest).toBe(true);
+    },
+  );
+
+  test("a mapped host ignores the selector entirely", async () => {
+    // Production's five domains all have a row, so this is what keeps them
+    // behaving exactly as they did before gh#30.
+    const berau = await mintToken("berau", FUTURE());
+    const forwarded = await middleware(
+      getSubresource(BERAU_ORIGIN, "/assets/x.js", `berau_session=${berau}; ${selector("gems-leader")}`),
+    );
+    expect(wasForwarded(forwarded)).toBe(true);
+
+    // And the converse: the selector cannot make a mapped host demand gems.
+    const held = await middleware(
+      getSubresource(
+        BERAU_ORIGIN,
+        "/assets/x.js",
+        `gems_session=${await mintToken("gems", FUTURE())}; ${selector("gems-leader")}`,
+      ),
+    );
+    expect(wasForwarded(held)).toBe(false);
+  });
+
+  test("`?variant=` still outranks the selector", async () => {
+    const cookie = `gems_session=${await mintToken("gems", FUTURE())}; ${selector("gems-leader")}`;
+
+    // The parameter says berau, so berau's session is what is demanded — the
+    // selector must not smuggle gems past it.
+    const res = await middleware(
+      getSubresource(PREVIEW_ORIGIN, "/assets/x.js?variant=berau-leader", cookie),
+    );
+    expect(wasForwarded(res)).toBe(false);
+    expect(await servedLoginPage(res)).toBe(true);
+  });
+
+  test("no selector on a preview still falls back to general", async () => {
+    const general = `general_session=${await mintToken("general", FUTURE())}`;
+    expect(
+      wasForwarded(await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", general))),
+    ).toBe(true);
+  });
+
+  test("duplicate selector cookies: the first wins, and neither opens a door", async () => {
+    // Only self-inflicted (two paths, two scopes), and harmless by construction:
+    // the value picks WHICH door is demanded, so the worst case is the wrong
+    // door — which then still needs that brand's token.
+    const gems = `gems_session=${await mintToken("gems", FUTURE())}`;
+    const first = await middleware(
+      getSubresource(
+        PREVIEW_ORIGIN,
+        "/assets/x.js",
+        `${gems}; ${SELECTOR_COOKIE}=gems-leader; ${SELECTOR_COOKIE}=berau-leader`,
+      ),
+    );
+    expect(wasForwarded(first)).toBe(true); // gems demanded, gems held
+
+    const reversed = await middleware(
+      getSubresource(
+        PREVIEW_ORIGIN,
+        "/assets/x.js",
+        `${gems}; ${SELECTOR_COOKIE}=berau-leader; ${SELECTOR_COOKIE}=gems-leader`,
+      ),
+    );
+    expect(wasForwarded(reversed)).toBe(false); // berau demanded, not held
+    expect(await servedLoginPage(reversed)).toBe(true);
+  });
+
+  test.each(["not-a-variant", "constructor", "", "gems", "GEMS-LEADER"])(
+    "a selector value of %j is not a table key, so it resolves general",
+    async (value) => {
+      // Whatever it says, the value is validated exactly like `?variant=`.
+      const cookie = `gems_session=${await mintToken("gems", FUTURE())}; ${SELECTOR_COOKIE}=${value}`;
+      const res = await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", cookie));
+      expect(wasForwarded(res), value).toBe(false);
+
+      const withGeneral = `general_session=${await mintToken("general", FUTURE())}; ${SELECTOR_COOKIE}=${value}`;
+      expect(
+        wasForwarded(await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", withGeneral))),
+        value,
+      ).toBe(true);
+    },
+  );
+});
+
+describe("selector cookie — documents never consult it", () => {
+  // The point of the `Sec-Fetch-Dest` gate: the client resolver cannot read
+  // cookies, so if a DOCUMENT resolved by the selector the two sides would
+  // disagree about who the viewer is — gems' door in front of the general deck.
+  test("a document request on a preview resolves general despite the selector", async () => {
+    const res = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/`, {
+        headers: {
+          "sec-fetch-dest": "document",
+          cookie: `gems_session=${await mintToken("gems", FUTURE())}; ${SELECTOR_COOKIE}=gems-leader`,
+        },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(false);
+    const body = await res.text();
+    expect(body).toContain(`<title>${COPY.general.title}</title>`);
+    // …and the door it offers is general's, so the form does not carry a variant.
+    expect(body).toContain('action="/__auth"');
+  });
+
+  test.each(["iframe", "frame", "fencedframe", "embed", "object"])(
+    "the document-like destination %s does not consult it either",
+    async (dest) => {
+      const cookie = `gems_session=${await mintToken("gems", FUTURE())}; ${SELECTOR_COOKIE}=gems-leader`;
+      const res = await middleware(getSubresource(PREVIEW_ORIGIN, "/", cookie, dest));
+      expect(wasForwarded(res), dest).toBe(false);
+    },
+  );
+
+  test("a document with a selector is NOT rejected — it is resolved by the host rule", async () => {
+    // The positive half, without which every assertion above would still pass on
+    // a gate that simply refused any document carrying a selector. General's own
+    // session must open general's document while a gems selector sits in the jar.
+    const res = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/`, {
+        headers: {
+          "sec-fetch-dest": "document",
+          cookie: `general_session=${await mintToken("general", FUTURE())}; ${SELECTOR_COOKIE}=gems-leader`,
+        },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(true);
+  });
+
+  test("an ABSENT Sec-Fetch-Dest falls back to the pre-gh#30 behaviour", async () => {
+    // Unknown destination (an old client, curl, a Playwright API request): treat
+    // it as possibly-a-document and do NOT consult the cookie. Fails closed to
+    // the old two-login flow instead of risking a divergent document.
+    const cookie = `gems_session=${await mintToken("gems", FUTURE())}; ${SELECTOR_COOKIE}=gems-leader`;
+    const res = await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", cookie, null));
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(await servedLoginPage(res)).toBe(true);
+  });
+});
+
+describe("selector cookie — carries no authority", () => {
+  test("forging it forwards nothing without that brand's session token", async () => {
+    // The whole security argument in one test: the selector chooses WHICH door is
+    // checked, never whether it opens.
+    const res = await middleware(
+      getSubresource(PREVIEW_ORIGIN, "/assets/x.js", `${SELECTOR_COOKIE}=gems-leader`),
+    );
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(res.status).toBe(200);
+    expect(await servedLoginPage(res)).toBe(true);
+  });
+
+  test("a foreign brand's session is still rejected — the cross-brand shortcut is NOT taken", async () => {
+    // The rejected option C: accepting ANY valid token on an unmapped host would
+    // let a berau participant read GEMS-specific slides (A.1, K.2) on a preview.
+    // Berau's token is real, unexpired and correctly signed; the selector names
+    // gems; the request must still be held.
+    const berau = await mintToken("berau", FUTURE());
+    const cookie = `berau_session=${berau}; ${SELECTOR_COOKIE}=gems-leader`;
+
+    const res = await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", cookie));
+    expect(wasForwarded(res)).toBe(false);
+
+    // Not even under gems' cookie NAME — the brand is inside the signature (gh#24).
+    const renamed = await middleware(
+      getSubresource(PREVIEW_ORIGIN, "/assets/x.js", `gems_session=${berau}; ${SELECTOR_COOKIE}=gems-leader`),
+    );
+    expect(wasForwarded(renamed)).toBe(false);
+  });
+
+  test("an expired session is not rescued by a live selector", async () => {
+    const stale = await mintToken("gems", Date.now() - 1_000);
+    const res = await middleware(
+      getSubresource(PREVIEW_ORIGIN, "/assets/x.js", `gems_session=${stale}; ${SELECTOR_COOKIE}=gems-leader`),
+    );
+    expect(wasForwarded(res)).toBe(false);
+  });
+});
+
+describe("selector cookie — when it is issued", () => {
+  const selectorSet = (res: Response): string | undefined =>
+    setCookies(res).find((c) => c.startsWith(`${SELECTOR_COOKIE}=`));
+
+  test("a successful override login sets it, with the session's attributes", async () => {
+    const res = await middleware(
+      submitPassword(PREVIEW_ORIGIN, LEGACY_PASSWORD, "?variant=gems-leader"),
+    );
+
+    expect(res.status).toBe(303);
+    const cookies = setCookies(res);
+    expect(cookies).toHaveLength(2);
+    expect(cookies[0]).toMatch(/^gems_session=/);
+
+    const set = cookies[1];
+    expect(set).toMatch(new RegExp(`^${SELECTOR_COOKIE}=gems-leader;`));
+    expect(set).toContain("Secure");
+    expect(set).toContain("SameSite=Lax");
+    expect(set).toContain("Path=/");
+    expect(set).toContain(`Max-Age=${MAX_AGE_S}`);
+  });
+
+  test.each(ALL_IDS)("the value is the resolved table key for %s, never an echoed string", async (id) => {
+    const res = await middleware(submitPassword(PREVIEW_ORIGIN, LEGACY_PASSWORD, `?variant=${id}`));
+    expect(selectorSet(res)).toMatch(new RegExp(`^${SELECTOR_COOKIE}=${id};`));
+  });
+
+  test("a percent-encoded parameter is stored decoded, as the canonical key", async () => {
+    // `%2D` is `-`. What lands in the cookie must be the table key the gate will
+    // later look up, not the bytes the request happened to spell it with.
+    const res = await middleware(
+      submitPassword(PREVIEW_ORIGIN, LEGACY_PASSWORD, "?variant=gems%2Dleader"),
+    );
+
+    expect(selectorSet(res)).toMatch(new RegExp(`^${SELECTOR_COOKIE}=gems-leader;`));
+    expect(res.headers.get("location")).toBe("/?variant=gems-leader");
+  });
+
+  test("an unknown ?variant= value is cleared, never stored as the unknown string", async () => {
+    const res = await middleware(
+      submitPassword(PREVIEW_ORIGIN, LEGACY_PASSWORD, "?variant=not-a-variant"),
+    );
+
+    expect(res.status).toBe(303);
+    expect(selectorSet(res)).toBe(`${SELECTOR_COOKIE}=; Secure; SameSite=Lax; Path=/; Max-Age=0`);
+    expect(res.headers.get("location")).toBe("/");
+  });
+
+  test("a WRONG password sets nothing at all", async () => {
+    const res = await middleware(
+      submitPassword(PREVIEW_ORIGIN, "wrong-password", "?variant=gems-leader"),
+    );
+
+    expect(res.status).toBe(401);
+    expect(setCookies(res)).toEqual([]);
+  });
+
+  test("a login WITHOUT an override clears it, so the last login wins", async () => {
+    const res = await middleware(submitPassword(PREVIEW_ORIGIN, LEGACY_PASSWORD));
+
+    expect(res.status).toBe(303);
+    expect(selectorSet(res)).toContain("Max-Age=0");
+
+    // Proven end to end: after the clearing login, a sub-resource that still
+    // presents the stale value is resolved by it only if the browser kept it —
+    // and the browser will not, because Max-Age=0 deletes it.
+    expect(selectorSet(res)).toBe(`${SELECTOR_COOKIE}=; Secure; SameSite=Lax; Path=/; Max-Age=0`);
+  });
+
+  test.each(ALL_IDS)("a login on %s's own mapped host sends ONE cookie, as before", async (id) => {
+    // Bit-for-bit unchanged on production: no selector header, set or cleared.
+    const res = await middleware(submitPassword(origin(id), LEGACY_PASSWORD));
+
+    const cookies = setCookies(res);
+    expect(cookies).toHaveLength(1);
+    expect(cookies[0]).toMatch(new RegExp(`^${BRANDS[VARIANTS[id].brand].cookie}=`));
+  });
+
+  test("a mapped host with an override still sends ONE cookie", async () => {
+    const res = await middleware(submitPassword(BERAU_ORIGIN, LEGACY_PASSWORD, "?variant=gems-leader"));
+    expect(setCookies(res)).toHaveLength(1);
+    expect(setCookies(res)[0]).toMatch(/^gems_session=/);
+  });
+});
+
+describe("selector cookie — a session that predates it", () => {
+  // THE MIGRATION HOLE: the login branch is the only place a cookie could be set,
+  // and a viewer holding a valid 7-day session never reaches it — the document
+  // forwards on the token alone. So a session minted before gh#30 shipped, or one
+  // whose selector a viewer cleared, would keep hitting the ORIGINAL defect for
+  // the rest of its life. The forward path therefore re-issues the selector when
+  // a valid token opens an explicit `?variant=` on an unmapped host.
+  const gemsJar = async () => `gems_session=${await mintToken("gems", FUTURE())}`;
+
+  test("a valid session with NO selector re-issues it when it opens ?variant=", async () => {
+    const res = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/?variant=gems-leader`, {
+        headers: { "sec-fetch-dest": "document", cookie: await gemsJar() },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(true);
+    expect(setCookies(res)).toEqual([
+      `${SELECTOR_COOKIE}=gems-leader; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`,
+    ]);
+  });
+
+  test("so the sub-resources of that document are forwarded too — no second login", async () => {
+    const jar = await gemsJar();
+    const doc = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/?variant=gems-leader`, {
+        headers: { "sec-fetch-dest": "document", cookie: jar },
+      }),
+    );
+
+    // Exactly what the browser will send next: the old session plus the cookie
+    // the response just set.
+    const next = `${jar}; ${cookiePair(setCookies(doc)[0])}`;
+    expect(wasForwarded(await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", next)))).toBe(
+      true,
+    );
+  });
+
+  test("it is NOT re-issued when the value is already correct — no redundant header", async () => {
+    const res = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/?variant=gems-leader`, {
+        headers: {
+          "sec-fetch-dest": "document",
+          cookie: `${await gemsJar()}; ${SELECTOR_COOKIE}=gems-leader`,
+        },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(true);
+    expect(setCookies(res)).toEqual([]);
+  });
+
+  test("an INVALID session issues nothing — the forward path is the only writer here", async () => {
+    // The re-issue must not become a way to set the cookie without proving a
+    // brand: the token is what gates it, exactly as it gates the deck.
+    const res = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/?variant=gems-leader`, {
+        headers: {
+          "sec-fetch-dest": "document",
+          cookie: `gems_session=${await mintToken("gems", Date.now() - 1_000)}`,
+        },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(setCookies(res)).toEqual([]);
+  });
+
+  test("a foreign brand's valid token issues nothing — it never proved this brand", async () => {
+    const res = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/?variant=gems-leader`, {
+        headers: {
+          "sec-fetch-dest": "document",
+          cookie: `gems_session=${await mintToken("berau", FUTURE())}`,
+        },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(setCookies(res)).toEqual([]);
+  });
+
+  test("a MAPPED host never writes it, on the forward path either", async () => {
+    const res = await middleware(
+      new Request(`${BERAU_ORIGIN}/?variant=berau-leader`, {
+        headers: {
+          "sec-fetch-dest": "document",
+          cookie: `berau_session=${await mintToken("berau", FUTURE())}`,
+        },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(true);
+    expect(setCookies(res)).toEqual([]);
+  });
+
+  test("a request with NO override never writes it, even with a valid session", async () => {
+    const res = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/`, {
+        headers: {
+          "sec-fetch-dest": "document",
+          cookie: `general_session=${await mintToken("general", FUTURE())}`,
+        },
+      }),
+    );
+
+    expect(wasForwarded(res)).toBe(true);
+    expect(setCookies(res)).toEqual([]);
+  });
+});
+
+describe("selector cookie — the single-login preview flow", () => {
+  test("POST ?variant=gems-leader → document → /assets/x.js, one login, no general session", async () => {
+    // The acceptance path of gh#30, walked with only what a browser would carry
+    // forward from the previous step.
+    const posted = await middleware(
+      submitPassword(PREVIEW_ORIGIN, LEGACY_PASSWORD, "?variant=gems-leader"),
+    );
+    expect(posted.status).toBe(303);
+    expect(posted.headers.get("location")).toBe("/?variant=gems-leader");
+
+    const jar = setCookies(posted).map(cookiePair).join("; ");
+    expect(jar).toContain("gems_session=");
+    expect(jar).toContain(`${SELECTOR_COOKIE}=gems-leader`);
+    expect(jar).not.toContain("general_session");
+
+    // 1 · the document the redirect lands on — resolved by `?variant=`.
+    const doc = await middleware(
+      new Request(`${PREVIEW_ORIGIN}/?variant=gems-leader`, {
+        headers: { "sec-fetch-dest": "document", cookie: jar },
+      }),
+    );
+    expect(wasForwarded(doc)).toBe(true);
+
+    // 2 · the sub-resources that document references — no query string, resolved
+    // by the selector. These are the requests that used to get login HTML. Each
+    // is sent with its own real `Sec-Fetch-Dest`, not one stand-in value.
+    for (const [path, dest] of [
+      ["/assets/index-abc123.js", "script"],
+      ["/assets/index-abc123.css", "style"],
+      ["/brand/x.png", "image"],
+      ["/api-ish/data.json", "empty"],
+    ]) {
+      const asset = await middleware(getSubresource(PREVIEW_ORIGIN, path, jar, dest));
+      expect(wasForwarded(asset), `${path} (${dest})`).toBe(true);
+    }
+  });
+
+  test("the same flow needs gems' password, not general's", async () => {
+    vi.stubEnv("SITE_PASSWORD", undefined);
+    vi.stubEnv("SITE_PASSWORD_GEMS", BRAND_PASSWORD.gems);
+    vi.stubEnv("SITE_PASSWORD_GENERAL", BRAND_PASSWORD.general);
+
+    const wrong = await middleware(
+      submitPassword(PREVIEW_ORIGIN, BRAND_PASSWORD.general, "?variant=gems-leader"),
+    );
+    expect(wrong.status).toBe(401);
+
+    const right = await middleware(
+      submitPassword(PREVIEW_ORIGIN, BRAND_PASSWORD.gems, "?variant=gems-leader"),
+    );
+    expect(right.status).toBe(303);
+
+    const jar = setCookies(right).map(cookiePair).join("; ");
+    expect(wasForwarded(await middleware(getSubresource(PREVIEW_ORIGIN, "/assets/x.js", jar)))).toBe(
+      true,
     );
   });
 });

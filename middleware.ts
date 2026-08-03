@@ -37,12 +37,14 @@ import { next } from '@vercel/functions';
 import {
   BRANDS,
   faviconType,
+  isMappedHost,
   isVariantId,
   loginTitle,
   resolveVariant,
   variantLabel,
   type Brand,
   type Variant,
+  type VariantId,
 } from './src/deck-variants';
 
 // `process.env` is injected by Vercel for env vars; ambient-declare it so this
@@ -71,31 +73,112 @@ export const config = {
 // `general`. Branding, password and cookie are BRAND-level; only the eyebrow's
 // label suffix comes from the deck set.
 //
-// KNOWN GAP, deliberate: `?variant=` only reaches the gate on requests that
-// carry it — the document. Sub-resource requests (`/assets/*.js`) do not, so on
-// a host with no row of its own (a Vercel preview) they resolve to `general` and
-// need general's cookie too. Verifying a non-default variant on a preview URL
-// therefore means logging in at bare `/` first; on `localhost` the gate never
-// runs at all. Closing that would need a variant cookie, which would make the
-// Edge rule differ from the client's — a worse trade than the extra login.
+// THE EDGE'S ONE EXTRA STEP — the selector cookie (gh#30, spec §1.3):
+// `?variant=` only reaches the gate on requests that carry it — the document.
+// Sub-resource requests (`/assets/*.js`, `*.css`) carry no query string, so on a
+// host with no row of its own (a Vercel preview) they used to resolve to
+// `general` while the document that referenced them was gated by the overridden
+// brand — the gate then answered the script request with login HTML and the app
+// never booted. Verifying a variant on a preview took two logins.
+//
+// So a request that PROVED a brand on an unmapped host — a successful login
+// carrying a valid `?variant=`, or a valid session token opening one — also gets
+// a SECOND, non-credential cookie naming that variant, and the Edge order
+// becomes `?variant=` → host row → selector cookie → `general`.
+// Four properties keep this honest:
+//   - The cookie carries NO AUTHORITY. It only chooses which brand's session
+//     cookie is demanded; forging it forwards nothing without that brand's
+//     signed token, and a foreign brand's token is still refused (gh#24).
+//   - A MAPPED HOST NEVER READS OR WRITES IT, so every host with a row behaves
+//     exactly as before — this is preview-only machinery.
+//   - It is consulted only for NON-DOCUMENT requests, so no document ever
+//     resolves differently from the client resolver, which cannot see cookies.
+//     `Sec-Fetch-Dest` must be present and non-document to qualify; absent (an
+//     old client, curl) means "unknown", which falls back to the old behaviour
+//     rather than diverging from the client.
+//   - It is issued on the FORWARD path too, not just at login. A session minted
+//     before this shipped, or one whose selector the viewer cleared, would
+//     otherwise keep hitting the original defect for its whole 7 days: the
+//     document forwards on the session alone, so no login happens to set the
+//     cookie. The brand written there is never taken from the request — it is
+//     the brand whose token just verified.
+// On `localhost` the gate never runs at all, so `?variant=` alone is enough
+// there — which is still where brand content deltas belong.
+//
+// WHAT THIS IS NOT: it is not a confidentiality boundary for deck CONTENT. One
+// build serves every variant and the client picks, so any authenticated brand
+// can fetch the shared bundle. Rejecting a foreign brand's token keeps each
+// brand's DOOR and rendered deck behind its own password; it does not make one
+// brand's slides unreadable to another brand's holder. That is a property of
+// the single-bundle architecture, not of this cookie.
 
 const MAX_AGE_S = 60 * 60 * 24 * 7; // 7 days
 const MAX_AGE_MS = MAX_AGE_S * 1000;
 const AUTH_PATH = '/__auth';
+
+/**
+ * The non-credential brand selector (gh#30). Every value this file WRITES is a
+ * table key; an incoming value is attacker-supplied like any other cookie, and
+ * is validated by `resolveVariant` exactly as `?variant=` is.
+ */
+const SELECTOR_COOKIE = 'variant';
+
+/** Same attributes and lifetime as the session cookie, minus `HttpOnly`: it is
+ * not a credential and no script needs it either way. */
+const setSelector = (id: VariantId) =>
+  `${SELECTOR_COOKIE}=${id}; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`;
+const CLEAR_SELECTOR = `${SELECTOR_COOKIE}=; Secure; SameSite=Lax; Path=/; Max-Age=0`;
+
+/**
+ * `Sec-Fetch-Dest` values that fetch a DOCUMENT, i.e. something that then runs
+ * the client resolver and must therefore resolve identically to it. `fencedframe`
+ * is in the list because a fenced frame also creates a document
+ * (https://wicg.github.io/fenced-frame/).
+ */
+const DOCUMENT_DESTS = new Set([
+  'document',
+  'iframe',
+  'frame',
+  'fencedframe',
+  'embed',
+  'object',
+]);
 
 const enc = new TextEncoder();
 
 export default async function middleware(request: Request): Promise<Response> {
   const { pathname, hostname, searchParams } = new URL(request.url);
   const variantParam = searchParams.get('variant');
-  const variant = resolveVariant({ variantParam, hostname });
+  const override = isVariantId(variantParam);
+
+  // A mapped host short-circuits before the cookie is even read, which is what
+  // keeps every host with a row identical to pre-gh#30.
+  const unmapped = !isMappedHost(hostname);
+  const selectorCookie = unmapped
+    ? // First occurrence wins, as everywhere else in this file. Duplicates can
+      // only be self-inflicted and carry no authority: the worst case is that
+      // the wrong brand's door is demanded for a sub-resource, never opened.
+      readCookie(request.headers.get('cookie'), SELECTOR_COOKIE)
+    : null;
+
+  // The selector is the LAST resort before `general`, so it is consulted only
+  // when the two shared steps have nothing to say — no valid `?variant=` — and
+  // only for a request that is not fetching a document.
+  const dest = request.headers.get('sec-fetch-dest');
+  const selector =
+    !override && dest !== null && !DOCUMENT_DESTS.has(dest) ? selectorCookie : null;
+
+  // `resolveVariant` validates whatever it is given, so a forged selector value
+  // is ignored exactly like a forged `?variant=` — it falls through to `general`.
+  const variant = resolveVariant({ variantParam: override ? variantParam : selector, hostname });
   const brand = BRANDS[variant.brand];
 
   // An explicit override must survive the round trip, or the POST would resolve
   // by host and check the WRONG brand's password. Re-serialized from the
   // resolved id (a table key), never echoed from the request — an unknown value
-  // resolved by host, so it is dropped here too.
-  const query = isVariantId(variantParam) ? `?variant=${variant.id}` : '';
+  // resolved by host, so it is dropped here too. The SELECTOR is deliberately
+  // not part of this: it must not put a parameter into a URL the viewer typed.
+  const query = override ? `?variant=${variant.id}` : '';
 
   // Uniform for every brand: the brand's own var, else the legacy shared one
   // (which still holds berau's password until the migration retires it — spec
@@ -116,13 +199,21 @@ export default async function middleware(request: Request): Promise<Response> {
       // Bound to the brand the password was just checked against, so the token
       // can only ever re-open this brand's deck.
       const token = await mintToken(variant.brand, AUTH_SECRET);
-      return new Response(null, {
-        status: 303,
-        headers: {
-          Location: `/${query}`,
-          'Set-Cookie': `${brand.cookie}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`,
-        },
-      });
+      const headers = new Headers({ Location: `/${query}` });
+      headers.append(
+        'Set-Cookie',
+        `${brand.cookie}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_S}`,
+      );
+
+      // The selector, on unmapped hosts only — a mapped host never reads it, so
+      // production's 303 stays exactly what it was (gh#30). A login WITHOUT an
+      // override CLEARS it, so the last login on this host is the one that
+      // decides, and a stale value can never outlive the session it was set with.
+      if (unmapped) {
+        headers.append('Set-Cookie', override ? setSelector(variant.id) : CLEAR_SELECTOR);
+      }
+
+      return new Response(null, { status: 303, headers });
     }
     return html(loginPage(variant, query, 'Incorrect password — please try again.'), 401);
   }
@@ -130,7 +221,15 @@ export default async function middleware(request: Request): Promise<Response> {
   // ── Existing session ─────────────────────────────────────────────────────
   const token = readCookie(request.headers.get('cookie'), brand.cookie);
   if (token && (await verifyToken(token, variant.brand, AUTH_SECRET))) {
-    return next(); // forward to the static origin — serve the deck
+    // Forward to the static origin — serve the deck. On an unmapped host, an
+    // explicit `?variant=` that a VALID TOKEN just opened also (re)issues the
+    // selector, so the sub-resources this document is about to request resolve
+    // to the same brand. Without it, a session that predates gh#30 — or one
+    // whose selector was cleared by a later bare login — would keep hitting the
+    // original defect until it expired, because this path never asks for a
+    // password and so never reaches the login branch above.
+    const reissue = override && unmapped && selectorCookie !== variant.id;
+    return next(reissue ? { headers: { 'Set-Cookie': setSelector(variant.id) } } : undefined);
   }
 
   // ── Not authenticated → branded login page ───────────────────────────────
