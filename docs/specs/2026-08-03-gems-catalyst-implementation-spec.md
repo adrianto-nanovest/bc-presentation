@@ -147,16 +147,18 @@ Host map is `Record<hostname, VariantId>` (many hosts → one variant), so alias
   middle-management participant can read the leader deck via `?variant=gems-leader`.
   **Accepted deliberately** (#5).
 
-### 1.4 Auth fix — brand-bound tokens (security, not cosmetic)
+### 1.4 Auth fix — brand-bound tokens (security, not cosmetic) — IMPLEMENTED (#24)
 
-`mintToken` signs only the expiry and all brands share one `AUTH_SECRET`, so **today a
-valid berau token pasted into `gems_session` on the GEMS domain verifies** — the cookie
-name is the only separation.
+`mintToken` signed only the expiry and all brands share one `AUTH_SECRET`, so **a valid berau
+token pasted into `gems_session` on the GEMS domain verified** — the cookie name was the only
+separation, and a cookie name is attacker-supplied.
 
-Fix: sign `` `${brand}|${exp}` ``, store `"<brand>.<exp>.<sig>"`, reject on brand mismatch.
-One `AUTH_SECRET`, no new env vars.
+Fix, now in `middleware.ts`: sign `` `${brand}|${exp}` ``, store `"<brand>.<exp>.<sig>"`, reject
+on brand mismatch. One `AUTH_SECRET`, no new env vars. Pre-#24 two-field tokens no longer
+verify; they fail closed to the login page.
 
 **This invalidates every live session on deploy.** Ship it on a day with no session running.
+Merged, not yet deployed — until the deploy lands, production still runs the old scheme.
 
 ### 1.5 Favicon / title / hero / assets
 
@@ -1453,8 +1455,10 @@ official.
 
 1. **`SITE_PASSWORD` holds berau's password.** Migrate in the §2.2 order or berau's door
    password changes silently, masked by 7-day cookies.
-2. **Cross-brand cookie hole.** `mintToken` signs expiry only — fix before the GEMS domains
-   go live, and expect every live session to be invalidated by the deploy.
+2. **Cross-brand cookie hole — CLOSED by #24.** `mintToken` signed the expiry only, so with one
+   shared `AUTH_SECRET` the cookie name was the only brand separation. Tokens are now
+   `<brand>.<exp>.<sig>` signed over `` `${brand}|${exp}` ``. The trap that remains: the deploy
+   invalidates every live session, so it must land in a free merge window.
 3. **#8's "E.12 override" means the *bridge*, not THE LOOP.** After #10 the bridge is E.13.
 4. **`a1Content.questions` is shared by reference** by both the general and the GEMS A.1.
    Rewording one for a single brand requires cloning the array first.

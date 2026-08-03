@@ -1,6 +1,6 @@
-# Berau Coal Energy AI Workshop — Deck
+# AI Catalyst Workshop — Deck
 
-React + Tailwind + Framer Motion presentation deck for the BC Vol-2 Session-2 workshop. See `docs/specs/2026-05-06-process-and-design-meta.md` for the design substrate decisions; see `docs/plans/2026-05-06-design-system-implementation.md` for the build plan that produced this scaffolding.
+React + Tailwind + Framer Motion presentation deck for the AI Catalyst Workshop. See `docs/specs/2026-05-06-process-and-design-meta.md` for the design substrate decisions; see `docs/plans/2026-05-06-design-system-implementation.md` for the build plan that produced this scaffolding.
 
 ## Develop
 
@@ -92,6 +92,25 @@ brand from the shared table — `?variant=` → host → `general` — and then 
 that brand's variable, so `SITE_PASSWORD_BERAU` and `SITE_PASSWORD_GEMS` are now
 live. **Merged, not yet deployed**: verify every domain at its door on the first
 deploy after this lands.
+
+### Session cookies are brand-bound (#24)
+
+The session token is `<brand>.<exp>.<sig>`, and the HMAC signature covers
+`` `${brand}|${exp}` ``. On every request the gate re-checks the signature, the
+expiry, **and** that the token's brand is the brand this request resolved to.
+
+Why: all brands share one `AUTH_SECRET`. A signature over the bare expiry is
+therefore valid for every brand, which left the cookie *name* as the only
+separation — and a cookie name is supplied by the caller, so a berau token pasted
+into `gems_session` on a GEMS domain used to be accepted. The brand is now inside
+the signature, so the boundary is cryptographic rather than nominal.
+
+**Deploying this logs everybody out.** Tokens in the old `<exp>.<sig>` format have
+two fields, not three, so they fail closed to the login page. Every live 7-day
+cookie is invalidated the moment the deploy goes live, so ship it on a day with
+**no session running** (free windows: Aug 3–5, 8–11, 14–17, 21+) and before the
+GEMS domains are handed out. No new environment variables; `AUTH_SECRET` is
+unchanged, and rotating it would invalidate the same sessions again.
 
 ### Retirement order for `SITE_PASSWORD`
 
