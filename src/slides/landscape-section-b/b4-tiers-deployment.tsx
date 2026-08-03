@@ -1,4 +1,4 @@
-// B.4 — MODELS BY CATEGORY · FRONTIER vs OPEN-WEIGHT
+// B.4 — MODELS BY CATEGORY · capability has converged, price has not
 //
 // Two-column composition matching B.2 / B.3:
 //   ┌─ FIG · slide-headline ───────────────────────────────────────────┐
@@ -211,6 +211,8 @@ export function B4ModelsByCategory() {
                 key="qsum"
                 data={C.qualitativeSummary}
                 freshness={C.freshness}
+                onPremNote={C.onPremNote}
+                onPremNoteKw={C.onPremNoteKw}
               />
             ) : null}
           </PaneLayer>

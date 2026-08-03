@@ -5,7 +5,7 @@
 //       FRONTIER LEADERS bar chart (3 rows, copper-700 fill)
 //       OPEN-WEIGHT CONTENDER bar row (copper outline, no fill) + tagline
 //       per-category serif-italic footnote (from `cat.footnote`)
-//   • R2 (creative): three labelled chip groups (IMAGE / VIDEO / VOICE)
+//   • R2 (creative): four labelled chip groups (IMAGE / VIDEO / SPEECH / MUSIC)
 //       + the same per-category footnote idiom.
 //   • R3 (cost-intel): cost × intelligence scatter (`B4CostScatter`). The
 //       scatter carries its own annotation in lieu of a footnote, so no
@@ -147,6 +147,7 @@ function R1Body({
   const data: B4BenchmarkBlock = C.benchmarks[categoryId];
   const maxScore = data.scaleMax;
   const unit = data.unit ?? "";
+  const decimals = data.decimals ?? 1;
 
   return (
     <div
@@ -168,6 +169,7 @@ function R1Body({
             score={row.score}
             max={maxScore}
             unit={unit}
+            decimals={decimals}
             tone="frontier"
             mounted={mounted}
             delay={80 + i * 80}
@@ -175,8 +177,11 @@ function R1Body({
         ))}
       </div>
 
+      {/* The licence restriction is disclosed HERE and nowhere else — once per
+          pane, on the head that owns the open-weight row, rather than repeated
+          against each of the four panels' bars. */}
       <div style={{ marginTop: 6 }}>
-        <SectionHead text="OPEN-WEIGHT CONTENDER" />
+        <SectionHead text="OPEN-WEIGHT CONTENDER · COMMERCIAL USE RESTRICTED" />
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <Bar
@@ -184,6 +189,7 @@ function R1Body({
           score={data.openWeight.score}
           max={maxScore}
           unit={unit}
+          decimals={decimals}
           tone="open-weight"
           mounted={mounted}
           delay={80 + data.frontier.length * 80}
@@ -217,12 +223,24 @@ interface BarProps {
   max: number;
   /** Unit suffix appended to the score label (e.g. "%" for MMMU). */
   unit?: string;
+  /** Decimal places on the score label — 0 for the indices AA publishes as
+   *  whole numbers, so the bar never claims precision AA does not report. */
+  decimals?: number;
   tone: "frontier" | "open-weight";
   mounted: boolean;
   delay: number;
 }
 
-function Bar({ name, score, max, unit = "", tone, mounted, delay }: BarProps) {
+function Bar({
+  name,
+  score,
+  max,
+  unit = "",
+  decimals = 1,
+  tone,
+  mounted,
+  delay,
+}: BarProps) {
   const fraction = Math.max(0.04, Math.min(1, score / max));
   const isFrontier = tone === "frontier";
 
@@ -281,7 +299,7 @@ function Bar({ name, score, max, unit = "", tone, mounted, delay }: BarProps) {
         <div style={barFillStyle} />
       </div>
       <span style={scoreStyle}>
-        {score.toFixed(1)}
+        {score.toFixed(decimals)}
         {unit}
       </span>
     </div>
@@ -299,18 +317,26 @@ function R2Body({
   cat: B4Category;
   mounted: boolean;
 }) {
+  // Four groups, not three: AA runs Speech (TTS) and Vocals (music) as
+  // separate arenas, and the old single VOICE group filed Suno — which makes
+  // songs — under a heading about voices.
   const groups: ReadonlyArray<{ label: string; chips: readonly string[] }> = [
-    { label: "IMAGE", chips: data.draw },
+    { label: "IMAGE", chips: data.image },
     { label: "VIDEO", chips: data.video },
-    { label: "VOICE", chips: data.voice },
+    { label: "SPEECH", chips: data.speech },
+    { label: "MUSIC", chips: data.music },
   ];
 
+  // A fourth group costs ~46px, which the three-group spacing did not have:
+  // the stack overflowed its envelope and pushed the footnote flush onto the
+  // section-box border. The row rhythm below is tightened just enough that the
+  // footnote keeps the same clearance it has on the R1 panes.
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 14,
+        gap: 10,
         height: "100%",
         paddingBottom: 24,
         boxSizing: "border-box",
@@ -333,7 +359,7 @@ function R2Body({
               display: "flex",
               flexWrap: "wrap",
               gap: 8,
-              marginTop: 8,
+              marginTop: 6,
             }}
           >
             {g.chips.map((chip) => (
@@ -342,9 +368,10 @@ function R2Body({
                 style={{
                   fontFamily: "var(--display)",
                   fontSize: 14,
+                  lineHeight: 1.15,
                   color: "var(--neutral-100)",
                   border: "1px solid var(--copper-700)",
-                  padding: "5px 10px",
+                  padding: "4px 10px",
                   background: "rgba(10,10,10,0.5)",
                 }}
               >

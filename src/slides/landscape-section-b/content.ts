@@ -473,11 +473,17 @@ export interface B4BenchmarkBlock {
   frontier: readonly B4BenchmarkRow[];
   /** Single open-weight champion for this category. */
   openWeight: B4OpenWeightRow;
-  /** Bar full-width reference. Per-category because each AA index uses a
-   *  different scale (Intelligence ~0–65, Agentic ~0–85, MMMU 0–100%). */
+  /** Bar full-width reference. **100 for every category** — a shared
+   *  denominator, so a score label can never outrun its own bar. The old
+   *  per-category maxima (65 / 65 / 85 / 100) silently clipped any bar that
+   *  outgrew them, which is the hazard this deletes rather than resets. */
   scaleMax: number;
   /** Optional unit suffix on each score label (e.g. "%" for MMMU). */
   unit?: string;
+  /** Decimal places on the score label. Matches how AA itself publishes the
+   *  figure — whole numbers for the Intelligence Index and MMMU-Pro, one
+   *  decimal for the Coding and Agentic indices. Defaults to 1. */
+  decimals?: number;
 }
 
 /** R1 chart data, keyed by category id (only R1 categories appear here). */
@@ -488,19 +494,22 @@ export interface B4Benchmarks {
   multimodal: B4BenchmarkBlock;
 }
 
+/** Four media arenas, matching how AA groups them. Speech (TTS) and music
+ *  (vocals) are separate leaderboards and separate model classes — collapsing
+ *  them into one "voice" group put Suno, which makes songs, under a heading
+ *  about voices. */
 export interface B4CreativeChips {
-  draw: readonly string[];
+  image: readonly string[];
   video: readonly string[];
-  voice: readonly string[];
-  /** Italic explanation of why this category has no numeric chart. */
-  footnote: string;
+  speech: readonly string[];
+  music: readonly string[];
 }
 
 export interface B4ScatterPoint {
   name: string;
   /** AA Intelligence Index score. */
   intelligence: number;
-  /** Blended cost per 1M tokens, USD. */
+  /** Cost to run one Intelligence-Index task, USD. */
   cost: number;
   kind: "frontier" | "open-weight";
 }
@@ -521,14 +530,23 @@ export interface B4Heatmap {
   descriptor: string;
 }
 
-export type B4QualitativeCell = "best" | "good" | "average" | "weak";
+/** Five bands. `best` is the strict column leader; the other four are set by
+ *  distance from that leader, so the grid is reproducible rather than
+ *  hand-tuned (see the derivation comment above `qualitativeSummary`). */
+export type B4QualitativeCell =
+  | "best"
+  | "very-good"
+  | "good"
+  | "average"
+  | "weak";
 
 export interface B4QualitativeSummary {
   /** 4 model rows (top → bottom). */
   rows: readonly string[];
   /** 5 category columns (left → right). */
   columns: readonly string[];
-  /** 4×5 qualitative grid, derived once at content-time from heatmap.scores. */
+  /** 4×5 qualitative grid, derived at content-time from this slide's own
+   *  `benchmarks` scores and `scatter` costs — never from `heatmap`. */
   cells: readonly (readonly B4QualitativeCell[])[];
   /** Header above the matrix (mono-caps). */
   header: string;
@@ -556,14 +574,41 @@ export interface B4Content {
   qualitativeSummary: B4QualitativeSummary;
   footer: string;
   footerKw: readonly string[];
-  /** Right-aligned freshness stamp in the footer band. */
+  /** Right-aligned freshness stamp below the matrix. Also carries the
+   *  effort-tier disclosure — the R1 bars are deliberately bare, so this is
+   *  the one place the reader learns the scores are at maximum effort. */
   freshness: string;
+  /** One mono line under the freshness stamp at step 1. It exists to correct
+   *  the single thing the open-weight column would otherwise imply — that
+   *  open weights buy you a security benefit. They do not: every open model
+   *  near the frontier is a 200B–1T MoE consumed through somebody's API. The
+   *  full security argument lives at leader D.4. */
+  onPremNote: string;
+  /** Substrings inside `onPremNote` to highlight in copper. */
+  onPremNoteKw: readonly string[];
 }
 
+// ─── B.4 data vintage ───────────────────────────────────────────────────────
+// EVERY number below comes from ONE capture: Artificial Analysis Intelligence
+// Index **v4.1**, values confirmed **2 August 2026**. Sources:
+//   docs/researches/2026-07-31-artificialanalysis-model-data.md   (roster)
+//   docs/researches/2026-08-02-aa-gemini-pro-addendum.md          (corrections)
+//   docs/references/artificialanalysis/2026-07-31-*.png           (media arenas)
+//
+// The failure mode this file guards against is MIXED VINTAGE — a pane that
+// still shows June bars under an August freshness stamp is worse than no
+// refresh at all. If you move one figure, re-read all of them, and re-derive
+// `qualitativeSummary.cells`. `tests/unit/b4-models-by-category.test.tsx`
+// re-applies the banding rule to these numbers and fails if the two disagree.
+//
+// Two figures here are known-unstable and were current at the stamp date:
+// DeepSeek V4 Flash's Open-Weights classification moved once inside 48 hours,
+// and GLM-5.2's cost moved 138% in the same window. Both are presented as
+// current state, not as corrections to AA.
 export const b4Content: B4Content = {
-  figLabel: "FRONTIER vs OPEN-WEIGHT",
-  slideTitle: "Six categories, one map of what wins where.",
-  slideTitleKw: ["wins where"],
+  figLabel: "MODELS BY CATEGORY",
+  slideTitle: "Six categories, one map of what to use where.",
+  slideTitleKw: ["to use where"],
   leftSectionTitle: "SIX CATEGORIES",
   rightSectionTitle: "MODEL DETAILS",
   rightSectionTitlePinned: "PINNED · MODEL DETAILS",
@@ -577,9 +622,12 @@ export const b4Content: B4Content = {
       iconName: "PenLine",
       essence: "Drafting, summarising, and chain-of-thought reasoning.",
       essenceKw: ["chain-of-thought"],
+      // Footnotes carry MEANING, never numbers. The gap figure lives in the
+      // open-weight tagline only; exact values stay on each bar's own score
+      // label. Stating it in three places is what produced this refresh.
       footnote:
-        "Frontier leads on reasoning; the open-weight gap is 6.7 points and shrinking.",
-      footnoteKw: ["6.7 points"],
+        "The general-purpose score. Two vendors and one open-weight model sit within a few points.",
+      footnoteKw: ["within a few points"],
     },
     {
       id: "code",
@@ -590,8 +638,8 @@ export const b4Content: B4Content = {
       essence: "Writing, refactoring, and debugging across whole repos.",
       essenceKw: ["whole repos"],
       footnote:
-        "Frontier still pulls clear on code — the best open-weight trails by 11.6 points.",
-      footnoteKw: ["11.6 points"],
+        "The tightest race of the four — open weights have all but caught up here.",
+      footnoteKw: ["all but caught up"],
     },
     {
       id: "agentic",
@@ -602,8 +650,8 @@ export const b4Content: B4Content = {
       essence: "Planning multi-step work, calling tools, finishing tasks.",
       essenceKw: ["calling tools"],
       footnote:
-        "Tool-calling reliability is the new battleground — open-weight is 9.2 points back.",
-      footnoteKw: ["Tool-calling reliability"],
+        "Planning and tool-calling is where the frontier still holds a real lead.",
+      footnoteKw: ["still holds a real lead"],
     },
     {
       id: "multimodal",
@@ -614,16 +662,21 @@ export const b4Content: B4Content = {
       essence: "Reading images, video, and speech alongside text.",
       essenceKw: ["images, video, and speech"],
       footnote:
-        "On visual reasoning the gap is nearly gone — MiniMax-M3 matches GPT-5.5.",
-      footnoteKw: ["matches GPT-5.5"],
+        "Reading scans, photos and charts. Everyone is close; this is table stakes now.",
+      footnoteKw: ["table stakes"],
     },
     {
       id: "creative",
       label: "CREATIVE TOOLS",
-      subLabel: "Different model class",
+      // Elo from human pairwise preference — a different metric class from the
+      // four index panels, and it must not read as comparable to them.
+      subLabel: "Elo arenas · human preference",
       layout: "R2",
       iconName: "Sparkles",
-      essence: "Generating images, video, and voice — different model class.",
+      // "voice" retired alongside the VOICE group: AA runs Speech (TTS) and
+      // Vocals (music) as separate arenas, and Suno makes songs, not voices.
+      essence:
+        "Generating images, video, speech, and music — a different model class.",
       essenceKw: ["different model class"],
       footnote:
         "Different model class — different leaderboards. None of the language models above compete here.",
@@ -632,7 +685,7 @@ export const b4Content: B4Content = {
     {
       id: "cost-intel",
       label: "COST × INTELLIGENCE",
-      subLabel: "Open-weight punchline",
+      subLabel: "What capability costs",
       layout: "R3",
       iconName: "DollarSign",
       essence: "How much capability you get per dollar spent.",
@@ -641,105 +694,135 @@ export const b4Content: B4Content = {
       footnoteKw: [],
     },
   ],
+  // R1 · four benchmark panels. One roster across all four — three closed
+  // vendors plus Kimi K3 as the single open-weight through-line, chosen over
+  // GLM-5.2 because it carries the thesis (1.8 points off on code).
+  //
+  // Bar names are BARE. No effort tier rides along on the chart; the tier is
+  // disclosed once, in `freshness`. Every score below is the model's figure at
+  // maximum reasoning effort in the 2 Aug 2026 v4.1 capture.
   benchmarks: {
-    // WRITE & REASON — AA Intelligence Index v4.0 (8 June 2026 snapshot).
-    // Claude Opus 4.8 (max) 61.4 #1, GPT-5.5 (xhigh) 60.2, Gemini 3.1 Pro 57.2;
-    // open-weight contender MiniMax-M3 54.7 (6.7 pts off the lead).
-    // Source: 2026-06-08-llm-benchmarks-june-2026.md.
+    // WRITE & REASON — AA Intelligence Index v4.1. AA publishes this one as a
+    // whole number, hence `decimals: 0`.
     "write-reason": {
-      scaleMax: 65,
+      scaleMax: 100,
+      decimals: 0,
       frontier: [
-        { name: "Claude Opus 4.8", score: 61.4 },
-        { name: "GPT-5.5", score: 60.2 },
-        { name: "Gemini 3.1 Pro", score: 57.2 },
+        { name: "Claude Opus 5", score: 61 },
+        { name: "GPT-5.6 Sol", score: 59 },
+        { name: "Gemini 3.6 Flash", score: 50 },
       ],
       openWeight: {
-        name: "MiniMax-M3",
-        score: 54.7,
-        tagline: "6.7 pts off the lead",
+        name: "Kimi K3",
+        score: 57,
+        tagline: "4 pts off the lead",
       },
     },
-    // CODE — AA Coding Index (Terminal-Bench Hard, SciCode), 8 June 2026.
-    // GPT-5.5 (xhigh) 59.1 leads, Claude Opus 4.8 (max) 56.7, Gemini 3.1 Pro
-    // 55.5; open-weight contender DeepSeek V4 Pro 47.5 (11.6 pts off the lead).
+    // CODE — AA Coding Index (Terminal-Bench v2.1, SciCode). The tightest of
+    // the four: Kimi K3 is 1.8 points off a closed leader.
     code: {
-      scaleMax: 65,
+      scaleMax: 100,
       frontier: [
-        { name: "GPT-5.5", score: 59.1 },
-        { name: "Claude Opus 4.8", score: 56.7 },
-        { name: "Gemini 3.1 Pro", score: 55.5 },
+        { name: "Claude Opus 5", score: 78.0 },
+        { name: "GPT-5.6 Sol", score: 77.4 },
+        { name: "Gemini 3.6 Flash", score: 69.2 },
       ],
       openWeight: {
-        name: "DeepSeek V4 Pro",
-        score: 47.5,
-        tagline: "11.6 pts off the lead",
+        name: "Kimi K3",
+        score: 76.2,
+        tagline: "1.8 pts off the lead",
       },
     },
-    // AGENTIC — AA Agentic Index (GDPval-AA, τ²-Bench Telecom), 8 June 2026.
-    // Claude Opus 4.8 (max) 77.8 leads, GPT-5.5 (xhigh) 74.1, Gemini 3.5 Flash
-    // 70.4; open-weight contender MiniMax-M3 68.6 (9.2 pts off the lead).
+    // AGENTIC — AA Agentic Index (GDPval-AA v2, τ³-Banking). Gemini 3.6 Flash's
+    // 38.7 is the widest spread on the slide and is deliberately shown: it is
+    // what the data says, and it is spoken to rather than softened.
     agentic: {
-      scaleMax: 85,
+      scaleMax: 100,
       frontier: [
-        { name: "Claude Opus 4.8", score: 77.8 },
-        { name: "GPT-5.5", score: 74.1 },
-        { name: "Gemini 3.5 Flash", score: 70.4 },
+        { name: "Claude Opus 5", score: 55.3 },
+        { name: "GPT-5.6 Sol", score: 54.0 },
+        { name: "Gemini 3.6 Flash", score: 38.7 },
       ],
       openWeight: {
-        name: "MiniMax-M3",
-        score: 68.6,
-        tagline: "9.2 pts off the lead",
+        name: "Kimi K3",
+        score: 50.1,
+        tagline: "5.2 pts off the lead",
       },
     },
-    // MULTIMODAL — MMMU-Pro (visual reasoning), 8 June 2026; scores in %.
-    // Gemini 3.5 Flash 84% leads, GPT-5.5 (xhigh) 80%, Claude Opus 4.7 79%;
-    // open-weight MiniMax-M3 80% — ties GPT-5.5, edges Opus 4.7.
+    // MULTIMODAL — MMMU-Pro (visual reasoning). NOT a component of the
+    // Intelligence Index; AA renders it as whole percentages, so GPT-5.6 Sol
+    // and Gemini 3.6 Flash at 83% may not be a true tie.
     multimodal: {
       scaleMax: 100,
+      decimals: 0,
       unit: "%",
       frontier: [
-        { name: "Gemini 3.5 Flash", score: 84 },
-        { name: "GPT-5.5", score: 80 },
-        { name: "Claude Opus 4.7", score: 79 },
+        { name: "Claude Opus 5", score: 85 },
+        { name: "GPT-5.6 Sol", score: 83 },
+        { name: "Gemini 3.6 Flash", score: 83 },
       ],
       openWeight: {
-        name: "MiniMax-M3",
-        score: 80,
-        tagline: "ties GPT-5.5 — 4.0 pts off the lead",
+        name: "Kimi K3",
+        score: 81,
+        tagline: "4 pts off the lead",
       },
     },
   },
+  // R2 · media arenas, ranked by Elo. Names only — an Elo figure next to the
+  // index panels would invite a comparison that does not hold.
+  //
+  // Two judgement calls, recorded so they are not rediscovered as bugs:
+  //   • Nano Banana 2 over MAI-Image-2.5 — AA puts both in rank Range 3–6 with
+  //     overlapping CIs, i.e. statistically tied. Tie broke toward the tool
+  //     this room may have touched.
+  //   • Veo 3.1 (video rank 11) and ElevenLabs (speech rank 10) dropped. Both
+  //     are the recognisable names and both are genuinely behind — not ties.
+  //     Pre-empt those two verbally; they do not belong on the slide.
   creativeChips: {
-    draw: ["Flux 2 Pro", "Midjourney v8", "Nanobanana Pro"],
-    video: ["Veo 3.1", "Kling 3.0", "Runway Gen-4"],
-    voice: ["ElevenLabs", "Suno v5"],
-    footnote:
-      "Different model class — different leaderboards. None of the language models above compete here.",
+    image: ["GPT Image 2", "Reve 2.1", "Nano Banana 2"],
+    video: ["Gemini Omni Flash", "MiniMax H3", "Dreamina Seedance 2.0"],
+    speech: ["Simba 3.2", "Qwen-Audio-3.0-TTS-Plus", "Gemini 3.1 Flash TTS"],
+    music: ["Suno V5.5", "Mureka V9"],
   },
-  // R3 scatter — Cost × Intelligence. X = AA "Cost to Run Intelligence Index"
-  // (USD, log scale); Y = AA Intelligence Index. Source: artificialanalysis.ai
-  // model cards, 8 June 2026. Four frontier + four open-weight.
+  // R3 scatter — X = cost to run ONE Intelligence-Index task (USD, log);
+  // Y = AA Intelligence Index. Per-task replaces "cost to run the full Index",
+  // which is the price of running a 9-evaluation suite once — unexplainable in
+  // the room and irrelevant to it.
+  //
+  // Eight dots, EIGHT vendors: one model each, so the picture is the market
+  // rather than a vendor's product line. Worth naming rather than being asked:
+  // the entire open column is Chinese labs.
   scatter: [
-    { name: "Claude Opus 4.8", intelligence: 61, cost: 4685.85, kind: "frontier" },
-    { name: "GPT-5.5", intelligence: 60, cost: 3357.0, kind: "frontier" },
-    { name: "Gemini 3.1 Pro", intelligence: 57, cost: 892.28, kind: "frontier" },
-    { name: "Grok 4.3", intelligence: 53, cost: 395.17, kind: "frontier" },
-    { name: "MiniMax-M3", intelligence: 55, cost: 308.34, kind: "open-weight" },
-    { name: "Kimi K2.6", intelligence: 54, cost: 947.87, kind: "open-weight" },
-    { name: "DeepSeek V4 Pro", intelligence: 52, cost: 267.82, kind: "open-weight" },
-    { name: "MiMo-V2.5-Pro", intelligence: 54, cost: 160.82, kind: "open-weight" },
+    { name: "Claude Opus 5", intelligence: 61, cost: 2.34, kind: "frontier" },
+    { name: "GPT-5.6 Sol", intelligence: 59, cost: 1.86, kind: "frontier" },
+    { name: "Grok 4.5", intelligence: 54, cost: 0.44, kind: "frontier" },
+    { name: "Gemini 3.6 Flash", intelligence: 50, cost: 0.56, kind: "frontier" },
+    { name: "Kimi K3", intelligence: 57, cost: 0.86, kind: "open-weight" },
+    // GLM-5.2's cost moved 138% in the 48 h before this capture (index
+    // unchanged at 51, cause unestablished). The freshness stamp is what makes
+    // the figure defensible.
+    { name: "GLM-5.2", intelligence: 51, cost: 0.69, kind: "open-weight" },
+    // Open Weights, MIT-licensed, weights on Hugging Face — the 31 July
+    // reading of "Proprietary" was refuted on 2 August. This is what puts a
+    // 50-index model at $0.03/task into the open column.
+    { name: "DeepSeek V4 Flash", intelligence: 50, cost: 0.03, kind: "open-weight" },
+    { name: "MiniMax-M3", intelligence: 44, cost: 0.14, kind: "open-weight" },
   ],
+  // 50/61 = 82% of the intelligence; 2.34/0.03 = 1/78th the cost. Both halves
+  // are reproducible from the two dots the arrow joins — the retired
+  // "90% / 1/15th" claim matched no pair in the data.
   scatterAnnotation: {
-    from: "Claude Opus 4.8",
-    to: "MiniMax-M3",
-    label: "90% the intelligence, 1/15th the cost",
+    from: "Claude Opus 5",
+    to: "DeepSeek V4 Flash",
+    label: "82% of the intelligence, 1/78th the cost",
   },
-  // R4 heatmap — DEPRECATED, not rendered (the slide uses qualitativeSummary
-  // below). Retained for compat; row labels kept in sync with the
-  // qualitativeSummary model set so the file stays coherent. 4 rows × 5 cols,
-  // per-column normalised 0–1 (COST inverted: cheaper = higher, open-weight
-  // row = 1.0). Cost normalisation is illustrative pending the refreshed
-  // cost × intelligence numbers.
+  // R4 heatmap — DEPRECATED and UNRENDERED. The slide uses qualitativeSummary.
+  //
+  // This is the one block in this file that is NOT August vintage: it is frozen
+  // June 2026 data and is deliberately left that way. Do not refresh it (that
+  // would imply it is live), do not delete it (out of scope here), and do not
+  // read a model name out of it. 4 rows × 5 cols, per-column normalised 0–1
+  // (COST inverted: cheaper = higher).
   heatmap: {
     rows: ["Claude Opus 4.8", "GPT-5.5", "Gemini 3.1 Pro", "MiniMax-M3"],
     columns: ["WRITE & REASON", "CODE", "AGENTIC", "MULTIMODAL", "COST"],
@@ -756,36 +839,51 @@ export const b4Content: B4Content = {
     descriptor:
       "Frontier leads 4/5. Open-weight wins cost. The gap is fine-tunable.",
   },
-  // Qualitative 4×5 matrix — relative strength per category, set from the AA
-  // category charts (8 June 2026). Exactly one "best" per column:
-  //   reason → Opus 4.8 (61.4) · code → GPT-5.5 (59.1) · agentic → Opus 4.8
-  //   (77.8) · multimodal → Gemini 3.5 Flash (84%) · cost → open-weight.
-  // The open-weight row is MiniMax-M3 — the through-line open contender (reason
-  // 54.7, agentic 68.6, multimodal 80% ties GPT-5.5). It reads "average" on
-  // reason/code (a clear step behind frontier; DeepSeek V4 Pro is the open code
-  // contender at 47.5) but "good" on agentic + multimodal, and wins cost.
+  // Qualitative 4×5 matrix — DERIVED from the `benchmarks` and `scatter` values
+  // above, never hand-set. Rows follow the R1 roster.
+  //
+  //   BEST    = strict column leader (two BEST only on an exact tie)
+  //   then, by distance from that leader:
+  //     capability  ≥95% V.GOOD · 88–95% GOOD · 75–88% AVERAGE · <75% WEAK
+  //     cost, as a multiple of the cheapest in the column:
+  //                 ≤1.75× V.GOOD · ≤2.5× GOOD · ≤4× AVERAGE · >4× WEAK
+  //
+  // Cost needs its own bands because price ratios spread far wider than score
+  // ratios — the capability thresholds would flatten the whole column to WEAK.
+  //
+  // Worked, so a reviewer can check it without a calculator:
+  //   W&R 61 → Sol 96.7% · Kimi 93.4% · Gemini 82.0%
+  //   CODE 78.0 → Sol 99.2% · Kimi 97.7% · Gemini 88.7%
+  //   AGENTIC 55.3 → Sol 97.6% · Kimi 90.6% · Gemini 70.0%
+  //   MULTIMODAL 85 → Sol 97.6% · Gemini 97.6% · Kimi 95.3%
+  //   COST $0.56 → Kimi 1.54× · Sol 3.32× · Opus 5 4.18×
   qualitativeSummary: {
-    rows: ["Claude Opus 4.8", "GPT-5.5", "Gemini 3.1 Pro", "MiniMax-M3"],
+    rows: ["Claude Opus 5", "GPT-5.6 Sol", "Gemini 3.6 Flash", "Kimi K3"],
     columns: ["WRITE & REASON", "CODE", "AGENTIC", "MULTIMODAL", "COST"],
     cells: [
-      // Claude Opus 4.8 — leads reason + agentic
-      ["best",    "good",    "best",    "good",    "weak"],
-      // GPT-5.5 — leads code
-      ["good",    "best",    "good",    "good",    "weak"],
-      // Gemini — leads multimodal (3.5 Flash)
-      ["good",    "good",    "good",    "best",    "weak"],
-      // MiniMax-M3 (open-weight; competitive agentic + multimodal, wins COST)
-      ["average", "average", "good",    "good",    "best"],
+      // Claude Opus 5 — tops every capability column, and pays for it
+      ["best",      "best",      "best",      "best",      "weak"],
+      // GPT-5.6 Sol — shadows the leader everywhere, at mid price
+      ["very-good", "very-good", "very-good", "very-good", "average"],
+      // Gemini 3.6 Flash — cheapest, and uneven
+      ["average",   "good",      "weak",      "very-good", "best"],
+      // Kimi K3 — never best, never bad, second-lowest price. The value row,
+      // which is the argument the slide is making.
+      ["good",      "very-good", "good",      "very-good", "very-good"],
     ],
     header: "AT A GLANCE — RELATIVE STRENGTH",
     footer:
-      "Frontier wins 4 of 5 categories. Open-weight wins cost by a wide margin.",
-    footerKw: ["Frontier", "Open-weight", "cost"],
+      "Capability has one leader. Cost has another. Kimi K3 is close to both.",
+    footerKw: ["Capability", "Cost", "Kimi K3"],
   },
   footer:
-    "Frontier wins on average. Fine-tuned open-weight wins on your work.",
-  footerKw: ["Frontier", "Fine-tuned open-weight", "your work"],
-  freshness: "Benchmark data: Artificial Analysis · 8 June 2026",
+    "The best models are within a few points of each other. The bills are not.",
+  footerKw: ["within a few points", "The bills are not"],
+  freshness:
+    "Artificial Analysis · 2 August 2026 · scores at maximum reasoning effort",
+  onPremNote:
+    "The most secure setup is the one you host yourself. Only sub-100B models are affordable to run — far behind in general, possibly better than the frontier at the job you fine-tune them for.",
+  onPremNoteKw: ["host yourself", "sub-100B", "fine-tune"],
 };
 
 // ─── B.5 — Today's Landscape + Inverse Hook ────────────────────────────────
