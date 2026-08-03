@@ -108,30 +108,40 @@ describe("A.1 hook selection", () => {
 
 async function closingFor(id: VariantId) {
   useVariant(id);
-  const [closing, k1, k2, k3] = await Promise.all([
+  const [closing, k1, k2, k2Gems, k3] = await Promise.all([
     import("@/slides/reveal-and-closing"),
     import("@/slides/reveal-and-closing/k1-challenge-handoff"),
     import("@/slides/reveal-and-closing/k2-practice-lab-overview"),
+    import("@/slides/reveal-and-closing/k2-gems"),
     import("@/slides/reveal-and-closing/k3-thank-you"),
   ]);
   return {
     slides: closing.revealAndClosingSlides,
     k1Slide: k1.k1Slide,
     k2Slide: k2.k2Slide,
+    k2GemsSlide: k2Gems.k2GemsSlide,
     k3Slide: k3.k3Slide,
   };
 }
 
 describe("Practice Lab slides", () => {
   test("brands with a practice lab keep K.1 + K.2 before the closer", async () => {
-    for (const id of [
-      "berau-middle-mgmt",
-      "berau-leader",
-      "gems-middle-mgmt",
-      "gems-leader",
-    ] as VariantId[]) {
+    for (const id of ["berau-middle-mgmt", "berau-leader"] as VariantId[]) {
       const { slides, k1Slide, k2Slide, k3Slide } = await closingFor(id);
       expect(slides.slice(-3), id).toEqual([k1Slide, k2Slide, k3Slide]);
+    }
+    // GEMS runs one track, so its part 2 is THE ANALYST — a brand delta shipped
+    // to `gems-leader` too, since leaders run the same lab (gh#26).
+    for (const id of ["gems-middle-mgmt", "gems-leader"] as VariantId[]) {
+      const { slides, k1Slide, k2GemsSlide, k3Slide } = await closingFor(id);
+      expect(slides.slice(-3), id).toEqual([k1Slide, k2GemsSlide, k3Slide]);
+    }
+  });
+
+  test("the GEMS K.2 reaches neither berau nor general", async () => {
+    for (const id of ["berau-middle-mgmt", "berau-leader", "general"] as VariantId[]) {
+      const { slides, k2GemsSlide } = await closingFor(id);
+      expect(slides, id).not.toContain(k2GemsSlide);
     }
   });
 

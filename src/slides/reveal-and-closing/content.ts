@@ -516,13 +516,59 @@ export const k1Content = {
   figLabel: "PRACTICE · LAB",
 } as const;
 
+// ─── K.2 — the Practice Lab ─────────────────────────────────────────────────
+//
+// Spelled out as interfaces rather than inferred `as const`, because part 2 is
+// brand-varying (`k2GemsContent` below) and both values must satisfy one type
+// the slide component can accept. Same reason A.1's content is typed
+// explicitly — see ../opening-section-a/content.ts.
+
+/** An external resource a part hands out, rendered as a LinkChip. */
+export interface K2Link {
+  label: string;
+  href: string;
+}
+
+export interface K2Row {
+  /** Rendered as the row's copper header, so it reads as a functional label. */
+  label: string;
+  items: readonly string[];
+  /** Only rows that hand out materials carry these; chips render beneath items. */
+  links?: readonly K2Link[];
+}
+
+export interface K2Part {
+  id: string;
+  num: number;
+  name: string;
+  essence: string;
+  pop: {
+    desc: string;
+    descKw: readonly string[];
+    rows: readonly K2Row[];
+  };
+}
+
+export interface K2Content {
+  figLabel: string;
+  headline: string;
+  headlineKw: readonly string[];
+  leftHeader: string;
+  footer: string;
+  footerKw: readonly string[];
+  spine: readonly K2Part[];
+}
+
+// `as const satisfies` rather than a plain annotation: parts 1, 3 and 4 are
+// shared by reference with the GEMS spine below, so deep readonly is what stops
+// one brand's tree from being mutated through the other's.
 export const k2Content = {
   figLabel: "THE PRACTICE LAB",
   headline: "The Practice Lab, end to end.",
-  headlineKw: ["end to end"] as const,
+  headlineKw: ["end to end"],
   leftHeader: "The Lab · 4 parts",
   footer: "Same recipe, real data — and a method that travels.",
-  footerKw: ["a method that travels"] as const,
+  footerKw: ["a method that travels"],
   spine: [
     {
       id: "case",
@@ -603,7 +649,49 @@ export const k2Content = {
       },
     },
   ],
-} as const;
+} as const satisfies K2Content;
+
+// GEMS runs ONE track, so `Two Tracks` is wrong on the facts, not just off-tone:
+// no GEMS-visible string in K.2 says "track". Three rows rather than one, because
+// the detail panel is sized for the densest part (The Outputs, 5 rows) — a single
+// row of three items reads as empty beside its siblings — and because the split
+// teaches the anatomy: a question, a Skill that answers it, the materials to run
+// it. No persona row label: the card is already named THE ANALYST and the essence
+// already says *same discipline*.
+//
+// The collateral is a copy of berau's Section Head set (same manufacturing case,
+// same single Skill). Canonical link ids only — no `ouid=` or other account
+// leakage.
+const k2GemsAnalyst = {
+  id: "analyst",
+  num: 2,
+  name: "THE ANALYST",
+  essence: "Same data, same discipline",
+  pop: {
+    desc: "Everyone works the same dataset as the same persona — an operational analyst. One provided Skill, built to cite its sources and refuse to fabricate.",
+    descKw: ["the same persona", "cite its sources", "refuse to fabricate"],
+    rows: [
+      { label: "The question", items: ['"Why did this happen?"'] },
+      { label: "The Skill", items: ["root-cause-investigator", "evidence-tracing"] },
+      {
+        label: "The collateral",
+        items: [],
+        links: [
+          { label: "Runbook", href: "https://docs.google.com/document/d/1piHjL5Vm25mj3Nvv-_bN5u3cG3vPX1z3" },
+          { label: "Main folder", href: "https://drive.google.com/drive/folders/1AIUJsU8usuj8TEIYN8yObN0iQDJ-v4FY" },
+          { label: "Starter pack", href: "https://drive.google.com/drive/folders/11aqVeWEXWqdwLu6FI3DYu2U6zv0apNeR" },
+        ],
+      },
+    ],
+  },
+} as const satisfies K2Part;
+
+// Part 2 only. Parts 1, 3 and 4 are the same objects as the shared spine, so a
+// copy-edit to The Case or The Outputs cannot drift between brands.
+export const k2GemsContent = {
+  ...k2Content,
+  spine: [k2Content.spine[0], k2GemsAnalyst, k2Content.spine[2], k2Content.spine[3]],
+} as const satisfies K2Content;
 
 export const k3Content = {
   heroSrc: "/heroes/k3-open-horizon.jpg",

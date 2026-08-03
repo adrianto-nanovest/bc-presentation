@@ -1,7 +1,8 @@
 // K.2 — THE PRACTICE LAB (overview of the hands-on lab)
 //
 // Answers "what does the Practice Lab give you?": a left spine of four parts
-// (Case · Tracks · Stages · Outputs); hovering or pinning a card reveals its
+// (Case · Tracks · Stages · Outputs — part 2 is brand-varying, see k2-gems.tsx);
+// hovering or pinning a card reveals its
 // detail in the full-height right-hand popover. Layout mirrors E.5's
 // stepIndex-0 grid (left card list in a single flex cell + right popover that
 // spans the full content height, so the dense Outputs detail never overflows).
@@ -25,13 +26,17 @@ import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
 import { LucideIcon } from "../foundation-core-section-e/components/LucideIcon";
-import { k2Content as C } from "./content";
+import { k2Content, type K2Content, type K2Part } from "./content";
 
 // ───────────────────── slide ─────────────────────
 
-type LabPart = (typeof C.spine)[number];
-
-export function K2PracticeLabOverview() {
+// `content` is a brand override: GEMS replaces part 2 (see k2-gems.tsx). Parts
+// are data-driven throughout, so a brand delta never needs a second component.
+export function K2PracticeLabOverview({
+  content: C = k2Content,
+}: {
+  content?: K2Content;
+}) {
   const { stepIndex } = useDeck();
   const [hoverPart, setHoverPart] = useState<string | null>(null);
   const [pinnedPart, setPinnedPart] = useState<string | null>(null);
@@ -39,7 +44,7 @@ export function K2PracticeLabOverview() {
   // Pin wins: a pinned part stays in the right panel regardless of hover, until
   // it is unpinned. Nothing pinned on arrival → empty until first interaction.
   const activePart = pinnedPart ?? hoverPart;
-  const popPart: LabPart | null = activePart
+  const popPart: K2Part | null = activePart
     ? C.spine.find((s) => s.id === activePart) ?? null
     : null;
 
@@ -247,13 +252,14 @@ export function K2PracticeLabOverview() {
 //
 // Rich-content popover mirroring the spine column on the right. Renders the
 // part's `pop` payload — `desc` (keyword-highlighted via `descKw`) plus an
-// array of `rows[]{label, items, links?}`. Only the Two Tracks rows carry
-// `links` (each persona's runbook + Drive folders), rendered as a row of
-// clickable LinkChips beneath that row's skill chips.
+// array of `rows[]{label, items, links?}`. Only part 2's rows carry `links` (the
+// runbook + Drive folders: one row per persona on the shared spine, a single
+// collateral row on GEMS), rendered as a row of clickable LinkChips beneath that
+// row's skill chips.
 // Compact vertical rhythm so the densest part (Outputs · 5 rows) fits the
 // full-height slot without overflow. Inlined here (like E.3/E.5) — only K.2
 // uses this layout.
-function LabPartPopover({ entry }: { entry: LabPart }) {
+function LabPartPopover({ entry }: { entry: K2Part }) {
   const popoverStyle: CSSProperties = {
     flex: 1,
     display: "flex",
@@ -345,8 +351,8 @@ function LabPartPopover({ entry }: { entry: LabPart }) {
                 <Chip key={it} text={it} />
               ))}
             </div>
-            {/* Resource links (only the Two Tracks persona rows carry these). */}
-            {"links" in r && r.links.length > 0 && (
+            {/* Resource links (only part 2's rows carry these). */}
+            {r.links && r.links.length > 0 && (
               <div
                 style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}
               >
@@ -396,7 +402,7 @@ function Chip({ text }: { text: string }) {
 
 // ───────────────────── LinkChip (external resource link) ─────────────────────
 //
-// A clickable variant of Chip for the Two Tracks materials (runbooks + Drive
+// A clickable variant of Chip for part 2's materials (runbooks + Drive
 // folders). Rendered as a real <a> so Slide.tsx's click-to-advance handler
 // skips it (it excludes `a`), and opened in a new tab. Copper-toned text +
 // trailing ↗ icon distinguish it from the neutral, non-interactive skill chips.
