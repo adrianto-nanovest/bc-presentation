@@ -8,6 +8,11 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
+    // `scripts/lib/variant-arg.mjs` is imported by a unit test. Plain `.mjs`
+    // because bare `node` runs the export scripts; `allowJs` lets tsc infer its
+    // exported types from the JSDoc instead of us hand-keeping a `.d.mts`.
+    // `checkJs` stays off — the scripts themselves are not under tsc.
+    "allowJs": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",

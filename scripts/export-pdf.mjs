@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 import { mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { deckUrl, parseVariantArgOrExit, scriptUsage } from "./lib/variant-arg.mjs";
 
 // Walks the smoke deck slide-by-slide. For each slide, advances to the
 // canonical screenshot pose (data-canonical-pose) by pressing Space the
@@ -9,8 +10,19 @@ import { dirname, resolve } from "node:path";
 //
 // Output: a single PDF where each page is one slide at its canonical pose.
 
-const URL = process.env.DECK_URL ?? "http://localhost:5173";
-const OUT = resolve(process.argv[2] ?? "exports/smoke-deck.pdf");
+const USAGE = scriptUsage({
+  script: "scripts/export-pdf.mjs",
+  outArg: "out.pdf",
+  outDefault: "exports/smoke-deck.pdf",
+});
+
+// Parsed before the browser launches, so a bad id costs no chromium boot.
+const { variant, positionals } = parseVariantArgOrExit(process.argv.slice(2), USAGE);
+
+// The variant is appended, never inherited: a bare localhost resolves to
+// `general`, so an unqualified url would silently export the wrong deck (gh#27).
+const URL = deckUrl(process.env.DECK_URL ?? "http://localhost:5173", variant);
+const OUT = resolve(positionals[0] ?? "exports/smoke-deck.pdf");
 mkdirSync(dirname(OUT), { recursive: true });
 
 const browser = await chromium.launch();
@@ -80,4 +92,6 @@ for (const buf of pdfBuffers) {
 const out = await merged.save({ useObjectStreams: false });
 const { writeFileSync } = await import("node:fs");
 writeFileSync(OUT, out);
-console.log(`wrote ${OUT} (${out.length.toLocaleString()} bytes, ${slideCount} pages)`);
+console.log(
+  `wrote ${OUT} (${out.length.toLocaleString()} bytes, ${slideCount} pages, variant ${variant})`,
+);

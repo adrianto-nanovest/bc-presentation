@@ -2,9 +2,21 @@ import { chromium } from "playwright";
 import PptxGenJS from "pptxgenjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { deckUrl, parseVariantArgOrExit, scriptUsage } from "./lib/variant-arg.mjs";
 
-const URL = process.env.DECK_URL ?? "http://localhost:5173";
-const OUT = resolve(process.argv[2] ?? "exports/smoke-deck.pptx");
+const USAGE = scriptUsage({
+  script: "scripts/export-pptx.mjs",
+  outArg: "out.pptx",
+  outDefault: "exports/smoke-deck.pptx",
+});
+
+// Parsed before the browser launches, so a bad id costs no chromium boot.
+const { variant, positionals } = parseVariantArgOrExit(process.argv.slice(2), USAGE);
+
+// The variant is appended, never inherited: a bare localhost resolves to
+// `general`, so an unqualified url would silently export the wrong deck (gh#27).
+const URL = deckUrl(process.env.DECK_URL ?? "http://localhost:5173", variant);
+const OUT = resolve(positionals[0] ?? "exports/smoke-deck.pptx");
 mkdirSync(dirname(OUT), { recursive: true });
 
 const browser = await chromium.launch();
@@ -69,4 +81,6 @@ for (const png of screenshots) {
 const buf = await pptx.write({ outputType: "nodebuffer" });
 const outBuf = Buffer.isBuffer(buf) ? buf : Buffer.from(buf, "base64");
 writeFileSync(OUT, outBuf);
-console.log(`wrote ${OUT} (${outBuf.length.toLocaleString()} bytes, ${slideCount} slides)`);
+console.log(
+  `wrote ${OUT} (${outBuf.length.toLocaleString()} bytes, ${slideCount} slides, variant ${variant})`,
+);

@@ -43,6 +43,26 @@ npm run export:pdf   # exports/smoke-deck.pdf  (multipage, canonical-pose-paused
 npm run export:pptx  # exports/smoke-deck.pptx (screenshot-stitched, static)
 ```
 
+Both default to the **`general`** deck — deliberately, so a forgotten flag
+produces an unbranded file rather than the wrong client's. Choose the deck with
+`--variant=<id>`; pass the output path first, as the npm scripts already do:
+
+```bash
+node scripts/export-pdf.mjs  exports/gems.pdf   --variant=gems-middle-mgmt
+node scripts/export-pptx.mjs exports/berau.pptx --variant=berau-middle-mgmt
+node scripts/screenshot-exchange-alerts.mjs screenshots/gems.png --variant=gems-leader
+```
+
+Ids are the five in the host table below. An unknown id, or a misspelt flag,
+exits non-zero with the usage text — the scripts never fall back to the default
+once you have asked for something. Each one prints the variant it rendered, and
+`DECK_URL` overrides the base url.
+
+The ids are not restated in the scripts; they read `src/deck-variants.ts`
+directly, which needs **Node ≥22.18** (type stripping on by default) and prints
+one `ExperimentalWarning: Type Stripping` line per run. That is expected — the
+alternative was a second copy of the variant list drifting out of step.
+
 ## Calibrate the palette against a projector
 
 ```bash
