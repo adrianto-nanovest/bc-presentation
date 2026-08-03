@@ -13,7 +13,6 @@
 // hidden in production builds. Deck arrow keys are taken by slide nav, so
 // variant cycling deviates from the usual switcher convention and uses `v`.
 import { useEffect, useState } from "react";
-import "../styles/prototype-gh15-light-theme.css";
 
 type Theme = "dark" | "light";
 
@@ -44,6 +43,16 @@ function readInitial(): { theme: Theme; variant: VariantKey } {
 
 export function PrototypeGh15ThemeBar() {
   const [{ theme, variant }, setState] = useState(readInitial);
+
+  // The stylesheet is pulled in on demand rather than imported at the top of
+  // the module: a static CSS import is a side effect that no bundler can shake
+  // out, so it would ship the whole light theme to production. import.meta.env
+  // .DEV is statically false in a build, so this call is dropped instead.
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      import("../styles/prototype-gh15-light-theme.css");
+    }
+  }, []);
 
   // Apply to <html> + persist. Root attrs are untouched by deck navigation,
   // which is exactly the "survives slide nav" property being proven.

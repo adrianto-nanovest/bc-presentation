@@ -6,7 +6,7 @@ export default function App() {
   return (
     <>
       <Deck />
-      <PrototypeGh15ThemeBar />
+      {import.meta.env.DEV && <PrototypeGh15ThemeBar />}
     </>
   );
 }

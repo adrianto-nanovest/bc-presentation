@@ -73,7 +73,9 @@ export function Slide({
           data-animation-mode={animationMode}
           data-canonical-pose={canonicalPose}
           data-surface={surface}
-          data-gh15-dark={GH15_DARK_SLIDES.has(index) ? "" : undefined}
+          {...(import.meta.env.DEV && GH15_DARK_SLIDES.has(index)
+            ? { "data-gh15-dark": "" }
+            : {})}
           style={stageStyle}
           onClick={handleClick}
         >
