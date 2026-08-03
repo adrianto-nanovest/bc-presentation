@@ -16,3 +16,8 @@ Effort-wise, there are `low`, `medium`, `high`, `xhigh`, `max` for all models ab
 
 Prompting best-practices can be checked on: /Users/macbook/Projects/knowledge-catalog/docs/references/prompting-gpt-5.6.md
 </codex-cli-notes>
+
+<tools>
+For web verification, use playwright-cli CLI; while on deployment related tasks, use vercel CLI. Both are installed.
+For vercel, it is already linked to github (CI/CD when pushing to main branch).
+</tools>

@@ -3,16 +3,19 @@
 **Date:** 2026-08-03 · **Owner:** repo owner (solo facilitator) · **Source map:** [#1](https://github.com/adrianto-nanovest/bc-presentation/issues/1) · **Assembled on:** [#13](https://github.com/adrianto-nanovest/bc-presentation/issues/13)
 
 This is the destination artifact of the Wayfinder map. It consolidates every resolved
-decision from #2–#12 and #15–#18 into one implementable document. **No decision is made
+decision from #2–#12 and #15–#19 into one implementable document. **No decision is made
 here that is not either (a) already resolved on a closed ticket, or (b) explicitly marked
 as decided in this spec with its rationale.** Anything still open is in §12.
 
 Resolution sources: #5 (variant architecture) · #6 (GEMS brand deltas) · #7 (shared
 substitutions) · #8 (leader re-spine) · #9 (B4 refresh) · #10 (Loop Engineering) ·
 #11 (E9 — shipped) · #12 (I1 — shipped) · #15 (light theme) · #16 (leader slides) ·
-#17 (E.12 canvas) · #18 (E.12 open form).
+#17 (E.12 canvas) · #18 (E.12 open form) · **#19 (E.12 form — resolved 2026-08-03)**.
 
-**Open decision ticket spawned by this assembly:** #19 — which E.12 form ships (§12.1).
+**Decision ticket spawned by this assembly, now resolved:** #19 — which E.12 form ships.
+**Resolved 2026-08-03: neither #17 C nor #18 A. A clean-sheet third build,
+`src/slides/prototype-gh19b-e12-loop-engineering/`, is the form that ships.** This replaces
+the content brief that §8.3 previously called fixed — see §8.3 and §12.1.
 
 ---
 
@@ -48,13 +51,19 @@ They are **not** pending. Only **B4 (#9)**, **Loop Engineering (#10/#17/#18)** a
 
 ### 0.3 What is prototyped but not productionized
 
-`main` carries three merged dev-only prototype directories, all absent from production
+`main` carries five merged dev-only prototype directories, all absent from production
 bundles: `src/slides/prototype-gh16-leader-slides` (`?dev=proto16`),
 `prototype-gh17-e12-loop-canvas` (`?dev=proto17`), `prototype-gh18-e12-open-form`
-(`?dev=proto18`), plus `src/deck/PrototypeGh15ThemeBar.tsx` and
-`src/styles/prototype-gh15-light-theme.css`. **All four are throwaway.** Each winning
-variant is **rewritten**, not lifted (they were built under prototype rules: no tests, no
-error handling, inline styles). Each directory is deleted by the phase that replaces it.
+(`?dev=proto18`), `prototype-gh19-e12-the-loop` (`?dev=proto19`),
+**`prototype-gh19b-e12-loop-engineering` (`?dev=proto19b`)**, plus
+`src/deck/PrototypeGh15ThemeBar.tsx` and `src/styles/prototype-gh15-light-theme.css`.
+**All are throwaway.** Each winning variant is **rewritten**, not lifted (they were built
+under prototype rules: no tests, no error handling, inline styles). Each directory is deleted
+by the phase that replaces it.
+
+`proto19` and `proto19b` post-date the original assembly: #19 was opened to pick between #17
+and #18, and instead produced two further builds — a spiral-to-ring figure (`proto19`, also
+retired) and the clean-sheet rebuild `proto19b`, **which is the form that ships** (§8.3).
 
 ### 0.4 Hard schedule constraints
 
@@ -479,7 +488,7 @@ brand's `practiceLab` flag (absent → `k1`, `k2` drop, and `k3` renumbers to `K
 | B | `landscape` | 5 | `b1`…`b5` |
 | C | `mindset` | 6 | `c1`…`c5`, `c6-bridge-to-d` |
 | D | `process` | 5 | `d1`…`d5` |
-| E | `fundamentals` | 13 | `e1`…`e11`, **`e12-the-loop`**, `e13-bridge-to-f` |
+| E | `fundamentals` | 13 | `e1`…`e11`, **`e12-loop-engineering`**, `e13-bridge-to-f` |
 | F | `techniques` | 9 | `f1`…`f9` |
 | G | `tools` | 11 | `g1`…`g11` |
 | H | `pitfalls` | 3 | `h1`…`h3` |
@@ -492,7 +501,7 @@ bridge becomes E.13.
 
 ### 4.3 Leader deck set — 73 slides, 16 leader-only new
 
-`64 (today) + 1 (e12-the-loop, all-variant) − 8 (F cut, F.8 kept) + 16 (new) = 73.`
+`64 (today) + 1 (e12-loop-engineering, all-variant) − 8 (F cut, F.8 kept) + 16 (new) = 73.`
 #8's "72" predates E.12's insertion.
 
 | Letter · name | # | Slides (in order) |
@@ -504,7 +513,7 @@ bridge becomes E.13.
 | **E · THE LANDSCAPE** | 5 | `b1`…`b5` |
 | **F · MINDSET** | 6 | `c1`…`c5`, `c6-bridge-to-d` |
 | **G · PROCESS & METHODOLOGY** | 5 | `d1`…`d5` |
-| **H · ENGINEERING FUNDAMENTALS** | 13 | `e1`…`e11`, `e12-the-loop`, `e13-bridge-to-f` *(beat-2 copy override)* |
+| **H · ENGINEERING FUNDAMENTALS** | 13 | `e1`…`e11`, `e12-loop-engineering`, `e13-bridge-to-f` *(beat-2 copy override)* |
 | **I · TOOLS ECOSYSTEM** | 11 | `g1`…`g11` |
 | **J · PITFALLS & BEST PRACTICES** | 3 | `h1`…`h3` |
 | **K · THE MANDATE** | 3 | `mandate-enablement` **new** · `mandate-phases-gates` **new** · `mandate-levers` **new** |
@@ -1027,7 +1036,7 @@ name it in the spoken track rather than be asked. Also live: `Gemini 3.6 Flash` 
 **WEAK on agentic** (38.7 vs 55.3 = 70%) is what the data says, and it is a blunt verdict on
 a Google model in front of a company running on Google Cloud.
 
-### 8.2 Loop Engineering (#10) — section E gains E.12 · THE LOOP
+### 8.2 Loop Engineering (#10) — section E gains E.12 · LOOP ENGINEERING
 
 **GO. One new slide, all brands, all deck sets, no cut anywhere.**
 
@@ -1042,7 +1051,7 @@ repetition (time).**
 |---|---|
 | **E.1** `e1-three-layers` | `steps: 4 → 5`, `canonicalPose: 3 → 4`. New step 4: `RingStack` gains an `orbit` prop — a copper arc sweeps all three rings, mono label `THE LOOP`. Footer → *"Three layers make one run. The loop makes it repeat."* `LayerSummary` untouched. |
 | **E.11** `e11-harness-practices` | Ralph card — essence → **"You start one job; it retries until a check passes."** · pattern → `Spec → attempt → check → fix → until done` · bullets → *Errors feed back — it re-diagnoses and retries* / *Runs past one context window via checkpoints* / *Success criteria / goal defined as the check — `/goal` on Claude Code & Codex CLI*. Footer → **"Eight parts. Now — what runs them, without you."** |
-| **E.12** `e12-the-loop` | **NEW.** See §8.3. |
+| **E.12** `e12-loop-engineering` | **NEW.** See §8.3. |
 | **E.13** | File renamed `e12-bridge-to-f.tsx` → `e13-bridge-to-f.tsx` (id, export symbol, unit-test name, `index.ts` slot). Beat 1 → **"Three layers. One loop."** **The `num` prop is not touched — §3 derives it.** |
 
 **Why E.12 is not the Ralph card.** Anthropic's own comparison hands over the boundary:
@@ -1071,90 +1080,123 @@ Research basis: `docs/researches/2026-07-31-loop-engineering.md` (provenance) +
 `docs/researches/2026-08-02-loop-engineering-practitioner-walkthrough.md` (operational
 detail). The walkthrough's *"this is the future"* framing is promotional and is **not** used.
 
-### 8.3 E.12 · THE LOOP — content brief (fixed) and form (§12.1 decision required)
+### 8.3 E.12 · LOOP ENGINEERING — the form that ships (#19 RESOLVED, 2026-08-03)
 
-**Fixed message, independent of form:**
+**Resolution: neither #17 C · GAUGE nor #18 A · THE DIAL.** Both prototypes are retired. The
+slide is built from a **clean-sheet third build**, `src/slides/prototype-gh19b-e12-loop-engineering/`
+(`?dev=proto19b`), sourced from the Panaversity *Loop Engineering: A Crash Course* material
+rather than from the #10 → #17/#18 lineage. Owner call on #19; one candidate, not a bracket.
 
-| Element | Copy |
+> **This supersedes the content brief that this section previously called "fixed regardless
+> of form".** The headline, qualifier, tagline, closer, the five `TRIGGER · MEMORY ·
+> CONDITION · BUDGET · GATE` rows, the Friday 4 PM worked example and the `steps: 2` /
+> `canonicalPose: 1` shape are all **replaced**, not adjusted. #17's arc-gauge-with-cap-tick
+> and #18's open ring both die with the ring — the shipping form has no ring. What survives
+> from #10 is only §8.2: the placement, the not-a-fourth-layer argument, the E.1 / E.11 /
+> E.13 knock-ons, and the `/loop`-not-`/goal` boundary (with one conflict to settle — see
+> "Build decisions still required" below).
+
+**Slide shape:**
+
+| Element | Value |
 |---|---|
-| Headline | **"The loop: stop doing the turns."** |
-| Qualifier, once | `LOOP ENGINEERING · NAMED JUNE 2026 · NEW NAME, OLD PRACTICE` — names the term, dates it, deflates it |
-| Tagline | **"Done is a check, not an opinion."** |
-| Closer | **"You were in every cycle. Now you're at both ends."** |
-| The shift | turn-by-turn `you → AI → you → AI` puts the human in every cycle; a loop puts them at the two ends only |
-| FigLabel | `THE LOOP` (letter and number derive — §3) |
-| Steps | `steps: 2`, `canonicalPose: 1` |
+| Headline | **"Stop writing prompts. Start writing loops."** (`kw`: *writing loops*) |
+| Qualifier | **None.** The mono strip under the headline is deleted by owner call — the term is carried by the FigLabel and the two practitioner quotes |
+| FigLabel | `LOOP ENGINEERING` (letter and number derive — §3) |
+| Steps | **`steps: 3`, `canonicalPose: 2`** |
+| Pacing | Hover a rail part to magnify it; **click pins**; un-hover **releases**. E.9's grammar, no Space press inside the diagram |
+| Closer | **"You wake up to two PRs and one flagged decision. You typed nothing."** |
+| Recap footnote | **"Design the loop once — it starts the work, checks the work, remembers the work. You keep *intent* and *accountability*."** — bottom-left, display weight, step 2 |
 
-**Five decisions** (teaching order: capability, capability, control, control, risk):
+**Step 0 — the mindset shift.** A diptych, and the argument of the whole slide.
 
-| Row | Content | Caption |
-|---|---|---|
-| `TRIGGER` | what starts it, not you — schedule · event · queue | "Every Friday, 4 PM. Nobody presses start." |
-| `MEMORY` | state outside the chat — state · anti-repetition · profile | "The chat forgets. The file doesn't." |
-| `CONDITION` | countable check on a file, not taste | "'Every client got an update' — checkable. 'Is it good' — not." |
-| `BUDGET` | closed loop, capped | "A closed loop with an unsatisfiable condition is an open loop, on a schedule, unattended." |
-| `GATE` | where a person signs | "Output goes to a person → a person signs." |
+- **Left, `PROMPTING — TURN BY TURN`:** four chips relaying an endless highlight cycle, each
+  row owning a quarter of the beat, with a dashed **"you, again"** return path. Verdict:
+  *"You are holding the tool the whole time. You are the heartbeat, the checker, and the
+  memory. Stop paying attention, and the work stops."*
+- **Right, `LOOPING — A SYSTEM YOU DESIGN ONCE`:** a live EKG heartbeat feeding
+  `DISCOVER → IMPLEMENT → VERIFY → COMMIT`, a spine (`progress.md`, read first / written
+  last), a `risky` escape to the single human gate, `approved` handed back to commit. A token
+  runs the column continuously. Verdict: *"The loop holds the steps in the middle. You keep
+  intent and accountability."*
+- Bridge between the panels: `THE LEVERAGE MOVES ›››`. The left panel **visibly cannot run
+  without you**; the right one **visibly can**. That contrast is the slide's thesis, carried
+  by motion rather than caption.
+- Beneath, the two practitioners who renamed the job: **Boris Cherny** (*"I don't prompt
+  Claude anymore. I have loops running that prompt Claude — my job is to write loops."*) and
+  **Peter Steinberger** (*"You should be designing loops that prompt your agents."*).
 
-`BUDGET`'s line is backed by a shipped guardrail: Claude Code's 7-day expiry on recurring
-tasks — *"this bounds how long a forgotten loop can run."*
+**Step 1 — the big loop, four parts.** Left rail `HEARTBEAT · ONE BEAT · CHECKER · SPINE`,
+joined by down-arrows and an amber return arc — *"tomorrow's beat starts by reading the
+spine."* A `HintIcon` sits beside the heading. Hovering a part magnifies it onto the right
+canvas, with a **stepped leader line physically connecting the card to the panel title**.
+Idle shows `ONE BEAT`, so the resting pose is the reference's "two loops, one name" spread.
 
-**Worked example** (always visible, not a step): Friday 4 PM — one status update per active
-client into a review folder. Condition: *did every active client get one this week?*
-Implementation strip: `/loop` + Routines.
+| Part | Right canvas |
+|---|---|
+| `HEARTBEAT` | **The four heartbeats** — in-session (`/loop`), conditional (`/goal`, `codex exec` + tests), scheduled (Routines, ChatGPT Tasks / cron), event-driven (Channels, GitHub, `@codex` on a PR) — each with its own stop condition and a plain-language analogy, laid on a *you hold it → it runs without you* axis. Foot: *each single firing of the loop is called a **beat***. **No OpenCode anywhere** (owner call) — Codex / ChatGPT stand in |
+| `ONE BEAT` | **The agent runtime** — build the context → the model decides → run the tools → add the results, drawn as an orbit with a circulating comet; dashed exit *the model stops asking — the beat ends, back to the big loop: the checker, then the spine.* Foot: the small loop has no heartbeat and no spine — when the beat ends it remembers nothing |
+| `CHECKER` | **The checker ladder** — a passing test (*proof*) → mechanical checks (*partial proof*) → a rubric with a bar (*a claim, not a proof*), with the human gate **widening beneath as the proof thins**. This is where "done is a check, not an opinion" now lives, and it is the **verification card §8.2 found missing** from the whole harness treatment |
+| `SPINE` | **Memory between runs** — Run 1 Monday ✕ *the session ends, the model's memory is wiped* ✕ Run 2 Tuesday, over a continuous repo band (`CLAUDE.md` / `AGENTS.md` the front of the diary, `progress.md` the back). Foot: *No spine, no loop.* |
 
-**Two prototypes ran in parallel against a shared decision rule** — (a) reads at projector
-distance, (b) paced by hover with no Space press, (c) holds at `steps: 2`. Both passed their
-own bracket, and the cross-bracket pick was never recorded. **The form is decided on
-[#19](https://github.com/adrianto-nanovest/bc-presentation/issues/19), not here** — see
-§12.1. Everything above this line is fixed regardless of which form wins.
+**Step 2 — the worked example.** The rail stays; the canvas becomes the **morning-triage
+loop, one beat**: heartbeat 9:00 → read `progress.md` → find the work (≤ 5 items) → draft in
+its own worktree (*the maker*) → a separate reviewer grades it (*the checker*) →
+`THE VERDICT?` forks to *needs a human* / *open a PR* → update `progress.md` → dashed return,
+*again tomorrow at 9:00*. Hovering a rail part now **lights the flow stages that part owns**
+(`spine` → read + update · `checker` → reviewer + verdict + both branches · `heartbeat` →
+the pill and the return · `beat` → the maker stages). Two day-tokens run the flow on
+alternating laps — one passes and opens a PR, the next fails and flags a person.
 
-**#17 winner — C · GAUGE** (fixed skeleton: left five-row list + right persistent canvas,
-E.9's grammar):
+**Build rules the prototype establishes and the real slide must keep:**
 
-- `BUDGET` becomes an **arc gauge on the ring itself, with a cap tick.** Nothing is
-  duplicated — no concentric ghost twin, no second figure. The ring never moves, never
-  re-draws.
-- **The apparatus stays hidden until hovered** ("must the canvas show everything at once?" —
-  no).
-- Ring anatomy, fixed by the brief and agreed by all three variants: clockwise
-  `START → RUN → CHECK → SHIP`, clock + entry arrow left, state file below-left (write-after
-  from SHIP, dashed read-before into START), condition diamond at CHECK with both exits,
-  gate human off the ship edge below-right, and the closing segment `SHIP → START` fading in
-  during the fold — *the moment it appears is the moment the chain stops being a chain.*
-- **Cost, accepted knowingly:** the "second ring with no stop" image is **gone**. The real
-  slide either says that in words or gives it up — **decide explicitly, do not let it vanish
-  by omission.**
-- **The gauge is load-bearing.** With no twin figure, the cap tick is the only thing carrying
-  "there is a limit"; it must survive a washed-out projector. #18's variant B stop-bar is
-  the reserve if the arc cannot hold it.
-- **Still open after this pick:** fold duration (2400 ms is only the default it was flipped
-  from) and un-hover behaviour (`release` vs `hold last`). Both were built as switcher
-  scalars, not variants — **they need a call at the projector.**
+- **Rank is a colour tier, never opacity.** Demotion moves borders to copper-900 and text to
+  neutral-400; nothing rests semi-transparent.
+- **`kw` on every prose string, never on mono.** All copy lives in a `content.ts` with `*Kw`
+  siblings, 1–3 keywords per chunk; titles, tool strips, axis labels and phase names are mono
+  and therefore keyword-free.
+- **Reduced motion:** zero SMIL nodes mount and every pose still renders complete.
+- 1280×720 absolute stage · dark surface · copper single accent · **CSS vars only, no hex
+  literals** · no new fonts or libraries · must sit between E.11's 8-card grid and E.13's
+  photographic bridge.
+- The prototype's `1`–`4` pin keys, `0` reset and `\` replay are **dev affordances, not part
+  of the contract** — production keeps hover + click-pin only.
 
-**#18 winner — A · THE DIAL** (open form, the control):
+**Observed in the browser** (prototype, via `scripts/p19b-shots.mjs` and
+`scripts/p19b-reduced.mjs` against the real `<Slide>` stage at 1280×720): all four hover
+states swap the panel and set `data-active`; un-hover releases; click-pin holds after the
+pointer leaves; step 2's footnote mounts and all four hovers light their own stages;
+`2 → 1 → 0` all re-render; two step-0 frames 1.7 s apart differ across both panels;
+`prefers-reduced-motion: reduce` mounts 0 `<animateMotion>` nodes at every step; console
+clean; `vite build` leaves no prototype markers in `dist/`.
 
-- **No list.** The five decisions are stations *on* the ring.
-- **The ring is open** — a 320° arc with a 40° gap on the left; one `YOU` block sits in the
-  gap and terminates both ends, so the closer is read off the geometry instead of captioned.
-- **No chain-to-ring fold.** The turn-by-turn "before" is a static struck-through inset,
-  top-left. The contrast is spatial, not temporal — a facilitator who arrives mid-slide loses
-  nothing, and the fold-duration question disappears.
-- **The ring never re-draws.** Hover lights one arc segment and swaps the caption in the
-  hollow. The worked example is always on, bottom-left.
-- Carry-overs: **segments, not a base arc** (a continuous 10 px base arc read as one thick
-  hoop and buried the "five"; five notched segments at 5 px unlit / 9 px lit is what made the
-  count legible) · **do not wash all five labels at step 1** (five washed boxes turn the
-  labels back into a card grid — wash on real selection only) · station labels need an
-  **outer div for the anchor transform**, because `.fade.on` runs a `fadeReveal` keyframe
-  that animates `transform` and a running CSS animation beats an inline style.
-- Known risk to weigh: section E is twelve slides of left/right diagrammatic rhythm and E.13
-  is a photographic exhale. A third form at slide twelve either reads as a deliberate lift
-  before the bridge, or as bolted on.
+**Build decisions still required — carried to §12.1:**
 
-**Constraints, both forms:** 1280×720 absolute stage · dark surface · copper single accent ·
-**CSS vars only, no hex literals** · no new fonts or libraries · `Reveal`/`CopperRule`
-primitives where applicable · must sit between E.11's 8-card grid and E.13's photographic
-bridge.
+1. **`BUDGET` has no home.** The old brief's fifth row (a capped loop, backed by Claude
+   Code's 7-day expiry on recurring tasks) appears **nowhere** in the shipping form. The
+   closest thing is the triage example's *"at most 5 items"*. Decide explicitly whether the
+   cost/runaway guardrail is stated in a foot line, moved to E.11, or dropped — **do not let
+   it vanish by omission.**
+2. **`/goal` now appears on both E.11 and E.12.** §8.2 separates them as *"the Ralph card is
+   `/goal`; E.12 is `/loop` + Routines"*, but the shipping form teaches `/goal` as heartbeat
+   kind 2 (`CONDITIONAL — also called run-until-done`), which is the Ralph card. Either kind 2
+   names the Ralph card explicitly as a callback, or E.11's card is re-cut again. Cheapest
+   fix: one callback line on kind 2.
+3. **Projector legibility of the 8.5 px mono tool strips** on the heartbeat cards — the
+   smallest type in the deck, unverified.
+4. **Step-0 entry choreography.** The right panel's connectors mount with the panel (~1 s, no
+   draw-in). Deliberate — step 0 is a poster, not a build-up — but it is an owner call.
+5. **Quote wording.** Both quotes are attributed on-slide to named people. Provenance is in
+   `docs/researches/2026-07-31-loop-engineering.md` (Cherny, Sequoia AI Ascent May 2026;
+   Steinberger, June 2026 post), but the exact Cherny sentence on the slide traces to a
+   secondary article and is marked *not verified* in
+   `docs/researches/topic-loop-engineering-x-articles.md`. Verify the wording against the
+   primary before it goes in front of an audience, or paraphrase.
+
+**Dead on this pick — do not re-import:** the chain→ring fold and its duration scalar, the
+open 320° ring with the `YOU` block in the gap, the arc gauge with a cap tick, the
+"second ring with no stop" image, and the five-row decision list in any form. The un-hover
+question is **settled: release** (pinning is the only way to hold state).
 
 ---
 
@@ -1265,14 +1307,18 @@ stylesheet behind an on-demand `import()`, and gate the DOM attributes — all t
 ### 10.2 Manual / rendered
 
 - Every new or restyled slide inspected at **1280×720 in the browser**, and at projection
-  distance for §7 and §8.3 (the copper single-hue system's form-based encodings and the
-  BUDGET cap tick are exactly what a washed-out projector attacks).
+  distance for §7 and §8.3 (the copper single-hue system's form-based encodings and E.12's
+  **8.5 px mono tool strips** — the smallest type in the deck — are exactly what a washed-out
+  projector attacks).
 - Per-domain post-deploy table — §2.4.
 - Export path: `scripts/export-pdf.mjs`, `export-pptx.mjs`,
   `screenshot-exchange-alerts.mjs` **must take a variant argument**. They navigate to bare
   `localhost:5173` today, so the `general` default flip silently makes them export the wrong
   deck.
-- Fold duration and un-hover behaviour for E.12 (§8.3) — **only answerable at the projector.**
+- E.12's four hover states, click-pin, un-hover release, and `2 → 1 → 0` re-render — the
+  prototype's browser checks (`scripts/p19b-shots.mjs`, `p19b-reduced.mjs`) must be
+  reproduced against the **real** slide, including `prefers-reduced-motion: reduce` mounting
+  **0 `<animateMotion>` nodes** at every step.
 
 ---
 
@@ -1286,7 +1332,7 @@ Dependencies are strict where stated. Free merge windows: **Aug 3–5, 8–11, 1
 | **2 · B4 model refresh** | §8.1 | none (parallel with 1) | Aug 5 if it fits; otherwise **Aug 11** for the Aug 12–13 batch |
 | **3 · Derived section letters & page numbers** | §3. `id` + `sectionKey` + `numbered`; composer; `FigLabel` from context; 64 call sites stripped; `FIG_NUM` hack deleted; A.1 `sectionRef`; jump-key generalization; golden snapshot | 1 | **Behaviour-preserving no-op** for all three live decks, proved by the snapshot diff |
 | **4 · Deck-set model + leader deck at zero new slides** | §4. Flat id lists; `sectionOverrides`; leader title + A.1 overrides; F cut with F.8 relocated; bridge beat-2 override; orphan guard | 3 | **The floor: a deliverable leader deck with no new slides.** At this checkpoint the leader deck is **56 slides across 11 sections A–K** (`shape` holds only the relocated F.8; `gap`, `invest` and `mandate` own no slides yet, so they take no letter). It grows to 73 / A–N as Phases 5–7 land |
-| **5 · E.12 THE LOOP + section-E knock-ons** | §8.2, §8.3. New `e12-the-loop`; E.1 orbit (steps 4→5); E.11 Ralph re-cut + footer; bridge rename + beat 1 | 3 (else a manual renumber per #10) · **#19 for `e12-the-loop` only** | Live for **Aug 12–13** and both leader decks. The E.1 / E.11 / bridge edits are separable and can ship without E.12 if #19 runs long |
+| **5 · E.12 LOOP ENGINEERING + section-E knock-ons** | §8.2, §8.3. New `e12-loop-engineering` — **`steps: 3`, `canonicalPose: 2`**, productionized from `prototype-gh19b-e12-loop-engineering/` (**rewrite, do not lift**: the prototype is inline-styled and untested); E.1 orbit (steps 4→5); E.11 Ralph re-cut + footer; bridge rename + beat 1 | 3 (else a manual renumber per #10) | **UNBLOCKED — #19 resolved 2026-08-03.** Live for **Aug 12–13** and both leader decks. Ship the five §12.1 calls with the build, not after it. The E.1 / E.11 / bridge edits remain separable |
 | **6 · Leader new slides, must-tier** | `shape-agentic-org` (§7.1, 9 steps) · `gap-capability-ladder` (§7.2) · `invest-own-proof` · `invest-security` · `invest-subscription` · `mandate-enablement` · `mandate-phases-gates` | 4 | Vendor claims verified (§12.2) before `invest-security` / `invest-subscription` ship |
 | **7 · Leader new slides, second tier** | `gap-hardest-part` · `gap-no-sop` · `gap-three-failures` · `gap-the-pattern` · `invest-base-rates` · `shape-middle-out` · `mandate-levers` · **`shape-tam-kotter` last** | 6 | **Live by Aug 17** for Berau leader **Aug 18**. TAM/Kotter is deliverable verbally if it slips |
 | **8 · Light theme productionization** | §9. Remove the DEV gates; drop the accent-variant switcher; **re-key the dark opt-out to slide id**; clear the §9.5 remediation list; decide the export/projection default | 4, 5 (id-keyed opt-out needs the final deck sets) | **After Aug 20.** Ships opt-in; presenter-facing only when §9.5 is empty |
@@ -1303,48 +1349,50 @@ Notes on ordering:
 - **Phase 8 is last by instruction and by dependency** — the dark opt-out list cannot be
   keyed to ids until the deck sets are final.
 - Every prototype directory is deleted by the phase that replaces it: `proto16` → Phase 6,
-  `proto17`/`proto18` → Phase 5, gh15 theme bar + stylesheet → Phase 8.
+  `proto17` / `proto18` / `proto19` / **`proto19b`** → Phase 5, gh15 theme bar + stylesheet →
+  Phase 8. `proto19b` is the one being productionized, so it is deleted **last in the phase**,
+  after the real slide renders.
 
 ---
 
 ## 12 · Open items
 
-### 12.1 DECISION REQUIRED — which E.12 form ships (blocks Phase 5) → tracked on #19
+### 12.1 RESOLVED 2026-08-03 — which E.12 form ships (#19 closed, Phase 5 unblocked)
 
-**Tracked as its own decision ticket:
-[#19](https://github.com/adrianto-nanovest/bc-presentation/issues/19).** Owner's position as
-of 2026-08-03: **mostly 18A · THE DIAL, with adjustments — the adjustments are not yet
-specified**, and are deferred to a working session. "A with changes" is not implementable
-until the changes are named, so Phase 5 stays closed until #19 resolves.
+**The form is the clean-sheet third build, `prototype-gh19b-e12-loop-engineering/`.** Not
+#17's C · GAUGE, not #18's A · THE DIAL, and not the recommendation this section previously
+carried (A with C's arc gauge). Full description in §8.3.
 
-#17 resolved to **C · GAUGE** and #18 resolved to **A · THE DIAL**. Each won its own bracket;
-the cross-bracket pick was never made, and the two are mutually exclusive — #17 keeps the
-fixed skeleton (left five-row list + right canvas, E.9's grammar), #18's A has **no list at
-all**. #18's own framing was *"if it wins, the skeleton was wrong."*
+**Why the recommendation was not taken.** #17 and #18 were both built to #10's brief, so both
+argue *"here are the five decisions that make a loop safe"* — a checklist rendered as
+apparatus. The clean-sheet build argues something else: *the leverage moves from typing turns
+to designing the system*, with the four parts as the anatomy of that system and the mindset
+diptych carrying the shift on its own. Once the argument changed, the ring, the five rows and
+the fold had nothing to attach to. Both prior brackets are **retired, not merged** — see
+§8.3's "dead on this pick" list.
 
-**Recommendation: ship #18's A · THE DIAL, and take #17's arc-gauge-with-cap-tick as the
-`BUDGET` treatment on A's open ring.** Rationale: A passes all three of #10's criteria with
-nothing left open, while C leaves fold duration and un-hover behaviour to be settled at a
-projector; A's static struck-through "before" inset means a facilitator who arrives mid-slide
-loses nothing; and #17's settled question was specifically *how does BUDGET show a comparison
-rather than a highlight* — that answer is portable to A's ring, so nothing #17 decided is
-discarded. Cost accepted: a third layout form arrives at slide twelve of a twelve-slide
-left/right section (#18's stated risk), and the "second ring with no stop" image is given up
-in words rather than drawn (#17 carry-over 1).
+**Consequences already absorbed into this spec:** §8.3 rewritten end to end · §8.2's E.12 row
+and the id `e12-loop-engineering` · `steps: 2` → **3** and `canonicalPose: 1` → **2** in §11 ·
+`proto19` and `proto19b` added to the Phase 5 / Appendix A deletion list · §10.2's projector
+bullet re-pointed from the BUDGET cap tick to the 8.5 px mono tool strips.
 
-This is a **recommendation, not a resolution.** #19 carries it, and must return three things
-before Phase 5 opens: the form that ships, **the adjustments to A named concretely enough to
-build**, and — if any part of C's fold survives — calls on fold duration and un-hover
-behaviour.
+**What #19 leaves open — five build-time calls, to be made *with* the Phase 5 build, not
+after it.** None blocks the phase; all are cheap now and expensive on a session day.
 
-Two items must be decided *with* the adjustments rather than after them: whether the
-**"second ring with no stop"** image is stated in words or given up (#17 carry-over 1 —
-decide explicitly, do not let it vanish by omission), and **un-hover behaviour** (release to
-idle vs hold the last state), which survives even though 18A has no fold.
+| # | Call | Why it cannot be silently skipped |
+|---|---|---|
+| 1 | **Where the `BUDGET` / runaway guardrail goes** — a foot line on E.12, a move to E.11, or an explicit drop | The old brief's fifth row is the only one with **no successor anywhere** in the shipping form. It is the slide's one risk row, in front of an audience that will go and build these |
+| 2 | **`/goal` appearing on both E.11 and E.12** | §8.2 separates them (*Ralph = `/goal`, E.12 = `/loop` + Routines*); the shipping form teaches `/goal` as heartbeat kind 2. One callback line on kind 2 is the cheap fix |
+| 3 | **Projector legibility of the 8.5 px mono tool strips** | Smallest type in the deck. Monitor-clean, projector-unverified — the exact failure the projection runbook exists to catch |
+| 4 | **Step-0 entry choreography** | The right panel's connectors mount with the panel, no draw-in. Deliberate (step 0 is a poster), but an owner call |
+| 5 | **Quote wording for Cherny and Steinberger** | Named attribution on-slide. The exact Cherny sentence traces to a secondary article marked *not verified*; check it against the Sequoia interview or paraphrase |
 
-**Phase 5's other work is separable.** The E.1 orbit step, the E.11 Ralph re-cut and footer,
-and the bridge rename + beat 1 are copy and step-count changes independent of E.12's form. If
-#19 runs past the free merge window, split them out and ship them without E.12.
+**Settled by this resolution, no longer open:** un-hover behaviour = **release** (pinning is
+the only hold), and fold duration, which dies with the fold. Both were carried from #17.
+
+**Phase 5's other work is still separable.** The E.1 orbit step, the E.11 Ralph re-cut and
+footer, and the bridge rename + beat 1 are copy and step-count changes independent of E.12.
+If the E.12 build runs past the free merge window, split them out and ship them without it.
 
 ### 12.2 Vendor pricing and data-handling claims — verify before Phase 6
 
@@ -1393,9 +1441,11 @@ official.
 | **delete** | `k3-thank-you.tsx:21` `FIG_NUM` + its `VARIANT` import | — |
 | **delete** | `GH15_DARK_SLIDES` index set in `Slide.tsx` | id-keyed opt-out (Phase 8) |
 | **delete** | `src/slides/prototype-gh16-leader-slides/` | Phase 6 |
-| **delete** | `src/slides/prototype-gh17-e12-loop-canvas/`, `prototype-gh18-e12-open-form/` | Phase 5 |
-| **delete** | `PrototypeGh15ThemeBar.tsx`, `styles/prototype-gh15-light-theme.css`, `scripts/prototype-gh15-*.mjs`, `scripts/proto18-shots.mjs` | Phase 8 |
-| **delete** | the three `?dev=proto*` hatches in `Deck.tsx` | with their directories |
+| **delete** | `src/slides/prototype-gh17-e12-loop-canvas/`, `prototype-gh18-e12-open-form/`, `prototype-gh19-e12-the-loop/` | Phase 5 |
+| **delete** | `src/slides/prototype-gh19b-e12-loop-engineering/` | Phase 5, **last** — it is the source of the real slide |
+| **delete** | `scripts/p19-shots.mjs`, `scripts/p19-extra.mjs`, `scripts/p19b-shots.mjs`, `scripts/p19b-reduced.mjs`, `scripts/proto18-shots.mjs` | Phase 5 |
+| **delete** | `PrototypeGh15ThemeBar.tsx`, `styles/prototype-gh15-light-theme.css`, `scripts/prototype-gh15-*.mjs` | Phase 8 |
+| **delete** | the four `?dev=proto*` hatches in `Deck.tsx` (`proto17`, `proto18`, `proto19`, `proto19b`) | with their directories |
 | fix | `index.html:6` `/bc-logo.png` (404) | `/brand/bce-logo.png` |
 | move | `assets/*-logo.*` | `assets/brand/` (+ middleware matcher exemption) |
 
