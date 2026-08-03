@@ -372,10 +372,12 @@ function HoverableTimeDistributionBar(props: {
 // Step count = 3 (step values 0..2): step 0 = load (full diagram visible),
 // step 1 = BEFORE/AFTER bars, step 2 (canonical) = B4 footer.
 export const c4Slide: SlideDef = {
+  id: "c4-v-bounce-workflow",
   steps: 3,
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",
+  sectionKey: "mindset",
   render: () => <C4VBounceWorkflow />,
 };

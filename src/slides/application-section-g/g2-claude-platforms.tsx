@@ -147,10 +147,12 @@ export function G2ClaudePlatforms() {
 // ───────────────────── slide def ─────────────────────
 
 export const g2Slide: SlideDef = {
+  id: "g2-claude-platforms",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G2ClaudePlatforms />,
 };

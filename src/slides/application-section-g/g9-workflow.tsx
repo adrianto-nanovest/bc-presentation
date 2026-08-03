@@ -201,10 +201,12 @@ function PipelineWithStagger({ stages }: { stages: StageDef[] }) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const g9Slide: SlideDef = {
+  id: "g9-workflow",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G9Workflow />,
 };

@@ -76,10 +76,12 @@ export function H1PitfallWall() {
 }
 
 export const h1Slide: SlideDef = {
+  id: "h1-pitfall-wall",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "H",
+  sectionKey: "pitfalls",
   render: () => <H1PitfallWall />,
 };

@@ -125,10 +125,12 @@ function CardView({ card, onPlayVideo }: CardViewProps) {
 }
 
 export const g6Slide: SlideDef = {
+  id: "g6-openai",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G6OpenAI />,
 };

@@ -3,7 +3,10 @@
 // Turns an ordered slide list into display letters and page numbers. Once the
 // chrome reads them (§3.5, a later ticket) no slide needs to hardcode
 // `section="E" num={11}`, and a cut, insert or reorder can no longer leave a
-// visible gap. Nothing consumes this yet — the deck is unchanged.
+// visible gap. `src/deck/registry.tsx` composes the live deck through this
+// (gh#34), but NOTHING RENDERS FROM IT YET — the chrome still prints its own
+// hardcoded props, and the two are held equal by
+// `tests/unit/deck-composed-numbering.test.ts`.
 //
 // Pure: a function over plain data. No React, no DOM, no work at module scope.
 
@@ -17,10 +20,10 @@ const RESERVED_NAV_KEYS = ["r", "u"] as const;
 const MAX_SECTIONS = 17;
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-// The narrow structural shape the composer actually reads. `SlideDef` grows
-// these two fields in the next ticket and will satisfy this as-is, so nothing
-// here needs editing then — and tests can compose synthetic lists without
-// standing up a renderable slide.
+// The narrow structural shape the composer actually reads. `SlideDef` carries
+// both fields as of gh#34 and satisfies this as-is; keeping the parameter
+// narrow lets tests compose synthetic lists without standing up a renderable
+// slide.
 export interface ComposableSlideDef {
   sectionKey: SectionKey;
   /** Default true. `false` means the slide renders no FigLabel (e.g. covers). */

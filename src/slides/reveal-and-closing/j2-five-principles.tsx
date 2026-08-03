@@ -308,10 +308,12 @@ export function J2FivePrinciples() {
 // ───────────────────── slide def ─────────────────────
 
 export const j2Slide: SlideDef = {
+  id: "j2-five-principles",
   steps: 2,
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
   section: "J",
+  sectionKey: "principles",
   render: () => <J2FivePrinciples />,
 };

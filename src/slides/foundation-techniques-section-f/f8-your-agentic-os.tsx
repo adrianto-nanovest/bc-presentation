@@ -77,10 +77,12 @@ export function F8YourAgenticOs() {
 }
 
 export const f8Slide: SlideDef = {
+  id: "f8-your-agentic-os",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F8YourAgenticOs />,
 };

@@ -418,10 +418,12 @@ function BeatCard({ label, caption, captionKw, anim }: BeatCardProps) {
 // ───────────────────── slide def ─────────────────────
 
 export const c5Slide: SlideDef = {
+  id: "c5-role-trajectory",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",
+  sectionKey: "mindset",
   render: () => <C5RoleTrajectory />,
 };

@@ -331,10 +331,12 @@ export function E10HarnessWhatWhy() {
 // ───────────────────── slide def ─────────────────────
 
 export const e10Slide: SlideDef = {
+  id: "e10-harness-what-why",
   steps: 5,
   canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E10HarnessWhatWhy />,
 };

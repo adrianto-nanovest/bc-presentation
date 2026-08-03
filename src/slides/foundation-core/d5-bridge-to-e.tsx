@@ -152,10 +152,12 @@ export function D5BridgeToE() {
 // ───────────────────── slide def ─────────────────────
 
 export const d5Slide: SlideDef = {
+  id: "d5-bridge-to-e",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "D",
+  sectionKey: "process",
   render: () => <D5BridgeToE />,
 };

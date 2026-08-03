@@ -221,10 +221,12 @@ export function G3ClaudeCapabilities() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const g3Slide: SlideDef = {
+  id: "g3-claude-capabilities",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G3ClaudeCapabilities />,
 };

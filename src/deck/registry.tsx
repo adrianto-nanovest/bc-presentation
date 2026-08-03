@@ -1,4 +1,5 @@
 import type { SlideDef } from "./types";
+import { composeDeck, type ComposedDeck } from "./compose";
 import { HexLadder } from "@/primitives/HexLadder";
 import { openingSectionASlides } from "@/slides/opening-section-a";
 import { landscapeSectionBSlides } from "@/slides/landscape-section-b";
@@ -15,13 +16,19 @@ import { applicationSectionHSlides } from "@/slides/application-section-h";
 // it never appears in audience navigation; reach it via ?dev=hexladder,
 // which Deck.tsx renders standalone.
 export const hexLadderDevSlide: SlideDef = {
+  // The one slide whose id is not a file basename: it is declared here rather
+  // than in a file of its own. `tests/unit/deck-slide-ids.test.ts` names it as
+  // the single sanctioned exception.
+  id: "hex-ladder",
   steps: 1,
   animationMode: "static",
   canonicalPose: 0,
   surface: "light",
-  // Dev-only utility — tagged "K" so the SlideDef type's non-optional
-  // `section` is satisfied. Not navigated.
+  // Dev-only utility — tagged "K" / `lab` so the SlideDef type's non-optional
+  // `section` and `sectionKey` are satisfied. Not navigated, and never composed,
+  // so the key costs the composed deck nothing.
   section: "K",
+  sectionKey: "lab",
   render: () => <HexLadder />,
 };
 
@@ -38,3 +45,16 @@ export const deckSlides: SlideDef[] = [
   ...applicationSectionHSlides, // H.1–H.3
   ...revealAndClosingSlides,    // I/J/K — K1 is the final audience slide
 ];
+
+// The same deck, carrying the letter and page number DERIVED from each slide's
+// position (§3.4). Nothing renders from it yet — the chrome still prints the
+// hardcoded `<FigLabel section= num=>` props, and `tests/unit/deck-composed-numbering.test.ts`
+// holds the two side by side and requires them to agree. Later tickets in this
+// phase move the chrome onto these values and delete the hardcoded pairs.
+//
+// COMPOSED AT MODULE SCOPE, on purpose and exactly once, because `deckSlides`
+// already resolves `VARIANT` at module scope — one module epoch holds exactly
+// one brand's deck, so it can also hold exactly one composed deck. That also
+// makes R4 (a section key may form only one run) a load-time error rather than
+// a first-paint one.
+export const composedDeck: ComposedDeck<SlideDef> = composeDeck(deckSlides);

@@ -215,10 +215,12 @@ export function D2TheConvergence() {
 // ───────────────────── slide def ─────────────────────
 
 export const d2Slide: SlideDef = {
+  id: "d2-the-convergence",
   steps: 3,
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "D",
+  sectionKey: "process",
   render: () => <D2TheConvergence />,
 };

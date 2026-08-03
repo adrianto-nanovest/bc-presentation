@@ -691,6 +691,7 @@ function titleForEra(key: B1EraKey): string {
 // ───────────────────── slide def ─────────────────────
 
 export const b1Slide: SlideDef = {
+  id: "b1-evolution-journey",
   // 7 stepIndex slots (0..6): one per era reveal (6) + footer caption.
   // Load animation (rail + dimmed lattice) is mount-driven, not a Space step.
   steps: 7,
@@ -698,5 +699,6 @@ export const b1Slide: SlideDef = {
   animationMode: "step-reveal",
   surface: "dark",
   section: "B",
+  sectionKey: "landscape",
   render: () => <B1EvolutionJourney />,
 };

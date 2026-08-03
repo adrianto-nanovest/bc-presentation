@@ -7,10 +7,12 @@ import { A1WhatYouveSeen } from "./a1-what-youve-seen";
 import { a1GemsContent } from "./content";
 
 export const a1GemsSlide: SlideDef = {
+  id: "a1-gems",
   steps: 3,
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "A",
+  sectionKey: "opening",
   render: () => <A1WhatYouveSeen content={a1GemsContent} />,
 };

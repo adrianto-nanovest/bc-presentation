@@ -620,10 +620,12 @@ function ColumnHeading({ on, label }: { on: boolean; label: string }) {
 // ───────────────────── slide def ─────────────────────
 
 export const a1Slide: SlideDef = {
+  id: "a1-what-youve-seen",
   steps: 3,
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "A",
+  sectionKey: "opening",
   render: () => <A1WhatYouveSeen />,
 };

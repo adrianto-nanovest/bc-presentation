@@ -1287,10 +1287,12 @@ function Arrow({ length = 48 }: { length?: number }) {
 // ───────────────────── slide def ─────────────────────
 
 export const f3Slide: SlideDef = {
+  id: "f3-plugins-the-package",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F3PluginsThePackage />,
 };

@@ -543,10 +543,12 @@ function SpinePopover({ entry }: SpinePopoverProps) {
 // ───────────────────── slide def ─────────────────────
 
 export const e3Slide: SlideDef = {
+  id: "e3-prompt-structure",
   steps: 3,
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E3PromptStructure />,
 };

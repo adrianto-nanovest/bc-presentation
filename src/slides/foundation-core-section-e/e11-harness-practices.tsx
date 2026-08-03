@@ -248,10 +248,12 @@ export function E11HarnessPractices() {
 // ───────────────────── slide def ─────────────────────
 
 export const e11Slide: SlideDef = {
+  id: "e11-harness-practices",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E11HarnessPractices />,
 };

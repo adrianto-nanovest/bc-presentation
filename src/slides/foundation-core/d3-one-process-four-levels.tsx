@@ -156,10 +156,12 @@ export function D3OneProcessFourLevels() {
 }
 
 export const d3Slide: SlideDef = {
+  id: "d3-one-process-four-levels",
   steps: 5,
   animationMode: "step-reveal",
   canonicalPose: 4,
   surface: "dark",
   section: "D",
+  sectionKey: "process",
   render: () => <D3OneProcessFourLevels />,
 };

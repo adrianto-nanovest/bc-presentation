@@ -443,10 +443,12 @@ function LinkChip({ label, href }: { label: string; href: string }) {
 // ───────────────────── slide def ─────────────────────
 
 export const k2Slide: SlideDef = {
+  id: "k2-practice-lab-overview",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "K",
+  sectionKey: "lab",
   render: () => <K2PracticeLabOverview />,
 };

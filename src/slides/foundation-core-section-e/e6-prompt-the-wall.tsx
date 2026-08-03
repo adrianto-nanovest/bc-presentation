@@ -287,10 +287,12 @@ export function E6PromptTheWall() {
 // ───────────────────── slide def ─────────────────────
 
 export const e6Slide: SlideDef = {
+  id: "e6-prompt-the-wall",
   steps: 4,
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E6PromptTheWall />,
 };

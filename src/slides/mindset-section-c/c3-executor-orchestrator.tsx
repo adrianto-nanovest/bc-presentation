@@ -742,10 +742,12 @@ function punchlineParaStyle(): CSSProperties {
 // ───────────────────── slide def ─────────────────────
 
 export const c3Slide: SlideDef = {
+  id: "c3-executor-orchestrator",
   steps: 4,           // step indices 0,1,2,3
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",
+  sectionKey: "mindset",
   render: () => <C3ExecutorOrchestrator />,
 };

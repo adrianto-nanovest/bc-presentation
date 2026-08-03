@@ -268,10 +268,12 @@ function renderHandoff(text: string, keywords: readonly string[], pulse: boolean
 // ───────────────────── slide def ─────────────────────
 
 export const bridgeMindsetToMechanicsSlide: SlideDef = {
+  id: "c6-bridge-to-d",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",
+  sectionKey: "mindset",
   render: () => <BridgeMindsetToMechanics />,
 };

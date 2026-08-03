@@ -232,10 +232,12 @@ export function E9ContextTheWall() {
 // ───────────────────── slide def ─────────────────────
 
 export const e9Slide: SlideDef = {
+  id: "e9-context-the-wall",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E9ContextTheWall />,
 };

@@ -430,10 +430,12 @@ export function I1MetaProcess() {
 // ───────────────────── slide def ─────────────────────
 
 export const i1Slide: SlideDef = {
+  id: "i1-meta-process",
   steps: 4,
   animationMode: "step-reveal",
   canonicalPose: 3,
   surface: "dark",
   section: "I",
+  sectionKey: "meta",
   render: () => <I1MetaProcess />,
 };

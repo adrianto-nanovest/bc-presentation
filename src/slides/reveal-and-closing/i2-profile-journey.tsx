@@ -170,10 +170,12 @@ export function I2ProfileJourney() {
 }
 
 export const i2Slide: SlideDef = {
+  id: "i2-profile-journey",
   steps: 2,
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
   section: "I",
+  sectionKey: "meta",
   render: () => <I2ProfileJourney />,
 };

@@ -297,10 +297,12 @@ export function J4RecipeShip() {
 // ───────────────────── slide def ─────────────────────
 
 export const j4Slide: SlideDef = {
+  id: "j4-recipe-ship",
   steps: 2,
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
   section: "J",
+  sectionKey: "principles",
   render: () => <J4RecipeShip />,
 };

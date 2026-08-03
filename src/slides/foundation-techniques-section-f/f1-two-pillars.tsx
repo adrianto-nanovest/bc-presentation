@@ -575,10 +575,12 @@ function Connector({ on, leftX, rightX, y }: ConnectorProps) {
 // ───────────────────── slide def ─────────────────────
 
 export const f1Slide: SlideDef = {
+  id: "f1-two-pillars",
   steps: 4,
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F1TwoPillars />,
 };

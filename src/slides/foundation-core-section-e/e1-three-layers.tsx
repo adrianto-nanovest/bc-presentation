@@ -352,10 +352,12 @@ function LayerSummary() {
 // ───────────────────── slide def ─────────────────────
 
 export const e1Slide: SlideDef = {
+  id: "e1-three-layers",
   steps: 4,
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E1ThreeLayers />,
 };

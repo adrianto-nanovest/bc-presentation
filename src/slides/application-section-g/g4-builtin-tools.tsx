@@ -219,10 +219,12 @@ function ItemRow({
 }
 
 export const g4Slide: SlideDef = {
+  id: "g4-builtin-tools",
   steps: 5,
   canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G4BuiltinTools />,
 };

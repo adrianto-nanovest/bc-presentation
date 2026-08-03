@@ -1159,10 +1159,12 @@ function ExampleState() {
 // ───────────────────── slide def ─────────────────────
 
 export const f4Slide: SlideDef = {
+  id: "f4-skills-write-once",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F4SkillsWriteOnce />,
 };

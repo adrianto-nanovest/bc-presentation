@@ -136,10 +136,12 @@ export function G1EcosystemOverview() {
 // ───────────────────── slide def ─────────────────────
 
 export const g1Slide: SlideDef = {
+  id: "g1-ecosystem-overview",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G1EcosystemOverview />,
 };

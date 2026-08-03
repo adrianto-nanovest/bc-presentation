@@ -99,10 +99,12 @@ export function H2DisciplineWall() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const h2Slide: SlideDef = {
+  id: "h2-discipline-wall",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "H",
+  sectionKey: "pitfalls",
   render: () => <H2DisciplineWall />,
 };

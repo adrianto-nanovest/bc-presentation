@@ -162,10 +162,12 @@ export function G11BridgeToH() {
 // ───────────────────── slide def ─────────────────────
 
 export const g11Slide: SlideDef = {
+  id: "g11-bridge-to-h",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G11BridgeToH />,
 };

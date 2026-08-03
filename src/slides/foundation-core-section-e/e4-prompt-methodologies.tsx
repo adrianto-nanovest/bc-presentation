@@ -510,10 +510,12 @@ function TechniqueDetail({ card }: TechniqueDetailProps) {
 // ───────────────────── slide def ─────────────────────
 
 export const e4Slide: SlideDef = {
+  id: "e4-prompt-methodologies",
   steps: 4,
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E4PromptMethodologies />,
 };

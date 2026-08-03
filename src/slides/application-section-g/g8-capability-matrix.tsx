@@ -364,10 +364,12 @@ function G8CapabilityMatrix() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const g8Slide: SlideDef = {
+  id: "g8-capability-matrix",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G8CapabilityMatrix />,
 };

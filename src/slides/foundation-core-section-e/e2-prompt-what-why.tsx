@@ -374,10 +374,12 @@ function highlightLabels(
 // ───────────────────── slide def ─────────────────────
 
 export const e2Slide: SlideDef = {
+  id: "e2-prompt-what-why",
   steps: 6,
   canonicalPose: 5,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E2PromptWhatWhy />,
 };

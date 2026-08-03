@@ -296,10 +296,12 @@ export function J3RecipeBuildup() {
 // ───────────────────── slide def ─────────────────────
 
 export const j3Slide: SlideDef = {
+  id: "j3-recipe-buildup",
   steps: 2,
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
   section: "J",
+  sectionKey: "principles",
   render: () => <J3RecipeBuildup />,
 };

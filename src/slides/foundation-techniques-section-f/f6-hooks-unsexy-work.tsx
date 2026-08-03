@@ -610,10 +610,12 @@ function ExampleCanvas() {
 // ───────────────────── slide def ─────────────────────
 
 export const f6Slide: SlideDef = {
+  id: "f6-hooks-unsexy-work",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F6HooksUnsexyWork />,
 };

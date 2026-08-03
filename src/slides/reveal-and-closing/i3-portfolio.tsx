@@ -78,10 +78,12 @@ export function I3Portfolio() {
 }
 
 export const i3Slide: SlideDef = {
+  id: "i3-portfolio",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "I",
+  sectionKey: "meta",
   render: () => <I3Portfolio />,
 };

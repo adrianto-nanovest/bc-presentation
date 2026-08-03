@@ -76,10 +76,12 @@ export function J1HumilityIntro() {
 }
 
 export const j1Slide: SlideDef = {
+  id: "j1-humility-intro",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "J",
+  sectionKey: "principles",
   render: () => <J1HumilityIntro />,
 };

@@ -650,10 +650,12 @@ function PillSection({
 // ───────────────────── slide def ─────────────────────
 
 export const e5Slide: SlideDef = {
+  id: "e5-prompt-examples",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E5PromptExamples />,
 };

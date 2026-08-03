@@ -251,10 +251,12 @@ function Card({ name, desc, videoFile, glyph, glyphSize, isHero, onPlayVideo }: 
 // ─────────────────── Slide Def Export ───────────────────
 
 export const g5Slide: SlideDef = {
+  id: "g5-google",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G5Google />,
 };

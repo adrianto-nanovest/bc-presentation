@@ -178,10 +178,12 @@ export function D4DecisionPattern() {
 // ───────────────────── slide def ─────────────────────
 
 export const d4Slide: SlideDef = {
+  id: "d4-decision-pattern",
   steps: 6,
   canonicalPose: 5,
   animationMode: "step-reveal",
   surface: "dark",
   section: "D",
+  sectionKey: "process",
   render: () => <D4DecisionPattern />,
 };

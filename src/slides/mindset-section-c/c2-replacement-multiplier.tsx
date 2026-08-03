@@ -556,10 +556,12 @@ function RecognitionLineInline({
 // ───────────────────── slide def ─────────────────────
 
 export const c2Slide: SlideDef = {
+  id: "c2-replacement-multiplier",
   steps: 5,
   canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",
+  sectionKey: "mindset",
   render: () => <C2ReplacementMultiplier />,
 };

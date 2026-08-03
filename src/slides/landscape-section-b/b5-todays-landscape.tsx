@@ -565,10 +565,12 @@ function Cliffhanger({
 // ───────────────────── slide def ─────────────────────
 
 export const b5Slide: SlideDef = {
+  id: "b5-todays-landscape",
   steps: 4,
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
   section: "B",
+  sectionKey: "landscape",
   render: () => <B5TodaysLandscape />,
 };

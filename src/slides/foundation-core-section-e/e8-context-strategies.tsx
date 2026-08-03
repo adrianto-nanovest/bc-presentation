@@ -234,10 +234,12 @@ export function E8ContextStrategies() {
 // ───────────────────── slide def ─────────────────────
 
 export const e8Slide: SlideDef = {
+  id: "e8-context-strategies",
   steps: 6,
   canonicalPose: 5,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E8ContextStrategies />,
 };

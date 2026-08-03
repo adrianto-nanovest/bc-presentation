@@ -28,9 +28,10 @@ import type { SlideDef } from "@/deck/types";
 /** `DeckProvider` as imported from a brand's own module epoch. */
 type DeckProviderComponent = (typeof import("@/deck/DeckContext"))["DeckProvider"];
 
-/** One slide's printed figure label. Keyed by deck index, because `SlideDef`
- *  has no `id` yet (it arrives with the composer) and index is what `deckSlides`
- *  is addressed by today. */
+/** One slide's printed figure label. Keyed by deck INDEX, not by `SlideDef.id`
+ *  (which gh#34 added): the fixture was recorded before ids existed, and re-keying
+ *  it would rewrite the golden record this phase is measured against. Index is
+ *  also what a figure number is derived from, so it is the honest key here. */
 export interface NumberingRow {
   index: number;
   /** The letter and number exactly as printed — `"E.11"`. `null` when the

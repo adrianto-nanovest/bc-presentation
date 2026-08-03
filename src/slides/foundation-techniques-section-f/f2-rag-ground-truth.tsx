@@ -1378,10 +1378,12 @@ function ExampleState({ active }: ExampleStateProps) {
 // ───────────────────── slide def ─────────────────────
 
 export const f2Slide: SlideDef = {
+  id: "f2-rag-ground-truth",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F2RagGroundTruth />,
 };

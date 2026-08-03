@@ -1162,10 +1162,12 @@ function DownArrow(): ReactNode {
 // ───────────────────── slide def ─────────────────────
 
 export const f5Slide: SlideDef = {
+  id: "f5-mcp-the-adapter",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F5McpTheAdapter />,
 };

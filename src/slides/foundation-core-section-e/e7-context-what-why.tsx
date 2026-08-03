@@ -346,10 +346,12 @@ export function E7ContextWhatWhy() {
 // ───────────────────── slide def ─────────────────────
 
 export const e7Slide: SlideDef = {
+  id: "e7-context-what-why",
   steps: 3,
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E7ContextWhatWhy />,
 };

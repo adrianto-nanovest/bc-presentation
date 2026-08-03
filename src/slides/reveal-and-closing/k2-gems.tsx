@@ -8,10 +8,12 @@ import { K2PracticeLabOverview } from "./k2-practice-lab-overview";
 import { k2GemsContent } from "./content";
 
 export const k2GemsSlide: SlideDef = {
+  id: "k2-gems",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "K",
+  sectionKey: "lab",
   render: () => <K2PracticeLabOverview content={k2GemsContent} />,
 };

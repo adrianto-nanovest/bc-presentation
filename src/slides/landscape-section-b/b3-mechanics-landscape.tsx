@@ -271,6 +271,7 @@ function SectionTitle({ label }: { label: string }) {
 // ───────────────────── slide def ─────────────────────
 
 export const b3Slide: SlideDef = {
+  id: "b3-mechanics-landscape",
   // 3 stepIndex values (0..2): pipeline reveal, tiles reveal, footer fade.
   // Pipeline loop runs continuously once revealed — not step-gated past 0.
   steps: 3,
@@ -278,5 +279,6 @@ export const b3Slide: SlideDef = {
   animationMode: "step-reveal",
   surface: "dark",
   section: "B",
+  sectionKey: "landscape",
   render: () => <B3MechanicsLandscape />,
 };

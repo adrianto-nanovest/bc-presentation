@@ -320,10 +320,12 @@ function renderToText(text: string, keywords: readonly string[], pulse: boolean)
 // ───────────────────── slide def ─────────────────────
 
 export const c1Slide: SlideDef = {
+  id: "c1-tool-to-bridge",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "C",
+  sectionKey: "mindset",
   render: () => <C1ToolToBridge />,
 };

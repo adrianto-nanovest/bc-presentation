@@ -253,10 +253,12 @@ export function D1TheTrap() {
 }
 
 export const d1Slide: SlideDef = {
+  id: "d1-the-trap",
   steps: 3,
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   section: "D",
+  sectionKey: "process",
   render: () => <D1TheTrap />,
 };

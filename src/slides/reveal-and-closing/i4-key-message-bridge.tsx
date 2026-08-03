@@ -163,10 +163,12 @@ export function I4KeyMessageBridge() {
 // ───────────────────── slide def ─────────────────────
 
 export const i4Slide: SlideDef = {
+  id: "i4-key-message-bridge",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "I",
+  sectionKey: "meta",
   render: () => <I4KeyMessageBridge />,
 };

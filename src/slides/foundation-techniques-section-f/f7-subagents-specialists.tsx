@@ -1187,10 +1187,12 @@ function ExampleState() {
 // ───────────────────── slide def ─────────────────────
 
 export const f7Slide: SlideDef = {
+  id: "f7-subagents-specialists",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F7SubagentsSpecialists />,
 };

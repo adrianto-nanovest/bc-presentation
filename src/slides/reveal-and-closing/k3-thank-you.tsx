@@ -163,10 +163,12 @@ export function K3ThankYou() {
 // ───────────────────── slide def ─────────────────────
 
 export const k3Slide: SlideDef = {
+  id: "k3-thank-you",
   steps: 1,
   canonicalPose: 0,
   animationMode: "step-reveal",
   surface: "dark",
   section: "K",
+  sectionKey: "lab",
   render: () => <K3ThankYou />,
 };

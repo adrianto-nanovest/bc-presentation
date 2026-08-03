@@ -190,10 +190,12 @@ function G10BeyondBigThree() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const g10Slide: SlideDef = {
+  id: "g10-beyond-big-three",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G10BeyondBigThree />,
 };

@@ -375,10 +375,12 @@ function G7HeadToHead() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const g7Slide: SlideDef = {
+  id: "g7-head-to-head",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "G",
+  sectionKey: "tools",
   render: () => <G7HeadToHead />,
 };

@@ -159,10 +159,12 @@ export function E12BridgeToF() {
 // ───────────────────── slide def ─────────────────────
 
 export const e12Slide: SlideDef = {
+  id: "e12-bridge-to-f",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "E",
+  sectionKey: "fundamentals",
   render: () => <E12BridgeToF />,
 };

@@ -334,10 +334,12 @@ function PaneLayer({
 // ───────────────────── slide def ─────────────────────
 
 export const b4Slide: SlideDef = {
+  id: "b4-tiers-deployment",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "B",
+  sectionKey: "landscape",
   render: () => <B4ModelsByCategory />,
 };

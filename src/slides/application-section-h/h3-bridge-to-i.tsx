@@ -167,10 +167,12 @@ export function H3BridgeToI() {
 // ───────────────────── slide def ─────────────────────
 
 export const h3Slide: SlideDef = {
+  id: "h3-bridge-to-i",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "H",
+  sectionKey: "pitfalls",
   render: () => <H3BridgeToI />,
 };

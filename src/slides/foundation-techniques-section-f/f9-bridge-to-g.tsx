@@ -156,10 +156,12 @@ export function F9BridgeToG() {
 // ───────────────────── slide def ─────────────────────
 
 export const f9Slide: SlideDef = {
+  id: "f9-bridge-to-g",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "F",
+  sectionKey: "techniques",
   render: () => <F9BridgeToG />,
 };

@@ -164,10 +164,12 @@ export function K1ChallengeHandoff() {
 // ───────────────────── slide def ─────────────────────
 
 export const k1Slide: SlideDef = {
+  id: "k1-challenge-handoff",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   section: "K",
+  sectionKey: "lab",
   render: () => <K1ChallengeHandoff />,
 };

@@ -456,10 +456,12 @@ function TierLadderCard({ tier, hovered, onHover }: TierLadderCardProps) {
 // ───────────────────── slide def ─────────────────────
 
 export const b2Slide: SlideDef = {
+  id: "b2-fields-terminology",
   steps: 6,
   canonicalPose: 5,
   animationMode: "step-reveal",
   surface: "dark",
   section: "B",
+  sectionKey: "landscape",
   render: () => <B2FieldsTerminology />,
 };

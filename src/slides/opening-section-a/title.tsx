@@ -189,10 +189,13 @@ export function Title() {
 // ───────────────────── slide def ─────────────────────
 
 export const titleSlide: SlideDef = {
+  id: "title",
   steps: 1,
   canonicalPose: 0,
   animationMode: "static",
   surface: "dark",
   section: "A",
+  sectionKey: "opening",
+  numbered: false,
   render: () => <Title />,
 };
