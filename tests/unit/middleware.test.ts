@@ -125,11 +125,26 @@ async function sign(payload: string, secret: string): Promise<string> {
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-/** A token the gate must accept: `"<expiry-ms>.<sig>"`, expiry in the future. */
-async function mintToken(expiryMs: number, secret = SECRET): Promise<string> {
+/**
+ * A token the gate must accept: `"<brand>.<expiry-ms>.<sig>"`, signed over
+ * `` `${brand}|${exp}` ``, expiry in the future (gh#24).
+ *
+ * The brand is a free parameter, not derived from the request, precisely so the
+ * cross-brand cases below can mint a token for one brand and present it as
+ * another's.
+ */
+async function mintToken(brand: Brand, expiryMs: number, secret = SECRET): Promise<string> {
+  const payload = `${brand}|${expiryMs}`;
+  return `${brand}.${expiryMs}.${await sign(payload, secret)}`;
+}
+
+/** The pre-gh#24 format: `"<expiry-ms>.<sig>"`, no brand. Must not verify. */
+async function mintLegacyToken(expiryMs: number, secret = SECRET): Promise<string> {
   const payload = String(expiryMs);
   return `${payload}.${await sign(payload, secret)}`;
 }
+
+const FUTURE = () => Date.now() + 60_000;
 
 // ── Request builders ─────────────────────────────────────────────────────────
 
@@ -458,7 +473,7 @@ describe("missing configuration", () => {
   });
 
   test("a valid cookie does not rescue an unconfigured gate", async () => {
-    const token = await mintToken(Date.now() + 60_000);
+    const token = await mintToken("berau", FUTURE());
     vi.stubEnv("AUTH_SECRET", undefined);
 
     const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`));
@@ -508,30 +523,53 @@ describe("login submit", () => {
     expect(cookie).toContain("Path=/");
     expect(cookie).toContain(`Max-Age=${MAX_AGE_S}`);
 
-    // The token is `"<expiry-ms>.<sig>"`, HMAC-signed with AUTH_SECRET and
-    // expiring 7 days out — verified here against an independent signer.
-    const token = cookieValue(cookie);
-    const dot = token.lastIndexOf(".");
-    const payload = token.slice(0, dot);
-    const sig = token.slice(dot + 1);
+    // The token is `"<brand>.<expiry-ms>.<sig>"`, signed over `brand|exp` with
+    // AUTH_SECRET and expiring 7 days out — checked against an independent signer.
+    const [brand, exp, sig] = cookieValue(cookie).split(".");
 
-    expect(sig).toBe(await sign(payload, SECRET));
-    expect(Number(payload)).toBeGreaterThanOrEqual(before + MAX_AGE_S * 1000);
-    expect(Number(payload)).toBeLessThanOrEqual(after + MAX_AGE_S * 1000);
+    expect(brand).toBe("berau");
+    expect(sig).toBe(await sign(`${brand}|${exp}`, SECRET));
+    expect(Number(exp)).toBeGreaterThanOrEqual(before + MAX_AGE_S * 1000);
+    expect(Number(exp)).toBeLessThanOrEqual(after + MAX_AGE_S * 1000);
   });
 
-  test("the token payload is still the bare expiry — minting is unchanged", async () => {
-    // gh#23 deliberately does NOT bind tokens to a brand (that is the next
-    // ticket, and it invalidates every live session). This asserts the scheme
-    // did not drift here: no brand field, and berau's existing cookie value
-    // format stays exactly as the sessions in the wild carry it.
-    const res = await middleware(submitPassword(origin("gems-leader"), LEGACY_PASSWORD));
-    const token = cookieValue(setCookieHeader(res));
+  test.each(["berau", "gems", "general"] as Brand[])(
+    "the minted token names %s and signs the brand into the payload",
+    async (brand) => {
+      // gh#24: the brand is INSIDE the signature, so it cannot be edited, and it
+      // is the field verification compares against the request's own brand.
+      const id = ALL_IDS.find((v) => VARIANTS[v].brand === brand) as VariantId;
+      const res = await middleware(submitPassword(origin(id), LEGACY_PASSWORD));
+      const token = cookieValue(setCookieHeader(res));
 
-    expect(token.split(".")).toHaveLength(2);
-    const [payload, sig] = token.split(".");
-    expect(payload).toMatch(/^\d+$/);
-    expect(sig).toBe(await sign(payload, SECRET));
+      const parts = token.split(".");
+      expect(parts).toHaveLength(3);
+      const [tokenBrand, exp, sig] = parts;
+      expect(tokenBrand).toBe(brand);
+      expect(exp).toMatch(/^\d+$/);
+      expect(sig).toBe(await sign(`${brand}|${exp}`, SECRET));
+      // The bare expiry is NOT what is signed — that was the hole (#24).
+      expect(sig).not.toBe(await sign(exp, SECRET));
+    },
+  );
+
+  test("both deck sets of a brand mint the same brand's token", async () => {
+    for (const id of ["gems-middle-mgmt", "gems-leader"] as VariantId[]) {
+      const res = await middleware(submitPassword(origin(id), LEGACY_PASSWORD));
+      expect(cookieValue(setCookieHeader(res)).split(".")[0], id).toBe("gems");
+    }
+  });
+
+  test("a freshly minted cookie is accepted by the gate that minted it", async () => {
+    // Closes the loop: mint → present → forwarded. Without this, every negative
+    // case below could pass on a gate that rejects EVERYTHING.
+    for (const id of ALL_IDS) {
+      const posted = await middleware(submitPassword(origin(id), LEGACY_PASSWORD));
+      const cookie = setCookieHeader(posted);
+      const header = cookie.slice(0, cookie.indexOf(";"));
+
+      expect(wasForwarded(await middleware(get(origin(id), "/", header))), id).toBe(true);
+    }
   });
 
   test("the password is never echoed into the response", async () => {
@@ -546,7 +584,7 @@ describe("login submit", () => {
 
 describe("session cookie", () => {
   test("a valid cookie forwards the request to the origin", async () => {
-    const token = await mintToken(Date.now() + 60_000);
+    const token = await mintToken("berau", FUTURE());
 
     const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`));
 
@@ -555,23 +593,14 @@ describe("session cookie", () => {
   });
 
   test("a valid cookie is found among other cookies", async () => {
-    const token = await mintToken(Date.now() + 60_000);
+    const token = await mintToken("berau", FUTURE());
     const header = `ab=1; berau_session=${token}; va-u=xyz`;
 
     expect(wasForwarded(await middleware(get(BERAU_ORIGIN, "/", header)))).toBe(true);
   });
 
-  test("verification is unchanged for tokens minted before this ticket", async () => {
-    // The 7-day cookies in the wild were minted by the previous gate. They must
-    // keep working on the berau host, or every live session breaks on deploy.
-    const token = await mintToken(Date.now() + 6 * 24 * 60 * 60 * 1000);
-    expect(wasForwarded(await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`)))).toBe(
-      true,
-    );
-  });
-
   test("a tampered signature → the login page, not the deck", async () => {
-    const token = await mintToken(Date.now() + 60_000);
+    const token = await mintToken("berau", FUTURE());
     const tampered = token.slice(0, -1) + (token.endsWith("A") ? "B" : "A");
 
     const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${tampered}`));
@@ -584,7 +613,7 @@ describe("session cookie", () => {
   });
 
   test("a token signed with the wrong secret → the login page", async () => {
-    const token = await mintToken(Date.now() + 60_000, "not-the-real-secret");
+    const token = await mintToken("berau", FUTURE(), "not-the-real-secret");
 
     const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`));
 
@@ -593,7 +622,7 @@ describe("session cookie", () => {
   });
 
   test("an expired token → the login page, not the deck", async () => {
-    const token = await mintToken(Date.now() - 1_000);
+    const token = await mintToken("berau", Date.now() - 1_000);
 
     const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`));
 
@@ -603,9 +632,9 @@ describe("session cookie", () => {
   });
 
   test("a correctly signed expiry cannot be extended by editing the payload", async () => {
-    const token = await mintToken(Date.now() - 1_000);
+    const token = await mintToken("berau", Date.now() - 1_000);
     const sig = token.slice(token.lastIndexOf(".") + 1);
-    const forged = `${Date.now() + 60_000}.${sig}`;
+    const forged = `berau.${FUTURE()}.${sig}`;
 
     const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${forged}`));
 
@@ -621,44 +650,205 @@ describe("session cookie", () => {
     expect(res.status).toBe(200);
   });
 
-  test("the cookie NAME is the brand boundary — a foreign brand's cookie is ignored", async () => {
-    // Every brand signs with the same AUTH_SECRET, so the token VALUE is valid
-    // for any of them; only the cookie name separates them. Losing that split
-    // would let one brand's session open another's deck with no visible symptom.
-    // (Binding the token itself to the brand is the next ticket, #24.)
-    const token = await mintToken(Date.now() + 60_000);
+  test("the cookie NAME is still a boundary — a foreign brand's cookie name is ignored", async () => {
+    // Unchanged behaviour, kept: the gate reads only THIS brand's cookie name, so
+    // a token parked under another name is not even looked at.
+    const token = await mintToken("berau", FUTURE());
 
     const onGems = await middleware(
       get(origin("gems-middle-mgmt"), "/", `berau_session=${token}`),
     );
     expect(wasForwarded(onGems)).toBe(false);
     expect(await servedLoginPage(onGems)).toBe(true);
-
-    const onBerau = await middleware(get(BERAU_ORIGIN, "/", `general_session=${token}`));
-    expect(wasForwarded(onBerau)).toBe(false);
-    expect(await servedLoginPage(onBerau)).toBe(true);
   });
 
   test("the two deck sets of one brand share a session, by design", async () => {
     // The isolation boundary is the BRAND (spec §1.3): with one shared password
     // a middle-management participant can read the leader deck. Accepted.
-    const token = await mintToken(Date.now() + 60_000);
+    const token = await mintToken("gems", FUTURE());
 
     const res = await middleware(get(origin("gems-leader"), "/", `gems_session=${token}`));
     expect(wasForwarded(res)).toBe(true);
   });
 
   test("a ?variant= override is gated by that brand's cookie, not the host's", async () => {
-    const token = await mintToken(Date.now() + 60_000);
-
     const withGems = await middleware(
-      get(PREVIEW_ORIGIN, "/?variant=gems-leader", `gems_session=${token}`),
+      get(
+        PREVIEW_ORIGIN,
+        "/?variant=gems-leader",
+        `gems_session=${await mintToken("gems", FUTURE())}`,
+      ),
     );
     expect(wasForwarded(withGems)).toBe(true);
 
     const withGeneral = await middleware(
-      get(PREVIEW_ORIGIN, "/?variant=gems-leader", `general_session=${token}`),
+      get(
+        PREVIEW_ORIGIN,
+        "/?variant=gems-leader",
+        `general_session=${await mintToken("general", FUTURE())}`,
+      ),
     );
     expect(wasForwarded(withGeneral)).toBe(false);
+  });
+});
+
+// ── Brand-bound tokens (gh#24) ───────────────────────────────────────────────
+//
+// THE HOLE THIS CLOSES: every brand signs with the same `AUTH_SECRET`, so before
+// this ticket the token VALUE was valid for any brand — the cookie NAME was the
+// only separation, and a cookie name is attacker-supplied. A berau token pasted
+// into `gems_session` on the GEMS domain verified.
+//
+// This regression has NO VISIBLE SYMPTOM: every login keeps working, the
+// isolation is simply gone. These tests are the only thing that would catch it,
+// which is why they assert the boundary from both directions.
+
+describe("brand-bound tokens", () => {
+  const BRANDS_LIST = ["berau", "gems", "general"] as Brand[];
+
+  /** The request that a stolen token would be replayed on: that brand's own host + own cookie name. */
+  const asBrand = (target: Brand, token: string) => {
+    const id = ALL_IDS.find((v) => VARIANTS[v].brand === target) as VariantId;
+    return get(origin(id), "/", `${BRANDS[target].cookie}=${token}`);
+  };
+
+  test("spec check 3, last row: a berau token presented in gems_session on the GEMS domain is rejected", async () => {
+    // The token is taken from a REAL berau login, not from the local helper: this
+    // is the attack as performed, with the exact bytes the gate hands a berau
+    // viewer. It also keeps the test honest if the mint format ever changes — the
+    // helper would keep agreeing with itself, a live login cannot.
+    const login = await middleware(submitPassword(BERAU_ORIGIN, LEGACY_PASSWORD));
+    const berauToken = cookieValue(setCookieHeader(login));
+    expect(wasForwarded(await middleware(asBrand("berau", berauToken)))).toBe(true);
+
+    // Correct cookie NAME for gems, correct signature, correct secret, unexpired
+    // — and still refused, because the token says `berau`.
+    const res = await middleware(
+      get(origin("gems-middle-mgmt"), "/", `gems_session=${berauToken}`),
+    );
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(res.status).toBe(200);
+
+    const body = await res.text();
+    expect(body).toContain('action="/__auth'); // the login page, not the deck
+    expect(body).toContain(`<title>${COPY["gems-middle-mgmt"].title}</title>`); // GEMS' own door
+  });
+
+  test.each(BRANDS_LIST)("a %s token verifies on %s and on no other brand", async (owner) => {
+    const token = await mintToken(owner, FUTURE());
+
+    expect(wasForwarded(await middleware(asBrand(owner, token))), owner).toBe(true);
+
+    for (const other of BRANDS_LIST.filter((b) => b !== owner)) {
+      const res = await middleware(asBrand(other, token));
+      expect(wasForwarded(res), `${owner} token on ${other}`).toBe(false);
+      expect(await servedLoginPage(res)).toBe(true);
+    }
+  });
+
+  test("the brand field cannot be rewritten to match — it is inside the signature", async () => {
+    const token = await mintToken("berau", FUTURE());
+    const [, exp, sig] = token.split(".");
+
+    const forged = `gems.${exp}.${sig}`;
+    const res = await middleware(get(origin("gems-middle-mgmt"), "/", `gems_session=${forged}`));
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(await servedLoginPage(res)).toBe(true);
+  });
+
+  test("a ?variant= override is gated by the token's brand, not just the cookie name", async () => {
+    // The override outranks the host, so the resolved brand is gems here. A
+    // general token under gems' cookie name must not ride the override in.
+    const generalToken = await mintToken("general", FUTURE());
+
+    const res = await middleware(
+      get(PREVIEW_ORIGIN, "/?variant=gems-leader", `gems_session=${generalToken}`),
+    );
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(await servedLoginPage(res)).toBe(true);
+  });
+
+  test("an expired token is still rejected for its OWN brand", async () => {
+    const token = await mintToken("gems", Date.now() - 1_000);
+    expect(wasForwarded(await middleware(asBrand("gems", token)))).toBe(false);
+  });
+
+  test.each(BRANDS_LIST)("a pre-gh#24 token (<exp>.<sig>) fails closed on %s", async (brand) => {
+    // Every 7-day cookie in the wild is this shape. It must land on the login
+    // page — not verify, and not throw a 500 either.
+    const legacy = await mintLegacyToken(FUTURE());
+
+    const res = await middleware(asBrand(brand, legacy));
+
+    expect(wasForwarded(res)).toBe(false);
+    expect(res.status).toBe(200);
+    expect(await servedLoginPage(res)).toBe(true);
+  });
+
+  test("a malformed cookie value fails closed rather than throwing", async () => {
+    const good = await mintToken("berau", FUTURE());
+    const [, exp, sig] = good.split(".");
+
+    const malformed = [
+      "",
+      ".",
+      "..",
+      "berau",
+      "berau.",
+      `berau.${exp}`, // no signature
+      `.${exp}.${sig}`, // empty brand
+      `berau..${sig}`, // empty expiry
+      `berau.${exp}.${sig}.extra`, // four fields
+      `berau.not-a-number.${sig}`,
+      `BERAU.${exp}.${sig}`, // wrong case
+      `berau|${exp}.${sig}`, // the payload delimiter, not the cookie's
+      `${good}.${good}`,
+      "%%%",
+    ];
+
+    for (const value of malformed) {
+      const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${value}`));
+      expect(wasForwarded(res), JSON.stringify(value)).toBe(false);
+      expect(res.status, JSON.stringify(value)).toBe(200);
+      expect(await servedLoginPage(res), JSON.stringify(value)).toBe(true);
+    }
+  });
+
+  test("a token minted for an unknown brand never verifies", async () => {
+    // `berau_session` is read on the berau host, so the resolved brand is berau;
+    // a token claiming anything else is refused. ONE expiry value in both the
+    // payload and the token, or a millisecond tick would make this pass on a
+    // signature mismatch and prove nothing about the brand.
+    const exp = FUTURE();
+    const token = `admin.${exp}.${await sign(`admin|${exp}`, SECRET)}`;
+
+    const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`));
+    expect(wasForwarded(res)).toBe(false);
+  });
+
+  test("a correctly signed but non-canonical expiry is refused", async () => {
+    // Signed with the real secret, so the signature cannot be what rejects these.
+    // Each coerces to a live timestamp through `Number`, and none is a form
+    // minting emits — so each must be refused, whether by the digit check or (for
+    // the exponent form, which smuggles in a `.`) by the field count.
+    for (const exp of [" 4102444800000", "+4102444800000", "4.1024448e12", "0x3BA9EE1AE00"]) {
+      const token = `berau.${exp}.${await sign(`berau|${exp}`, SECRET)}`;
+
+      const res = await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`));
+      expect(wasForwarded(res), exp).toBe(false);
+      expect(await servedLoginPage(res), exp).toBe(true);
+    }
+  });
+
+  test("an expiry beyond the exact-integer range is refused", async () => {
+    const exp = "99999999999999999999";
+    const token = `berau.${exp}.${await sign(`berau|${exp}`, SECRET)}`;
+
+    expect(wasForwarded(await middleware(get(BERAU_ORIGIN, "/", `berau_session=${token}`)))).toBe(
+      false,
+    );
   });
 });

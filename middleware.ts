@@ -10,11 +10,21 @@
  * Security model (server-side, password never reaches the client bundle):
  *   - Each brand's shared password lives only in an env var:
  *     `SITE_PASSWORD_<BRAND> ?? SITE_PASSWORD` (the legacy default, retired last).
- *   - On success we mint an HMAC-SHA256-signed token `"<exp>.<sig>"` (signed with
- *     `AUTH_SECRET`) and store it in an HttpOnly, Secure, SameSite=Lax cookie.
- *   - Every later request re-verifies the signature + embedded expiry server-side.
+ *   - On success we mint an HMAC-SHA256-signed token `"<brand>.<exp>.<sig>"`,
+ *     where the signature covers `` `${brand}|${exp}` `` (key: `AUTH_SECRET`),
+ *     and store it in an HttpOnly, Secure, SameSite=Lax cookie.
+ *   - Every later request re-verifies the signature + embedded expiry server-side,
+ *     AND that the token's brand is the brand resolved for this request (gh#24).
  *   - Both the password check and the signature check use constant-time compares.
  *   - Fail closed: if env vars are missing we serve 503, never the unguarded deck.
+ *
+ * WHY THE TOKEN CARRIES THE BRAND (gh#24): all brands share one `AUTH_SECRET`, so
+ * a signature over the bare expiry is valid for EVERY brand. The cookie name was
+ * then the only thing separating them — and a cookie name is attacker-supplied, so
+ * a berau token pasted into `gems_session` on the GEMS domain used to verify. The
+ * brand is now inside the signed payload and is compared against the brand this
+ * request resolved to, which makes the boundary cryptographic instead of nominal.
+ * One secret still, no new env vars.
  *
  * Edge runtime gives us Web Crypto (`crypto.subtle`), `btoa`, `TextEncoder`,
  * `request.formData()` and real `Date.now()` — no Node-only APIs are used.
@@ -31,6 +41,7 @@ import {
   loginTitle,
   resolveVariant,
   variantLabel,
+  type Brand,
   type Variant,
 } from './src/deck-variants';
 
@@ -102,9 +113,9 @@ export default async function middleware(request: Request): Promise<Response> {
     const form = await request.formData();
     const submitted = String(form.get('password') ?? '');
     if (timingSafeEqual(submitted, SITE_PASSWORD)) {
-      // Token minting is deliberately unchanged here (brand-bound tokens are
-      // their own ticket — they invalidate every live session).
-      const token = await mintToken(AUTH_SECRET);
+      // Bound to the brand the password was just checked against, so the token
+      // can only ever re-open this brand's deck.
+      const token = await mintToken(variant.brand, AUTH_SECRET);
       return new Response(null, {
         status: 303,
         headers: {
@@ -118,7 +129,7 @@ export default async function middleware(request: Request): Promise<Response> {
 
   // ── Existing session ─────────────────────────────────────────────────────
   const token = readCookie(request.headers.get('cookie'), brand.cookie);
-  if (token && (await verifyToken(token, AUTH_SECRET))) {
+  if (token && (await verifyToken(token, variant.brand, AUTH_SECRET))) {
     return next(); // forward to the static origin — serve the deck
   }
 
@@ -128,21 +139,51 @@ export default async function middleware(request: Request): Promise<Response> {
 
 // ── Crypto helpers (Web Crypto only) ─────────────────────────────────────────
 
-async function mintToken(secret: string): Promise<string> {
-  const payload = String(Date.now() + MAX_AGE_MS);
-  const sig = await sign(payload, secret);
-  return `${payload}.${sig}`;
+/**
+ * `"<brand>.<exp>.<sig>"`, the signature taken over `` `${brand}|${exp}` ``.
+ *
+ * Two delimiters on purpose: `.` splits the cookie value, `|` joins the signed
+ * payload. Neither character occurs in a brand id (three fixed lowercase words),
+ * in a millisecond timestamp, or in base64url — so the split is unambiguous and
+ * no field can be smuggled into its neighbour.
+ */
+async function mintToken(brand: Brand, secret: string): Promise<string> {
+  const exp = String(Date.now() + MAX_AGE_MS);
+  const sig = await sign(`${brand}|${exp}`, secret);
+  return `${brand}.${exp}.${sig}`;
 }
 
-async function verifyToken(token: string, secret: string): Promise<boolean> {
-  const dot = token.lastIndexOf('.');
-  if (dot < 1) return false;
-  const payload = token.slice(0, dot);
-  const sig = token.slice(dot + 1);
-  const expected = await sign(payload, secret);
+/**
+ * `brand` is the brand RESOLVED FOR THIS REQUEST, never the one in the token —
+ * that is the whole point. Anything that is not a well-formed, brand-matching,
+ * correctly signed, unexpired token returns `false`, which the caller turns into
+ * the login page. Fail closed, never throw: a thrown error in the Edge gate is a
+ * 500 for a viewer whose only fault is an old cookie.
+ */
+async function verifyToken(token: string, brand: Brand, secret: string): Promise<boolean> {
+  // Exactly three fields. This is also what retires the pre-gh#24 `"<exp>.<sig>"`
+  // token: two fields, so every session in the wild fails closed on deploy.
+  const parts = token.split('.');
+  if (parts.length !== 3) return false;
+  const [tokenBrand, exp, sig] = parts;
+
+  // A plain compare: a brand id is public, low-cardinality and not a secret, so
+  // there is no timing signal here worth hiding. The SIGNATURE compare below is
+  // the one that must be constant-time.
+  if (tokenBrand !== brand) return false;
+
+  // Signed over the resolved brand, i.e. over data we trust, so a rewritten
+  // brand field cannot select which payload gets verified.
+  const expected = await sign(`${brand}|${exp}`, secret);
   if (!timingSafeEqual(sig, expected)) return false;
-  const exp = Number(payload);
-  return Number.isFinite(exp) && exp > Date.now();
+
+  // Canonical digits only. `Number` would otherwise coerce ` 12 `, `+12`, `1e99`
+  // and `0x10` into a valid-looking expiry, and `isFinite` would pass integers
+  // past 2^53 where the comparison stops being exact. Minting emits plain digits,
+  // so anything else is not a token this gate made.
+  if (!/^\d+$/.test(exp)) return false;
+  const expMs = Number(exp);
+  return Number.isSafeInteger(expMs) && expMs > Date.now();
 }
 
 async function sign(payload: string, secret: string): Promise<string> {
