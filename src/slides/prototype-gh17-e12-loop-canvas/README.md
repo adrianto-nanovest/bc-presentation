@@ -94,3 +94,36 @@ answer mechanism, not this number.
 ## Not done
 
 No tests, no error handling, no export-pipeline wiring. Prototype rules.
+
+## Verdict — 2026-08-03
+
+**C — GAUGE wins.** Owner's call, on a browser walkthrough of all three. No
+rationale was stated beyond the preference; recorded as-is rather than invented.
+
+What that settles:
+
+| open question (gh#17) | answer |
+|---|---|
+| Q2 · How does `BUDGET` show a comparison rather than a highlight? | **An arc gauge on the ring itself, with a cap tick.** Nothing is duplicated — no ghost twin (A), no second figure (B). The ring never moves and never re-draws. |
+| Must the canvas show everything at once? | **No.** The apparatus stays hidden until hovered. A and C were the two sides of this question; the reveal-on-hover side wins. |
+
+Q1 (fold duration) and Q3 (un-hover behaviour) were built as switcher scalars,
+not as variants, so **this pick does not settle them.** Both still need an owner
+call at the projector; 2400 ms and `release` are only the defaults they were
+flipped from.
+
+Carry-overs for the real implementation:
+
+1. **The "second ring with no stop" image is gone.** This is the known cost of C
+   (finding above) and it is a deliberate trade of fidelity for legibility. The
+   real slide either says that in words or gives it up — decide explicitly, do
+   not let it vanish by omission.
+2. **The gauge is now load-bearing.** With no twin figure, the cap tick is the
+   only thing carrying "there is a limit". It has to survive a washed-out
+   projector; the sibling prototype (gh#18) lists ring-borne `BUDGET` as a known
+   risk and keeps B's stop-bar in reserve if the arc cannot hold it.
+3. **Keep the shared ring anatomy.** The fold, the clockwise `START → RUN →
+   CHECK → SHIP`, the closing segment that fades in — the brief fixes these and
+   all three variants agreed on them.
+4. **Rewrite, do not lift.** Prototype rules applied — no tests, no error
+   handling, inline styles throughout.
