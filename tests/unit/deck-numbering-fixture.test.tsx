@@ -15,7 +15,8 @@
 //     npm run harvest:numbering       # rewrites the fixture, then re-asserts it
 //
 // which is the same harvester, so the fixture can never be hand-edited into
-// agreement with itself.
+// agreement with itself — and which REFUSES to absorb a moved figure number
+// unless told to in as many words. See `recordFixture`.
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
@@ -33,6 +34,9 @@ const FIXTURE = path.resolve(__dirname, "../fixtures/deck-numbering.json");
 /** Set by `npm run harvest:numbering`. Rewrites the fixture from the harvest
  *  before the assertions below run against it. */
 const UPDATING = process.env.UPDATE_DECK_NUMBERING === "1";
+
+/** Set by `ALLOW_MOVED_FIGURES=1 npm run harvest:numbering` — see `recordFixture`. */
+const ALLOW_MOVED_FIGURES = process.env.ALLOW_MOVED_FIGURES === "1";
 
 /** The slide counts observed live and recorded on gh#32 — the same figures
  *  `tests/unit/deck-registry.test.ts` composes to. Repeated here as a number
@@ -58,9 +62,7 @@ let harvested: DeckNumbering;
 
 beforeAll(async () => {
   harvested = await harvestAllDecks();
-  if (UPDATING) {
-    writeFileSync(FIXTURE, `${JSON.stringify(harvested, null, 2)}\n`, "utf8");
-  }
+  if (UPDATING) recordFixture(harvested);
 }, 300_000);
 
 afterAll(restoreLocation);
@@ -75,6 +77,60 @@ function readFixture(): DeckNumbering {
       }`,
     );
   }
+}
+
+/** Every figure number, or row count, this harvest changes against the record.
+ *  Empty when there is no record yet — the first harvest IS the record. */
+function figureDrift(decks: DeckNumbering): string[] {
+  let recorded: DeckNumbering;
+  try {
+    recorded = JSON.parse(readFileSync(FIXTURE, "utf8")) as DeckNumbering;
+  } catch {
+    return [];
+  }
+
+  return (Object.keys(decks) as Brand[]).flatMap((brand) => {
+    const before = recorded[brand] ?? [];
+    const after = decks[brand];
+    const drift =
+      before.length === after.length
+        ? []
+        : [`${brand}: ${before.length} slides recorded, ${after.length} rendered`];
+    return after.reduce((found, row, i) => {
+      const was = before[i];
+      if (was && was.fig !== row.fig) {
+        found.push(`${brand} slide ${i}: recorded ${was.fig}, renders ${row.fig}`);
+      }
+      return found;
+    }, drift);
+  });
+}
+
+/**
+ * Re-records the fixture — refusing, by default, to absorb a MOVED FIGURE NUMBER.
+ *
+ * Re-recording is the remedy this file points at when the gate fails, which
+ * makes it also the way a genuine Phase 3 regression could be laundered into a
+ * green suite: overwrite the record and every assertion below passes against
+ * the very output that broke it. Labels are copy and drift legitimately; the
+ * figure numbers ARE what Phase 3 has to prove it did not move, so moving one
+ * takes a person saying so out loud:
+ *
+ *     ALLOW_MOVED_FIGURES=1 npm run harvest:numbering
+ */
+function recordFixture(decks: DeckNumbering): void {
+  const drift = figureDrift(decks);
+  if (drift.length > 0 && !ALLOW_MOVED_FIGURES) {
+    throw new Error(
+      [
+        `refusing to re-record: ${drift.length} figure number(s) moved.`,
+        ...drift.map((d) => `  · ${d}`),
+        "This is what Phase 3 must NOT do — fix the deck. If the move is genuinely",
+        "intended, re-record with ALLOW_MOVED_FIGURES=1 npm run harvest:numbering.",
+      ].join("\n"),
+    );
+  }
+  writeFileSync(FIXTURE, `${JSON.stringify(decks, null, 2)}\n`, "utf8");
 }
 
 // ── The gate ─────────────────────────────────────────────────────────────────

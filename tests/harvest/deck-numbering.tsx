@@ -15,7 +15,7 @@
 // Consequence worth stating loudly: `DeckProvider` MUST be imported from the
 // same epoch as the registry. A static import would hand the slides a React
 // context object from the previous epoch and every `useDeck()` would throw.
-import { render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { vi } from "vitest";
 import {
   BRANDS,
@@ -112,15 +112,18 @@ function harvestSlide(
   DeckProvider: DeckProviderComponent,
   at: string,
 ): NumberingRow {
-  const { container, unmount } = render(
-    <DeckProvider stepCounts={[def.steps]}>{def.render()}</DeckProvider>,
-  );
   try {
+    const { container } = render(
+      <DeckProvider stepCounts={[def.steps]}>{def.render()}</DeckProvider>,
+    );
     return { index, ...readFigLabel(container, at) };
   } finally {
-    // Unmount before the next slide so a leftover interval or rAF loop cannot
-    // keep running — 64 slides mount in one file.
-    unmount();
+    // Tear down before the next slide so a leftover interval or rAF loop cannot
+    // keep running — about 190 mounts run in this one file, 64 per practice-lab
+    // brand. `cleanup()` rather than the `unmount` handle, because a slide that
+    // THROWS during render never yields one and its root would stay mounted for
+    // the rest of the harvest.
+    cleanup();
   }
 }
 
@@ -162,9 +165,14 @@ export async function harvestDeck(brand: Brand): Promise<NumberingRow[]> {
 /** Every live deck, harvested one brand per module epoch. */
 export async function harvestAllDecks(): Promise<DeckNumbering> {
   const decks = {} as DeckNumbering;
-  for (const brand of HARVESTED_BRANDS) {
-    decks[brand] = await harvestDeck(brand);
+  try {
+    for (const brand of HARVESTED_BRANDS) {
+      decks[brand] = await harvestDeck(brand);
+    }
+  } finally {
+    // A failed harvest must not leave the last brand's `?variant=` pointing at
+    // `window.location` for whatever runs next in this file.
+    restoreLocation();
   }
-  restoreLocation();
   return decks;
 }
