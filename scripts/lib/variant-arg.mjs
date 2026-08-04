@@ -57,22 +57,36 @@ export function scriptUsage({ script, outArg, outDefault }) {
     optionLine(outArg, `Output path. Default: ${outDefault}`),
     optionLine("--variant=<id>", `Deck to render. Default: ${DEFAULT_VARIANT_ID}.`),
     optionLine("", `Ids: ${VARIANT_IDS.join(", ")}`),
+    optionLine("--strict", "Exit non-zero if any pose was still animating at capture."),
     "",
     optionLine("DECK_URL", "Base url to render. Default: http://localhost:5173"),
   ].join("\n");
 }
 
 /**
- * Split `argv` (already sliced past `node script`) into the chosen variant and
- * the remaining positionals — the scripts read their output path from those.
+ * Split `argv` (already sliced past `node script`) into the chosen variant, any
+ * boolean switches the caller declares, and the remaining positionals — the
+ * scripts read their output path from those.
  *
  * A flag, not a positional, so `node scripts/export-pdf.mjs out.pdf` keeps
  * meaning what it always meant.
  *
+ * `booleans` and `values` are how a script adds its own options WITHOUT loosening
+ * the policy in this file: anything not declared is still an error, so a misspelt
+ * `--strcit` cannot pass as "not strict" and a misspelt `--varient=` cannot pass
+ * as "no variant given" (gh#50). Every script that takes arguments comes through
+ * here, so there is one policy and not one per script.
+ *
  * @param {string[]} argv
- * @returns {{ variant: string, positionals: string[] }}
+ * @param {{ booleans?: string[], values?: string[] }} [options]
+ * @returns {{ variant: string, positionals: string[], flags: Record<string, boolean>,
+ *            values: Record<string, string | undefined> }}
  */
-export function parseVariantArg(argv) {
+export function parseVariantArg(argv, options = {}) {
+  const booleans = options.booleans ?? [];
+  const valueNames = options.values ?? [];
+  const flags = Object.fromEntries(booleans.map((name) => [name, false]));
+  const values = Object.fromEntries(valueNames.map((name) => [name, undefined]));
   const positionals = [];
   let variant;
 
@@ -80,6 +94,32 @@ export function parseVariantArg(argv) {
     const arg = argv[i];
     if (!arg.startsWith("-")) {
       positionals.push(arg);
+      continue;
+    }
+
+    if (booleans.includes(arg.slice(2)) && !arg.includes("=")) {
+      flags[arg.slice(2)] = true;
+      continue;
+    }
+
+    const named = valueNames.find((name) => arg === `--${name}` || arg.startsWith(`--${name}=`));
+    if (named) {
+      let v;
+      if (arg === `--${named}`) {
+        v = argv[i + 1];
+        // A following flag is not a value — the same rule `--variant` follows.
+        if (v === undefined || v === "" || v.startsWith("-")) {
+          throw new VariantArgError(`\`--${named}\` needs a value.`);
+        }
+        i++;
+      } else {
+        v = arg.slice(named.length + 3);
+        if (v === "") throw new VariantArgError(`\`--${named}=\` needs a value.`);
+      }
+      if (values[named] !== undefined) {
+        throw new VariantArgError(`\`--${named}\` given twice; pick one.`);
+      }
+      values[named] = v;
       continue;
     }
 
@@ -113,7 +153,7 @@ export function parseVariantArg(argv) {
     variant = value;
   }
 
-  return { variant: variant ?? DEFAULT_VARIANT_ID, positionals };
+  return { variant: variant ?? DEFAULT_VARIANT_ID, positionals, flags, values };
 }
 
 /**
@@ -122,10 +162,11 @@ export function parseVariantArg(argv) {
  *
  * @param {string[]} argv
  * @param {string} usage Full usage text, variant lines included.
+ * @param {{ booleans?: string[], values?: string[] }} [options]
  */
-export function parseVariantArgOrExit(argv, usage) {
+export function parseVariantArgOrExit(argv, usage, options) {
   try {
-    return parseVariantArg(argv);
+    return parseVariantArg(argv, options);
   } catch (err) {
     if (!(err instanceof VariantArgError)) throw err;
     console.error(`error: ${err.message}\n`);

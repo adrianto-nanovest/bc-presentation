@@ -697,21 +697,61 @@ export const e12Content = {
      * The two practitioners who renamed the job — index 0 sits under the LEFT
      * panel, index 1 under the right (owner correction 2, which swapped them).
      *
-     * Cherny's line is a PARAPHRASE, deliberately. The sentence the prototype
-     * quoted traces to a secondary article marked *not verified* in
-     * `docs/researches/topic-loop-engineering-x-articles.md`, and §12.1 call 5
-     * says: verify against the primary, or paraphrase. This paraphrases, and
-     * one line is also what correction 2 asks for.
+     * §12.1 CALL 5, CLOSED 2026-08-04 (gh#50): BOTH LINES ARE NOW VERBATIM, and
+     * the source they are verbatim from is named here.
+     *
+     * The wording is checked against Addy Osmani's originating essay
+     * *Loop Engineering* (addyosmani.com/blog/loop-engineering/, 2026-06-07) —
+     * the piece that named the practice by quoting these two people, and the
+     * attribution source `docs/researches/2026-07-31-loop-engineering.md`
+     * already cites. It prints:
+     *   Steinberger — "You shouldn't be prompting coding agents anymore. You
+     *                  should be designing loops that prompt your agents."
+     *   Cherny      — "I don't prompt Claude anymore. I have loops running that
+     *                  prompt Claude and figuring out what to do. My job is to
+     *                  write loops"
+     * Steinberger's line below is his second sentence, unedited. Cherny's is his
+     * first and last sentence with the middle one elided, and the ELLIPSIS IS
+     * THE POINT: the earlier paraphrase sat inside quotation marks, which reads
+     * as verbatim to a room. `My` keeps its capital across the elision, because
+     * lower-casing it would be an edit inside a quotation. One line is still what
+     * correction 2 asks for.
+     *
+     * WHAT IS AND IS NOT VERIFIED, stated plainly because the slide names two
+     * people. Osmani's essay is the SOURCE OF RECORD for both wordings, and it is
+     * a named, dated, published source — which the previous Cherny sentence was
+     * not. It is not the PRIMARY for Cherny: he spoke the line at Sequoia AI
+     * Ascent in May 2026 (`docs/researches/2026-07-31-loop-engineering.md:181`),
+     * that recording was NOT re-watched, and other outlets transcribe the middle
+     * sentence differently. That is exactly why the middle sentence is the elided
+     * one and why the two that ship are the two Osmani prints.
+     *
+     * The sentence marked *not verified* in
+     * `docs/researches/topic-loop-engineering-x-articles.md` is that file's own
+     * secondary retelling ("I do not prompt Claude anymore. I have loops running
+     * that prompt Claude and figure out what to do."). It is not what ships.
+     *
+     * ATTRIBUTIONS, both checked because a named person plus a named company is
+     * a factual claim on a slide:
+     *   · Steinberger — **CREATOR**, not "founder", of OpenClaw. He wrote it
+     *     (`docs/researches/2026-05-11-section-g-tooling-gaps.md`), and the
+     *     press that reported his February 2026 move to OpenAI calls him its
+     *     creator; stewardship went to a foundation, so "founder of" is both
+     *     the weaker word and the one that ages worse.
+     *   · Cherny — creator of Claude Code, and still its head at Anthropic.
+     *     Osmani's essay describes him as head of Claude Code; his own public
+     *     profile and the June 2026 press say creator. Both hold; the chip
+     *     names the one the audience can place.
      */
     quotes: [
       {
         text: "You should be designing loops that prompt your agents.",
         kw: ["designing loops"],
-        attr: "PETER STEINBERGER · FOUNDER OF OPENCLAW",
+        attr: "PETER STEINBERGER · CREATOR OF OPENCLAW",
       },
       {
-        text: "I don't prompt Claude anymore — I write the loops that prompt it.",
-        kw: ["write the loops"],
+        text: "I don't prompt Claude anymore … My job is to write loops.",
+        kw: ["write loops"],
         attr: "BORIS CHERNY · CREATOR OF CLAUDE CODE",
       },
     ],
@@ -727,6 +767,43 @@ export const e12Content = {
   /** Pose 1 only (gh#49 correction 8) — pose 2 drops the label and keeps the arc. */
   returnArc: "tomorrow's beat starts by reading the spine",
   returnArcKw: ["reading the spine"],
+
+  /**
+   * §12.1 CALL 1, CLOSED 2026-08-04 (gh#50) — THE `BUDGET` GUARDRAIL, and where
+   * it went.
+   *
+   * DECISION: a foot line on E.12, under the rail, on POSES 1 AND 2. Not moved
+   * to E.11, and not dropped.
+   *
+   * The old #10 brief carried five decision rows — `TRIGGER · MEMORY ·
+   * CONDITION · BUDGET · GATE` — and the shipping form re-teaches four of them
+   * as the four parts. `BUDGET` was the one with no successor: the closest thing
+   * left is the triage example's *"at most 5 items"*, which is a cap DEMONSTRATED
+   * and never NAMED. §12.1 calls it the slide's one risk row, in front of a room
+   * that will go and build these, and forbids letting it vanish by omission.
+   *
+   * WHY THE RAIL AND NOT E.11. E.11 is eight practices at three bullets each,
+   * all full; a ninth line there would land on a slide about what harness teams
+   * do, two slides before the room is shown a loop that runs while they sleep.
+   * The risk belongs beside the thing that carries it.
+   *
+   * WHY BOTH POSES AND NOT JUST POSE 1. `canonicalPose` is 2, and
+   * `scripts/export-pdf.mjs` / `export-pptx.mjs` print exactly the canonical
+   * pose — so a guardrail that lived only on pose 1 would be absent from every
+   * PDF and every deck anyone takes away. That is the same omission by a
+   * quieter route.
+   *
+   * WHY NO VENDOR NUMBER. §12.1 backs the row with "Claude Code's 7-day expiry
+   * on recurring tasks". That number is in no research file in this repo, and
+   * §12.2 is explicit that vendor terms are the highest-consequence place in the
+   * deck to be wrong. The three caps below are true of any loop and need no
+   * vendor's current policy to stay true.
+   */
+  guardrail: {
+    label: "THE GUARDRAIL",
+    text: "Cap what runs unattended — items per beat, spend, and an end date. A loop with no cap is a bill with no cap.",
+    textKw: ["Cap what runs unattended", "a bill with no cap"],
+  },
 
   parts: [
     {
@@ -796,6 +873,27 @@ export const e12Content = {
           descKw: ["a checked condition"],
           stop: "stops when the check passes",
           tools: ["Claude Code · /goal", "Codex · exec + tests"],
+          /**
+           * §12.1 CALL 2, CLOSED 2026-08-04 (gh#50) — the ONE line that stops
+           * `/goal` being taught twice without acknowledgement.
+           *
+           * §8.2 splits the two slides as *"the Ralph card is `/goal`; E.12 is
+           * `/loop` + Routines"*, and then the shipping form teaches `/goal`
+           * here, as kind 2. The split is still right — run-until-done versus
+           * run-again-and-again — so the fix is the cheap one §12.1 recommends:
+           * kind 2 says out loud that the room has met this heartbeat already.
+           * The alternative was re-cutting E.11's Ralph card a second time.
+           *
+           * IT NAMES THE CARD, NOT A NUMBER. "E.11" is derived per deck set
+           * (§3) and the leader deck reorders sections, so a letter in copy is a
+           * line that goes wrong silently on one of five decks. `Ralph Wiggum`
+           * is the card's own name and moves with it.
+           */
+          callback: "Ralph Wiggum, from the harness",
+          /** §8.3 wants a keyword on every PROSE string, and this row is prose —
+           *  so the card's own name is the keyword. It is also the emphasis the
+           *  line wants: the room is being pointed at a card, not at a sentence. */
+          callbackKw: ["Ralph Wiggum"],
           analogy: "keep cooking until the taster says it is ready",
           analogyKw: ["until the taster"],
         },
@@ -817,7 +915,15 @@ export const e12Content = {
           desc: "reacts the moment something happens",
           descKw: ["the moment"],
           stop: "stops when the event ends",
-          tools: ["Claude Code · Channels, GitHub", "Codex · @codex on a PR"],
+          /**
+           * `GitHub` DROPPED FROM THE CLAUDE LINE (§12.1 call 3, gh#50). At the
+           * mono floor this strip ran 16px past its card's padding — and §12.1
+           * settles that trade in advance: *"an unreadable strip is worse than a
+           * shorter one."* The example survives on the line below it, where
+           * `@codex on a PR` IS the GitHub event; the two lines still name two
+           * vendors and two kinds of trigger.
+           */
+          tools: ["Claude Code · Channels", "Codex · @codex on a PR"],
           analogy: "a doorbell: nothing happens until someone presses it",
           analogyKw: ["until someone presses it"],
         },

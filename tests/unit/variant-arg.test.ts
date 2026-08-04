@@ -31,13 +31,15 @@ describe("the id list comes from the shared table", () => {
 
 describe("parseVariantArg", () => {
   test("no arguments at all falls back to the documented default", () => {
-    expect(parseVariantArg([])).toEqual({ variant: "general", positionals: [] });
+    expect(parseVariantArg([])).toEqual({ variant: "general", positionals: [], flags: {}, values: {} });
   });
 
   test("a lone positional is left for the caller as the output path", () => {
     expect(parseVariantArg(["exports/smoke-deck.pdf"])).toEqual({
       variant: "general",
       positionals: ["exports/smoke-deck.pdf"],
+      flags: {},
+      values: {},
     });
   });
 
@@ -45,6 +47,8 @@ describe("parseVariantArg", () => {
     expect(parseVariantArg(["out.pdf", "--variant=gems-middle-mgmt"])).toEqual({
       variant: "gems-middle-mgmt",
       positionals: ["out.pdf"],
+      flags: {},
+      values: {},
     });
   });
 
@@ -52,6 +56,8 @@ describe("parseVariantArg", () => {
     expect(parseVariantArg(["--variant", "berau-leader", "out.pdf"])).toEqual({
       variant: "berau-leader",
       positionals: ["out.pdf"],
+      flags: {},
+      values: {},
     });
   });
 
@@ -69,6 +75,36 @@ describe("parseVariantArg", () => {
       expect((err as Error).message).toContain("berau");
       for (const id of VARIANT_IDS) expect((err as Error).message).toContain(id);
     }
+  });
+
+  // gh#50 — `booleans` and `values` exist so a script can take its OWN options
+  // without each script inventing its own parser, and without loosening the rule
+  // that an undeclared option is an error.
+  test("a declared boolean switch is read, and defaults to false", () => {
+    const opts = { booleans: ["strict"] };
+    expect(parseVariantArg(["--strict"], opts).flags).toEqual({ strict: true });
+    expect(parseVariantArg([], opts).flags).toEqual({ strict: false });
+  });
+
+  test("a declared value option takes `=value` or a following word", () => {
+    const opts = { values: ["out"] };
+    expect(parseVariantArg(["--out=/tmp/a"], opts).values).toEqual({ out: "/tmp/a" });
+    expect(parseVariantArg(["--out", "/tmp/a"], opts).values).toEqual({ out: "/tmp/a" });
+  });
+
+  test("a declared value option refuses an empty, missing or repeated value", () => {
+    const opts = { values: ["out"] };
+    expect(() => parseVariantArg(["--out="], opts)).toThrow(VariantArgError);
+    expect(() => parseVariantArg(["--out"], opts)).toThrow(VariantArgError);
+    expect(() => parseVariantArg(["--out", "--variant=general"], opts)).toThrow(VariantArgError);
+    expect(() => parseVariantArg(["--out=a", "--out=b"], opts)).toThrow(VariantArgError);
+  });
+
+  test("an option the caller did NOT declare is still an error", () => {
+    // The whole point: a misspelt switch must not read as its own absence.
+    expect(() => parseVariantArg(["--strict"])).toThrow(VariantArgError);
+    expect(() => parseVariantArg(["--strcit"], { booleans: ["strict"] })).toThrow(VariantArgError);
+    expect(() => parseVariantArg(["--out=/tmp/a"], { booleans: ["strict"] })).toThrow(VariantArgError);
   });
 
   test("an empty value is refused rather than read as the default", () => {

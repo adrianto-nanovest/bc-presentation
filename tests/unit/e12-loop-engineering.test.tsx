@@ -25,6 +25,10 @@ import {
   e12Slide,
 } from "@/slides/foundation-core-section-e/e12-loop-engineering";
 import { e12Content } from "@/slides/foundation-core-section-e/content";
+import {
+  MONO_FLOOR,
+  PROSE_FLOOR,
+} from "@/slides/foundation-core-section-e/components/E12Primitives";
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree —
  *  which is the only way to catch state that outlives a step change. */
@@ -232,17 +236,34 @@ test("Steinberger is left with his affiliation; Cherny is right and one line", (
   renderSlide();
 
   const left = screen.getByTestId("e12-quote-left");
-  expect(left.textContent).toContain("PETER STEINBERGER · FOUNDER OF OPENCLAW");
+  // CREATOR, not "founder" (§12.1 call 5, closed on gh#50): he wrote OpenClaw and
+  // its stewardship has since moved to a foundation, so "founder of" is both the
+  // weaker word and the one that ages worse. A named person plus a named company
+  // is a factual claim on a slide, so the wording is pinned here.
+  expect(left.textContent).toContain("PETER STEINBERGER · CREATOR OF OPENCLAW");
   expect(left.textContent).toContain("designing loops that prompt your agents");
 
   const right = screen.getByTestId("e12-quote-right");
   expect(right.textContent).toContain("BORIS CHERNY · CREATOR OF CLAUDE CODE");
-  // A PARAPHRASE, not the prototype's sentence: that one traces to a secondary
-  // article marked *not verified* (§12.1 call 5).
+  // VERBATIM from Addy Osmani's originating essay, with an ellipsis where a
+  // sentence is elided — the earlier paraphrase sat inside quotation marks, which
+  // reads as verbatim to a room.
   expect(e12Content.mindset.quotes[1].text).toBe(
-    "I don't prompt Claude anymore — I write the loops that prompt it.",
+    "I don't prompt Claude anymore … My job is to write loops.",
   );
   expect(e12Content.mindset.quotes[1].text.length).toBeLessThanOrEqual(80);
+});
+
+test("the quote copy keeps the marks that make it quotable (§12.1 call 5)", () => {
+  // The two failure modes this guards, both of them one careless edit away: a
+  // compressed quote losing the mark that says it is compressed, and an
+  // attribution drifting to a title nobody published.
+  const [steinberger, cherny] = e12Content.mindset.quotes;
+  expect(steinberger.attr).not.toMatch(/FOUNDER/i);
+  expect(cherny.text).toContain("…");
+  // Both lines are set in quotation marks on the slide, so both must be quotable
+  // as they stand — no bracketed edits, no paraphrase dressed as a quote.
+  e12Content.mindset.quotes.forEach((q) => expect(q.text, q.attr).not.toMatch(/[[\]]/));
 });
 
 test("each quote block's left edge is its own panel's left edge", () => {
@@ -437,22 +458,33 @@ test("HEARTBEAT renders all four kinds, each with a stop condition and an analog
   expect(panel.textContent).toContain("called a beat");
 });
 
-test("kind 2 has room for the closing ticket's one-line callback, and no line yet", () => {
-  // "Heartbeat kind 2 (`/goal`) gets one callback line naming E.11's Ralph card,
-  // decided on the closing ticket (§12.1 call 2). Build kind 2 so a one-line
-  // callback fits without a re-layout — do not write the line here." The room is
-  // reserved on all four cards so they stay in register, and it is a real element
-  // rather than incidental slack, which is what makes "no re-layout" checkable.
+test("kind 2, and only kind 2, calls back to the Ralph card (§12.1 call 2)", () => {
+  // gh#49 reserved the row and left the copy to the closing ticket; gh#50 writes
+  // it. `/goal` is taught on this card AND on E.11's Ralph card, so kind 2 says so
+  // out loud — that is the whole of call 2. The row stays reserved and EMPTY on the
+  // other three, because the four cards are read side by side and their tool strips
+  // and analogies have to stay in register.
   renderSlide(1);
   hover("heartbeat");
-  e12Content.panels.heartbeat.kinds.forEach((k) => {
+  const kinds = e12Content.panels.heartbeat.kinds;
+  kinds.forEach((k) => {
     const room = screen.getByTestId(`e12-kind-${k.num}-callback-room`);
     // One line of the card's smallest prose is 10.5px × 1.35 ≈ 15px.
     expect(Number.parseFloat(room.style.height), k.num).toBeGreaterThanOrEqual(15);
-    expect(room.textContent, k.num).toBe("");
+    const expected = "callback" in k ? `↩ ${k.callback}` : "";
+    expect(room.textContent, k.num).toBe(expected);
   });
-  // …and the line itself is NOT written yet: nothing on the panel names Ralph.
-  expect(screen.getByTestId("e12-panel-heartbeat").textContent).not.toMatch(/ralph/i);
+  expect(kinds.filter((k) => "callback" in k)).toHaveLength(1);
+  expect(kinds[1]).toHaveProperty("callback");
+
+  // It names the CARD, and no letter or number: §3 derives E.11's letter per deck
+  // set, so a letter in copy is a line that goes silently wrong on one of five
+  // decks. This is the assertion that keeps the fix deck-set-safe.
+  const line = kinds[1].callback;
+  expect(kinds[1].callbackKw).toEqual(["Ralph Wiggum"]);
+  expect(line).toMatch(/Ralph Wiggum/);
+  expect(line).not.toMatch(/E\.?1?1|\bslide\b/i);
+  expect(screen.getByTestId("e12-panel-heartbeat").textContent).toMatch(/Ralph Wiggum/);
 });
 
 test("CHECKER renders three rungs with the human gate widening as the proof thins", () => {
@@ -633,6 +665,100 @@ test("every card box on poses 1 and 2 carries it too — rail cards and panels a
   expectBoxes([...RAIL_BOXES, ...FLOW_BOXES]);
 });
 
+// ── §12.1 call 1 — the guardrail, and the pose that prints ──────────────────
+
+test("the guardrail is on BOTH working poses, because pose 2 is the one that prints", () => {
+  // The `BUDGET` row of the old brief had no successor in the shipping form, and
+  // §12.1 forbids letting it vanish by omission. It sits under the rail — and it
+  // has to be on pose 2, because `canonicalPose` is 2 and `scripts/export-pdf.mjs`
+  // and `export-pptx.mjs` print exactly the canonical pose. A pose-1-only
+  // guardrail is missing from every PDF the room takes home, which is the same
+  // omission by a quieter route.
+  const { label, text } = e12Content.guardrail;
+
+  const pose0 = renderSlide(0);
+  expect(screen.queryByTestId("e12-guardrail")).toBeNull();
+  pose0.unmount();
+
+  for (const pose of [1, 2] as const) {
+    const view = renderSlide(pose);
+    const rail = screen.getByTestId("e12-guardrail");
+    expect(rail.textContent, `pose ${pose}`).toContain(label);
+    expect(rail.textContent, `pose ${pose}`).toContain("Cap what runs unattended");
+    view.unmount();
+  }
+
+  // A cap is not a slogan: the line names what to cap, and all three are the caps
+  // a runaway loop actually needs.
+  ["items per beat", "spend", "an end date"].forEach((cap) => expect(text).toContain(cap));
+  // And it stays out of vendor-terms territory (§12.2) — no product's current
+  // policy is asserted, so nothing here expires.
+  expect(text).not.toMatch(/7 day|claude|routine/i);
+});
+
+test("the guardrail clears the return label on pose 1 and the recap on pose 2", () => {
+  // jsdom has no layout, so the claim is asserted as the two offsets that make it
+  // true. Measured at 1280×720: the rail's cards end at stage y=505, pose 1's
+  // return label runs 517→541, pose 2's recap starts at y=612 — so pose 1 sits at
+  // 549 and pose 2 at 517, and both blocks have air above and below.
+  const one = renderSlide(1);
+  const posePose1 = Number.parseFloat(screen.getByTestId("e12-guardrail").style.top);
+  const returnTop = Number.parseFloat(screen.getByTestId("e12-rail-return").style.top);
+  expect(posePose1).toBeGreaterThan(returnTop);
+  one.unmount();
+
+  renderSlide(2);
+  const pose2 = Number.parseFloat(screen.getByTestId("e12-guardrail").style.top);
+  expect(pose2).toBeLessThan(posePose1);
+  // The recap is bottom-anchored, so "above the recap" is the offset staying
+  // inside the rail's own height less the recap's two lines.
+  expect(screen.getByTestId("e12-thesis").style.bottom).toBe("0px");
+  expect(pose2).toBeLessThan(492 - 36 - 41);
+});
+
+// ── §12.1 call 3 — the type floors, enforced over the rendered tree ──────────
+
+test("no run of type on any pose sits below the projector floor", () => {
+  // The browser half of this is `node scripts/projection-test.mjs e12 --audit`,
+  // which also measures overflow; what is checkable HERE — and therefore in CI on
+  // every commit — is the floor itself. Every piece of type on this slide is
+  // inline-styled, so jsdom can read the sizes back even with no layout engine.
+  //
+  // §12.1 call 3 flagged the 8.5px tool strips. The audit found 34 runs under the
+  // two floors across the three poses, including the pose-2 heartbeat pill and
+  // both fork labels, which PRINT. Anything new that lands below a floor fails
+  // here before it reaches a projector.
+  const below: string[] = [];
+  const collect = () => {
+    for (const el of Array.from(document.querySelectorAll<HTMLElement>("[style]"))) {
+      const size = Number.parseFloat(el.style.fontSize);
+      if (!Number.isFinite(size)) continue;
+      const family = el.style.fontFamily || "";
+      const floor = family.includes("mono") ? MONO_FLOOR : family.includes("serif") ? PROSE_FLOOR : 0;
+      if (floor && size < floor) {
+        below.push(`${size}px < ${floor} · ${(el.textContent ?? "").trim().slice(0, 40)}`);
+      }
+    }
+  };
+
+  const pose0 = renderSlide(0);
+  collect();
+  pose0.unmount();
+
+  const pose1 = renderSlide(1);
+  for (const id of ["heartbeat", "beat", "checker", "spine"]) {
+    hover(id);
+    collect();
+    unhover(id);
+  }
+  pose1.unmount();
+
+  renderSlide(2);
+  collect();
+
+  expect(below).toEqual([]);
+});
+
 // ── reduced motion ─────────────────────────────────────────────────────────
 
 describe("prefers-reduced-motion: reduce", () => {
@@ -726,6 +852,7 @@ const MONO: readonly string[] = [
   ...M.quotes.map((q) => q.attr),
   // the rail
   e12Content.railHeading,
+  e12Content.guardrail.label,
   ...e12Content.parts.map((p) => p.title),
   ...e12Content.parts.map((p) => p.num),
   // the panels
@@ -775,6 +902,10 @@ const HIGHLIGHTED: readonly { text: string; kw: readonly string[] }[] = [
   { text: M.right.gate.sub, kw: M.right.gate.subKw },
   ...M.quotes.map((q) => ({ text: q.text, kw: q.kw })),
   { text: e12Content.returnArc, kw: e12Content.returnArcKw },
+  { text: e12Content.guardrail.text, kw: e12Content.guardrail.textKw },
+  // Kind 2's callback to the Ralph card — the only one (§12.1 call 2), and prose,
+  // so §8.3 wants a keyword on it.
+  { text: P.heartbeat.kinds[1].callback, kw: P.heartbeat.kinds[1].callbackKw },
   { text: e12Content.thesis, kw: e12Content.thesisKw },
   ...e12Content.parts.map((p) => ({ text: p.desc, kw: p.descKw })),
   ...P.heartbeat.kinds.map((k) => ({ text: k.desc, kw: k.descKw })),
@@ -857,6 +988,7 @@ test("mono strings carry no `*Kw` sibling", () => {
     M.right.spine,
     ...M.right.stations,
     ...e12Content.parts,
+    e12Content.guardrail,
     P.heartbeat,
     ...P.heartbeat.kinds,
     P.heartbeat.axis,

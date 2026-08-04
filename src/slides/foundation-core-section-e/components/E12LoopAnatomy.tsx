@@ -40,6 +40,7 @@ import {
   CANVAS_W,
   E12Heading,
   HEAD_H,
+  MONO_FLOOR,
   RAIL,
   arrowIds,
   mono,
@@ -56,6 +57,18 @@ import { e12Content as C, type E12PartId } from "../content";
 const CARD = { h: 62, gap: 20, inset: 30 };
 const CARDS_H = 4 * CARD.h + 3 * CARD.gap;
 const cardTop = (i: number) => i * (CARD.h + CARD.gap);
+
+/**
+ * THE GUARDRAIL'S SLOT (§12.1 call 1, closed on gh#50 — copy and reasoning in
+ * `../content.tsx`). It is the FIRST FREE ROW UNDER THE RAIL, and that row is
+ * lower on pose 1 than on pose 2 because pose 1 has one more thing above it:
+ * measured at 1280×720, the cards end at stage y=505, pose 1's return label runs
+ * 517→541, and pose 2's recap starts at y=612. So pose 1 takes 549 (clear of the
+ * label, nothing below it) and pose 2 takes 517 (straight under the cards, 37px
+ * of air above the recap). One offset for both would leave 5px between this
+ * block and the recap, and the two italic notes would read as one paragraph.
+ */
+const guardTop = (pose: number) => HEAD_H + CARDS_H + (pose < 2 ? 44 : 12);
 
 const PART_ICONS: Record<E12PartId, typeof Activity> = {
   heartbeat: Activity,
@@ -278,6 +291,30 @@ function Rail({
           </span>
         </Reveal>
       )}
+
+      {/* THE GUARDRAIL — the slide's one risk row (§12.1 call 1, gh#50). On both
+          poses, because the canonical pose is the one that prints: a pose-1-only
+          line would be missing from every PDF the room takes home. A mono kicker
+          and a dotted rule above it, so it reads as a caution note and not as a
+          fifth part of the loop. */}
+      <Reveal
+        on
+        delay={560}
+        data-testid="e12-guardrail"
+        style={{
+          position: "absolute",
+          left: CARD.inset,
+          top: guardTop(pose),
+          width: RAIL.width - CARD.inset,
+        }}
+      >
+        <div style={{ borderTop: "1px dotted var(--copper-800)", paddingTop: 8 }}>
+          <div style={mono(MONO_FLOOR, "var(--copper-300)", 0.22)}>{C.guardrail.label}</div>
+          <p style={{ ...prose(11.5, "var(--copper-100)", true), margin: "5px 0 0" }}>
+            {highlight(C.guardrail.text, C.guardrail.textKw)}
+          </p>
+        </div>
+      </Reveal>
 
       {/* Pose 2's recap, in E.11's footer style (correction 8): serif italic
           13.5px on neutral-400, quiet, at the bottom-left of the stage where

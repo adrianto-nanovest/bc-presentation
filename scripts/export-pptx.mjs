@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 import PptxGenJS from "pptxgenjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { settlePose } from "./lib/settle.mjs";
 import { deckUrl, parseVariantArgOrExit, scriptUsage } from "./lib/variant-arg.mjs";
 
 const USAGE = scriptUsage({
@@ -11,7 +12,9 @@ const USAGE = scriptUsage({
 });
 
 // Parsed before the browser launches, so a bad id costs no chromium boot.
-const { variant, positionals } = parseVariantArgOrExit(process.argv.slice(2), USAGE);
+const { variant, positionals, flags } = parseVariantArgOrExit(process.argv.slice(2), USAGE, {
+  booleans: ["strict"],
+});
 
 // The variant is appended, never inherited: a bare localhost resolves to
 // `general`, so an unqualified url would silently export the wrong deck (gh#27).
@@ -32,6 +35,12 @@ const slideCount = await page.evaluate(
 );
 
 const screenshots = [];
+/** Slides whose entry choreography was still running when `settlePose` gave up.
+ *  The file is still written — a slightly-early page beats no file at all — but it
+ *  is reported on STDERR and, with `--strict`, exits non-zero: a SILENT partial is
+ *  exactly how the mid-reveal exports went unnoticed for this long (gh#50). */
+const stillMoving = [];
+const STRICT = flags.strict;
 for (let i = 0; i < slideCount; i++) {
   await page.waitForFunction(
     (idx) =>
@@ -51,7 +60,9 @@ for (let i = 0; i < slideCount; i++) {
   for (let s = 0; s < canonicalPose; s++) {
     await page.keyboard.press(" ");
   }
-  await page.waitForTimeout(150);
+  // The pose's reveals have to FINISH before the shot: a row still at opacity 0
+  // is a row that is not in the file (gh#50 — see `./lib/settle.mjs`).
+  if (!(await settlePose(page))) stillMoving.push(i);
   const buf = await page.screenshot({ type: "png", fullPage: false });
   screenshots.push(buf);
   if (i < slideCount - 1) {
@@ -82,5 +93,11 @@ const buf = await pptx.write({ outputType: "nodebuffer" });
 const outBuf = Buffer.isBuffer(buf) ? buf : Buffer.from(buf, "base64");
 writeFileSync(OUT, outBuf);
 console.log(
-  `wrote ${OUT} (${outBuf.length.toLocaleString()} bytes, ${slideCount} slides, variant ${variant})`,
-);
+  `wrote ${OUT} (${outBuf.length.toLocaleString()} bytes, ${slideCount} slides, variant ${variant})`);
+if (stillMoving.length) {
+  console.error(
+    `warning: still animating at capture — slides ${stillMoving.join(", ")}. ` +
+      "Those pages may be missing a row; re-run, or raise the cap in scripts/lib/settle.mjs.",
+  );
+  if (STRICT) process.exit(1);
+}

@@ -60,13 +60,43 @@ export function edgeLabel(size = 10.5, fill = "var(--copper-300)"): CSSPropertie
  * THE TEXT FLOOR (gh#49 correction 7). `more and more unattended →` shipped in
  * the prototype at `--neutral-400` on a dark panel and was illegible on a
  * washed-out projector profile. The fix is a rule and not one edit: NO text on
- * this slide rests below this tier — the only thing allowed to use
- * `--neutral-400` is a DEMOTED box on pose 2, where the dimming is the meaning
- * (§8.3: demotion moves borders to copper-900 and text to neutral-400).
+ * this slide rests below this tier, with TWO named exemptions:
+ *   · a DEMOTED box on pose 2, where the dimming is the meaning (§8.3: demotion
+ *     moves borders to copper-900 and text to neutral-400).
+ *   · pose 2's recap, which gh#49 correction 8 asks for in E.11's FOOTER STYLE —
+ *     serif italic 13.5px on `--neutral-400`, matching
+ *     `../e11-harness-practices.tsx` exactly. It is a 13.5px line rather than a
+ *     small label, and matching the footer the room has seen eight times is the
+ *     whole point of that correction.
+ * `scripts/projection-test.mjs --audit` holds the rule and lists both exemptions
+ * by selector, so a third one has to be argued for rather than added quietly.
  */
 export const TEXT_FLOOR = "var(--neutral-300)";
 /** The tier a demoted box's prose drops to, and the floor's only exception. */
 export const DEMOTED_TEXT = "var(--neutral-400)";
+
+/**
+ * THE SIZE FLOORS (§12.1 call 3, closed on gh#50). The colour floor above was
+ * gh#49's answer to one illegible label; this is the same finding's other half.
+ *
+ * §12.1 flagged the 8.5px mono tool strips as the smallest type in the deck and
+ * projector-unverified. gh#49 raised the strips to 9px and left the rest; the
+ * audit in `scripts/projection-test.mjs --audit` then found 34 runs under these
+ * two numbers across the three poses — including the pose-2 heartbeat pill and
+ * both fork labels, which PRINT, because pose 2 is `canonicalPose` and the export
+ * scripts render exactly that pose.
+ *
+ * So the floor is a number and not a habit: 9.5px for a mono LABEL, 10.5px for a
+ * prose SENTENCE. Both are tiers this slide already used everywhere else (the
+ * station names, the gate label, the run names, every panel foot), so applying
+ * them changed no type SCALE — it removed five smaller odd ones out.
+ *
+ * The audit fails on anything below either number, so the next 8.5px is caught
+ * before a projector finds it. Physical confirmation at projection distance is
+ * still an owner walk: `node scripts/projection-test.mjs e12`.
+ */
+export const MONO_FLOOR = 9.5;
+export const PROSE_FLOOR = 10.5;
 
 // ───────────────────── the two-column geometry ─────────────────────
 // Stage coordinates for poses 1 and 2: a 356px rail at x=48 and a 798px canvas
@@ -294,7 +324,10 @@ export function NumChip({ n, size = 17, on = true }: { n: string; size?: number;
         background: on ? "var(--copper-500)" : "var(--copper-800)",
         color: on ? "var(--neutral-950)" : "var(--copper-200)",
         fontFamily: "var(--mono)",
-        fontSize: size * 0.58,
+        // A chip's numeral scales with the chip — but never below the mono floor.
+        // The spine panel's 14px step chips were rendering 8.12px numerals, the
+        // smallest type on the slide after gh#49 raised the strips (§12.1 call 3).
+        fontSize: Math.max(size * 0.58, MONO_FLOOR),
         fontWeight: 700,
         transition: "background 200ms var(--ease), color 200ms var(--ease)",
       }}

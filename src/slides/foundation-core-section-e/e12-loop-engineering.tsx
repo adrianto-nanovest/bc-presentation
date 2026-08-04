@@ -49,6 +49,30 @@
 //   4. The canvas is BLANK until a rail card is hovered or pinned, so pose 1 opens
 //      rail-only. §8.3's idle `ONE BEAT` resting pose is dropped.
 //
+// THE FIVE §12.1 BUILD-TIME CALLS, ALL CLOSED 2026-08-04 (gh#50). Each decision
+// is written beside the code that carries it; this is the index:
+//   1. `BUDGET` / runaway guardrail — KEPT, as a foot line under the rail on
+//      poses 1 AND 2. `e12Content.guardrail` in `./content.tsx` holds the copy and
+//      the reasoning; `./components/E12LoopAnatomy.tsx` places it. Both poses,
+//      because `canonicalPose` is 2 and that is the only pose the PDF and PPTX
+//      exports print — a pose-1-only guardrail is the same omission, quieter.
+//   2. `/goal` taught on both E.11 and E.12 — kind 2 now names the Ralph card in
+//      one line (`panels.heartbeat.kinds[1].callback`), landing in the row gh#49
+//      reserved for it. It names the CARD, never a letter: §3 derives letters per
+//      deck set.
+//   3. Projector legibility — `MONO_FLOOR` / `PROSE_FLOOR` in
+//      `./components/E12Primitives.tsx`, enforced by
+//      `node scripts/projection-test.mjs e12 --audit`, which found 34 runs under
+//      the floors and 2 spilling their boxes. The physical back-row walk is the
+//      same script without `--audit`, and is an owner job with a projector.
+//   4. Pose-0 entry choreography — CONFIRMED AS BUILT: the connectors mount with
+//      the panel, no draw-in. Reasoning at the connectors in
+//      `./components/E12MindsetDiptych.tsx`.
+//   5. Quote wording and attribution — both quotes are now VERBATIM from Addy
+//      Osmani's originating essay, Cherny's with an ellipsis where a sentence is
+//      elided, and Steinberger is `CREATOR OF OPENCLAW`, not "founder". Sources
+//      and the checks at `mindset.quotes` in `./content.tsx`.
+//
 // Productionized from `src/slides/prototype-gh19b-e12-loop-engineering/`, and
 // rewritten rather than lifted: the prototype is inline-styled, untested, and
 // carries dev-only key handlers. CSS vars only, no hex literals; no new fonts or

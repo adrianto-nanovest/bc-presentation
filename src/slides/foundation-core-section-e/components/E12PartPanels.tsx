@@ -17,6 +17,10 @@
 //     illegible on a washed-out projector; it is now copper-200 at 11px, and no
 //     other grey on these four panels sits below the floor either.
 //
+// gh#50 (§12.1 call 3) adds the SIZE half of that rule: `MONO_FLOOR` /
+// `PROSE_FLOOR`, and no label on these panels sits under either. The tool strips,
+// both axes and the read / write annotations were the runs below it.
+//
 // Rewritten from `prototype-gh19b-e12-loop-engineering/PartPanels.tsx`: inline
 // styles throughout, no shared box, kickers on every panel, connectors that mount
 // fully drawn. CSS vars only, no hex literals.
@@ -29,7 +33,9 @@ import {
   CANVAS_W,
   Connector,
   ILLUS_H,
+  MONO_FLOOR,
   NumChip,
+  PROSE_FLOOR,
   PanelShell,
   TEXT_FLOOR,
   arrowIds,
@@ -62,11 +68,14 @@ export function PartPanel({ id, reduced }: { id: E12PartId; reduced: boolean }) 
 
 const KINDS = { height: 320, gap: 10 };
 /**
- * ROOM FOR THE CLOSING TICKET (§12.1 call 2). `/goal` is taught here as heartbeat
- * kind 2 and is also E.11's Ralph card, so kind 2 gets one callback line naming
- * it — decided on the closing ticket, NOT written here. This is the line's space,
- * reserved on every kind card so adding the copy needs no re-layout: the analogy
- * is bottom-pinned, so the reserve stays a gap and never becomes a jump.
+ * THE CALLBACK ROW (§12.1 call 2, closed on gh#50). `/goal` is taught here as
+ * kind 2 and is also E.11's Ralph card, so kind 2 carries one line naming that
+ * card — `kinds[1].callback` in `../content.tsx`, where the reasoning sits.
+ *
+ * gh#49 RESERVED THIS HEIGHT ON ALL FOUR CARDS so the copy could land without a
+ * re-layout, and the row stays reserved on the three cards that have no callback:
+ * the four cards are read side by side, so their tool strips and analogies have
+ * to sit on one line each. An `auto`-collapsing row would stagger them.
  */
 const CALLBACK_RESERVE = 15;
 
@@ -114,7 +123,7 @@ function HeartbeatsPanel({ reduced }: { reduced: boolean }) {
               </div>
               {/* `also called run-until-done` — only kind 2 has one, and the row
                   is held open on all four so the cards stay in register. */}
-              <div style={{ ...prose(10, "var(--copper-300)", true), marginTop: -4, minHeight: 13 }}>
+              <div style={{ ...prose(PROSE_FLOOR, "var(--copper-300)", true), marginTop: -4, minHeight: 15 }}>
                 {k.alt}
               </div>
               <div className="e12-prose" style={{ ...prose(12, "var(--neutral-200)"), minHeight: 48 }}>
@@ -124,16 +133,17 @@ function HeartbeatsPanel({ reduced }: { reduced: boolean }) {
               <div style={{ ...prose(11.5, "var(--neutral-50)"), fontWeight: 600, minHeight: 30 }}>
                 {k.stop}
               </div>
-              {/* The tool strip is mono and keyword-free (§8.3). 9px, not the
-                  prototype's 8.5 — it was the smallest type in the deck and
-                  §12.1 call 3 flagged it as unverified on a projector. */}
+              {/* The tool strip is mono and keyword-free (§8.3), and it is THE
+                  strip §12.1 call 3 was written about: 8.5px in the prototype,
+                  9px after gh#49, and now `MONO_FLOOR` — the audit in
+                  `scripts/projection-test.mjs --audit` holds it there. */}
               <div style={{ borderTop: "1px dotted var(--copper-800)", paddingTop: 6, minHeight: 30 }}>
                 {k.tools.map((t) => (
                   <div
                     key={t}
                     style={{
                       fontFamily: "var(--mono)",
-                      fontSize: 9,
+                      fontSize: MONO_FLOOR,
                       letterSpacing: "0.04em",
                       color: "var(--copper-200)",
                       lineHeight: 1.6,
@@ -144,11 +154,24 @@ function HeartbeatsPanel({ reduced }: { reduced: boolean }) {
                   </div>
                 ))}
               </div>
+              {/* Kind 2 only. `↩` because the room has met this heartbeat
+                  already — decoration, so it is `aria-hidden` and the copy audit
+                  sees only the string in `content.tsx`. */}
               <div
-                aria-hidden
                 data-testid={`e12-kind-${k.num}-callback-room`}
-                style={{ height: CALLBACK_RESERVE }}
-              />
+                style={{
+                  ...prose(PROSE_FLOOR, "var(--copper-200)", true),
+                  height: CALLBACK_RESERVE,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {"callback" in k ? (
+                  <>
+                    <span aria-hidden>↩ </span>
+                    {highlight(k.callback, k.callbackKw)}
+                  </>
+                ) : null}
+              </div>
               <div
                 className="e12-prose"
                 style={{
@@ -192,10 +215,10 @@ function HeartbeatsPanel({ reduced }: { reduced: boolean }) {
           </svg>
           {!reduced && <span className="e12-axis-spark" />}
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-            <span style={mono(9, "var(--copper-100)", 0.2)}>{heartbeat.axis.left}</span>
+            <span style={mono(MONO_FLOOR, "var(--copper-100)", 0.2)}>{heartbeat.axis.left}</span>
             {/* correction 7 — this is the label that was illegible. */}
             <span style={prose(11, "var(--copper-200)", true)}>{heartbeat.axis.mid} →</span>
-            <span style={mono(9, "var(--copper-100)", 0.2)}>{heartbeat.axis.right}</span>
+            <span style={mono(MONO_FLOOR, "var(--copper-100)", 0.2)}>{heartbeat.axis.right}</span>
           </div>
         </div>
       </Reveal>
@@ -395,8 +418,8 @@ function CheckerPanel() {
       {/* strongest → weakest: the axis the three rungs hang off */}
       <div style={{ position: "relative", height: 26 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-          <span style={mono(9, "var(--copper-300)", 0.2)}>{checker.axisL}</span>
-          <span style={mono(9, "var(--copper-300)", 0.2)}>{checker.axisR}</span>
+          <span style={mono(MONO_FLOOR, "var(--copper-300)", 0.2)}>{checker.axisL}</span>
+          <span style={mono(MONO_FLOOR, "var(--copper-300)", 0.2)}>{checker.axisR}</span>
         </div>
         <svg width="100%" height="10" style={{ display: "block", overflow: "visible" }} aria-hidden>
           <ArrowMarkers scope="ladder" bright="var(--copper-400)" />
@@ -634,10 +657,10 @@ function SpinePanel({ reduced }: { reduced: boolean }) {
                   strokeWidth="1.1"
                   markerEnd={`url(#${arrowIds("rw").arrow})`}
                 />
-                <text x={`${base - 1.6}%`} y="30" textAnchor="end" style={monoFill(9, "var(--copper-300)")}>
+                <text x={`${base - 1.6}%`} y="30" textAnchor="end" style={monoFill(MONO_FLOOR, "var(--copper-300)")}>
                   {spine.read.toUpperCase()}
                 </text>
-                <text x={`${base + 8.6}%`} y="30" style={monoFill(9, "var(--copper-300)")}>
+                <text x={`${base + 8.6}%`} y="30" style={monoFill(MONO_FLOOR, "var(--copper-300)")}>
                   {spine.write.toUpperCase()}
                 </text>
               </Connector>

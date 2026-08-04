@@ -30,7 +30,18 @@ import type { CSSProperties } from "react";
 import { Bot, User } from "lucide-react";
 import { highlight } from "@/components/highlight";
 import { Reveal } from "./Reveal";
-import { ArrowMarkers, Box, Ekg, arrowIds, edgeLabel, mono, prose } from "./E12Primitives";
+import {
+  ArrowMarkers,
+  Box,
+  Ekg,
+  MONO_FLOOR,
+  PROSE_FLOOR,
+  TEXT_FLOOR,
+  arrowIds,
+  edgeLabel,
+  mono,
+  prose,
+} from "./E12Primitives";
 import { e12Content as C } from "../content";
 
 const M = C.mindset;
@@ -294,7 +305,7 @@ function Bridge() {
       style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}
     >
       {M.bridge.map((word) => (
-        <span key={word} style={mono(9, "var(--copper-400)", 0.3)}>
+        <span key={word} style={mono(MONO_FLOOR, "var(--copper-400)", 0.3)}>
           {word}
         </span>
       ))}
@@ -321,10 +332,18 @@ function Bridge() {
 // Scene coordinates, local to the panel's inner box.
 const SCENE = { left: PANEL_PAD.x, top: 42, width: 548, height: 292 };
 const COLUMN_X = 294; // the stations' centreline, and the token's track
-const NODE = { x: 194, width: 200, height: 30, top: 44, pitch: 42 };
+/** The station chips. `x` and `width` stay centred on `COLUMN_X` — 8px wider
+ *  than gh#48 shipped them, because `the checker — a second agent` was reaching
+ *  2px into the chip's own right padding (found by
+ *  `scripts/projection-test.mjs e12 --audit`, gh#50 call 3). The `risky` escape
+ *  measures from `NODE.x + NODE.width`, so it follows the edge on its own. */
+const NODE = { x: 190, width: 208, height: 30, top: 44, pitch: 42 };
 const nodeTop = (i: number) => NODE.top + i * NODE.pitch;
 const nodeMid = (i: number) => nodeTop(i) + NODE.height / 2;
-const HEARTBEAT = { width: 300, height: 30 };
+/** The heartbeat pill. 330 wide, not gh#48's 300: at `MONO_FLOOR` the label
+ *  needs ~301px next to the EKG and was WRAPPING inside a 30px pill (gh#50 call
+ *  3). Centred on `COLUMN_X`, so it still clears the scene on both sides. */
+const HEARTBEAT = { width: 330, height: 30 };
 const SPINE = { left: 0, width: 140 };
 const GATE = { left: 144, top: 240, width: 344, height: 48 };
 
@@ -355,6 +374,30 @@ function LoopSystem({ reduced }: { reduced: boolean }) {
           height: SCENE.height,
         }}
       >
+        {/*
+          §12.1 CALL 4, CLOSED 2026-08-04 (gh#50): CONFIRMED AS BUILT — the
+          connectors MOUNT WITH THE PANEL, and there is no draw-in.
+
+          The call was open because poses 1 and 2 do the opposite: every connector
+          there reveals with the box it points into (gh#49 correction 5, `Connector`
+          in `./E12Primitives`). This pose is deliberately not those poses.
+
+          Pose 0 is a POSTER whose argument is a COMPARISON: the left panel cannot
+          run without you, the right one can. The audience has to be able to read
+          both wirings at once for that contrast to land, and a ~1s draw-in would
+          animate the very lines being compared — the right panel would assemble
+          itself while the left one sat finished, which reads as "the right one is
+          newer", not "the right one runs on its own".
+
+          The pose also has its motion budget spent, on the two things that ARE the
+          argument: the left panel's relay cycling through four turns it can never
+          leave, and the token below running the right column unattended. A third
+          moving layer competes with both.
+
+          Nothing about a build-up is cheap here either: the presenter talks over
+          this pose from the first second, and the connectors are the map they talk
+          against.
+        */}
         {/* connective tissue — drawn first, so the boxes sit on top of it */}
         <svg
           width={SCENE.width}
@@ -481,7 +524,12 @@ function LoopSystem({ reduced }: { reduced: boolean }) {
           }}
         >
           <Ekg />
-          <span className="e12-mono" style={mono(8.5, "var(--copper-200)", 0.16)}>
+          {/* `nowrap` is load-bearing: a wrapped label spills out of a 30px
+              pill, and a wrap is the one overflow the audit cannot see. */}
+          <span
+            className="e12-mono"
+            style={{ ...mono(MONO_FLOOR, "var(--copper-200)", 0.16), whiteSpace: "nowrap" }}
+          >
             {R.heartbeat}
           </span>
         </Box>
@@ -509,7 +557,7 @@ function LoopSystem({ reduced }: { reduced: boolean }) {
             </span>
             <span
               className="e12-prose"
-              style={{ ...prose(10.5, "var(--neutral-400)", true), whiteSpace: "nowrap" }}
+              style={{ ...prose(PROSE_FLOOR, TEXT_FLOOR, true), whiteSpace: "nowrap" }}
             >
               {s.sub}
             </span>
@@ -528,7 +576,7 @@ function LoopSystem({ reduced }: { reduced: boolean }) {
             padding: "7px 11px",
           }}
         >
-          <div className="e12-mono" style={mono(8.5, "var(--copper-400)", 0.22)}>
+          <div className="e12-mono" style={mono(MONO_FLOOR, "var(--copper-400)", 0.22)}>
             {R.spine.label}
           </div>
           {/* the file name is mono and never highlighted — it is a path, not prose */}
@@ -540,7 +588,7 @@ function LoopSystem({ reduced }: { reduced: boolean }) {
           </div>
           <div
             className="e12-prose"
-            style={{ ...prose(9.5, "var(--neutral-400)", true), marginTop: 2 }}
+            style={{ ...prose(PROSE_FLOOR, TEXT_FLOOR, true), marginTop: 2 }}
           >
             {R.spine.sub}
           </div>

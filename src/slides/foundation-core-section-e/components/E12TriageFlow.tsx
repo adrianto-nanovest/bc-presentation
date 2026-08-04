@@ -29,6 +29,7 @@ import {
   DEMOTED_TEXT,
   Ekg,
   ILLUS_H,
+  MONO_FLOOR,
   NumChip,
   PanelShell,
   TEXT_FLOOR,
@@ -131,7 +132,7 @@ export function TriageFlow({ active, reduced }: { active: E12PartId | null; redu
             }}
           >
             <Ekg w={30} h={10} color="var(--copper-300)" />
-            <span className="e12-mono" style={mono(8.5, MONO_LABEL[litOf("hb", active)], 0.18)}>
+            <span className="e12-mono" style={mono(MONO_FLOOR, MONO_LABEL[litOf("hb", active)], 0.18)}>
               {T.hb}
             </span>
           </Box>
@@ -174,10 +175,10 @@ export function TriageFlow({ active, reduced }: { active: E12PartId | null; redu
           delay={600}
           style={{ position: "absolute", left: 0, width: FAIL.x + FAIL.w / 2 - 14, top: VERDICT.y + 8, textAlign: "right" }}
         >
-          <span style={mono(8.5, MONO_LABEL[litOf("fail", active)], 0.18)}>{T.nodes.failLabel}</span>
+          <span style={mono(MONO_FLOOR, MONO_LABEL[litOf("fail", active)], 0.18)}>{T.nodes.failLabel}</span>
         </Reveal>
         <Reveal on delay={600} style={{ position: "absolute", left: PASS.x + PASS.w / 2 + 14, top: VERDICT.y + 8 }}>
-          <span style={mono(8.5, MONO_LABEL[litOf("pass", active)], 0.18)}>{T.nodes.passLabel}</span>
+          <span style={mono(MONO_FLOOR, MONO_LABEL[litOf("pass", active)], 0.18)}>{T.nodes.passLabel}</span>
         </Reveal>
 
         <BranchBox stage="fail" active={active} delay={660} box={FAIL} node={T.nodes.fail} />
@@ -245,7 +246,7 @@ function FlowNode({
           {node.sources && (
             <div
               style={{
-                ...mono(9, MONO_LABEL[lit], 0.06),
+                ...mono(MONO_FLOOR, MONO_LABEL[lit], 0.06),
                 whiteSpace: "nowrap",
                 marginTop: 1,
               }}
