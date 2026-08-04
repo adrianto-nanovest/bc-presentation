@@ -639,7 +639,7 @@ export const e11Content = {
  *                gate's line, both quotes, the guardrail, the thesis, every rail
  *                and kind description, every analogy and every flow node. 1–3
  *                keywords each.
- *   MICRO-LABEL  the four turns, `you, again`, station and spine subtitles,
+ *   MICRO-LABEL  the four turns, `round and round`, station and spine subtitles,
  *                `risky` / `approved` / `pass`, the stop conditions, the run
  *                steps, the gate widths and their descriptions, `also called
  *                run-until-done`, the two diary roles. Serif, but two to five
@@ -667,7 +667,18 @@ export const e12Content = {
         { who: "you", text: "you read the reply" },
         { who: "you", text: "you type a prompt again" },
       ],
-      returnLabel: "you, again",
+      /**
+       * THE RETURN ARC'S LABEL. Was `you, again` until 2026-08-04, when the arc
+       * moved to land on ROW 02 — so a label naming YOU sat pointing at the box
+       * where the AGENT replies. This names the repetition instead, which is what
+       * the arc now draws, and the panel's own `you`s (three of the four rows, and
+       * the verdict's "all you") already carry the person.
+       *
+       * NOT `loop`, and not any word from it: `loop` is the RIGHT panel's word and
+       * the headline's payoff, and lending it to the treadmill would spend it
+       * before the diptych's contrast lands.
+       */
+      returnLabel: "round and round",
       verdictTitle: "You are holding the tool the whole time.",
       // ONE LINE (owner correction 1). The meaning held from the prototype's
       // two-line body: you are the heartbeat, the checker and the memory, and

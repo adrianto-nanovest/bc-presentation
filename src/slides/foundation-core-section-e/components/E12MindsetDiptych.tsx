@@ -1,7 +1,7 @@
 // E.12 · LOOP ENGINEERING — pose 0, the mindset diptych.
 //
 // THE ARGUMENT, drawn twice. Left: prompting turn by turn — four chips on an
-// endless relay with a dashed "you, again" return path, which is a picture of a
+// endless relay with a dashed "round and round" return path, which is a picture of a
 // system that cannot run without a person in it. Right: a loop drawn as the
 // system it is — one heartbeat feeding four stations, a spine read first and
 // written last, a person at ONE gate. The left panel visibly cannot run without
@@ -288,11 +288,14 @@ function TurnByTurn() {
               markerEnd={`url(#${arrow.arrow})`}
             />
           ))}
-          {/* you, again — the reply's only destination is your next turn, which
-              is why this path exists and why it never leaves the panel. It lands
-              on ROW 02: row 01 is the entry, and what follows your next prompt is
-              the agent replying again (see `LOOP_ROWS`). The label sits on the
-              arc's own midpoint, which is row 03's centreline. */}
+          {/* round and round — the turn has no exit, which is why this path
+              exists and why it never leaves the panel. It lands on ROW 02: row 01
+              is the entry, and what follows your next prompt is the agent
+              replying again (see `LOOP_ROWS`). The LABEL names the repetition and
+              not the person, because since the arc moved it points at the box
+              where the AGENT speaks — `mindset.left.returnLabel` in
+              `../content.tsx` carries that reasoning. The label sits on the arc's
+              own midpoint, which is row 03's centreline. */}
           <path
             className="f-arrow-stream"
             d={`M${ROW.width + 6},${rowMid(3)} H345 V${rowMid(1)} H${ROW.width + 12}`}

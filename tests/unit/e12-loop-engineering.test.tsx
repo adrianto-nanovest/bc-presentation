@@ -183,7 +183,7 @@ test("pose 0 renders both panels and the bridge between them", () => {
   const left = screen.getByTestId("e12-panel-prompting");
   expect(left.textContent).toContain("PROMPTING — TURN BY TURN");
   e12Content.mindset.left.rows.forEach((r) => expect(left.textContent).toContain(r.text));
-  expect(left.textContent).toContain("you, again");
+  expect(left.textContent).toContain("round and round");
 
   const right = screen.getByTestId("e12-panel-looping");
   expect(right.textContent).toContain("LOOPING — A SYSTEM YOU DESIGN ONCE");
