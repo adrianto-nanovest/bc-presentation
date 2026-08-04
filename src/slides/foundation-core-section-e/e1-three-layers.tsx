@@ -1,6 +1,13 @@
 // E.1 — THREE LAYERS
 //
-// 4 steps: 0=PROMPT focal, 1=CONTEXT focal, 2=HARNESS focal, 3=SUMMARY.
+// 5 steps: 0=PROMPT focal, 1=CONTEXT focal, 2=HARNESS focal, 3=SUMMARY,
+// 4=THE LOOP.
+//
+// Step 4 (spec §8.2) names the loop for the first time in the deck. It reuses the
+// summary pose whole — same three rings, same LayerSummary — and adds only the
+// orbit arc over the figure plus its own footer. The loop is repetition in TIME
+// over a run that the three rings already draw in SPACE, which is why it is an
+// arc and not a fourth ring.
 //
 // Layout uses absolute coordinates against the 1280×720 stage (see
 // src/deck/Slide.tsx + globals.css `.stage-wrap`). The design source is the
@@ -29,9 +36,13 @@ export function E1ThreeLayers() {
       ? "harness"
       : null;
   const isSummary = stepIndex === 3;
+  const isLoop = stepIndex === 4;
+  // Step 4 is the summary pose plus the orbit — the rings and the right-hand
+  // summary must not move under it.
+  const showSummary = isSummary || isLoop;
   const focusIndex =
     stepIndex === 0 ? 0 : stepIndex === 1 ? 1 : stepIndex === 2 ? 2 : null;
-  const mode: "focal" | "summary" = isSummary ? "summary" : "focal";
+  const mode: "focal" | "summary" = showSummary ? "summary" : "focal";
 
   const [hoverTag, setHoverTag] = useState<string | null>(null);
 
@@ -58,10 +69,16 @@ export function E1ThreeLayers() {
           justifyContent: "center",
         }}
       >
-        <RingStack focusIndex={focusIndex} mode={mode} width={540} height={460} />
+        <RingStack
+          focusIndex={focusIndex}
+          mode={mode}
+          width={540}
+          height={460}
+          orbit={isLoop}
+        />
       </div>
 
-      {/* Right: focal detail (steps 0–2) or layer summary (step 3). */}
+      {/* Right: focal detail (steps 0–2) or layer summary (steps 3–4). */}
       <div
         style={{
           position: "absolute",
@@ -79,7 +96,9 @@ export function E1ThreeLayers() {
             setHoverTag={setHoverTag}
           />
         )}
-        {isSummary && <LayerSummary key="summary" />}
+        {/* One key across steps 3 and 4 — advancing to the loop must not remount
+            the summary and replay its reveals. */}
+        {showSummary && <LayerSummary key="summary" />}
       </div>
 
       {/* Footer quote — only on summary step. */}
@@ -132,6 +151,34 @@ export function E1ThreeLayers() {
           >
             {C.attr}
           </span>
+        </Reveal>
+      )}
+
+      {/* Step 4 takes the same bottom slot as the quote — one footer at a time. */}
+      {isLoop && (
+        <Reveal
+          on
+          delay={250}
+          data-testid="e1-loop-footer"
+          style={{
+            position: "absolute",
+            left: 60,
+            right: 60,
+            bottom: 30,
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontSize: 17,
+              color: "var(--neutral-200)",
+              margin: 0,
+              lineHeight: 1.4,
+            }}
+          >
+            {highlight(C.loopFooter, C.loopFooterKw)}
+          </p>
         </Reveal>
       )}
     </>
@@ -255,7 +302,7 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
   );
 }
 
-// ───────────────────── LayerSummary (step 3) ─────────────────────
+// ───────────────────── LayerSummary (steps 3–4) ─────────────────────
 
 function LayerSummary() {
   return (
@@ -353,8 +400,8 @@ function LayerSummary() {
 
 export const e1Slide: SlideDef = {
   id: "e1-three-layers",
-  steps: 4,
-  canonicalPose: 3,
+  steps: 5,
+  canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "fundamentals",

@@ -50,6 +50,10 @@ export const e1Content = {
   quote: "A decent model with a great harness beats a great model with a bad harness.",
   quoteKw: ["A decent model with a great harness beats a great model with a bad harness"],
   attr: "— Anthropic",
+  // Step 4 — the first time the deck names the loop. The three rings are one run
+  // (space); the loop is repetition (time). See spec §8.2.
+  loopFooter: "Three layers make one run. The loop makes it repeat.",
+  loopFooterKw: ["one run", "makes it repeat"],
 } as const;
 
 export const e2Content = {
