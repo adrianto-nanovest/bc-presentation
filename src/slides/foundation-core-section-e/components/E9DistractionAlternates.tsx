@@ -10,9 +10,10 @@
 // evaluates as `false` and drops along with this chunk.
 //
 // Reach them in a dev build with `?proto=current|A|B|C|D`, `[` / `]` to cycle,
-// `\` to replay, plus pause and a scrub slider. Scrubbing is the point: stop
-// anywhere and check that the growth pane and the curve still agree, which is
-// the property being judged.
+// `\` to replay. Nothing renders on screen: the deck is presented from
+// `npm run dev`, so the floating pill was removed and pause / scrub went with
+// it, having no URL form. To scrub again, restore the bar from git history —
+// the props it needs are still on SwitcherProps.
 //
 // Every figure here is a pure function of the same `Frame` the shipping figure
 // takes, so promoting one is a matter of moving it into E9DistractionMotion.tsx
@@ -56,7 +57,6 @@ import {
   SVG_W,
   T_MAX,
   THRESHOLD_K,
-  TOTAL_DUR,
   TURNS,
   type DistractionFigure,
   type Frame,
@@ -546,17 +546,6 @@ function VariantC({ f }: { f: Frame }) {
   );
 }
 
-const BTN: React.CSSProperties = {
-  background: "transparent",
-  border: 0,
-  color: "#cfe3ff",
-  fontSize: 13,
-  lineHeight: 1,
-  padding: "5px 7px",
-  cursor: "pointer",
-  fontFamily: "ui-monospace, monospace",
-};
-
 export const ALTERNATE_FIGURES: Record<string, DistractionFigure> = {
   current: CurrentAnim,
   A: VariantA,
@@ -566,23 +555,9 @@ export const ALTERNATE_FIGURES: Record<string, DistractionFigure> = {
 
 const KEYS = ["current", "A", "B", "C", "D"] as const;
 
-const NAMES: Record<string, string> = {
-  current: "original (2.2s bar + curve)",
-  A: "ledger stack · bar contains the last bar",
-  B: "nested frames · each turn wraps the last",
-  C: "bounded window · drawn linkage",
-  D: "one shared x-axis · re-send arcs  ← SHIPPED",
-};
-
 export function DistractionSwitcher({
   current,
   onPick,
-  t,
-  f,
-  paused,
-  onPause,
-  scrub,
-  onScrub,
   onReplay,
 }: SwitcherProps) {
   const i = Math.max(0, KEYS.indexOf(current as (typeof KEYS)[number]));
@@ -616,60 +591,9 @@ export function DistractionSwitcher({
     return () => window.removeEventListener("keydown", handler);
   });
 
-  return (
-    <div
-      data-no-advance
-      data-testid="e9-proto-switcher"
-      style={{
-        position: "fixed",
-        left: "50%",
-        bottom: 16,
-        transform: "translateX(-50%)",
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-        padding: "5px 8px",
-        borderRadius: 999,
-        background: "#0b1b33",
-        border: "1px solid #2d5c9e",
-        boxShadow: "0 6px 20px rgba(0,0,0,0.5)",
-        fontFamily: "ui-monospace, monospace",
-        fontSize: 11,
-        color: "#cfe3ff",
-        userSelect: "none",
-        whiteSpace: "nowrap",
-      }}
-    >
-      <button style={BTN} title="previous ([)" onClick={() => step(-1)}>
-        ◀
-      </button>
-      <span style={{ minWidth: 320 }}>
-        <b>{current}</b> — {NAMES[current] ?? "?"}
-      </span>
-      <button style={BTN} title="next (])" onClick={() => step(1)}>
-        ▶
-      </button>
-      <span style={{ opacity: 0.4 }}>|</span>
-      <button style={BTN} title="replay (\)" onClick={onReplay}>
-        ↺
-      </button>
-      <button style={BTN} title="play / pause" onClick={onPause}>
-        {paused ? "▶︎" : "❙❙"}
-      </button>
-      <input
-        type="range"
-        min={0}
-        max={1000}
-        value={Math.round((t / TOTAL_DUR) * 1000)}
-        onChange={(e) => onScrub(Number(e.target.value) / 1000)}
-        title="scrub the shared clock — both panes must agree at every stop"
-        style={{ width: 130, accentColor: "#5b9bff" }}
-      />
-      <span style={{ minWidth: 132, opacity: 0.85 }}>
-        {t.toFixed(2)}s · T={Math.round(f.T)}k · turn {f.turn}
-        {scrub != null ? " · scrub" : ""}
-      </span>
-    </div>
-  );
+  // Keyboard only. The old floating pill is gone: the deck is demoed straight
+  // out of `npm run dev`, so nothing dev-only may render on stage. Variant
+  // choice therefore travels by `?proto=` and by `[` / `]`; the pause and scrub
+  // controls went with the bar, since neither has a URL form.
+  return null;
 }

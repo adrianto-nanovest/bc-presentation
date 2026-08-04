@@ -255,18 +255,11 @@ export const ALTERNATE_SIMS: Record<string, BackdropSimFactory> = {
   D: convergenceSim,
 };
 
-const LABELS: Record<string, string> = {
-  off: "no backdrop",
-  A: "Copper network (faithful port)",
-  B: "Ember rise",
-  C: "Grid pulse — SHIPPING",
-  D: "Convergence",
-};
-
-// ───────────────────── switcher UI ─────────────────────
-// Deliberately un-deck-like (blue, mono, fixed to the viewport rather than the
-// stage) so it can never be mistaken for part of the design. `[` / `]` are the
-// only safe keys: arrows, space, r, u and a–k all belong to useKeyboardNav.
+// ───────────────────── switcher keys ─────────────────────
+// Keyboard only, renders nothing. The floating blue pill was removed because
+// the deck is presented from `npm run dev`, where any dev chrome is on stage.
+// `[` / `]` are the only safe keys: arrows, space, r, u and a–k all belong to
+// useKeyboardNav.
 export function BackdropSwitcher({
   options,
   current,
@@ -302,52 +295,5 @@ export function BackdropSwitcher({
     return () => window.removeEventListener("keydown", handler);
   });
 
-  const btn: React.CSSProperties = {
-    background: "transparent",
-    border: 0,
-    color: "#cfe3ff",
-    fontSize: 15,
-    lineHeight: 1,
-    padding: "6px 8px",
-    cursor: "pointer",
-    fontFamily: "ui-monospace, monospace",
-  };
-
-  return (
-    <div
-      data-no-advance
-      data-testid="backdrop-switcher"
-      style={{
-        position: "fixed",
-        left: "50%",
-        bottom: 18,
-        transform: "translateX(-50%)",
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        gap: 4,
-        padding: "4px 6px",
-        borderRadius: 999,
-        background: "#0b1b33",
-        border: "1px solid #2d5c9e",
-        boxShadow: "0 6px 20px rgba(0,0,0,0.5)",
-        fontFamily: "ui-monospace, monospace",
-        fontSize: 12,
-        color: "#cfe3ff",
-        userSelect: "none",
-      }}
-    >
-      <button style={btn} onClick={() => step(-1)} title="previous ([)">
-        ←
-      </button>
-      <span style={{ padding: "0 6px", whiteSpace: "nowrap" }}>
-        <strong>{current}</strong>
-        {LABELS[current] ? ` — ${LABELS[current]}` : ""}
-        <span style={{ opacity: 0.5 }}>{"  [ ] to cycle"}</span>
-      </span>
-      <button style={btn} onClick={() => step(1)} title="next (])">
-        →
-      </button>
-    </div>
-  );
+  return null;
 }

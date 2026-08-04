@@ -45,10 +45,10 @@
 //
 // Switching variants (dev only, never bundled for production — see
 // E9DistractionAlternates.tsx): `?proto=current|A|B|C|D` plus `[` / `]` to
-// cycle, `\` to replay, and a pause/scrub control. Scrubbing is how the sync
-// gets judged: stop anywhere and the two panes still agree. To ship a different
-// variant permanently, move its figure into this file and repoint
-// PRODUCTION_KEY / ProductionFigure.
+// cycle, `\` to replay. There is no on-screen switcher — the deck is presented
+// from `npm run dev`, so no dev chrome may render. To ship a different variant
+// permanently, move its figure into this file and repoint PRODUCTION_KEY /
+// ProductionFigure.
 // (`?variant=` is taken by the berau|general deck build — src/variant.ts.)
 import { useEffect, useRef, useState, type ComponentType } from "react";
 
