@@ -583,6 +583,19 @@ bridge becomes E.13.
 `sectionOverrides: { "f8-your-agentic-os": "shape" }`, otherwise R1 splits the `shape` run
 in three and R4 throws.
 
+> **Amendment 2026-08-04 — C.2 arrives in Phase 6, not Phase 4.** At the Phase 4 floor the
+> override value shipped as **`tools`** and F.8 sat inside the retained TOOLS run (gh#41):
+> with no `shape-agentic-org` yet, a lone `shape` run put F.8 third in the deck with no
+> argument in front of it. **#54 restores this section's C.2** — it moves the row after C.1
+> and flips the value to `shape` in the same edit, because either half alone throws at load.
+> Placement confirmed on the content rather than on the table: F.8's nav rail reads
+> Dashboard · Skills · Agents · Vault · Memory · Connectors · People · Settings, which is
+> **pillar-shaped, not technique-shaped**, so after C.1's hub-and-spokes it is the same
+> organization drawn as one concrete screen. Open on #54: F.8's closer — *"this is yours —
+> wherever you go, you carry it"* — is a builder's line addressed at C.2 to someone who will
+> sponsor rather than build; keep it verbatim or add a deck-set-scoped variant, but decide it
+> out loud.
+
 **`e13-bridge-to-f` in the leader deck** keeps beat 1 (*"Three layers. The fundamentals are
 built."*) and overrides beat 2 to F.9's line — *"Next: the platforms that bring them to
 life"* — because F is cut and H.13 now bridges into **I · TOOLS ECOSYSTEM**. One string,
@@ -1389,14 +1402,20 @@ Dependencies are strict where stated. Free merge windows: **Aug 3–5, 8–11, 1
 | **1 · Variant architecture & brand deltas** | §1, §2, §5. Shared `BRANDS`/`DECK_SETS` table; both resolvers honour `?variant=`; brand-bound tokens; favicon/title/assets; GEMS A.1 + K.2; env migration in order; checks 1–4 | — | **Live by Aug 5.** `gems-middle-mgmt` must exist for **Aug 6** |
 | **2 · B4 model refresh** | §8.1 | none (parallel with 1) | Aug 5 if it fits; otherwise **Aug 11** for the Aug 12–13 batch |
 | **3 · Derived section letters & page numbers** | §3. `id` + `sectionKey` + `numbered`; composer; `FigLabel` from context; 64 call sites stripped; `FIG_NUM` hack deleted; A.1 `sectionRef`; jump-key generalization; golden snapshot | 1 | **Behaviour-preserving no-op** for all three live decks, proved by the snapshot diff |
-| **4 · Deck-set model + leader deck at zero new slides** | §4. Flat id lists; `sectionOverrides`; leader title + A.1 overrides; F cut with F.8 relocated; bridge beat-2 override; orphan guard | 3 | **The floor: a deliverable leader deck with no new slides.** At this checkpoint the leader deck is **56 slides across 11 sections A–K** (`shape` holds only the relocated F.8; `gap`, `invest` and `mandate` own no slides yet, so they take no letter). It grows to 73 / A–N as Phases 5–7 land |
+| **4 · Deck-set model + leader deck at zero new slides** | §4. Flat id lists; `sectionOverrides`; leader title + A.1 overrides; F cut with F.8 relocated; bridge beat-2 override; orphan guard | 3 | **The floor: a deliverable leader deck with no new slides.** **SHIPPED as 56 slides across 10 sections A–J, closing J.3** — not the 11 / A–K this row first predicted. Owner deviation, gh#41: F.8's override value is **`tools`** and it sits inside the retained TOOLS run, because at the floor `shape-agentic-org` does not exist and a one-slide `shape` run would put F.8 **third in the deck**, between the agenda and the landscape, with no argument in front of it. §4.3's C.2 placement is **restored in Phase 6** (#54). Phase 5's E.12 makes the floor 57 / A–J; Phases 6–7 grow it to 73 / A–N |
 | **5 · E.12 LOOP ENGINEERING + section-E knock-ons** | §8.2, §8.3. New `e12-loop-engineering` — **`steps: 3`, `canonicalPose: 2`**, productionized from `prototype-gh19b-e12-loop-engineering/` (**rewrite, do not lift**: the prototype is inline-styled and untested); E.1 orbit (steps 4→5); E.11 Ralph re-cut + footer; bridge rename + beat 1 | 3 (else a manual renumber per #10) | **UNBLOCKED — #19 resolved 2026-08-03.** Live for **Aug 12–13** and both leader decks. Ship the five §12.1 calls with the build, not after it. The E.1 / E.11 / bridge edits remain separable |
-| **6 · Leader new slides, must-tier** | `shape-agentic-org` (§7.1, 9 steps) · `gap-capability-ladder` (§7.2) · `invest-own-proof` · `invest-security` · `invest-subscription` · `mandate-enablement` · `mandate-phases-gates` | 4 | Vendor claims verified (§12.2) before `invest-security` / `invest-subscription` ship |
+| **6 · Leader new slides, must-tier** | `gap-capability-ladder` (§7.2, 5 steps) · `shape-agentic-org` (§7.1, 9 steps) · **F.8 back to C.2** (override `tools` → `shape`, reversing gh#41's floor deviation) · `invest-own-proof` · **`invest-chicken-egg`** · `invest-security` · `invest-subscription` · `mandate-enablement` · `mandate-phases-gates` · delete `proto16` + its hatch | 4 — **and not 5**: E.12 ships to every deck set and moves no leader row, so the two phases share no file | Vendor claims verified (§12.2) before `invest-security` / `invest-subscription` ship. **End state: both leader decks at 65 slides across 14 sections A–N, closer N.3**, with the standard decks unmoved at 65 / K.3 and `general` at 63 / K.1 |
 | **7 · Leader new slides, second tier** | `gap-hardest-part` · `gap-no-sop` · `gap-three-failures` · `gap-the-pattern` · `invest-base-rates` · `shape-middle-out` · `mandate-levers` · **`shape-tam-kotter` last** | 6 | **Live by Aug 17** for Berau leader **Aug 18**. TAM/Kotter is deliverable verbally if it slips |
 | **8 · Light theme productionization** | §9. Remove the DEV gates; drop the accent-variant switcher; **re-key the dark opt-out to slide id**; clear the §9.5 remediation list; decide the export/projection default | 4, 5 (id-keyed opt-out needs the final deck sets) | **After Aug 20.** Ships opt-in; presenter-facing only when §9.5 is empty |
 
 Notes on ordering:
 
+- **Amendment 2026-08-04 — `invest-chicken-egg` was in no phase row.** §4.3 needs **16** new
+  leader slides; Phases 6 and 7 as first written listed **15**. D.3 was the missing one.
+  It is now in **Phase 6**, beside D.4, because §6.2's shadow-AI escalation (B.2 =
+  *condition* · D.3 = *rational behaviour* · D.4 beat 2 = *exposure*) cannot be checked for
+  shared images or statistics if two of its three passes ship in different phases. Phase 6
+  therefore delivers **8** new slides and Phase 7 the remaining **8**. Tickets #52–#63.
 - **Phases 1 and 2 are independent** and can land in either order; 1 has the hard external
   deadline.
 - **Phase 3 before Phase 5** is a cost decision, not a correctness one: without it, E.12's
@@ -1525,7 +1544,9 @@ official.
 7. **gh#15's dark opt-out is index-keyed** and breaks the moment E.12 inserts or the leader
    deck composes.
 8. **A slide id is not a section reference.** `f8-your-agentic-os` renders as `C.2` in the
-   leader deck.
+   leader deck — **from Phase 6 on**. At the Phase 4 floor its override is `tools` and it
+   renders inside the retained TOOLS run (gh#41, restored on #54), so the letter it prints
+   depends on which phase the tree is at, not on the file.
 9. **`heatmap` in B4 is DEPRECATED and unrendered.** Do not refresh it.
 10. **`deck-registry.test.ts` is already red** on `main` — do not read its failure as a
     regression from this work.
