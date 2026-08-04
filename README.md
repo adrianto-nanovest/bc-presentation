@@ -65,11 +65,24 @@ alternative was a second copy of the variant list drifting out of step.
 
 ## Calibrate the palette against a projector
 
+Two targets. Both boot the dev server themselves.
+
 ```bash
-npm run projection-test
+npm run projection-test                        # hexladder (default) — the copper swatch
+node scripts/projection-test.mjs e12           # E.12's dense mono strips
+node scripts/projection-test.mjs e12 --audit   # headless; no projector needed
 ```
 
-Opens the HexLadder slide. See `docs/runbooks/projection-test.md` for the full procedure.
+`hexladder` opens the swatch at `?dev=hexladder` and prompts you to press `F11`;
+you then walk to the back row and check every adjacent copper / neutral stop is
+still distinguishable. `e12` opens the deck's smallest type instead. Both need the
+room and the hardware — `--audit` is the one part a script can do alone: it reports
+every text run's computed size and colour against the floors gh#50 set, and exits
+non-zero on a run that is too small, overflows its box, or is too grey.
+
+`e12` also takes `--pose=N` (default 1) and `--variant=<id>`. Neither applies to
+`hexladder`: it is one static slide in a deck of its own.
+See `docs/runbooks/projection-test.md` for the walk itself.
 
 ## Deploy — environment variables and domains
 

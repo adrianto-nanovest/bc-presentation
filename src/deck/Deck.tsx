@@ -65,18 +65,24 @@ export function Deck() {
     }
     if (params.get("dev") === "hexladder") {
       const composed = hexLadderComposedDeck.slides[0];
+      // Its OWN provider, scoped to this one slide. `<Slide>` calls `useDeck` for
+      // click-to-advance, so the bare `<Slide>` this branch used to return threw
+      // and rendered nothing (gh#51). One step, so every nav call clamps in place
+      // — which is what a standalone calibration swatch should do.
       return (
-        <Slide
-          index={0}
-          animationMode={hexLadderDevSlide.animationMode}
-          canonicalPose={hexLadderDevSlide.canonicalPose}
-          surface={hexLadderDevSlide.surface ?? "dark"}
-          letter={composed.letter}
-          num={composed.num}
-          sectionKey={composed.sectionKey}
-        >
-          {hexLadderDevSlide.render()}
-        </Slide>
+        <DeckProvider stepCounts={[hexLadderDevSlide.steps]}>
+          <Slide
+            index={0}
+            animationMode={hexLadderDevSlide.animationMode}
+            canonicalPose={hexLadderDevSlide.canonicalPose}
+            surface={hexLadderDevSlide.surface ?? "dark"}
+            letter={composed.letter}
+            num={composed.num}
+            sectionKey={composed.sectionKey}
+          >
+            {hexLadderDevSlide.render()}
+          </Slide>
+        </DeckProvider>
       );
     }
   }
