@@ -91,12 +91,12 @@ export function Slide({
           onClick={handleClick}
         >
           {/* The NavBar prints the same composed letter the FigLabel inside
-              `children` does — one value, one source. It takes the letter as a
-              prop rather than reading the context because it is rendered right
-              here, by the component that already holds it. */}
+              `children` does — one value, one source. It takes the letter and
+              the key as props rather than reading the context because it is
+              rendered right here, by the component that already holds them. */}
           <SlideNumberProvider value={{ letter, num, sectionKey }}>
             {children}
-            <NavBar letter={letter} />
+            <NavBar letter={letter} sectionKey={sectionKey} />
           </SlideNumberProvider>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { type MouseEvent } from "react";
 import { useDeck } from "./DeckContext";
+import { SECTION_NAMES, type SectionKey } from "./sections";
 
 // Six chevron variants used by the nav buttons. SVG paths copied verbatim
 // from the original Claude-Design shell so the visual stays identical.
@@ -60,6 +61,16 @@ export interface NavBarProps {
    * "Q" and the union stops at "K".
    */
   letter: string;
+  /**
+   * The showing slide's section, as a semantic KEY (§3.3) — the tag looks its
+   * name up in `SECTION_NAMES` (gh#39).
+   *
+   * The key, and not the name, because the letter beside it is only a position:
+   * §4.3 re-letters every section for the leader deck, so a name derived from
+   * the letter — or from a slide id — would read correctly in one deck and lie
+   * in the other. The key is the same in both.
+   */
+  sectionKey: SectionKey;
 }
 
 // Hover-revealed bottom nav. The outer `.nav-zone` is a transparent hot-zone
@@ -67,7 +78,7 @@ export interface NavBarProps {
 // pill. `data-no-advance` prevents Slide.tsx's click-to-advance handler
 // (T6) from firing when the nav is interacted with — the inner `stop`
 // handlers are belt-and-braces against synthetic-event bubbling quirks.
-export function NavBar({ letter }: NavBarProps) {
+export function NavBar({ letter, sectionKey }: NavBarProps) {
   const {
     slideIndex,
     stepIndex,
@@ -96,7 +107,16 @@ export function NavBar({ letter }: NavBarProps) {
     <div className="nav-zone" data-no-advance>
       <div className="nav-bar" onClick={stop} onMouseDown={stop}>
         <div className="nav-clusters">
-          <div className="nav-section-tag">Section {letter}</div>
+          {/* Letter and name, in that order: the letter is what the figure
+              numbers on the slide are keyed to, the name is what tells a
+              presenter of the 14-section leader deck where the letter puts
+              them. The tag is right-anchored and `nowrap`, so it grows leftward
+              into empty stage and leaves the Step / Slide clusters where they
+              are — measured, not assumed; see `.nav-section-tag` in
+              globals.css. */}
+          <div className="nav-section-tag">
+            Section {letter} · {SECTION_NAMES[sectionKey]}
+          </div>
           <div className="nav-group">
             <div className="nav-group-head">
               <span className="nav-group-label">Step</span>

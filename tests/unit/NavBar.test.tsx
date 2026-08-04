@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, act } from "@testing-library/react";
 import { NavBar } from "@/deck/NavBar";
 import { DeckProvider, useDeck } from "@/deck/DeckContext";
+import { SECTION_NAMES } from "@/deck/sections";
 
 // Test driver that renders the NavBar plus a small probe so we can both
 // drive the deck (via goTo/advance) and read its state back from the DOM.
@@ -16,7 +17,7 @@ function Harness({
   return (
     <DeckProvider stepCounts={stepCounts}>
       <Probe initialSlide={initialSlide} initialStep={initialStep} />
-      <NavBar letter="E" />
+      <NavBar letter="E" sectionKey="fundamentals" />
     </DeckProvider>
   );
 }
@@ -65,9 +66,69 @@ function getButton(title: string): HTMLButtonElement {
 // `<Slide>` from the composed deck. The half this file owns is that the letter it
 // is given prints verbatim, in unchanged `.nav-section-tag` markup — the class is
 // asserted because globals.css styles the tag through it.
-test("renders the section tag with the supplied letter", () => {
+//
+// gh#39 — the tag now also names the section. Both halves are asserted together
+// because they are one string on screen and the failure mode is the join.
+test("renders the section tag with the supplied letter and the section's name", () => {
   const { container } = render(<Harness stepCounts={[3, 4, 2]} />);
-  expect(container.querySelector(".nav-section-tag")?.textContent).toBe("Section E");
+  expect(container.querySelector(".nav-section-tag")?.textContent).toBe(
+    "Section E · ENGINEERING FUNDAMENTALS",
+  );
+});
+
+// gh#39, Trap 8 — the guard that gives the previous test its meaning. A letter is
+// a POSITION and a key is an IDENTITY, and a tag built from the letter would agree
+// with the fixture in the standard deck and lie in the leader deck, where §4.3
+// re-letters every section. Handing in a letter that belongs to another section
+// entirely fails any implementation that reached for the letter, a letter→name
+// table, or a slide id.
+test("reads the name from the section key, not from the letter", () => {
+  const { container } = render(
+    <DeckProvider stepCounts={[1]}>
+      {/* A SYNTHETIC pairing, and deliberately so: no deck hands `fundamentals`
+          a "Q" — it is E in the standard deck and H in the leader deck (§4.3).
+          Pairing the key with a letter no composer would give it is what makes
+          the assertion below independent of the letter; a real pairing would
+          pass just as well against an implementation that read the letter. */}
+      <NavBar letter="Q" sectionKey="fundamentals" />
+    </DeckProvider>,
+  );
+  expect(container.querySelector(".nav-section-tag")?.textContent).toBe(
+    "Section Q · ENGINEERING FUNDAMENTALS",
+  );
+});
+
+// The name is READ from the table rather than re-typed here, so an edit to
+// SECTION_NAMES reaches the nav tag instead of being caught as a test failure —
+// the table is the single source (§3.3) and this is the tag's only lookup.
+test("prints the SECTION_NAMES entry for every section key it is given", () => {
+  for (const [key, name] of Object.entries(SECTION_NAMES)) {
+    const { container, unmount } = render(
+      <DeckProvider stepCounts={[1]}>
+        <NavBar letter="A" sectionKey={key as keyof typeof SECTION_NAMES} />
+      </DeckProvider>,
+    );
+    expect(container.querySelector(".nav-section-tag")?.textContent).toBe(
+      `Section A · ${name}`,
+    );
+    unmount();
+  }
+});
+
+// The ticket's named case, pinned as a string. Scope, stated honestly: the pair
+// is mounted by hand, so this owns the RENDERING of `general`'s K run and not
+// the composition behind it — that `lab` runs last and takes K in `general` is
+// deck-registry's to assert, and was checked on the running deck (62 slides, K
+// at index 61).
+test("renders general's single-slide K run as Section K · THE PRACTICE LAB", () => {
+  const { container } = render(
+    <DeckProvider stepCounts={[1]}>
+      <NavBar letter="K" sectionKey="lab" />
+    </DeckProvider>,
+  );
+  expect(container.querySelector(".nav-section-tag")?.textContent).toBe(
+    "Section K · THE PRACTICE LAB",
+  );
 });
 
 test("renders zero-padded step and slide counters", () => {
@@ -108,7 +169,7 @@ test("nav-bar click does not bubble to the parent (stopPropagation)", () => {
   render(
     <div onClick={parentClick}>
       <DeckProvider stepCounts={[3, 4, 2]}>
-        <NavBar letter="E" />
+        <NavBar letter="E" sectionKey="fundamentals" />
       </DeckProvider>
     </div>,
   );
@@ -124,7 +185,7 @@ test("nav-bar mousedown does not bubble to the parent (stopPropagation)", () => 
   render(
     <div onMouseDown={parentMouseDown}>
       <DeckProvider stepCounts={[3, 4, 2]}>
-        <NavBar letter="E" />
+        <NavBar letter="E" sectionKey="fundamentals" />
       </DeckProvider>
     </div>,
   );
@@ -183,7 +244,7 @@ test("clicking reset deck sends both slide and step to 0", () => {
 test("nav-zone wrapper carries the data-no-advance attribute", () => {
   const { container } = render(
     <DeckProvider stepCounts={[1]}>
-      <NavBar letter="E" />
+      <NavBar letter="E" sectionKey="fundamentals" />
     </DeckProvider>,
   );
   const zone = container.querySelector(".nav-zone");

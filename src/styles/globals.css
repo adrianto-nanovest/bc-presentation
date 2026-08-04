@@ -202,6 +202,20 @@ em.kw {
   pointer-events: auto;
 }
 
+/* Since gh#39 this tag prints `Section E · ENGINEERING FUNDAMENTALS`, not just
+   `Section E`, so its width is now driven by SECTION_NAMES. It still needs no
+   size of its own: `.nav-bar` above is `justify-content: flex-end`, so the tag
+   grows LEFTWARD into empty stage and the Step / Slide clusters keep their
+   positions.
+
+   Measured at 1280×720 in the hover-revealed state, across all 11 sections of
+   the standard deck: the longest name, `PITFALLS & BEST PRACTICES`, makes a
+   317.5px tag whose left edge lands at x=688.5 — one line, no overflow, and
+   both clusters at the same x they held before the name was added.
+
+   `white-space: nowrap` is the guard on that: without it the tag is a shrinkable
+   flex item and `.stage` clips overflow, so a future longer name would wrap or
+   disappear silently rather than run left into the space it has. */
 .nav-section-tag {
   font-family: var(--mono);
   font-size: 11px;

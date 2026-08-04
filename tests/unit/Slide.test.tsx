@@ -146,7 +146,12 @@ test("clicking an element marked data-no-advance does NOT advance", () => {
 // from SlideProps there is no second letter to disagree with it, so a letter
 // nowhere near this file's E run is the proof the tag reads `letter` and not a
 // hardcode: `AT_E11` would let "E" pass either way.
-test("Slide renders NavBar inside the stage, printing its composed letter", () => {
+//
+// gh#39 — the tag names the section too, which makes this Slide's assertion that
+// BOTH values reach the NavBar. G and `techniques` are deliberately mismatched
+// against the standard deck (where `techniques` is F): the pair can only render
+// as written if each was forwarded, unaltered, from the props above.
+test("Slide renders NavBar inside the stage, printing its composed letter and section name", () => {
   render(
     wrap(
       <Slide
@@ -163,7 +168,7 @@ test("Slide renders NavBar inside the stage, printing its composed letter", () =
   );
   const stage = screen.getByTestId("slide");
   const tag = stage.querySelector(".nav-section-tag");
-  expect(tag?.textContent).toBe("Section G");
+  expect(tag?.textContent).toBe("Section G · TECHNIQUES");
 });
 
 // §3.5 — Slide is the publisher of the derived figure number. A FigLabel mounted
