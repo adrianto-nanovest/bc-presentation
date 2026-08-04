@@ -351,7 +351,6 @@ export const e7Slide: SlideDef = {
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E7ContextWhatWhy />,
 };

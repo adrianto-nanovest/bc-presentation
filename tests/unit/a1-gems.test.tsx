@@ -257,7 +257,7 @@ describe("A.1 (GEMS) renders", () => {
     expect(a1GemsSlide.canonicalPose).toBe(a1Slide.canonicalPose);
     expect(a1GemsSlide.animationMode).toBe(a1Slide.animationMode);
     expect(a1GemsSlide.surface).toBe(a1Slide.surface);
-    expect(a1GemsSlide.section).toBe(a1Slide.section);
+    expect(a1GemsSlide.sectionKey).toBe(a1Slide.sectionKey);
   });
 
   test("step 0 shows the GEMS fig label, title, tagline, rule header and five chips", () => {

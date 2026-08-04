@@ -104,7 +104,6 @@ export const h2Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "H",
   sectionKey: "pitfalls",
   render: () => <H2DisciplineWall />,
 };

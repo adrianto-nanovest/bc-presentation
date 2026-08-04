@@ -161,7 +161,6 @@ export const d3Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 4,
   surface: "dark",
-  section: "D",
   sectionKey: "process",
   render: () => <D3OneProcessFourLevels />,
 };

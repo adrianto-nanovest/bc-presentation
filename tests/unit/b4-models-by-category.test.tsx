@@ -56,7 +56,7 @@ test("B.4 keeps its pose contract — 2 steps, canonicalPose 1", () => {
   expect(b4Slide.steps).toBe(2);
   expect(b4Slide.canonicalPose).toBe(1);
   expect(b4Slide.animationMode).toBe("step-reveal");
-  expect(b4Slide.section).toBe("B");
+  expect(b4Slide.sectionKey).toBe("landscape");
 });
 
 test("B.4 still renders six category cards in the locked order", () => {

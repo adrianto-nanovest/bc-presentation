@@ -548,7 +548,6 @@ export const e3Slide: SlideDef = {
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E3PromptStructure />,
 };

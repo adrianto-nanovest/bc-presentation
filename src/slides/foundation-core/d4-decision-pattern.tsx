@@ -183,7 +183,6 @@ export const d4Slide: SlideDef = {
   canonicalPose: 5,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "D",
   sectionKey: "process",
   render: () => <D4DecisionPattern />,
 };

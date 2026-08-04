@@ -31,9 +31,9 @@ function renderAtStep(step: number) {
   });
 }
 
-test("E.5 declares 2 steps in section E (dark, step-reveal)", () => {
+test("E.5 declares 2 steps in `fundamentals` (dark, step-reveal)", () => {
   expect(e5Slide.steps).toBe(2);
-  expect(e5Slide.section).toBe("E");
+  expect(e5Slide.sectionKey).toBe("fundamentals");
   expect(e5Slide.canonicalPose).toBe(1);
   expect(e5Slide.animationMode).toBe("step-reveal");
   expect(e5Slide.surface).toBe("dark");

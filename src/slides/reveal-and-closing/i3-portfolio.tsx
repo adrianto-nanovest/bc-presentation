@@ -83,7 +83,6 @@ export const i3Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "I",
   sectionKey: "meta",
   render: () => <I3Portfolio />,
 };

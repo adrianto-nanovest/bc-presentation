@@ -81,7 +81,6 @@ export const h1Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "H",
   sectionKey: "pitfalls",
   render: () => <H1PitfallWall />,
 };

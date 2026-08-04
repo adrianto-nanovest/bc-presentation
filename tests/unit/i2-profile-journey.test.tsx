@@ -17,7 +17,7 @@ function renderSlide() {
 test("I.2 slide definition: 2 steps, canonical pose at step 2", () => {
   expect(i2Slide.steps).toBe(2);
   expect(i2Slide.canonicalPose).toBe(1);
-  expect(i2Slide.section).toBe("I");
+  expect(i2Slide.sectionKey).toBe("meta");
   expect(i2Slide.surface).toBe("dark");
   expect(i2Slide.animationMode).toBe("step-reveal");
 });

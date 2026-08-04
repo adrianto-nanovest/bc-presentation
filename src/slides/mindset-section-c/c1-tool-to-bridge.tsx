@@ -325,7 +325,6 @@ export const c1Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "C",
   sectionKey: "mindset",
   render: () => <C1ToolToBridge />,
 };

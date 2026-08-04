@@ -30,7 +30,7 @@ test("D.1 declares 3 steps with canonicalPose=2", () => {
   expect(d1Slide.steps).toBe(3);
   expect(d1Slide.canonicalPose).toBe(2);
   expect(d1Slide.animationMode).toBe("step-reveal");
-  expect(d1Slide.section).toBe("D");
+  expect(d1Slide.sectionKey).toBe("process");
 });
 
 test("D.1 renders the FIG label", () => {

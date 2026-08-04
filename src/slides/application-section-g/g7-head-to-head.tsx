@@ -380,7 +380,6 @@ export const g7Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "G",
   sectionKey: "tools",
   render: () => <G7HeadToHead />,
 };

@@ -461,7 +461,6 @@ export const b2Slide: SlideDef = {
   canonicalPose: 5,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "B",
   sectionKey: "landscape",
   render: () => <B2FieldsTerminology />,
 };

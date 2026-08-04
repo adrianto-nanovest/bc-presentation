@@ -256,7 +256,6 @@ export const g5Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "G",
   sectionKey: "tools",
   render: () => <G5Google />,
 };

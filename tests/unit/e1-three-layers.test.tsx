@@ -31,7 +31,7 @@ test("E.1 declares 4 steps with canonicalPose=3", () => {
   expect(e1Slide.steps).toBe(4);
   expect(e1Slide.canonicalPose).toBe(3);
   expect(e1Slide.animationMode).toBe("step-reveal");
-  expect(e1Slide.section).toBe("E");
+  expect(e1Slide.sectionKey).toBe("fundamentals");
 });
 
 test("E.1 renders without throwing under DeckProvider and shows the FigLabel", () => {

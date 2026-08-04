@@ -339,7 +339,6 @@ export const b4Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "B",
   sectionKey: "landscape",
   render: () => <B4ModelsByCategory />,
 };

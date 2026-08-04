@@ -258,7 +258,6 @@ export const d1Slide: SlideDef = {
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "D",
   sectionKey: "process",
   render: () => <D1TheTrap />,
 };

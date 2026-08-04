@@ -220,7 +220,6 @@ export const d2Slide: SlideDef = {
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "D",
   sectionKey: "process",
   render: () => <D2TheConvergence />,
 };

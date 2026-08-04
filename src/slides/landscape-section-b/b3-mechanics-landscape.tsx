@@ -278,7 +278,6 @@ export const b3Slide: SlideDef = {
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "B",
   sectionKey: "landscape",
   render: () => <B3MechanicsLandscape />,
 };

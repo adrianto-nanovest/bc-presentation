@@ -253,7 +253,6 @@ export const e11Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E11HarnessPractices />,
 };

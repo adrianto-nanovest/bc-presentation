@@ -12,7 +12,6 @@ export const a1GeneralSlide: SlideDef = {
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "A",
   sectionKey: "opening",
   render: () => <A1WhatYouveSeen content={a1GeneralContent} />,
 };

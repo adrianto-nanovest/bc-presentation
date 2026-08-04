@@ -655,7 +655,6 @@ export const e5Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E5PromptExamples />,
 };

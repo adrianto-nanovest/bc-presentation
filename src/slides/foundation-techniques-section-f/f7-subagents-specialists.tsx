@@ -1192,7 +1192,6 @@ export const f7Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "F",
   sectionKey: "techniques",
   render: () => <F7SubagentsSpecialists />,
 };

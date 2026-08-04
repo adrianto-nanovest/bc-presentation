@@ -302,7 +302,6 @@ export const j4Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
-  section: "J",
   sectionKey: "principles",
   render: () => <J4RecipeShip />,
 };

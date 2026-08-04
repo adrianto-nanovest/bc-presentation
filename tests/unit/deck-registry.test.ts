@@ -8,7 +8,7 @@
 // there.
 //
 // `VARIANT` resolves once at module scope and `src/slides/reveal-and-closing`
-// reads it to pick the K run, so one module epoch holds exactly ONE brand's
+// reads it to pick the `lab` run, so one module epoch holds exactly ONE brand's
 // deck. Each case therefore re-points `window.location` and resets the module
 // registry before importing — once per case, in `beforeAll`, because reloading
 // the whole slide registry is the expensive part of this file.
@@ -20,35 +20,46 @@ import {
   type DeckSetId,
   type VariantId,
 } from "@/deck-variants";
-import type { SlideDef, SlideSection } from "@/deck/types";
+import type { SlideDef } from "@/deck/types";
+import type { SectionKey } from "@/deck/sections";
 
-/** One `[section, length]` pair. The deck is asserted as its run-length encoding,
- *  which is equivalent to comparing the full ordered section list but names the
- *  offending section on failure instead of an index. */
-type SectionRun = readonly [SlideSection, number];
+/** One `[sectionKey, length]` pair. The deck is asserted as its run-length
+ *  encoding, which is equivalent to comparing the full ordered section list but
+ *  names the offending section on failure instead of an index.
+ *
+ *  Keyed by `sectionKey`, never by a display letter: as of gh#38 no slide states
+ *  what letter it is, and the letter a run takes is a function of where the run
+ *  sits (§3.4 R2). Asserting the keys asserts the letters — a run in the wrong
+ *  place fails HERE, at the section that moved, rather than as a letter mismatch
+ *  on every slide downstream of it. */
+type SectionRun = readonly [SectionKey, number];
 
-// Sections A–J are the standard deck's spine: every brand composes them
-// identically, so only the K run is brand-dependent. A brand delta INSIDE a
-// section (each brand's own A.1, gems' own K.2) swaps one slide for another and
-// so moves no count — see variant-composition.test.tsx for those.
+// This is the standard deck's spine: every brand composes it identically, so
+// only the closing `lab` run is brand-dependent. A brand delta INSIDE a section
+// (each brand's own A.1, gems' own lab slide) swaps one slide for another and so
+// moves no count — see variant-composition.test.tsx for those.
+//
+// Composed in this order the runs take the letters A–J, which is what the deck
+// prints today. The letters are NOT restated here; the order below is what
+// produces them.
 const SPINE: readonly SectionRun[] = [
-  ["A", 2], // cover + A.1
-  ["B", 5],
-  ["C", 6], // C.1–C.5 + the C→D bridge
-  ["D", 5],
-  ["E", 12],
-  ["F", 9],
-  ["G", 11],
-  ["H", 3],
-  ["I", 4],
-  ["J", 4],
+  ["opening", 2], // cover + A.1
+  ["landscape", 5],
+  ["mindset", 6], // C.1–C.5 + the bridge into `process`
+  ["process", 5],
+  ["fundamentals", 12],
+  ["techniques", 9],
+  ["tools", 11],
+  ["pitfalls", 3],
+  ["meta", 4],
+  ["principles", 4],
 ];
 
-// K IS the practice-lab difference: K.1 handoff + K.2 lab overview + K.3 closer
-// where the lab runs; the closer alone where it does not, renumbering itself to
-// K.1 (see k3-thank-you.tsx).
-const K_RUN_WITH_LAB = 3;
-const K_RUN_WITHOUT_LAB = 1;
+// `lab` IS the practice-lab difference: handoff + lab overview + closer where
+// the lab runs; the closer alone where it does not, which renumbers the closer
+// to .1 of its run (see k3-thank-you.tsx).
+const PRACTICE_LAB_RUN = 3;
+const CLOSER_ONLY_RUN = 1;
 
 /** The live slide count recorded on the ticket (gh#28) for a practice-lab brand.
  *  Anchors SPINE to an externally observed figure; asserted once, not per case. */
@@ -58,7 +69,7 @@ const OBSERVED_TOTAL_WITH_LAB = 64;
 function standardRuns(brand: Brand): readonly SectionRun[] {
   return [
     ...SPINE,
-    ["K", BRANDS[brand].practiceLab ? K_RUN_WITH_LAB : K_RUN_WITHOUT_LAB],
+    ["lab", BRANDS[brand].practiceLab ? PRACTICE_LAB_RUN : CLOSER_ONLY_RUN],
   ];
 }
 
@@ -100,11 +111,11 @@ function variantFor({ brand, deckSet }: DeckCase): VariantId {
   return id;
 }
 
-function runsOf(slides: readonly SlideDef[]): Array<[SlideSection, number]> {
-  return slides.reduce<Array<[SlideSection, number]>>((runs, s) => {
+function runsOf(slides: readonly SlideDef[]): Array<[SectionKey, number]> {
+  return slides.reduce<Array<[SectionKey, number]>>((runs, s) => {
     const last = runs.at(-1);
-    if (last && last[0] === s.section) last[1] += 1;
-    else runs.push([s.section, 1]);
+    if (last && last[0] === s.sectionKey) last[1] += 1;
+    else runs.push([s.sectionKey, 1]);
     return runs;
   }, []);
 }
@@ -133,7 +144,7 @@ async function loadRegistry(variant: VariantId) {
   return import("@/deck/registry");
 }
 
-test(`the spine plus a practice-lab K run is the ${OBSERVED_TOTAL_WITH_LAB} slides observed live`, () => {
+test(`the spine plus a practice-lab run is the ${OBSERVED_TOTAL_WITH_LAB} slides observed live`, () => {
   expect(totalOf(standardRuns("berau"))).toBe(OBSERVED_TOTAL_WITH_LAB);
 });
 
@@ -153,7 +164,7 @@ describe.each(CASES)("deck composed for $brand · $deckSet", (deckCase) => {
 
   test("every slide is navigable: a step count and an in-range canonical pose", () => {
     deckSlides.forEach((s, i) => {
-      const at = `${variant} slide ${i} (${s.section})`;
+      const at = `${variant} slide ${i} (${s.id})`;
       expect(typeof s.render, at).toBe("function");
       expect(s.steps, at).toBeGreaterThan(0);
       expect(s.canonicalPose, at).toBeGreaterThanOrEqual(0);
@@ -163,7 +174,7 @@ describe.each(CASES)("deck composed for $brand · $deckSet", (deckCase) => {
 
   test("excludes the dev-only hex-ladder slide, so the last authored section closes the deck", () => {
     expect(deckSlides).not.toContain(hexLadderDevSlide);
-    expect(deckSlides.at(-1)?.section).toBe(expectedRuns(deckCase).at(-1)?.[0]);
+    expect(deckSlides.at(-1)?.sectionKey).toBe(expectedRuns(deckCase).at(-1)?.[0]);
   });
 });
 
@@ -187,6 +198,6 @@ describe("the practice-lab difference", () => {
     }));
 
     const { deckSlides } = await loadRegistry("general");
-    expect(runsOf(deckSlides).at(-1)).toEqual(["K", K_RUN_WITH_LAB]);
+    expect(runsOf(deckSlides).at(-1)).toEqual(["lab", PRACTICE_LAB_RUN]);
   });
 });

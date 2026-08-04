@@ -164,7 +164,7 @@ async function deckShapeFor(id: VariantId): Promise<string[]> {
   useVariant(id);
   const { deckSlides } = await import("@/deck/registry");
   return deckSlides.map(
-    (s) => `${s.section}:${s.steps}:${s.canonicalPose}:${s.animationMode}:${s.surface}`,
+    (s) => `${s.sectionKey}:${s.steps}:${s.canonicalPose}:${s.animationMode}:${s.surface}`,
   );
 }
 

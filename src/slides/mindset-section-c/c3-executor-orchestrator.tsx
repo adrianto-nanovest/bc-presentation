@@ -747,7 +747,6 @@ export const c3Slide: SlideDef = {
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "C",
   sectionKey: "mindset",
   render: () => <C3ExecutorOrchestrator />,
 };

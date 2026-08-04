@@ -9,7 +9,7 @@
 // against, and would prove nothing.
 //
 // ONE EPOCH HOLDS ONE BRAND. `src/variant.ts` resolves `VARIANT` at module
-// scope and `src/slides/reveal-and-closing` reads it to pick the K run, so a
+// scope and `src/slides/reveal-and-closing` reads it to pick the `lab` run, so a
 // brand's deck only exists inside a module registry loaded with that brand's
 // `?variant=` in place — the pattern `tests/unit/deck-registry.test.ts` uses.
 // Consequence worth stating loudly: `DeckProvider` MUST be imported from the
@@ -176,7 +176,7 @@ export async function harvestDeck(brand: Brand): Promise<NumberingRow[]> {
   // exactly that, so reading the composed list loses nothing.
   composedDeck.slides.forEach((composed) => {
     const { def, index } = composed;
-    const at = `${variant} slide ${index} (${def.section})`;
+    const at = `${variant} slide ${index} (${def.id})`;
     try {
       rows.push(harvestSlide(def, composed, DeckProvider, SlideNumberProvider, at));
     } catch (err) {

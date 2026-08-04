@@ -25,10 +25,9 @@ export const hexLadderDevSlide: SlideDef = {
   animationMode: "static",
   canonicalPose: 0,
   surface: "light",
-  // Dev-only utility — tagged "K" / `lab` so the SlideDef type's non-optional
-  // `section` and `sectionKey` are satisfied. Not navigated, and never composed,
-  // so the key costs the composed deck nothing.
-  section: "K",
+  // Dev-only utility — tagged `lab` so the SlideDef type's non-optional
+  // `sectionKey` is satisfied. Not navigated, and never composed with the
+  // audience deck, so the key costs that deck nothing.
   sectionKey: "lab",
   render: () => <HexLadder />,
 };

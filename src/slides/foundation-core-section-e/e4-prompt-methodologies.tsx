@@ -515,7 +515,6 @@ export const e4Slide: SlideDef = {
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E4PromptMethodologies />,
 };

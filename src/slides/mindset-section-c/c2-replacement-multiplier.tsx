@@ -561,7 +561,6 @@ export const c2Slide: SlideDef = {
   canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "C",
   sectionKey: "mindset",
   render: () => <C2ReplacementMultiplier />,
 };

@@ -237,7 +237,6 @@ export const e9Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E9ContextTheWall />,
 };

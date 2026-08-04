@@ -18,7 +18,7 @@
 // column of the rendered fixture moves. That case belongs to the other file.
 //
 // ONE EPOCH HOLDS ONE BRAND — `src/variant.ts` resolves `VARIANT` at module
-// scope and `src/slides/reveal-and-closing` reads it to pick the K run, so each
+// scope and `src/slides/reveal-and-closing` reads it to pick the `lab` run, so each
 // brand's deck only exists inside a module registry loaded with that brand's
 // `?variant=` in place. Same pattern as `deck-registry.test.ts`.
 import { readFileSync } from "node:fs";

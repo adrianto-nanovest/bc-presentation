@@ -23,11 +23,11 @@ function renderJ4(advanceToStep = j4Slide.canonicalPose) {
   );
 }
 
-test("J.4 slide def — 2 steps, canonicalPose=1, step-reveal, section J", () => {
+test("J.4 slide def — 2 steps, canonicalPose=1, step-reveal, `principles`", () => {
   expect(j4Slide.steps).toBe(2);
   expect(j4Slide.canonicalPose).toBe(1);
   expect(j4Slide.animationMode).toBe("step-reveal");
-  expect(j4Slide.section).toBe("J");
+  expect(j4Slide.sectionKey).toBe("principles");
 });
 
 test("J.4 renders FIG label, headline, subtitle, footer caption, and 3 cards", () => {

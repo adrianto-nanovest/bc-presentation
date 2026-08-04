@@ -1167,7 +1167,6 @@ export const f5Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "F",
   sectionKey: "techniques",
   render: () => <F5McpTheAdapter />,
 };

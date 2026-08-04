@@ -175,7 +175,6 @@ export const i2Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
-  section: "I",
   sectionKey: "meta",
   render: () => <I2ProfileJourney />,
 };

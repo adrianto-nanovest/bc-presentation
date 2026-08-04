@@ -698,7 +698,6 @@ export const b1Slide: SlideDef = {
   canonicalPose: 6,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "B",
   sectionKey: "landscape",
   render: () => <B1EvolutionJourney />,
 };

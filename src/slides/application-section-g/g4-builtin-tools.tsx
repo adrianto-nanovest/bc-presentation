@@ -224,7 +224,6 @@ export const g4Slide: SlideDef = {
   canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "G",
   sectionKey: "tools",
   render: () => <G4BuiltinTools />,
 };

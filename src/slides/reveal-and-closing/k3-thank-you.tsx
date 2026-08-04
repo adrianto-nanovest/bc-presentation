@@ -161,7 +161,6 @@ export const k3Slide: SlideDef = {
   canonicalPose: 0,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "K",
   sectionKey: "lab",
   render: () => <K3ThankYou />,
 };

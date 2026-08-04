@@ -40,7 +40,7 @@ test("F.6 declares 2 steps with canonicalPose=1", () => {
   expect(f6Slide.steps).toBe(2);
   expect(f6Slide.canonicalPose).toBe(1);
   expect(f6Slide.animationMode).toBe("step-reveal");
-  expect(f6Slide.section).toBe("F");
+  expect(f6Slide.sectionKey).toBe("techniques");
   expect(f6Slide.surface).toBe("dark");
 });
 

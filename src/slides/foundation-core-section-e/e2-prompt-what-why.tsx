@@ -379,7 +379,6 @@ export const e2Slide: SlideDef = {
   canonicalPose: 5,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E2PromptWhatWhy />,
 };

@@ -157,7 +157,6 @@ export const d5Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "D",
   sectionKey: "process",
   render: () => <D5BridgeToE />,
 };

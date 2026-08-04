@@ -570,7 +570,6 @@ export const b5Slide: SlideDef = {
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "B",
   sectionKey: "landscape",
   render: () => <B5TodaysLandscape />,
 };

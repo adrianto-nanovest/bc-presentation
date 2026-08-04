@@ -580,7 +580,6 @@ export const f1Slide: SlideDef = {
   canonicalPose: 3,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "F",
   sectionKey: "techniques",
   render: () => <F1TwoPillars />,
 };

@@ -301,7 +301,6 @@ export const j3Slide: SlideDef = {
   animationMode: "step-reveal",
   canonicalPose: 1,
   surface: "dark",
-  section: "J",
   sectionKey: "principles",
   render: () => <J3RecipeBuildup />,
 };

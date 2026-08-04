@@ -61,7 +61,7 @@ test("K.2 GEMS declares exactly the shared K.2's step + morph mechanics", () => 
   expect(k2GemsSlide.canonicalPose).toBe(k2Slide.canonicalPose);
   expect(k2GemsSlide.animationMode).toBe(k2Slide.animationMode);
   expect(k2GemsSlide.surface).toBe(k2Slide.surface);
-  expect(k2GemsSlide.section).toBe("K");
+  expect(k2GemsSlide.sectionKey).toBe("lab");
 });
 
 // ── storage: override part 2 only ────────────────────────────────────────────

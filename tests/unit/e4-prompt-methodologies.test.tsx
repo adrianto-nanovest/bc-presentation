@@ -38,7 +38,7 @@ test("E.4 declares 4 steps with canonicalPose=3", () => {
   expect(e4Slide.steps).toBe(4);
   expect(e4Slide.canonicalPose).toBe(3);
   expect(e4Slide.animationMode).toBe("step-reveal");
-  expect(e4Slide.section).toBe("E");
+  expect(e4Slide.sectionKey).toBe("fundamentals");
   expect(e4Slide.surface).toBe("dark");
 });
 

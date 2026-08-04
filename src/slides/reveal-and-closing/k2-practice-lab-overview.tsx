@@ -448,7 +448,6 @@ export const k2Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "K",
   sectionKey: "lab",
   render: () => <K2PracticeLabOverview />,
 };

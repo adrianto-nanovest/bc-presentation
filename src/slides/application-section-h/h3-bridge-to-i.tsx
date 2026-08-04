@@ -172,7 +172,6 @@ export const h3Slide: SlideDef = {
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "H",
   sectionKey: "pitfalls",
   render: () => <H3BridgeToI />,
 };

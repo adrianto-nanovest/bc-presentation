@@ -48,11 +48,11 @@ function renderAtStep(step: number) {
 // ---------------------------------------------------------------------------
 // Slide-def sanity (not a numbered test in spec §10, but cheap insurance).
 // ---------------------------------------------------------------------------
-test("F.8 slide-def declares 2 steps with canonicalPose=1, dark surface, section F", () => {
+test("F.8 slide-def declares 2 steps with canonicalPose=1, dark surface, `techniques`", () => {
   expect(f8Slide.steps).toBe(2);
   expect(f8Slide.canonicalPose).toBe(1);
   expect(f8Slide.animationMode).toBe("step-reveal");
-  expect(f8Slide.section).toBe("F");
+  expect(f8Slide.sectionKey).toBe("techniques");
   expect(f8Slide.surface).toBe("dark");
 });
 

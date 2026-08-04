@@ -6,12 +6,16 @@ import type { SectionKey } from "./sections";
 // sub-spec contributes an array of these and the deck composes them
 // into a single ordered registry (see src/deck/registry.ts).
 //
-// No longer reaches the screen: as of gh#36 no runtime chrome or navigation code
-// reads it. The remaining readers are ~30 unit tests and the numbering harvest,
-// which assert the field against the letter it used to print. gh#38 deletes those
-// readers along with the field and this type.
-export type SlideSection = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K";
-
+// NO SLIDE STATES WHAT LETTER IT IS. The hardcoded `section` letter and the
+// A–K union that typed it lived here until gh#38 and are gone: a display letter
+// is DERIVED from where a slide's section sits in the composed deck (§3.4 R2)
+// and is authored nowhere. It is still carried to the screen from there — the
+// composed row, `<Slide>`, `SlideNumberContext`, `FigLabel` — but every copy
+// traces back to that one derivation, so none of them can disagree.
+//
+// That is what will let Phase 4's leader deck reorder its sections and render
+// `f8-your-agentic-os` as C.2 (§4.3) without re-authoring the slide: a field
+// asserting its own letter could not have survived the move.
 export interface SlideDef {
   /**
    * Stable, opaque, unique. The deck-set lists reference slides by this.
@@ -27,13 +31,6 @@ export interface SlideDef {
   animationMode: AnimationMode;        // controls click bubbling per Slide.tsx
   canonicalPose: number;               // step index the export pipeline pauses at
   surface?: "dark" | "light";
-  /**
-   * LEGACY hardcoded display letter. The NavBar was its last RUNTIME reader and
-   * as of gh#36 takes the derived letter instead, so nothing this field says can
-   * reach the screen — only tests still read it. Use `sectionKey`; this field
-   * cannot survive a section being reordered. gh#38 deletes it.
-   */
-  section: SlideSection;
   /** What narrative block this slide belongs to. The display letter is DERIVED
    *  from where the block sits in the composed deck (§3.3). */
   sectionKey: SectionKey;

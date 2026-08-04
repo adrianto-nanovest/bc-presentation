@@ -377,7 +377,6 @@ export const c4Slide: SlideDef = {
   canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "C",
   sectionKey: "mindset",
   render: () => <C4VBounceWorkflow />,
 };

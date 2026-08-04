@@ -194,7 +194,6 @@ export const titleSlide: SlideDef = {
   canonicalPose: 0,
   animationMode: "static",
   surface: "dark",
-  section: "A",
   sectionKey: "opening",
   numbered: false,
   render: () => <Title />,

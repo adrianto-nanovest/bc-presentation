@@ -34,12 +34,12 @@ function renderAtStep(step: number) {
   return result;
 }
 
-test("Bridge declares 2 steps with canonicalPose=1 and section C", () => {
+test("Bridge declares 2 steps with canonicalPose=1 in `mindset`", () => {
   expect(bridgeMindsetToMechanicsSlide.steps).toBe(2);
   expect(bridgeMindsetToMechanicsSlide.canonicalPose).toBe(1);
   expect(bridgeMindsetToMechanicsSlide.animationMode).toBe("step-reveal");
   expect(bridgeMindsetToMechanicsSlide.surface).toBe("dark");
-  expect(bridgeMindsetToMechanicsSlide.section).toBe("C");
+  expect(bridgeMindsetToMechanicsSlide.sectionKey).toBe("mindset");
 });
 
 test("Bridge renders the canonical top-left FIG.C.6 label", () => {

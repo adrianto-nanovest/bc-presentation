@@ -336,7 +336,6 @@ export const e10Slide: SlideDef = {
   canonicalPose: 4,
   animationMode: "step-reveal",
   surface: "dark",
-  section: "E",
   sectionKey: "fundamentals",
   render: () => <E10HarnessWhatWhy />,
 };
