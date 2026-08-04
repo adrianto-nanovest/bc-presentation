@@ -1,6 +1,4 @@
 import type { SlideDef } from "@/deck/types";
-import { BRANDS, type Brand } from "@/deck-variants";
-import { VARIANT } from "@/variant";
 import { i1Slide } from "./i1-meta-process";
 import { i2Slide } from "./i2-profile-journey";
 import { i3Slide } from "./i3-portfolio";
@@ -14,23 +12,16 @@ import { k2Slide } from "./k2-practice-lab-overview";
 import { k2GemsSlide } from "./k2-gems";
 import { k3Slide } from "./k3-thank-you";
 
-// K.2's part 2 states how many tracks the lab runs, which is a BRAND fact: GEMS
-// runs one, so its part 2 names the single persona instead (gh#26). `general` has
-// no practice lab, so its row is never read — it is declared to keep the map
-// exhaustive when a brand is added.
-const k2ByBrand: Record<Brand, SlideDef> = {
-  berau: k2Slide,
-  gems: k2GemsSlide,
-  general: k2Slide,
-};
-
-// Spec §1 final order. A brand without a Practice Lab drops K.1 (handoff) and
-// K.2 (lab overview); the thank-you closer then renumbers itself to K.1 (see
-// k3-thank-you.tsx). Leaders run the same lab, so this is brand-level.
-const kSlides: SlideDef[] = BRANDS[VARIANT.brand].practiceLab
-  ? [k1Slide, k2ByBrand[VARIANT.brand], k3Slide]
-  : [k3Slide];
-
+// Reveal + closing — every def authored for sections I, J and K, the GEMS K.2
+// alternate included.
+//
+// A CATALOGUE, NOT A DECK FRAGMENT (§4.1, gh#40). This module used to read
+// `BRANDS[VARIANT.brand].practiceLab` to decide whether K.1 and K.2 composed,
+// and to pick between the two K.2s. Both decisions now sit in
+// `src/deck/slots.ts` — the lab-only ids declared once, the alternate resolving
+// behind the canonical slot id `k2-practice-lab-overview` — so a brand without
+// a Practice Lab drops the two slots there and the closer renumbers itself to
+// K.1 by compose.ts R3.
 export const revealAndClosingSlides: SlideDef[] = [
   i1Slide,
   i2Slide,
@@ -40,5 +31,8 @@ export const revealAndClosingSlides: SlideDef[] = [
   j2Slide,
   j3Slide,
   j4Slide,
-  ...kSlides,
+  k1Slide,
+  k2Slide,
+  k2GemsSlide,
+  k3Slide,
 ];

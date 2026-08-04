@@ -60,16 +60,21 @@ describe("title-slide workshop chip", () => {
 
 // ── A.1 hook, selected by brand ──────────────────────────────────────────────
 
+// READ OFF THE COMPOSED DECK, not off a section index module. Until gh#40 the
+// brand pick lived in `@/slides/opening-section-a`, which handed the deck the
+// cover plus one A.1; the deck set now owns the order and `@/deck/slots.ts` the
+// pick, so `deckSlides` is where the answer is. The assertions below are
+// unchanged — `slides[1]` is still the A.1 this brand runs.
 async function openingFor(id: VariantId) {
   useVariant(id);
-  const [opening, berauA1, generalA1, gemsA1] = await Promise.all([
-    import("@/slides/opening-section-a"),
+  const [registry, berauA1, generalA1, gemsA1] = await Promise.all([
+    import("@/deck/registry"),
     import("@/slides/opening-section-a/a1-what-youve-seen"),
     import("@/slides/opening-section-a/a1-general"),
     import("@/slides/opening-section-a/a1-gems"),
   ]);
   return {
-    slides: opening.openingSectionASlides,
+    slides: registry.deckSlides,
     a1Slide: berauA1.a1Slide,
     a1GeneralSlide: generalA1.a1GeneralSlide,
     a1GemsSlide: gemsA1.a1GemsSlide,
@@ -99,24 +104,34 @@ describe("A.1 hook selection", () => {
   });
 
   test("the opening is always the cover plus exactly one A.1", async () => {
-    const { slides } = await openingFor("gems-middle-mgmt");
-    expect(slides).toHaveLength(2);
+    const { slides, a1Slide, a1GeneralSlide, a1GemsSlide } =
+      await openingFor("gems-middle-mgmt");
+    // Counted rather than length-checked, because the deck no longer ENDS after
+    // the opening: the claim is that the three alternates share one slot, so
+    // exactly one of them composes — the failure this guards is two A.1s, which
+    // a `slides[1]` assertion would not see.
+    const alternates = [a1Slide, a1GeneralSlide, a1GemsSlide];
+    expect(slides.filter((s) => alternates.includes(s))).toHaveLength(1);
+    expect(slides[0].numbered).toBe(false); // the cover, still first
   });
 });
 
 // ── Practice Lab inclusion, driven by the brand's `practiceLab` flag ─────────
 
+// The composed deck again, for the same reason: `practiceLab` inclusion and the
+// K.2 pick moved out of `@/slides/reveal-and-closing` and into `@/deck/slots.ts`
+// (gh#40). `slice(-3)` still reads the K run, because K still closes the deck.
 async function closingFor(id: VariantId) {
   useVariant(id);
-  const [closing, k1, k2, k2Gems, k3] = await Promise.all([
-    import("@/slides/reveal-and-closing"),
+  const [registry, k1, k2, k2Gems, k3] = await Promise.all([
+    import("@/deck/registry"),
     import("@/slides/reveal-and-closing/k1-challenge-handoff"),
     import("@/slides/reveal-and-closing/k2-practice-lab-overview"),
     import("@/slides/reveal-and-closing/k2-gems"),
     import("@/slides/reveal-and-closing/k3-thank-you"),
   ]);
   return {
-    slides: closing.revealAndClosingSlides,
+    slides: registry.deckSlides,
     k1Slide: k1.k1Slide,
     k2Slide: k2.k2Slide,
     k2GemsSlide: k2Gems.k2GemsSlide,

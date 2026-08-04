@@ -7,9 +7,10 @@
 // what size. Identity assertions do not belong here and counts do not belong
 // there.
 //
-// `VARIANT` resolves once at module scope and `src/slides/reveal-and-closing`
-// reads it to pick the `lab` run, so one module epoch holds exactly ONE brand's
-// deck. Each case therefore re-points `window.location` and resets the module
+// `VARIANT` resolves once at module scope and `src/deck/registry.tsx` reads it
+// to resolve the deck set and the `lab` run (gh#40 moved that read there from
+// `src/slides/reveal-and-closing`), so one module epoch holds exactly ONE
+// brand's deck. Each case therefore re-points `window.location` and resets the module
 // registry before importing — once per case, in `beforeAll`, because reloading
 // the whole slide registry is the expensive part of this file.
 import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";

@@ -9,7 +9,8 @@
 // against, and would prove nothing.
 //
 // ONE EPOCH HOLDS ONE BRAND. `src/variant.ts` resolves `VARIANT` at module
-// scope and `src/slides/reveal-and-closing` reads it to pick the `lab` run, so a
+// scope and `src/deck/registry.tsx` reads it to resolve the deck set and the
+// `lab` run (gh#40 moved that read out of `src/slides/reveal-and-closing`), so a
 // brand's deck only exists inside a module registry loaded with that brand's
 // `?variant=` in place — the pattern `tests/unit/deck-registry.test.ts` uses.
 // Consequence worth stating loudly: `DeckProvider` MUST be imported from the
