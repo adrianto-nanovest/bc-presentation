@@ -255,3 +255,41 @@ export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
     sectionOverrides: { "f8-your-agentic-os": "tools" },
   },
 };
+
+/**
+ * The slide defs that reach NO deck set — and the reason each is allowed to.
+ *
+ * Spec §10.1 check 7 (gh#44). Once the lists above own the order, a slide file
+ * can exist, compile, pass its own unit test and reach no deck AT ALL, silently:
+ * nothing else in the codebase compares "what exists" against "what composes".
+ * `tests/unit/deck-orphan-guard.test.ts` does, and requires every def in the
+ * tree to be either composed by a deck set or named here. That is what turns
+ * §4.1's "drift becomes explicit" into a decision someone has to make — a new
+ * slide fails the suite until its id is written into a deck-set list above, or
+ * into this one AND into the guard's pinned list of orphans. Adding an entry
+ * here is deliberately not the cheap way out: it takes a second edit, in a file
+ * that says out loud that one orphan is all this repo has.
+ *
+ * WHY IT LIVES HERE, beside the lists, and not in the test: "this slide ships to
+ * no audience, on purpose" is a statement about the DECK, not a fixture. A
+ * reader of the composition sees the exception without opening a test file, and
+ * the exception sits one screen from the lists it is an exception to.
+ *
+ * A RECORD AND NOT AN ARRAY because the reason is the load-bearing half. A bare
+ * id list accepts a new entry with no argument beside it, which is the drift
+ * this guard exists to catch, arriving one review cycle later.
+ *
+ * NOT HERE, deliberately: the five `src/slides/prototype-gh*` directories. They
+ * declare no `SlideDef`, so the guard never sees them, and Phases 5–8 delete
+ * them — an entry would be a permanent record of a temporary thing.
+ */
+export const ORPHANED_SLIDES: Readonly<Record<string, string>> = {
+  "hex-ladder":
+    "A developer utility, not a slide of any deck. Declared as " +
+    "`hexLadderDevSlide` in `./registry.tsx` rather than in a slide file, " +
+    "reached only by typing `?dev=hexladder`, and kept for the colour " +
+    "calibration `scripts/projection-test.mjs` runs. Held outside every list " +
+    "above so it can never enter audience navigation — that route is NOT " +
+    "`import.meta.env.DEV`-gated the way the prototype routes are, so being " +
+    "unreachable by navigation is the whole of what keeps it off a projector.",
+};
