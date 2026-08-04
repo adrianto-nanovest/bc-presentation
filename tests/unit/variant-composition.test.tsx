@@ -392,14 +392,18 @@ describe("thank-you closer figure number", () => {
     expect(await closerFigLabelFor("general")).toMatch(/FIG\.\s*K\.1/);
   });
 
-  test("sits one letter earlier in a leader deck, which cuts section F", async () => {
-    // Same three lab slides — leaders run the same lab — at J instead of K,
-    // because gh#41's cut leaves the leader deck ten sections. Nothing renumbered
-    // the closer; the letter is a function of position (§3.4 R2).
+  test("lands on the letter the leader deck's own section count produces", async () => {
+    // Same three lab slides — leaders run the same lab — and K.3 again, but NOT
+    // for the standard deck's reason and not by coincidence. Two edits cancel:
+    // gh#41's F cut took the leader deck to ten sections and the closer to J.3,
+    // and gh#53's `gap` run took it back to eleven and to K.3. Nothing renumbered
+    // the closer either time; the letter is a function of position (§3.4 R2), and
+    // this test moving twice while `k3-thank-you.tsx` was never opened IS the
+    // property under test.
     //
     // ONE leader deck, not both: this asserts the letter a POSITION produces, and
-    // the two leader decks share the position. That the other one records J.3 too
+    // the two leader decks share the position. That the other one records K.3 too
     // is in the numbering fixture, which pays no epoch cost to say so.
-    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*J\.3/);
+    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*K\.3/);
   });
 });

@@ -261,14 +261,31 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 57 slots — the F cut, F.8 kept", () => {
+  test("gives the leader deck its own 58 slots — the F cut, F.8 kept, plus its own", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(57);
-    expect(standard.slides.length - leader.slides.length).toBe(8);
+    expect(leader.slides).toHaveLength(58);
     expect(leader.slides).toContain("f8-your-agentic-os");
+
+    // The two lists no longer differ by the cut alone, and gh#53 is why: the
+    // leader deck now holds a slide no standard deck does. Asserted as the two
+    // directions SEPARATELY rather than as one net number, so the next leader-only
+    // slide cannot mask a cut F slide creeping back in.
+    const standardIds = new Set(standard.slides);
+    const leaderIds = new Set(leader.slides);
+    expect(standard.slides.filter((id) => !leaderIds.has(id))).toEqual([
+      "f1-two-pillars",
+      "f2-rag-ground-truth",
+      "f3-plugins-the-package",
+      "f4-skills-write-once",
+      "f5-mcp-the-adapter",
+      "f6-hooks-unsexy-work",
+      "f7-subagents-specialists",
+      "f9-bridge-to-g",
+    ]);
+    expect(leader.slides.filter((id) => !standardIds.has(id))).toEqual(["gap-capability-ladder"]);
   });
 
   test("relocates F.8 with the one override that names the run it lands in", () => {

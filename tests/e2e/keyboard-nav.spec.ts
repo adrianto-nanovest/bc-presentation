@@ -68,12 +68,16 @@ test("a live section letter jumps to that section's first numbered slide", async
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "1");
 });
 
-// The same two halves, on the deck whose letters DIFFER (§4.3, gh#41). The leader
-// deck cuts section F, so its ten sections are A–J and the practice lab closes at
-// J — the letter `k` addressed on every standard deck addresses nothing here.
-// Asserted through the printed figure, never through a slide index: this file has
-// gone stale twice by naming one.
-test("the leader deck's own letters jump, and `k` is a no-op there", async ({ page }) => {
+// The same two halves, on the deck whose letters DIFFER (§4.3). What differs has
+// itself changed twice, which is why this asserts through the PRINTED FIGURE and
+// never through a slide index: gh#41's F cut took the leader deck to ten sections
+// closing at J, and gh#53's `gap` run took it back to eleven closing at K. So the
+// two decks agree on `k` again — and disagree on `b`, which is THE LANDSCAPE in
+// every standard deck and THE GAP here. Nothing in `useKeyboardNav` was edited
+// either time; the map is the composed deck's (§3.5).
+test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
+  page,
+}) => {
   const problems: string[] = [];
   page.on("pageerror", (err) => problems.push(`pageerror: ${err.message}`));
   page.on("console", (msg) => {
@@ -83,17 +87,23 @@ test("the leader deck's own letters jump, and `k` is a no-op there", async ({ pa
   await page.goto("/?variant=berau-leader&slide=6");
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "6");
 
-  // `j` is THE PRACTICE LAB in the leader deck — the run that takes K in every
-  // standard deck. R5 lands the jump on the run's first numbered slide.
-  await page.keyboard.press("j");
-  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*J\.1/);
+  // `b` is THE GAP here — the leader-only run gh#53 put in front of the
+  // curriculum. On a standard deck the same key lands on the landscape.
+  await page.keyboard.press("b");
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*B\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/THE CAPABILITY LADDER/);
+
+  // `k` is THE PRACTICE LAB again. R5 lands the jump on the run's first numbered
+  // slide, so this is K.1 and not the closer.
+  await page.keyboard.press("k");
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*K\.1/);
   const at = await page.getAttribute(slideAttr, "data-slide-index");
 
-  // `k` passes the letter test and owns no section in this deck, so it must do
+  // `l` passes the letter test and owns no section in either deck, so it must do
   // nothing at all — the failure this guards is a jump to slide 0 mid-talk.
-  await page.keyboard.press("k");
+  await page.keyboard.press("l");
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", String(at));
-  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*J\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*K\.1/);
   expect(problems).toEqual([]);
 });
 

@@ -21,9 +21,13 @@
 // keys, `0` and `\` were dev affordances and do not ship.
 //
 // THE FIGURE IS NOT AUTHORED HERE. `FigLabel` takes a label only — the letter and
-// the number derive from this slide's position in the composed deck (§3), so the
-// same file prints E.12 in all five decks today and moves with the deck later
-// without an edit. It also pushes the bridge behind it to E.13. The LABEL is
+// the number derive from this slide's position in the composed deck (§3), and this
+// slide has already collected the dividend: it printed E.12 in all five decks when
+// gh#48 landed it, and since gh#53 put a `gap` run in front of the leader
+// curriculum it prints **F.12** on the two leader decks and E.12 on the three
+// standard ones — with no edit here. Phase 6 moves it again, to H.12. Anyone
+// verifying this slide on a leader deck reads the composed deck, never the literal
+// "E.12". It also pushes the bridge behind it to E.13 / F.13. The LABEL is
 // passed at the call site rather than held in `./content.tsx`, as at every other
 // FigLabel in the deck: it is the figure's own mono caption, not slide copy, and
 // the content module holds what the audience reads as prose.

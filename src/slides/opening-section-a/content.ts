@@ -412,10 +412,11 @@ const LEADER_QUESTIONS: readonly A1Question[] = [
     //
     // The keys are the standard sections a leader deck RETAINS, in deck order.
     // `techniques` is absent because the leader deck cuts section F (gh#41), so
-    // naming it would only ever be dropped. The letters follow the deck: this
-    // run is SECTIONS B–G at the Phase 4 floor and SECTIONS E–J once Phases 6–7
-    // put the four leader movements in front of it (§4.3) — WITHOUT AN EDIT
-    // HERE. Do not pin a letter to make the row look finished.
+    // naming it would only ever be dropped. The letters follow the deck, and have:
+    // this run printed SECTIONS B–G at the Phase 4 floor, prints SECTIONS C–H now
+    // that gh#53's `gap` run sits in front of it, and reaches SECTIONS E–J once the
+    // rest of Phase 6 lands (§4.3) — WITHOUT AN EDIT HERE, on any of the three.
+    // Do not pin a letter to make the row look finished.
     text: "What if \"using AI properly\" had an actual curriculum?",
     kw: ["curriculum"],
     sectionRef: {
@@ -430,11 +431,13 @@ const LEADER_QUESTIONS: readonly A1Question[] = [
   },
 ];
 
-// AT THE PHASE 4 FLOOR FOUR OF THESE FIVE ROWS PRINT A NAME AND NO LETTER, and
-// that is the correct output, not a gap to paper over: `gap`, `shape`, `invest`
-// and `mandate` own no slides until Phases 6–7, and `sectionPointerLabel`
-// collapses an unresolved pointer to its name rather than printing
-// `SECTION undefined`. The rows fill themselves in when the slides land.
+// A ROW WHOSE MOVEMENT OWNS NO SLIDES PRINTS A NAME AND NO LETTER, and that is the
+// correct output, not a gap to paper over: `sectionPointerLabel` collapses an
+// unresolved pointer to its name rather than printing `SECTION undefined`. All four
+// leader movements were unresolved at the Phase 4 floor. `gap` resolved on gh#53
+// and THE GAP now prints its letter; `shape`, `invest` and `mandate` own no slides
+// until #54–#58 and still print bare. The rows fill themselves in when the slides
+// land — nothing here is edited when one does.
 
 /**
  * What a leader deck set changes about A.1, over whatever the brand authored.

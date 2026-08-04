@@ -92,7 +92,10 @@ export interface Variant {
 }
 
 // All five ids serve. `berau-leader` and `gems-leader` compose the LEADER deck as
-// of gh#41 — 56 slides, section F cut, `f8-your-agentic-os` relocated — so the
+// of gh#41 — section F cut, `f8-your-agentic-os` relocated — and as of gh#53 it
+// also holds a slide no standard deck does, so it is a different deck in both
+// directions now, not merely a shorter one. The count lives in
+// `src/deck/deck-sets.ts` and is deliberately not restated here. So the
 // `· Leadership` suffix is no longer the only thing that distinguishes them. What
 // they still share with their sibling is the brand: auth, chrome and every §5
 // content delta are brand-level and reach both deck sets.

@@ -4,9 +4,11 @@
 // key says WHAT the block is; the display letter says WHERE it currently sits
 // and is derived per deck at compose time (see ./compose.ts). Nothing here
 // knows a letter, because the same key takes different letters in different
-// deck sets: `tools` is G in the standard deck and F in the leader deck, which
-// cuts `techniques` (gh#41) — and `process` becomes G in the leader deck once
-// Phases 5–7 put four new sections in front of it (§4.3).
+// deck sets — and the same key takes different letters in the SAME deck set over
+// time. `tools` is the worked example: G in the standard deck, F in the leader
+// deck once gh#41 cut `techniques`, and G again in the leader deck once gh#53 put
+// a `gap` run in front of the curriculum. It reaches I when the rest of Phase 6
+// lands (§4.3). Three moves, no edit to this file — which is the point of it.
 //
 // Pure data. No React, no DOM, no side effects — importable from a node test.
 

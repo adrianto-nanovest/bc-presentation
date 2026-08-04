@@ -145,14 +145,23 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 57 slides, ten sections. The Phase 4 floor was 56 and held no
- * slide the standard deck did not; gh#48's `e12-loop-engineering` is the first
- * addition, and it ships to BOTH sets because §8.2 gives it no cut anywhere.
+ * The leader deck — 58 slides, ELEVEN sections as of gh#53. The Phase 4 floor was
+ * 56 and held no slide the standard deck did not; gh#48's `e12-loop-engineering`
+ * was the first addition and ships to BOTH sets, and gh#53's
+ * `gap-capability-ladder` is the first slide that reaches THIS LIST ALONE.
+ *
+ * THAT SLIDE MOVED EVERY LETTER BEHIND IT, which is §3.4 R2 working as designed
+ * and the one thing to know before verifying anything against this deck: the
+ * `gap` run claims B, so `landscape` is C, `fundamentals` is F — the loop slide
+ * prints F.12 here, not E.12 — and the closer is K.3 rather than J.3. Phase 6
+ * moves them again. Anyone checking a figure on a leader deck reads the COMPOSED
+ * deck, never a literal.
  *
  * The curriculum is the standard deck's, minus section F and with F.8 kept: it
- * is the deck a leader can be walked through on Aug 18 whether or not Phases
- * 6–7 land. Phases 5–7 grow it to 73 slides across A–N (§4.3) by inserting the
- * `gap`, `shape`, `invest` and `mandate` runs; every id below survives that.
+ * is the deck a leader can be walked through on Aug 18 whether or not the rest of
+ * Phases 6–7 land. Those phases grow it to 73 slides across A–N (§4.3) by filling
+ * `gap` and inserting the `shape`, `invest` and `mandate` runs; every id below
+ * survives that.
  *
  * WHAT THIS LIST DOES NOT HOLD, and why:
  *
@@ -173,6 +182,12 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // opening — the cover claims no number, so A.1 is the second slot
   "title",
   "a1-what-youve-seen", // canonical slot: `a1-general` / `a1-gems` resolve behind it
+  // gap — the first leader-only run (gh#53). §4.3 gives it five slides and the
+  // ladder is the LAST of them, so #55–#58 insert AHEAD of this line; the run
+  // itself sits here, in front of `landscape`, and that is what pushes every
+  // later letter in this deck by one (§3.4 R2 — the loop slide prints F.12 here
+  // now, and H.12 once Phase 6 completes).
+  "gap-capability-ladder",
   // landscape
   "b1-evolution-journey",
   "b2-fields-terminology",

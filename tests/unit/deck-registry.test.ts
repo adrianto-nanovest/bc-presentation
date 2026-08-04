@@ -76,19 +76,25 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
   ];
 }
 
-// ── The leader deck at the Phase 4 floor (gh#41) ──────────────────────────────
+// ── The leader deck, which is no longer the Phase 4 floor (gh#41, gh#53) ──────
 
-/** The leader deck's spine: the standard one with `techniques` GONE and `tools`
- *  one longer.
+/** The leader deck's spine: the standard one with `techniques` GONE, `tools` one
+ *  longer, and a `gap` run in front of `landscape`.
  *
- *  Both facts are the same edit. `f1`–`f7` and `f9` are cut, which empties
+ *  The first two facts are one edit. `f1`–`f7` and `f9` are cut, which empties
  *  `techniques` so it takes no letter at all; `f8-your-agentic-os` survives
  *  inside the `tools` run, carried there by the deck set's one
- *  `sectionOverrides` entry. Composed in this order the runs take A–J, and the
- *  letters are not restated here for the same reason the standard SPINE does not
- *  restate its own. */
+ *  `sectionOverrides` entry.
+ *
+ *  `gap` is gh#53's, and it is the first run the standard deck does not have. It
+ *  sits SECOND, so every run behind it takes the next letter along — which is
+ *  why this file asserts KEYS and not letters (see `SectionRun`): the one-line
+ *  insert below is the whole diff, and a letter-keyed table would have needed ten
+ *  edits to say the same thing. Composed in this order the runs take A–K.
+ *  §4.3 gives `gap` five slides; #55–#58 raise this 1 and move nothing else. */
 const LEADER_SPINE: readonly SectionRun[] = [
   ["opening", 2], // cover + A.1
+  ["gap", 1], // `gap-capability-ladder` (gh#53) — leader-only, §4.3's B.5
   ["landscape", 5],
   ["mindset", 6],
   ["process", 5],
@@ -109,11 +115,24 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
   ];
 }
 
-/** The leader deck's own total: the standard deck, minus the eight cut F slides.
- *  56 when gh#41 recorded it against a 64-slide standard deck, 57 now that gh#48
- *  has inserted E.12 into both sets — the DIFFERENCE is what gh#41 pinned, and it
- *  is still eight. */
-const LEADER_TOTAL_WITH_LAB = 57;
+/** The leader deck's own total: 56 when gh#41 recorded it against a 64-slide
+ *  standard deck, 57 once gh#48 inserted E.12 into both sets, 58 now that gh#53's
+ *  ladder has reached this deck and no other.
+ *
+ *  SO THE DIFFERENCE gh#41 PINNED HAS CHANGED, and that is the point of Phase 6
+ *  rather than a regression: the leader deck is no longer "the standard deck minus
+ *  eight", it is that minus eight PLUS its own slides. The assertion below states
+ *  both halves separately so the next `gap` slide moves one number, not a
+ *  sentence. */
+const LEADER_TOTAL_WITH_LAB = 58;
+
+/** The eight cut F slides — `f1`–`f7` and `f9`, with `f8-your-agentic-os` kept
+ *  and relocated. Held apart from the total above so a leader-only ADDITION can
+ *  never be mistaken for a retained F slide, or vice versa. */
+const LEADER_CUT_F_SLIDES = 8;
+
+/** What the leader deck holds that no standard deck does: `gap`, so far. */
+const LEADER_ONLY_SLIDES = 1;
 
 interface DeckCase {
   brand: Brand;
@@ -125,9 +144,10 @@ interface DeckCase {
 // standard row moved. `general` has no leader variant — leaders are addressed per
 // organisation — so there are five rows, not six.
 //
-// This is not §4.3's finished leader deck: 57 slides across A–J. Phases 5–7 grow
-// it to 73 across A–N by filling `gap`, `shape`, `invest` and `mandate`, which
-// lengthens `LEADER_SPINE` and leaves these rows alone.
+// This is not §4.3's finished leader deck: 58 slides across A–K. The rest of
+// Phase 6 grows it to 73 across A–N by filling `gap` and inserting `shape`,
+// `invest` and `mandate`, which lengthens `LEADER_SPINE` and leaves these rows
+// alone.
 const CASES: readonly DeckCase[] = [
   { brand: "berau", deckSet: "standard" },
   { brand: "gems", deckSet: "standard" },
@@ -193,11 +213,22 @@ test(`the spine plus a practice-lab run is the ${OBSERVED_TOTAL_WITH_LAB} slides
   expect(totalOf(standardRuns("berau"))).toBe(OBSERVED_TOTAL_WITH_LAB);
 });
 
-test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the standard deck less the eight cut F slides`, () => {
+test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the cut F section, plus its own`, () => {
   expect(totalOf(leaderRuns("berau"))).toBe(LEADER_TOTAL_WITH_LAB);
-  // Eight, not nine: `f8-your-agentic-os` is kept and relocated, so the cut is
-  // `f1`–`f7` plus `f9`. The two tables above have to disagree by exactly that.
-  expect(OBSERVED_TOTAL_WITH_LAB - LEADER_TOTAL_WITH_LAB).toBe(8);
+  // The two tables have to disagree by exactly the cut MINUS the additions. Eight
+  // cut and not nine: `f8-your-agentic-os` is kept and relocated, so the cut is
+  // `f1`–`f7` plus `f9`. One addition, and it is `gap` (gh#53).
+  expect(OBSERVED_TOTAL_WITH_LAB - LEADER_TOTAL_WITH_LAB).toBe(
+    LEADER_CUT_F_SLIDES - LEADER_ONLY_SLIDES,
+  );
+  // Asserted from the run table too, so the arithmetic above cannot be satisfied
+  // by a cut F slide quietly coming back while a `gap` slide quietly leaves.
+  const standardKeys = standardRuns("berau").map(([key]) => key);
+  expect(
+    leaderRuns("berau")
+      .filter(([key]) => !standardKeys.includes(key))
+      .reduce((n, [, length]) => n + length, 0),
+  ).toBe(LEADER_ONLY_SLIDES);
 });
 
 describe.each(CASES)("deck composed for $brand · $deckSet", (deckCase) => {

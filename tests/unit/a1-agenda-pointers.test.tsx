@@ -17,12 +17,17 @@
 // against synthetic decks, so a Phase 4 shape can be proved before Phase 4.
 //
 // AS OF gh#43 THE LEADER DECKS ARE REAL AND ARE ASSERTED HERE TOO. A.1's right
-// column is deck-set-scoped: a leader deck prints the five MOVEMENTS (§3.6),
-// four of which own no slides at the Phase 4 floor and therefore print a name
-// with no letter — the true output, and the reason no row may carry a literal
-// letter. Those four rows are read out of the REAL composed leader deck, not a
-// synthetic one, because a synthetic deck cannot show that the floor's own
-// composition is what collapses them.
+// column is deck-set-scoped: a leader deck prints the five MOVEMENTS (§3.6), and
+// a movement that owns no slides prints a name with NO LETTER — the true output,
+// and the reason no row may carry a literal letter. Those rows are read out of the
+// REAL composed leader deck, not a synthetic one, because a synthetic deck cannot
+// show that the deck's own composition is what collapses them.
+//
+// AS OF gh#53 ONE OF THEM RESOLVES. `gap` owns a slide, so THE GAP prints its
+// letter and the curriculum range behind it shifted one along — with no edit to
+// A.1, which is the whole claim. So this file now holds both halves of the rule
+// against the same real decks: a movement with slides prints the letter the
+// composer derived, one without prints its name alone.
 //
 // ONE EPOCH HOLDS ONE BRAND. `src/variant.ts` resolves `VARIANT` at module
 // scope, so a brand's A.1 and its composed deck only exist inside a module
@@ -55,25 +60,35 @@ const POINTERS_AS_SHIPPED = [
 ] as const;
 
 /**
- * What a leader deck prints AT THE PHASE 4 FLOOR (gh#43).
+ * What a leader deck prints TODAY — one movement in, three still to come.
  *
- * Four rows are a bare name: `gap`, `shape`, `invest` and `mandate` own no
- * slides until Phases 6–7, and a name alone is the honest output — the letters
- * arrive with the slides, from the composed deck, with no edit to A.1.
+ * THE GAP ROW FILLED ITSELF IN, and that is gh#43's core claim being paid off
+ * rather than a fixture being maintained: gh#53 wrote ONE id into one deck-set
+ * list, and A.1 — which was not opened — started printing `SECTION B · THE GAP`
+ * because `gap` now owns a slide. No literal letter exists anywhere for that edit
+ * to have contradicted.
  *
- * The curriculum row is the one that resolves, and it resolves to a RANGE over
- * the retained standard sections: at the floor `landscape`…`pitfalls` are B–G
- * (section F is cut and f8 sits inside the TOOLS run, gh#41). It is also the one
- * row with a `SectionRef.name` — the letters are the deck's, the NAME is the
- * movement's, because no section is called THE CURRICULUM.
+ * Three rows are still a bare name: `shape`, `invest` and `mandate` own no slides
+ * until #54–#58, and a name alone is the honest output. Their letters arrive with
+ * their slides, the same way.
+ *
+ * The curriculum row moved WITH the insert, from `SECTIONS B–G` to `SECTIONS C–H`:
+ * `gap` claims B, so the retained standard run `landscape`…`pitfalls` shifts one
+ * letter along (section F is still cut and f8 still sits inside the TOOLS run,
+ * gh#41). It is also the one row with a `SectionRef.name` — the letters are the
+ * deck's, the NAME is the movement's, because no section is called THE CURRICULUM.
  */
-const LEADER_POINTERS_AT_THE_FLOOR = [
-  "THE GAP",
+const LEADER_POINTERS_TODAY = [
+  "SECTION B · THE GAP",
   "THE SHAPE",
   "WHY INVEST",
-  "SECTIONS B–G · THE CURRICULUM",
+  "SECTIONS C–H · THE CURRICULUM",
   "THE MANDATE",
 ] as const;
+
+/** The rows whose movement owns no slide yet, by index — the ones that must print
+ *  a name and nothing else. `gap` left this list on gh#53. */
+const UNRESOLVED_ROWS = [1, 2, 4] as const;
 
 /** §3.6's five movement questions, in order. Read back out of the DOM below. */
 const LEADER_QUESTIONS_AS_AUTHORED = [
@@ -119,6 +134,11 @@ interface RenderedA1 {
   /** `Reveal`'s per-card gate. The column can be at opacity 1 with every card
    *  still held back, which would put the pointers in the DOM and nowhere else. */
   cardsRevealed: boolean[];
+  /** The letter THIS EPOCH's composed deck gave the `gap` run, or `undefined`
+   *  where the deck runs no `gap` slide. Read off the same `composedDeck` the
+   *  render used, so the rendered pointer can be compared against the derivation
+   *  itself rather than against a letter this file also believes in. */
+  gapLetter: string | undefined;
 }
 
 /** Mounts the A.1 one VARIANT composes, out of that variant's own deck, at step
@@ -183,6 +203,7 @@ async function renderA1For(variant: VariantId): Promise<RenderedA1> {
       .map((el) => el.children[1]?.firstElementChild?.textContent ?? ""),
     columnOpacity: (screen.getByTestId("a1-questions-column") as HTMLElement).style.opacity,
     cardsRevealed: cards.map((el) => el.classList.contains("on")),
+    gapLetter: composedDeck.letterOf("gap"),
   };
 }
 
@@ -211,7 +232,7 @@ describe.each(HARVESTED_BRANDS)("%s's A.1 agenda pointers", (brand) => {
   });
 });
 
-// ── The real leader decks, at the Phase 4 floor (gh#43) ──────────────────────
+// ── The real leader decks, with one movement filled in (gh#43, gh#53) ─────────
 
 describe.each(LEADER_VARIANTS)("%s's A.1 right column", (variant) => {
   test("prints the five movement questions, in order", async () => {
@@ -223,24 +244,30 @@ describe.each(LEADER_VARIANTS)("%s's A.1 right column", (variant) => {
     expect(cardsRevealed).toEqual([true, true, true, true, true]);
   });
 
-  test("prints the curriculum range and four bare movement names, with no undefined", async () => {
-    const { pointers } = await renderA1For(variant);
+  test("prints THE GAP's letter, the curriculum range, and three bare names, with no undefined", async () => {
+    const { pointers, gapLetter } = await renderA1For(variant);
 
-    expect(pointers).toEqual(LEADER_POINTERS_AT_THE_FLOOR.map((p) => `${ARROW}${p}`));
+    expect(pointers).toEqual(LEADER_POINTERS_TODAY.map((p) => `${ARROW}${p}`));
     pointers.forEach((p) => {
       expect(p).not.toContain("undefined");
       expect(p).not.toContain("SECTION undefined");
     });
-    // The four unresolved rows print a name and NOTHING else. Asserted
-    // separately from the equality above because this is the rule — a row whose
-    // section owns no slides may not invent a letter — and the four strings are
-    // only today's instance of it.
-    const [gap, shape, invest, curriculum, mandate] = pointers;
-    for (const bare of [gap, shape, invest, mandate]) {
-      expect(bare).not.toContain("SECTION");
-      expect(bare).not.toContain("·");
+    // The unresolved rows print a name and NOTHING else. Asserted separately from
+    // the equality above because this is the rule — a row whose section owns no
+    // slides may not invent a letter — and the strings are only today's instance
+    // of it.
+    for (const row of UNRESOLVED_ROWS) {
+      expect(pointers[row]).not.toContain("SECTION");
+      expect(pointers[row]).not.toContain("·");
     }
-    expect(curriculum).toContain("SECTIONS");
+    // And the other half of the same rule, which only became checkable against a
+    // REAL deck on gh#53: a row whose section owns slides prints the letter the
+    // composed deck derived for that run. Compared against `letterOf` and not
+    // against "B", so this assertion survives Phase 6 moving the run and fails if
+    // A.1 ever starts printing a letter of its own invention.
+    expect(gapLetter).toBeDefined();
+    expect(pointers[0]).toBe(`${ARROW}SECTION ${gapLetter} · THE GAP`);
+    expect(pointers[3]).toContain("SECTIONS");
   });
 
   test("keeps this brand's own left column", async () => {

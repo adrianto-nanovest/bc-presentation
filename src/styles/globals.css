@@ -1179,3 +1179,34 @@ em.kw {
   animation: f-fade-up var(--fade-duration, 600ms) var(--ease) both;
   animation-delay: var(--fade-delay, 0ms);
 }
+
+/* ─────────── THE GAP · the capability ladder (gh#53) ─────────── */
+
+/* The staircase's one-shot path draw — §7.2's settled entry, and the one thing
+   the `hr-group-agentic-org/web/` original contributes besides its geometry.
+   PAIR WITH pathLength={1}: the dasharray below is in the same unit, so one gap
+   of 1 covers the whole staircase however the treads are re-cut.
+
+   `both`, so the frame this rests on is the FINISHED staircase — which is also
+   what makes it correct under `prefers-reduced-motion: reduce`: the global rule
+   at the top of this file squashes the duration to 0.01ms and the ladder is
+   simply already drawn. A CSS animation is used here rather than SMIL for
+   exactly that reason; SMIL is invisible to that rule and would have to be gated
+   at mount, and this slide has nothing SMIL can draw that CSS cannot.
+
+   Named for this section and not shared with `.e12-draw`, which is the same four
+   lines under section E's name: every slide family in this file owns its own
+   keyframes, so retiming one entry can never retime another slide's. */
+@keyframes gap-ladder-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.gap-ladder-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: gap-ladder-draw 1400ms var(--ease) both;
+}

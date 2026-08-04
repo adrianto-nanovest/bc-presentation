@@ -16,6 +16,7 @@
 
 import type { SlideDef } from "./types";
 import { openingSectionASlides } from "@/slides/opening-section-a";
+import { leaderGapSlides } from "@/slides/leader-gap";
 import { landscapeSectionBSlides } from "@/slides/landscape-section-b";
 import { mindsetSectionCSlides } from "@/slides/mindset-section-c";
 import { foundationCoreSlides } from "@/slides/foundation-core";
@@ -27,6 +28,9 @@ import { revealAndClosingSlides } from "@/slides/reveal-and-closing";
 
 export const slideCatalogue: readonly SlideDef[] = [
   ...openingSectionASlides,
+  // Leader-only (§4.3). In the POOL like everything else — "which decks run it"
+  // is `./deck-sets.ts`'s answer, and only the two leader lists name it.
+  ...leaderGapSlides,
   ...landscapeSectionBSlides,
   ...mindsetSectionCSlides,
   ...foundationCoreSlides,

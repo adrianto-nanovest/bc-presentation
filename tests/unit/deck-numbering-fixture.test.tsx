@@ -64,10 +64,19 @@ interface ObservedDeck {
  * took `ALLOW_MOVED_FIGURES=1` — see `recordFixture`. No `fig` before the insert
  * changed, and the closers did not move: the insert is inside section E.
  *
- * The leader decks (gh#41) are 8 slides shorter — `f1`–`f7` and `f9` cut,
- * `f8-your-agentic-os` kept — and close on **J.3**, not K.3: the same three lab
- * slides, one letter earlier because section F is gone. Nothing renumbered them;
- * a letter is a function of position (§3.4 R2).
+ * THE LEADER ROWS MOVED ON gh#53, and the standard rows did not — which is the
+ * split that ticket promised. `gap-capability-ladder` is the first slide to reach
+ * the leader lists ALONE, so those two decks are one row longer (58) and every
+ * letter behind the new `gap` run stepped along: the loop slide prints **F.12**
+ * there rather than E.12, and the closer is back at **K.3** after gh#41's F cut
+ * had taken it to J.3. Re-recording it therefore took `ALLOW_MOVED_FIGURES=1` —
+ * 54 moved figures in each leader deck, every one of them a LETTER and not a
+ * number, because an insert in front of a run cannot renumber inside one. Nothing
+ * renumbered them; a letter is a function of position (§3.4 R2).
+ *
+ * `berau`, `gems` and `general` are byte-identical to the previous record. That is
+ * the assertion worth reading twice: a leader-only insert must not be able to
+ * touch a standard deck, and the fixture is where that would show.
  *
  * Keyed by `string` because the key set is not available as a type: which decks
  * exist is a VALUE (`VARIANTS[id].deckSet`), and deriving the non-standard subset
@@ -79,8 +88,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 57, closer: "J.3" },
-  "gems-leader": { slides: 57, closer: "J.3" },
+  "berau-leader": { slides: 58, closer: "K.3" },
+  "gems-leader": { slides: 58, closer: "K.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

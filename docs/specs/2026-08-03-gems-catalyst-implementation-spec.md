@@ -1410,6 +1410,17 @@ Dependencies are strict where stated. Free merge windows: **Aug 3–5, 8–11, 1
 
 Notes on ordering:
 
+- **Amendment 2026-08-04 — Phase 6 has started, and the leader letters have already
+  moved once (gh#53).** `gap-capability-ladder` shipped as the first leader-only slide
+  in the tree: the two leader decks are now **58 slides across 11 sections A–K, closer
+  K.3** — the `gap` run claims **B**, so every later run stepped one letter along and
+  the closer returned to K.3 after gh#41's F cut had taken it to J.3. The standard decks
+  are unmoved at 65 / K.3 and `general` at 63 / K.1, verified in
+  `tests/fixtures/deck-numbering.json`. **Consequence for anyone verifying Phase 5: the
+  loop slide prints `F.12` on a leader deck and `E.12` on a standard one, and it will
+  print `H.12` once Phase 6 completes.** That is §3.4 R2 working as designed — read the
+  composed deck, never the literal "E.12" (#50). Each remaining Phase 6/7 section shifts
+  the letters again, so no ticket should pin one.
 - **Amendment 2026-08-04 — `invest-chicken-egg` was in no phase row.** §4.3 needs **16** new
   leader slides; Phases 6 and 7 as first written listed **15**. D.3 was the missing one.
   It is now in **Phase 6**, beside D.4, because §6.2's shadow-AI escalation (B.2 =
