@@ -20,6 +20,12 @@ import type { LucideIcon } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
+// What turns an agenda row's section KEYS into the letters it prints (§3.6).
+// NOT `@/deck/registry` — that module imports this one, and a slide importing it
+// back deadlocks the module runner; `@/deck/section-letters` exists to carry the
+// lookup across that gap and documents why.
+import { sectionLetterOf } from "@/deck/section-letters";
+import { sectionPointerLabel } from "@/deck/sections";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight as KW } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
@@ -524,7 +530,10 @@ function QuestionsColumn({
           <Reveal
             on={on}
             delay={i * 90}
-            key={q.sectionLabel}
+            // Keyed on the row's FIRST SECTION KEY, not on what it prints: a
+            // pointer label is derived and can collapse to a bare name when a
+            // key owns no slides, and two such rows would then share a key.
+            key={q.sectionRef.keys[0]}
             data-testid={`a1-question-card-${i + 1}`}
             style={{ flex: 1, minHeight: CARD_HEIGHT, display: "flex" }}
           >
@@ -574,6 +583,7 @@ function QuestionCard({ q }: { q: A1Question }) {
         {KW(q.text, q.kw)}
       </p>
       <div
+        data-testid="a1-question-pointer"
         style={{
           fontFamily: "var(--mono)",
           fontSize: 10,
@@ -585,7 +595,7 @@ function QuestionCard({ q }: { q: A1Question }) {
         }}
       >
         {"→ "}
-        {q.sectionLabel}
+        {sectionPointerLabel(q.sectionRef.keys, sectionLetterOf)}
       </div>
     </div>
   );

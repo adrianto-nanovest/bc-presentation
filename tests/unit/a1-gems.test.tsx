@@ -9,7 +9,7 @@
 //      `String.includes` match that NO-OPS SILENTLY (spec §trap 5), so a typo
 //      or a curly apostrophe drops a copper highlight with no error anywhere.
 //   2. `questions` losing its shared-by-reference link. The five questions ARE
-//      the D→H agenda and are identical across brands, so they are one shared
+//      the agenda and are identical across brands, so they are one shared
 //      array; the hazard is editing a question THROUGH that reference for GEMS,
 //      which silently ships the edit to berau and general as well. Rewording one
 //      for GEMS means cloning the array first.
@@ -189,13 +189,17 @@ describe("A.1 (GEMS) questions", () => {
     expect(a1GeneralContent.questions).toBe(a1Content.questions);
   });
 
-  test("still point at sections D through H, in order", () => {
-    expect(a1GemsContent.questions.map((q) => q.sectionLabel)).toEqual([
-      "SECTION D · PROCESS & METHODOLOGY",
-      "SECTION E · ENGINEERING FUNDAMENTALS",
-      "SECTION F · TECHNIQUES",
-      "SECTION G · TOOLS ECOSYSTEM",
-      "SECTION H · PITFALLS & BEST PRACTICES",
+  test("still point at the same five sections, in order", () => {
+    // By KEY, not by printed label: gh#37 moved the letter and the name out of
+    // the content and into the composed deck. That what GEMS PRINTS is still
+    // "SECTION D · PROCESS & METHODOLOGY" is asserted from rendered output by
+    // `a1-agenda-pointers.test.tsx`.
+    expect(a1GemsContent.questions.map((q) => q.sectionRef.keys)).toEqual([
+      ["process"],
+      ["fundamentals"],
+      ["techniques"],
+      ["tools"],
+      ["pitfalls"],
     ]);
   });
 });

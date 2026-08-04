@@ -7,6 +7,8 @@
 //     KeywordHighlight (copper-400 italic) at the slide level.
 //   - 1–3 keywords per chunk (feedback_keyword_highlighting.md).
 
+import type { SectionRefKeys } from "@/deck/sections";
+
 // ─── Title ─────────────────────────────────────────────────────────────────
 
 export interface TitleContent {
@@ -63,9 +65,17 @@ export interface A1Capability {
 export interface A1Question {
   text: string;
   kw: readonly string[];
-  /** Full section pointer label, e.g. "SECTION F · TECHNIQUES". The leading
-   *  "→ " arrow is rendered by the card component, not stored here. */
-  sectionLabel: string;
+  /** WHAT the row points at, never WHERE that sits (§3.6). The rendered
+   *  "SECTION F · TECHNIQUES" is composed from these keys by
+   *  `sectionPointerLabel`: the letter comes from the composed deck and the
+   *  name from `SECTION_NAMES`. A literal letter here would be a lie in the
+   *  leader deck, where `process` resolves to G, not D.
+   *
+   *  A LIST, because one row may span a run of sections and print
+   *  "SECTIONS E–J · …" — and a NON-EMPTY one, because a row pointing at no
+   *  section has nothing to name. The leading "→ " arrow is rendered by the
+   *  card component, not stored here. */
+  sectionRef: { keys: SectionRefKeys };
 }
 
 export interface A1Content {
@@ -127,32 +137,35 @@ export const a1Content: A1Content = {
       descriptionKw: ["Layering intelligence"],
     },
   ],
-  // Order matches downstream section flow: D → E → F → G → H.
+  // Order matches downstream section flow. In the standard deck those five keys
+  // resolve to D → E → F → G → H, which is what the five rows printed as
+  // literals before gh#37; in the leader deck they resolve elsewhere, and the
+  // rows follow rather than lie.
   questions: [
     {
       text: "What if you fixed the process before you automated it?",
       kw: ["fixed the process"],
-      sectionLabel: "SECTION D · PROCESS & METHODOLOGY",
+      sectionRef: { keys: ["process"] },
     },
     {
       text: "What if you never had to re-explain your context again?",
       kw: ["re-explain"],
-      sectionLabel: "SECTION E · ENGINEERING FUNDAMENTALS",
+      sectionRef: { keys: ["fundamentals"] },
     },
     {
       text: "What if you could plug AI into your work, not just chat?",
       kw: ["not just chat"],
-      sectionLabel: "SECTION F · TECHNIQUES",
+      sectionRef: { keys: ["techniques"] },
     },
     {
       text: "What if you knew which tool to use, when, and how?",
       kw: ["when, and how"],
-      sectionLabel: "SECTION G · TOOLS ECOSYSTEM",
+      sectionRef: { keys: ["tools"] },
     },
     {
       text: "What if one person's solution became everyone's tool?",
       kw: ["everyone's tool"],
-      sectionLabel: "SECTION H · PITFALLS & BEST PRACTICES",
+      sectionRef: { keys: ["pitfalls"] },
     },
   ],
   footerCaption: "Five capabilities already in the room. Five questions still ahead.",
@@ -207,8 +220,10 @@ export const a1GeneralContent: A1Content = {
       descriptionKw: ["Shaping the question"],
     },
   ],
-  // Shared by reference: these cards ARE the D→H agenda, and sections D–H are
-  // identical across variants — sharing the object means an edit can't drift.
+  // Shared by reference: these cards ARE the agenda, and the five sections they
+  // point at are identical across variants — sharing the object means an edit
+  // can't drift. (No letters named here any more: the rows carry section keys
+  // and the composed deck supplies the letters, gh#37.)
   questions: a1Content.questions,
   footerCaption: "Five things we mostly know. Five questions still ahead.",
   footerCaptionKw: ["mostly know", "ahead"],
@@ -292,9 +307,9 @@ export const a1GemsContent: A1Content = {
     },
   ],
   // Shared by reference, exactly as the general variant does: these cards ARE
-  // the D→H agenda, and sections D–H are identical across brands. REWORDING
-  // ANY OF THE FIVE FOR GEMS REQUIRES CLONING THE ARRAY FIRST — otherwise the
-  // edit ships to berau and general too.
+  // the agenda, and the five sections they point at are identical across
+  // brands. REWORDING ANY OF THE FIVE FOR GEMS REQUIRES CLONING THE ARRAY
+  // FIRST — otherwise the edit ships to berau and general too.
   questions: a1Content.questions,
   footerCaption: "Five systems already live. Five questions still ahead.",
   footerCaptionKw: ["already live", "ahead"],

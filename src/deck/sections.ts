@@ -16,11 +16,12 @@ export type SectionKey =
   | "gap" | "shape" | "invest" | "mandate";
 
 // Display names. Five of these are ALREADY on screen, inside A.1's agenda
-// pointers, and are lifted byte-identical from
-// `src/slides/opening-section-a/content.ts`'s `sectionLabel` strings so A.1
-// renders the same text once its letters are derived.
-// `tests/unit/deck-sections.test.ts` asserts that identity against the real
-// content module — do not edit these five by hand.
+// pointers, and were lifted byte-identical from the `sectionLabel` strings
+// `src/slides/opening-section-a/content.ts` used to hold. As of gh#37 those
+// strings are gone and THIS TABLE is what A.1 prints, so editing one of the five
+// changes the slide. `tests/unit/a1-agenda-pointers.test.tsx` holds the rendered
+// pointers against the literals A.1 shipped, in all three brand decks — do not
+// edit these five by hand.
 export const SECTION_NAMES: Record<SectionKey, string> = {
   opening:      "OPENING",                    // not rendered today
   landscape:    "THE LANDSCAPE",              // not rendered today
@@ -38,3 +39,47 @@ export const SECTION_NAMES: Record<SectionKey, string> = {
   invest:       "WHY INVEST",                 // leader A.1
   mandate:      "THE MANDATE",                // leader A.1
 };
+
+// ─── Cross-references ──────────────────────────────────────────────────────
+
+/** One or more keys, and never zero. A pointer at nothing has no name to print
+ *  and no stable React key to sit on, so the emptiness is refused by the type
+ *  rather than guarded for at every read. */
+export type SectionRefKeys = readonly [SectionKey, ...SectionKey[]];
+
+// An en dash, matching the deck's other ranges. NOT a hyphen — the two are
+// indistinguishable in a code review and obvious on a projector.
+const RANGE_DASH = "–";
+
+/**
+ * The label a slide prints when it points at another section —
+ * `"SECTION D · PROCESS & METHODOLOGY"`, or `"SECTIONS E–J · …"` for a run.
+ *
+ * Spec §3.6, and the only formatter for R6's cross-reference: the letters come
+ * from the composed deck and the name from the table above, so the same pointer
+ * reads `SECTION D` in the standard deck and `SECTION G` in the leader deck
+ * without being re-authored. A.1's agenda column is its one caller today.
+ *
+ * `letterOf` is a parameter rather than a closed-over import for two reasons:
+ * this module composes no deck and must not import one, and the formatting can
+ * then be exercised against decks that do not exist yet.
+ *
+ * A key the deck gives NO letter is dropped from the range — it names a section
+ * that deck does not run, and `SECTION undefined` on a projector is the failure
+ * this prevents. A pointer whose keys all drop prints its name alone.
+ */
+export function sectionPointerLabel(
+  keys: SectionRefKeys,
+  letterOf: (key: SectionKey) => string | undefined,
+): string {
+  // The name is the FIRST key's, whether or not that key kept a letter: it is
+  // what the pointer is about, and the range is only where it currently sits.
+  const name = SECTION_NAMES[keys[0]];
+  const letters = keys.map(letterOf).filter((l): l is string => Boolean(l));
+  if (letters.length === 0) return name;
+  const range =
+    letters.length > 1
+      ? `SECTIONS ${letters[0]}${RANGE_DASH}${letters[letters.length - 1]}`
+      : `SECTION ${letters[0]}`;
+  return `${range} · ${name}`;
+}

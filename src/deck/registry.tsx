@@ -1,5 +1,6 @@
 import type { SlideDef } from "./types";
 import { composeDeck, type ComposedDeck } from "./compose";
+import { publishSectionLetters } from "./section-letters";
 import { HexLadder } from "@/primitives/HexLadder";
 import { openingSectionASlides } from "@/slides/opening-section-a";
 import { landscapeSectionBSlides } from "@/slides/landscape-section-b";
@@ -60,6 +61,14 @@ export const deckSlides: SlideDef[] = [
 // makes R4 (a section key may form only one run) a load-time error rather than
 // a first-paint one.
 export const composedDeck: ComposedDeck<SlideDef> = composeDeck(deckSlides);
+
+// A slide that prints a cross-reference to another section (A.1's agenda
+// pointers, §3.6) cannot import this module — it is already in it, through
+// `deckSlides`. Push the lookup out to the leaf module it CAN import instead;
+// see `./section-letters.ts` for why the edge has to run this way round.
+// The hex-ladder deck below deliberately does NOT publish: it is one dev-only
+// slide, not the deck the audience navigates.
+publishSectionLetters(composedDeck.letterOf);
 
 // The dev route renders the hex ladder ALONE, so that route is its own one-slide
 // deck and composes as one. It prints no FigLabel, so these values never reach
