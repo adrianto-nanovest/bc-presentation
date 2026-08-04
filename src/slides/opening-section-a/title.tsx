@@ -1,8 +1,14 @@
-// Title — "From AI Curiosity to AI Capability"
+// Title — the cover.
 //
 // Opening slide. Headline + serif tagline + workshop meta line stack at
 // left:80; speaker info chip sits bottom-left to share that left edge. A
 // left-side darken gradient lifts the title text off the hero photo.
+//
+// The headline and tagline are DECK-SET-SCOPED (§4.5, gh#42): a leader deck
+// opens on "From a Few People to the Whole Organization", because the standard
+// "From AI Curiosity to AI Capability" promises individual capability and the
+// leader deck delivers an investment case. The hero is the same photo for all
+// five variants (§1.5), so it is not part of that pick.
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { Mic } from "lucide-react";
@@ -12,9 +18,13 @@ import { DarkenOverlay } from "@/components/DarkenOverlay";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { highlight as KW } from "@/components/highlight";
 import { TitleKeymap } from "./components/TitleKeymap";
-import { titleContent as C } from "./content";
+import { titleContentFor } from "./content";
 import { variantLabel } from "@/deck-variants";
 import { VARIANT } from "@/variant";
+
+// Resolved once, at module scope, because `VARIANT` is: one build serves every
+// variant and the URL that decided it cannot change without a reload.
+const C = titleContentFor(VARIANT.deckSet);
 
 // ───────────────────── slide ─────────────────────
 

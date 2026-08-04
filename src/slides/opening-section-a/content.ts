@@ -7,6 +7,7 @@
 //     KeywordHighlight (copper-400 italic) at the slide level.
 //   - 1–3 keywords per chunk (feedback_keyword_highlighting.md).
 
+import type { DeckSetId } from "@/deck-variants";
 import type { SectionRefKeys } from "@/deck/sections";
 
 // ─── Title ─────────────────────────────────────────────────────────────────
@@ -35,6 +36,58 @@ export const titleContent: TitleContent = {
   heroAlt: "Abstract copper threads converging in deep space",
   darkenStrength: 0.18,
 };
+
+// ─── Title (leader deck sets) — spec §4.5 ──────────────────────────────────
+//
+// The standard headline promises INDIVIDUAL capability, and the leader deck then
+// delivers an investment case — so on a leader deck the cover contradicts the
+// argument behind it (gh#42).
+//
+// The tagline does the three jobs §4.5 names, in that order: what an agentic
+// organization IS (every team directing AI, not just using it), what it COSTS
+// (seats and protected hours), and what only a leader can AUTHORIZE (the
+// mandate). It opens on the thesis that runs through the whole leader deck —
+// *a few people, or one team, already proved it; imagine it distributed across
+// the whole org* — which A.1's left column, A.1 question 3 and `invest-own-proof`
+// each restate in their own terms. WORD IT THE SAME WAY IN ALL FOUR: a leader
+// hearing four phrasings of one thesis hears four claims.
+//
+// SPREAD BY VALUE, not by re-authoring: the hero, the facilitator credit and the
+// darken strength are IDENTICAL for all five variants (§1.5), so a spread means
+// there is one place to change them and no per-deck-set copy to drift.
+const leaderTitleContent: TitleContent = {
+  ...titleContent,
+  displayHeadline: "From a Few People to the Whole Organization",
+  displayHeadlineKw: [],
+  tagline:
+    "A few people proved it. An agentic organization is that proof at scale — every team directing AI, not just using it — and it costs seats, protected hours, and a mandate only you can give.",
+  taglineKw: ["directing AI, not just using it", "only you can give"],
+};
+
+/**
+ * Title copy by deck set — the ONE thing about the cover that a leader audience
+ * changes.
+ *
+ * A `Record` keyed by `DeckSetId`, exactly as the brand alternates are keyed by
+ * `Brand` (`BRAND_ALTERNATE_IDS` in `@/deck/slots`): a third deck set fails to
+ * compile here rather than silently serving the standard cover. §4.1 keeps
+ * `sectionOverrides` to composition facts for the same reason — a generic
+ * override bag would be untyped by construction and the compiler would stop
+ * helping.
+ *
+ * BRAND IS NOT AN AXIS HERE. Both brands share the leader cover; brand identity
+ * already arrives through the workshop chip, which `variantLabel` suffixes with
+ * `· Leadership`.
+ */
+const TITLE_CONTENT_BY_DECK_SET: Record<DeckSetId, TitleContent> = {
+  standard: titleContent,
+  leader: leaderTitleContent,
+};
+
+/** The cover copy this deck set serves. Pass `VARIANT.deckSet`. */
+export function titleContentFor(deckSet: DeckSetId): TitleContent {
+  return TITLE_CONTENT_BY_DECK_SET[deckSet];
+}
 
 // The workshop chip is NOT authored here: it is the brand label plus the deck
 // set's label suffix, derived by `variantLabel` in src/deck-variants.ts. Once
