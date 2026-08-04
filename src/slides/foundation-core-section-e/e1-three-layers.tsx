@@ -1,13 +1,16 @@
 // E.1 — THREE LAYERS
 //
-// 5 steps: 0=PROMPT focal, 1=CONTEXT focal, 2=HARNESS focal, 3=SUMMARY,
-// 4=THE LOOP.
+// 5 steps: 0=PROMPT focal, 1=CONTEXT focal, 2=HARNESS focal, 3=THE LOOP focal,
+// 4=SUMMARY (the full stack).
 //
-// Step 4 (spec §8.2) names the loop for the first time in the deck. It reuses the
-// summary pose whole — same three rings, same LayerSummary — and adds only the
-// orbit arc over the figure plus its own footer. The loop is repetition in TIME
-// over a run that the three rings already draw in SPACE, which is why it is an
-// arc and not a fourth ring.
+// Step 3 names the loop for the first time in the deck, and it gets the same
+// treatment as the three layers before it: a focal card on the right, its own
+// ring on the left. That ring is the OUTERMOST one and it carries a marker that
+// travels around it — the loop is repetition in TIME of the run the three inner
+// rings draw in SPACE, and the motion is what says so. (Owner direction
+// 2026-08-04; this replaces the tilted sweep arc of spec §8.2 / gh#45.)
+//
+// Step 4 then shows the whole figure at once with the four-row summary.
 //
 // Layout uses absolute coordinates against the 1280×720 stage (see
 // src/deck/Slide.tsx + globals.css `.stage-wrap`). The design source is the
@@ -21,28 +24,29 @@ import { RingStack } from "./components/RingStack";
 import { Reveal, CopperRule } from "./components/Reveal";
 import { e1Content as C } from "./content";
 
-type LayerId = (typeof C.layers)[number]["id"];
+/** The three layers plus the loop, in ring order. One row per figure ring. */
+const FOCALS = [...C.layers, C.loop] as const;
+type FocalId = (typeof FOCALS)[number]["id"];
+
+/** Eyebrow over each focal card. The loop carries a phrase, not a number — see
+ *  `e1Content.loop` for why. */
+const EYEBROW: Record<FocalId, string> = {
+  prompt: "Layer 1",
+  context: "Layer 2",
+  harness: "Layer 3",
+  loop: C.loop.eyebrow,
+};
 
 // ───────────────────── slide ─────────────────────
 
 export function E1ThreeLayers() {
   const { stepIndex } = useDeck();
-  const focal: LayerId | null =
-    stepIndex === 0
-      ? "prompt"
-      : stepIndex === 1
-      ? "context"
-      : stepIndex === 2
-      ? "harness"
-      : null;
-  const isSummary = stepIndex === 3;
-  const isLoop = stepIndex === 4;
-  // Step 4 is the summary pose plus the orbit — the rings and the right-hand
-  // summary must not move under it.
-  const showSummary = isSummary || isLoop;
-  const focusIndex =
-    stepIndex === 0 ? 0 : stepIndex === 1 ? 1 : stepIndex === 2 ? 2 : null;
-  const mode: "focal" | "summary" = showSummary ? "summary" : "focal";
+  const focal = stepIndex <= 3 ? FOCALS[stepIndex] : null;
+  const isSummary = stepIndex === 4;
+  const focusIndex = isSummary ? null : (stepIndex as 0 | 1 | 2 | 3);
+  const mode: "focal" | "summary" = isSummary ? "summary" : "focal";
+  // The loop ring is on stage from its own focal step onward.
+  const showLoopRing = stepIndex >= 3;
 
   const [hoverTag, setHoverTag] = useState<string | null>(null);
 
@@ -56,12 +60,15 @@ export function E1ThreeLayers() {
         </h1>
       </div>
 
-      {/* Left: concentric rings — top-aligned with the right column. */}
+      {/* Left: concentric rings, centered at y=380. The four-ring pose has to
+          live between the headline (ends ≈128) and the footer (text top ≈654),
+          so its outer ring is 452 — y 154–606, with the marker dot 4px proud of
+          that. See `RING_GAP_4` in RingStack for why it is not larger. */}
       <div
         style={{
           position: "absolute",
           left: 60,
-          top: 155,
+          top: 150,
           width: 540,
           height: 460,
           display: "flex",
@@ -74,88 +81,40 @@ export function E1ThreeLayers() {
           mode={mode}
           width={540}
           height={460}
-          orbit={isLoop}
+          loop={showLoopRing}
         />
       </div>
 
-      {/* Right: focal detail (steps 0–2) or layer summary (steps 3–4). */}
+      {/* Right: focal detail (steps 0–3) or the full-stack summary (step 4). */}
       <div
         style={{
           position: "absolute",
           right: 60,
           top: 170,
           width: 580,
-          bottom: 80,
+          bottom: 100,
         }}
       >
         {focal && (
           <FocalDetail
-            key={focal}
-            layer={focal}
+            key={focal.id}
+            data={focal}
+            eyebrow={EYEBROW[focal.id]}
             hoverTag={hoverTag}
             setHoverTag={setHoverTag}
           />
         )}
-        {/* One key across steps 3 and 4 — advancing to the loop must not remount
-            the summary and replay its reveals. */}
-        {showSummary && <LayerSummary key="summary" />}
+        {isSummary && <LayerSummary />}
       </div>
 
-      {/* Footer quote — only on summary step. */}
+      {/* Footer — step 4 only.
+          `bottom: 60` lands this line's BASE on the TOP of the nav's
+          `STEP nn / nn` row: `.nav-bar` pads 14 from the floor, the 28px button
+          row and a 6px gap sit above it, so the counter text runs y≈660–672 —
+          and a 17px/1.4 line at bottom 60 ends at y=660. It is left-anchored at
+          x=60 while the counters are right-anchored past x=1030, so the two
+          never meet. Clears the outer ring (bottom 606) by 30px. */}
       {isSummary && (
-        <Reveal
-          on
-          delay={250}
-          data-testid="e1-footer-quote"
-          style={{
-            position: "absolute",
-            left: 60,
-            right: 60,
-            bottom: 30,
-            display: "flex",
-            alignItems: "baseline",
-            gap: 16,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--display)",
-              fontSize: 36,
-              color: "var(--copper-400)",
-              lineHeight: 1,
-            }}
-          >
-            “
-          </span>
-          <p
-            style={{
-              fontFamily: "var(--serif)",
-              fontStyle: "italic",
-              fontSize: 17,
-              color: "var(--neutral-200)",
-              margin: 0,
-              lineHeight: 1.4,
-            }}
-          >
-            {highlight(C.quote, C.quoteKw)}
-          </p>
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.18em",
-              color: "var(--neutral-500)",
-              textTransform: "uppercase",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {C.attr}
-          </span>
-        </Reveal>
-      )}
-
-      {/* Step 4 takes the same bottom slot as the quote — one footer at a time. */}
-      {isLoop && (
         <Reveal
           on
           delay={250}
@@ -164,7 +123,7 @@ export function E1ThreeLayers() {
             position: "absolute",
             left: 60,
             right: 60,
-            bottom: 30,
+            bottom: 60,
           }}
         >
           <p
@@ -185,21 +144,19 @@ export function E1ThreeLayers() {
   );
 }
 
-// ───────────────────── FocalDetail (steps 0–2) ─────────────────────
+// ───────────────────── FocalDetail (steps 0–3) ─────────────────────
 
 interface FocalDetailProps {
-  layer: LayerId;
+  /** One entry of `FOCALS` — a layer, or the loop. Same card either way. */
+  data: (typeof FOCALS)[number];
+  eyebrow: string;
   hoverTag: string | null;
   setHoverTag: (t: string | null) => void;
 }
 
-function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
-  const data = C.layers.find((l) => l.id === layer);
-  if (!data) return null;
-  const layerNum = layer === "prompt" ? 1 : layer === "context" ? 2 : 3;
-
+function FocalDetail({ data, eyebrow, hoverTag, setHoverTag }: FocalDetailProps) {
   return (
-    <Reveal on data-testid={`focal-detail-${layer}`}>
+    <Reveal on data-testid={`focal-detail-${data.id}`}>
       <span
         style={{
           fontFamily: "var(--mono)",
@@ -209,7 +166,7 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
           textTransform: "uppercase",
         }}
       >
-        Layer {layerNum}
+        {eyebrow}
       </span>
       <h2
         style={{
@@ -302,7 +259,7 @@ function FocalDetail({ layer, hoverTag, setHoverTag }: FocalDetailProps) {
   );
 }
 
-// ───────────────────── LayerSummary (steps 3–4) ─────────────────────
+// ───────────────────── LayerSummary (step 4) ─────────────────────
 
 function LayerSummary() {
   return (
@@ -316,7 +273,7 @@ function LayerSummary() {
           textTransform: "uppercase",
         }}
       >
-        Three Layers · Summary
+        Three Layers + The Loop · Summary
       </span>
       <h2
         style={{
@@ -331,66 +288,81 @@ function LayerSummary() {
       </h2>
       <CopperRule on width="40%" style={{ background: "var(--copper-200)" }} />
 
+      {/* Four rows now, so the type and the gaps step down — the column has to
+          finish above the footer at `bottom: 92`. */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 16,
-          marginTop: 22,
+          gap: 12,
+          marginTop: 20,
         }}
       >
-        {C.layers.map((l, i) => (
-          <Reveal
-            on
-            delay={300 + i * 150}
-            key={l.id}
-            data-testid={`summary-row-${l.id}`}
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: 14,
-              padding: "10px 14px",
-              borderLeft: "2px solid var(--copper-200)",
-            }}
-          >
-            <span
+        {FOCALS.map((l, i) => {
+          const isLoop = l.id === "loop";
+          return (
+            <Reveal
+              on
+              delay={300 + i * 150}
+              key={l.id}
+              data-testid={`summary-row-${l.id}`}
               style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.22em",
-                color: "var(--copper-300)",
-                textTransform: "uppercase",
-                minWidth: 56,
+                display: "flex",
+                alignItems: "baseline",
+                gap: 14,
+                padding: "8px 14px",
+                // The loop is not the fourth layer — a brighter rule and a gap
+                // above it are what separate the run from its repetition.
+                borderLeft: `2px solid ${
+                  isLoop ? "var(--copper-400)" : "var(--copper-200)"
+                }`,
+                marginTop: isLoop ? 8 : 0,
               }}
             >
-              Layer {i + 1}
-            </span>
-            <div style={{ flex: 1 }}>
-              <div
+              {/* Fixed width, not `minWidth`: the marker column is what the
+                  four titles align against, so a longer word here must not push
+                  its own title right. */}
+              <span
                 style={{
-                  fontFamily: "var(--display)",
-                  fontSize: 24,
-                  color: "var(--neutral-50)",
-                  lineHeight: 1.05,
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.22em",
+                  color: isLoop ? "var(--copper-400)" : "var(--copper-300)",
+                  textTransform: "uppercase",
+                  width: 64,
+                  flex: "0 0 64px",
+                  whiteSpace: "nowrap",
                 }}
               >
-                {l.titleA} {l.titleB}
+                {isLoop ? C.loop.summaryMarker : `Layer ${i + 1}`}
+              </span>
+              <div style={{ flex: 1 }}>
+                <div
+                  style={{
+                    fontFamily: "var(--display)",
+                    fontSize: 22,
+                    color: "var(--neutral-50)",
+                    lineHeight: 1.05,
+                  }}
+                >
+                  {l.titleA} {l.titleB}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "var(--serif)",
+                    fontStyle: "italic",
+                    fontSize: 14,
+                    color: "var(--neutral-300)",
+                    marginTop: 4,
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {l.summarySub}
+                </div>
               </div>
-              <div
-                style={{
-                  fontFamily: "var(--serif)",
-                  fontStyle: "italic",
-                  fontSize: 15,
-                  color: "var(--neutral-300)",
-                  marginTop: 4,
-                  lineHeight: 1.35,
-                }}
-              >
-                {l.summarySub}
-              </div>
-            </div>
-          </Reveal>
-        ))}
+            </Reveal>
+          );
+        })}
       </div>
     </Reveal>
   );

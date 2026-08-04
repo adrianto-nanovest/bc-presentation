@@ -387,6 +387,48 @@ em.kw {
   background: rgba(20, 12, 6, 0.95);
 }
 
+/* ─────────────────── E.1 — the loop ring's traveling marker ───────────────
+   A box the size of the loop ring rotates; the dot is pinned to its top edge,
+   so the dot rides the ring stroke at any diameter. CSS, not SMIL, so the
+   global prefers-reduced-motion rule above parks the dot on the ring instead of
+   needing a mount gate. `e1RingIn` is the loop ring's own arrival — the three
+   inner rings are already on stage when it appears. */
+.e1-loop-marker {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: e1LoopOrbit 7s linear infinite;
+}
+.e1-loop-marker-dot {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  margin-left: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--copper-100);
+  box-shadow: 0 0 10px 2px rgba(217, 158, 108, 0.5);
+}
+@keyframes e1LoopOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes e1RingIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* E6 — bigger satellites + consistent icon size + hover state */
 .e6-sat {
   min-width: 0;

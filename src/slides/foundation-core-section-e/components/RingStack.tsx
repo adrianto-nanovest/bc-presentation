@@ -1,20 +1,20 @@
-// Three concentric rings (PROMPT / CONTEXT / HARNESS) used on slide E.1.
+// Concentric rings (PROMPT / CONTEXT / HARNESS, plus THE LOOP) used on slide E.1.
 //
 // Ported from `claude-design-project/jsx/slides-a.jsx:78-109`. The source
 // drives ring diameters from the outer step number; we expose a typed
-// `focusIndex` (0=prompt, 1=context, 2=harness, null=summary) plus a
+// `focusIndex` (0=prompt, 1=context, 2=harness, 3=loop, null=summary) plus a
 // `mode` discriminator and recompute the diameters internally so callers
-// don't have to. The rings themselves are SVG-free — pure absolutely-positioned
-// divs with CSS transitions, no Framer Motion.
+// don't have to. The rings are SVG-free — pure absolutely-positioned divs with
+// CSS transitions, no Framer Motion.
 //
-// `orbit` (spec §8.2, gh#45) adds the one thing the rings cannot express: the
-// three rings are one run in SPACE, the loop is repetition in TIME. It is drawn
-// as a tilted SVG ellipse that CROSSES all three rings — deliberately not a
-// fourth ring, and not a circle around them either, because a concentric outer
-// boundary would assert the loop/harness containment direction that a third of
-// the current literature draws the other way round. Off by default; the orbit is
-// the only SVG this component mounts.
-import { useId, type CSSProperties } from "react";
+// `loop` (owner direction 2026-08-04) draws THE LOOP as a FOURTH, OUTERMOST
+// RING carrying a marker that travels around it. This supersedes the earlier
+// §8.2 treatment (a tilted ellipse sweeping across the three rings, gh#45),
+// which is gone: the owner asked for a concentric outer ring so that the loop
+// can be given its own focal step and its own summary row alongside the three
+// layers. The three inner rings shrink when the loop ring appears, so the
+// figure keeps its margins on the 540×460 canvas.
+import type { CSSProperties } from "react";
 
 const LAYERS = [
   {
@@ -38,64 +38,63 @@ const LAYERS = [
     baseColor: "var(--copper-700)",
     focalColor: "var(--copper-200)",
   },
+  {
+    id: "loop",
+    // One word, like the three ring labels above it — `THE LOOP` was the only
+    // label carrying an article, which is what made the figure read unevenly.
+    label: "LOOP",
+    essence: "the repetition",
+    baseColor: "var(--copper-700)",
+    focalColor: "var(--copper-200)",
+  },
 ] as const;
 
 type RingMode = "focal" | "summary";
-
-// ───────────────────── orbit geometry ─────────────────────
-// A TILTED ELLIPSE, not a concentric circle. This is the whole point of §8.2: a
-// circle drawn outside the harness would be a fourth containment boundary, which
-// is the direction the spec rejects. A tilted ellipse instead CROSSES the figure —
-// its long axis reaches past the outer harness ring while its short axis dips
-// inside the innermost prompt core, so the track cuts over all three ring strokes
-// and cannot be read as enclosing any of them. It closes on itself, which is the
-// "it repeats" reading.
-const ORBIT_LABEL = "THE LOOP";
-/** Long axis clearance from the canvas edge. 540 wide → rx 240, i.e. 50px past
- *  the 380-diameter harness ring. */
-const ORBIT_RX_INSET = 30;
-/** Short axis. Far inside the 240-diameter context ring's 120px radius, so both
- *  passes run through the interior of the stack and cross every ring stroke —
- *  that is what makes this a sweep and not an enclosure. */
-const ORBIT_RY = 40;
-/** Tilt, in degrees. Reads as perspective — an orbit seen edge-on, not a band.
- *  Kept shallow because tilt is what lifts the far pass toward the ring copy. */
-const ORBIT_TILT = -14;
-/** The track's center sits BELOW the rings' center. Every ring prints its label
- *  and essence at its own top edge, so the upper half of the figure is full of
- *  copy and the lower half is empty. With RY and TILT above, dropping the center
- *  by this much puts the whole track below the lowest of that copy (the prompt
- *  ring's essence line) while its far pass still runs through the prompt core, so
- *  all three ring strokes are crossed. Being off-center also puts the
- *  non-containment reading beyond doubt — nothing off-center is a boundary. */
-const ORBIT_CY_OFFSET = 64;
-/** Seconds for one full sweep. Slow enough to read as time, not as decoration. */
-const ORBIT_DUR = 7;
+type LayerIndex = 0 | 1 | 2 | 3;
 
 export interface RingStackProps {
-  focusIndex: 0 | 1 | 2 | null;
+  focusIndex: LayerIndex | null;
   mode: RingMode;
   /** SVG-style canvas width. The diagram is centered inside it. */
   width: number;
   /** SVG-style canvas height. */
   height: number;
   /**
-   * When true, a copper arc sweeps all three rings and carries the mono label
-   * `THE LOOP`. Motion over the figure, never a fourth ring. Default off, so
-   * existing call sites are unaffected.
+   * When true, the outermost LOOP ring is drawn and a copper marker travels
+   * around it. Implied by `focusIndex === 3`. Default off, so the three-ring
+   * poses (steps 0–2) are unaffected.
    */
-  orbit?: boolean;
+  loop?: boolean;
 }
 
-// Diameter table mirrors the source (`promptD`, `contextD`, `harnessD`).
-// Index = layer (0=prompt, 1=context, 2=harness). Inner index = focusIndex
-// (0..2 focal stages, 3 = summary).
-const DIAMETERS: Readonly<Record<number, [number, number, number]>> = {
-  // [promptD, contextD, harnessD]
-  0: [220, 0, 0],
-  1: [140, 320, 0],
-  2: [110, 240, 380],
-  3: [110, 240, 380], // summary
+// Diameter table mirrors the source (`promptD`, `contextD`, `harnessD`) and adds
+// `loopD`. Index = pose. 0..2 = the focal stages, 3 = the three-ring summary,
+// 4 = any pose that carries the loop ring.
+//
+// Pose 4's four rings are set by the GAP, not by the diameters: every ring
+// prints a label and an essence line inside its own top band, so the band has to
+// clear the ring below it. 58px of gap against a ~39px text block (see `compact`
+// in `Ring`) keeps `the repetition` off the harness stroke with ~19px to spare.
+//
+// The gap also fixes the outer diameter at 452, and THAT is what has to fit the
+// slide: the figure is centered at y=380, so the outer ring spans y 154–606 and
+// the marker dot overhangs it by 4. Headline ends at 128, footer text starts at
+// 654 — about 22px of air at the top and 44px at the foot. Widening the gap
+// pushes the ring into the headline, which is why it is 58 and not 62.
+const RING_GAP_4 = 58;
+const PROMPT_D_4 = 104;
+const DIAMETERS: Readonly<Record<number, [number, number, number, number]>> = {
+  // [promptD, contextD, harnessD, loopD]
+  0: [220, 0, 0, 0],
+  1: [140, 320, 0, 0],
+  2: [110, 240, 380, 0],
+  3: [110, 240, 380, 0], // summary, no loop
+  4: [
+    PROMPT_D_4,
+    PROMPT_D_4 + 2 * RING_GAP_4,
+    PROMPT_D_4 + 4 * RING_GAP_4,
+    PROMPT_D_4 + 6 * RING_GAP_4, // 452
+  ],
 };
 
 export function RingStack({
@@ -103,10 +102,11 @@ export function RingStack({
   mode,
   width,
   height,
-  orbit = false,
+  loop = false,
 }: RingStackProps) {
-  const stage = focusIndex == null ? 3 : focusIndex;
-  const [promptD, contextD, harnessD] = DIAMETERS[stage];
+  const showLoop = loop || focusIndex === 3;
+  const stage = showLoop ? 4 : focusIndex ?? 3;
+  const [promptD, contextD, harnessD, loopD] = DIAMETERS[stage];
   const summary = mode === "summary";
 
   return (
@@ -114,7 +114,7 @@ export function RingStack({
       data-testid="ring-stack"
       data-mode={mode}
       data-focus={focusIndex == null ? "summary" : String(focusIndex)}
-      data-orbit={orbit ? "true" : "false"}
+      data-loop={showLoop ? "true" : "false"}
       style={{
         position: "relative",
         width,
@@ -124,166 +124,89 @@ export function RingStack({
         justifyContent: "center",
       }}
     >
+      {showLoop && (
+        <Ring
+          layerIndex={3}
+          diameter={loopD}
+          focal={focusIndex === 3}
+          summary={summary}
+          compact
+          entering
+        />
+      )}
       <Ring
         layerIndex={2}
         diameter={harnessD}
         focal={focusIndex === 2}
         summary={summary}
+        compact={showLoop}
       />
       <Ring
         layerIndex={1}
         diameter={contextD}
         focal={focusIndex === 1}
         summary={summary}
+        compact={showLoop}
       />
       <Ring
         layerIndex={0}
         diameter={promptD}
         focal={focusIndex === 0}
         summary={summary}
+        compact={showLoop}
       />
-      {/* Last in the DOM so the arc paints over the rings, not between them. */}
-      {orbit && <Orbit width={width} height={height} />}
+      {/* Last in the DOM so the marker paints over every ring stroke it passes. */}
+      {showLoop && <LoopMarker diameter={loopD} />}
     </div>
   );
 }
 
-// ───────────────────── Orbit (step 4) ─────────────────────
+// ───────────────────── LoopMarker ─────────────────────
 
-/** Rotate `p` about (cx, cy) by `deg`, matching SVG's `rotate()` transform. */
-function rotatePoint(
-  p: { x: number; y: number },
-  cx: number,
-  cy: number,
-  deg: number,
-) {
-  const a = (deg * Math.PI) / 180;
-  const dx = p.x - cx;
-  const dy = p.y - cy;
-  return {
-    x: cx + dx * Math.cos(a) - dy * Math.sin(a),
-    y: cy + dx * Math.sin(a) + dy * Math.cos(a),
-  };
-}
-
-function Orbit({ width, height }: { width: number; height: number }) {
-  // SMIL is invisible to the global prefers-reduced-motion rule in globals.css
-  // (it squashes CSS animations only), so the motion nodes are gated at mount.
-  const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
-
-  // The <defs> path is referenced by <mpath href>, so the id must be unique per
-  // mount. useId's colons are legal in an id but need escaping anywhere the id
-  // reaches a CSS selector — strip them rather than depend on that.
-  const trackId = `orbit-track-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
-
-  const cx = width / 2;
-  const rx = width / 2 - ORBIT_RX_INSET;
-  const ry = ORBIT_RY;
-  // The rings' center, then the track's — the two are deliberately not the same.
-  const ocy = height / 2 + ORBIT_CY_OFFSET;
-
-  // Closed ellipse, drawn as two half-arcs from the right-hand extreme. Both use
-  // sweep-flag 1, so the track runs clockwise: rightmost → bottom → leftmost → top.
-  // Everything inside the rotated <g> is written in these UNROTATED coordinates;
-  // the group transform tilts the track and the marker together.
-  const d =
-    `M ${cx + rx} ${ocy} A ${rx} ${ry} 0 1 1 ${cx - rx} ${ocy}` +
-    ` A ${rx} ${ry} 0 1 1 ${cx + rx} ${ocy}`;
-
-  // Arrowhead on the near pass (bottom of the ellipse), where the track runs
-  // right-to-left. It is what still says "direction" when motion is suppressed.
-  const head =
-    `M ${cx - 7} ${ocy + ry} L ${cx + 2} ${ocy + ry - 4}` +
-    ` L ${cx + 2} ${ocy + ry + 4} Z`;
-
-  // The label rides the track's high end but must stay upright, so it sits
-  // outside the rotated group at the rotated position of that end. The end is
-  // close enough to the canvas edge that a centered label would overhang it, so
-  // the x is clamped to keep the whole string on the canvas.
-  const labelEnd = rotatePoint({ x: cx + rx, y: ocy }, cx, ocy, ORBIT_TILT);
-  const labelAt = { x: Math.min(labelEnd.x, width - 45), y: labelEnd.y };
-
+/**
+ * The dot that travels the loop ring. A rotating square box the size of the
+ * ring, with the dot pinned to its top edge — so the dot rides the stroke
+ * exactly, whatever the diameter.
+ *
+ * CSS animation, not SMIL: the global `prefers-reduced-motion` rule in
+ * globals.css squashes CSS animations, so this needs no mount gate of its own
+ * and the dot simply parks on the ring when motion is suppressed.
+ */
+function LoopMarker({ diameter }: { diameter: number }) {
   return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width,
-        height,
-        overflow: "visible",
-        pointerEvents: "none",
-      }}
+    <div
+      data-testid="ring-loop-marker"
+      className="e1-loop-marker"
+      style={{ width: diameter, height: diameter }}
     >
-      <g
-        data-testid="ring-orbit"
-        data-orbit-rx={rx}
-        data-orbit-ry={ry}
-        data-orbit-cy={ocy}
-        data-orbit-tilt={ORBIT_TILT}
-      >
-        <defs>
-          <path id={trackId} d={d} />
-        </defs>
-        <g transform={`rotate(${ORBIT_TILT} ${cx} ${ocy})`}>
-          {/* Knock-out pass in the surface color: the track reads as passing IN
-              FRONT of the ring strokes it crosses, not merging with them. */}
-          <path d={d} fill="none" stroke="var(--surface-dark)" strokeWidth="5" />
-          <path
-            data-testid="ring-orbit-arc"
-            d={d}
-            fill="none"
-            stroke="var(--copper-400)"
-            strokeWidth="1.5"
-          />
-          <path d={head} fill="var(--copper-300)" />
-          {reduced ? (
-            <circle
-              data-testid="ring-orbit-marker"
-              cx={cx + rx}
-              cy={ocy}
-              r="3.5"
-              fill="var(--copper-100)"
-            />
-          ) : (
-            // No cx/cy: animateMotion translates the element from the origin.
-            <circle
-              data-testid="ring-orbit-marker"
-              r="3.5"
-              fill="var(--copper-100)"
-            >
-              <animateMotion dur={`${ORBIT_DUR}s`} repeatCount="indefinite">
-                <mpath href={`#${trackId}`} />
-              </animateMotion>
-            </circle>
-          )}
-        </g>
-        <text
-          x={labelAt.x}
-          y={labelAt.y - 12}
-          textAnchor="middle"
-          fill="var(--copper-200)"
-          fontFamily="var(--mono)"
-          fontSize="11"
-          letterSpacing="2"
-        >
-          {ORBIT_LABEL}
-        </text>
-      </g>
-    </svg>
+      <span className="e1-loop-marker-dot" />
+    </div>
   );
 }
 
 interface RingProps {
-  layerIndex: 0 | 1 | 2;
+  layerIndex: LayerIndex;
   diameter: number;
   focal: boolean;
   summary: boolean;
+  /**
+   * Four rings on stage: the label block is trimmed so it clears the ring below
+   * it inside a 62px gap. The three-ring poses keep their original metrics —
+   * they have 65–70px of gap and were signed off as they are.
+   */
+  compact?: boolean;
+  /** Fade + settle on mount. Only the loop ring appears mid-slide. */
+  entering?: boolean;
 }
 
-function Ring({ layerIndex, diameter, focal, summary }: RingProps) {
+function Ring({
+  layerIndex,
+  diameter,
+  focal,
+  summary,
+  compact,
+  entering,
+}: RingProps) {
   if (diameter <= 0) return null;
   const layer = LAYERS[layerIndex];
   const summaryColor = "#e8c4a0";
@@ -312,7 +235,8 @@ function Ring({ layerIndex, diameter, focal, summary }: RingProps) {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    paddingTop: small ? 8 : 12,
+    paddingTop: small ? 8 : compact ? 10 : 12,
+    ...(entering ? { animation: "e1RingIn 0.6s var(--ease) both" } : null),
   };
 
   return (
@@ -325,7 +249,8 @@ function Ring({ layerIndex, diameter, focal, summary }: RingProps) {
       <span
         style={{
           fontFamily: "var(--mono)",
-          fontSize: small ? 9 : 11,
+          fontSize: small ? 9 : compact ? 10 : 11,
+          lineHeight: 1,
           letterSpacing: "0.18em",
           color: labelColor,
           textTransform: "uppercase",
@@ -338,9 +263,18 @@ function Ring({ layerIndex, diameter, focal, summary }: RingProps) {
           style={{
             fontFamily: "var(--display)",
             fontStyle: "italic",
-            fontSize: small ? 11 : diameter <= 240 ? 13 : 16,
+            fontSize: small
+              ? 11
+              : diameter <= 240
+              ? compact
+                ? 12
+                : 13
+              : compact
+              ? 14
+              : 16,
+            lineHeight: 1.15,
             color: essenceColor,
-            marginTop: small ? 1 : 4,
+            marginTop: small ? 1 : compact ? 3 : 4,
             whiteSpace: "nowrap",
           }}
         >

@@ -47,11 +47,32 @@ export const e1Content = {
       tags: ["Orchestration", "Observability", "Subagents", "Triggers", "Memory"],
     },
   ],
-  quote: "A decent model with a great harness beats a great model with a bad harness.",
-  quoteKw: ["A decent model with a great harness beats a great model with a bad harness"],
-  attr: "— Anthropic",
-  // Step 4 — the first time the deck names the loop. The three rings are one run
-  // (space); the loop is repetition (time). See spec §8.2.
+  /**
+   * THE LOOP — step 3's focal card and the summary's fourth row.
+   *
+   * Same shape as a `layers` entry so one `FocalDetail` renders both, but it is
+   * deliberately NOT in `layers`: the three layers are one run (space), the loop
+   * is repetition of that run (time). `eyebrow` and `summaryMarker` are what keep
+   * that distinction visible — the three read `Layer 1..3`, this one does not
+   * take the number `4`. Swap those two strings to `"Layer 4"` if the deck later
+   * decides the loop IS a fourth layer; nothing else has to move.
+   *
+   * `summaryMarker` sits in the rank column beside `Loop Engineering`, so it
+   * must NOT be the word `Loop` again — it says where the loop sits, the way
+   * `Layer 1` does. `Around` is the short form of the eyebrow above; `Outer`
+   * and `Repeat` are the other two that fit the 64px column.
+   */
+  loop: {
+    id: "loop", label: "LOOP", titleA: "Loop", titleB: "Engineering",
+    essence: "the repetition", kw: ["repetition"],
+    eyebrow: "Around all three",
+    summaryMarker: "Around",
+    summarySub: "How to make AI run again without you in every turn.",
+    blurb: "What runs the stack again. A heartbeat starts it, a checker verifies it, and a spine carries state from one run into the next.",
+    tags: ["Heartbeat", "Spine", "Verify", "Human Gate", "Autonomy"],
+  },
+  // Step 4 — the full stack, named. The three rings are one run; the outer ring
+  // is the repetition around them. See spec §8.2.
   loopFooter: "Three layers make one run. The loop makes it repeat.",
   loopFooterKw: ["one run", "makes it repeat"],
 } as const;
