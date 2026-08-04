@@ -13,14 +13,50 @@
 // blocked inside the bezel via `data-no-advance`.
 import fs from "node:fs";
 import path from "node:path";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, vi } from "vitest";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { useDeck } from "@/deck/DeckContext";
+import {
+  DECK_SETS,
+  VARIANTS,
+  type DeckSetId,
+  type VariantId,
+} from "@/deck-variants";
 import { SlideHarness } from "../support/slide-harness";
 import {
   F8YourAgenticOs,
   f8Slide,
 } from "@/slides/foundation-techniques-section-f/f8-your-agentic-os";
-import { f8Content } from "@/slides/foundation-techniques-section-f/content";
+import {
+  f8CloserFor,
+  f8Content,
+  type F8Closer,
+} from "@/slides/foundation-techniques-section-f/content";
+
+// ---------------------------------------------------------------------------
+// The closer, signed off deck set by deck set (#54).
+//
+// QUOTED HERE AS LITERALS, not read back off `f8CloserFor`: reading the content
+// module would only re-state whatever it currently holds and would pass straight
+// through a silent rewording. The standard line is the one that shipped before
+// #54 and must not move by one byte; the leader line is the variant #54 decided
+// on, in place of a builder's portability promise addressed to a sponsor.
+//
+// A `Record<DeckSetId, …>` in the test too, for the reason the production table
+// is one: a third deck set fails to compile HERE, by name, instead of quietly
+// going unasserted.
+// ---------------------------------------------------------------------------
+const CLOSER_AS_SIGNED_OFF: Record<DeckSetId, F8Closer> = {
+  standard: {
+    tagline: "this is yours — wherever you go, you carry it.",
+    taglineKw: ["yours", "carry it"],
+  },
+  leader: {
+    tagline: "one person carries this — you decide whether a division does.",
+    /** In the order `highlight()` renders them — DOM order, i.e. copy order. */
+    taglineKw: ["one person", "a division"],
+  },
+};
 
 // ---------------------------------------------------------------------------
 // Render harness — mirrors the pattern used by every other Section F test.
@@ -113,6 +149,11 @@ test("§10.4 step 1 — tagline visible; 4 tiles + chat rail present", () => {
 
 // ---------------------------------------------------------------------------
 // §10.8 (renumbered) — Tagline exact text at step 1.
+//
+// This file mounts the slide under the default variant (`localhost` → `general`
+// → deck set `standard`), so the STANDARD closer is the one under test here —
+// unchanged by #54. The leader closer needs a module epoch of its own and is
+// asserted in "the closer, per deck set" below.
 // ---------------------------------------------------------------------------
 test("§10.8 tagline — exact text visible at step 1", () => {
   renderAtStep(1);
@@ -120,9 +161,220 @@ test("§10.8 tagline — exact text visible at step 1", () => {
   expect(tagline.className).toMatch(/\bon\b/);
   // `highlight()` wraps keywords in <em class="kw"> spans, but textContent
   // strips tags — so the parent string should equal the spec tagline exactly.
-  expect(tagline.textContent).toBe(
-    "this is yours — wherever you go, you carry it.",
-  );
+  expect(tagline.textContent).toBe(CLOSER_AS_SIGNED_OFF.standard.tagline);
+});
+
+// ---------------------------------------------------------------------------
+// The closer, per deck set (#54, spec §4.1 / §4.5).
+//
+// F.8 is relocated to C.2 in both leader decks, where the audience will sponsor
+// this rather than build it, so the closer is deck-set-scoped copy resolved by
+// section F's own content module. Two things can break silently:
+//
+//   1. The pick resolving to the wrong line — a leader deck closing C.2 on
+//      "wherever you go, you carry it" looks like a working slide and argues
+//      against C.1's whole-organisation abstraction in front of it. So the line
+//      is READ BACK OUT OF THE DOM under a real leader `?variant=`, not asserted
+//      off the content object: asserting the data against itself would pass even
+//      with the slide wired to the other deck set's line.
+//   2. A keyword that is not a substring of its copy. `highlight()` is a plain
+//      `String.includes` that NO-OPS SILENTLY, so a typo drops a copper
+//      highlight with no error anywhere.
+//
+// ONE EPOCH HOLDS ONE DECK SET. `VARIANT` resolves at module scope and the slide
+// reads it, so a deck set's closer only exists inside a module registry loaded
+// with that variant's `?variant=` in place. That also rules out `SlideHarness`
+// here — it imports `composedDeck` statically and would mix a stale context
+// object into a fresh registry — so these cases build the two providers the way
+// `variant-composition.test.tsx` does.
+// ---------------------------------------------------------------------------
+const DECK_SET_IDS = Object.keys(DECK_SETS) as DeckSetId[];
+
+/** Every registered variant, grouped by the deck set it serves. Read off
+ *  `VARIANTS` rather than hand-listed, so a new variant arrives here by being
+ *  registered — and a new DECK SET fails to compile on this initializer. */
+const VARIANT_IDS_BY_DECK_SET: Record<DeckSetId, VariantId[]> = {
+  standard: [],
+  leader: [],
+};
+for (const variant of Object.values(VARIANTS)) {
+  VARIANT_IDS_BY_DECK_SET[variant.deckSet].push(variant.id);
+}
+
+const realLocation = window.location;
+
+interface RenderedCloser {
+  /** Raw `textContent`: "byte-identical" has to mean it. */
+  text: string;
+  /** The keywords `highlight()` actually rendered, in DOM order — an empty array
+   *  means every one of them missed. `KeywordHighlight` renders an `<em>`, and
+   *  the closer carries no other emphasis, so the tag IS the selector. */
+  highlights: string[];
+  /** Whether the Reveal is lit — the closer only counts at its canonical pose. */
+  revealed: boolean;
+}
+
+describe("the closer, per deck set", () => {
+  beforeEach(() => vi.resetModules());
+
+  afterEach(() => {
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      writable: true,
+      value: realLocation,
+    });
+  });
+
+  async function closerFor(id: VariantId): Promise<RenderedCloser> {
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      writable: true,
+      value: new URL(`http://localhost:5173/?variant=${id}`),
+    });
+    vi.resetModules();
+    cleanup(); // several variants are rendered inside one test case
+
+    // FOUR MODULES, ONE EPOCH — including `SlideNumberContext` and
+    // `DeckContext`. A React context is an object identity, so a provider
+    // imported from outside this epoch would hand the slide a different context
+    // than its `FigLabel` and `useDeck` read, and the render would throw.
+    const [deck, slideNumber, { composedDeck }, f8] = await Promise.all([
+      import("@/deck/DeckContext"),
+      import("@/deck/SlideNumberContext"),
+      import("@/deck/registry"),
+      import("@/slides/foundation-techniques-section-f/f8-your-agentic-os"),
+    ]);
+    // BY ID, NOT BY IDENTITY. On a leader deck this slide is the one row the
+    // deck set's `sectionOverrides` rewrites, and `resolveDeckSetSlides` returns
+    // `{ ...def, sectionKey }` for an overridden slot — so the composed row holds
+    // a COPY of the def and `row.def === f8Slide` is false there by construction.
+    // The id is the join key (as `bridgeBeat2For` in
+    // `variant-composition.test.tsx` also uses).
+    const row = composedDeck.slides.find((s) => s.def.id === f8.f8Slide.id);
+    if (!row) throw new Error(`F.8 is not in ${id}'s composed deck`);
+
+    // The closer reveals at `canonicalPose`, and only this epoch's own `useDeck`
+    // can reach this epoch's provider — hence a component declared in here.
+    function AdvanceToCanonicalPose() {
+      const { goTo } = deck.useDeck();
+      return (
+        <button
+          data-testid="goto"
+          onClick={() => goTo(0, f8.f8Slide.canonicalPose)}
+        />
+      );
+    }
+
+    const { container } = render(
+      <deck.DeckProvider stepCounts={[f8.f8Slide.steps]}>
+        <slideNumber.SlideNumberProvider
+          value={{ letter: row.letter, num: row.num, sectionKey: row.sectionKey }}
+        >
+          <AdvanceToCanonicalPose />
+          <f8.F8YourAgenticOs />
+        </slideNumber.SlideNumberProvider>
+      </deck.DeckProvider>,
+    );
+    act(() => {
+      (container.querySelector('[data-testid="goto"]') as HTMLElement).click();
+    });
+
+    const closer = container.querySelector('[data-testid="f8-tagline"]');
+    expect(closer, `no closer rendered for ${id}`).not.toBeNull();
+    return {
+      text: closer?.textContent ?? "",
+      highlights: Array.from(closer?.querySelectorAll("em") ?? []).map(
+        (el) => el.textContent ?? "",
+      ),
+      revealed: /\bon\b/.test(closer?.className ?? ""),
+    };
+  }
+
+  test("every variant prints the closer its own deck set owns", async () => {
+    for (const deckSet of DECK_SET_IDS) {
+      for (const id of VARIANT_IDS_BY_DECK_SET[deckSet]) {
+        const rendered = await closerFor(id);
+        expect(rendered.text, id).toBe(CLOSER_AS_SIGNED_OFF[deckSet].tagline);
+        expect(rendered.revealed, `${id}: closer revealed at canonical pose`).toBe(
+          true,
+        );
+      }
+    }
+  });
+
+  test("neither deck set prints the other's closer", async () => {
+    // The negative is not implied by the positives above: both would still pass
+    // if the two table rows were ever aliased to one string.
+    expect((await closerFor("berau-leader")).text).not.toBe(
+      CLOSER_AS_SIGNED_OFF.standard.tagline,
+    );
+    expect((await closerFor("berau-middle-mgmt")).text).not.toBe(
+      CLOSER_AS_SIGNED_OFF.leader.tagline,
+    );
+  });
+
+  test("the leader closer's two keywords both land, in copy order", async () => {
+    // The contrast IS the line, and it is carried by the highlights: a keyword
+    // that misses costs the copper on "one person" or "a division" and reports
+    // nothing.
+    const { highlights } = await closerFor("gems-leader");
+    expect(highlights).toEqual([...CLOSER_AS_SIGNED_OFF.leader.taglineKw]);
+  });
+
+  test("the standard closer's two keywords both land, in copy order", async () => {
+    const { highlights } = await closerFor("general");
+    expect(highlights).toEqual([...CLOSER_AS_SIGNED_OFF.standard.taglineKw]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `f8CloserFor` — the pick itself.
+//
+// Walks the REGISTERED deck sets (`DECK_SETS`), not a hand-kept pair: the
+// `Record<DeckSetId, …>` already makes a missing deck set a compile error, and
+// this is what holds the rules the compiler cannot see — an empty string, a
+// keyword that misses, or a third deck set inheriting a line written for another
+// audience.
+// ---------------------------------------------------------------------------
+describe("f8CloserFor", () => {
+  test("every registered deck set resolves to the copy it was signed off with", () => {
+    for (const deckSet of DECK_SET_IDS) {
+      const closer = f8CloserFor(deckSet);
+      expect(closer.tagline, deckSet).toBe(CLOSER_AS_SIGNED_OFF[deckSet].tagline);
+      expect(closer.taglineKw, deckSet).toEqual([
+        ...CLOSER_AS_SIGNED_OFF[deckSet].taglineKw,
+      ]);
+      expect(closer.tagline, `${deckSet}: closer is not empty`).not.toBe("");
+    }
+  });
+
+  test("the standard closer is byte-identical to the line that shipped before #54", () => {
+    // The literal, not the constant: this is the one assertion in the file that
+    // may not be indirected, because it is the whole "do not change the string"
+    // half of #54's decision.
+    expect(f8CloserFor("standard").tagline).toBe(
+      "this is yours — wherever you go, you carry it.",
+    );
+  });
+
+  test("no two deck sets share a closer", () => {
+    // Pairwise-distinct rather than `standard !== leader`, so a third deck set
+    // has to bring its own line instead of copying one of these two.
+    const taglines = DECK_SET_IDS.map((deckSet) => f8CloserFor(deckSet).tagline);
+    expect(new Set(taglines).size).toBe(DECK_SET_IDS.length);
+  });
+
+  test("every keyword is a substring of the closer it highlights", () => {
+    for (const deckSet of DECK_SET_IDS) {
+      const closer = f8CloserFor(deckSet);
+      for (const kw of closer.taglineKw) {
+        expect(closer.tagline, `${deckSet}: closer kw`).toContain(kw);
+      }
+      // 1–3 keywords per chunk (feedback_keyword_highlighting.md).
+      expect(closer.taglineKw.length, `${deckSet}: 1–3 keywords`).toBeLessThanOrEqual(3);
+      expect(closer.taglineKw.length, `${deckSet}: at least one keyword`).toBeGreaterThan(0);
+    }
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -332,14 +584,22 @@ test("§10.12 vault — clicking Reports folder updates preview pane title", () 
 });
 
 // ---------------------------------------------------------------------------
-// §10.13 — Tagline exclusivity: the exact tagline string is the literal
-// payload of EXACTLY ONE slide-content file (Section F's content.tsx). To
-// avoid false positives from comments / doc-strings that document the
-// constraint, strip line and block comments before matching.
+// §10.13 — Closer exclusivity: each deck set's closer is the literal payload of
+// EXACTLY ONE slide-content file (Section F's content.tsx), and no other slide
+// carries either of them.
+//
+// This is the surviving half of the original "appears EXACTLY ONCE in the entire
+// deck" rule, which is a WITHIN-DECK uniqueness constraint — the 2026-05-11
+// section-F spec lets sections C and J echo the theme but never repeat the
+// phrase. #54's deck-set-scoped variant keeps it: one closer per deck set, both
+// authored in one place, and no second slide printing either line.
+//
+// To avoid false positives from comments / doc-strings that document the
+// constraint — the doc comment above the table quotes the old rule and part of
+// the standard line — strip line and block comments before matching.
 // ---------------------------------------------------------------------------
-test("§10.13 tagline exclusivity — string literal appears exactly once across src/slides/**/*.tsx", () => {
+test("§10.13 closer exclusivity — each deck set's closer appears in exactly one file across src/slides/**/*.tsx", () => {
   const SLIDES_ROOT = path.resolve(__dirname, "../../src/slides");
-  const TAGLINE = "this is yours — wherever you go, you carry it.";
 
   function walk(dir: string, acc: string[] = []): string[] {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -361,14 +621,20 @@ test("§10.13 tagline exclusivity — string literal appears exactly once across
       .replace(/(^|[^:])\/\/.*$/gm, "$1");
   }
 
-  const files = walk(SLIDES_ROOT);
-  const matches: string[] = [];
-  for (const file of files) {
-    const text = stripComments(fs.readFileSync(file, "utf8"));
-    if (text.includes(TAGLINE)) matches.push(file);
+  const sources = walk(SLIDES_ROOT).map((file) => ({
+    file,
+    code: stripComments(fs.readFileSync(file, "utf8")),
+  }));
+
+  // Per deck set, off the registered ids — a third deck set's closer is held to
+  // the same rule the day it is registered.
+  for (const deckSet of DECK_SET_IDS) {
+    const matches = sources
+      .filter(({ code }) => code.includes(f8CloserFor(deckSet).tagline))
+      .map(({ file }) => file);
+    expect(matches, deckSet).toHaveLength(1);
+    expect(matches[0], deckSet).toMatch(/content\.tsx$/);
   }
-  expect(matches).toHaveLength(1);
-  expect(matches[0]).toMatch(/content\.tsx$/);
 });
 
 // ---------------------------------------------------------------------------

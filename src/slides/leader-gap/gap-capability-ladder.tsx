@@ -30,11 +30,12 @@
 // closer nobody outside the room ever reads.
 //
 // THE LETTER IS NOT AUTHORED HERE, and this slide is the reason that rule earns
-// its keep: it is the first slide of the `gap` run, so it prints B.1 today, will
-// print B.5 once #55–#58 put the other four `gap` slides in front of it, and its
-// arrival pushes the loop slide from E.12 to F.12 in both leader decks (§3.4 R2).
-// `FigLabel` takes a label only; the letter and number come from the composed
-// deck (§3.5).
+// its keep: it is the first slide of the `gap` run, so it prints B.1 today and will
+// print B.5 once #55–#58 put the other four `gap` slides in front of it. Its
+// arrival pushed the loop slide from E.12 to F.12 in both leader decks, and gh#54's
+// `shape` run has since pushed it to G.12 — one insert each, both in front of the
+// curriculum, both costing no edit to any slide behind them (§3.4 R2). `FigLabel`
+// takes a label only; the letter and number come from the composed deck (§3.5).
 //
 // NO LEGEND, anywhere. See `./components/CapabilityLadder.tsx` for the four
 // encodings that replace one.

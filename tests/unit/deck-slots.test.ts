@@ -261,12 +261,12 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 58 slots — the F cut, F.8 kept, plus its own", () => {
+  test("gives the leader deck its own 59 slots — the F cut, F.8 kept, plus its own", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(58);
+    expect(leader.slides).toHaveLength(59);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
@@ -285,18 +285,35 @@ describe("DECK_SET_COMPOSITION", () => {
       "f7-subagents-specialists",
       "f9-bridge-to-g",
     ]);
-    expect(leader.slides.filter((id) => !standardIds.has(id))).toEqual(["gap-capability-ladder"]);
+    expect(leader.slides.filter((id) => !standardIds.has(id))).toEqual([
+      "gap-capability-ladder",
+      "shape-agentic-org",
+    ]);
   });
 
   test("relocates F.8 with the one override that names the run it lands in", () => {
-    // The VALUE is what matters and is easy to get wrong: `f8-your-agentic-os`
-    // sits inside the leader deck's `tools` block, so the override must say
-    // `tools`. §4.3's `shape` would make it a second, one-slide run in the middle
-    // of `tools`, splitting `tools` in two — R4, thrown at module load. Phase 6
-    // flips the value and moves the list entry in one edit.
+    // The VALUE is what matters and is easy to get wrong: as of gh#54
+    // `f8-your-agentic-os` sits at §4.3's C.2, directly behind
+    // `shape-agentic-org`, so the override must say `shape`. `tools` — the value
+    // it carried while f8 sat inside the retained TOOLS run — would now make
+    // `tools` a second run at `g1`, and R4 throws at module load. The row moved
+    // and the value flipped in ONE edit, because either half alone throws.
     expect(DECK_SET_COMPOSITION.leader.sectionOverrides).toEqual({
-      "f8-your-agentic-os": "tools",
+      "f8-your-agentic-os": "shape",
     });
+  });
+
+  test("puts C.1 and C.2 next to each other, in that order", () => {
+    // ADJACENCY IS THE COMPOSITION FACT the override serves, and it is separate
+    // from the value: `shape` on a row parked elsewhere in the list is still one
+    // key forming two runs. Asserted on the LIST, so the failure names the edit
+    // that broke it rather than surfacing as an R4 throw two files away.
+    const { slides } = DECK_SET_COMPOSITION.leader;
+    const c1 = slides.indexOf("shape-agentic-org");
+    expect(c1).toBeGreaterThan(-1);
+    expect(slides[c1 + 1]).toBe("f8-your-agentic-os");
+    // And it comes straight after the `gap` run — §4.3's C follows B.
+    expect(slides[c1 - 1]).toBe("gap-capability-ladder");
   });
 
   test("carries no section override on the standard deck, which needs none", () => {

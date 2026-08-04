@@ -76,30 +76,38 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
   ];
 }
 
-// ── The leader deck, which is no longer the Phase 4 floor (gh#41, gh#53) ──────
+// ── The leader deck, which is no longer the Phase 4 floor (gh#41, gh#53, gh#54) ─
 
-/** The leader deck's spine: the standard one with `techniques` GONE, `tools` one
- *  longer, and a `gap` run in front of `landscape`.
+/** The leader deck's spine: the standard one with `techniques` GONE, and TWO runs
+ *  the standard deck does not have — `gap` then `shape` — in front of `landscape`.
  *
- *  The first two facts are one edit. `f1`–`f7` and `f9` are cut, which empties
- *  `techniques` so it takes no letter at all; `f8-your-agentic-os` survives
- *  inside the `tools` run, carried there by the deck set's one
- *  `sectionOverrides` entry.
+ *  `techniques` is the gh#41 cut. `f1`–`f7` and `f9` are dropped, which empties the
+ *  key so it takes no letter at all; `f8-your-agentic-os` survives, carried
+ *  elsewhere by the deck set's one `sectionOverrides` entry.
  *
- *  `gap` is gh#53's, and it is the first run the standard deck does not have. It
- *  sits SECOND, so every run behind it takes the next letter along — which is
- *  why this file asserts KEYS and not letters (see `SectionRun`): the one-line
- *  insert below is the whole diff, and a letter-keyed table would have needed ten
- *  edits to say the same thing. Composed in this order the runs take A–K.
- *  §4.3 gives `gap` five slides; #55–#58 raise this 1 and move nothing else. */
+ *  WHERE IT IS CARRIED TO IS THE gh#54 EDIT, and it is why `tools` is 11 here and
+ *  not 12: f8 spent gh#41–gh#53 inside the `tools` run, making that run one LONGER
+ *  than the standard deck's, and gh#54 moved it out to §4.3's C.2 — so `tools` is
+ *  back to the standard 11 and the two extra slides now sit in `shape`.
+ *
+ *  `gap` (gh#53) and `shape` (gh#54) are the runs no standard deck has. Both sit in
+ *  front of the curriculum, so every run behind them takes a letter two along from
+ *  where gh#41 left it — which is why this file asserts KEYS and not letters (see
+ *  `SectionRun`): each insert is ONE line here, where a letter-keyed table would
+ *  have needed ten edits to say the same thing twice. Composed in this order the
+ *  runs take A–L.
+ *
+ *  §4.3 gives `gap` five slides and `shape` four; #55–#58 raise `gap` to 5 and the
+ *  unbuilt C.3/C.4 raise `shape` to 4. Neither moves any other line. */
 const LEADER_SPINE: readonly SectionRun[] = [
   ["opening", 2], // cover + A.1
   ["gap", 1], // `gap-capability-ladder` (gh#53) — leader-only, §4.3's B.5
+  ["shape", 2], // `shape-agentic-org` (gh#54, leader-only) + the relocated f8 at C.2
   ["landscape", 5],
   ["mindset", 6],
   ["process", 5],
   ["fundamentals", 13], // e1–e11, E.12 · LOOP ENGINEERING (gh#48), the bridge
-  ["tools", 12], // g1–g10 + the relocated f8 + g11-bridge-to-h
+  ["tools", 11], // g1–g11, the standard length again since f8 left on gh#54
   ["pitfalls", 3],
   ["meta", 4],
   ["principles", 4],
@@ -116,23 +124,46 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
 }
 
 /** The leader deck's own total: 56 when gh#41 recorded it against a 64-slide
- *  standard deck, 57 once gh#48 inserted E.12 into both sets, 58 now that gh#53's
- *  ladder has reached this deck and no other.
+ *  standard deck, 57 once gh#48 inserted E.12 into both sets, 58 once gh#53's
+ *  ladder reached this deck and no other, 59 now that gh#54's `shape-agentic-org`
+ *  has done the same.
  *
  *  SO THE DIFFERENCE gh#41 PINNED HAS CHANGED, and that is the point of Phase 6
  *  rather than a regression: the leader deck is no longer "the standard deck minus
  *  eight", it is that minus eight PLUS its own slides. The assertion below states
- *  both halves separately so the next `gap` slide moves one number, not a
- *  sentence. */
-const LEADER_TOTAL_WITH_LAB = 58;
+ *  both halves separately so the next `gap` or `shape` slide moves one number, not
+ *  a sentence. */
+const LEADER_TOTAL_WITH_LAB = 59;
 
 /** The eight cut F slides — `f1`–`f7` and `f9`, with `f8-your-agentic-os` kept
  *  and relocated. Held apart from the total above so a leader-only ADDITION can
  *  never be mistaken for a retained F slide, or vice versa. */
 const LEADER_CUT_F_SLIDES = 8;
 
-/** What the leader deck holds that no standard deck does: `gap`, so far. */
-const LEADER_ONLY_SLIDES = 1;
+/**
+ * SLIDES no standard deck runs: `gap-capability-ladder` (gh#53) and
+ * `shape-agentic-org` (gh#54). Two files that exist for this deck alone.
+ *
+ * THIS IS NOT THE SAME NUMBER AS "SLIDES IN THE LEADER-ONLY RUNS", and gh#54 is
+ * where the two stopped agreeing — read both assertions below before changing
+ * either. The `shape` RUN holds two slides and only ONE of them is leader-only:
+ * the other is `f8-your-agentic-os`, a standard-deck slide the leader list
+ * RELOCATES into that run, so it counts toward the run's length and not toward
+ * this constant.
+ *
+ * The split matters because the two constants answer different questions: this one
+ * is the deck's slide-count arithmetic (a relocated slide is present in both decks
+ * and cancels out of it), and {@link RELOCATED_INTO_LEADER_ONLY_RUNS} is what
+ * reconciles that with the run TABLE, where a relocated slide is indistinguishable
+ * from a new one.
+ */
+const LEADER_ONLY_SLIDES = 2;
+
+/** Standard-deck slides the leader list relocates INTO one of those leader-only
+ *  runs: `f8-your-agentic-os` alone, moved to `shape` by the deck set's single
+ *  `sectionOverrides` entry. Zero until gh#54, which is why one constant used to
+ *  serve both assertions below. */
+const RELOCATED_INTO_LEADER_ONLY_RUNS = 1;
 
 interface DeckCase {
   brand: Brand;
@@ -144,10 +175,21 @@ interface DeckCase {
 // standard row moved. `general` has no leader variant — leaders are addressed per
 // organisation — so there are five rows, not six.
 //
-// This is not §4.3's finished leader deck: 58 slides across A–K. The rest of
-// Phase 6 grows it to 73 across A–N by filling `gap` and inserting `shape`,
-// `invest` and `mandate`, which lengthens `LEADER_SPINE` and leaves these rows
-// alone.
+// This is not §4.3's finished leader deck. Today's floor is 59 slides across A–L,
+// and what is still missing is:
+//
+//   · `gap` holds 1 of its 5 slides — #55–#58 are the other four, and the ladder
+//     is the LAST of them, so it becomes B.5.
+//   · `shape` holds 2 of its 4 — C.3 (`shape-tam-kotter`) and C.4
+//     (`shape-middle-out`) are unbuilt and append after f8.
+//   · `invest` and `mandate` have no slides and therefore no letters at all; A.1
+//     prints those two rows as bare names (`a1-agenda-pointers.test.tsx`).
+//   · `shape-agentic-org` itself is at its 2-pose resting pose — its 9-step focus
+//     walk is still to come, which changes step counts and not this table.
+//
+// The rest of Phase 6 grows the deck to 73 slides across A–N by filling those runs
+// and inserting the two missing ones, which lengthens `LEADER_SPINE` and leaves
+// these rows alone.
 const CASES: readonly DeckCase[] = [
   { brand: "berau", deckSet: "standard" },
   { brand: "gems", deckSet: "standard" },
@@ -215,20 +257,29 @@ test(`the spine plus a practice-lab run is the ${OBSERVED_TOTAL_WITH_LAB} slides
 
 test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the cut F section, plus its own`, () => {
   expect(totalOf(leaderRuns("berau"))).toBe(LEADER_TOTAL_WITH_LAB);
-  // The two tables have to disagree by exactly the cut MINUS the additions. Eight
-  // cut and not nine: `f8-your-agentic-os` is kept and relocated, so the cut is
-  // `f1`–`f7` plus `f9`. One addition, and it is `gap` (gh#53).
+  // The two tables have to disagree by exactly the cut MINUS the leader-only
+  // slides. Eight cut and not nine: `f8-your-agentic-os` is kept, so the cut is
+  // `f1`–`f7` plus `f9`. Two additions — `gap` (gh#53) and `shape` (gh#54) — and
+  // the relocated f8 is in NEITHER number, because it is present in both decks and
+  // cancels out of a difference.
   expect(OBSERVED_TOTAL_WITH_LAB - LEADER_TOTAL_WITH_LAB).toBe(
     LEADER_CUT_F_SLIDES - LEADER_ONLY_SLIDES,
   );
   // Asserted from the run table too, so the arithmetic above cannot be satisfied
-  // by a cut F slide quietly coming back while a `gap` slide quietly leaves.
+  // by a cut F slide quietly coming back while a leader-only slide quietly leaves.
+  //
+  // THE TABLE COUNTS THE RELOCATED SLIDE AND THE ARITHMETIC DOES NOT, which is the
+  // one thing to hold in mind here: a run keyed `shape` is two slides long whether
+  // its members were written for this deck or moved into it, so this sum is the
+  // leader-only slides PLUS whatever the deck set relocates into a leader-only run.
+  // Adding f8's row to the total above instead would claim the leader deck is a
+  // slide longer than it is.
   const standardKeys = standardRuns("berau").map(([key]) => key);
   expect(
     leaderRuns("berau")
       .filter(([key]) => !standardKeys.includes(key))
       .reduce((n, [, length]) => n + length, 0),
-  ).toBe(LEADER_ONLY_SLIDES);
+  ).toBe(LEADER_ONLY_SLIDES + RELOCATED_INTO_LEADER_ONLY_RUNS);
 });
 
 describe.each(CASES)("deck composed for $brand · $deckSet", (deckCase) => {

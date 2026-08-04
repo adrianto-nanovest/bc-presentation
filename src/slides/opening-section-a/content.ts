@@ -412,11 +412,12 @@ const LEADER_QUESTIONS: readonly A1Question[] = [
     //
     // The keys are the standard sections a leader deck RETAINS, in deck order.
     // `techniques` is absent because the leader deck cuts section F (gh#41), so
-    // naming it would only ever be dropped. The letters follow the deck, and have:
-    // this run printed SECTIONS B–G at the Phase 4 floor, prints SECTIONS C–H now
-    // that gh#53's `gap` run sits in front of it, and reaches SECTIONS E–J once the
-    // rest of Phase 6 lands (§4.3) — WITHOUT AN EDIT HERE, on any of the three.
-    // Do not pin a letter to make the row look finished.
+    // naming it would only ever be dropped. The letters follow the deck, and have,
+    // three times now: this run printed SECTIONS B–G at the Phase 4 floor, SECTIONS
+    // C–H once gh#53's `gap` run sat in front of it, prints SECTIONS D–I now that
+    // gh#54's `shape` run sits there too, and reaches SECTIONS E–J once the rest of
+    // Phase 6 lands (§4.3) — WITHOUT AN EDIT HERE, on any of the four. Do not pin a
+    // letter to make the row look finished.
     text: "What if \"using AI properly\" had an actual curriculum?",
     kw: ["curriculum"],
     sectionRef: {
@@ -435,9 +436,10 @@ const LEADER_QUESTIONS: readonly A1Question[] = [
 // correct output, not a gap to paper over: `sectionPointerLabel` collapses an
 // unresolved pointer to its name rather than printing `SECTION undefined`. All four
 // leader movements were unresolved at the Phase 4 floor. `gap` resolved on gh#53
-// and THE GAP now prints its letter; `shape`, `invest` and `mandate` own no slides
-// until #54–#58 and still print bare. The rows fill themselves in when the slides
-// land — nothing here is edited when one does.
+// and `shape` on gh#54, so THE GAP and THE SHAPE now print their letters; `invest`
+// and `mandate` own no slides until #55–#58 and still print bare. The rows fill
+// themselves in when the slides land — nothing here was edited when either did,
+// which is the claim gh#43 made and these two tickets have now paid off twice.
 
 /**
  * What a leader deck set changes about A.1, over whatever the brand authored.

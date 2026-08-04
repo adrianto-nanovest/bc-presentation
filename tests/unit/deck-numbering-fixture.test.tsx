@@ -30,8 +30,35 @@ import {
   type NumberingRow,
 } from "../harvest/deck-numbering";
 import { BRANDS, VARIANTS, type VariantId } from "@/deck-variants";
+import { SECTION_NAMES } from "@/deck/sections";
 
 const FIXTURE = path.resolve(__dirname, "../fixtures/deck-numbering.json");
+
+/**
+ * The shape of a printed figure — `"E.11"`: one section letter, a dot, a number.
+ *
+ * THE LETTER BOUND IS DERIVED, NOT TYPED. `composeDeck` hands out one letter per
+ * RUN in encounter order (§3.4 R2) and R4 caps a key at exactly one run, so a deck
+ * cannot show more runs than there are registered section keys — which makes the
+ * last registered key's ordinal the widest letter any deck could legally print.
+ * (`composeDeck`'s own 17-section cap is the other bound and is looser today.)
+ *
+ * IT WAS A LITERAL `[A-K]` UNTIL gh#54, and it went stale for a reason that has
+ * nothing to do with what this assertion is about: the leader deck gained a twelfth
+ * section and started printing `L`. A range typed here has to be edited every time
+ * a section is added, and each edit is a chance to widen it past a real regression.
+ *
+ * IT IS A SHAPE CHECK, NOT A RANGE GATE, which is why loosening the bound costs
+ * nothing: what each deck actually prints, letter by letter, is pinned by the
+ * fixture equality at the top of this file and by the per-deck closer below. This
+ * row exists to refuse `"E11"`, `"11"`, or a re-typed `"SECTION E"` in a field that
+ * must hold what the screen shows.
+ */
+const FIG_PATTERN = new RegExp(
+  `^[A-${String.fromCharCode(
+    "A".charCodeAt(0) + Object.keys(SECTION_NAMES).length - 1,
+  )}]\\.\\d+$`,
+);
 
 /** Set by `npm run harvest:numbering`. Rewrites the fixture from the harvest
  *  before the assertions below run against it. */
@@ -74,9 +101,36 @@ interface ObservedDeck {
  * number, because an insert in front of a run cannot renumber inside one. Nothing
  * renumbered them; a letter is a function of position (§3.4 R2).
  *
- * `berau`, `gems` and `general` are byte-identical to the previous record. That is
- * the assertion worth reading twice: a leader-only insert must not be able to
- * touch a standard deck, and the fixture is where that would show.
+ * THE LEADER ROWS MOVED AGAIN ON gh#54, AND FURTHER THAN gh#53's INSERT DID,
+ * because that ticket did two things and only one of them was an insert:
+ *
+ *   1. `shape-agentic-org` reached the leader lists alone — the second slide ever
+ *      to do so — taking both decks to **59** rows. `shape` claims C, so every
+ *      letter behind it stepped along for the second time: the loop slide prints
+ *      **G.12** in a leader deck now (E.12 → F.12 → G.12, with that file never
+ *      opened), and the closer is **L.3**, a letter no standard deck has ever
+ *      printed.
+ *   2. `f8-your-agentic-os` was RELOCATED out of the retained TOOLS run to C.2, so
+ *      its own figure went **G.11 → C.2** — a new letter and a new number, which is
+ *      simply what moving a slide to another run does.
+ *
+ *      THE SIDE EFFECT IS THE ONE WORTH KNOWING, and it is the part an insert
+ *      cannot cause: a slide leaving the MIDDLE of a run renumbers what follows it
+ *      INSIDE that run (R3), so `g11-bridge-to-h` went **G.12 → H.11**. The `tools`
+ *      run is 12 slides long no more; the bridge is its 11th, not its 12th.
+ *
+ * So the honest count for gh#54, per leader deck, is 55 moved figures: 53 pure
+ * LETTER moves (same number, next letter along), plus those 2. gh#53's "every move
+ * is a letter" held because that ticket ONLY inserted; do not carry that claim
+ * forward without checking which kind of edit is in play. Two figures did not move
+ * at all — A.1 and B.1, the rows in FRONT of the insert, which is R2 read from the
+ * other end.
+ *
+ * `berau`, `gems` and `general` are byte-identical to the previous record, through
+ * both tickets. That is the assertion worth reading twice: a leader-only insert
+ * must not be able to touch a standard deck, and the relocation could not either —
+ * f8 moved because a LEADER LIST moved it, and the standard list was not edited.
+ * The fixture is where either failure would show.
  *
  * Keyed by `string` because the key set is not available as a type: which decks
  * exist is a VALUE (`VARIANTS[id].deckSet`), and deriving the non-standard subset
@@ -88,8 +142,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 58, closer: "K.3" },
-  "gems-leader": { slides: 58, closer: "K.3" },
+  "berau-leader": { slides: 59, closer: "L.3" },
+  "gems-leader": { slides: 59, closer: "L.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */
@@ -257,8 +311,9 @@ describe.each(HARVEST_TARGETS)("$key's recorded deck", ({ key }) => {
         return;
       }
       // `"E.11"` — the letter and number exactly as printed, never a re-typed
-      // section tag or a bare number.
-      expect(row.fig, at).toMatch(/^[A-K]\.\d+$/);
+      // section tag or a bare number. See `FIG_PATTERN` for why the letter bound
+      // is derived rather than typed.
+      expect(row.fig, at).toMatch(FIG_PATTERN);
       expect(typeof row.label, at).toBe("string");
       expect(row.label, at).not.toBe("");
     });

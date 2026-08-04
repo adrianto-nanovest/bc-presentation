@@ -13,22 +13,23 @@
 // held apart even though no single composed deck contains more than one of each.
 //
 // TRAP 8 — an id is NOT a section reference. The letters inside
-// `f8-your-agentic-os` are historical: that slide renders as F.11 in the leader
-// deck, where section F is cut and it is carried into the TOOLS run (gh#41), and
-// moves again to C.2 in Phase 6. Ids are stable and opaque; display text comes
-// from the composer and
-// nowhere else. This test is why ids are allowed to LOOK like section tags
-// without becoming one.
+// `f8-your-agentic-os` are historical: that slide renders as F.8 in the standard
+// deck and as C.2 in the leader deck, where section F is cut and gh#54 moved it
+// behind `shape-agentic-org` — it had been carried inside the TOOLS run since
+// gh#41, printing F.11 and then G.11, under an id that never changed. Ids are
+// stable and opaque; display text comes from the composer and nowhere else. This
+// test is why ids are allowed to LOOK like section tags without becoming one.
 import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { findSlideDefs } from "../harvest/slide-defs";
 
-/** 69 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
- *  count of 67 files, `e12-loop-engineering` (gh#48) and `gap-capability-ladder`
- *  (gh#53, the first leader-only file). A migration sentinel, not the completeness
- *  proof — see the note on `findSlideDefs`; the scan is proven complete against
- *  the live decks in `deck-composed-numbering.test.ts`. */
-const EXPECTED_DEFS = 70;
+/** 70 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
+ *  count of 67 files, `e12-loop-engineering` (gh#48), `gap-capability-ladder`
+ *  (gh#53, the first leader-only file) and `shape-agentic-org` (gh#54, the
+ *  second). A migration sentinel, not the completeness proof — see the note on
+ *  `findSlideDefs`; the scan is proven complete against the live decks in
+ *  `deck-composed-numbering.test.ts`. */
+const EXPECTED_DEFS = 71;
 
 /** `hexLadderDevSlide` is declared in `registry.tsx` beside `deckSlides`, so it
  *  has no file of its own to be named after. It is the ONLY def whose id is not

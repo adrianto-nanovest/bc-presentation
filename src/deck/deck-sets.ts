@@ -44,9 +44,21 @@ export interface DeckSet {
    *
    * The leader deck has exactly one entry, and it is load-bearing: it relocates
    * `f8-your-agentic-os` out of the cut F section, and the value MUST be the
-   * key of the run it lands inside. Without it, f8 keeps `techniques`, which no
-   * other leader slide holds, and a one-slide `techniques` run in the middle of
-   * `tools` splits `tools` into two runs — R4, at module load.
+   * key of the run it lands inside — as of gh#54 that is `shape`, because the
+   * row sits immediately after `shape-agentic-org` (§4.3's C.2).
+   *
+   * THREE WAYS TO GET IT WRONG, and only two of them are loud:
+   *
+   *   - value `tools` with the row up at C.2 → `tools` forms a second run at
+   *     `g1` (R4, at module load).
+   *   - value `shape` with the row back inside the TOOLS run → `shape` forms a
+   *     second run at f8 (R4, at module load).
+   *   - NO ENTRY AT ALL → f8 keeps `techniques`, which no other leader slide
+   *     holds, so it becomes a one-slide run and claims a section LETTER of its
+   *     own, in a deck that cut the section that letter is named after. That one
+   *     composes cleanly and is wrong on the projector, which is why the entry
+   *     is not optional and why this doc says so rather than trusting R4 to
+   *     catch every case.
    */
   sectionOverrides?: Readonly<Record<string, SectionKey>>;
 }
@@ -145,22 +157,25 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 58 slides, ELEVEN sections as of gh#53. The Phase 4 floor was
+ * The leader deck — 59 slides, TWELVE sections as of gh#54. The Phase 4 floor was
  * 56 and held no slide the standard deck did not; gh#48's `e12-loop-engineering`
- * was the first addition and ships to BOTH sets, and gh#53's
- * `gap-capability-ladder` is the first slide that reaches THIS LIST ALONE.
+ * was the first addition and ships to BOTH sets, gh#53's `gap-capability-ladder`
+ * was the first slide that reached THIS LIST ALONE, and gh#54's
+ * `shape-agentic-org` is the second.
  *
- * THAT SLIDE MOVED EVERY LETTER BEHIND IT, which is §3.4 R2 working as designed
- * and the one thing to know before verifying anything against this deck: the
- * `gap` run claims B, so `landscape` is C, `fundamentals` is F — the loop slide
- * prints F.12 here, not E.12 — and the closer is K.3 rather than J.3. Phase 6
- * moves them again. Anyone checking a figure on a leader deck reads the COMPOSED
- * deck, never a literal.
+ * EVERY NEW RUN MOVES EVERY LETTER BEHIND IT, which is §3.4 R2 working as designed
+ * and the one thing to know before verifying anything against this deck. Today the
+ * runs read `opening`(A) · `gap`(B) · `shape`(C) · `landscape`(D) · `mindset`(E) ·
+ * `process`(F) · `fundamentals`(G) · `tools`(H) · `pitfalls`(I) · `meta`(J) ·
+ * `principles`(K) · `lab`(L) — so the loop slide prints G.12 here, not E.12, and
+ * the closer is L.3. The rest of Phase 6 moves them again (§4.3 ends at A–N).
+ * Anyone checking a figure on a leader deck reads the COMPOSED deck, never a
+ * literal.
  *
  * The curriculum is the standard deck's, minus section F and with F.8 kept: it
  * is the deck a leader can be walked through on Aug 18 whether or not the rest of
  * Phases 6–7 land. Those phases grow it to 73 slides across A–N (§4.3) by filling
- * `gap` and inserting the `shape`, `invest` and `mandate` runs; every id below
+ * `gap` and `shape` and inserting the `invest` and `mandate` runs; every id below
  * survives that.
  *
  * WHAT THIS LIST DOES NOT HOLD, and why:
@@ -170,13 +185,22 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  *   - `f8-your-agentic-os` — KEPT, and it is the one slide out of its home
  *     section, so it carries the single `sectionOverrides` entry below.
  *
- * f8 SITS INSIDE THE TOOLS RUN, not at C.2 where §4.3 puts it — a deviation
- * decided on gh#41 and reversed in Phase 6. §4.3's C.2 is `shape-agentic-org`'s
- * concrete answer, and at the floor `shape-agentic-org` does not exist: a lone
- * `shape` run would put f8 THIRD IN THE DECK, between the agenda and the
+ * f8 IS BACK AT C.2, WHERE §4.3 PUTS IT — and the argument that kept it inside the
+ * TOOLS run from gh#41 until now is history, recorded here because reversing a
+ * deviation silently is how it comes back. That argument was: §4.3's C.2 is
+ * `shape-agentic-org`'s concrete answer, `shape-agentic-org` did not exist, and a
+ * lone `shape` run would have put f8 THIRD IN THE DECK, between the agenda and the
  * landscape, with no argument in front of it. Between `g10-beyond-big-three` and
- * the bridge out of TOOLS it has one. Phase 6 moves the entry and flips the
- * override value to `shape` in the same edit — the mechanism does not change.
+ * the bridge out of TOOLS it had one.
+ *
+ * C.1 NOW EXISTS (gh#54), so the objection is gone — and §4.3's 2026-08-04
+ * amendment confirms the placement on the CONTENT rather than on the table: f8's
+ * nav rail reads Dashboard · Skills · Agents · Vault · Memory · Connectors ·
+ * People · Settings, which is PILLAR-SHAPED, NOT TECHNIQUE-SHAPED. After C.1's
+ * hub-and-spokes it is the same organization drawn as one concrete screen, which
+ * is a better neighbour than the tool comparison it was parked beside. The row
+ * moves and the override value flips to `shape` in the SAME edit: either half
+ * alone gives one section key two runs and throws at module load (R4).
  */
 const LEADER_SLIDE_IDS: readonly string[] = [
   // opening — the cover claims no number, so A.1 is the second slot
@@ -184,10 +208,17 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "a1-what-youve-seen", // canonical slot: `a1-general` / `a1-gems` resolve behind it
   // gap — the first leader-only run (gh#53). §4.3 gives it five slides and the
   // ladder is the LAST of them, so #55–#58 insert AHEAD of this line; the run
-  // itself sits here, in front of `landscape`, and that is what pushes every
-  // later letter in this deck by one (§3.4 R2 — the loop slide prints F.12 here
-  // now, and H.12 once Phase 6 completes).
+  // itself sits here, in front of `landscape`, and that is what pushed every
+  // later letter in this deck by one (§3.4 R2).
   "gap-capability-ladder",
+  // shape — the second leader-only run (gh#54), and the second push: the loop
+  // slide prints G.12 here now, and H.12 once the `invest` run lands. §4.3 gives
+  // this run four slides — C.3 (`shape-tam-kotter`) and C.4 (`shape-middle-out`)
+  // append after f8, so the two lines below stay adjacent.
+  "shape-agentic-org",
+  // Relocated out of the cut F section and back to §4.3's C.2, which is why the
+  // override exists and why it now reads `shape` — see the doc above.
+  "f8-your-agentic-os",
   // landscape
   "b1-evolution-journey",
   "b2-fields-terminology",
@@ -222,7 +253,8 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "e11-harness-practices",
   "e12-loop-engineering",
   "e13-bridge-to-f",
-  // tools — plus the relocated f8, which is why the override exists
+  // tools — g1…g11 with no hole and no second run, as of gh#54: the relocated f8
+  // used to sit between `g10-beyond-big-three` and the bridge below
   "g1-ecosystem-overview",
   "g2-claude-platforms",
   "g3-claude-capabilities",
@@ -233,7 +265,6 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "g8-capability-matrix",
   "g9-workflow",
   "g10-beyond-big-three",
-  "f8-your-agentic-os", // relocated out of the cut F section — see the doc above
   "g11-bridge-to-h",
   // pitfalls
   "h1-pitfall-wall",
@@ -260,19 +291,26 @@ const LEADER_SLIDE_IDS: readonly string[] = [
  *
  * The two lists are separate constants and no longer one shared one: as of
  * gh#41 the leader deck really is a different deck, and
- * `tests/unit/variant-composition.test.tsx` states the difference — 8 slides
- * shorter, no `f1`–`f7`/`f9`, f8 retained — rather than the old "they are
+ * `tests/unit/variant-composition.test.tsx` states the difference — no
+ * `f1`–`f7`/`f9`, f8 retained and relocated — rather than the old "they are
  * identical" claim.
+ *
+ * THE DIFFERENCE IS NO LONGER ONE NUMBER, which is why it is not stated as one
+ * here. gh#41's leader deck was "the standard deck minus eight"; it is now that
+ * minus eight PLUS its own slides, so the net is SIX shorter (65 against 59) and
+ * the two halves move independently — `tests/unit/deck-registry.test.ts` holds
+ * them as separate constants for exactly that reason, and a single subtraction
+ * written here would go stale on the next leader-only insert.
  */
 export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
   standard: { id: "standard", slides: STANDARD_SLIDE_IDS },
   leader: {
     id: "leader",
     slides: LEADER_SLIDE_IDS,
-    // ONE ENTRY, and `tools` rather than §4.3's `shape` for as long as f8 sits
-    // in the TOOLS run. The value must name the run f8 lands inside or R4
-    // throws at load — see the `sectionOverrides` doc above.
-    sectionOverrides: { "f8-your-agentic-os": "tools" },
+    // ONE ENTRY, and §4.3's `shape` as of gh#54 — f8 now sits at C.2, directly
+    // behind `shape-agentic-org`. The value must name the run f8 lands inside or
+    // R4 throws at load — see the `sectionOverrides` doc above.
+    sectionOverrides: { "f8-your-agentic-os": "shape" },
   },
 };
 

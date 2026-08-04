@@ -9,6 +9,11 @@
 // document audit, email triage, meeting summarization, customer support
 // routing, spreadsheet analysis, calendar/scheduling, knowledge-base lookup).
 // NEVER mining-specific — per `feedback_generic_examples.md` and spec §2.3.
+//
+// One string here varies with the DECK SET — F.8's closer, see `f8CloserFor`.
+// Type-only import, so this module still pulls in nothing at runtime and stays
+// plain data.
+import type { DeckSetId } from "@/deck-variants";
 
 // ─────────────────── F.1 — TWO PILLARS ───────────────────
 //
@@ -539,13 +544,78 @@ export const f7Content = {
 // Section synthesis. Spec §§2–9 (2026-05-14 rework). Monitor-mockup layout:
 // bezel + top bar + nav rail + main canvas (panel per active tab) + chat rail.
 // Driven by 6-step axis; nav-rail clicks override step-driven defaults.
-// Closing portability tagline is load-bearing and appears EXACTLY ONCE in the
-// entire deck — do not change the string.
+
+/** The closing line, plus the substrings rendered as keywords. */
+export interface F8Closer {
+  tagline: string;
+  taglineKw: readonly string[];
+}
+
+/**
+ * F.8's closer — the ONE string in section F that depends on the deck set.
+ *
+ * ONE CLOSER PER DECK SET. The rule this replaces read "the closing portability
+ * tagline is load-bearing and appears EXACTLY ONCE in the entire deck — do not
+ * change the string", and the constraint behind it is a WITHIN-DECK uniqueness
+ * rule: the 2026-05-11 section-F spec forbids sections C and J from repeating the
+ * PHRASE while letting them echo the theme. That rule is intact — every deck set
+ * still prints exactly one closer, and no other slide prints either of these two.
+ * The standard string below is unchanged, byte for byte, and still load-bearing:
+ * there F.8 closes section F, and portability is what F.2–F.7 just earned.
+ *
+ * THE LEADER DECKS PRINT A DIFFERENT ONE, because #54 makes F.8 a different slide
+ * there: it is relocated out of the TOOLS run to C.2, immediately after C.1 ·
+ * `shape-agentic-org`, so the closer now lands on someone who will SPONSOR this
+ * rather than build it, seconds after a hub-and-spokes drawing of a whole
+ * organisation. "wherever you go, you carry it" is a builder's promise of
+ * INDIVIDUAL portability, and §4.5 already settled that argument for this deck —
+ * the leader cover was overridden off "From AI Curiosity to AI Capability"
+ * precisely because a leader deck must not promise individual capability and then
+ * deliver an investment case. The leader thesis is *a few people, or one team,
+ * already proved it — imagine it distributed across the whole org*, worded the
+ * same way by the cover, A.1 and `invest-own-proof`; an individual-portability
+ * closer at C.2 argues against the ORG abstraction on the slide in front of it.
+ * So the leader line keeps the register and the dash, and turns the contrast into
+ * the point: the reach of this is the leader's decision, not the audience's.
+ *
+ * THE DECISION #54 ASKED FOR, RECORDED HERE: a deck-set-scoped variant, not the
+ * verbatim string on both decks. §4.1 permits exactly this and nothing wider —
+ * copy variance lives in the slide's own content module behind a typed resolver,
+ * while `sectionOverrides` stays composition-only (it carries F.8's `shape` key
+ * and no copy).
+ *
+ * A `Record<DeckSetId, …>` and not a `deckSet === "leader"` ternary, the same
+ * shape as `e13Beat2For` and `titleContentFor`: a third deck set FAILS TO COMPILE
+ * here, rather than silently inheriting a closer written for another audience.
+ */
+const F8_CLOSER_BY_DECK_SET: Record<DeckSetId, F8Closer> = {
+  standard: {
+    tagline: "this is yours — wherever you go, you carry it.",
+    taglineKw: ["yours", "carry it"],
+  },
+  leader: {
+    tagline: "one person carries this — you decide whether a division does.",
+    // The two fragments carry the contrast, which IS the line — highlighting the
+    // scale words and not the verb is what makes the copper land on the choice.
+    taglineKw: ["one person", "a division"],
+  },
+};
+
+/** The closer this deck set prints. Pass `VARIANT.deckSet`.
+ *
+ *  THE ONLY WAY IN — the table above is deliberately not exported, for
+ *  `capabilityLadderFor`'s reason: a caller that could read it could also
+ *  enumerate its keys, and a test holding a rule over "every deck set" would then
+ *  prove it over this file's own key set instead of over `DECK_SETS`. */
+export function f8CloserFor(deckSet: DeckSetId): F8Closer {
+  return F8_CLOSER_BY_DECK_SET[deckSet];
+}
+
 export const f8Content = {
   headline: "The command center you carry.",
   headlineKw: ["command center", "carry"],
-  tagline: "this is yours — wherever you go, you carry it.",
-  taglineKw: ["yours", "carry it"],
+  // The closer is NOT a field here: it depends on the deck set, so `f8CloserFor`
+  // resolves it and this object holds only what every deck prints alike.
 
   // ── Top status bar inside the monitor bezel (spec §3.1) ──
   topBar: {

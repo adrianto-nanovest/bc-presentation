@@ -69,12 +69,18 @@ test("a live section letter jumps to that section's first numbered slide", async
 });
 
 // The same two halves, on the deck whose letters DIFFER (§4.3). What differs has
-// itself changed twice, which is why this asserts through the PRINTED FIGURE and
-// never through a slide index: gh#41's F cut took the leader deck to ten sections
-// closing at J, and gh#53's `gap` run took it back to eleven closing at K. So the
-// two decks agree on `k` again — and disagree on `b`, which is THE LANDSCAPE in
-// every standard deck and THE GAP here. Nothing in `useKeyboardNav` was edited
-// either time; the map is the composed deck's (§3.5).
+// itself changed three times now, which is why this asserts through the PRINTED
+// FIGURE AND ITS LABEL and never through a slide index: gh#41's F cut took the
+// leader deck to ten sections closing at J, gh#53's `gap` run took it back to
+// eleven closing at K, and gh#54's `shape` run takes it to twelve closing at L.
+// Nothing in `useKeyboardNav` was edited any of the three times; the map is the
+// composed deck's (§3.5).
+//
+// SO THE FIGURE ALONE IS NO LONGER ENOUGH, and that is this ticket's lesson here.
+// `k` prints K.1 in both decks and means two different sections: THE PRACTICE LAB
+// in a standard deck, PRINCIPLES here, because `shape` pushed the leader lab run
+// along to L. A test that read `/K\.1/` and stopped would have passed gh#54 while
+// asserting the wrong section — so every jump below names the label it lands on.
 test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
   page,
 }) => {
@@ -93,17 +99,36 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*B\.1/);
   await expect(page.locator(".fig-label")).toHaveText(/THE CAPABILITY LADDER/);
 
-  // `k` is THE PRACTICE LAB again. R5 lands the jump on the run's first numbered
-  // slide, so this is K.1 and not the closer.
+  // `c` is THE SHAPE — the run gh#54 inserted, and the reason every letter behind
+  // it moved. R5 lands the jump on the run's first numbered slide, so this is C.1
+  // and not the relocated F.8 sitting behind it at C.2.
+  await page.keyboard.press("c");
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*C\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/THE AGENTIC ORGANIZATION/);
+
+  // `k` is PRINCIPLES here, NOT the practice lab — see the block comment. Same
+  // printed figure as a standard deck's lab, different section, which is why the
+  // label is asserted beside it.
   await page.keyboard.press("k");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*K\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/THE RECIPE/);
+
+  // `l` NOW CLAIMS A SECTION in this deck — the practice lab, pushed along to L by
+  // the `shape` run. It was a no-op here until gh#54 and this line asserted that it
+  // did nothing; it jumps now, and the assertion moved with the deck rather than
+  // being deleted.
+  await page.keyboard.press("l");
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*L\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/PRACTICE · LAB/);
   const at = await page.getAttribute(slideAttr, "data-slide-index");
 
-  // `l` passes the letter test and owns no section in either deck, so it must do
-  // nothing at all — the failure this guards is a jump to slide 0 mid-talk.
-  await page.keyboard.press("l");
+  // `m` is the unclaimed letter in THIS deck now — the leader deck runs A–L, and M
+  // arrives with the rest of Phase 6 (§4.3 takes it to A–N). The failure this
+  // guards is unchanged: a throw on the undefined lookup, or a fall-through that
+  // sends the deck to slide 0 mid-talk.
+  await page.keyboard.press("m");
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", String(at));
-  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*K\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*L\.1/);
   expect(problems).toEqual([]);
 });
 

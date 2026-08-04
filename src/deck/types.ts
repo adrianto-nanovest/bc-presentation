@@ -14,18 +14,22 @@ import type { SectionKey } from "./sections";
 // traces back to that one derivation, so none of them can disagree.
 //
 // That is what lets the leader deck (gh#41) cut section F and still render
-// `f8-your-agentic-os` — as F.11 there, inside the TOOLS run — without the slide
-// being re-authored: a field asserting its own letter could not have survived the
-// move.
+// `f8-your-agentic-os` without the slide being re-authored — and that one slide is
+// the standing proof, because it has now printed THREE different figures in that
+// deck while its file was never opened for any of them: F.11 when gh#41 carried it
+// into the TOOLS run, G.11 once gh#53's `gap` run pushed that run a letter along,
+// and C.2 since gh#54 relocated it to §4.3's own slot for it. A field asserting its
+// own letter could not have survived one of those moves, let alone three.
 export interface SlideDef {
   /**
    * Stable, opaque, unique. The deck-set lists reference slides by this.
    *
    * NOT A SECTION REFERENCE. Letters inside an id are historical — the id is
    * the file's basename, frozen at the moment the file was named, and
-   * `f8-your-agentic-os` renders as F.11 in the leader deck. NEVER derive
-   * display text from an id: letters and numbers come from the composer
-   * (./compose.ts) and from nowhere else.
+   * `f8-your-agentic-os` renders as F.8 in a standard deck and as C.2 in a
+   * leader deck (gh#54), where neither the letter nor the number is the one in
+   * its name. NEVER derive display text from an id: letters and numbers come
+   * from the composer (./compose.ts) and from nowhere else.
    */
   id: string;
   steps: number;                       // step count fed to DeckProvider

@@ -9,19 +9,35 @@
 //   0 → bezel materializes; staggered reveal of left rail, main canvas, right rail
 //   1 → footer tagline reveals (canonical pose)
 //
+// The tagline that reveals at step 1 is the ONE piece of copy here that varies
+// with the deck set (#54) — see `f8CloserFor` in ./content for the decision and
+// why the leader decks close this slide on a different line.
+//
 // Click-to-advance is blocked inside the bezel via data-no-advance on
 // the monitor wrapper (see Slide.tsx click handler).
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
+import { VARIANT } from "@/variant";
 import { FigLabel } from "@/components/FigLabel";
 import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { AgenticOSMonitor } from "./components/AgenticOSMonitor";
 import { Reveal } from "./components/Reveal";
-import { f8Content } from "./content";
+import { f8CloserFor, f8Content } from "./content";
 
 export function F8YourAgenticOs() {
   const { stepIndex } = useDeck();
+
+  // The closer follows the AUDIENCE: the standard decks run this slide as F.8 and
+  // close section F on portability, the leader decks run it at C.2 in front of a
+  // sponsor (§4.5, #54). Resolved by the content module's own pick, off
+  // `VARIANT.deckSet` and NOT off a `letterOf` lookup — the letter this slide
+  // prints is derived from its composed position (§3) and reads `C` on one deck
+  // and `F` on the other, but the letter is an output of composition, not the
+  // thing the line depends on. Read inside the component like the section-E
+  // bridge's beat 2 does, since the component is the only consumer; `VARIANT`
+  // itself resolves at module scope, so one module epoch holds one deck set.
+  const closer = f8CloserFor(VARIANT.deckSet);
 
   return (
     <>
@@ -69,7 +85,7 @@ export function F8YourAgenticOs() {
             lineHeight: 1.3,
           }}
         >
-          {highlight(f8Content.tagline, f8Content.taglineKw)}
+          {highlight(closer.tagline, closer.taglineKw)}
         </Reveal>
       </div>
     </>

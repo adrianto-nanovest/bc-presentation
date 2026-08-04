@@ -121,8 +121,10 @@ describe("A.1 hook selection", () => {
 // The composed deck again, for the same reason: `practiceLab` inclusion and the
 // K.2 pick moved out of `@/slides/reveal-and-closing` and into `@/deck/slots.ts`
 // (gh#40). `slice(-3)` still reads the lab run, because the lab still closes every
-// deck — at K in a standard deck and at J in a leader deck, which is why this
-// helper names neither letter.
+// deck — at K in a standard deck, and in a leader deck at J at the gh#41 floor, at
+// K after gh#53's `gap` run and at L as of gh#54's `shape` run. Three letters for
+// one run in one deck, which is why this helper names none of them and slices from
+// the end instead.
 async function closingFor(id: VariantId) {
   useVariant(id);
   const [registry, k1, k2, k2Gems, k3] = await Promise.all([
@@ -173,13 +175,29 @@ describe("Practice Lab slides", () => {
 // ── The leader deck sets compose their OWN deck ───────────────────────────────
 // gh#41. Until Phase 4 both leader variants pointed at the standard slide list
 // and only the `· Leadership` suffix separated them, and the block here said so.
-// The leader deck now exists: the same curriculum, minus section F, with
-// `f8-your-agentic-os` kept and relocated into the TOOLS run.
+// The leader deck now exists: the standard curriculum minus section F, with TWO
+// leader-only runs in front of it — `gap` (gh#53) and `shape` (gh#54) — and
+// `f8-your-agentic-os` kept, standing as of gh#54 at §4.3's C.2, the second slide
+// of that `shape` run.
+//
+// IT SAT INSIDE THE RETAINED TOOLS RUN FROM gh#41 UNTIL THEN, which is what the
+// neighbour assertions below used to state. They were REWRITTEN rather than
+// dropped: the pair of ids around f8 is the only thing that says the relocation
+// actually happened, and a test that merely checked `toContain` would pass with f8
+// parked anywhere in the deck.
 //
 // WHAT IS ASSERTED WHERE. The composed SHAPE — which runs, in what order, at what
 // size — belongs to `deck-registry.test.ts`, and the printed letters and numbers
-// to the numbering fixture. This file owns WHICH SLIDE, by identity: the cut, the
-// survivor, and each brand's own alternates inside a leader deck.
+// to the numbering fixture. This file owns WHICH SLIDE: the cut, the survivor and
+// where it stands, each brand's own alternates inside a leader deck, and the one
+// `sectionKey` the deck set rewrites.
+//
+// BY IDENTITY WHERE IT CAN BE, BY ID WHERE IT CANNOT. `resolveDeckSetSlides`
+// returns `{ ...def, sectionKey }` for a slot named in `sectionOverrides`
+// (`src/deck/slots.ts`), so on a LEADER deck f8's composed row is a COPY of the
+// imported def and every identity comparison against `f8Slide` is false there by
+// construction. f8 is therefore joined on `id` throughout, and identity is kept for
+// the A.1 and K.2 alternates, which no deck set overrides.
 //
 // `render` closures are re-created by each module epoch, so identity cannot
 // cross a `resetModules()`; this fingerprints the composition instead.
@@ -199,6 +217,16 @@ async function deckIdsFor(id: VariantId): Promise<string[]> {
   return deckSlides.map((s) => s.id);
 }
 
+/** `id → sectionKey`, in composed order (a `Map` keeps insertion order, and ids
+ *  are unique). Read off `deckSlides`, which is `resolveDeckSetSlides`' output, so
+ *  this is the OVERRIDDEN key — the same value `composeDeck` groups into runs and
+ *  derives letters from, not the key the slide's own file authors. */
+async function sectionKeysFor(id: VariantId): Promise<Map<string, string>> {
+  useVariant(id);
+  const { deckSlides } = await import("@/deck/registry");
+  return new Map(deckSlides.map((s): [string, string] => [s.id, s.sectionKey]));
+}
+
 /** The eight section-F slides the leader deck cuts. `f8-your-agentic-os` is NOT
  *  among them — it is the one that survives, which is the whole reason this list
  *  is spelled out rather than derived from an `f`-prefix. */
@@ -215,18 +243,62 @@ const CUT_F_IDS = [
 
 const LEADER_IDS: VariantId[] = ["berau-leader", "gems-leader"];
 
+/** The three variants whose deck set carries no `sectionOverrides` at all. Named
+ *  rather than derived from `VARIANTS`, because what makes them the control group
+ *  is the deck set's empty override table, not the count of standard variants. */
+const STANDARD_IDS: VariantId[] = ["berau-middle-mgmt", "gems-middle-mgmt", "general"];
+
 describe("leader deck sets", () => {
-  test("cut section F but keep the relocated F.8", async () => {
+  test("cut section F but keep the relocated F.8 — at C.2 as of gh#54", async () => {
     for (const id of LEADER_IDS) {
       const ids = await deckIdsFor(id);
       expect(ids.filter((slide) => CUT_F_IDS.includes(slide as never)), id).toEqual([]);
       expect(ids, id).toContain("f8-your-agentic-os");
       // Its neighbours are the composition fact the `sectionOverrides` entry
-      // exists to produce: f8 sits between the last TOOLS slide and the bridge
-      // out of TOOLS, not back in a section of its own.
+      // exists to produce, and gh#54 moved BOTH of them: f8 follows
+      // `shape-agentic-org` — §4.3's C.1, the abstraction it is the concrete
+      // answer to — and is followed by the first slide of the retained
+      // curriculum. It used to sit between `g10-beyond-big-three` and the bridge
+      // out of TOOLS, which is what these two lines said until gh#54.
       const at = ids.indexOf("f8-your-agentic-os");
-      expect(ids[at - 1], id).toBe("g10-beyond-big-three");
-      expect(ids[at + 1], id).toBe("g11-bridge-to-h");
+      expect(ids[at - 1], id).toBe("shape-agentic-org");
+      expect(ids[at + 1], id).toBe("b1-evolution-journey");
+      // And the run it left has closed up behind it: `g10` now hands straight to
+      // the bridge, with no hole where f8 stood.
+      expect(ids[ids.indexOf("g10-beyond-big-three") + 1], id).toBe("g11-bridge-to-h");
+    }
+  });
+
+  test("give f8 the `shape` key, so the C run is C.1 + C.2 and nothing splits it", async () => {
+    // WHAT THE OVERRIDE BUYS, read off the COMPOSED DECK. `deck-slots.ts`'s test
+    // owns the deck-set table — that the entry exists and says `shape`; this owns
+    // the consequence, which is the only half the projector shows.
+    //
+    // Joined on `id`, never on identity: the overridden row is a copy of the def
+    // (see the block comment above), so `row.def === f8Slide` is false here by
+    // construction and would make an identity assertion silently vacuous.
+    for (const id of LEADER_IDS) {
+      const keys = await sectionKeysFor(id);
+      expect(keys.get("shape-agentic-org"), id).toBe("shape");
+      expect(keys.get("f8-your-agentic-os"), id).toBe("shape");
+      // THE WHOLE RUN, IN ORDER — which is the part that cannot be inferred from
+      // the two lookups above. A third `shape` row, or either of these two
+      // carrying another key, splits C: non-adjacently it throws as R4 at module
+      // load, adjacently it just prints the wrong letter from here to the closer.
+      // (`deck-registry.test.ts` owns the run's SIZE; this is which slides fill it.)
+      const shapeRun = [...keys].filter(([, key]) => key === "shape").map(([slide]) => slide);
+      expect(shapeRun, id).toEqual(["shape-agentic-org", "f8-your-agentic-os"]);
+    }
+  });
+
+  test("leave f8 in `techniques` on every standard deck, where nothing overrides it", async () => {
+    // The negative half, and it is not implied by the positives: the override is a
+    // DECK-SET property, and f8's own file still authors `techniques`. Were the
+    // key ever moved in the file instead of in the table, the leader assertions
+    // above would all still pass and F.8 would quietly leave section F for
+    // 65 slides' worth of standard deck.
+    for (const id of STANDARD_IDS) {
+      expect((await sectionKeysFor(id)).get("f8-your-agentic-os"), id).toBe("techniques");
     }
   });
 
@@ -393,17 +465,21 @@ describe("thank-you closer figure number", () => {
   });
 
   test("lands on the letter the leader deck's own section count produces", async () => {
-    // Same three lab slides — leaders run the same lab — and K.3 again, but NOT
-    // for the standard deck's reason and not by coincidence. Two edits cancel:
-    // gh#41's F cut took the leader deck to ten sections and the closer to J.3,
-    // and gh#53's `gap` run took it back to eleven and to K.3. Nothing renumbered
-    // the closer either time; the letter is a function of position (§3.4 R2), and
-    // this test moving twice while `k3-thank-you.tsx` was never opened IS the
-    // property under test.
+    // Same three lab slides — leaders run the same lab — so the NUMBER is .3 here
+    // for the standard deck's reason. The LETTER is on its third value: gh#41's F
+    // cut took the leader deck to ten sections and the closer to J.3, gh#53's
+    // `gap` run took it to eleven and back to K.3 (two edits cancelling, which is
+    // what this test read at the time), and gh#54's `shape` run takes it to twelve
+    // and to L.3 — a letter no standard deck prints at all, so this is the first
+    // time the two deck sets' closers disagree.
+    //
+    // Nothing renumbered the closer any of the three times; the letter is a
+    // function of position (§3.4 R2), and this line moving while
+    // `k3-thank-you.tsx` stayed shut IS the property under test.
     //
     // ONE leader deck, not both: this asserts the letter a POSITION produces, and
-    // the two leader decks share the position. That the other one records K.3 too
+    // the two leader decks share the position. That the other one records L.3 too
     // is in the numbering fixture, which pays no epoch cost to say so.
-    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*K\.3/);
+    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*L\.3/);
   });
 });

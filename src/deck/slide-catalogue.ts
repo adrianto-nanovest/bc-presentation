@@ -17,6 +17,7 @@
 import type { SlideDef } from "./types";
 import { openingSectionASlides } from "@/slides/opening-section-a";
 import { leaderGapSlides } from "@/slides/leader-gap";
+import { leaderShapeSlides } from "@/slides/leader-shape";
 import { landscapeSectionBSlides } from "@/slides/landscape-section-b";
 import { mindsetSectionCSlides } from "@/slides/mindset-section-c";
 import { foundationCoreSlides } from "@/slides/foundation-core";
@@ -31,6 +32,12 @@ export const slideCatalogue: readonly SlideDef[] = [
   // Leader-only (§4.3). In the POOL like everything else — "which decks run it"
   // is `./deck-sets.ts`'s answer, and only the two leader lists name it.
   ...leaderGapSlides,
+  // Section C's centrepiece, and the reason `f8-your-agentic-os` finally sits at
+  // C.2 rather than inside the retained TOOLS run — see `./deck-sets.ts`. The two
+  // are neighbours in the composed leader deck and NOT here: one is a leader-only
+  // file and the other a standard-deck slide the leader list relocates, so the
+  // pool keeps each under its own section index.
+  ...leaderShapeSlides,
   ...landscapeSectionBSlides,
   ...mindsetSectionCSlides,
   ...foundationCoreSlides,

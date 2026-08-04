@@ -18,10 +18,12 @@ import {
   BookOpen,
   Bot,
   Box,
+  Boxes,
   Brain,
   Calendar,
   ChevronsRight,
   ChevronsRightLeft,
+  Compass,
   Database,
   Droplets,
   Eye,
@@ -65,10 +67,15 @@ const ICONS: Record<string, LucideIconType> = {
   BookOpen,
   Bot,
   Box,
+  // `Boxes` and `Compass` are section C's (`src/slides/leader-shape/`) — the
+  // Tools & Platform and Strategy & Leadership pillars. Added here, to the shim
+  // 20+ modules already share, rather than as a third copy of this file.
+  Boxes,
   Brain,
   Calendar,
   ChevronsRight,
   ChevronsRightLeft,
+  Compass,
   Database,
   Droplets,
   Eye,

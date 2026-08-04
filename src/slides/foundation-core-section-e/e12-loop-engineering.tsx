@@ -22,15 +22,19 @@
 //
 // THE FIGURE IS NOT AUTHORED HERE. `FigLabel` takes a label only — the letter and
 // the number derive from this slide's position in the composed deck (§3), and this
-// slide has already collected the dividend: it printed E.12 in all five decks when
-// gh#48 landed it, and since gh#53 put a `gap` run in front of the leader
-// curriculum it prints **F.12** on the two leader decks and E.12 on the three
-// standard ones — with no edit here. Phase 6 moves it again, to H.12. Anyone
-// verifying this slide on a leader deck reads the composed deck, never the literal
-// "E.12". It also pushes the bridge behind it to E.13 / F.13. The LABEL is
-// passed at the call site rather than held in `./content.tsx`, as at every other
-// FigLabel in the deck: it is the figure's own mono caption, not slide copy, and
-// the content module holds what the audience reads as prose.
+// slide has collected the dividend TWICE now: it printed E.12 in all five decks
+// when gh#48 landed it, F.12 on the two leader decks once gh#53 put a `gap` run in
+// front of the leader curriculum, and **G.12** on those two since gh#54 put a
+// `shape` run there as well — with no change to this slide's rendering, data or
+// behaviour for either, only to the sentence you are reading. It still prints E.12
+// on the three standard decks, which is the same fact from the other side: nothing
+// about what this file DRAWS changed, so nothing about those decks did. Phase 6
+// moves it again, to H.12. Anyone verifying this slide on a leader deck reads the
+// composed deck, never the literal "E.12". It also pushes the bridge behind it to
+// E.13 / G.13. The LABEL is passed at the call site rather than held in
+// `./content.tsx`, as at every other FigLabel in the deck: it is the figure's own
+// mono caption, not slide copy, and the content module holds what the audience
+// reads as prose.
 //
 // NO QUALIFIER STRIP. The mono line under the headline is deleted by owner call
 // (§8.3): the term "loop engineering" is carried by the FigLabel and by the two
