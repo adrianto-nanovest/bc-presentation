@@ -311,12 +311,12 @@ describe("section jumps come from the composed deck", () => {
   });
 });
 
-// The reason the letter test stopped naming a range. `l` is ALREADY live in the two
-// leader decks — gh#54's `shape` run took them to twelve sections, so `l` is the
-// practice lab there and dead in every standard deck — and `m` and `n` follow when
-// the rest of Phases 5–7 take that deck to 14 (§11). This is the assertion that says
-// each of those costs no edit to the hook, which gh#53 and gh#54 have now both
-// demonstrated for real.
+// The reason the letter test stopped naming a range. `l` AND `m` are ALREADY live in
+// the two leader decks — gh#54's `shape` run took them to twelve sections and gh#56's
+// `invest` run to thirteen, so `l` is PRINCIPLES and `m` the practice lab there, both
+// dead in every standard deck — and `n` follows when the rest of Phase 6 takes that
+// deck to 14 (§11). This is the assertion that says each of those costs no edit to
+// the hook, which gh#53, gh#54 and gh#56 have now demonstrated for real three times.
 describe("a deck whose letters run past K needs no edit here", () => {
   afterEach(() => {
     vi.doUnmock("@/deck/registry");

@@ -15,7 +15,11 @@
 // `invest-own-proof` (D.2), `invest-chicken-egg` (D.3), `invest-security` (D.4) and
 // `invest-subscription` (D.5) — and only the second exists today. THE ARRAY IS NOT
 // PRE-SIZED FOR THE OTHER FOUR: a placeholder entry is an id a deck set can compose
-// into a blank slide, and #57–#59 append their own rows here when they build them.
+// into a blank slide. #57's `invest-base-rates` is §6.7's D.1, so it INSERTS AHEAD of
+// the line below — the same shape as `src/slides/leader-gap/index.ts`, where the one
+// slide built is §4.3's last — and #58–#59 append D.3–D.5 behind it. That insert is
+// also what turns this slide's derived figure from D.1 into D.2, and no file here
+// changes for it.
 import type { SlideDef } from "@/deck/types";
 import { investOwnProofSlide } from "./invest-own-proof";
 

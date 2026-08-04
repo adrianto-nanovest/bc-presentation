@@ -542,8 +542,12 @@ const LEADER_QUESTIONS: readonly A1Question[] = [
  *
  * The tagline IS `LEADER_THESIS_LINE` (§4.5) — not a wording of it, the value —
  * so it is byte-identical to what `invest-own-proof` closes on and opens on the
- * same sentence as the leader cover. The footer then hands over to the movement
- * the leader alone can authorise, which is question 5 and section K.
+ * same sentence as the leader cover. The footer then hands over to the movement the
+ * leader alone can authorise: `mandate`, which question 5 points at. THE LETTER
+ * DEPENDS ON WHICH DECK YOU MEAN — `mandate` is section K in §4.3's FINISHED
+ * 14-section leader deck (it lands behind `pitfalls`, §3.6), and in the deck
+ * composed today it owns no slides, so it takes no letter at all and its row prints
+ * bare while K is `meta`. Neither string below names either letter, and none may.
  *
  * BRAND-NEUTRAL BY NECESSITY: one deck-set delta serves berau-leader and
  * gems-leader both, so neither string may name a brand's own evidence — the left

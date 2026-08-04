@@ -18,13 +18,17 @@ import { composedDeck } from "./registry";
 // tests `/^[A-Za-z]$/` and then LOOKS THE LETTER UP in the composed deck's
 // `sectionFirstIndex` (compose.ts R5). The standard deck claims A–K. The leader deck
 // claimed A–J at the Phase 4 floor — where `k` did nothing at all — A–K as of gh#53's
-// `gap` run, A–L as of gh#54's `shape` run, and reaches A–N once the rest of Phase 6
-// lands (§11). NONE OF THOSE FIVE SHAPES NEEDS AN EDIT HERE, which is the whole
-// claim; an unclaimed letter is a no-op for the same reason an unused one already
-// was — it is absent from the map. Note that the two deck sets now DISAGREE on `l`:
-// it is the practice lab in a leader deck and dead in a standard one, having been
-// dead in both until gh#54. `r` and `u` are why the composer caps a deck at 17
-// sections: section 18 would claim "R" and shadow the reset key.
+// `gap` run, A–L as of gh#54's `shape` run, A–M as of gh#56's `invest` run, and
+// reaches A–N once the rest of Phase 6 lands (§11). NONE OF THOSE SIX SHAPES NEEDS
+// AN EDIT HERE, which is the whole claim; an unclaimed letter is a no-op for the
+// same reason an unused one already was — it is absent from the map. Note that the
+// two deck sets now DISAGREE ON THREE KEYS, and on more than liveness: `l` and `m`
+// are dead in a standard deck and live in a leader one, while `k` is live in BOTH
+// and means the practice lab there against THE META-PROCESS here. So pressing a
+// letter and reading the printed figure alone can agree while the section does not —
+// which is why the e2e jumps assert the label beside the figure. `r` and `u` are why
+// the composer caps a deck at 17 sections: section 18 would claim "R" and shadow the
+// reset key.
 //
 // PageDown/PageUp are intentionally NOT bound — clickers can be configured to
 // emit Space/Backspace or arrows; binding PageDown invites surprises.

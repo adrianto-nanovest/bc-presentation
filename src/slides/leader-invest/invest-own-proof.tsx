@@ -32,13 +32,17 @@
 // sentence they are evidence FOR missing, which is the one thing a leader is
 // meant to take away from the slide.
 //
-// THE LETTER IS NOT AUTHORED HERE. This slide composes as D.2 today — behind
-// `invest-base-rates` (#57's D.1) once that lands, and behind `opening`, `gap` and
-// `shape` in both leader decks. The letter is derived per deck (§3.5): `FigLabel`
+// THE LETTER IS NOT AUTHORED HERE, and the number moves. This slide composes as
+// **D.1** today — it is the only slide the `invest` run owns, behind `opening`, `gap`
+// and `shape` in both leader decks — and becomes D.2 the moment #57's
+// `invest-base-rates` (§6.7's D.1) lands in front of it. §6.7 numbers it D.2 because
+// §6.7 describes the FINISHED section; the composed deck numbers it D.1 because a
+// letter and a number are derived from what the deck actually holds (§3.5): `FigLabel`
 // takes a label only, and what §3.4 R2 renumbers is everything BEHIND this run. No
 // rendered string under `src/slides/leader-invest/` may name a letter or a number —
-// the D.2 in these comments describes where the deck currently puts the slide,
-// which is the one place it is safe to say so.
+// a comment may, and only by saying which of the two frames it is speaking in.
+// `scripts/gh56-verify.mjs` reads the letter off the rendered page in both leader
+// decks, so this sentence is measured rather than asserted.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { VARIANT } from "@/variant";

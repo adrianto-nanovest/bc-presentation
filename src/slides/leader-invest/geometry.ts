@@ -14,19 +14,26 @@
 //     40px on 1.05 line-height, so it ends at ≈122. EYEBROW_TOP is 134 — the same
 //     shelf `leader-gap` hangs its provenance line on, so the two sibling leader
 //     slides put their mono line in the same place.
-//   · The NavBar's hover band is the floor: `.nav-zone` is `bottom: 0;
+//   · The NavBar's hover band is the STAGE's floor: `.nav-zone` is `bottom: 0;
 //     height: 88px`, so nothing may sit below y=632. The closer is the lowest
 //     thing on the stage and NAV_ZONE_CLEARANCE is what is left under it —
-//     asserted, not assumed.
+//     asserted, not assumed. That is the ONLY budget the band bounds; it takes no
+//     part in the row arithmetic below: the closer's shelf stops the column at
+//     y=530, 102px above the band.
 //   · Everything between is the SLOT: one rectangle that holds either the rows
 //     and their attribution, or the one line a deck that names no organisation
 //     prints instead. One slot for both fills, so "the band is never blank" is a
 //     property of the layout and not of remembering to fill it.
 //
-// ROW_CAPACITY IS DERIVED FROM THAT BUDGET, not written down. A fifth figure under
-// either brand would land 82px lower — inside the NavBar band — so `rowOffset`
-// throws instead of drawing it there. A silently placed fifth row is a figure a
-// leader cannot click past, and it would look deliberate.
+// ROW_CAPACITY IS DERIVED FROM THAT BUDGET, and the constraint is THE CLOSER'S
+// SHELF. A fifth figure under either brand would land 82px lower, at y=518…552 —
+// 22px past the slot's own bottom edge at 530 — and would hang its source line at
+// y=566…582, which is INSIDE the closer's 556…590. The deck's thesis would be
+// printed over by the evidence for it. The hover band is not what refuses the row:
+// at y=632 it is still 80px below that fifth figure and 50px below its attribution.
+// So `rowOffset` throws instead of drawing it there, because a silently placed fifth
+// row is a figure sitting on the sentence it is evidence for, and it would look
+// deliberate.
 //
 // Pure data and pure functions. No React, no DOM, no work at module scope beyond
 // the arithmetic below — importable from a node test.
@@ -55,17 +62,25 @@ export const EYEBROW_TOP = 134;
 export const SLOT_TOP = 190;
 
 /**
- * A row's own height: one line of 26px mono on 1.1 line-height is 28.6px, and 34
- * leaves the descenders of a fallback font somewhere to go. It is the TYPE's
- * height and not a padded box — a box taller than its content would make every
- * assertion about the air between two rows off by the padding.
+ * A row's own height. One line of 26px mono on 1.1 line-height is 28.6px, so this
+ * box IS 5.4px taller than the type it holds — deliberately, to leave the
+ * descenders of a fallback font somewhere to go, and it is the number the harness
+ * measures the rendered row against (`scripts/gh56-verify.mjs`).
+ *
+ * THE 5.4px IS THE ERROR IN EVERY "AIR BETWEEN TWO ROWS" CLAIM MADE FROM THIS
+ * CONSTANT, which is why {@link ROW_GAP} states the rendered figure as well as its
+ * own. Growing this box further widens that error; it does not move the type.
  */
 export const ROW_HEIGHT = 34;
 
 /**
- * The air between two rows. Generous for a table and correct for a projector: at
- * 26px, four figures 48px apart read as four separate statements from the back
- * row, and four figures 20px apart read as a paragraph of numbers.
+ * The air between two row BOXES — not between two lines of type. The row is
+ * `alignItems: baseline` over a 28.6px figure line box in a 34px row, so what the
+ * room actually sees between two figures is `ROW_PITCH - 28.6 = 53.4px`.
+ *
+ * Generous for a table and correct for a projector: at 26px, four figures with
+ * 53.4px of air between them read as four separate statements from the back row,
+ * and four figures 20px apart read as a paragraph of numbers.
  */
 export const ROW_GAP = 48;
 
@@ -91,8 +106,13 @@ export const CLOSER_TOP = 556;
 /** One line of 26px serif italic on 1.3 line-height. */
 export const CLOSER_HEIGHT = 34;
 /** The air between the slot's bottom edge and the closer. It has to read as a
- *  turn — the figures stop, then the sentence they are evidence for arrives. */
-export const CLOSER_GAP = 26;
+ *  turn — the figures stop, then the sentence they are evidence for arrives.
+ *
+ *  NOT EXPORTED: it is an input to {@link SLOT_HEIGHT} and nothing outside this file
+ *  reads it. An exported constant with no outside reader is a number two places
+ *  could come to disagree about for no gain — `leader-shape/geometry.ts` deleted one
+ *  of exactly this kind. */
+const CLOSER_GAP = 26;
 
 /** What is left under the closer before the NavBar's hover band starts. */
 export const NAV_ZONE_CLEARANCE = NAV_ZONE_TOP - (CLOSER_TOP + CLOSER_HEIGHT);
@@ -101,8 +121,9 @@ export const NAV_ZONE_CLEARANCE = NAV_ZONE_TOP - (CLOSER_TOP + CLOSER_HEIGHT);
 export const SLOT_HEIGHT = CLOSER_TOP - CLOSER_GAP - SLOT_TOP;
 
 /** What the rows themselves may use: the slot, minus the source line that hangs
- *  under them. */
-export const ROWS_HEIGHT_BUDGET = SLOT_HEIGHT - ATTRIBUTION_GAP - ATTRIBUTION_HEIGHT;
+ *  under them. Not exported either — it exists to derive {@link ROW_CAPACITY}, which
+ *  is the answer callers actually want. */
+const ROWS_HEIGHT_BUDGET = SLOT_HEIGHT - ATTRIBUTION_GAP - ATTRIBUTION_HEIGHT;
 
 /**
  * How many rows this band can hold — DERIVED, so raising the closer lowers the
@@ -159,7 +180,7 @@ export function rowOffset(index: number): number {
   if (!Number.isInteger(index) || index < 0 || index >= ROW_CAPACITY) {
     throw new Error(
       `rowOffset: no row ${index} — this band holds ${ROW_CAPACITY} rows ` +
-        `(0…${ROW_CAPACITY - 1}) above the NavBar's hover band at y=${NAV_ZONE_TOP}.`,
+        `(0…${ROW_CAPACITY - 1}) above the closer's fixed shelf at y=${CLOSER_TOP}.`,
     );
   }
   return index * ROW_PITCH;
@@ -176,7 +197,7 @@ export function columnHeight(count: number): number {
   if (!Number.isInteger(count) || count < 1 || count > ROW_CAPACITY) {
     throw new Error(
       `columnHeight: ${count} rows — this band holds 1…${ROW_CAPACITY} rows above ` +
-        `the NavBar's hover band at y=${NAV_ZONE_TOP}.`,
+        `the closer's fixed shelf at y=${CLOSER_TOP}.`,
     );
   }
   return (count - 1) * ROW_PITCH + ROW_HEIGHT;

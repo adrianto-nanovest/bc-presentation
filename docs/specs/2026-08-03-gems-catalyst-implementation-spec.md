@@ -1516,6 +1516,17 @@ official.
    another department's role, in front of Div Heads.
 2. **GEMVIS figures are vendor-reported** (Google Cloud customer story), not independently
    audited. Cite attributed; ideally have DigiTech confirm before Aug 19.
+   - **Amendment 2026-08-05 — gh#56 shipped the ATTRIBUTED-ONLY branch, and the confirmation
+     is no longer blocking.** `invest-own-proof` (D.1 today, §6.7's D.2) prints all four
+     GEMVIS figures with their provenance ON the slide, not in a footnote: a source line
+     naming Google Cloud's published GEMVIS customer story, a `vendor-reported` chip on
+     every one of the four rows, and the negation *"not independently audited"* as an
+     exported constant (`NOT_AUDITED`) that the unit test strips before forbidding the words
+     *audited* / *independent* / *verified* anywhere else in the slide's copy. Nothing on the
+     slide claims confirmation the deck does not have. **If DigiTech does confirm, the change
+     is one attribution line and four chips** — a copy edit inside
+     `src/slides/leader-invest/content.ts`, not a re-argued slide, and the same shape holds
+     for Berau's three `participant-claimed` rows, which nobody will ever confirm.
 3. **Two ⚠ claims are live on E.11 today and still unverified** — *"Token metrics ≈ 80% of
    completion variance"* (Observability card) and *"Citadel ships 22 hooks across 14 events"*
    (Triggers card). Not blocking; separate ticket.

@@ -32,11 +32,11 @@
 //
 // THE KEYWORD RULE. `kw` goes on PROSE ONLY, and this slide has exactly two lines
 // of prose — the headline and the closer (plus `general`'s one-line refusal, which
-// no composed deck reaches). The eyebrow, all nine figures, their metric names,
-// the epistemic chips and the attribution line are LABELS in the mono or sans
-// register, where a copper italic reads as a rendering fault, so none of them has
-// a `*Kw` sibling. The test holds that as a list, so a new string has to pick a
-// side.
+// no composed deck reaches). The eyebrow, all seven figures — GEMS' four and Berau's
+// three — their metric names, the epistemic chips and the attribution line are LABELS
+// in the mono or sans register, where a copper italic reads as a rendering fault, so
+// none of them has a `*Kw` sibling. The test holds that as a list, so a new string
+// has to pick a side.
 //
 // WHAT IS DELIBERATELY NOT IN THIS FILE, because this ticket does not render it:
 // D.1 (`invest-base-rates`, 78% → 6%), D.3 (`invest-chicken-egg`, four beats),
@@ -46,13 +46,27 @@
 // argument nobody agreed to is on a projector. Same reasoning as the top of
 // `src/slides/leader-shape/content.ts`.
 //
-// Type-only import for `Brand`, so this module pulls in nothing at runtime beyond
-// the thesis constants and stays plain data — importable from a node test.
+// Type-only import for `Brand`, so nothing but the thesis constants below arrives at
+// runtime and this file stays plain data.
 import type { Brand } from "@/deck-variants";
 // THE THESIS, IMPORTED AND NOT RE-AUTHORED (§4.5). The leader cover authored the
 // sentence, A.1 quotes it, and this slide closes on it; the constants live in the
 // cover's own content module and the doc comment there says why. Three carriers,
 // one value, so they cannot drift apart one edit at a time.
+//
+// AND THIS IS THE ONE MODULE IN THE FAMILY THAT IS NOT NODE-IMPORTABLE, which is a
+// price paid on purpose. `leader-gap/content.ts`, `leader-shape/content.ts`,
+// `leader-gap/geometry.ts`, `leader-shape/geometry.ts` and `./geometry.ts` all claim
+// "importable from a node test" and all hold it, because every import they have is
+// type-only and gets stripped. The line below is a RUNTIME import through the `@/`
+// bundler alias, which bare Node does not resolve, so
+// `node --experimental-strip-types -e 'import("./src/slides/leader-invest/content.ts")'`
+// fails on it — and neither alternative is better. Writing the specifier relative does
+// NOT fix it (bare Node ESM wants the file extension, and `allowImportingTsExtensions`
+// is off in `tsconfig.json`), and re-typing the thesis here to keep the import list
+// empty is exactly the drift §4.5 exists to prevent. Nothing needs this module in bare
+// Node anyway: `scripts/gh56-verify.mjs` imports `./geometry.ts` — which keeps the
+// property — and transcribes every string from the issue's AC on purpose.
 import {
   LEADER_THESIS_LINE,
   LEADER_THESIS_LINE_KW,
@@ -61,7 +75,27 @@ import {
 // ───────────────────── the epistemic label ─────────────────────
 
 /**
+ * Both kinds of claim this slide can make, as VALUES — and the single source of the
+ * type below.
+ *
+ * A union cannot be enumerated at run time, and the rules this slide is held to are
+ * rules over "every mark", so the members have to exist as a value somewhere. THE
+ * ARRAY IS THAT SOMEWHERE AND THE TYPE IS DERIVED FROM IT. Written the other way
+ * round — a hand-typed union beside a hand-typed array — a third member compiles
+ * with no array entry and is then invisible to every rule that walks the array,
+ * which is the one failure mode a closed set is supposed to remove.
+ *
+ * `tests/unit/invest-own-proof.test.tsx` walks this array and asserts every member is
+ * IN USE on some brand's rows, which is the half a list cannot prove on its own: a
+ * mark nobody carries is copy nobody reviewed.
+ */
+export const EPISTEMIC_MARKS = ["vendor-reported", "participant-claimed"] as const;
+
+/**
  * How a figure on this slide is KNOWN — a closed union, and the chip's own copy.
+ *
+ * DERIVED FROM {@link EPISTEMIC_MARKS}, so the members cannot disagree with the list
+ * the tests walk. Adding a third kind of claim is one edit, to the array.
  *
  * TWO REASONS IT IS A UNION AND NOT A `string`. First, a free-text mark is a mark
  * an author can spell "vendor reported" or "Vendor-reported", which renders as a
@@ -76,17 +110,7 @@ import {
  * these two terms writes them; the LABEL register shouts them on the stage. Same
  * decision as `hubLabel` in `src/slides/leader-shape/content.ts`.
  */
-export type EpistemicMark = "vendor-reported" | "participant-claimed";
-
-/**
- * Both members, as values.
- *
- * A union cannot be enumerated at run time, and the rules this slide is held to
- * are rules over "every mark" — so the members exist once as a value too, next to
- * the type, rather than being retyped in the test file. The test asserts both are
- * IN USE, which is the half a list cannot prove on its own.
- */
-export const EPISTEMIC_MARKS = ["vendor-reported", "participant-claimed"] as const;
+export type EpistemicMark = (typeof EPISTEMIC_MARKS)[number];
 
 /**
  * The ONE phrase on this slide that may contain the words a figure must never be

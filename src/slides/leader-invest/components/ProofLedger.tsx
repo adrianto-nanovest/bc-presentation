@@ -5,8 +5,9 @@
 // chart of "+90%", "50+" and "4,000+" would put three unrelated quantities on one
 // axis and invite the room to compare them; a ledger puts each number beside what
 // it measures and beside HOW IT IS KNOWN, which is the column a chart has no room
-// for and the column this slide exists for. Nine numbers, three cells each, one
-// tier per cell role.
+// for and the column this slide exists for. Seven numbers across the two brands —
+// GEMS' four and Berau's three, never in one room — three cells each, one tier per
+// cell role.
 //
 // ONE COMPONENT AND NOT THREE. The eyebrow, the rows, the source line and the
 // closer are four bands of one figure, and the fact they share — how far down the
@@ -22,25 +23,31 @@
 //
 // CSS vars only, NO HEX AND NO rgba() LITERALS. Rank is a COLOUR TIER between the
 // three cell ROLES — the number, what it measures, how it is known — and never
-// between rows: nine figures of equal standing, and any visual promotion of one is
-// a claim nobody authored, which is the same failure as printing the word
-// "audited". Opacity here means "not revealed yet", i.e. time, not rank.
+// between rows: three or four figures of equal standing on any one stage, and any
+// visual promotion of one is a claim nobody authored, which is the same failure as
+// printing the word "audited". Opacity here means "not revealed yet", i.e. time, not
+// rank.
 //
 // ZERO SMIL NODES, at every pose, under any motion preference — and there is no
 // `<svg>` on this slide at all, so the question is closed by construction rather
-// than by discipline. The whole motion budget is `.fade`'s opacity-and-translate
-// transition, which the global `prefers-reduced-motion: reduce` rule at the top of
-// `src/styles/globals.css` squashes to 0.01ms, so every pose rests on its finished
-// frame and there is nothing to gate at mount. NO NEW KEYFRAME AND NO NEW CLASS
-// EITHER: gh#53 needed one because a `stroke-dashoffset` sweep has no resting pair
-// of values to transition between; nothing here needs anything a transition cannot
-// do.
+// than by discipline. The whole motion budget is `.fade`, which is TWO channels and
+// not one: an opacity-and-translate TRANSITION on `.fade`, plus the `fadeReveal`
+// KEYFRAME animation `.fade.on` adds (`src/styles/globals.css`) —
+// `scripts/gh56-verify.mjs` names both and samples the opacity they produce. The
+// global `prefers-reduced-motion: reduce` rule at the top of that stylesheet squashes
+// both — `transition-duration` AND `animation-duration` to 0.01ms — so every pose
+// rests on its finished frame under either preference and there is nothing to gate at
+// mount. NO NEW KEYFRAME AND NO NEW CLASS EITHER: gh#53 needed one because a
+// `stroke-dashoffset` sweep has no resting pair of values to transition between;
+// nothing here needs anything the shared primitive cannot do.
 import type { CSSProperties } from "react";
-// Section E's copy, which is the tree's de facto shared reveal primitive — 27
-// modules reach for it, A.1 and the Capability Ladder among them, against 6 for
-// the section F duplicate. A fourth copy under this directory would be the wrong
-// answer to three existing ones; centralising them is a cleanup this ticket is
-// not.
+// Section E's copy, which is the tree's de facto shared reveal primitive: 27 modules
+// outside section E import this `Reveal`, THIS FILE INCLUDED — A.1 and the Capability
+// Ladder among them — where the section F duplicate has 5, and section G's third copy
+// has none at all outside its own directory. (Two more modules take only this file's
+// `CopperRule`, which is why a grep of `src/` for the path returns 29.) A FOURTH copy
+// under this directory would be the wrong answer to three existing ones; centralising
+// them is a cleanup this ticket is not.
 import { Reveal } from "@/slides/foundation-core-section-e/components/Reveal";
 import { highlight } from "@/components/highlight";
 import {
@@ -66,11 +73,15 @@ import { investOwnProofContent as C, type OwnProofBlock } from "../content";
 /**
  * One tier per cell ROLE, and the same tier for every row.
  *
- * THE RANK IS ACROSS A ROW, NEVER DOWN THE COLUMN. Reading left to right the type
- * gets quieter — the number, then what it measures, then how it is known — which
- * is the order the room needs them in. Reading top to bottom nothing changes at
- * all, because these figures are not ranked: they are the same organisation's
- * evidence, and a brighter row would be a claim that one of them counts more.
+ * THE RANK IS ACROSS A ROW, NEVER DOWN THE COLUMN — and across the row it is SIZE
+ * that carries the first step, not colour. The figure is 26px `--copper-200`
+ * (luminance 0.5917) beside a 15px `--neutral-200` metric name (0.6584): the number
+ * reads first because it is 11px larger, and it is very slightly the DARKER of the
+ * two. From the metric to the chip the type does get quieter as well as smaller —
+ * `--neutral-300` (0.3663) at 10px — so the third cell is the one this table
+ * actually dims. Reading top to bottom nothing changes at all, because these
+ * figures are not ranked: they are the same organisation's evidence, and a brighter
+ * row would be a claim that one of them counts more.
  *
  * THE CHIP RESTS ON gh#50's FLOOR AND NOT UNDER IT. `--neutral-300` is the floor
  * for text on this stage, and the caveat is the one string somebody would be
@@ -79,10 +90,16 @@ import { investOwnProofContent as C, type OwnProofBlock } from "../content";
  * the floor: quietest, and still legible from the back row.
  */
 const TIER = {
-  /** Copper, because the number IS the point of the row. Two tiers under the
-   *  keyword italic, so a figure never reads as an emphasised word. */
+  /** Copper, because the number IS the point of the row. Two tiers OVER the keyword
+   *  italic and twice its light — `--copper-200` 0.5917 against
+   *  `KeywordHighlight`'s `--copper-400` 0.2966 — using "over" the way
+   *  `../../leader-shape/components/PillarOrbit.tsx` uses it: the lower token
+   *  number is the brighter one. So a figure is never the same copper as an
+   *  emphasised word, and it is upright 26px mono where a keyword is serif italic. */
   figure: "var(--copper-200)",
-  /** What the number measures — one tier under the headline's own. */
+  /** What the number measures — two tiers under the headline's own, on the ramp
+   *  this stage declares (0 · 50 · 100 · 200 · 300): `--neutral-200` 0.6584 against
+   *  the headline's `--neutral-50` 0.9131. */
   metric: "var(--neutral-200)",
   /** How it is known. See the note above about the floor. */
   mark: "var(--neutral-300)",
@@ -91,8 +108,13 @@ const TIER = {
   markBorder: "1px solid var(--copper-800)",
   /** The source line, same tier as the chips it summarises. */
   attribution: "var(--neutral-300)",
-  /** The thesis. The brightest type on the stage at pose 2, which is correct — at
-   *  pose 2 the whole slide is that sentence. */
+  /** The thesis. The brightest tier this slide sets UNDER the headline row —
+   *  `--neutral-100` 0.7835, over the metric's 0.6584 and the chip's 0.3663 — and one
+   *  tier under the headline itself, which `.slide-headline` prints in `--neutral-50`
+   *  (0.9131) at all three poses. The headline stays the brightest type on the stage
+   *  on purpose: it is the premise this sentence answers. What makes pose 2 the
+   *  closer's is that it is the only thing that ARRIVES there, not that it out-shines
+   *  what is already up. */
   closer: "var(--neutral-100)",
   /** The eyebrow, in the copper label tier the sibling leader slides use for the
    *  line under the headline. */
@@ -243,7 +265,8 @@ export function ProofLedger({ content, pose }: ProofLedgerProps) {
                     a column of their own. A reader scanning down the right edge
                     reads the provenance of the whole ledger without reading a
                     single number — which is what "the label is part of the copy"
-                    has to mean on a slide with nine of them. */}
+                    has to mean on a slide that carries one mark per row, three or
+                    four of them, and no summary chip standing in for the column. */}
                 <div
                   style={{
                     width: MARK_COL_W,

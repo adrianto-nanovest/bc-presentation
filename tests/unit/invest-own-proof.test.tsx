@@ -6,10 +6,10 @@
 // and the rendered composition is walked at 1280×720 in a real engine separately.
 // What jsdom is good for is the three things this slide is actually at risk of:
 //
-//   1. A FIGURE THAT MOVED. Nine numbers are quoted from two outside records
-//      (§6.7). "+90%" becoming "+9%", or an en dash becoming a hyphen, is a
-//      review-proof edit and a projector-proof one; it is a string comparison
-//      here.
+//   1. A FIGURE THAT MOVED. Seven numbers — GEMS' four and Berau's three — are
+//      quoted from two outside records (§6.7). "+90%" becoming "+9%", or an en dash
+//      becoming a hyphen, is a review-proof edit and a projector-proof one; it is a
+//      string comparison here.
 //   2. A FIGURE THAT LOST ITS EPISTEMIC MARK. The issue is explicit that the
 //      label is COPY and not a footnote to be trimmed, and the failure this
 //      slide can cause is a claim presented as audited in a room with
@@ -90,10 +90,13 @@ const POSES = [0, 1, 2] as const;
  * position to look up — which is itself the fact `deck-numbering-fixture` and
  * `deck-registry` prove, from the decks that do run it.
  *
- * D.2 is where §4.3 puts it. Neither the letter nor the number is authored in the
- * slide (§3.5), so this is a harness input and not a claim the slide makes.
+ * D.1 rather than §6.7's D.2 because `invest` holds one slide today; #57 puts
+ * `invest-base-rates` in front of it. Neither the letter nor the number is authored
+ * in the slide (§3.5), so this is a harness input and not a claim the slide makes —
+ * and it is the number the two leader decks actually derive, which
+ * `tests/fixtures/deck-numbering.json` records for both.
  */
-const AT = { letter: "D", num: 2, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 1, sectionKey: "invest" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {
@@ -523,9 +526,10 @@ describe("no figure is stated or styled as audited, independent or verified", ()
 
 describe("no row is ranked above another", () => {
   // A figure STYLED as the confirmed one is the same failure as a figure stated
-  // to be audited: nine numbers of equal standing, and any visual promotion of
-  // one is a claim nobody authored. Rank on this slide is a COLOUR TIER between
-  // ROLES (figure over metric over mark) and never between rows.
+  // to be audited: seven numbers of equal standing across the two brands — four on
+  // a GEMS stage, three on a Berau one — and any visual promotion of one is a claim
+  // nobody authored. Rank on this slide is a COLOUR TIER between ROLES (the figure's
+  // copper, the metric's neutral, the chip on the floor) and never between rows.
   test("one figure tier, one metric tier, one chip, across all rows", () => {
     for (const [name, block] of [
       ["gems", gems],
@@ -698,8 +702,9 @@ describe("brand variance resolves through a typed pick over Brand", () => {
       expect(block.eyebrow.trim(), brand).not.toBe("");
       expect(block.attribution.trim(), brand).not.toBe("");
       // NON-EMPTY, and inside the band the layout can actually hold: a fifth row
-      // under either brand is a row that would sit in the NavBar's hover band,
-      // and the geometry refuses it rather than drawing it there.
+      // under either brand would hang its source line inside the closer's fixed
+      // shelf — on top of the deck's own thesis — and the geometry refuses it
+      // rather than drawing it there.
       expect(block.figures.length, brand).toBeGreaterThan(0);
       expect(block.figures.length, brand).toBeLessThanOrEqual(ROW_CAPACITY);
       expect(new Set(block.figures.map((f) => f.id)).size, brand).toBe(block.figures.length);
@@ -1015,13 +1020,13 @@ describe("keywords go on prose only", () => {
   });
 
   test("no authored string names a section letter", () => {
-    // §3.4 R2. This slide composes as D.2 today and everything behind the
-    // `invest` run renumbers as the rest of Phase 6 lands, so a literal "D.2" or
-    // "SECTION D" anywhere in this copy would be a lie on a projector within the
-    // week.
+    // §3.4 R2. This slide composes as D.1 today, becomes D.2 the moment #57's
+    // `invest-base-rates` lands in front of it, and everything behind the `invest`
+    // run renumbers as the rest of Phase 6 lands — so a literal "D.1" or "SECTION
+    // D" anywhere in this copy would be a lie on a projector within the week.
     for (const copy of authoredStrings()) {
       expect(copy).not.toMatch(/\bSECTIONS?\s+[A-N]\b/i);
-      // A bare figure reference — `D.2`, `G.12`.
+      // A bare figure reference — `D.1`, `G.12`.
       expect(copy).not.toMatch(/\b[A-N]\.\d+\b/);
     }
   });
@@ -1087,18 +1092,39 @@ describe("the ledger geometry", () => {
     // against four — and the capacity is DERIVED from the band rather than
     // written down, so moving the closer up moves the capacity with it.
     expect(ROW_CAPACITY).toBe(4);
-    expect(columnHeight(ROW_CAPACITY)).toBe((ROW_CAPACITY - 1) * ROW_PITCH + ROW_HEIGHT);
-    expect(attributionOffset(ROW_CAPACITY)).toBe(
-      columnHeight(ROW_CAPACITY) + ATTRIBUTION_GAP,
-    );
-    // The tallest column, plus its attribution, fits inside the slot.
-    expect(attributionOffset(ROW_CAPACITY) + ATTRIBUTION_HEIGHT).toBeLessThanOrEqual(
-      SLOT_HEIGHT,
-    );
 
-    // A FIFTH ROW THROWS rather than being drawn 82px lower, which is inside the
-    // NavBar's hover band. A silently placed row is a figure a leader cannot
-    // click past.
+    // WHAT THE TWO HEIGHTS OWE THE ROWS, held against `rowOffset` — which the test
+    // above pins to `i * ROW_PITCH` on its own — and NOT re-typed from their own
+    // formulas. The column has to END at the last row's bottom edge, and the source
+    // line has to hang exactly `ATTRIBUTION_GAP` under that edge. Writing
+    // `(count - 1) * ROW_PITCH + ROW_HEIGHT` on the right-hand side here would
+    // compare the arithmetic with a copy of itself and pass on any value both
+    // returned, which is the failure the paragraph at the top of this block is about.
+    for (let count = 1; count <= ROW_CAPACITY; count++) {
+      const lastRowBottom = rowOffset(count - 1) + ROW_HEIGHT;
+      expect(columnHeight(count), `${count} rows`).toBe(lastRowBottom);
+      expect(attributionOffset(count) - lastRowBottom, `${count} rows`).toBe(ATTRIBUTION_GAP);
+      // AND THE WHOLE STACK FITS THE SLOT at every count the band accepts, not only
+      // at the tallest one — this is what fails if the closer is ever moved up.
+      expect(
+        attributionOffset(count) + ATTRIBUTION_HEIGHT,
+        `${count} rows`,
+      ).toBeLessThanOrEqual(SLOT_HEIGHT);
+    }
+
+    // AND FOUR IS THE MOST THE SHELF ALLOWS, which is what makes it a capacity and
+    // not a preference. A fifth row would hang its source line at stage y=566…582 —
+    // inside the closer's fixed 556…590, printed over the deck's own thesis — while
+    // the NavBar's hover band at y=632 is still 50px clear of it. THE CLOSER IS THE
+    // CONSTRAINT; the band is not, and the numbers say so.
+    const fifthAttributionTop =
+      SLOT_TOP + ROW_CAPACITY * ROW_PITCH + ROW_HEIGHT + ATTRIBUTION_GAP;
+    expect(fifthAttributionTop).toBeGreaterThan(CLOSER_TOP);
+    expect(fifthAttributionTop).toBeLessThan(CLOSER_TOP + CLOSER_HEIGHT);
+    expect(fifthAttributionTop + ATTRIBUTION_HEIGHT).toBeLessThan(NAV_ZONE_TOP);
+
+    // SO IT THROWS instead of drawing it there. A silently placed fifth row is a
+    // figure sitting on the sentence it is evidence for.
     expect(() => rowOffset(ROW_CAPACITY)).toThrow(/no row/);
     expect(() => rowOffset(-1)).toThrow(/no row/);
     expect(() => columnHeight(ROW_CAPACITY + 1)).toThrow(/rows/);
@@ -1112,13 +1138,34 @@ describe("the ledger geometry", () => {
     expect(SIDE_MARGIN).toBe(48);
     expect(CONTENT_WIDTH).toBe(1280 - 2 * SIDE_MARGIN);
 
-    // The three columns tile the content width exactly — no column can be widened
-    // without taking the width from another one, which is what stops the chip
-    // from being pushed off the right margin.
-    expect(FIGURE_COL_W + COL_GAP + METRIC_COL_W + COL_GAP + MARK_COL_W).toBe(CONTENT_WIDTH);
+    // THE THREE COLUMNS TILE THE CONTENT WIDTH — asserted on the ROW THE RENDERER
+    // AUTHORS, not on the constants. Summing the three back up proves nothing:
+    // `METRIC_COL_W` is DEFINED as `CONTENT_WIDTH - FIGURE_COL_W - MARK_COL_W -
+    // 2 * COL_GAP`, so that sum equals `CONTENT_WIDTH` for every value of every term
+    // in it. What CAN fail is the render — a cell that hardcodes a width, or drops
+    // the `marginLeft` standing in for a gap — and the chip is right-aligned to the
+    // margin, so it is the thing that leaves the stage when the tiling breaks.
+    const { figures: tiling } = figuresOf(gems, "gems");
+    renderProof(gems, 1);
+    const tiledRow = screen.getByTestId(`invest-row-${tiling[0].id}`);
+    const cells = [...tiledRow.children] as HTMLElement[];
+    expect(cells.length, "figure · metric · chip cell").toBe(3);
+    const spanned = cells.reduce(
+      (sum, cell) => sum + parseFloat(cell.style.width) + (parseFloat(cell.style.marginLeft) || 0),
+      0,
+    );
+    expect(parseFloat(tiledRow.style.width)).toBe(CONTENT_WIDTH);
+    expect(spanned, `${cells.map((c) => c.style.width).join(" + ")} + the two gaps`).toBe(
+      CONTENT_WIDTH,
+    );
+
+    // And the residue is the METRIC's, not the chip's: the two cells a real engine
+    // measured are the fixed ones, so they have to leave room over. Widen either and
+    // this fails, where summing all three constants would not.
     for (const w of [FIGURE_COL_W, METRIC_COL_W, MARK_COL_W]) {
       expect(w).toBeGreaterThan(0);
     }
+    expect(FIGURE_COL_W + MARK_COL_W + 2 * COL_GAP).toBeLessThan(CONTENT_WIDTH);
 
     // The vertical stack, top to bottom, with nothing in the band.
     expect(EYEBROW_TOP).toBeLessThan(SLOT_TOP);
