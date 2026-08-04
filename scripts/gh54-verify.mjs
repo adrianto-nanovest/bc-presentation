@@ -745,8 +745,32 @@ for (const variant of LEADER_VARIANTS) {
   // FORWARD FROM THE LAST POSE, not by URL: the AC is about what the presenter's
   // next keypress does, and `?slide=` would prove only that the slide after this one
   // exists somewhere in the deck.
-  await page.keyboard.press("Space");
-  await page.waitForTimeout(POSE_MS);
+  //
+  // AND "THE LAST POSE" IS NOT POSE 1 ANY MORE. gh#54 measured this figure at
+  // `steps: 2`, so one `Space` from the pose it measures happened to spill onto the
+  // next slide; gh#55's focus walk took the slide to `steps: 9`, and that same single
+  // keypress now lands on the first decision beat. The four C.2 assertions below
+  // failed on exactly that — a harness that had hardcoded "pose 1 is the end"
+  // without saying so.
+  //
+  // SO IT WALKS UNTIL THE SLIDE INDEX CHANGES, rather than counting to a new
+  // literal: `Space` does not spill until the last pose (`DeckContext.advance`), so
+  // pressing it until the deck moves on IS "one step past the last pose" for any step
+  // budget, and the next ticket to grow this slide costs no edit here. The bound is
+  // the guard — a slide that never spilled would otherwise hang the run — and it is
+  // generous because it is not a step budget, it is a ceiling no slide in the deck
+  // comes near.
+  const SPILL_LIMIT = 24;
+  let spilled = 0;
+  for (; spilled < SPILL_LIMIT; spilled++) {
+    await page.keyboard.press("Space");
+    await page.waitForTimeout(POSE_MS);
+    const stillHere = await page.evaluate(
+      () => document.querySelector('[data-testid="slide"]').dataset.slideIndex,
+    );
+    if (stillHere !== String(index)) break;
+  }
+  check(`${tag} · C.2 · Space spilled off the figure inside ${SPILL_LIMIT} presses`, spilled < SPILL_LIMIT, true);
   const next = await page.evaluate(() => ({
     slideIndex: document.querySelector('[data-testid="slide"]').dataset.slideIndex,
     figLabel: document.querySelector(".fig-label")?.innerText.replace(/\s+/g, " ").trim() ?? null,

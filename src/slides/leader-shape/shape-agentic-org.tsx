@@ -15,23 +15,50 @@
 // arrives first and alone, so the room reads "who" before "what", and the six
 // arrive as a sweep rather than a flash, so they read as six of one thing.
 //
-// 2 POSES THIS TICKET, one argument each:
+// NINE POSES, one argument each. `./walk.ts` owns WHEN each one lands and names the
+// three that are not counted; this is what each one SAYS:
 //   0 — THE ENABLER. The hub, its brand line, and the standing kicker that says an
 //       operating model is not a department and not a committee.
 //   1 — THE SIX PILLARS, with their spokes and labels. ALL SIX AT FULL STRENGTH:
 //       nothing is dimmed and nothing is waiting to be undimmed (§7.1 — attention
 //       is bought with added light, never subtracted).
+//   2 — GOVERNANCE & POLICIES. Where the data may go, written down before someone
+//       improvises. The walk opens here because section D opens here.
+//   3 — TOOLS & PLATFORM. Who gets a company-managed seat, and that the company
+//       pays for it.
+//   4 — PEOPLE & MINDSET. Whether the culture rewards the person who tries it or
+//       the person who waits.
+//   5 — STRATEGY & LEADERSHIP. Which problem gets the pilot, and that leading the
+//       culture is part of the job.
+//   6 — PROCESS & METHODOLOGY. Where a human still signs, and everywhere they no
+//       longer do.
+//   7 — AI COMPANIONS. When a tool is allowed to become an agent.
+//   8 — THE CLOSER. The ring back at rest — nothing lit, nothing dimmed — and the
+//       claim the six beats were evidence for: none of them is a tool purchase.
 //
-// `canonicalPose: 1` — the fullest pose this slide has, and the only one the PDF
-// and PPTX exports print. A canonical pose of 0 would export a hub with no
-// organisation around it.
+// SIX BEATS AND NO GROUPING, which is where the step budget went. #16 budgeted ~4
+// steps; §7.1 spends nine. Pairing the pillars (governance+tools /
+// people+strategy / process+companions) would fit the old budget and would cost the
+// one-decision-per-pillar clarity that is the only reason this slide can be an
+// INDEX for the section behind it — a leader who hears two decisions in one breath
+// remembers neither pillar. The count is not typed here either: `STEP_COUNT` is
+// derived from the number of pillars that have a decision (see `./walk.ts`), so a
+// seventh pillar grows the budget instead of silently losing a beat.
 //
-// THE STEP BUDGET GROWS TO 9 IN THE NEXT TICKET, not here. §7.1 settled nine
-// steps: hub + reveal + six focus beats + closer, one leader decision per pillar,
-// which is what turns the centrepiece into the index for section D. This ticket
-// ships the RESTING POSE ONLY, and — deliberately — authors none of that copy: see
-// the list at the top of `./content.ts` for why writing it early is a hazard rather
-// than a head start.
+// `canonicalPose: 1` — AND IT IS NO LONGER `steps - 1`, so it needs its argument
+// written down. The exports print `canonicalPose` and nothing else, and pose 1 is
+// the fullest pose in which no ONE of six pillars is singled out. A canonical pose
+// INSIDE the walk would print a PDF whose centrepiece emphasises whichever pillar
+// the export happened to stop on — six pillars that "move together, or none of them
+// move", with one of them lit for a reason the page cannot explain. A canonical
+// pose of 0 would export a hub with no organisation around it.
+//
+// POSE 8 IS THE ONE REAL ALTERNATIVE and was considered: the ring is back at rest
+// there, so it singles out nothing, and it adds the closer — arguably the strongest
+// single frame this slide has. It is not shipped because #55's acceptance criteria
+// pin `canonicalPose` at 1 "unless a different pose is argued for in a comment on
+// this issue first", and that argument has not been made on the issue. So 1 ships,
+// and the six decisions are SPOKEN rather than printed.
 //
 // THE LETTER IS NOT AUTHORED HERE. This slide composes as C.1 today, and the
 // `shape` run keeps C as the rest of Phase 6 lands — §4.3 gives the run four
@@ -47,6 +74,7 @@ import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { PillarOrbit } from "./components/PillarOrbit";
 import { hubBrandLineFor, shapeOrgContent as C } from "./content";
+import { STEP_COUNT } from "./walk";
 
 // ───────────────────── slide ─────────────────────
 
@@ -78,7 +106,15 @@ const BRAND_LINE = hubBrandLineFor(VARIANT.brand);
 
 export const shapeAgenticOrgSlide: SlideDef = {
   id: "shape-agentic-org",
-  steps: 2,
+  // NINE, IMPORTED AND NOT TYPED. `STEP_COUNT` is `hub + ring + one beat per pillar
+  // + closer`, counted off `shapeOrgContent.pillars` — so a seventh pillar makes
+  // this ten on its own. A literal `9` here is how the seventh pillar's decision
+  // becomes a pose the deck can never reach (`DeckContext` clamps at `steps - 1`):
+  // no error, no blank slide, no failing test, just one pillar whose decision is
+  // never spoken and a closer that arrives while a pillar is still lit.
+  steps: STEP_COUNT,
+  // Deliberately NOT `STEP_COUNT - 1`, and no longer equal to it — see the argument
+  // for pose 1 in the header comment.
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
