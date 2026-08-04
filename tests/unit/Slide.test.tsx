@@ -18,7 +18,7 @@ test("Slide annotates animation mode and canonical pose as data attrs on the sta
         animationMode="step-reveal"
         canonicalPose={2}
         index={0}
-        section="E" {...AT_E11}
+        {...AT_E11}
       >
         hi
       </Slide>,
@@ -40,7 +40,7 @@ test("Slide stage has fixed 1280x720 dimensions (via CSS classes)", () => {
   // tests/e2e/viewport-fit.spec.ts.
   const { container } = render(
     wrap(
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
+      <Slide animationMode="static" canonicalPose={0} index={0} {...AT_E11}>
         hi
       </Slide>,
     ),
@@ -54,7 +54,7 @@ test("Slide stage has fixed 1280x720 dimensions (via CSS classes)", () => {
 test("Slide stage has cursor: pointer", () => {
   render(
     wrap(
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
+      <Slide animationMode="static" canonicalPose={0} index={0} {...AT_E11}>
         hi
       </Slide>,
     ),
@@ -80,7 +80,7 @@ function StateProbe() {
 test("clicking the stage advances the deck (animationMode=static)", () => {
   render(
     <DeckProvider stepCounts={[2, 2]}>
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
+      <Slide animationMode="static" canonicalPose={0} index={0} {...AT_E11}>
         <span>body</span>
       </Slide>
       <StateProbe />
@@ -98,7 +98,7 @@ test("clicking the stage advances the deck (animationMode=step-reveal)", () => {
         animationMode="step-reveal"
         canonicalPose={0}
         index={0}
-        section="E" {...AT_E11}
+        {...AT_E11}
       >
         <span>body</span>
       </Slide>
@@ -113,7 +113,7 @@ test("clicking the stage advances the deck (animationMode=step-reveal)", () => {
 test("clicking a <button> inside the stage does NOT advance", () => {
   render(
     <DeckProvider stepCounts={[2, 2]}>
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
+      <Slide animationMode="static" canonicalPose={0} index={0} {...AT_E11}>
         <button type="button">no-op</button>
       </Slide>
       <StateProbe />
@@ -129,7 +129,7 @@ test("clicking a <button> inside the stage does NOT advance", () => {
 test("clicking an element marked data-no-advance does NOT advance", () => {
   render(
     <DeckProvider stepCounts={[2, 2]}>
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
+      <Slide animationMode="static" canonicalPose={0} index={0} {...AT_E11}>
         <div data-no-advance data-testid="opt-out">
           shielded
         </div>
@@ -142,19 +142,28 @@ test("clicking an element marked data-no-advance does NOT advance", () => {
   expect(screen.getByTestId("probe").getAttribute("data-step")).toBe("0");
 });
 
-test("Slide renders NavBar inside the stage with the section tag", () => {
+// §3.5 (gh#36) — the nav chrome's letter is the composed one. With `section` gone
+// from SlideProps there is no second letter to disagree with it, so a letter
+// nowhere near this file's E run is the proof the tag reads `letter` and not a
+// hardcode: `AT_E11` would let "E" pass either way.
+test("Slide renders NavBar inside the stage, printing its composed letter", () => {
   render(
     wrap(
-      <Slide animationMode="static" canonicalPose={0} index={0} section="E" {...AT_E11}>
+      <Slide
+        animationMode="static"
+        canonicalPose={0}
+        index={0}
+        letter="G"
+        num={4}
+        sectionKey="techniques"
+      >
         hi
       </Slide>,
     ),
   );
-  // NavBar's section tag reads "Section E" and lives inside the stage.
-  const tag = screen.getByText(/Section\s+E/);
-  expect(tag).toBeInTheDocument();
   const stage = screen.getByTestId("slide");
-  expect(stage.contains(tag)).toBe(true);
+  const tag = stage.querySelector(".nav-section-tag");
+  expect(tag?.textContent).toBe("Section G");
 });
 
 // §3.5 — Slide is the publisher of the derived figure number. A FigLabel mounted
@@ -167,7 +176,6 @@ test("Slide publishes its composed number to the chrome inside it", () => {
         animationMode="static"
         canonicalPose={0}
         index={0}
-        section="E"
         letter="E"
         num={11}
         sectionKey="fundamentals"

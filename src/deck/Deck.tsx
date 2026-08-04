@@ -52,7 +52,6 @@ function ActiveSlide() {
       animationMode={def.animationMode}
       canonicalPose={def.canonicalPose}
       surface={def.surface ?? "dark"}
-      section={def.section}
       letter={composed.letter}
       num={composed.num}
       sectionKey={composed.sectionKey}
@@ -96,7 +95,6 @@ export function Deck() {
           animationMode={hexLadderDevSlide.animationMode}
           canonicalPose={hexLadderDevSlide.canonicalPose}
           surface={hexLadderDevSlide.surface ?? "dark"}
-          section={hexLadderDevSlide.section}
           letter={composed.letter}
           num={composed.num}
           sectionKey={composed.sectionKey}

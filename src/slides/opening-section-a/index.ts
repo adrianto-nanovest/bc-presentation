@@ -18,8 +18,9 @@ const a1ByBrand: Record<Brand, SlideDef> = {
 };
 
 // Opening — Title + Section A (locked order).
-// Title is grouped here but tagged section="A" so the NavBar can rely on a
-// non-optional section field.
+// The Title is grouped here because it belongs to the `opening` run, and it
+// carries `numbered: false`: it prints no figure, and pressing `A` skips past it
+// to A.1 (compose.ts R5).
 export const openingSectionASlides: SlideDef[] = [
   titleSlide,
   a1ByBrand[VARIANT.brand],

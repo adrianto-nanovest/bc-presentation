@@ -16,7 +16,7 @@ function Harness({
   return (
     <DeckProvider stepCounts={stepCounts}>
       <Probe initialSlide={initialSlide} initialStep={initialStep} />
-      <NavBar section="E" />
+      <NavBar letter="E" />
     </DeckProvider>
   );
 }
@@ -61,9 +61,13 @@ function getButton(title: string): HTMLButtonElement {
   return screen.getByTitle(title) as HTMLButtonElement;
 }
 
+// §3.5 (gh#36) — the letter NavBar prints is now the DERIVED one, handed down by
+// `<Slide>` from the composed deck. The half this file owns is that the letter it
+// is given prints verbatim, in unchanged `.nav-section-tag` markup — the class is
+// asserted because globals.css styles the tag through it.
 test("renders the section tag with the supplied letter", () => {
-  setup({ stepCounts: [3, 4, 2] });
-  expect(screen.getByText("Section E")).toBeInTheDocument();
+  const { container } = render(<Harness stepCounts={[3, 4, 2]} />);
+  expect(container.querySelector(".nav-section-tag")?.textContent).toBe("Section E");
 });
 
 test("renders zero-padded step and slide counters", () => {
@@ -104,7 +108,7 @@ test("nav-bar click does not bubble to the parent (stopPropagation)", () => {
   render(
     <div onClick={parentClick}>
       <DeckProvider stepCounts={[3, 4, 2]}>
-        <NavBar section="E" />
+        <NavBar letter="E" />
       </DeckProvider>
     </div>,
   );
@@ -120,7 +124,7 @@ test("nav-bar mousedown does not bubble to the parent (stopPropagation)", () => 
   render(
     <div onMouseDown={parentMouseDown}>
       <DeckProvider stepCounts={[3, 4, 2]}>
-        <NavBar section="E" />
+        <NavBar letter="E" />
       </DeckProvider>
     </div>,
   );
@@ -179,7 +183,7 @@ test("clicking reset deck sends both slide and step to 0", () => {
 test("nav-zone wrapper carries the data-no-advance attribute", () => {
   const { container } = render(
     <DeckProvider stepCounts={[1]}>
-      <NavBar section="E" />
+      <NavBar letter="E" />
     </DeckProvider>,
   );
   const zone = container.querySelector(".nav-zone");

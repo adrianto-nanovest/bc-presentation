@@ -161,7 +161,6 @@ export function Proto16Route() {
         animationMode="step-reveal"
         canonicalPose={def.steps - 1}
         surface="dark"
-        section="A"
         letter={def.fig.section}
         num={def.fig.num}
         sectionKey="opening"

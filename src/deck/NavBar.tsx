@@ -1,6 +1,5 @@
 import { type MouseEvent } from "react";
 import { useDeck } from "./DeckContext";
-import type { SlideSection } from "./types";
 
 // Six chevron variants used by the nav buttons. SVG paths copied verbatim
 // from the original Claude-Design shell so the visual stays identical.
@@ -52,7 +51,15 @@ function IconChev({ dir }: { dir: ChevDir }) {
 }
 
 export interface NavBarProps {
-  section: SlideSection;
+  /**
+   * The DERIVED display letter of the showing slide's section (§3.5). Handed
+   * down by `<Slide>` from the composed deck, so the nav chrome holds no letter
+   * of its own and cannot disagree with the figure number beside it.
+   *
+   * A plain `string`, not `SlideSection`: the composer hands out letters up to
+   * "Q" and the union stops at "K".
+   */
+  letter: string;
 }
 
 // Hover-revealed bottom nav. The outer `.nav-zone` is a transparent hot-zone
@@ -60,7 +67,7 @@ export interface NavBarProps {
 // pill. `data-no-advance` prevents Slide.tsx's click-to-advance handler
 // (T6) from firing when the nav is interacted with — the inner `stop`
 // handlers are belt-and-braces against synthetic-event bubbling quirks.
-export function NavBar({ section }: NavBarProps) {
+export function NavBar({ letter }: NavBarProps) {
   const {
     slideIndex,
     stepIndex,
@@ -89,7 +96,7 @@ export function NavBar({ section }: NavBarProps) {
     <div className="nav-zone" data-no-advance>
       <div className="nav-bar" onClick={stop} onMouseDown={stop}>
         <div className="nav-clusters">
-          <div className="nav-section-tag">Section {section}</div>
+          <div className="nav-section-tag">Section {letter}</div>
           <div className="nav-group">
             <div className="nav-group-head">
               <span className="nav-group-label">Step</span>

@@ -84,7 +84,6 @@ function PrototypeStage() {
         animationMode="step-reveal"
         canonicalPose={1}
         surface="dark"
-        section="E"
         letter={brief.fig.section}
         num={brief.fig.num}
         sectionKey="fundamentals"

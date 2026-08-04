@@ -3,7 +3,6 @@ import { useDeck } from "./DeckContext";
 import { useViewportScale } from "./useViewportScale";
 import { NavBar } from "./NavBar";
 import { SlideNumberProvider } from "./SlideNumberContext";
-import type { SlideSection } from "./types";
 import type { SectionKey } from "./sections";
 
 export type AnimationMode =
@@ -19,9 +18,10 @@ export interface SlideProps {
   // screenshotting (spec §4.1). 0 for static slides.
   canonicalPose: number;
   surface?: "dark" | "light";
-  section: SlideSection;
   // The slide's DERIVED position, published to its chrome via
-  // SlideNumberContext so no slide has to name its own figure number (§3.5).
+  // SlideNumberContext and handed to the NavBar, so no slide has to name its own
+  // letter or figure number (§3.5). There is NO `section` prop: a second,
+  // caller-supplied letter is exactly what could disagree with this one.
   // Required, not optional: the caller reads them off the composed deck, and a
   // default here would silently print a wrong number instead of failing.
   letter: string;
@@ -54,7 +54,6 @@ export function Slide({
   animationMode,
   canonicalPose,
   surface = "dark",
-  section,
   letter,
   num,
   sectionKey,
@@ -91,12 +90,13 @@ export function Slide({
           style={stageStyle}
           onClick={handleClick}
         >
-          {/* NavBar sits inside the provider too. It still reads `section` and
-              nothing about it changes here; §3.5 moves the nav chrome onto these
-              same derived values next, and it should not have to be re-wired. */}
+          {/* The NavBar prints the same composed letter the FigLabel inside
+              `children` does — one value, one source. It takes the letter as a
+              prop rather than reading the context because it is rendered right
+              here, by the component that already holds it. */}
           <SlideNumberProvider value={{ letter, num, sectionKey }}>
             {children}
-            <NavBar section={section} />
+            <NavBar letter={letter} />
           </SlideNumberProvider>
         </div>
       </div>

@@ -5,9 +5,11 @@ import type { SectionKey } from "./sections";
 // Shared shape for any slide registered in the deck. Each section's
 // sub-spec contributes an array of these and the deck composes them
 // into a single ordered registry (see src/deck/registry.ts).
-// Section tag drives the NavBar's "Section X" label. Required so the
-// NavBar can rely on it for every slide; the dev-only hex-ladder slide
-// gets "K" as a deliberate trade-off to keep the field non-optional.
+//
+// No longer reaches the screen: as of gh#36 no runtime chrome or navigation code
+// reads it. The remaining readers are ~30 unit tests and the numbering harvest,
+// which assert the field against the letter it used to print. gh#38 deletes those
+// readers along with the field and this type.
 export type SlideSection = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K";
 
 export interface SlideDef {
@@ -26,9 +28,10 @@ export interface SlideDef {
   canonicalPose: number;               // step index the export pipeline pauses at
   surface?: "dark" | "light";
   /**
-   * LEGACY hardcoded display letter, still consumed by NavBar. Deleted in this
-   * phase's last ticket, once every reader has moved to the derived letter.
-   * Prefer `sectionKey` — this field cannot survive a section being reordered.
+   * LEGACY hardcoded display letter. The NavBar was its last RUNTIME reader and
+   * as of gh#36 takes the derived letter instead, so nothing this field says can
+   * reach the screen — only tests still read it. Use `sectionKey`; this field
+   * cannot survive a section being reordered. gh#38 deletes it.
    */
   section: SlideSection;
   /** What narrative block this slide belongs to. The display letter is DERIVED

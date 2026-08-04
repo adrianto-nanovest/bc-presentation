@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDeck } from "./DeckContext";
-import { deckSlides } from "./registry";
+import { composedDeck } from "./registry";
 
 // Spec §5.1 + plan §1.2 navigation contract:
 //   Space / Enter / ArrowDown   advance() — next step, spill to next slide on last step
@@ -9,8 +9,18 @@ import { deckSlides } from "./registry";
 //   ArrowLeft                   goTo(slide-1, 0) — previous slide, step 0
 //   r / R                       resetDeck() — only when no modifier held
 //   u / U                       resetStep() — only when no modifier held
-//   a-k / A-K                   goTo(firstSlideOf(section), 0) — section jump; r/u are
-//                                handled above and never reach this branch
+//   any other letter            goTo(firstNumberedSlideOf(section), 0) — section jump,
+//                                IF the composed deck gave that letter to a section.
+//                                An unclaimed letter does nothing. r/u are handled
+//                                above and never reach this branch.
+//
+// WHICH LETTERS ARE LIVE IS THE DECK'S ANSWER, NOT THIS FILE'S (§3.5). The branch
+// tests `/^[A-Za-z]$/` and then LOOKS THE LETTER UP in the composed deck's
+// `sectionFirstIndex` (compose.ts R5). Today's deck claims A–K; the leader deck
+// grows to A–N as Phases 5–7 land (§11). Neither needs an edit here, and an
+// unclaimed letter is a no-op for the same reason an unused one already was — it
+// is absent from the map. `r` and `u` are why the composer caps a deck at 17
+// sections: section 18 would claim "R" and shadow the reset key.
 //
 // PageDown/PageUp are intentionally NOT bound — clickers can be configured to
 // emit Space/Backspace or arrows; binding PageDown invites surprises.
@@ -18,23 +28,6 @@ import { deckSlides } from "./registry";
 // Modifier gating on r/u/section-keys protects Cmd+R (browser reload), Cmd+U
 // (view source), and Cmd+letter shortcuts — without it, a presenter mid-rehearsal
 // hitting Cmd+R would silently reset.
-
-// Section → first-slide-index map. Built once at module load from the static
-// deck registry. Letters that don't have a section in the deck are absent
-// from the map (their key press is a no-op).
-//
-// Index 0 is the title slide — also tagged section "A" but acting as the
-// opening cover. It is excluded from the section map so pressing `A` jumps
-// to A.1 (the first body slide of section A), not the cover. Use `R` to
-// return to the cover.
-const SECTION_FIRST_INDEX: ReadonlyMap<string, number> = (() => {
-  const m = new Map<string, number>();
-  deckSlides.forEach((slide, i) => {
-    if (i === 0) return;
-    if (!m.has(slide.section)) m.set(slide.section, i);
-  });
-  return m;
-})();
 
 export function useKeyboardNav() {
   const {
@@ -90,11 +83,13 @@ export function useKeyboardNav() {
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         e.preventDefault();
         resetStep();
-      } else if (/^[A-Ka-k]$/.test(e.key)) {
-        // Section jump (A–K). Cmd/Ctrl/Alt combinations remain bound to
-        // their browser/OS shortcuts.
+      } else if (/^[A-Za-z]$/.test(e.key)) {
+        // Section jump. The target is the run's first NUMBERED slide (R5), so
+        // `A` lands on A.1 rather than on the cover without this file holding an
+        // exception for index 0. Cmd/Ctrl/Alt combinations remain bound to their
+        // browser/OS shortcuts.
         if (e.metaKey || e.ctrlKey || e.altKey) return;
-        const target = SECTION_FIRST_INDEX.get(e.key.toUpperCase());
+        const target = composedDeck.sectionFirstIndex.get(e.key.toUpperCase());
         if (target !== undefined) {
           e.preventDefault();
           goTo(target, 0);

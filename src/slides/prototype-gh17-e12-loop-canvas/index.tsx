@@ -226,7 +226,6 @@ function ProtoSlide({
         animationMode="step-reveal"
         canonicalPose={1}
         surface="dark"
-        section="E"
         letter="E"
         num={12}
         sectionKey="fundamentals"
