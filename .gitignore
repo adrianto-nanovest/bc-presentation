@@ -30,7 +30,7 @@ htmlcov/
 
 # Credentials and secrets
 *.env
-.env*.local
+.env*
 credentials/
 secrets/
 
@@ -47,3 +47,5 @@ exports/
 docs/kpi
 
 .playwright-cli
+
+.vercel

@@ -1,7 +1,7 @@
 <codex-cli-notes>
 For using codex CLI, here is the mechanic:
 ```bash
-codex exec -m gpt-5.6-terra -c model_reasoning_effort="high" \
+codex exec -m gpt-5.6-terra -c model_reasoning_effort="high" -c service_tier="fast"\
   --sandbox read-only --skip-git-repo-check --ephemeral \
   -o <ABS_OUT.md> '<self-contained prompt>' < /dev/null   # final message → stdout AND the -o file
 ```
