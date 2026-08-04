@@ -21,10 +21,16 @@
 // Rewritten from `src/slides/prototype-gh19b-e12-loop-engineering/Step0Mindset.tsx`,
 // not lifted: the prototype is inline-styled throughout with no shared boxes and
 // no hover. CSS vars only, no hex literals.
-import type { CSSProperties, ReactNode } from "react";
+//
+// THE PRIMITIVES MOVED OUT on gh#49. `Box`, the two type registers, the EKG and
+// the arrow markers were defined here when pose 0 was the whole slide; poses 1
+// and 2 draw with the same ones, so they now live in `./E12Primitives` and this
+// file imports them. Nothing about them changed in the move.
+import type { CSSProperties } from "react";
 import { Bot, User } from "lucide-react";
 import { highlight } from "@/components/highlight";
 import { Reveal } from "./Reveal";
+import { ArrowMarkers, Box, Ekg, arrowIds, edgeLabel, mono, prose } from "./E12Primitives";
 import { e12Content as C } from "../content";
 
 const M = C.mindset;
@@ -54,90 +60,7 @@ const VERDICT = { bottom: 14, height: 56 };
 
 const QUOTES_TOP = 446;
 
-// ───────────────────── type shorthands ─────────────────────
-// The deck's two type registers on this slide: mono for anything the audience
-// reads as a label (titles, station names, file names), serif for anything they
-// read as a sentence. `e12-mono` / `e12-prose` are the hooks the hover rule in
-// globals.css lifts a tier — see `Box`.
-
-function mono(size: number, color: string, ls = 0.18): CSSProperties {
-  return {
-    fontFamily: "var(--mono)",
-    fontSize: size,
-    letterSpacing: `${ls}em`,
-    color,
-    textTransform: "uppercase",
-  };
-}
-
-function prose(size: number, color: string, italic = false): CSSProperties {
-  return {
-    fontFamily: "var(--serif)",
-    fontStyle: italic ? "italic" : "normal",
-    fontSize: size,
-    lineHeight: 1.35,
-    color,
-  };
-}
-
-/** An italic serif note drawn inside an SVG — the `pass` / `risky` / `approved`
- *  edge labels and the relay's return label. */
-function edgeLabel(size = 10.5): CSSProperties {
-  return {
-    fontFamily: "var(--serif)",
-    fontStyle: "italic",
-    fontSize: size,
-    fill: "var(--copper-300)",
-  };
-}
-
-// ───────────────────── shared boxes ─────────────────────
-
-/**
- * EVERY CARD BOX ON THIS SLIDE, and the reason there is a component for it.
- *
- * Owner correction 4: every box reacts to hover, on every pose — a hover
- * affordance on some boxes and not others reads as broken interactivity in front
- * of a room. Routing all eleven boxes through one component is what makes that
- * checkable (`tests/unit/e12-loop-engineering.test.tsx` counts them) instead of
- * a rule eleven call sites have to remember.
- *
- * The hover itself is `.e12-box` in globals.css, and it moves a COLOUR TIER and
- * never opacity (§8.3): border and text step up, nothing fades.
- */
-function Box({
-  testid,
-  border,
-  background,
-  className = "",
-  style,
-  children,
-}: {
-  testid: string;
-  /** The box's rest border tier. Hover lifts it; nothing here fades. */
-  border: string;
-  background?: string;
-  className?: string;
-  /** Where the box sits. Placement stays with the panel that owns the box —
-   *  what is shared here is the border, the background and the hover. */
-  style: CSSProperties;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      data-testid={testid}
-      className={`e12-box ${className}`.trim()}
-      style={{
-        border: `1px solid ${border}`,
-        background,
-        boxSizing: "border-box",
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+// ───────────────────── the verdict ─────────────────────
 
 /** A panel's verdict: the claim, then the reason. One component and one set of
  *  offsets for both panels — see `VERDICT`. */
@@ -171,77 +94,6 @@ function Verdict({
         {highlight(body, bodyKw)}
       </div>
     </div>
-  );
-}
-
-/**
- * The arrowheads a panel's connectors draw with. Two tiers, because a dimmed
- * connector needs a dimmed head — a bright head on a copper-600 line reads as an
- * error.
- *
- * SCOPED PER SVG, and that is the whole reason this takes a `scope`. A marker id
- * is document-global, so both panels declaring `e12-arrow` would be two elements
- * holding one id. Each SVG declares its own pair instead of sharing one `<defs>`:
- * same markup, no cross-SVG reference, no duplicate id.
- */
-function arrowIds(scope: string) {
-  return { arrow: `e12-${scope}-arrow`, dim: `e12-${scope}-arrow-dim` };
-}
-
-function ArrowMarkers({ scope }: { scope: string }) {
-  const id = arrowIds(scope);
-  return (
-    <defs>
-      <marker
-        id={id.arrow}
-        viewBox="0 0 8 8"
-        refX="6"
-        refY="4"
-        markerWidth="7"
-        markerHeight="7"
-        orient="auto-start-reverse"
-      >
-        <path d="M0,0.6 L7,4 L0,7.4" fill="none" stroke="var(--copper-500)" strokeWidth="1.4" />
-      </marker>
-      <marker
-        id={id.dim}
-        viewBox="0 0 8 8"
-        refX="6"
-        refY="4"
-        markerWidth="7"
-        markerHeight="7"
-        orient="auto-start-reverse"
-      >
-        <path d="M0,0.6 L7,4 L0,7.4" fill="none" stroke="var(--copper-600)" strokeWidth="1.4" />
-      </marker>
-    </defs>
-  );
-}
-
-/**
- * The heartbeat's live trace. A dim base line with a bright dash segment cycling
- * along it; `pathLength={1}` makes the dash period 1, so the sweep loops
- * seamlessly. CSS animation, so the global reduced-motion rule squashes it to a
- * still frame with no gate here.
- */
-function Ekg({ w = 46, h = 14 }: { w?: number; h?: number }) {
-  const mid = h * 0.62;
-  const pts = `0,${mid} ${w * 0.18},${mid} ${w * 0.26},${h * 0.2} ${w * 0.34},${h * 0.95} ${
-    w * 0.42
-  },${mid} ${w * 0.62},${mid} ${w * 0.7},${h * 0.42} ${w * 0.78},${mid} ${w},${mid}`;
-  return (
-    <svg width={w} height={h} style={{ display: "block", overflow: "visible" }} aria-hidden>
-      <polyline points={pts} fill="none" stroke="var(--copper-800)" strokeWidth={1} />
-      <polyline
-        className="e12-ekg-sweep"
-        points={pts}
-        fill="none"
-        stroke="var(--copper-200)"
-        strokeWidth={1.4}
-        pathLength={1}
-        strokeDasharray="0.28 0.72"
-      />
-    </svg>
   );
 }
 

@@ -603,29 +603,41 @@ export const e11Content = {
 
 /**
  * E.12 — LOOP ENGINEERING. Spec §8.3, as amended by the owner corrections on
- * gh#48. This slice carries POSE 0 only, the mindset diptych; gh#49 adds the
- * `parts` rail and the worked example beneath the same headline.
+ * gh#48 (pose 0) and gh#49 (poses 1 and 2). All three poses' copy is here.
  *
- * SOURCED FROM `prototype-gh19b-e12-loop-engineering/content.ts`, with four
- * copy changes the owner made on 2026-08-04 (see the slide file's header):
+ * SOURCED FROM `prototype-gh19b-e12-loop-engineering/content.ts`, with the copy
+ * changes the owner made on 2026-08-04 (see the slide file's header):
  *   1. the left verdict body is ONE LINE, so both panels' verdict dividers land
  *      at the same y
  *   2. Steinberger goes left and gains his affiliation; Cherny goes right,
  *      shortened to one line
  *   3–4. layout and hover, which are the slide file's business, not this one's.
+ *   gh#49 · 2. EVERY PANEL'S ITALIC KICKER IS DELETED. The prototype gave each
+ *      right-canvas panel a subtitle line under its title ("Two loops, one name:
+ *      …" and its four siblings); all five are gone, title then illustration, so
+ *      the strings are absent here rather than unused.
+ *   gh#49 · 8. The recap is `thesis`, ONE line in E.11's footer style — not the
+ *      prototype's display-weight three-liner, which is why `footnote` is gone.
  *
  * KEYWORDS, per §8.3: prose carries a `*Kw` sibling, mono never does. Every
  * string below is in exactly one of four groups, and
  * `tests/unit/e12-loop-engineering.test.tsx` asserts that the four ACCOUNT FOR ALL
  * OF THEM — so a bare string is a decision recorded here and not a gap:
  *
- *   MONO         titles, the heartbeat strip, station labels, `progress.md`, the
- *                gate label, the bridge words, both attributions. Labels, never
- *                sentences, so §8.3 forbids keywords on them.
- *   HIGHLIGHTED  the headline, both verdict reasons, the gate's sentence and both
- *                quotes — 1–3 keywords each.
- *   MICRO-LABEL  the four turns, `you, again`, the station subtitles, the spine's
- *                subtitle, `risky` / `approved` / `pass`. Serif, but two to five
+ *   MONO         every title, rail and panel; the heartbeat and tool strips, the
+ *                source strip, station and rung names, run names, file names,
+ *                axis labels, badges, gate labels, `THE VERDICT?`, both fork
+ *                labels, `read` / `write`, the row numbers, the bridge words and
+ *                both attributions. Labels, never sentences, so §8.3 forbids
+ *                keywords on them.
+ *   HIGHLIGHTED  every serif SENTENCE — the headline, both verdict reasons, the
+ *                gate's line, both quotes, the return arc, the thesis, every rail
+ *                and kind description, every analogy, every panel foot, every
+ *                flow node and the closer. 1–3 keywords each.
+ *   MICRO-LABEL  the four turns, `you, again`, station and spine subtitles,
+ *                `risky` / `approved` / `pass`, the stop conditions, the run
+ *                steps, the gate widths and their descriptions, `also called
+ *                run-until-done`, the two diary roles. Serif, but two to five
  *                words: a "keyword inside" one of these would be the whole string,
  *                which highlights nothing. The 1–3-per-chunk rule needs a chunk.
  *   VERDICT CLAIM the two `verdictTitle`s. A verdict is ONE chunk of prose set on
@@ -704,7 +716,286 @@ export const e12Content = {
       },
     ],
   },
+
+  // ─────────────── poses 1–2 — the rail that carries both ───────────────
+  // The rail is the anatomy of the big loop; pose 1 magnifies a part, pose 2
+  // shows the same four parts wearing a name badge in one real loop. The hint
+  // tooltip is NOT copy here on purpose: `HintIcon`'s deck-wide default already
+  // says "hover for details, click to pin/unpin", the same affordance E.9 and
+  // G.7 teach, and a second wording of one gesture is a second thing to keep true.
+  railHeading: "THE BIG LOOP · FOUR PARTS",
+  /** Pose 1 only (gh#49 correction 8) — pose 2 drops the label and keeps the arc. */
+  returnArc: "tomorrow's beat starts by reading the spine",
+  returnArcKw: ["reading the spine"],
+
+  parts: [
+    {
+      id: "heartbeat",
+      num: "01",
+      title: "HEARTBEAT",
+      desc: "a schedule or an event starts a beat",
+      descKw: ["starts a beat"],
+    },
+    {
+      id: "beat",
+      num: "02",
+      title: "ONE BEAT",
+      desc: "one full, self-contained run of the work",
+      descKw: ["self-contained"],
+    },
+    {
+      id: "checker",
+      num: "03",
+      title: "CHECKER",
+      desc: "a separate agent grades the result",
+      descKw: ["separate"],
+    },
+    {
+      id: "spine",
+      num: "04",
+      title: "SPINE",
+      desc: "progress.md — the memory between runs",
+      descKw: ["memory between runs"],
+    },
+  ],
+
+  /**
+   * Pose 2's recap — ONE line, in E.11's footer style (gh#49 correction 8):
+   * serif italic 13.5px on `--neutral-400`, not the prototype's 23.5px
+   * display-weight three-liner. The three verbs are the three parts the loop
+   * runs for you; the two nouns are what it cannot.
+   */
+  thesis:
+    "Design the loop once — it starts, checks and remembers the work. You keep intent and accountability.",
+  thesisKw: ["starts, checks and remembers", "intent and accountability"],
+
+  // ─────────────── pose 1 — the four right-canvas panels ───────────────
+  // NO KICKERS (gh#49 correction 2): title, then the illustration. The `NN ·`
+  // prefix on each title is load-bearing since correction 3 deleted the leader
+  // line — the number is now the only tie between the rail card and its panel.
+  panels: {
+    heartbeat: {
+      title: "01 · THE FOUR HEARTBEATS",
+      kinds: [
+        {
+          num: "1",
+          name: "IN-SESSION",
+          alt: "",
+          desc: "repeats on a timer while you watch",
+          descKw: ["while you watch"],
+          stop: "stops when the session closes",
+          tools: ["Claude Code · /loop"],
+          analogy: "a kitchen timer: it only rings while you are in the kitchen",
+          analogyKw: ["in the kitchen"],
+        },
+        {
+          num: "2",
+          name: "CONDITIONAL",
+          alt: "also called run-until-done",
+          desc: "repeats until a checked condition is true",
+          descKw: ["a checked condition"],
+          stop: "stops when the check passes",
+          tools: ["Claude Code · /goal", "Codex · exec + tests"],
+          analogy: "keep cooking until the taster says it is ready",
+          analogyKw: ["until the taster"],
+        },
+        {
+          num: "3",
+          name: "SCHEDULED",
+          alt: "",
+          desc: "runs on a clock, even with the laptop closed",
+          descKw: ["laptop closed"],
+          stop: "stops when the schedule ends",
+          tools: ["Claude Code · Routines", "ChatGPT · Tasks / cron"],
+          analogy: "an alarm clock: it rings whether or not you are home",
+          analogyKw: ["whether or not you are home"],
+        },
+        {
+          num: "4",
+          name: "EVENT-DRIVEN",
+          alt: "",
+          desc: "reacts the moment something happens",
+          descKw: ["the moment"],
+          stop: "stops when the event ends",
+          tools: ["Claude Code · Channels, GitHub", "Codex · @codex on a PR"],
+          analogy: "a doorbell: nothing happens until someone presses it",
+          analogyKw: ["until someone presses it"],
+        },
+      ],
+      axis: { left: "YOU HOLD IT", mid: "more and more unattended", right: "IT RUNS WITHOUT YOU" },
+      foot: "Learn one word: each single firing of the loop is called a beat.",
+      footKw: ["beat"],
+    },
+
+    beat: {
+      title: "02 · INSIDE ONE BEAT — THE AGENT RUNTIME",
+      stations: [
+        { num: "1", name: "BUILD THE CONTEXT", sub: "prompt + files + results" },
+        { num: "2", name: "THE MODEL DECIDES", sub: "answer, or ask for tools" },
+        { num: "3", name: "RUN THE TOOLS", sub: "do what the model asked" },
+        { num: "4", name: "ADD THE RESULTS", sub: "outputs go into the context" },
+      ],
+      center: "repeat while the model keeps asking for tools",
+      centerKw: ["keeps asking"],
+      exitTitle: "the model stops asking — the beat ends",
+      exitTitleKw: ["the beat ends"],
+      exitSub: "back to the big loop: the checker, then the spine",
+      exitSubKw: ["the checker, then the spine"],
+      foot: "The small loop has no heartbeat and no spine. When the beat ends, it remembers nothing.",
+      footKw: ["remembers nothing"],
+    },
+
+    checker: {
+      title: "03 · THE CHECKER LADDER",
+      axisL: "STRONGEST CHECKER",
+      axisR: "WEAKEST",
+      rungs: [
+        {
+          num: "1",
+          name: "A PASSING TEST",
+          desc: "Code. The test runner and the linter decide — a command cannot convince itself the work is fine.",
+          descKw: ["cannot convince itself"],
+          badge: "proof",
+          claim: false,
+          gate: "narrow",
+          gateDesc: "spot-checks",
+          gateWidth: 0.38,
+        },
+        {
+          num: "2",
+          name: "MECHANICAL CHECKS",
+          desc: "Prose. Broken links, missing figures, banned words. Commands prove the mechanical part, and only that part.",
+          descKw: ["only that part"],
+          badge: "partial proof",
+          claim: false,
+          gate: "wider",
+          gateDesc: "you judge the content",
+          gateWidth: 0.68,
+        },
+        {
+          num: "3",
+          name: "A RUBRIC WITH A BAR",
+          desc: "A reviewer agent grades the draft: “do not stop below 95.” The loop can act on the score — but a model's score is still an opinion.",
+          descKw: ["still an opinion"],
+          badge: "a claim, not a proof",
+          claim: true,
+          gate: "widest",
+          gateDesc: "a person reads it",
+          gateWidth: 1,
+        },
+      ],
+      gateLabel: "THE HUMAN GATE",
+      foot: "The weaker the checker, the more work passes through the human gate — done is a check, not an opinion.",
+      footKw: ["done is a check, not an opinion"],
+    },
+
+    spine: {
+      title: "04 · THE SPINE — MEMORY BETWEEN RUNS",
+      runs: [
+        {
+          name: "RUN 1 — MONDAY, 9:00",
+          steps: ["read the spine first", "do the work", "update the spine last"],
+        },
+        {
+          name: "RUN 2 — TUESDAY, 9:00",
+          steps: ["read the spine first", "the work, building on Monday's", "update the spine last"],
+        },
+      ],
+      wipe: "the session ends — the model's memory is wiped",
+      wipeKw: ["memory is wiped"],
+      lesson: "a repeated mistake? the lesson goes to the front of the diary",
+      lessonKw: ["the front of the diary"],
+      repoTitle: "THE REPO — CONTINUOUS ACROSS EVERY RUN",
+      files: [
+        {
+          name: "CLAUDE.md / AGENTS.md",
+          role: "the front of the diary",
+          desc: "durable lessons and habits — read at the start of every run",
+          descKw: ["every run"],
+        },
+        {
+          name: "progress.md",
+          role: "the back of the diary",
+          desc: "what was tried, what passed, what is open — updated at the end",
+          descKw: ["what is open"],
+        },
+      ],
+      read: "read",
+      write: "write",
+      foot: "No spine, no loop. An intern without the diary redoes yesterday's work forever — so does a loop.",
+      footKw: ["No spine, no loop"],
+    },
+  },
+
+  // ─────────────── pose 2 — the worked example ───────────────
+  triage: {
+    title: "THE MORNING-TRIAGE LOOP — ONE BEAT",
+    hb: "THE HEARTBEAT · EVERY WEEKDAY AT 9:00",
+    nodes: {
+      read: { num: "1", text: "Read progress.md — the spine", kw: ["the spine"] },
+      find: {
+        num: "2",
+        text: "Find the work (at most 5 items)",
+        kw: ["at most 5"],
+        // A `·`-joined SOURCE STRIP, mono like the heartbeat panel's tool strips
+        // (§8.3): three examples, not a sentence, so it carries no keywords.
+        sources: "CI FAILURES · OPEN ISSUES · AUDIT ADVISORIES",
+      },
+      draft: { num: "3", text: "Draft a fix in its own worktree — the maker", kw: ["the maker"] },
+      review: { num: "4", text: "A separate reviewer grades it — the checker", kw: ["the checker"] },
+      verdict: "THE VERDICT?",
+      failLabel: "FAIL, OR RISKY",
+      fail: {
+        num: "5b",
+        text: "Write it to “needs a human”",
+        kw: ["needs a human"],
+        sub: "no PR — a person decides later",
+        subKw: ["a person decides"],
+      },
+      passLabel: "PASS, AND LOW RISK",
+      pass: {
+        num: "5a",
+        text: "Open a pull request",
+        kw: ["pull request"],
+        sub: "a human reviews it there — the gate",
+        subKw: ["the gate"],
+      },
+      update: { num: "6", text: "Update progress.md — tomorrow reads it", kw: ["tomorrow reads it"] },
+    },
+    ret: "the next candidate — and again tomorrow at 9:00",
+    retKw: ["again tomorrow"],
+    closer: "You wake up to two PRs and one flagged decision. You typed nothing.",
+    closerKw: ["You typed nothing"],
+  },
+
+  /**
+   * WHICH FLOW STAGES EACH RAIL PART OWNS (§8.3, pose 2). The rail is the
+   * anatomy; the flow is the anatomy wearing a name badge, and hovering a part
+   * lights exactly its stages and demotes the rest by colour tier.
+   *
+   * Keys are `parts[].id`, values are `triage.nodes` keys plus the two drawn
+   * stages `hb` and `ret` — machine ids on both sides, which is why this table
+   * holds no copy and is skipped by the copy audit.
+   */
+  lights: {
+    heartbeat: ["hb", "ret"],
+    beat: ["find", "draft"],
+    checker: ["review", "verdict", "fail", "pass"],
+    spine: ["read", "update"],
+  },
 } as const;
+
+/** A rail part, and the four ids the panels and the light table are keyed to. */
+export type E12Part = (typeof e12Content.parts)[number];
+export type E12PartId = E12Part["id"];
+
+/**
+ * Every stage pose 2 draws, DERIVED from the light table rather than written
+ * twice. A stage that no rail part owns cannot exist in this type, so a typo in
+ * `litOf("verdcit", …)` is a compile error and not a stage that silently never
+ * lights.
+ */
+export type E12StageId = (typeof e12Content.lights)[E12PartId][number];
 
 /** One reveal: the string, plus the substrings rendered as keywords. */
 export interface E13Beat {
