@@ -578,19 +578,23 @@ export const e11Content = {
         "AutoGen's three-mode model of human input",
       ],
     },
+    // The RUN-UNTIL-DONE card (§8.2). This card is `/goal` — turn-driven, and
+    // it stops when a check passes. E.12 is `/loop` + Routines, which is
+    // interval-driven: run-again-and-again. The two essences do the separating;
+    // NEITHER slide cross-references the other.
     {
       id: "ralph", icon: "Repeat", name: "Ralph Wiggum",
-      essence: "Autonomous loop persists until the spec is met.",
-      pattern: "Spec → attempt → fail → re-diagnose → repeat",
+      essence: "You start one job; it retries until a check passes.",
+      pattern: "Spec → attempt → check → fix → until done",
       bullets: [
-        "Errors feed back into the next prompt",
-        "Crosses context boundaries via checkpoints",
-        "Success criteria / goal defined (like '/goal' on Claude Code & Codex CLI)",
+        "Errors feed back — it re-diagnoses and retries",
+        "Runs past one context window via checkpoints",
+        "Success criteria / goal defined as the check — /goal on Claude Code & Codex CLI",
       ],
     },
   ],
-  footer: "Each one automates work you do by hand today.",
-  footerKw: ["automates work you do by hand today"],
+  footer: "Eight parts. Now — what runs them, without you.",
+  footerKw: ["what runs them, without you"],
 } as const;
 
 /** One reveal: the string, plus the substrings rendered as keywords. */

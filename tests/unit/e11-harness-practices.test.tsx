@@ -113,6 +113,113 @@ test("step 1 (canonicalPose) → footer caption revealed", () => {
   }
 });
 
+// ───────────── gh#46 · the Ralph card becomes run-until-done ─────────────
+//
+// Spec §8.2 splits the two loop slides by essence, with no cross-reference
+// either way: the Ralph card is `/goal` (run-until-done — starts the next turn
+// when the previous finishes, stops when a check passes) and E.12 is `/loop` +
+// Routines (run-again-and-again). These assertions pin E.11's side of that
+// distinction — the copy that has to carry it, since no slide names the other.
+//
+// Content-only: the Ralph card keeps the same markup as the other seven, so
+// there is no `kw` channel on a card — `essence`, `pattern` and `bullets` are
+// plain strings rendered in serif (prose) and mono (`pattern`) exactly as
+// before. Only the slide footer carries `kw`.
+
+test("Ralph card renders the run-until-done essence, pattern and 3 bullets", () => {
+  renderAtStep(0);
+
+  const ralph = e11Content.practices[7];
+  expect(ralph.id).toBe("ralph");
+  expect(ralph.name).toBe("Ralph Wiggum");
+
+  // The essence is the boundary against E.12 — one job, retried until a check
+  // passes. NOT a vague "keep going" loop.
+  expect(ralph.essence).toBe(
+    "You start one job; it retries until a check passes.",
+  );
+  expect(ralph.pattern).toBe("Spec → attempt → check → fix → until done");
+  expect(ralph.bullets).toEqual([
+    "Errors feed back — it re-diagnoses and retries",
+    "Runs past one context window via checkpoints",
+    "Success criteria / goal defined as the check — /goal on Claude Code & Codex CLI",
+  ]);
+
+  // …and each string reaches the DOM through the shared card markup.
+  const card = screen.getByTestId("practice-card-ralph");
+  expect(card.textContent).toMatch(ralph.essence);
+
+  const pattern = screen.getByTestId("practice-card-ralph-pattern");
+  expect(pattern.textContent).toBe(ralph.pattern);
+
+  ralph.bullets.forEach((b, j) => {
+    expect(
+      screen.getByTestId(`practice-card-ralph-bullet-${j}`).textContent,
+    ).toBe(b);
+  });
+});
+
+test("the Ralph card's pattern chip stays mono and keyword-free", () => {
+  renderAtStep(0);
+
+  const pattern = screen.getByTestId("practice-card-ralph-pattern");
+  expect(pattern).toHaveStyle({ fontFamily: "var(--mono)" });
+  // `highlight()` emits <em> — the mono chip must carry none.
+  expect(pattern.querySelector("em")).toBeNull();
+
+  // The tool strings live in a bullet, and bullets carry no keywords either.
+  const bullets = screen.getByTestId("practice-card-ralph-bullets");
+  expect(bullets.querySelector("em")).toBeNull();
+  expect(bullets.textContent).toMatch("/goal on Claude Code & Codex CLI");
+});
+
+test("the slide footer hands the deck to what runs the eight parts", () => {
+  renderAtStep(1);
+
+  expect(e11Content.footer).toBe(
+    "Eight parts. Now — what runs them, without you.",
+  );
+
+  const footer = screen.getByTestId("e11-footer");
+  expect(footer.className).toMatch(/\bon\b/);
+  expect(footer.textContent).toBe(e11Content.footer);
+
+  // Prose carries `kw`, and the copper <em>s are EXACTLY the declared
+  // keywords — a typo'd `kw` highlights nothing and would otherwise pass.
+  const marks = footer.querySelectorAll("em");
+  expect(Array.from(marks, (m) => m.textContent)).toEqual([
+    ...e11Content.footerKw,
+  ]);
+});
+
+test("the other seven cards keep the essence and pattern they shipped with", () => {
+  renderAtStep(0);
+
+  // gh#46 re-cuts ONE card. This pins the other seven so the re-cut cannot
+  // spill sideways.
+  const untouched: ReadonlyArray<readonly [string, string, string]> = [
+    ["orchestration", "The agentic loop that makes the model act.", "ReAct: prompt → infer → tool → observe → loop"],
+    ["plugins", "Pluggable capability layered onto the harness.", "Skills · MCP · Subagents · Hooks"],
+    ["memory", "Self-learning state that survives the session.", "Spec · PROGRESS.md · AGENTS.md · Git"],
+    ["observability", "Every decision auditable, every token counted.", "Log · trace · checkpoint"],
+    ["triggers", "Lifecycle hooks that fire at the right moment.", "Manual · Schedule · Event"],
+    ["spec-driven", "An immutable spec is the source of truth.", "Spec → code → verify → repeat"],
+    ["hitl", "A human approves at the right moments.", "NEVER · TERMINATE · ALWAYS"],
+  ];
+
+  expect(untouched).toHaveLength(e11Content.practices.length - 1);
+
+  for (const [id, essence, pattern] of untouched) {
+    const p = e11Content.practices.find((x) => x.id === id);
+    expect(p, `card ${id} is missing`).toBeDefined();
+    expect(p!.essence).toBe(essence);
+    expect(p!.pattern).toBe(pattern);
+    expect(
+      screen.getByTestId(`practice-card-${id}-pattern`).textContent,
+    ).toBe(pattern);
+  }
+});
+
 test("backward navigation 0 → 1 → 0 re-arms the card stagger", () => {
   // Stub rAF so we can drive the double-rAF mount trick deterministically.
   // Without this, jsdom's native rAF runs on a setTimeout and the .fade.on
