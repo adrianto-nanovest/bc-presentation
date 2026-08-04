@@ -49,6 +49,27 @@ export const SECTION_NAMES: Record<SectionKey, string> = {
  *  rather than guarded for at every read. */
 export type SectionRefKeys = readonly [SectionKey, ...SectionKey[]];
 
+/**
+ * WHAT a slide points at — the keys, and optionally the name to print for them.
+ *
+ * `name` exists for one shape §3.6 asks for and keys alone cannot express: a row
+ * that spans a RUN of sections which the deck calls something the sections are
+ * not each called. The leader A.1's fourth row spans the whole retained
+ * curriculum and is named `THE CURRICULUM`, which is a MOVEMENT name — no
+ * section owns it, and inventing a `SectionKey` for it would register a key that
+ * owns no slides, forever, to serve one string in one row.
+ *
+ * SO IT OVERRIDES THE NAME AND NOTHING ELSE. The letters still come from the
+ * composed deck, so an overridden row moves with the deck exactly as every other
+ * row does — this is not a hatch for writing `"SECTION C · …"` by hand.
+ */
+export interface SectionRef {
+  keys: SectionRefKeys;
+  /** Printed instead of `SECTION_NAMES[keys[0]]`. Omit it unless the row's name
+   *  really is not the first key's — see above. */
+  name?: string;
+}
+
 // An en dash, matching the deck's other ranges. NOT a hyphen — the two are
 // indistinguishable in a code review and obvious on a projector.
 const RANGE_DASH = "–";
@@ -73,12 +94,14 @@ const RANGE_DASH = "–";
  * this prevents. A pointer whose keys all drop prints its name alone.
  */
 export function sectionPointerLabel(
-  keys: SectionRefKeys,
+  { keys, name: nameOverride }: SectionRef,
   letterOf: (key: SectionKey) => string | undefined,
 ): string {
   // The name is the FIRST key's, whether or not that key kept a letter: it is
   // what the pointer is about, and the range is only where it currently sits.
-  const name = SECTION_NAMES[keys[0]];
+  // An authored `name` wins, because a row can be named after something no
+  // single section is called (see `SectionRef`).
+  const name = nameOverride ?? SECTION_NAMES[keys[0]];
   const letters = keys.map(letterOf).filter((l): l is string => Boolean(l));
   if (letters.length === 0) return name;
   const range =

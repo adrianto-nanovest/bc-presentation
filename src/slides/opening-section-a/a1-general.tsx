@@ -3,8 +3,14 @@
 // Same component and morph mechanics as the Berau A.1; only the content
 // differs (see a1GeneralContent for the framing rationale).
 import type { SlideDef } from "@/deck/types";
+import { VARIANT } from "@/variant";
 import { A1WhatYouveSeen } from "./a1-what-youve-seen";
-import { a1GeneralContent } from "./content";
+import { a1ContentFor, a1GeneralContent } from "./content";
+
+// Applied even though no `general-leader` variant is registered, so that
+// registering one serves the leader agenda rather than silently serving the
+// middle-management one. Today this resolves to `a1GeneralContent` by identity.
+const C = a1ContentFor(a1GeneralContent, VARIANT.deckSet);
 
 export const a1GeneralSlide: SlideDef = {
   id: "a1-general",
@@ -13,5 +19,5 @@ export const a1GeneralSlide: SlideDef = {
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "opening",
-  render: () => <A1WhatYouveSeen content={a1GeneralContent} />,
+  render: () => <A1WhatYouveSeen content={C} />,
 };

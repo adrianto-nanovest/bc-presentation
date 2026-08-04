@@ -29,8 +29,10 @@ import { sectionPointerLabel } from "@/deck/sections";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight as KW } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
+import { VARIANT } from "@/variant";
 import {
   a1Content,
+  a1ContentFor,
   type A1Content,
   type A1IconName,
   type A1Capability,
@@ -595,7 +597,7 @@ function QuestionCard({ q }: { q: A1Question }) {
         }}
       >
         {"→ "}
-        {sectionPointerLabel(q.sectionRef.keys, sectionLetterOf)}
+        {sectionPointerLabel(q.sectionRef, sectionLetterOf)}
       </div>
     </div>
   );
@@ -629,6 +631,13 @@ function ColumnHeading({ on, label }: { on: boolean; label: string }) {
 
 // ───────────────────── slide def ─────────────────────
 
+// Resolved once, at module scope, exactly as `title.tsx` resolves its cover copy
+// and for the same reason: `VARIANT` resolves at module scope, so one epoch holds
+// one deck set and the URL that decided it cannot change without a reload. On a
+// leader deck this swaps the right column, the tagline and the footer; the
+// brand's own left column rides through untouched (§4.4 slot 1).
+const C = a1ContentFor(a1Content, VARIANT.deckSet);
+
 export const a1Slide: SlideDef = {
   id: "a1-what-youve-seen",
   steps: 3,
@@ -636,5 +645,5 @@ export const a1Slide: SlideDef = {
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "opening",
-  render: () => <A1WhatYouveSeen />,
+  render: () => <A1WhatYouveSeen content={C} />,
 };

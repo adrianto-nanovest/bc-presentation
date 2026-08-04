@@ -8,7 +8,7 @@
 //   - 1–3 keywords per chunk (feedback_keyword_highlighting.md).
 
 import type { DeckSetId } from "@/deck-variants";
-import type { SectionRefKeys } from "@/deck/sections";
+import type { SectionRef } from "@/deck/sections";
 
 // ─── Title ─────────────────────────────────────────────────────────────────
 
@@ -127,8 +127,11 @@ export interface A1Question {
    *  A LIST, because one row may span a run of sections and print
    *  "SECTIONS E–J · …" — and a NON-EMPTY one, because a row pointing at no
    *  section has nothing to name. The leading "→ " arrow is rendered by the
-   *  card component, not stored here. */
-  sectionRef: { keys: SectionRefKeys };
+   *  card component, not stored here.
+   *
+   *  `SectionRef.name` overrides the printed NAME and never the letters, and
+   *  exactly one row uses it (the leader curriculum row below). */
+  sectionRef: SectionRef;
 }
 
 export interface A1Content {
@@ -367,3 +370,127 @@ export const a1GemsContent: A1Content = {
   footerCaption: "Five systems already live. Five questions still ahead.",
   footerCaptionKw: ["already live", "ahead"],
 };
+
+// ─── A.1 (leader deck sets) — the five movements ────────────────────────────
+//
+// Spec §3.6's leader right column, §4.4 slot 1. A.1 is the deck's ONE brand ×
+// deck-set slide, and the axes split cleanly:
+//
+//   - LEFT COLUMN, fig label, slide title, headings — BRAND. A leader is shown
+//     their OWN organisation's proof: berau's Session-1 capabilities, GEMS'
+//     DigiTech portfolio, general's daily familiarity (gh#25). Untouched here.
+//   - RIGHT COLUMN, TAGLINE, FOOTER — DECK SET. They are the agenda for what
+//     follows, and after A.1 a leader deck is a different deck (gh#41).
+//
+// TRAP 4 — `a1Content.questions` is shared BY REFERENCE with `a1GeneralContent`
+// and `a1GemsContent` (asserted by identity in `tests/unit/a1-gems.test.tsx`).
+// The leader agenda is therefore its OWN array. Never write into the shared one:
+// the edit would ship to both middle-management brands with nothing to show it.
+const LEADER_QUESTIONS: readonly A1Question[] = [
+  {
+    text: "What if your people already use AI where you can't see it?",
+    kw: ["already use AI"],
+    sectionRef: { keys: ["gap"] },
+  },
+  {
+    text: "What if agentic were an operating model, not a project?",
+    kw: ["operating model"],
+    sectionRef: { keys: ["shape"] },
+  },
+  {
+    text: "What if one team's win became the whole org's baseline?",
+    kw: ["the whole org's baseline"],
+    sectionRef: { keys: ["invest"] },
+  },
+  {
+    // THE ONE ROW WITH A NAME OVERRIDE (§3.6): it spans the whole retained
+    // curriculum, which the leader deck calls THE CURRICULUM — a movement name
+    // that no section is called and no `SectionKey` owns. Without the override
+    // this row would print THE LANDSCAPE, `landscape` being its first key. (gh#43
+    // predicted ENGINEERING FUNDAMENTALS; that was written against gh#37's
+    // synthetic leader shape, not against §4.3's retained order.)
+    //
+    // The keys are the standard sections a leader deck RETAINS, in deck order.
+    // `techniques` is absent because the leader deck cuts section F (gh#41), so
+    // naming it would only ever be dropped. The letters follow the deck: this
+    // run is SECTIONS B–G at the Phase 4 floor and SECTIONS E–J once Phases 6–7
+    // put the four leader movements in front of it (§4.3) — WITHOUT AN EDIT
+    // HERE. Do not pin a letter to make the row look finished.
+    text: "What if \"using AI properly\" had an actual curriculum?",
+    kw: ["curriculum"],
+    sectionRef: {
+      keys: ["landscape", "mindset", "process", "fundamentals", "tools", "pitfalls"],
+      name: "THE CURRICULUM",
+    },
+  },
+  {
+    text: "What if you knew exactly what to fund first?",
+    kw: ["what to fund first"],
+    sectionRef: { keys: ["mandate"] },
+  },
+];
+
+// AT THE PHASE 4 FLOOR FOUR OF THESE FIVE ROWS PRINT A NAME AND NO LETTER, and
+// that is the correct output, not a gap to paper over: `gap`, `shape`, `invest`
+// and `mandate` own no slides until Phases 6–7, and `sectionPointerLabel`
+// collapses an unresolved pointer to its name rather than printing
+// `SECTION undefined`. The rows fill themselves in when the slides land.
+
+/**
+ * What a leader deck set changes about A.1, over whatever the brand authored.
+ *
+ * The tagline and the footer carry the leader thesis in the SAME WORDS as the
+ * leader cover (§4.5, `leaderTitleContent` above): *a few people, or one team,
+ * already proved it — imagine it across the whole org*. The footer then hands
+ * over to the movement the leader alone can authorise, which is question 5 and
+ * section K. A leader hearing four phrasings of one thesis hears four claims, so
+ * these two strings are worded off the cover deliberately.
+ *
+ * BRAND-NEUTRAL BY NECESSITY: one deck-set delta serves berau-leader and
+ * gems-leader both, so neither string may name a brand's own evidence — the left
+ * column beside them already does, in that brand's terms.
+ */
+const LEADER_A1_DELTA = {
+  // ONE LINE AT 40px, measured: the opener's tagline sits at top 270 and the rule
+  // header at 380, so a second line leaves 6px between them. 1184px of width
+  // holds about 62 characters of the display serif — keep a reword inside that.
+  tagline: "A few people proved it. Now imagine it across the whole org.",
+  taglineKw: ["A few people proved it", "across the whole org"],
+  questions: LEADER_QUESTIONS,
+  footerCaption: "The proof is already in the room. The mandate to scale it is not.",
+  footerCaptionKw: ["already in the room", "The mandate to scale it"],
+} satisfies Partial<A1Content>;
+
+/**
+ * What each deck set does to a brand's A.1 block.
+ *
+ * A `Record` keyed by `DeckSetId` and not a `deckSet === "leader"` ternary, for
+ * the same reason `TITLE_CONTENT_BY_DECK_SET` above is one: a third deck set must
+ * FAIL TO COMPILE here rather than silently serve the middle-management agenda to
+ * an audience nobody re-read this file for.
+ *
+ * `standard` returns the block ITSELF, not a spread of it, so the three
+ * middle-management A.1s stay the same objects they were before gh#43.
+ */
+const A1_BY_DECK_SET: Record<DeckSetId, (brandContent: A1Content) => A1Content> = {
+  standard: (brandContent) => brandContent,
+  leader: (brandContent) => ({ ...brandContent, ...LEADER_A1_DELTA }),
+};
+
+/**
+ * A.1's content for one brand crossed with one deck set. Pass the brand's own
+ * block and `VARIANT.deckSet`.
+ *
+ * TAKES THE BRAND CONTENT rather than looking it up, because the brand axis is
+ * already resolved — by slot, in `BRAND_ALTERNATE_IDS`, one A.1 def per brand
+ * (`@/deck/slots`). A second brand table here would be a second place to keep in
+ * step.
+ *
+ * `general` has no leader variant registered today, so its leader form is
+ * unreachable — the resolver is still applied to it (a1-general.tsx), so that
+ * registering `general-leader` serves the leader agenda instead of silently
+ * serving the middle-management one.
+ */
+export function a1ContentFor(brandContent: A1Content, deckSet: DeckSetId): A1Content {
+  return A1_BY_DECK_SET[deckSet](brandContent);
+}
