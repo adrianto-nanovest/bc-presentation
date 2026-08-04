@@ -4,11 +4,16 @@
 // left:80; speaker info chip sits bottom-left to share that left edge. A
 // left-side darken gradient lifts the title text off the hero photo.
 //
-// The headline and tagline are DECK-SET-SCOPED (§4.5, gh#42): a leader deck
-// opens on "From a Few People to the Whole Organization", because the standard
-// "From AI Curiosity to AI Capability" promises individual capability and the
-// leader deck delivers an investment case. The hero is the same photo for all
-// five variants (§1.5), so it is not part of that pick.
+// The headline and tagline are DECK-SET-SCOPED (§4.5, gh#42): a leader deck opens
+// on "Scale What Already Works", because the standard "From AI Curiosity to AI
+// Capability" promises individual capability and the leader deck delivers an
+// investment case. The hero is the same photo for all five variants (§1.5), so it
+// is not part of that pick.
+//
+// The leader pair was re-authored on owner review (2026-08-05) — §4.5's own
+// wording ran two lines of headline and three of tagline. `content.ts` carries the
+// reasoning beside the strings; the LAYOUT below is what constrains them, and the
+// tagline's `maxWidth: 680` at 24px is the two-line budget it was cut to.
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { Mic } from "lucide-react";

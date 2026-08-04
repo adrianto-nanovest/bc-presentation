@@ -1421,6 +1421,22 @@ Notes on ordering:
   print `H.12` once Phase 6 completes.** That is §3.4 R2 working as designed — read the
   composed deck, never the literal "E.12" (#50). Each remaining Phase 6/7 section shifts
   the letters again, so no ticket should pin one.
+- **Amendment 2026-08-05 — the leader letters have now moved a third time (gh#54, gh#56),
+  and the loop slide has reached `H.12` early.** `shape-agentic-org` claimed **C** (gh#54,
+  which also returned F.8 to **C.2** with the override value flipped `tools` → `shape`), and
+  `invest-own-proof` claimed **D** (gh#56). Both leader decks are now **60 slides across 13
+  sections A–M, closer M.3** — `opening`(A) · `gap`(B) · `shape`(C) · `invest`(D) ·
+  `landscape`(E) · `mindset`(F) · `process`(G) · `fundamentals`(H) · `tools`(I) ·
+  `pitfalls`(J) · `meta`(K) · `principles`(L) · `lab`(M). The standard decks are still
+  unmoved at 65 / K.3 and `general` at 63 / K.1, verified in
+  `tests/fixtures/deck-numbering.json`. **The `H.12` the amendment above predicted for the
+  END of Phase 6 arrived with gh#56**, because the one run still missing — `mandate` — lands
+  behind `pitfalls` (§3.6) and so moves no curriculum letter: `A–N` will be reached by
+  appending N, not by pushing H along. A.1's WHY INVEST row started printing `SECTION D ·
+  WHY INVEST` with no edit to A.1, the third time gh#43's claim has paid off.
+  **`invest-own-proof` composes as `D.1`, not §6.7's `D.2`**, because `invest-base-rates`
+  (D.1) is a Phase 7 slide and does not exist yet; the figure is derived per deck (§3.5), so
+  it becomes D.2 when that slide lands and no ticket may pin either value.
 - **Amendment 2026-08-04 — `invest-chicken-egg` was in no phase row.** §4.3 needs **16** new
   leader slides; Phases 6 and 7 as first written listed **15**. D.3 was the missing one.
   It is now in **Phase 6**, beside D.4, because §6.2's shadow-AI escalation (B.2 =

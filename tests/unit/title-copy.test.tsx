@@ -57,11 +57,20 @@ const STANDARD_AS_SHIPPED = {
  * is the point — a signed-off string should not move without someone noticing.
  */
 const LEADER_AS_SIGNED_OFF = {
-  headline: "From a Few People to the Whole Organization",
+  // RE-AUTHORED ON OWNER REVIEW, 2026-08-05, and both halves for the same reason
+  // — LENGTH. §4.5's headline ran 43 characters over two lines of 84px display
+  // serif with no verb in it; the tagline ran 185 characters over THREE lines at
+  // 24px, and the owner capped it at two. The replacement keeps all three §4.5
+  // jobs (below) and drops the opener's restatement ("that proof at scale") and
+  // the definition's second half ("not just using it").
+  //
+  // The spec text still quotes the old pair, so `content.ts` carries the deviation
+  // note beside the strings; this constant is the pin, not the record.
+  headline: "Scale What Already Works",
   tagline:
-    "A few people proved it. An agentic organization is that proof at scale — every team directing AI, not just using it — and it costs seats, protected hours, and a mandate only you can give.",
+    "A few people proved it. Every team directing AI — that takes seats, protected hours, and a mandate only you can give.",
   /** In the order `highlight()` renders them — DOM order, i.e. copy order. */
-  taglineKw: ["directing AI, not just using it", "only you can give"],
+  taglineKw: ["Every team directing AI", "only you can give"],
 } as const;
 
 const realLocation = window.location;
@@ -191,11 +200,25 @@ describe("titleContentFor", () => {
     // Phrases, not a vibe check: each fragment is the one this deck uses for that
     // job, and rewording one here means rewording it in A.1 and
     // `invest-own-proof` too (§4.5's thesis line runs through all three).
+    //
+    // THE JOBS ARE THE ASSERTION; the phrases are only how this cover currently
+    // does them, and they moved with the 2026-08-05 shortening — the term "agentic
+    // organization" left the cover (A.1's second movement question names it one
+    // slide later) and the definition kept its concrete half.
     expect(tagline).toContain("proved it"); // a few people already did it
-    expect(tagline).toContain("agentic organization is"); // what it IS
-    expect(tagline).toContain("directing AI, not just using it"); // …stated concretely
-    expect(tagline).toContain("costs"); // what it COSTS
+    expect(tagline).toContain("Every team directing AI"); // what it IS, concretely
+    expect(tagline).toContain("seats, protected hours"); // what it COSTS
     expect(tagline).toContain("only you can give"); // what only a leader authorizes
+  });
+
+  test("the leader tagline stays inside the cover's two-line budget", () => {
+    // The owner's cap, held as the one number a reword can be checked against
+    // WITHOUT a browser: `title.tsx` renders the tagline at 24px italic serif
+    // inside `maxWidth: 680`, which runs ~60 characters to the line. jsdom has no
+    // layout and cannot measure the real wrap, so this is a proxy — the rendered
+    // line count is verified in a real engine, and this is what fails first when a
+    // future edit pushes the string back to the three lines it had.
+    expect(titleContentFor("leader").tagline.length).toBeLessThanOrEqual(120);
   });
 
   test("every keyword is a substring of the copy it highlights", () => {

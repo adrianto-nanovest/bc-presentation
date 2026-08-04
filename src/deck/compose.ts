@@ -15,9 +15,10 @@ import type { SectionKey } from "./sections";
 // `useKeyboardNav` binds a bare letter press to a section jump, and reserves
 // `r` (reset deck) and `u` (reset step). Section letters are handed out A, B,
 // C, …, so the 18th section would be assigned "R" and shadow the reset key.
-// The cap is that collision, not an arbitrary limit. The longest deck today is
-// the standard one at 11 sections; the leader deck runs 10 at the Phase 4 floor
-// and reaches 14 once Phases 5–7 fill `gap`, `shape`, `invest` and `mandate`.
+// The cap is that collision, not an arbitrary limit. The longest deck today is the
+// LEADER one at 13 sections — it ran 10 at the Phase 4 floor, against the standard
+// deck's 11, and passed it on gh#54 — and it reaches 14 once Phase 6's `mandate`
+// run lands, `gap`, `shape` and `invest` having arrived on gh#53, gh#54 and gh#56.
 const RESERVED_NAV_KEYS = ["r", "u"] as const;
 const MAX_SECTIONS = 17;
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

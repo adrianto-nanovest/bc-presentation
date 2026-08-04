@@ -47,6 +47,7 @@ const FIXTURE = path.resolve(__dirname, "../fixtures/deck-numbering.json");
  * nothing to do with what this assertion is about: the leader deck gained a twelfth
  * section and started printing `L`. A range typed here has to be edited every time
  * a section is added, and each edit is a chance to widen it past a real regression.
+ * gh#56 is the payoff — a thirteenth section, `M` on screen, no edit to this line.
  *
  * IT IS A SHAPE CHECK, NOT A RANGE GATE, which is why loosening the bound costs
  * nothing: what each deck actually prints, letter by letter, is pinned by the
@@ -126,11 +127,31 @@ interface ObservedDeck {
  * at all — A.1 and B.1, the rows in FRONT of the insert, which is R2 read from the
  * other end.
  *
+ * THE LEADER ROWS MOVED A THIRD TIME ON gh#56, and this one is a PURE INSERT — the
+ * gh#53 kind, not the gh#54 kind, so "every move is a letter" holds again and is
+ * worth checking against the diff rather than assumed. `invest-own-proof` reached the
+ * leader lists alone, the third slide ever to do so, taking both decks to **60** rows
+ * and THIRTEEN sections. `invest` claims D, in front of NINE runs — `landscape`,
+ * `mindset`, `process`, `fundamentals`, `tools`, `pitfalls`, `meta`, `principles`,
+ * `lab` — so:
+ *
+ *   · 54 figures moved per leader deck, every one of them a LETTER and not a number.
+ *     The loop slide prints **H.12** now (E.12 → F.12 → G.12 → H.12, four letters and
+ *     its file never opened once), and the closer is **M.3**.
+ *   · FOUR figures did not move: A.1, B.1, C.1 and C.2 — the rows in front of the
+ *     insert, five rows counting the cover, which prints none. An insert cannot
+ *     renumber what precedes it (R2 read from the other end), and f8 staying at C.2
+ *     is the half of that worth naming, because gh#54 had just moved it there.
+ *   · ONE row was added, and it is the only new label in the file:
+ *     `D.1 · PROOF FROM INSIDE THE COMPANY`. §6.7 numbers that slide D.2; it composes
+ *     D.1 while #57's `invest-base-rates` is unbuilt, and both figures are derived
+ *     (§3.5), which is why this record and not a comment is where the answer lives.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * both tickets. That is the assertion worth reading twice: a leader-only insert
- * must not be able to touch a standard deck, and the relocation could not either —
- * f8 moved because a LEADER LIST moved it, and the standard list was not edited.
- * The fixture is where either failure would show.
+ * all three tickets. That is the assertion worth reading twice: a leader-only insert
+ * must not be able to touch a standard deck, and gh#54's relocation could not
+ * either — f8 moved because a LEADER LIST moved it, and the standard list was not
+ * edited. The fixture is where either failure would show.
  *
  * Keyed by `string` because the key set is not available as a type: which decks
  * exist is a VALUE (`VARIANTS[id].deckSet`), and deriving the non-standard subset
@@ -142,8 +163,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 59, closer: "L.3" },
-  "gems-leader": { slides: 59, closer: "L.3" },
+  "berau-leader": { slides: 60, closer: "M.3" },
+  "gems-leader": { slides: 60, closer: "M.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

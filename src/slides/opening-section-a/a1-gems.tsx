@@ -1,4 +1,4 @@
-// A.1 (GEMS variant) — WHAT GEMS ALREADY RUNS
+// A.1 (GEMS variant) — THE CURRENT PORTFOLIO
 //
 // Same component and morph mechanics as the Berau A.1; only the content
 // differs (see a1GemsContent for the framing rationale and claim discipline).

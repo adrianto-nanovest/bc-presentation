@@ -1,4 +1,7 @@
-// A.1 — WHAT YOU'VE ALREADY SEEN
+// A.1 (berau) — FIVE CAPABILITIES, FIVE QUESTIONS
+//
+// The COMPONENT every brand's A.1 renders — the file is named for the berau slide
+// it was written for, and the fig label it was named after moved on 2026-08-05.
 //
 // Step 0 chips morph into step 1 cards via framer-motion `layoutId` on a
 // shared <CapabilityShape>. Step 0 also carries a "CAPABILITIES COVERED"
@@ -605,9 +608,32 @@ function QuestionCard({ q }: { q: A1Question }) {
 
 // ───────────────────── shared column heading ─────────────────────
 
+// THE RULE MEASURES THE HEADING, NOT THE COLUMN. It used to be `width="40%"` — a
+// fixed 208px of the 520px column, drawn identically under a 28-character label
+// ("Five systems already running") and a 22-character one ("Questions we'll
+// answer"), so neither column's rule agreed with its own text and the two
+// disagreed with each other (owner review, 2026-08-05).
+//
+// A WRAPPER IS WHAT MAKES `100%` MEAN THE TEXT. Both callers render this inside a
+// `flexDirection: "column"` container, whose default `alignItems: stretch` gives
+// every child the full 520px — so a percentage rule measured the column no matter
+// what number it carried. `alignSelf: "flex-start"` shrink-wraps the wrapper to
+// the label's own width and the rule then takes 100% OF THAT, which is why the
+// number below is a percentage of a box that is finally the right box.
+//
+// `maxWidth: "100%"` so a label longer than the column still wraps rather than
+// widening the wrapper past it. `alignItems: "stretch"` is inherited, not set:
+// the rule must span the wrapper, and the LABEL is what sizes it.
 function ColumnHeading({ on, label }: { on: boolean; label: string }) {
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignSelf: "flex-start",
+        maxWidth: "100%",
+      }}
+    >
       <div
         style={{
           fontFamily: "var(--mono)",
@@ -624,8 +650,8 @@ function ColumnHeading({ on, label }: { on: boolean; label: string }) {
       >
         {label}
       </div>
-      <CopperRule on={on} width="40%" />
-    </>
+      <CopperRule on={on} width="100%" />
+    </div>
   );
 }
 

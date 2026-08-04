@@ -18,6 +18,7 @@ import type { SlideDef } from "./types";
 import { openingSectionASlides } from "@/slides/opening-section-a";
 import { leaderGapSlides } from "@/slides/leader-gap";
 import { leaderShapeSlides } from "@/slides/leader-shape";
+import { leaderInvestSlides } from "@/slides/leader-invest";
 import { landscapeSectionBSlides } from "@/slides/landscape-section-b";
 import { mindsetSectionCSlides } from "@/slides/mindset-section-c";
 import { foundationCoreSlides } from "@/slides/foundation-core";
@@ -38,6 +39,10 @@ export const slideCatalogue: readonly SlideDef[] = [
   // file and the other a standard-deck slide the leader list relocates, so the
   // pool keeps each under its own section index.
   ...leaderShapeSlides,
+  // Leader-only too (§6.7), and the third run in front of the curriculum. It holds
+  // ONE of its five slides today — the pool grows a row per ticket, and which decks
+  // run them stays `./deck-sets.ts`'s answer.
+  ...leaderInvestSlides,
   ...landscapeSectionBSlides,
   ...mindsetSectionCSlides,
   ...foundationCoreSlides,

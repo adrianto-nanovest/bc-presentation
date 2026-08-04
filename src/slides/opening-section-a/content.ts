@@ -37,6 +37,46 @@ export const titleContent: TitleContent = {
   darkenStrength: 0.18,
 };
 
+// ─── The leader thesis, as three constants — spec §4.5 ─────────────────────
+//
+// One sentence runs through the whole leader deck: *a few people, or one team,
+// already proved it — imagine it distributed across the whole org.* THREE slides
+// carry it (§4.5) — this module's leader cover, this module's leader A.1 delta,
+// and `invest-own-proof` in `src/slides/leader-invest/` — and a leader hearing
+// three phrasings of one thesis hears three claims.
+//
+// SO IT IS A CONSTANT AND NOT A REVIEW NOTE. Until gh#56 the identity was a
+// comment asking three authors to keep three literals in step; two of them were
+// already different strings, and nothing failed when they drifted. Now the shared
+// words exist ONCE and the carriers are composed from them, so a reword reaches
+// all three or fails to compile.
+//
+// WHY THEY LIVE IN THE OPENING SECTION'S MODULE, and not in a new shared one:
+// THE COVER AUTHORED THE LINE (gh#42, owner-approved and pinned literally in
+// `tests/unit/title-copy.test.tsx`), and the other two QUOTE it. A `src/copy/`
+// module for one sentence would put the authored copy one import further from the
+// slide that owns it and give the deck a second place where cross-slide strings
+// live. `invest-own-proof` imports these three names and re-authors nothing.
+//
+// THE COVER ELABORATES PAST THE SHARED LINE, BY DESIGN. §4.5 gives the cover
+// three more jobs after the opener — what an agentic organization IS, what it
+// COSTS, and what only a leader can AUTHORIZE — so it is built from
+// `LEADER_THESIS_OPENER` and NOT from `LEADER_THESIS_LINE`. A.1 and
+// `invest-own-proof` print the whole line, which is why the opener is the piece
+// that is shared three ways and the line is the piece that is shared two.
+
+/** The sentence all three carriers open on, ending in its full stop so a caller
+ *  concatenates rather than punctuates. */
+export const LEADER_THESIS_OPENER = "A few people proved it.";
+
+/** The thesis in full — A.1's tagline and `invest-own-proof`'s closer, byte for
+ *  byte, because they ARE this string. */
+export const LEADER_THESIS_LINE = `${LEADER_THESIS_OPENER} Now imagine it across the whole org.`;
+
+/** The two highlights that line carries. Shared with the string, so a carrier
+ *  cannot print the thesis and emphasise something else in it. */
+export const LEADER_THESIS_LINE_KW = ["A few people proved it", "across the whole org"] as const;
+
 // ─── Title (leader deck sets) — spec §4.5 ──────────────────────────────────
 //
 // The standard headline promises INDIVIDUAL capability, and the leader deck then
@@ -44,24 +84,48 @@ export const titleContent: TitleContent = {
 // argument behind it (gh#42).
 //
 // The tagline does the three jobs §4.5 names, in that order: what an agentic
-// organization IS (every team directing AI, not just using it), what it COSTS
-// (seats and protected hours), and what only a leader can AUTHORIZE (the
-// mandate). It opens on the thesis that runs through the whole leader deck —
-// *a few people, or one team, already proved it; imagine it distributed across
-// the whole org* — which A.1's left column, A.1 question 3 and `invest-own-proof`
-// each restate in their own terms. WORD IT THE SAME WAY IN ALL FOUR: a leader
-// hearing four phrasings of one thesis hears four claims.
+// organization IS (every team directing AI), what it COSTS (seats and protected
+// hours), and what only a leader can AUTHORIZE (the mandate). It opens on
+// `LEADER_THESIS_OPENER` above — the thesis that runs through the whole leader
+// deck — and then says those three things, which is the elaboration §4.5 asks the
+// COVER for and asks no other carrier for.
+//
+// THE OPENER IS COMPOSED IN, NOT RETYPED. What changed on gh#56 is that its first
+// sentence is the same value A.1 and `invest-own-proof` print, so the three cannot
+// drift apart one edit at a time.
+//
+// BOTH STRINGS WERE RE-AUTHORED ON OWNER REVIEW (2026-08-05), and this is a
+// DEVIATION FROM §4.5's LITERAL WORDING, recorded here because the spec still
+// quotes the old headline:
+//
+//   - HEADLINE. §4.5's "From a Few People to the Whole Organization" said the
+//     right thing at the wrong volume: 43 characters of 84px display serif, two
+//     lines of it, and no verb — a description of the deck rather than a cover.
+//     "Scale What Already Works" is the same argument as an INSTRUCTION, and it
+//     hands the proof to the tagline underneath, which is where the evidence
+//     belongs. The word `agentic` leaves the cover with it, and does not go
+//     missing: A.1's second movement question names it one slide later.
+//   - TAGLINE. It ran 185 characters — THREE lines at 24px inside `maxWidth: 680`
+//     — and the owner capped it at two. It is 116 now and keeps all three jobs;
+//     what went is the "that proof at scale" restatement of the opener and the
+//     "not just using it" half of the definition, both of which spent a line
+//     saying a thing the sentence had already said.
 //
 // SPREAD BY VALUE, not by re-authoring: the hero, the facilitator credit and the
 // darken strength are IDENTICAL for all five variants (§1.5), so a spread means
 // there is one place to change them and no per-deck-set copy to drift.
 const leaderTitleContent: TitleContent = {
   ...titleContent,
-  displayHeadline: "From a Few People to the Whole Organization",
+  displayHeadline: "Scale What Already Works",
   displayHeadlineKw: [],
+  // TWO LINES AT 24px, MEASURED — not estimated: `title.tsx` sets `maxWidth: 680`
+  // and the italic serif runs ~60 characters to the line there, so the ceiling is
+  // about 120 characters and a reword has to be counted, not eyeballed. Verified
+  // rendered at 1280×720 in both leader variants.
   tagline:
-    "A few people proved it. An agentic organization is that proof at scale — every team directing AI, not just using it — and it costs seats, protected hours, and a mandate only you can give.",
-  taglineKw: ["directing AI, not just using it", "only you can give"],
+    `${LEADER_THESIS_OPENER} Every team directing AI — that takes seats, ` +
+    "protected hours, and a mandate only you can give.",
+  taglineKw: ["Every team directing AI", "only you can give"],
 };
 
 /**
@@ -93,7 +157,7 @@ export function titleContentFor(deckSet: DeckSetId): TitleContent {
 // set's label suffix, derived by `variantLabel` in src/deck-variants.ts. Once
 // gh#23 puts the login eyebrow on that same call, the two cannot drift apart.
 
-// ─── A.1 — "What you've already seen" ──────────────────────────────────────
+// ─── A.1 (berau) — "Five capabilities, five questions" ─────────────────────
 
 export type A1IconName =
   | "MessageSquare"
@@ -153,11 +217,28 @@ export interface A1Content {
 }
 
 export const a1Content: A1Content = {
-  figLabel: "WHAT YOU'VE ALREADY SEEN",
-  slideTitle: "The capabilities you brought to the room.",
-  slideTitleKw: ["capabilities"],
-  tagline: "What you saw is real. And it opens some questions.",
-  taglineKw: ["questions"],
+  // THE LABEL NAMES THE FIGURE, THE TITLE MAKES THE CLAIM — and neither says the
+  // other's words. Until now the label read WHAT YOU'VE ALREADY SEEN over a title
+  // reading *The capabilities you brought to the room*, which is one sentence
+  // printed twice in two registers; the owner read them side by side and called
+  // it duplication. The label is now what the figure IS (five capabilities on the
+  // left, five questions on the right — the same two columns `leftHeading` and
+  // `rightHeading` name), which is the register every other fig label in the deck
+  // uses: THE CAPABILITY LADDER, MODELS BY CATEGORY, THE AGENTIC ORGANIZATION.
+  figLabel: "FIVE CAPABILITIES, FIVE QUESTIONS",
+  // NOT "you brought": the same string is the BRAND half of berau-leader's A.1
+  // (§4.4 slot 1), and a Div Head did not personally carry anything into Session 1.
+  // *In your hands* is true of both audiences — the room's own people did it.
+  slideTitle: "The AI already in your hands.",
+  slideTitleKw: ["already in your hands"],
+  // THE FIRST CLAUSE IS WHAT MOVED, and the hand-off into the right column did
+  // NOT (owner call, 2026-08-05). "What you saw is real" asserted a negative
+  // nobody in the room doubted and named no one; berau's whole hook is SOCIAL
+  // PROOF — their own colleagues built the Session-1 work behind these five
+  // capabilities — so the clause now says WHO, which is the fact that makes the
+  // questions after it land as *ours to answer* rather than *someone's to sell*.
+  tagline: "Your own people built that. And it opens some questions.",
+  taglineKw: ["Your own people", "questions"],
   ruleHeader: "Capabilities Covered",
   leftHeading: "Five capabilities",
   rightHeading: "Questions we'll answer",
@@ -285,7 +366,7 @@ export const a1GeneralContent: A1Content = {
   footerCaptionKw: ["mostly know", "ahead"],
 };
 
-// ─── A.1 (GEMS variant) — "What GEMS already runs" ─────────────────────────
+// ─── A.1 (GEMS variant) — "The DigiTech portfolio" ─────────────────────────
 //
 // GEMS' portfolio was built FOR participants by a central team, so the berau
 // hook ("what you've already seen") would land here as *the experts already
@@ -316,12 +397,26 @@ export const a1GeneralContent: A1Content = {
 // works on brand recognition.
 
 export const a1GemsContent: A1Content = {
-  figLabel: "WHAT GEMS ALREADY RUNS",
+  // WHAT GEMS ALREADY RUNS over *The AI already running at GEMS.* was the same
+  // sentence twice, so the label no longer restates the title: it names the FIGURE
+  // — the portfolio as it stands today — and the title makes the claim about it.
+  // Register matches the deck's other labels (THE CAPABILITY LADDER).
+  //
+  // "CURRENT", NOT "DIGITECH" (owner call, 2026-08-05). The label is chrome, and
+  // spending it on the builder's name puts DigiTech twice on one screen — the
+  // tagline below already credits them, which is where the credit does work. The
+  // word `current` also carries the frame the slide argues from: this is the state
+  // of things NOW, and the questions after it are about what comes next.
+  figLabel: "THE CURRENT PORTFOLIO",
   slideTitle: "The AI already running at GEMS.",
   slideTitleKw: ["already running"],
-  tagline:
-    "DigiTech built these for you. The questions ahead are about building with them.",
-  taglineKw: ["built these for you", "building with them"],
+  // ONE LINE AT 40px, and that is the whole reason it is shorter: the opener's
+  // tagline sits at top 270 and the rule header at 380, so a second line closes to
+  // 6px of the rule. 1184px holds ~62 characters of the display serif and the old
+  // 78-character line wrapped. The ownership turn is intact and now IMPERATIVE —
+  // *they built, you build* — which is the same steer-4 job in half the words.
+  tagline: "DigiTech built these for you. Now build with them.",
+  taglineKw: ["built these for you", "build with them"],
   ruleHeader: "Already In Production",
   leftHeading: "Five systems already running",
   rightHeading: "Questions we'll answer",
@@ -435,21 +530,20 @@ const LEADER_QUESTIONS: readonly A1Question[] = [
 // A ROW WHOSE MOVEMENT OWNS NO SLIDES PRINTS A NAME AND NO LETTER, and that is the
 // correct output, not a gap to paper over: `sectionPointerLabel` collapses an
 // unresolved pointer to its name rather than printing `SECTION undefined`. All four
-// leader movements were unresolved at the Phase 4 floor. `gap` resolved on gh#53
-// and `shape` on gh#54, so THE GAP and THE SHAPE now print their letters; `invest`
-// and `mandate` own no slides until #55–#58 and still print bare. The rows fill
-// themselves in when the slides land — nothing here was edited when either did,
-// which is the claim gh#43 made and these two tickets have now paid off twice.
+// leader movements were unresolved at the Phase 4 floor. `gap` resolved on gh#53,
+// `shape` on gh#54 and `invest` on gh#56 — the first `invest` slide is
+// `invest-own-proof`, so WHY INVEST now prints its letter too. `mandate` owns no
+// slides until #60–#61 and still prints bare. The rows fill themselves in when the
+// slides land — no row above was edited when any of the three did, which is the
+// claim gh#43 made and these tickets have now paid off three times.
 
 /**
  * What a leader deck set changes about A.1, over whatever the brand authored.
  *
- * The tagline and the footer carry the leader thesis in the SAME WORDS as the
- * leader cover (§4.5, `leaderTitleContent` above): *a few people, or one team,
- * already proved it — imagine it across the whole org*. The footer then hands
- * over to the movement the leader alone can authorise, which is question 5 and
- * section K. A leader hearing four phrasings of one thesis hears four claims, so
- * these two strings are worded off the cover deliberately.
+ * The tagline IS `LEADER_THESIS_LINE` (§4.5) — not a wording of it, the value —
+ * so it is byte-identical to what `invest-own-proof` closes on and opens on the
+ * same sentence as the leader cover. The footer then hands over to the movement
+ * the leader alone can authorise, which is question 5 and section K.
  *
  * BRAND-NEUTRAL BY NECESSITY: one deck-set delta serves berau-leader and
  * gems-leader both, so neither string may name a brand's own evidence — the left
@@ -458,9 +552,11 @@ const LEADER_QUESTIONS: readonly A1Question[] = [
 const LEADER_A1_DELTA = {
   // ONE LINE AT 40px, measured: the opener's tagline sits at top 270 and the rule
   // header at 380, so a second line leaves 6px between them. 1184px of width
-  // holds about 62 characters of the display serif — keep a reword inside that.
-  tagline: "A few people proved it. Now imagine it across the whole org.",
-  taglineKw: ["A few people proved it", "across the whole org"],
+  // holds about 62 characters of the display serif — the thesis is 60, and a
+  // reword has to stay inside that IN `LEADER_THESIS_LINE`, where all three
+  // carriers see it.
+  tagline: LEADER_THESIS_LINE,
+  taglineKw: LEADER_THESIS_LINE_KW,
   questions: LEADER_QUESTIONS,
   footerCaption: "The proof is already in the room. The mandate to scale it is not.",
   footerCaptionKw: ["already in the room", "The mandate to scale it"],

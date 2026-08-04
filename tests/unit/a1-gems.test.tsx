@@ -1,4 +1,4 @@
-// A.1 (GEMS) — WHAT GEMS ALREADY RUNS · content + render tests (gh#25).
+// A.1 (GEMS) — THE CURRENT PORTFOLIO · content + render tests (gh#25).
 //
 // The slide's job: GEMS' portfolio was built FOR participants by a central
 // team, so "what you've already seen" can land as *the experts already handled
@@ -78,11 +78,16 @@ const isRevealed = (testId: string): boolean =>
 
 describe("A.1 (GEMS) copy", () => {
   test("the frame strings match the brief", () => {
-    expect(a1GemsContent.figLabel).toBe("WHAT GEMS ALREADY RUNS");
+    // THE LABEL AND THE TITLE MAY NOT SAY THE SAME THING, which is what they did
+    // until 2026-08-05: WHAT GEMS ALREADY RUNS over *The AI already running at
+    // GEMS.* The label now names the FIGURE and the title makes the claim — and it
+    // does not name DigiTech either, because the tagline below already credits them
+    // and one screen does not need the builder twice (owner call, same day).
+    expect(a1GemsContent.figLabel).toBe("THE CURRENT PORTFOLIO");
     expect(a1GemsContent.slideTitle).toBe("The AI already running at GEMS.");
-    expect(a1GemsContent.tagline).toBe(
-      "DigiTech built these for you. The questions ahead are about building with them.",
-    );
+    // ONE LINE AT 40px. Shortened from 78 characters on owner review — the old
+    // line wrapped and closed on the rule header 110px below it.
+    expect(a1GemsContent.tagline).toBe("DigiTech built these for you. Now build with them.");
     expect(a1GemsContent.ruleHeader).toBe("Already In Production");
     expect(a1GemsContent.leftHeading).toBe("Five systems already running");
     expect(a1GemsContent.footerCaption).toBe(
@@ -97,7 +102,7 @@ describe("A.1 (GEMS) copy", () => {
 
   test("the keyword arrays match the brief", () => {
     expect(a1GemsContent.slideTitleKw).toEqual(["already running"]);
-    expect(a1GemsContent.taglineKw).toEqual(["built these for you", "building with them"]);
+    expect(a1GemsContent.taglineKw).toEqual(["built these for you", "build with them"]);
     expect(a1GemsContent.footerCaptionKw).toEqual(["already live", "ahead"]);
   });
 
@@ -264,13 +269,11 @@ describe("A.1 (GEMS) renders", () => {
     const { container } = renderAtStep(0);
 
     const fig = container.querySelector(".fig-label") as HTMLElement;
-    expect(fig.textContent).toMatch(/FIG\.\s*A\.1\s*·\s*WHAT GEMS ALREADY RUNS/);
+    expect(fig.textContent).toMatch(/FIG\.\s*A\.1\s*·\s*THE CURRENT PORTFOLIO/);
     expect(container.textContent).toContain("The AI already running at GEMS.");
 
     const tagline = screen.getByTestId("a1-tagline");
-    expect(tagline.textContent).toBe(
-      "DigiTech built these for you. The questions ahead are about building with them.",
-    );
+    expect(tagline.textContent).toBe("DigiTech built these for you. Now build with them.");
     expect(opacityOf("a1-tagline")).toBe("1");
 
     expect(screen.getByTestId("a1-rule-header").textContent).toContain("Already In Production");

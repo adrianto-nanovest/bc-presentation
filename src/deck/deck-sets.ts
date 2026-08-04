@@ -157,25 +157,26 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 59 slides, TWELVE sections as of gh#54. The Phase 4 floor was
+ * The leader deck — 60 slides, THIRTEEN sections as of gh#56. The Phase 4 floor was
  * 56 and held no slide the standard deck did not; gh#48's `e12-loop-engineering`
  * was the first addition and ships to BOTH sets, gh#53's `gap-capability-ladder`
- * was the first slide that reached THIS LIST ALONE, and gh#54's
- * `shape-agentic-org` is the second.
+ * was the first slide that reached THIS LIST ALONE, gh#54's `shape-agentic-org` is
+ * the second, and gh#56's `invest-own-proof` is the third.
  *
  * EVERY NEW RUN MOVES EVERY LETTER BEHIND IT, which is §3.4 R2 working as designed
  * and the one thing to know before verifying anything against this deck. Today the
- * runs read `opening`(A) · `gap`(B) · `shape`(C) · `landscape`(D) · `mindset`(E) ·
- * `process`(F) · `fundamentals`(G) · `tools`(H) · `pitfalls`(I) · `meta`(J) ·
- * `principles`(K) · `lab`(L) — so the loop slide prints G.12 here, not E.12, and
- * the closer is L.3. The rest of Phase 6 moves them again (§4.3 ends at A–N).
- * Anyone checking a figure on a leader deck reads the COMPOSED deck, never a
- * literal.
+ * runs read `opening`(A) · `gap`(B) · `shape`(C) · `invest`(D) · `landscape`(E) ·
+ * `mindset`(F) · `process`(G) · `fundamentals`(H) · `tools`(I) · `pitfalls`(J) ·
+ * `meta`(K) · `principles`(L) · `lab`(M) — so the loop slide prints H.12 here, not
+ * E.12, and the closer is M.3. THREE LETTERS FOR THAT ONE SLIDE ALREADY (E.12 →
+ * F.12 → G.12 → H.12, its file never opened once), and the rest of Phase 6 moves
+ * them a fourth time (§4.3 ends at A–N). Anyone checking a figure on a leader deck
+ * reads the COMPOSED deck, never a literal.
  *
  * The curriculum is the standard deck's, minus section F and with F.8 kept: it
  * is the deck a leader can be walked through on Aug 18 whether or not the rest of
  * Phases 6–7 land. Those phases grow it to 73 slides across A–N (§4.3) by filling
- * `gap` and `shape` and inserting the `invest` and `mandate` runs; every id below
+ * `gap`, `shape` and `invest` and inserting the `mandate` run; every id below
  * survives that.
  *
  * WHAT THIS LIST DOES NOT HOLD, and why:
@@ -211,14 +212,21 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // itself sits here, in front of `landscape`, and that is what pushed every
   // later letter in this deck by one (§3.4 R2).
   "gap-capability-ladder",
-  // shape — the second leader-only run (gh#54), and the second push: the loop
-  // slide prints G.12 here now, and H.12 once the `invest` run lands. §4.3 gives
+  // shape — the second leader-only run (gh#54), and the second push. §4.3 gives
   // this run four slides — C.3 (`shape-tam-kotter`) and C.4 (`shape-middle-out`)
   // append after f8, so the two lines below stay adjacent.
   "shape-agentic-org",
   // Relocated out of the cut F section and back to §4.3's C.2, which is why the
   // override exists and why it now reads `shape` — see the doc above.
   "f8-your-agentic-os",
+  // invest — the third leader-only run (gh#56), and the third push: the loop slide
+  // prints H.12 here now and the closer is M.3. §6.7 gives this run five slides and
+  // ONE of them exists; the row below is §6.7's D.2, and it composes one number
+  // earlier than that today because #57's `invest-base-rates` (§6.7's D.1) is
+  // unbuilt and inserts AHEAD of this line. Both figures are derived per deck
+  // (§3.5) — nothing here or in the slide pins either, and #58–#59 append D.3–D.5
+  // behind it without moving anything above.
+  "invest-own-proof",
   // landscape
   "b1-evolution-journey",
   "b2-fields-terminology",
@@ -297,10 +305,12 @@ const LEADER_SLIDE_IDS: readonly string[] = [
  *
  * THE DIFFERENCE IS NO LONGER ONE NUMBER, which is why it is not stated as one
  * here. gh#41's leader deck was "the standard deck minus eight"; it is now that
- * minus eight PLUS its own slides, so the net is SIX shorter (65 against 59) and
+ * minus eight PLUS its own slides, so the net is FIVE shorter (65 against 60) and
  * the two halves move independently — `tests/unit/deck-registry.test.ts` holds
  * them as separate constants for exactly that reason, and a single subtraction
- * written here would go stale on the next leader-only insert.
+ * written here would go stale on the next leader-only insert. It has been eight
+ * (gh#41), seven (gh#53), six (gh#54) and five (gh#56) — four values in four
+ * tickets, none of which edited a standard-deck row.
  */
 export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
   standard: { id: "standard", slides: STANDARD_SLIDE_IDS },

@@ -7,10 +7,12 @@
 // deck sets — and the same key takes different letters in the SAME deck set over
 // time. `tools` is the worked example: G in the standard deck, then in the LEADER
 // deck F once gh#41 cut `techniques`, G again once gh#53 put a `gap` run in front
-// of the curriculum, and H as of gh#54's `shape` run. It reaches I when the rest of
-// Phase 6 lands (§4.3). FOUR MOVES SO FAR, no edit to this file for any of them —
+// of the curriculum, H as of gh#54's `shape` run, and I as of gh#56's `invest` run.
+// FIVE LETTERS FOR ONE KEY, FOUR MOVES, no edit to this file for any of them —
 // which is the point of it, and the reason the chain is extended rather than
-// replaced each time: one entry would read as a coincidence.
+// replaced each time: one entry would read as a coincidence. I is also where §4.3
+// leaves it: the one run still to come, `mandate`, lands BEHIND `pitfalls` (§3.6),
+// so it is the first Phase 6 insert that will move no curriculum letter at all.
 //
 // Pure data. No React, no DOM, no side effects — importable from a node test.
 
@@ -84,9 +86,9 @@ const RANGE_DASH = "–";
  *
  * Spec §3.6, and the only formatter for R6's cross-reference: the letters come
  * from the composed deck and the name from the table above, so one authored
- * `tools` pointer reads `SECTION G` in the standard deck and `SECTION H` in the
+ * `tools` pointer reads `SECTION G` in the standard deck and `SECTION I` in the
  * leader deck without being re-authored — see the chain at the top of this file for
- * the two other letters that same pointer has printed. A.1's agenda column is its
+ * the three other letters that same pointer has printed. A.1's agenda column is its
  * one caller today, and in a leader deck its `techniques` pointer takes the
  * no-letter path below, because that deck cuts the section (gh#41) and the one slide
  * it keeps out of it is composed under another key.
