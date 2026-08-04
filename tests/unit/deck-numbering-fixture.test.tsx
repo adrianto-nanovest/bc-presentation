@@ -22,12 +22,14 @@ import path from "node:path";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import {
   harvestAllDecks,
+  HARVEST_TARGETS,
   HARVESTED_BRANDS,
   restoreLocation,
+  type DeckKey,
   type DeckNumbering,
   type NumberingRow,
 } from "../harvest/deck-numbering";
-import { BRANDS, type Brand } from "@/deck-variants";
+import { BRANDS, VARIANTS, type VariantId } from "@/deck-variants";
 
 const FIXTURE = path.resolve(__dirname, "../fixtures/deck-numbering.json");
 
@@ -38,25 +40,49 @@ const UPDATING = process.env.UPDATE_DECK_NUMBERING === "1";
 /** Set by `ALLOW_MOVED_FIGURES=1 npm run harvest:numbering` — see `recordFixture`. */
 const ALLOW_MOVED_FIGURES = process.env.ALLOW_MOVED_FIGURES === "1";
 
-/** The slide counts observed live and recorded on gh#32 — the same figures
- *  `tests/unit/deck-registry.test.ts` composes to. Repeated here as a number
- *  the harvest must hit, so a deck that silently loses a slide fails LOUDLY
- *  instead of quietly rewriting the fixture one row shorter. */
-const OBSERVED_SLIDES: Record<Brand, number> = {
-  berau: 64,
-  gems: 64,
-  general: 62,
+/** What one harvested deck must show, independently of the record on disk. */
+interface ObservedDeck {
+  slides: number;
+  /** The figure the LAST slide prints. */
+  closer: string;
+}
+
+/**
+ * The figures observed live, per fixture key (`DeckKey` — a brand means that
+ * brand's standard deck). Repeated here as numbers the harvest must hit, so a
+ * deck that silently loses a slide fails LOUDLY instead of quietly rewriting the
+ * fixture one row shorter.
+ *
+ * The three standard rows were recorded on gh#32. `general` runs no Practice Lab,
+ * so its K run is the closer alone and it renumbers itself to K.1 — that used to
+ * be a `FIG_NUM` hack inside `k3-thank-you.tsx` reading `practiceLab`; gh#35
+ * deleted it and the K.1 below is the composer's own output.
+ *
+ * The leader decks (gh#41) are 8 slides shorter — `f1`–`f7` and `f9` cut,
+ * `f8-your-agentic-os` kept — and close on **J.3**, not K.3: the same three lab
+ * slides, one letter earlier because section F is gone. Nothing renumbered them;
+ * a letter is a function of position (§3.4 R2).
+ *
+ * Keyed by `string` because the key set is not available as a type: which decks
+ * exist is a VALUE (`VARIANTS[id].deckSet`), and deriving the non-standard subset
+ * would take literal `deckSet` types in the Edge-shared variant table — see
+ * `DeckKey`. The parity test below stands in for that exhaustiveness: an
+ * unharvested deck, or an unrecorded one, fails there by name.
+ */
+const OBSERVED: Record<string, ObservedDeck> = {
+  berau: { slides: 64, closer: "K.3" },
+  gems: { slides: 64, closer: "K.3" },
+  general: { slides: 62, closer: "K.1" },
+  "berau-leader": { slides: 56, closer: "J.3" },
+  "gems-leader": { slides: 56, closer: "J.3" },
 };
 
-/** The closer each brand prints today. `general` runs no Practice Lab, so its
- *  K run is the closer alone and it renumbers itself to K.1. That used to be a
- *  `FIG_NUM` hack inside `k3-thank-you.tsx`, reading the brand's `practiceLab`
- *  flag; gh#35 deleted it and the K.1 below is now the composer's own output. */
-const OBSERVED_CLOSER: Record<Brand, string> = {
-  berau: "K.3",
-  gems: "K.3",
-  general: "K.1",
-};
+/** The expectations for one deck, or a failure naming the deck that has none. */
+function observed(key: DeckKey): ObservedDeck {
+  const row = OBSERVED[key];
+  if (!row) throw new Error(`no observed slide count or closer recorded for deck "${key}"`);
+  return row;
+}
 
 let harvested: DeckNumbering;
 
@@ -89,21 +115,40 @@ function figureDrift(decks: DeckNumbering): string[] {
     return [];
   }
 
-  return (Object.keys(decks) as Brand[]).flatMap((brand) => {
-    const before = recorded[brand] ?? [];
-    const after = decks[brand];
-    const drift =
-      before.length === after.length
-        ? []
-        : [`${brand}: ${before.length} slides recorded, ${after.length} rendered`];
-    return after.reduce((found, row, i) => {
-      const was = before[i];
-      if (was && was.fig !== row.fig) {
-        found.push(`${brand} slide ${i}: recorded ${was.fig}, renders ${row.fig}`);
-      }
-      return found;
-    }, drift);
-  });
+  // A recorded deck that is no longer harvested IS drift, and the worst kind: its
+  // rows leave the file, so every figure it recorded stops being checked and
+  // nothing else here would notice. A re-key — `berau` becoming
+  // `berau-middle-mgmt` — looks exactly like this plus one "new" deck.
+  const dropped = Object.keys(recorded)
+    .filter((key) => !(key in decks))
+    .map((key) => `${key}: ${recorded[key].length} slides recorded, deck no longer harvested`);
+
+  return dropped.concat(
+    Object.keys(decks).flatMap((key) => {
+      const before = recorded[key];
+    // A deck the record does not hold yet is NEW, not drifted — gh#41 added the
+    // two leader decks this way. There is no recorded figure for it to have
+    // moved, and refusing to record it would force `ALLOW_MOVED_FIGURES=1`, which
+    // would also wave through a real regression in the decks that ARE recorded.
+      // Safe only because a dropped key is caught above: "new" cannot be how a
+      // moved figure sneaks in, because the row it moved from cannot vanish
+      // unnoticed.
+      if (!before) return [];
+
+      const after = decks[key];
+      const drift =
+        before.length === after.length
+          ? []
+          : [`${key}: ${before.length} slides recorded, ${after.length} rendered`];
+      return after.reduce((found, row, i) => {
+        const was = before[i];
+        if (was && was.fig !== row.fig) {
+          found.push(`${key} slide ${i}: recorded ${was.fig}, renders ${row.fig}`);
+        }
+        return found;
+      }, drift);
+    }),
+  );
 }
 
 /**
@@ -150,22 +195,39 @@ test("the committed fixture is what the decks render today", () => {
   expect(harvested, STALE).toEqual(readFixture());
 });
 
-test("the fixture records every brand that composes a deck", () => {
-  expect(Object.keys(readFixture()).sort()).toEqual([...HARVESTED_BRANDS].sort());
+// ── Every deck the app serves is in the record, once ─────────────────────────
+
+// THE KEYING RULE (see `DeckKey`): a brand name means that brand's standard deck,
+// a variant id means a non-standard one. Asserted against `VARIANTS` rather than
+// against a list, so a sixth variant is harvested — or reported unharvested —
+// without anyone remembering to update this file.
+const EXPECTED_KEYS = (Object.keys(VARIANTS) as VariantId[])
+  .map((id) => (VARIANTS[id].deckSet === "standard" ? VARIANTS[id].brand : id))
+  .sort();
+
+test("the fixture records every deck the app serves, and nothing else", () => {
+  expect(Object.keys(readFixture()).sort()).toEqual(EXPECTED_KEYS);
+  expect(HARVEST_TARGETS.map((t) => t.key).sort()).toEqual(EXPECTED_KEYS);
+  // Every brand still composes a standard deck, so the brand keys are `BRANDS`
+  // itself — the leader keys are the addition, not a re-keying.
   expect([...HARVESTED_BRANDS].sort()).toEqual(Object.keys(BRANDS).sort());
 });
 
-// ── What the record has to say, brand by brand ───────────────────────────────
+test("every recorded deck has an observed slide count and closer to hit", () => {
+  expect(Object.keys(OBSERVED).sort()).toEqual(EXPECTED_KEYS);
+});
 
-describe.each(HARVESTED_BRANDS)("%s's recorded deck", (brand) => {
+// ── What the record has to say, deck by deck ─────────────────────────────────
+
+describe.each(HARVEST_TARGETS)("$key's recorded deck", ({ key }) => {
   let rows: NumberingRow[];
 
   beforeAll(() => {
-    rows = harvested[brand];
+    rows = harvested[key];
   });
 
-  test(`holds one row per slide — ${OBSERVED_SLIDES[brand]} of them`, () => {
-    expect(rows).toHaveLength(OBSERVED_SLIDES[brand]);
+  test(`holds one row per slide — ${observed(key).slides} of them`, () => {
+    expect(rows).toHaveLength(observed(key).slides);
   });
 
   test("keys rows by deck index, in deck order, with no gaps", () => {
@@ -174,7 +236,7 @@ describe.each(HARVESTED_BRANDS)("%s's recorded deck", (brand) => {
 
   test("carries a printed figure and a label on every row, or null on both", () => {
     rows.forEach((row) => {
-      const at = `${brand} slide ${row.index}`;
+      const at = `${key} slide ${row.index}`;
       if (row.fig === null) {
         expect(row.label, at).toBeNull();
         return;
@@ -191,8 +253,8 @@ describe.each(HARVESTED_BRANDS)("%s's recorded deck", (brand) => {
     expect(rows[0]).toEqual({ index: 0, fig: null, label: null });
   });
 
-  test(`closes on ${OBSERVED_CLOSER[brand]}`, () => {
-    expect(rows.at(-1)?.fig).toBe(OBSERVED_CLOSER[brand]);
+  test(`closes on ${observed(key).closer}`, () => {
+    expect(rows.at(-1)?.fig).toBe(observed(key).closer);
   });
 
   test("prints each figure number once — no two slides claim the same one", () => {

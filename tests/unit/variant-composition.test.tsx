@@ -120,7 +120,9 @@ describe("A.1 hook selection", () => {
 
 // The composed deck again, for the same reason: `practiceLab` inclusion and the
 // K.2 pick moved out of `@/slides/reveal-and-closing` and into `@/deck/slots.ts`
-// (gh#40). `slice(-3)` still reads the K run, because K still closes the deck.
+// (gh#40). `slice(-3)` still reads the lab run, because the lab still closes every
+// deck — at K in a standard deck and at J in a leader deck, which is why this
+// helper names neither letter.
 async function closingFor(id: VariantId) {
   useVariant(id);
   const [registry, k1, k2, k2Gems, k3] = await Promise.all([
@@ -168,10 +170,16 @@ describe("Practice Lab slides", () => {
   });
 });
 
-// ── Leader deck sets still render the standard deck ──────────────────────────
-// Deliberate, and stated as such in gh#22: only the `· Leadership` suffix
-// separates a leader variant from its middle-management sibling until Phase 4
-// composes the real leader deck. Phase 4 is expected to change this test.
+// ── The leader deck sets compose their OWN deck ───────────────────────────────
+// gh#41. Until Phase 4 both leader variants pointed at the standard slide list
+// and only the `· Leadership` suffix separated them, and the block here said so.
+// The leader deck now exists: the same curriculum, minus section F, with
+// `f8-your-agentic-os` kept and relocated into the TOOLS run.
+//
+// WHAT IS ASSERTED WHERE. The composed SHAPE — which runs, in what order, at what
+// size — belongs to `deck-registry.test.ts`, and the printed letters and numbers
+// to the numbering fixture. This file owns WHICH SLIDE, by identity: the cut, the
+// survivor, and each brand's own alternates inside a leader deck.
 //
 // `render` closures are re-created by each module epoch, so identity cannot
 // cross a `resetModules()`; this fingerprints the composition instead.
@@ -183,20 +191,127 @@ async function deckShapeFor(id: VariantId): Promise<string[]> {
   );
 }
 
-describe("leader deck sets, before Phase 4", () => {
-  test("compose exactly the same slides as their brand's standard deck", async () => {
-    expect(await deckShapeFor("berau-leader")).toEqual(
-      await deckShapeFor("berau-middle-mgmt"),
-    );
-    expect(await deckShapeFor("gems-leader")).toEqual(
-      await deckShapeFor("gems-middle-mgmt"),
-    );
+/** Slide ids in composed order — the granularity the cut is stated at, since two
+ *  slides can share a shape fingerprint but never an id. */
+async function deckIdsFor(id: VariantId): Promise<string[]> {
+  useVariant(id);
+  const { deckSlides } = await import("@/deck/registry");
+  return deckSlides.map((s) => s.id);
+}
+
+/** The eight section-F slides the leader deck cuts. `f8-your-agentic-os` is NOT
+ *  among them — it is the one that survives, which is the whole reason this list
+ *  is spelled out rather than derived from an `f`-prefix. */
+const CUT_F_IDS = [
+  "f1-two-pillars",
+  "f2-rag-ground-truth",
+  "f3-plugins-the-package",
+  "f4-skills-write-once",
+  "f5-mcp-the-adapter",
+  "f6-hooks-unsexy-work",
+  "f7-subagents-specialists",
+  "f9-bridge-to-g",
+] as const;
+
+const LEADER_IDS: VariantId[] = ["berau-leader", "gems-leader"];
+
+describe("leader deck sets", () => {
+  test("cut section F but keep the relocated F.8", async () => {
+    for (const id of LEADER_IDS) {
+      const ids = await deckIdsFor(id);
+      expect(ids.filter((slide) => CUT_F_IDS.includes(slide as never)), id).toEqual([]);
+      expect(ids, id).toContain("f8-your-agentic-os");
+      // Its neighbours are the composition fact the `sectionOverrides` entry
+      // exists to produce: f8 sits between the last TOOLS slide and the bridge
+      // out of TOOLS, not back in a section of its own.
+      const at = ids.indexOf("f8-your-agentic-os");
+      expect(ids[at - 1], id).toBe("g10-beyond-big-three");
+      expect(ids[at + 1], id).toBe("g11-bridge-to-h");
+    }
+  });
+
+  // NOT ASSERTED HERE: that a leader deck is eight slides shorter. That is a
+  // count, `deck-registry.test.ts` owns counts, and it already holds both leader
+  // decks against their run-length encoding and the standard deck against the
+  // same eight. Restating it here would load two more module epochs — the
+  // expensive part of this file — to re-prove another file's claim.
+
+  test("still take their own brand's A.1 and K.2, by identity", async () => {
+    // The brand axis and the deck-set axis are independent (§4.4), and this is
+    // the assertion that says so: a leader deck is not "the general deck with a
+    // suffix". Object identity, not copy — an alternate aliased to the canonical
+    // slide would satisfy any text-level check.
+    const berau = await openingFor("berau-leader");
+    expect(berau.slides[1]).toBe(berau.a1Slide);
+
+    const gems = await openingFor("gems-leader");
+    expect(gems.slides[1]).toBe(gems.a1GemsSlide);
+    expect(gems.slides[1]).not.toBe(gems.a1Slide);
+
+    const gemsClosing = await closingFor("gems-leader");
+    expect(gemsClosing.slides.slice(-3)).toEqual([
+      gemsClosing.k1Slide,
+      gemsClosing.k2GemsSlide,
+      gemsClosing.k3Slide,
+    ]);
   });
 
   test("a practice-lab brand's deck is exactly K.1 + K.2 longer than general's", async () => {
     const gems = await deckShapeFor("gems-middle-mgmt");
     const general = await deckShapeFor("general");
     expect(gems.length - general.length).toBe(2);
+  });
+});
+
+// ── E.12's beat 2 names the section E hands off to ────────────────────────────
+// §4.3, gh#41. The standard deck runs F · TECHNIQUES next; the leader deck cuts F,
+// so its next section is TOOLS ECOSYSTEM and beat 2 says so. Deck-set-scoped copy,
+// resolved by a typed pick in section E's own content module — `sectionOverrides`
+// carries composition facts only (§4.1).
+//
+// Read off the RENDERED slide, in the variant's own epoch: `e12Content` is data,
+// and asserting the data against itself would pass even if the slide printed the
+// other line.
+async function bridgeBeat2For(id: VariantId): Promise<string> {
+  useVariant(id);
+  cleanup();
+  const [{ DeckProvider }, { SlideNumberProvider }, { composedDeck }, e12] = await Promise.all([
+    import("@/deck/DeckContext"),
+    import("@/deck/SlideNumberContext"),
+    import("@/deck/registry"),
+    import("@/slides/foundation-core-section-e/e12-bridge-to-f"),
+  ]);
+  const row = composedDeck.slides.find((s) => s.def.id === "e12-bridge-to-f");
+  if (!row) throw new Error(`the section-E bridge is not in ${id}'s composed deck`);
+  const { container } = render(
+    <DeckProvider stepCounts={[e12.e12Slide.steps]}>
+      <SlideNumberProvider
+        value={{ letter: row.letter, num: row.num, sectionKey: row.sectionKey }}
+      >
+        <e12.E12BridgeToF />
+      </SlideNumberProvider>
+    </DeckProvider>,
+  );
+  return container.querySelector('[data-testid="e12-beat2"]')?.textContent ?? "";
+}
+
+describe("the section-E bridge's beat 2", () => {
+  test("names the techniques in every standard deck", async () => {
+    for (const id of [
+      "berau-middle-mgmt",
+      "gems-middle-mgmt",
+      "general",
+    ] as VariantId[]) {
+      expect(await bridgeBeat2For(id), id).toBe("Next: the techniques that matter most.");
+    }
+  });
+
+  test("names the platforms in both leader decks, where section F is cut", async () => {
+    for (const id of LEADER_IDS) {
+      expect(await bridgeBeat2For(id), id).toBe(
+        "Next: the platforms that bring them to life.",
+      );
+    }
   });
 });
 
@@ -236,9 +351,22 @@ async function closerFigLabelFor(id: VariantId): Promise<string> {
 }
 
 describe("thank-you closer figure number", () => {
-  test("is K.3 where the practice lab runs, K.1 where it does not", async () => {
+  // TWO INDEPENDENT DERIVATIONS, and the cases below separate them: the brand's
+  // `practiceLab` flag decides the NUMBER (a lab run of 3 closes on .3, a run of
+  // 1 on .1), and the run's position decides the LETTER.
+  test("is .3 where the practice lab runs and .1 where it does not", async () => {
     expect(await closerFigLabelFor("gems-middle-mgmt")).toMatch(/FIG\.\s*K\.3/);
-    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*K\.3/);
     expect(await closerFigLabelFor("general")).toMatch(/FIG\.\s*K\.1/);
+  });
+
+  test("sits one letter earlier in a leader deck, which cuts section F", async () => {
+    // Same three lab slides — leaders run the same lab — at J instead of K,
+    // because gh#41's cut leaves the leader deck ten sections. Nothing renumbered
+    // the closer; the letter is a function of position (§3.4 R2).
+    //
+    // ONE leader deck, not both: this asserts the letter a POSITION produces, and
+    // the two leader decks share the position. That the other one records J.3 too
+    // is in the numbering fixture, which pays no epoch cost to say so.
+    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*J\.3/);
   });
 });

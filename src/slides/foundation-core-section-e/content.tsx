@@ -1,9 +1,11 @@
 // Single source of truth for all Section E slide copy (E.1–E.12).
 //
 // Schema is ported verbatim from `claude-design-project/jsx/data.jsx` — the
-// design source — with two differences:
+// design source — with three differences:
 //   1. `const E<N> = {...}` → `export const e<N>Content = {...} as const`
 //   2. The window-globals attach is dropped (TS modules export instead).
+//   3. E.12's beat 2 is not a field but a PICK over the deck set, because the two
+//      decks hand section E off to different sections — see `e12Beat2For`.
 //
 // Field names match the design source EXACTLY (e.g. `headlineKw`, `naivePrompt`,
 // `properLabels`, `spine[].pop`, `whyPoints`, `satellites`, `rings[].sub`,
@@ -13,6 +15,11 @@
 //
 // Markup convention: data carries plain strings + a sibling `kw` / `*Kw` array
 // of substrings to highlight at render time. No inline `<em>` tags in data.
+//
+// One string here varies with the DECK SET — E.12's beat 2, see
+// `e12Beat2For`. Type-only import, so this module still pulls in nothing
+// at runtime and stays plain data.
+import type { DeckSetId } from "@/deck-variants";
 
 export const e1Content = {
   headline: "Three layers. Each one contains the last.",
@@ -586,10 +593,45 @@ export const e11Content = {
   footerKw: ["automates work you do by hand today"],
 } as const;
 
+/** One reveal: the string, plus the substrings rendered as keywords. */
+export interface E12Beat {
+  text: string;
+  kw: readonly string[];
+}
+
+/**
+ * E.12's beat 2 — the ONE string in section E that depends on the deck set.
+ *
+ * Beat 2 hands section E off by name, and the two decks hand off to different
+ * sections: the standard deck runs F · TECHNIQUES next, and the leader deck cuts
+ * F entirely (§4.3, gh#41), so there its next section is TOOLS ECOSYSTEM. The
+ * leader line is F.9's own — `f9Content.beat2` in
+ * `../foundation-techniques-section-f/content.tsx` — because F.9 is the bridge
+ * into TOOLS that the leader deck no longer runs.
+ *
+ * A `Record<DeckSetId, …>` and not a `standard | leader` guess: a third deck set
+ * fails to compile HERE, where the missing line would otherwise be an
+ * `undefined` beat on a projector. Copy, never composition — `sectionOverrides`
+ * stays composition-only (§4.1), so this does not live in the deck-set table.
+ */
+const E12_BEAT2_BY_DECK_SET: Record<DeckSetId, E12Beat> = {
+  standard: { text: "Next: the techniques that matter most.", kw: ["techniques that matter most"] },
+  leader: { text: "Next: the platforms that bring them to life.", kw: ["platforms", "life"] },
+};
+
+/** The beat 2 a deck set prints. THE RESOLVER LIVES HERE, in the content module,
+ *  and the slide asks it — the same shape `titleContentFor` uses for the
+ *  deck-set-scoped cover copy (gh#42). The table stays private so the pick is the
+ *  only way in, and a caller cannot reach past it into the wrong deck set. */
+export function e12Beat2For(deckSet: DeckSetId): E12Beat {
+  return E12_BEAT2_BY_DECK_SET[deckSet];
+}
+
 export const e12Content = {
   beat1: {
     lineA: { text: "Three layers.", kw: ["Three layers"] },
     lineB: { text: "The fundamentals are built.", kw: ["fundamentals"] },
   },
-  beat2: { text: "Next: the techniques that matter most.", kw: ["techniques that matter most"] },
+  /** Beat 2 is NOT here: it depends on the deck set, so it is resolved by
+   *  `e12Beat2For` and this object holds only what every deck prints alike. */
 } as const;

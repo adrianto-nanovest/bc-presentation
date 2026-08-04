@@ -3,10 +3,10 @@
 // Composition used to be "concatenate the nine section index modules", which
 // made the deck's order an emergent property of nine files that no one file
 // stated. It is now ONE list per deck set, reviewable as a single artifact, and
-// walked by `./slots.ts`. That is also what will make drift explicit ONCE THE
-// TWO SETS DIVERGE (§4.3): appending a slide to section E will then lengthen
-// whichever list names it and no other. Today they still share one list — see
-// `DECK_SET_COMPOSITION` — so today an edit reaches both.
+// walked by `./slots.ts`. THE TWO SETS HAVE DIVERGED as of gh#41, which is what
+// makes drift explicit: appending a slide to section E lengthens whichever list
+// names it and no other, so a curriculum edit meant for both decks has to be
+// written into both lists — deliberately, and visibly in one diff.
 //
 // WHY NOT IN `src/deck-variants.ts`, where `DECK_SETS` already lives. That
 // module is imported by `middleware.ts` through a RELATIVE path and must stay
@@ -42,10 +42,11 @@ export interface DeckSet {
    * content module behind a typed resolver — a generic override bag for copy is
    * untyped by construction and the compiler stops helping.
    *
-   * Empty today. The leader deck needs exactly one:
-   * `{ "f8-your-agentic-os": "shape" }`, because it relocates that slide out of
-   * the cut F section and without the override R1 would split the `shape` run
-   * in three and R4 would throw.
+   * The leader deck has exactly one entry, and it is load-bearing: it relocates
+   * `f8-your-agentic-os` out of the cut F section, and the value MUST be the
+   * key of the run it lands inside. Without it, f8 keeps `techniques`, which no
+   * other leader slide holds, and a one-slide `techniques` run in the middle of
+   * `tools` splits `tools` into two runs — R4, at module load.
    */
   sectionOverrides?: Readonly<Record<string, SectionKey>>;
 }
@@ -142,16 +143,115 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
+ * The leader deck at the Phase 4 FLOOR — 56 slides, ten sections, no new slide.
+ *
+ * The curriculum is the standard deck's, minus section F and with F.8 kept: it
+ * is the deck a leader can be walked through on Aug 18 whether or not Phases
+ * 6–7 land. Phases 5–7 grow it to 73 slides across A–N (§4.3) by inserting the
+ * `gap`, `shape`, `invest` and `mandate` runs; every id below survives that.
+ *
+ * WHAT THIS LIST DOES NOT HOLD, and why:
+ *
+ *   - `f1`–`f7`, `f9` — CUT. Section F teaches how to build the techniques; a
+ *     leader authorizes them and does not implement them (§4.3).
+ *   - `f8-your-agentic-os` — KEPT, and it is the one slide out of its home
+ *     section, so it carries the single `sectionOverrides` entry below.
+ *
+ * f8 SITS INSIDE THE TOOLS RUN, not at C.2 where §4.3 puts it — a deviation
+ * decided on gh#41 and reversed in Phase 6. §4.3's C.2 is `shape-agentic-org`'s
+ * concrete answer, and at the floor `shape-agentic-org` does not exist: a lone
+ * `shape` run would put f8 THIRD IN THE DECK, between the agenda and the
+ * landscape, with no argument in front of it. Between `g10-beyond-big-three` and
+ * the bridge out of TOOLS it has one. Phase 6 moves the entry and flips the
+ * override value to `shape` in the same edit — the mechanism does not change.
+ */
+const LEADER_SLIDE_IDS: readonly string[] = [
+  // opening — the cover claims no number, so A.1 is the second slot
+  "title",
+  "a1-what-youve-seen", // canonical slot: `a1-general` / `a1-gems` resolve behind it
+  // landscape
+  "b1-evolution-journey",
+  "b2-fields-terminology",
+  "b3-mechanics-landscape",
+  "b4-tiers-deployment",
+  "b5-todays-landscape",
+  // mindset — five plus the bridge into `process`
+  "c1-tool-to-bridge",
+  "c2-replacement-multiplier",
+  "c3-executor-orchestrator",
+  "c4-v-bounce-workflow",
+  "c5-role-trajectory",
+  "c6-bridge-to-d",
+  // process
+  "d1-the-trap",
+  "d2-the-convergence",
+  "d3-one-process-four-levels",
+  "d4-decision-pattern",
+  "d5-bridge-to-e",
+  // fundamentals — the bridge's beat 2 names TOOLS here, not the cut F section;
+  // the pick lives in the slide's own content module (§4.1)
+  "e1-three-layers",
+  "e2-prompt-what-why",
+  "e3-prompt-structure",
+  "e4-prompt-methodologies",
+  "e5-prompt-examples",
+  "e6-prompt-the-wall",
+  "e7-context-what-why",
+  "e8-context-strategies",
+  "e9-context-the-wall",
+  "e10-harness-what-why",
+  "e11-harness-practices",
+  "e12-bridge-to-f", // Phase 5 inserts THE LOOP before this and renames it `e13`
+  // tools — plus the relocated f8, which is why the override exists
+  "g1-ecosystem-overview",
+  "g2-claude-platforms",
+  "g3-claude-capabilities",
+  "g4-builtin-tools",
+  "g5-google",
+  "g6-openai",
+  "g7-head-to-head",
+  "g8-capability-matrix",
+  "g9-workflow",
+  "g10-beyond-big-three",
+  "f8-your-agentic-os", // relocated out of the cut F section — see the doc above
+  "g11-bridge-to-h",
+  // pitfalls
+  "h1-pitfall-wall",
+  "h2-discipline-wall",
+  "h3-bridge-to-i",
+  // meta
+  "i1-meta-process",
+  "i2-profile-journey",
+  "i3-portfolio",
+  "i4-key-message-bridge",
+  // principles
+  "j1-humility-intro",
+  "j2-five-principles",
+  "j3-recipe-buildup",
+  "j4-recipe-ship",
+  // lab — leaders run the same lab (§4.4), so this run is the standard one
+  "k1-challenge-handoff",
+  "k2-practice-lab-overview", // canonical slot: `k2-gems` resolves behind it
+  "k3-thank-you",
+];
+
+/**
  * The composition of every registered deck set.
  *
- * The leader set deliberately points at the SAME list: only the `· Leadership`
- * suffix separates a leader variant from its middle-management sibling until
- * §4.3 gives the leader deck its own order, and sharing the constant means the
- * two cannot drift apart by accident while they are meant to be identical.
- * `tests/unit/variant-composition.test.tsx`'s "leader deck sets, before Phase 4"
- * block is what says so out loud.
+ * The two lists are separate constants and no longer one shared one: as of
+ * gh#41 the leader deck really is a different deck, and
+ * `tests/unit/variant-composition.test.tsx` states the difference — 8 slides
+ * shorter, no `f1`–`f7`/`f9`, f8 retained — rather than the old "they are
+ * identical" claim.
  */
 export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
   standard: { id: "standard", slides: STANDARD_SLIDE_IDS },
-  leader: { id: "leader", slides: STANDARD_SLIDE_IDS },
+  leader: {
+    id: "leader",
+    slides: LEADER_SLIDE_IDS,
+    // ONE ENTRY, and `tools` rather than §4.3's `shape` for as long as f8 sits
+    // in the TOOLS run. The value must name the run f8 lands inside or R4
+    // throws at load — see the `sectionOverrides` doc above.
+    sectionOverrides: { "f8-your-agentic-os": "tools" },
+  },
 };

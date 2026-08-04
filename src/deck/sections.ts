@@ -4,7 +4,9 @@
 // key says WHAT the block is; the display letter says WHERE it currently sits
 // and is derived per deck at compose time (see ./compose.ts). Nothing here
 // knows a letter, because the same key takes different letters in different
-// deck sets: `process` is D in the standard deck and G in the leader deck.
+// deck sets: `tools` is G in the standard deck and F in the leader deck, which
+// cuts `techniques` (gh#41) — and `process` becomes G in the leader deck once
+// Phases 5–7 put four new sections in front of it (§4.3).
 //
 // Pure data. No React, no DOM, no side effects — importable from a node test.
 
@@ -57,8 +59,10 @@ const RANGE_DASH = "–";
  *
  * Spec §3.6, and the only formatter for R6's cross-reference: the letters come
  * from the composed deck and the name from the table above, so the same pointer
- * reads `SECTION D` in the standard deck and `SECTION G` in the leader deck
- * without being re-authored. A.1's agenda column is its one caller today.
+ * reads `SECTION G` in the standard deck and `SECTION F` in the leader deck
+ * without being re-authored. A.1's agenda column is its one caller today — and in
+ * a leader deck its `techniques` pointer takes the no-letter path below, because
+ * that deck cuts the section (gh#41).
  *
  * `letterOf` is a parameter rather than a closed-over import for two reasons:
  * this module composes no deck and must not import one, and the formatting can

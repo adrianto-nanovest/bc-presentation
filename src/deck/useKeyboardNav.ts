@@ -16,8 +16,9 @@ import { composedDeck } from "./registry";
 //
 // WHICH LETTERS ARE LIVE IS THE DECK'S ANSWER, NOT THIS FILE'S (§3.5). The branch
 // tests `/^[A-Za-z]$/` and then LOOKS THE LETTER UP in the composed deck's
-// `sectionFirstIndex` (compose.ts R5). Today's deck claims A–K; the leader deck
-// grows to A–N as Phases 5–7 land (§11). Neither needs an edit here, and an
+// `sectionFirstIndex` (compose.ts R5). The standard deck claims A–K, the leader
+// deck A–J at the Phase 4 floor — where `k` therefore does nothing at all — and
+// A–N once Phases 5–7 land (§11). None of the three needs an edit here, and an
 // unclaimed letter is a no-op for the same reason an unused one already was — it
 // is absent from the map. `r` and `u` are why the composer caps a deck at 17
 // sections: section 18 would claim "R" and shadow the reset key.

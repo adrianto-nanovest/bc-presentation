@@ -69,8 +69,10 @@ export const BRANDS: Record<Brand, BrandRow> = {
 };
 
 /**
- * Everything that varies with the *audience*. Slide composition lives here
- * (Phase 4); today only the label suffix distinguishes the two deck sets.
+ * Everything that varies with the *audience* AT THE EDGE — which is only the
+ * label suffix. Slide composition is deck-set-level too, but it lives in
+ * `src/deck/deck-sets.ts` (gh#41): this module must stay import-free for the
+ * middleware build, and a composition list is typed by `SectionKey`.
  */
 export interface DeckSetRow {
   /** Appended to the brand label on the eyebrow + title chip ONLY. */
@@ -89,9 +91,11 @@ export interface Variant {
   deckSet: DeckSetId;
 }
 
-// All five ids are registered NOW. `berau-leader` and `gems-leader` resolve and
-// render the STANDARD deck until Phase 4 composes the leader deck; only the
-// `· Leadership` suffix distinguishes them. That is intentional.
+// All five ids serve. `berau-leader` and `gems-leader` compose the LEADER deck as
+// of gh#41 — 56 slides, section F cut, `f8-your-agentic-os` relocated — so the
+// `· Leadership` suffix is no longer the only thing that distinguishes them. What
+// they still share with their sibling is the brand: auth, chrome and every §5
+// content delta are brand-level and reach both deck sets.
 export const VARIANTS: Record<VariantId, Variant> = {
   "berau-middle-mgmt": { id: "berau-middle-mgmt", brand: "berau", deckSet: "standard" },
   "berau-leader": { id: "berau-leader", brand: "berau", deckSet: "leader" },

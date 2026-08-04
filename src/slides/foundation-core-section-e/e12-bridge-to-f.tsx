@@ -13,15 +13,23 @@
 // Motion. CSS vars only, no hex literals.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
+import { VARIANT } from "@/variant";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "./components/Reveal";
-import { e12Content as C } from "./content";
+import { e12Beat2For, e12Content as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
 
 export function E12BridgeToF() {
   const { stepIndex } = useDeck();
+
+  // Beat 2 names the section E hands off to, and the leader deck cuts F
+  // (§4.3, gh#41) — so it hands off to TOOLS there. Resolved by the content
+  // module's own pick, off `VARIANT.deckSet` and not off a `letterOf` lookup: the
+  // sentence names the section in prose, not as a letter, so there is no letter
+  // to derive.
+  const beat2 = e12Beat2For(VARIANT.deckSet);
 
   const showBeat1 = stepIndex >= 0;
   const showBeat2 = stepIndex >= 1;
@@ -148,7 +156,7 @@ export function E12BridgeToF() {
               lineHeight: 1.1,
             }}
           >
-            {highlight(C.beat2.text, C.beat2.kw)}
+            {highlight(beat2.text, beat2.kw)}
           </p>
         </Reveal>
       </div>

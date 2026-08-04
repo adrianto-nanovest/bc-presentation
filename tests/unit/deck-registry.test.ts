@@ -1,18 +1,18 @@
-// The composed deck, asserted per brand.
+// The composed deck, asserted per brand × deck set.
 //
 // DIVISION OF LABOUR with variant-composition.test.tsx: that file owns *which
-// slide* each brand gets (berau/gems/general A.1 hooks, the gems K.2, the leader
-// deck sets still rendering the standard deck) by object identity. This file
-// owns the *shape* of the composed deck — which sections run, in what order, at
-// what size. Identity assertions do not belong here and counts do not belong
-// there.
+// slide* a variant gets (berau/gems/general A.1 hooks, the gems K.2, the leader
+// deck's F cut and its retained F.8) by object identity. This file owns the
+// *shape* of the composed deck — which sections run, in what order, at what size.
+// Identity assertions do not belong here and counts do not belong there.
 //
 // `VARIANT` resolves once at module scope and `src/deck/registry.tsx` reads it
 // to resolve the deck set and the `lab` run (gh#40 moved that read there from
 // `src/slides/reveal-and-closing`), so one module epoch holds exactly ONE
-// brand's deck. Each case therefore re-points `window.location` and resets the module
-// registry before importing — once per case, in `beforeAll`, because reloading
-// the whole slide registry is the expensive part of this file.
+// VARIANT's deck — brand alone stopped naming a deck when gh#41 gave the leader
+// set its own list. Each case therefore re-points `window.location` and resets the
+// module registry before importing — once per case, in `beforeAll`, because
+// reloading the whole slide registry is the expensive part of this file.
 import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 import {
   BRANDS,
@@ -74,30 +74,70 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
   ];
 }
 
+// ── The leader deck at the Phase 4 floor (gh#41) ──────────────────────────────
+
+/** The leader deck's spine: the standard one with `techniques` GONE and `tools`
+ *  one longer.
+ *
+ *  Both facts are the same edit. `f1`–`f7` and `f9` are cut, which empties
+ *  `techniques` so it takes no letter at all; `f8-your-agentic-os` survives
+ *  inside the `tools` run, carried there by the deck set's one
+ *  `sectionOverrides` entry. Composed in this order the runs take A–J, and the
+ *  letters are not restated here for the same reason the standard SPINE does not
+ *  restate its own. */
+const LEADER_SPINE: readonly SectionRun[] = [
+  ["opening", 2], // cover + A.1
+  ["landscape", 5],
+  ["mindset", 6],
+  ["process", 5],
+  ["fundamentals", 12],
+  ["tools", 12], // g1–g10 + the relocated f8 + g11-bridge-to-h
+  ["pitfalls", 3],
+  ["meta", 4],
+  ["principles", 4],
+];
+
+/** The runs a leader deck set composes. Same `practiceLab` read as the standard
+ *  deck: leaders run the same lab (§4.4), so nothing here is deck-set-specific —
+ *  and no leader variant is registered for the brand without one. */
+function leaderRuns(brand: Brand): readonly SectionRun[] {
+  return [
+    ...LEADER_SPINE,
+    ["lab", BRANDS[brand].practiceLab ? PRACTICE_LAB_RUN : CLOSER_ONLY_RUN],
+  ];
+}
+
+/** The leader deck's own total, recorded on gh#41: the standard 64, minus the
+ *  eight cut F slides. */
+const LEADER_TOTAL_WITH_LAB = 56;
+
 interface DeckCase {
   brand: Brand;
   deckSet: DeckSetId;
 }
 
-// One row per brand × deck set whose composition is pinned. Only `standard` is
-// pinned today: Phase 4 builds the leader deck (spec §4.3 — 73 slides, sections
-// A–N, a different letter map entirely), and until then the leader variants
-// render the standard deck, a fact variant-composition.test.tsx already asserts.
-// Repeating it here would duplicate that file and force Phase 4 to REWRITE these
-// rows instead of appending to them.
+// One row per brand × deck set whose composition is pinned. The two leader rows
+// were APPENDED by gh#41, exactly as the previous ticket planned for, and no
+// standard row moved. `general` has no leader variant — leaders are addressed per
+// organisation — so there are five rows, not six.
+//
+// This is the Phase 4 FLOOR, not §4.3's finished leader deck: 56 slides across
+// A–J. Phases 5–7 grow it to 73 across A–N by filling `gap`, `shape`, `invest`
+// and `mandate`, which lengthens `LEADER_SPINE` and leaves these rows alone.
 const CASES: readonly DeckCase[] = [
   { brand: "berau", deckSet: "standard" },
   { brand: "gems", deckSet: "standard" },
   { brand: "general", deckSet: "standard" },
-  // Phase 4 appends `{ brand: …, deckSet: "leader" }` rows here and adds the
-  // matching arm to `expectedRuns` below. Two additive edits, no row rewritten.
+  { brand: "berau", deckSet: "leader" },
+  { brand: "gems", deckSet: "leader" },
 ];
 
 function expectedRuns({ brand, deckSet }: DeckCase): readonly SectionRun[] {
   switch (deckSet) {
     case "standard":
       return standardRuns(brand);
-    // Phase 4: `case "leader": return leaderRuns(brand);`
+    case "leader":
+      return leaderRuns(brand);
     default:
       throw new Error(`no composition recorded for deck set "${deckSet}"`);
   }
@@ -147,6 +187,13 @@ async function loadRegistry(variant: VariantId) {
 
 test(`the spine plus a practice-lab run is the ${OBSERVED_TOTAL_WITH_LAB} slides observed live`, () => {
   expect(totalOf(standardRuns("berau"))).toBe(OBSERVED_TOTAL_WITH_LAB);
+});
+
+test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the standard deck less the eight cut F slides`, () => {
+  expect(totalOf(leaderRuns("berau"))).toBe(LEADER_TOTAL_WITH_LAB);
+  // Eight, not nine: `f8-your-agentic-os` is kept and relocated, so the cut is
+  // `f1`–`f7` plus `f9`. The two tables above have to disagree by exactly that.
+  expect(OBSERVED_TOTAL_WITH_LAB - LEADER_TOTAL_WITH_LAB).toBe(8);
 });
 
 describe.each(CASES)("deck composed for $brand · $deckSet", (deckCase) => {

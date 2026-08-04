@@ -13,8 +13,10 @@
 // held apart even though no single composed deck contains more than one of each.
 //
 // TRAP 8 — an id is NOT a section reference. The letters inside
-// `f8-your-agentic-os` are historical: that slide renders as C.2 in the leader
-// deck. Ids are stable and opaque; display text comes from the composer and
+// `f8-your-agentic-os` are historical: that slide renders as F.11 in the leader
+// deck, where section F is cut and it is carried into the TOOLS run (gh#41), and
+// moves again to C.2 in Phase 6. Ids are stable and opaque; display text comes
+// from the composer and
 // nowhere else. This test is why ids are allowed to LOOK like section tags
 // without becoming one.
 import path from "node:path";

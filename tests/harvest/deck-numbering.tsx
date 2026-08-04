@@ -8,11 +8,12 @@
 // source would encode the same assumptions the refactor is being tested
 // against, and would prove nothing.
 //
-// ONE EPOCH HOLDS ONE BRAND. `src/variant.ts` resolves `VARIANT` at module
+// ONE EPOCH HOLDS ONE VARIANT. `src/variant.ts` resolves `VARIANT` at module
 // scope and `src/deck/registry.tsx` reads it to resolve the deck set and the
 // `lab` run (gh#40 moved that read out of `src/slides/reveal-and-closing`), so a
-// brand's deck only exists inside a module registry loaded with that brand's
-// `?variant=` in place — the pattern `tests/unit/deck-registry.test.ts` uses.
+// deck only exists inside a module registry loaded with its own `?variant=` in
+// place — the pattern `tests/unit/deck-registry.test.ts` uses. One VARIANT and no
+// longer one brand: since gh#41 a brand serves two different decks.
 // Consequence worth stating loudly: `DeckProvider` MUST be imported from the
 // same epoch as the registry. A static import would hand the slides a React
 // context object from the previous epoch and every `useDeck()` would throw.
@@ -54,17 +55,59 @@ export interface NumberingRow {
   label: string | null;
 }
 
-/** The fixture's shape: one row per slide, per brand. */
-export type DeckNumbering = Record<Brand, NumberingRow[]>;
+/**
+ * A fixture key. THE RULE: **a brand name means that brand's STANDARD deck; a
+ * variant id means a non-standard one.**
+ *
+ * The fixture was recorded per brand, when every registered variant composed the
+ * standard deck and a leader key would have held a duplicate. gh#41 gives the
+ * leader deck its own composition, so the two leader variants need keys — and
+ * re-keying all five to variant ids would rewrite the three golden arrays Phase
+ * 3 is measured against, for no gain. So the three brand keys stay exactly as
+ * they are and the leader decks arrive as `berau-leader` / `gems-leader`.
+ *
+ * WIDER THAN THE RULE, knowingly: this admits `berau-middle-mgmt`, which the rule
+ * forbids. Narrowing it would take literal `deckSet` values in `VARIANTS` (it is
+ * typed `Record<VariantId, Variant>`, so `deckSet` is `DeckSetId` and the
+ * non-standard subset cannot be derived) — a change to the module the Edge build
+ * shares, for a test-side type. The rule is enforced at RUNTIME instead, by the
+ * key-parity test in `tests/unit/deck-numbering-fixture.test.tsx`.
+ */
+export type DeckKey = Brand | VariantId;
 
-/** Brands in fixture order. Every brand composes a deck, so this is `BRANDS`
- *  itself rather than a hand-kept list — a fourth brand joins the fixture by
- *  being registered. */
+/** The fixture's shape: one row per slide, per harvested deck. */
+export type DeckNumbering = Record<string, NumberingRow[]>;
+
+/** Brands in fixture order. Every brand composes a standard deck, so this is
+ *  `BRANDS` itself rather than a hand-kept list — a fourth brand joins the
+ *  fixture by being registered. */
 export const HARVESTED_BRANDS = Object.keys(BRANDS) as Brand[];
 
-/** The variant serving this brand's STANDARD deck. `berau-leader` / `gems-leader`
- *  are registered but still compose the standard deck (Phase 4 changes that), so
- *  they would add duplicate rows and are deliberately not harvested. */
+/** One harvested deck: the variant that serves it, under the key it records at. */
+export interface HarvestTarget {
+  key: DeckKey;
+  variant: VariantId;
+}
+
+/**
+ * Every deck the app serves, in FIXTURE ORDER — the three standard decks first,
+ * in brand order, then the non-standard ones.
+ *
+ * That order is not cosmetic: it keeps the three recorded arrays where they
+ * already sit in the JSON, so gh#41's fixture diff is purely additive and the
+ * "byte-identical standard rows" claim is readable straight off the diff.
+ *
+ * Derived from `VARIANTS`, never hand-kept: a variant the app serves but nobody
+ * harvested is exactly the deck that would break unwatched.
+ */
+export const HARVEST_TARGETS: readonly HarvestTarget[] = [
+  ...HARVESTED_BRANDS.map((brand) => ({ key: brand, variant: standardVariantFor(brand) })),
+  ...(Object.keys(VARIANTS) as VariantId[])
+    .filter((id) => VARIANTS[id].deckSet !== "standard")
+    .map((id) => ({ key: id, variant: id })),
+];
+
+/** The variant serving this brand's STANDARD deck. */
 export function standardVariantFor(brand: Brand): VariantId {
   const ids = Object.keys(VARIANTS) as VariantId[];
   const id = ids.find((v) => VARIANTS[v].brand === brand && VARIANTS[v].deckSet === "standard");
@@ -142,8 +185,9 @@ function harvestSlide(
     return { index, ...readFigLabel(container, at) };
   } finally {
     // Tear down before the next slide so a leftover interval or rAF loop cannot
-    // keep running — about 190 mounts run in this one file, 64 per practice-lab
-    // brand. `cleanup()` rather than the `unmount` handle, because a slide that
+    // keep running — about 300 mounts run in this one file across five decks (64
+    // per practice-lab brand, 62 for general, 56 per leader deck since gh#41).
+    // `cleanup()` rather than the `unmount` handle, because a slide that
     // THROWS during render never yields one and its root would stay mounted for
     // the rest of the harvest.
     cleanup();
@@ -151,15 +195,18 @@ function harvestSlide(
 }
 
 /**
- * The composed deck for one brand, as rendered.
+ * The composed deck one VARIANT serves, as rendered.
+ *
+ * Keyed by variant and not by brand since gh#41: brand alone no longer names a
+ * deck — `berau-middle-mgmt` and `berau-leader` are the same brand and 56 vs 64
+ * slides. Callers that want a brand's standard deck pass `standardVariantFor`.
  *
  * Mounts every slide and collects EVERY mount failure before throwing, so a
  * broken slide reports itself by index instead of hiding behind the first one.
  * §3.7's pre-approved escape hatch (harvest a deck through Playwright instead)
  * is only reachable on evidence, and this is the evidence.
  */
-export async function harvestDeck(brand: Brand): Promise<NumberingRow[]> {
-  const variant = standardVariantFor(brand);
+export async function harvestDeck(variant: VariantId): Promise<NumberingRow[]> {
   pointLocationAt(variant);
   vi.resetModules();
   // Same epoch, all three. See the file header.
@@ -191,15 +238,15 @@ export async function harvestDeck(brand: Brand): Promise<NumberingRow[]> {
   return rows;
 }
 
-/** Every live deck, harvested one brand per module epoch. */
+/** Every live deck, harvested one variant per module epoch, in fixture order. */
 export async function harvestAllDecks(): Promise<DeckNumbering> {
-  const decks = {} as DeckNumbering;
+  const decks: DeckNumbering = {};
   try {
-    for (const brand of HARVESTED_BRANDS) {
-      decks[brand] = await harvestDeck(brand);
+    for (const { key, variant } of HARVEST_TARGETS) {
+      decks[key] = await harvestDeck(variant);
     }
   } finally {
-    // A failed harvest must not leave the last brand's `?variant=` pointing at
+    // A failed harvest must not leave the last variant's `?variant=` pointing at
     // `window.location` for whatever runs next in this file.
     restoreLocation();
   }

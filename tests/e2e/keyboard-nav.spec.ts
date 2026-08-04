@@ -68,6 +68,35 @@ test("a live section letter jumps to that section's first numbered slide", async
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "1");
 });
 
+// The same two halves, on the deck whose letters DIFFER (§4.3, gh#41). The leader
+// deck cuts section F, so its ten sections are A–J and the practice lab closes at
+// J — the letter `k` addressed on every standard deck addresses nothing here.
+// Asserted through the printed figure, never through a slide index: this file has
+// gone stale twice by naming one.
+test("the leader deck's own letters jump, and `k` is a no-op there", async ({ page }) => {
+  const problems: string[] = [];
+  page.on("pageerror", (err) => problems.push(`pageerror: ${err.message}`));
+  page.on("console", (msg) => {
+    if (msg.type() === "error") problems.push(`console: ${msg.text()}`);
+  });
+
+  await page.goto("/?variant=berau-leader&slide=6");
+  await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "6");
+
+  // `j` is THE PRACTICE LAB in the leader deck — the run that takes K in every
+  // standard deck. R5 lands the jump on the run's first numbered slide.
+  await page.keyboard.press("j");
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*J\.1/);
+  const at = await page.getAttribute(slideAttr, "data-slide-index");
+
+  // `k` passes the letter test and owns no section in this deck, so it must do
+  // nothing at all — the failure this guards is a jump to slide 0 mid-talk.
+  await page.keyboard.press("k");
+  await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", String(at));
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*J\.1/);
+  expect(problems).toEqual([]);
+});
+
 test("a letter that owns no section is a silent no-op", async ({ page }) => {
   const problems: string[] = [];
   page.on("pageerror", (err) => problems.push(`pageerror: ${err.message}`));

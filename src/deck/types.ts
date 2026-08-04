@@ -13,16 +13,17 @@ import type { SectionKey } from "./sections";
 // composed row, `<Slide>`, `SlideNumberContext`, `FigLabel` — but every copy
 // traces back to that one derivation, so none of them can disagree.
 //
-// That is what will let Phase 4's leader deck reorder its sections and render
-// `f8-your-agentic-os` as C.2 (§4.3) without re-authoring the slide: a field
-// asserting its own letter could not have survived the move.
+// That is what lets the leader deck (gh#41) cut section F and still render
+// `f8-your-agentic-os` — as F.11 there, inside the TOOLS run — without the slide
+// being re-authored: a field asserting its own letter could not have survived the
+// move.
 export interface SlideDef {
   /**
    * Stable, opaque, unique. The deck-set lists reference slides by this.
    *
    * NOT A SECTION REFERENCE. Letters inside an id are historical — the id is
    * the file's basename, frozen at the moment the file was named, and
-   * `f8-your-agentic-os` renders as C.2 in the leader deck. NEVER derive
+   * `f8-your-agentic-os` renders as F.11 in the leader deck. NEVER derive
    * display text from an id: letters and numbers come from the composer
    * (./compose.ts) and from nowhere else.
    */

@@ -154,8 +154,10 @@ describe("resolveDeckSetSlides", () => {
 
   describe("sectionOverrides", () => {
     test("re-key the named slide and leave every other one untouched", () => {
-      // The leader deck's one case: F.8 relocated into `shape`, which is what
-      // stops R1 splitting that run in three.
+      // Synthetic keys, deliberately: this asserts the MECHANISM, not the live
+      // entry. The leader deck's real one is `f8-your-agentic-os` → `tools`
+      // (pinned in `DECK_SET_COMPOSITION` below); Phase 6 changes the value to
+      // `shape` and this test must not need editing when it does.
       const resolved = resolveDeckSetSlides(
         deckSet(["title", "f8-your-agentic-os"], { "f8-your-agentic-os": "shape" }),
         { defs, brand: "berau", practiceLab: true },
@@ -259,14 +261,28 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("still resolves the leader deck set to the standard list, before §4.3", () => {
-    // Deliberate, and stated in gh#22: only the `· Leadership` suffix separates
-    // a leader variant from its sibling until the leader deck is composed. The
-    // next ticket replaces this row.
-    expect(DECK_SET_COMPOSITION.leader.slides).toEqual(DECK_SET_COMPOSITION.standard.slides);
+  test("gives the leader deck its own 56 slots — the F cut, F.8 kept", () => {
+    // Its own LIST, not the standard one: the two were the same constant until
+    // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
+    // `f8-your-agentic-os` survives, relocated.
+    const { leader, standard } = DECK_SET_COMPOSITION;
+    expect(leader.slides).toHaveLength(56);
+    expect(standard.slides.length - leader.slides.length).toBe(8);
+    expect(leader.slides).toContain("f8-your-agentic-os");
   });
 
-  test("carries no section override yet — the standard deck needs none", () => {
+  test("relocates F.8 with the one override that names the run it lands in", () => {
+    // The VALUE is what matters and is easy to get wrong: `f8-your-agentic-os`
+    // sits inside the leader deck's `tools` block, so the override must say
+    // `tools`. §4.3's `shape` would make it a second, one-slide run in the middle
+    // of `tools`, splitting `tools` in two — R4, thrown at module load. Phase 6
+    // flips the value and moves the list entry in one edit.
+    expect(DECK_SET_COMPOSITION.leader.sectionOverrides).toEqual({
+      "f8-your-agentic-os": "tools",
+    });
+  });
+
+  test("carries no section override on the standard deck, which needs none", () => {
     expect(DECK_SET_COMPOSITION.standard.sectionOverrides).toBeUndefined();
   });
 });

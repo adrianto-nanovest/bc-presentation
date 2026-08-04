@@ -15,7 +15,7 @@ import {
   E12BridgeToF,
   e12Slide,
 } from "@/slides/foundation-core-section-e/e12-bridge-to-f";
-import { e12Content } from "@/slides/foundation-core-section-e/content";
+import { e12Beat2For, e12Content } from "@/slides/foundation-core-section-e/content";
 
 function AdvanceTo({ step }: { step: number }) {
   const { goTo } = useDeck();
@@ -86,5 +86,9 @@ test("step 1 (canonicalPose) → both beats visible", () => {
 
   const beat2 = screen.getByTestId("e12-beat2");
   expect(beat2.className).toMatch(/\bon\b/);
-  expect(beat2.textContent).toMatch(e12Content.beat2.text);
+  // The STANDARD line: this file mounts the slide under the default variant
+  // (`localhost` → `general` → deck set `standard`). Beat 2 is deck-set-scoped as
+  // of gh#41 — the leader deck's line is asserted in
+  // `variant-composition.test.tsx`, which is where a per-variant epoch is set up.
+  expect(beat2.textContent).toMatch(e12Beat2For("standard").text);
 });
