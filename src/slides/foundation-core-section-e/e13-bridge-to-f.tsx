@@ -1,10 +1,10 @@
 // BRIDGE · BUILT (final slide of Section E)
 //
 // The id is `e13-bridge-to-f` because E.12 · LOOP ENGINEERING inserts ahead of
-// it (§8.2). The id is opaque (Appendix B trap 8): the letter and number the
-// slide PRINTS derive from its composed position (§3), so today — before THE
-// LOOP lands — every deck still renders it as E.12. The id does not promise a
-// number.
+// it (§8.2), which gh#48 did: every deck now renders this slide as E.13, and
+// nothing in this file was edited to make that happen. The id is opaque
+// (Appendix B trap 8) — the letter and number the slide PRINTS derive from its
+// composed position (§3), and the id does not promise either of them.
 //
 // 2 steps:
 //   0 — beat 1 reveals (display-size headline + copper rule).

@@ -1,8 +1,11 @@
 // The section-E bridge — BRIDGE · BUILT · slide tests.
 //
 // Named for the slide, not for a number: the letter and number it prints are
-// derived from its composed position (§3), so the FIG assertion below tracks
-// what the deck composes TODAY (E.12) and not the `e13` in the id.
+// derived from its composed position (§3), so the FIG assertion below tracks what
+// the deck composes TODAY. That is now E.13 — gh#48 inserted E.12 · LOOP
+// ENGINEERING ahead of this slide and the bridge moved a number without being
+// edited, which is the whole point of §3. The id was already `e13`; it did not
+// make this happen and it does not promise it either.
 //
 // Covers the new 2-step design ported from
 // `claude-design-project/jsx/slides-c.jsx:167-196`.
@@ -46,10 +49,10 @@ test("the bridge declares 2 steps with canonicalPose=1", () => {
   expect(e13Slide.surface).toBe("dark");
 });
 
-test("the bridge renders the FIG label the deck derives for it — today `E.12`", () => {
+test("the bridge renders the FIG label the deck derives for it — today `E.13`", () => {
   renderAtStep(0);
   const fig = document.querySelector(".fig-label");
-  expect(fig?.textContent).toMatch(/FIG\.\s*E\.12.*BRIDGE.*BUILT/i);
+  expect(fig?.textContent).toMatch(/FIG\.\s*E\.13.*BRIDGE.*BUILT/i);
 });
 
 test("the bridge renders its hero photo + three layered overlays", () => {

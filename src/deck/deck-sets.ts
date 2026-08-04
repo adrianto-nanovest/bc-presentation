@@ -52,12 +52,13 @@ export interface DeckSet {
 }
 
 /**
- * The standard deck, slot by slot — today's order, unchanged.
+ * The standard deck, slot by slot — 65 slots as of gh#48, which inserted
+ * `e12-loop-engineering` ahead of the section-E bridge (§4.2).
  *
  * This list IS the deck's order as of §4.1; nothing else states it. The section
  * letters it produces (A–K) are DERIVED by `./compose.ts` from where each run
  * of `sectionKey`s falls, so no comment here promises a letter. Grouping and
- * counts are annotated because a 64-line list is otherwise unreviewable.
+ * counts are annotated because a 65-line list is otherwise unreviewable.
  *
  * `k1-challenge-handoff` and `k2-practice-lab-overview` are listed
  * unconditionally: a brand without a Practice Lab drops them at resolution
@@ -99,6 +100,7 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
   "e9-context-the-wall",
   "e10-harness-what-why",
   "e11-harness-practices",
+  "e12-loop-engineering",
   "e13-bridge-to-f",
   // techniques
   "f1-two-pillars",
@@ -143,7 +145,9 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck at the Phase 4 FLOOR — 56 slides, ten sections, no new slide.
+ * The leader deck — 57 slides, ten sections. The Phase 4 floor was 56 and held no
+ * slide the standard deck did not; gh#48's `e12-loop-engineering` is the first
+ * addition, and it ships to BOTH sets because §8.2 gives it no cut anywhere.
  *
  * The curriculum is the standard deck's, minus section F and with F.8 kept: it
  * is the deck a leader can be walked through on Aug 18 whether or not Phases
@@ -201,6 +205,7 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "e9-context-the-wall",
   "e10-harness-what-why",
   "e11-harness-practices",
+  "e12-loop-engineering",
   "e13-bridge-to-f",
   // tools — plus the relocated f8, which is why the override exists
   "g1-ecosystem-overview",

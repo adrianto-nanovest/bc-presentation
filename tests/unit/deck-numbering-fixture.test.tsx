@@ -58,6 +58,12 @@ interface ObservedDeck {
  * be a `FIG_NUM` hack inside `k3-thank-you.tsx` reading `practiceLab`; gh#35
  * deleted it and the K.1 below is the composer's own output.
  *
+ * EVERY ROW GREW BY ONE ON gh#48, which inserted `e12-loop-engineering` ahead of
+ * the section-E bridge in both deck sets (§8.2 — no cut anywhere). That insert also
+ * moved one recorded figure, the bridge's, from E.12 to E.13, so re-recording it
+ * took `ALLOW_MOVED_FIGURES=1` — see `recordFixture`. No `fig` before the insert
+ * changed, and the closers did not move: the insert is inside section E.
+ *
  * The leader decks (gh#41) are 8 slides shorter — `f1`–`f7` and `f9` cut,
  * `f8-your-agentic-os` kept — and close on **J.3**, not K.3: the same three lab
  * slides, one letter earlier because section F is gone. Nothing renumbered them;
@@ -70,11 +76,11 @@ interface ObservedDeck {
  * unharvested deck, or an unrecorded one, fails there by name.
  */
 const OBSERVED: Record<string, ObservedDeck> = {
-  berau: { slides: 64, closer: "K.3" },
-  gems: { slides: 64, closer: "K.3" },
-  general: { slides: 62, closer: "K.1" },
-  "berau-leader": { slides: 56, closer: "J.3" },
-  "gems-leader": { slides: 56, closer: "J.3" },
+  berau: { slides: 65, closer: "K.3" },
+  gems: { slides: 65, closer: "K.3" },
+  general: { slides: 63, closer: "K.1" },
+  "berau-leader": { slides: 57, closer: "J.3" },
+  "gems-leader": { slides: 57, closer: "J.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

@@ -980,6 +980,66 @@ em.kw {
   animation-delay: var(--bar-delay, 0ms);
 }
 
+/* =====================================================================
+   E.12 — LOOP ENGINEERING (the mindset diptych)
+   ===================================================================== */
+
+/* Every card box on E.12 reacts to hover, on every pose (gh#48 correction 4) —
+   by COLOUR TIER and never by opacity (§8.3). The border and the text step up a
+   tier; nothing fades, and nothing rests semi-transparent.
+
+   `!important` on all three, for two reasons: each box carries its own rest tier
+   as an inline style, and the left panel's relay rows are mid-animation on
+   `f-card-highlight-cycle` — an animated declaration outranks a normal author one,
+   so only an important one can hold the hover state while the cycle runs. */
+.e12-box {
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.e12-box:hover {
+  border-color: var(--copper-200) !important;
+}
+.e12-box:hover .e12-mono {
+  color: var(--copper-100) !important;
+}
+.e12-box:hover .e12-prose {
+  color: var(--neutral-50) !important;
+}
+
+/* The heartbeat's EKG trace — a bright dash segment sweeping along the line.
+   Paired with `pathLength=1`, so the dash period is 1 and the loop is seamless. */
+@keyframes e12-ekg-sweep {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.e12-ekg-sweep {
+  animation: e12-ekg-sweep 2.2s linear infinite;
+}
+
+/* The bridge between the panels — three chevrons crossing left to right, one
+   after another, staggered per chevron by `--chev-delay`. This is "the leverage
+   moves" as motion; the words above it only name what the motion already shows. */
+@keyframes e12-chevron {
+  0% {
+    opacity: 0;
+    transform: translateX(-7px);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(9px);
+  }
+}
+.e12-chevron {
+  animation: e12-chevron 1.6s linear infinite;
+  animation-delay: var(--chev-delay, 0s);
+}
+
 /* F.4 — fade-in companion for staggered descriptions / count numbers. */
 @keyframes f-fade-up {
   0% {

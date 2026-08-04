@@ -48,7 +48,7 @@ const SPINE: readonly SectionRun[] = [
   ["landscape", 5],
   ["mindset", 6], // C.1–C.5 + the bridge into `process`
   ["process", 5],
-  ["fundamentals", 12],
+  ["fundamentals", 13], // e1–e11, E.12 · LOOP ENGINEERING (gh#48), the bridge
   ["techniques", 9],
   ["tools", 11],
   ["pitfalls", 3],
@@ -62,9 +62,11 @@ const SPINE: readonly SectionRun[] = [
 const PRACTICE_LAB_RUN = 3;
 const CLOSER_ONLY_RUN = 1;
 
-/** The live slide count recorded on the ticket (gh#28) for a practice-lab brand.
- *  Anchors SPINE to an externally observed figure; asserted once, not per case. */
-const OBSERVED_TOTAL_WITH_LAB = 64;
+/** The live slide count for a practice-lab brand: the 64 recorded on gh#28, plus
+ *  E.12 · LOOP ENGINEERING (gh#48), which §8.2 ships to every deck with no cut
+ *  anywhere. Anchors SPINE to an externally observed figure; asserted once, not
+ *  per case. */
+const OBSERVED_TOTAL_WITH_LAB = 65;
 
 /** The runs a standard deck set composes, read off the brand's `practiceLab` flag. */
 function standardRuns(brand: Brand): readonly SectionRun[] {
@@ -90,7 +92,7 @@ const LEADER_SPINE: readonly SectionRun[] = [
   ["landscape", 5],
   ["mindset", 6],
   ["process", 5],
-  ["fundamentals", 12],
+  ["fundamentals", 13], // e1–e11, E.12 · LOOP ENGINEERING (gh#48), the bridge
   ["tools", 12], // g1–g10 + the relocated f8 + g11-bridge-to-h
   ["pitfalls", 3],
   ["meta", 4],
@@ -107,9 +109,11 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
   ];
 }
 
-/** The leader deck's own total, recorded on gh#41: the standard 64, minus the
- *  eight cut F slides. */
-const LEADER_TOTAL_WITH_LAB = 56;
+/** The leader deck's own total: the standard deck, minus the eight cut F slides.
+ *  56 when gh#41 recorded it against a 64-slide standard deck, 57 now that gh#48
+ *  has inserted E.12 into both sets — the DIFFERENCE is what gh#41 pinned, and it
+ *  is still eight. */
+const LEADER_TOTAL_WITH_LAB = 57;
 
 interface DeckCase {
   brand: Brand;
@@ -121,9 +125,9 @@ interface DeckCase {
 // standard row moved. `general` has no leader variant — leaders are addressed per
 // organisation — so there are five rows, not six.
 //
-// This is the Phase 4 FLOOR, not §4.3's finished leader deck: 56 slides across
-// A–J. Phases 5–7 grow it to 73 across A–N by filling `gap`, `shape`, `invest`
-// and `mandate`, which lengthens `LEADER_SPINE` and leaves these rows alone.
+// This is not §4.3's finished leader deck: 57 slides across A–J. Phases 5–7 grow
+// it to 73 across A–N by filling `gap`, `shape`, `invest` and `mandate`, which
+// lengthens `LEADER_SPINE` and leaves these rows alone.
 const CASES: readonly DeckCase[] = [
   { brand: "berau", deckSet: "standard" },
   { brand: "gems", deckSet: "standard" },

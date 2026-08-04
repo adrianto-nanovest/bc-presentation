@@ -263,6 +263,36 @@ describe("leader deck sets", () => {
   });
 });
 
+// ── E.12 · LOOP ENGINEERING reaches every deck ────────────────────────────────
+// §8.2, gh#48: one new slide, all brands, both deck sets, NO CUT ANYWHERE — the
+// first slide since gh#41 that had to be written into both lists deliberately, and
+// the one thing that could go wrong is exactly that: one list edited, one not.
+//
+// ASSERTED AS A NEIGHBOUR PAIR, not as an index. E.12 is only correct where it is
+// — immediately before the bridge, so the bridge stays the last slide of section E
+// — and the two decks put that pair at different indices. `deck-registry.test.ts`
+// owns the run's new size (`fundamentals` 12 → 13) and the numbering fixture owns
+// the printed E.12 / E.13; this file owns which slide, and where.
+const ALL_VARIANTS: VariantId[] = [
+  "berau-middle-mgmt",
+  "gems-middle-mgmt",
+  "general",
+  "berau-leader",
+  "gems-leader",
+];
+
+describe("E.12 · LOOP ENGINEERING", () => {
+  test("composes into every deck, immediately before the section-E bridge", async () => {
+    for (const id of ALL_VARIANTS) {
+      const ids = await deckIdsFor(id);
+      const at = ids.indexOf("e12-loop-engineering");
+      expect(at, `${id} does not compose e12-loop-engineering`).toBeGreaterThan(-1);
+      expect(ids[at - 1], id).toBe("e11-harness-practices");
+      expect(ids[at + 1], id).toBe("e13-bridge-to-f");
+    }
+  });
+});
+
 // ── the bridge's beat 2 names the section E hands off to ──────────────────────
 // §4.3, gh#41. The standard deck runs F · TECHNIQUES next; the leader deck cuts F,
 // so its next section is TOOLS ECOSYSTEM and beat 2 says so. Deck-set-scoped copy,

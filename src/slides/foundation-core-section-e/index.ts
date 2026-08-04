@@ -10,6 +10,7 @@ import { e8Slide } from "./e8-context-strategies";
 import { e9Slide } from "./e9-context-the-wall";
 import { e10Slide } from "./e10-harness-what-why";
 import { e11Slide } from "./e11-harness-practices";
+import { e12Slide } from "./e12-loop-engineering";
 import { e13Slide } from "./e13-bridge-to-f";
 
 // Spec §1.1 — locked Section E order.
@@ -25,5 +26,6 @@ export const foundationCoreSectionESlides: SlideDef[] = [
   e9Slide,
   e10Slide,
   e11Slide,
+  e12Slide,
   e13Slide,
 ];

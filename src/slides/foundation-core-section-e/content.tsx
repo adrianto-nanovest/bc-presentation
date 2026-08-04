@@ -601,6 +601,111 @@ export const e11Content = {
   footerKw: ["what runs them, without you"],
 } as const;
 
+/**
+ * E.12 — LOOP ENGINEERING. Spec §8.3, as amended by the owner corrections on
+ * gh#48. This slice carries POSE 0 only, the mindset diptych; gh#49 adds the
+ * `parts` rail and the worked example beneath the same headline.
+ *
+ * SOURCED FROM `prototype-gh19b-e12-loop-engineering/content.ts`, with four
+ * copy changes the owner made on 2026-08-04 (see the slide file's header):
+ *   1. the left verdict body is ONE LINE, so both panels' verdict dividers land
+ *      at the same y
+ *   2. Steinberger goes left and gains his affiliation; Cherny goes right,
+ *      shortened to one line
+ *   3–4. layout and hover, which are the slide file's business, not this one's.
+ *
+ * KEYWORDS, per §8.3: prose carries a `*Kw` sibling, mono never does. Every
+ * string below is in exactly one of four groups, and
+ * `tests/unit/e12-loop-engineering.test.tsx` asserts that the four ACCOUNT FOR ALL
+ * OF THEM — so a bare string is a decision recorded here and not a gap:
+ *
+ *   MONO         titles, the heartbeat strip, station labels, `progress.md`, the
+ *                gate label, the bridge words, both attributions. Labels, never
+ *                sentences, so §8.3 forbids keywords on them.
+ *   HIGHLIGHTED  the headline, both verdict reasons, the gate's sentence and both
+ *                quotes — 1–3 keywords each.
+ *   MICRO-LABEL  the four turns, `you, again`, the station subtitles, the spine's
+ *                subtitle, `risky` / `approved` / `pass`. Serif, but two to five
+ *                words: a "keyword inside" one of these would be the whole string,
+ *                which highlights nothing. The 1–3-per-chunk rule needs a chunk.
+ *   VERDICT CLAIM the two `verdictTitle`s. A verdict is ONE chunk of prose set on
+ *                two lines — the claim at display weight, the reason beneath it —
+ *                and the chunk's keywords land in the reason. This is the
+ *                distribution the approved prototype shipped.
+ */
+export const e12Content = {
+  // The mindset shift IS the headline — Cherny's and Steinberger's shared verb.
+  headline: "Stop writing prompts. Start writing loops.",
+  headlineKw: ["writing loops"],
+
+  // ─────────────── pose 0 — the mindset shift, as a diptych ───────────────
+  mindset: {
+    left: {
+      title: "PROMPTING — TURN BY TURN",
+      // Four turns on an endless relay. `who` drives the icon only, so it is a
+      // marker and not copy.
+      rows: [
+        { who: "you", text: "you type a prompt" },
+        { who: "agent", text: "the agent replies" },
+        { who: "you", text: "you read the reply" },
+        { who: "you", text: "you type again" },
+      ],
+      returnLabel: "you, again",
+      verdictTitle: "You are holding the tool the whole time.",
+      // ONE LINE (owner correction 1). The meaning held from the prototype's
+      // two-line body: you are the heartbeat, the checker and the memory, and
+      // the work stops when you stop.
+      verdict: "Heartbeat, checker, memory — all you. Stop, and the work stops.",
+      verdictKw: ["the work stops"],
+    },
+    bridge: ["THE", "LEVERAGE", "MOVES"],
+    right: {
+      title: "LOOPING — A SYSTEM YOU DESIGN ONCE",
+      heartbeat: "HEARTBEAT — A SCHEDULE OR AN EVENT",
+      stations: [
+        { label: "DISCOVER", sub: "find the work" },
+        { label: "IMPLEMENT", sub: "the maker" },
+        { label: "VERIFY", sub: "the checker — a second agent" },
+        { label: "COMMIT", sub: "opens the PR" },
+      ],
+      spine: { label: "SPINE", file: "progress.md", sub: "read first, written last" },
+      gate: {
+        label: "YOU — THE HUMAN GATE",
+        sub: "only the risky calls come to you. You do not type each turn.",
+        subKw: ["only the risky calls"],
+      },
+      risky: "risky",
+      approved: "approved",
+      pass: "pass",
+      verdictTitle: "The loop holds the steps in the middle.",
+      verdict: "You keep intent and accountability.",
+      verdictKw: ["intent", "accountability"],
+    },
+    /**
+     * The two practitioners who renamed the job — index 0 sits under the LEFT
+     * panel, index 1 under the right (owner correction 2, which swapped them).
+     *
+     * Cherny's line is a PARAPHRASE, deliberately. The sentence the prototype
+     * quoted traces to a secondary article marked *not verified* in
+     * `docs/researches/topic-loop-engineering-x-articles.md`, and §12.1 call 5
+     * says: verify against the primary, or paraphrase. This paraphrases, and
+     * one line is also what correction 2 asks for.
+     */
+    quotes: [
+      {
+        text: "You should be designing loops that prompt your agents.",
+        kw: ["designing loops"],
+        attr: "PETER STEINBERGER · FOUNDER OF OPENCLAW",
+      },
+      {
+        text: "I don't prompt Claude anymore — I write the loops that prompt it.",
+        kw: ["write the loops"],
+        attr: "BORIS CHERNY · CREATOR OF CLAUDE CODE",
+      },
+    ],
+  },
+} as const;
+
 /** One reveal: the string, plus the substrings rendered as keywords. */
 export interface E13Beat {
   text: string;

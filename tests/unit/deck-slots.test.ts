@@ -242,11 +242,11 @@ describe("resolveDeckSetSlides", () => {
 // ── The lists themselves ─────────────────────────────────────────────────────
 
 describe("DECK_SET_COMPOSITION", () => {
-  test("gives the standard deck the 64 slots it runs today", () => {
-    // 64 SLOTS, not 64 files: a practice-lab brand composes all 64 and `general`
-    // composes 62. The figure is the one recorded live on gh#28 and held by
-    // `tests/unit/deck-numbering-fixture.test.tsx`.
-    expect(DECK_SET_COMPOSITION.standard.slides).toHaveLength(64);
+  test("gives the standard deck the 65 slots it runs today", () => {
+    // 65 SLOTS, not 65 files: a practice-lab brand composes all 65 and `general`
+    // composes 63. The figure is gh#28's live 64 plus E.12 · LOOP ENGINEERING
+    // (gh#48), and it is held by `tests/unit/deck-numbering-fixture.test.tsx`.
+    expect(DECK_SET_COMPOSITION.standard.slides).toHaveLength(65);
   });
 
   test("names each slot once — no deck set composes a slide twice", () => {
@@ -261,12 +261,12 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 56 slots — the F cut, F.8 kept", () => {
+  test("gives the leader deck its own 57 slots — the F cut, F.8 kept", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(56);
+    expect(leader.slides).toHaveLength(57);
     expect(standard.slides.length - leader.slides.length).toBe(8);
     expect(leader.slides).toContain("f8-your-agentic-os");
   });
