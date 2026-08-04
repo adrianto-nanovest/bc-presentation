@@ -105,13 +105,7 @@ const LINE: Record<Lit, string> = {
 
 export function TriageFlow({ active, reduced }: { active: E12PartId | null; reduced: boolean }) {
   return (
-    <PanelShell
-      testid="e12-panel-triage"
-      title={T.title}
-      foot={T.closer}
-      footKw={T.closerKw}
-      footDelay={1150}
-    >
+    <PanelShell testid="e12-panel-triage" title={T.title}>
       <div style={{ position: "relative", height: ILLUS_H }} data-active-part={active ?? "none"}>
         <FlowLines active={active} reduced={reduced} />
 
@@ -314,7 +308,7 @@ function FlowLines({ active, reduced }: { active: E12PartId | null; reduced: boo
   // reveals on that box's frame — tip included, via `Connector` (correction 5) —
   // and it takes that box's rank, so a hovered part lights a continuous path and
   // not a row of bright arrows between dimmed boxes (correction 9).
-  const arrows: { d: string; to: E12StageId; delay: number }[] = [
+  const arrows: { d: string; to: E12StageId; delay: number; head?: boolean }[] = [
     { d: `M${CX},${HB.y + HB.h} V${READ.y - 3}`, to: "read", delay: 150 },
     { d: `M${CX},${READ.y + READ.h} V${FIND.y - 3}`, to: "find", delay: 240 },
     { d: `M${CX},${FIND.y + FIND.h} V${DRAFT.y - 3}`, to: "draft", delay: 330 },
@@ -323,9 +317,15 @@ function FlowLines({ active, reduced }: { active: E12PartId | null; reduced: boo
     // the fork
     { d: `M${VERDICT.x},${VERDICT.y + VERDICT.h / 2} H${FAIL.x + FAIL.w / 2} V${FAIL.y - 3}`, to: "fail", delay: 660 },
     { d: `M${VERDICT.x + VERDICT.w},${VERDICT.y + VERDICT.h / 2} H${PASS.x + PASS.w / 2} V${PASS.y - 3}`, to: "pass", delay: 660 },
-    // the join — both branches end at the spine
-    { d: `M${FAIL.x + FAIL.w / 2},${FAIL.y + FAIL.h} V${UPDATE.y - 10} H${CX - 4}`, to: "update", delay: 780 },
-    { d: `M${PASS.x + PASS.w / 2},${PASS.y + PASS.h} V${UPDATE.y - 10} H${CX + 4}`, to: "update", delay: 780 },
+    // The join — both branches end at the spine. THREE PATHS, ONE ARROWHEAD
+    // (owner call, 2026-08-04): the two horizontal runs used to carry their own
+    // tip and stopped 4px short of the centreline, so the junction rendered as
+    // three heads meeting in a ✳. They now run flush INTO the centreline with no
+    // marker, and the short vertical drop below them carries the only tip on the
+    // junction — pointing into `Update progress.md`, which is where all three
+    // paths are actually going. `head: false` is what says so at the call site.
+    { d: `M${FAIL.x + FAIL.w / 2},${FAIL.y + FAIL.h} V${UPDATE.y - 10} H${CX}`, to: "update", delay: 780, head: false },
+    { d: `M${PASS.x + PASS.w / 2},${PASS.y + PASS.h} V${UPDATE.y - 10} H${CX}`, to: "update", delay: 780, head: false },
     { d: `M${CX},${UPDATE.y - 10} V${UPDATE.y - 3}`, to: "update", delay: 780 },
   ];
 
@@ -361,7 +361,9 @@ function FlowLines({ active, reduced }: { active: E12PartId | null; reduced: boo
               fill="none"
               stroke={LINE[lit]}
               strokeWidth={1.2}
-              markerEnd={`url(#${lit === "dim" ? arrow.dim : arrow.arrow})`}
+              markerEnd={
+                a.head === false ? undefined : `url(#${lit === "dim" ? arrow.dim : arrow.arrow})`
+              }
               pathLength={1}
             />
           </Connector>

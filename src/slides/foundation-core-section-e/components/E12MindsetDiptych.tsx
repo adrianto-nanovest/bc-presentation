@@ -175,8 +175,24 @@ export function E12MindsetDiptych() {
 const ROW = { height: 46, gap: 24, width: 310, top: 48 };
 const rowTop = (i: number) => i * (ROW.height + ROW.gap);
 const rowMid = (i: number) => rowTop(i) + ROW.height / 2;
-/** The relay's full cycle. Four rows, so each owns a quarter of the beat. */
-const CYCLE_S = 6;
+/**
+ * THE RELAY IS A THREE-ROW LOOP WITH A ONE-ROW ENTRY (owner call, 2026-08-04).
+ *
+ * Row 01 is how you ENTER the relay; rows 02–04 are the turn you can never leave
+ * — the agent replies, you read it, you type again, and the next thing that
+ * happens is the agent replying again. So the return path lands on row 02, not on
+ * row 01, and the highlight travels 01 → 02 → 03 → 04 → 02 → 03 → 04 → …
+ *
+ * The cycle holds THREE slots (`LOOP_ROWS`), 1.5s each, which is the slot width
+ * the four-row version shipped with. Rows 02–04 take slot delays of 1, 2 and 3
+ * slots: row 04's delay is a WHOLE period, so its first highlight lands after row
+ * 01's and every later one lands after row 03's. Row 01 runs the same keyframe
+ * ONCE (`animationIterationCount`) and then rests — a row that keeps re-lighting
+ * would say the loop returns to it, which is the thing this arrangement denies.
+ */
+const LOOP_ROWS = 3;
+const SLOT_S = 1.5;
+const CYCLE_S = LOOP_ROWS * SLOT_S;
 
 function TurnByTurn() {
   const L = M.left;
@@ -225,10 +241,12 @@ function TurnByTurn() {
                 alignItems: "center",
                 gap: 11,
                 padding: "0 13px",
-                // Each row owns a quarter of the relay. The class is the
-                // deck-wide highlight cycle, parameterized (globals.css).
+                // Each row owns one slot of the relay — see `LOOP_ROWS`. The
+                // class is the deck-wide highlight cycle, parameterized
+                // (globals.css); row 01 runs it once and drops out.
                 "--cycle-duration": `${CYCLE_S}s`,
-                "--cycle-delay": `${(i * CYCLE_S) / L.rows.length}s`,
+                "--cycle-delay": `${i * SLOT_S}s`,
+                ...(i === 0 ? { animationIterationCount: 1 } : null),
               } as CSSProperties}
             >
               <span className="e12-mono" style={mono(9.5, "var(--copper-500)", 0.12)}>
@@ -271,16 +289,19 @@ function TurnByTurn() {
             />
           ))}
           {/* you, again — the reply's only destination is your next turn, which
-              is why this path exists and why it never leaves the panel */}
+              is why this path exists and why it never leaves the panel. It lands
+              on ROW 02: row 01 is the entry, and what follows your next prompt is
+              the agent replying again (see `LOOP_ROWS`). The label sits on the
+              arc's own midpoint, which is row 03's centreline. */}
           <path
             className="f-arrow-stream"
-            d={`M${ROW.width + 6},${rowMid(3)} H345 V${rowMid(0)} H${ROW.width + 12}`}
+            d={`M${ROW.width + 6},${rowMid(3)} H345 V${rowMid(1)} H${ROW.width + 12}`}
             fill="none"
             stroke="var(--copper-600)"
             strokeWidth={1.2}
             markerEnd={`url(#${arrow.dim})`}
           />
-          <text x={356} y={(rowMid(1) + rowMid(2)) / 2 + 4} style={edgeLabel(12)}>
+          <text x={356} y={rowMid(2) + 4} style={edgeLabel(12)}>
             {L.returnLabel}
           </text>
         </svg>

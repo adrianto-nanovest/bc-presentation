@@ -82,7 +82,7 @@ const CALLBACK_RESERVE = 15;
 function HeartbeatsPanel({ reduced }: { reduced: boolean }) {
   const heartbeat = PANELS.heartbeat;
   return (
-    <PanelShell testid="e12-panel-heartbeat" title={heartbeat.title} foot={heartbeat.foot} footKw={heartbeat.footKw}>
+    <PanelShell testid="e12-panel-heartbeat" title={heartbeat.title}>
       <div
         style={{
           display: "grid",
@@ -260,7 +260,7 @@ function OneBeatPanel({ reduced }: { reduced: boolean }) {
   const arrow = arrowIds("beat");
 
   return (
-    <PanelShell testid="e12-panel-beat" title={beat.title} foot={beat.foot} footKw={beat.footKw}>
+    <PanelShell testid="e12-panel-beat" title={beat.title}>
       <div style={{ position: "relative", height: ILLUS_H }}>
         <svg
           width={CANVAS_W}
@@ -414,7 +414,7 @@ function CheckerPanel() {
   const arrow = arrowIds("ladder");
 
   return (
-    <PanelShell testid="e12-panel-checker" title={checker.title} foot={checker.foot} footKw={checker.footKw}>
+    <PanelShell testid="e12-panel-checker" title={checker.title}>
       {/* strongest → weakest: the axis the three rungs hang off */}
       <div style={{ position: "relative", height: 26 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
@@ -548,7 +548,7 @@ function SpinePanel({ reduced }: { reduced: boolean }) {
   const arrow = arrowIds("spine");
 
   return (
-    <PanelShell testid="e12-panel-spine" title={spine.title} foot={spine.foot} footKw={spine.footKw}>
+    <PanelShell testid="e12-panel-spine" title={spine.title}>
       <div
         style={{
           height: ILLUS_H,

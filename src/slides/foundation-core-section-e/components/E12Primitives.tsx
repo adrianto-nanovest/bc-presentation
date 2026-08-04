@@ -15,7 +15,6 @@
 //
 // CSS vars only, no hex literals. The hover itself is `.e12-box` in globals.css.
 import type { CSSProperties, ReactNode } from "react";
-import { highlight } from "@/components/highlight";
 import { HintIcon } from "@/components/HintIcon";
 import { CopperRule, Reveal } from "./Reveal";
 
@@ -121,13 +120,19 @@ const HEAD = { labelH: 16, ruleGap: 10, ruleH: 1, contentGap: 14 };
 export const HEAD_H = HEAD.labelH + HEAD.ruleGap + HEAD.ruleH + HEAD.contentGap;
 
 /**
- * THE FOOT, AND WHY IT IS 72px OFF THE FLOOR (gh#49 correction 6). The prototype
- * ran its canvas to `bottom: 34` and every panel's foot line collided with the
- * NavBar at 1280×720. The NavBar's cluster is ~56px tall including its 14px
- * bottom padding, so the last row of slide content has to stop above y≈660: this
- * puts the foot's bottom edge at y=648 and its text baseline higher still.
+ * THE FOOT ROW, NOW EMPTY — and kept as air, not reclaimed.
+ *
+ * gh#49 correction 6 sized it: the prototype ran its canvas to `bottom: 34` and
+ * every panel's foot line collided with the NavBar at 1280×720, so the row was
+ * placed to end at y=648. The owner deleted the foot COPY on 2026-08-04 — all
+ * four panel foots and pose 2's closer — and this height stays in the arithmetic
+ * on purpose: `ILLUS_H` is the number four illustrations are tuned against
+ * (`ORBIT.cy` in `./E12PartPanels.tsx` is literally derived from it), so
+ * reclaiming the 42px would move every figure on the slide to buy blank space
+ * under it. The row is now the canvas's bottom margin, and pose 2's recap is what
+ * sits in it.
  */
-const FOOT = { height: 30, gap: 12, paddingTop: 9 };
+const FOOT = { height: 30, gap: 12 };
 /** Every panel's illustration area — one height, so no panel can outgrow the
  *  space the next panel gets and make the canvas jump. */
 export const ILLUS_H = CANVAS_H - HEAD_H - FOOT.height - FOOT.gap;
@@ -180,25 +185,26 @@ export function E12Heading({
 }
 
 /**
- * EVERY RIGHT-CANVAS PANEL: title, illustration, foot. Three fixed bands.
+ * EVERY RIGHT-CANVAS PANEL: title, then illustration. Two fixed bands.
  *
  * NO SUBTITLE (gh#49 correction 2). The prototype gave each panel an italic
  * kicker under its title; all five are deleted, title then illustration — which
  * is also why the illustration band can start at a fixed `HEAD_H` for all four.
+ *
+ * NO FOOT LINE either, since 2026-08-04 (owner call). Every panel carried one
+ * italic sentence on a ruled row at the bottom of the canvas — "…called a beat",
+ * "remembers nothing", "done is a check, not an opinion", "No spine, no loop",
+ * and pose 2's "You typed nothing" — and all five are deleted, copy and band
+ * together. The illustration above each one already makes the point, and the row
+ * they occupied is where pose 2's recap now runs.
  */
 export function PanelShell({
   testid,
   title,
-  foot,
-  footKw,
-  footDelay = 500,
   children,
 }: {
   testid: string;
   title: string;
-  foot: string;
-  footKw: readonly string[];
-  footDelay?: number;
   children: ReactNode;
 }) {
   return (
@@ -213,24 +219,6 @@ export function PanelShell({
       >
         {children}
       </div>
-
-      <Reveal
-        on
-        delay={footDelay}
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: FOOT.height,
-          borderTop: "1px solid var(--copper-900)",
-          paddingTop: FOOT.paddingTop,
-          boxSizing: "border-box",
-          textAlign: "center",
-        }}
-      >
-        <span style={prose(13.5, "var(--copper-100)", true)}>{highlight(foot, footKw)}</span>
-      </Reveal>
     </Reveal>
   );
 }

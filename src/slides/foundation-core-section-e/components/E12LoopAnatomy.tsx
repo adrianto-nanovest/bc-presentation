@@ -60,15 +60,15 @@ const cardTop = (i: number) => i * (CARD.h + CARD.gap);
 
 /**
  * THE GUARDRAIL'S SLOT (§12.1 call 1, closed on gh#50 — copy and reasoning in
- * `../content.tsx`). It is the FIRST FREE ROW UNDER THE RAIL, and that row is
- * lower on pose 1 than on pose 2 because pose 1 has one more thing above it:
- * measured at 1280×720, the cards end at stage y=505, pose 1's return label runs
- * 517→541, and pose 2's recap starts at y=612. So pose 1 takes 549 (clear of the
- * label, nothing below it) and pose 2 takes 517 (straight under the cards, 37px
- * of air above the recap). One offset for both would leave 5px between this
- * block and the recap, and the two italic notes would read as one paragraph.
+ * `../content.tsx`). It is the FIRST FREE ROW UNDER THE RAIL, and it is now ONE
+ * offset for both poses: the owner deleted pose 1's return label on 2026-08-04,
+ * which was the only thing that ever sat between the cards and this block. So the
+ * guardrail sits straight under the cards on pose 1 and pose 2 alike — measured at
+ * 1280×720, the cards end at stage y=505 and this block starts at y=517 — and it
+ * no longer MOVES when the presenter steps between the two poses, which the old
+ * two-offset version did.
  */
-const guardTop = (pose: number) => HEAD_H + CARDS_H + (pose < 2 ? 44 : 12);
+const GUARD_TOP = HEAD_H + CARDS_H + 12;
 
 const PART_ICONS: Record<E12PartId, typeof Activity> = {
   heartbeat: Activity,
@@ -81,12 +81,21 @@ const PART_ICONS: Record<E12PartId, typeof Activity> = {
 
 export function E12LoopAnatomy({ pose }: { pose: number }) {
   // Un-hover RELEASES; click PINS (settled on #19 — pinning is the only way to
-  // hold state). `hovered ?? pinned` and not the other way round: a pin's job is
-  // to HOLD a panel after the pointer leaves, not to lock the rail, so hovering
-  // another card still swaps the panel and letting go falls back to the pin.
+  // hold state).
+  //
+  // A PIN LOCKS THE CANVAS (owner call, 2026-08-04). `pinned ?? hovered`, so once
+  // a part is pinned the right column stops answering the pointer altogether:
+  // hovering another card no longer swaps the panel out from under the thing the
+  // presenter deliberately parked there. Before this, a pin only survived
+  // un-hover, which meant a stray pointer crossing the rail while the presenter
+  // talked would replace the pinned panel mid-sentence.
+  //
+  // THE RAIL STILL ANSWERS THE POINTER, and that is the other half of the call:
+  // `on` below is `hovered || pinned`, so a hovered card lights exactly as it
+  // always did — the affordance stays alive, only the canvas is held.
   const [hovered, setHovered] = useState<E12PartId | null>(null);
   const [pinned, setPinned] = useState<E12PartId | null>(null);
-  const active = hovered ?? pinned;
+  const active = pinned ?? hovered;
 
   // A PIN DOES NOT CROSS A POSE BOUNDARY. The rail is mounted for both poses, so a
   // pin set on pose 1 would otherwise still be holding a panel when the presenter
@@ -111,7 +120,7 @@ export function E12LoopAnatomy({ pose }: { pose: number }) {
     <div data-testid="e12-anatomy" style={{ position: "absolute", inset: 0 }}>
       <Rail
         pose={pose}
-        active={active}
+        hovered={hovered}
         pinned={pinned}
         onHover={setHovered}
         onPin={(id) => setPinned((cur) => (cur === id ? null : id))}
@@ -145,13 +154,15 @@ export function E12LoopAnatomy({ pose }: { pose: number }) {
 
 function Rail({
   pose,
-  active,
+  hovered,
   pinned,
   onHover,
   onPin,
 }: {
   pose: number;
-  active: E12PartId | null;
+  /** The pointer's own truth. The rail lights this AND the pin — see `active`
+   *  in `E12LoopAnatomy`: the canvas answers only the pin. */
+  hovered: E12PartId | null;
   pinned: E12PartId | null;
   onHover: (id: E12PartId | null) => void;
   onPin: (id: E12PartId) => void;
@@ -208,7 +219,10 @@ function Rail({
 
         {C.parts.map((p, i) => {
           const Icon = PART_ICONS[p.id];
-          const on = active === p.id;
+          // The HOVERED card lights, and so does the pinned one — the pin is what
+          // the canvas is showing, so it cannot go dark while the pointer is
+          // somewhere else on the rail. The pin glyph is what tells the two apart.
+          const on = hovered === p.id || pinned === p.id;
           const isPinned = pinned === p.id;
           return (
             <Reveal key={p.id} on delay={90 + i * 85}>
@@ -276,21 +290,13 @@ function Rail({
         })}
       </div>
 
-      {/* Pose 1 only. On pose 2 the flow's own dashed return says the same thing
-          in the example's words — "and again tomorrow at 9:00" — so this label
-          would be the second copy of one idea (correction 8). */}
-      {pose < 2 && (
-        <Reveal
-          on
-          delay={430}
-          data-testid="e12-rail-return"
-          style={{ position: "absolute", left: CARD.inset, top: HEAD_H + CARDS_H + 12, width: RAIL.width - CARD.inset }}
-        >
-          <span style={prose(11.5, "var(--copper-300)", true)}>
-            ↺ {highlight(C.returnArc, C.returnArcKw)}
-          </span>
-        </Reveal>
-      )}
+      {/* NO RETURN LABEL, on either pose (owner call, 2026-08-04). gh#49's
+          correction 8 had already deleted it from pose 2, where the flow's own
+          dashed return says the same thing in the example's words; it is now gone
+          from pose 1 as well. The ARC stays on both poses — it is the loop's
+          shape, and the rail's four cards plus the arc back up to HEARTBEAT
+          already say "the next beat starts here" without a line of prose
+          repeating it. */}
 
       {/* THE GUARDRAIL — the slide's one risk row (§12.1 call 1, gh#50). On both
           poses, because the canonical pose is the one that prints: a pose-1-only
@@ -304,7 +310,7 @@ function Rail({
         style={{
           position: "absolute",
           left: CARD.inset,
-          top: guardTop(pose),
+          top: GUARD_TOP,
           width: RAIL.width - CARD.inset,
         }}
       >
@@ -318,10 +324,23 @@ function Rail({
 
       {/* Pose 2's recap, in E.11's footer style (correction 8): serif italic
           13.5px on neutral-400, quiet, at the bottom-left of the stage where
-          E.11's own thesis sits. */}
+          E.11's own thesis sits.
+
+          IT SPANS BOTH COLUMNS, and that is the owner call of 2026-08-04: at the
+          rail's own 356px this line wrapped to two, and a recap is one line or it
+          is a paragraph. The width below is the rail's left edge to the canvas's
+          right edge, which is the same span the headline uses. It is still a CHILD
+          OF THE RAIL — nothing may be drawn BETWEEN the two columns (gh#49
+          correction 3), and the recap sits UNDER both of them, in the row the
+          panels' deleted foot lines used to occupy. */}
       {pose >= 2 && (
-        <Reveal on delay={300} data-testid="e12-thesis" style={{ position: "absolute", left: 0, bottom: 0, width: RAIL.width }}>
-          <p style={{ ...prose(13.5, "var(--neutral-400)", true), margin: 0 }}>
+        <Reveal
+          on
+          delay={300}
+          data-testid="e12-thesis"
+          style={{ position: "absolute", left: 0, bottom: 0, width: CANVAS.left + CANVAS_W - RAIL.left }}
+        >
+          <p style={{ ...prose(13.5, "var(--neutral-400)", true), margin: 0, whiteSpace: "nowrap" }}>
             {highlight(C.thesis, C.thesisKw)}
           </p>
         </Reveal>

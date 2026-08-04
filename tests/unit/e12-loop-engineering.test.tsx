@@ -332,14 +332,38 @@ test("click PINS: the panel holds after the pointer leaves, and clicking again r
   expect(card.querySelector('[aria-label="pinned"]')).toBeNull();
 });
 
-test("a pin HOLDS but does not lock: hovering another card still swaps, and letting go falls back", () => {
+test("a pin LOCKS the canvas: another card still lights, but the panel does not move", () => {
+  // Owner call, 2026-08-04, and a REVERSAL of the behaviour gh#49 shipped: a pin
+  // used to survive un-hover only, so a pointer crossing the rail while the
+  // presenter talked replaced the pinned panel mid-sentence. The pin now holds the
+  // right column outright.
   renderSlide(1);
   fireEvent.click(screen.getByTestId("e12-card-spine"));
 
   hover("beat");
-  expect(panelOf()).toBe("beat");
+  expect(panelOf()).toBe("spine");
+  expect(screen.getByTestId("e12-panel-spine")).toBeInTheDocument();
+  expect(screen.queryByTestId("e12-panel-beat")).toBeNull();
+  // …and the rail still answers the pointer, which is the other half of the call:
+  // BOTH cards read active — the hovered one and the one the canvas is showing.
+  expect(screen.getByTestId("e12-card-beat").getAttribute("data-active")).toBe("true");
+  expect(screen.getByTestId("e12-card-spine").getAttribute("data-active")).toBe("true");
+
   unhover("beat");
   expect(panelOf()).toBe("spine");
+  expect(screen.getByTestId("e12-card-beat").getAttribute("data-active")).toBe("false");
+});
+
+test("a pin locks pose 2's lighting too — the same rail, the same grammar", () => {
+  renderSlide(2);
+  fireEvent.click(screen.getByTestId("e12-card-checker"));
+  expect(screen.getByTestId("e12-flow-review").getAttribute("data-lit")).toBe("on");
+
+  hover("spine");
+  // The flow keeps the CHECKER's stages lit; only the rail card follows the pointer.
+  expect(screen.getByTestId("e12-flow-review").getAttribute("data-lit")).toBe("on");
+  expect(screen.getByTestId("e12-flow-read").getAttribute("data-lit")).toBe("dim");
+  expect(screen.getByTestId("e12-card-spine").getAttribute("data-active")).toBe("true");
 });
 
 test("a pin does not cross a pose boundary — each pose arrives at rest", () => {
@@ -401,14 +425,15 @@ test("both columns' rules end at their own text, and the hint sits outside the r
   expect(panelTitle?.querySelector(".copper-rule")?.getAttribute("style")).toContain("width: 100%");
 });
 
-test("no panel renders a subtitle, and all four illustrations start at the same y", () => {
-  // gh#49 corrections 2 and 6. A panel is exactly three bands — heading,
-  // illustration, foot — so a fourth child IS the deleted kicker coming back.
+test("no panel renders a subtitle or a foot, and all four illustrations start at the same y", () => {
+  // gh#49 corrections 2 and 6, plus the 2026-08-04 foot deletion. A panel is now
+  // exactly TWO bands — heading, illustration — so a third child is either the
+  // deleted kicker or the deleted foot line coming back.
   renderSlide(1);
   for (const id of PART_IDS) {
     hover(id);
     const panel = screen.getByTestId(`e12-panel-${id}`);
-    expect([...panel.children], id).toHaveLength(3);
+    expect([...panel.children], id).toHaveLength(2);
     const illus = screen.getByTestId(`e12-panel-${id}-illustration`);
     expect(illus.style.top, id).toBe(HEAD_H);
     expect(illus.style.height, id).toBe("409px");
@@ -455,7 +480,6 @@ test("HEARTBEAT renders all four kinds, each with a stop condition and an analog
   expect(panel.textContent).toContain("YOU HOLD IT");
   expect(panel.textContent).toContain("more and more unattended");
   expect(panel.textContent).toContain("IT RUNS WITHOUT YOU");
-  expect(panel.textContent).toContain("called a beat");
 });
 
 test("kind 2, and only kind 2, calls back to the Ralph card (§12.1 call 2)", () => {
@@ -490,7 +514,6 @@ test("kind 2, and only kind 2, calls back to the Ralph card (§12.1 call 2)", ()
 test("CHECKER renders three rungs with the human gate widening as the proof thins", () => {
   renderSlide(1);
   hover("checker");
-  const panel = screen.getByTestId("e12-panel-checker");
 
   const widths = e12Content.panels.checker.rungs.map((r) => {
     const rung = screen.getByTestId(`e12-rung-${r.num}`);
@@ -502,8 +525,12 @@ test("CHECKER renders three rungs with the human gate widening as the proof thin
   expect(widths).toEqual([...widths].sort((a, b) => a - b));
   expect(new Set(widths).size).toBe(3);
   expect(widths[2]).toBe(1);
-  // This panel IS the verification card §8.2 found missing.
-  expect(panel.textContent).toContain("done is a check, not an opinion");
+  // This panel IS the verification card §8.2 found missing, and it still is with
+  // the foot line gone: the argument moved from a sentence to the BADGES, which
+  // run proof → partial proof → a claim, and to the widening gate bars above.
+  const badges = e12Content.panels.checker.rungs.map((r) => r.badge);
+  expect(badges[2]).toBe("a claim, not a proof");
+  badges.forEach((b, i) => expect(screen.getByTestId(`e12-rung-${i + 1}`).textContent).toContain(b));
 });
 
 test("ONE BEAT and SPINE render the runtime and the memory between runs", () => {
@@ -513,7 +540,6 @@ test("ONE BEAT and SPINE render the runtime and the memory between runs", () => 
   const beat = screen.getByTestId("e12-panel-beat");
   e12Content.panels.beat.stations.forEach((s) => expect(beat.textContent).toContain(s.name));
   expect(beat.textContent).toContain("the beat ends");
-  expect(beat.textContent).toContain("remembers nothing");
   expect(screen.getByTestId("e12-comet")).toBeInTheDocument();
   unhover("beat");
 
@@ -524,7 +550,6 @@ test("ONE BEAT and SPINE render the runtime and the memory between runs", () => 
   expect(spine.textContent).toContain("memory is wiped");
   expect(spine.textContent).toContain("CLAUDE.md / AGENTS.md");
   expect(spine.textContent).toContain("progress.md");
-  expect(spine.textContent).toContain("No spine, no loop");
 });
 
 test("NO OpenCode string appears anywhere — in the copy or on any pose", () => {
@@ -542,7 +567,7 @@ test("NO OpenCode string appears anywhere — in the copy or on any pose", () =>
 
 // ── pose 2 — the worked example ─────────────────────────────────────────────
 
-test("pose 2 renders the triage flow, the fork, both day-tokens and the closer", () => {
+test("pose 2 renders the triage flow, the fork and both day-tokens", () => {
   renderSlide(2);
 
   expect(panelOf()).toBe("triage");
@@ -556,12 +581,29 @@ test("pose 2 renders the triage flow, the fork, both day-tokens and the closer",
   expect(panel.textContent).toContain("needs a human");
   expect(panel.textContent).toContain("Open a pull request");
   expect(panel.textContent).toContain("again tomorrow at 9:00");
-  expect(panel.textContent).toContain("You typed nothing");
 
   // Two days, on alternating laps: one opens a PR, the next flags a person.
   expect(screen.getByTestId("e12-day-pass")).toBeInTheDocument();
   expect(screen.getByTestId("e12-day-fail")).toBeInTheDocument();
   expect(document.querySelectorAll("animateMotion")).toHaveLength(2);
+});
+
+test("the branch join carries ONE arrowhead, on the drop into `Update progress.md`", () => {
+  // Owner call, 2026-08-04. The two horizontal runs out of FAIL and PASS used to
+  // carry a tip each and stop 4px short of the centreline, so the junction drew
+  // three heads meeting in a star. They now run flush into the centreline with no
+  // marker, and the short vertical drop below them owns the only tip.
+  renderSlide(2);
+  const joins = [...document.querySelectorAll('[data-testid="e12-arrow-update"]')];
+  expect(joins).toHaveLength(3);
+
+  const headed = joins.filter((p) => p.getAttribute("marker-end"));
+  expect(headed).toHaveLength(1);
+  // …and the one that keeps it is the drop INTO the box, not either branch run.
+  expect(headed[0].getAttribute("d")).toBe("M300,320 V327");
+  joins
+    .filter((p) => !p.getAttribute("marker-end"))
+    .forEach((p) => expect(p.getAttribute("d")).toMatch(/H300$/));
 });
 
 test("hovering a rail part lights EXACTLY the stages it owns, and demotes the rest", () => {
@@ -605,14 +647,13 @@ test("hovering a rail part lights EXACTLY the stages it owns, and demotes the re
   expect([...claimed].sort()).toEqual([...ALL_STAGES].sort());
 });
 
-test("pose 2 drops the rail's return label, and its thesis is one quiet line", () => {
-  // gh#49 correction 8. The label stays on pose 1; the recap arrives in E.11's
-  // footer style — serif italic 13.5px on neutral-400 — not the prototype's
-  // display-weight three-liner.
+test("NEITHER pose draws a return label, and pose 2's thesis is one quiet line", () => {
+  // gh#49 correction 8 dropped the label from pose 2; the owner dropped it from
+  // pose 1 as well on 2026-08-04, so the arc back up to HEARTBEAT is the whole
+  // statement. The recap stays in E.11's footer style — serif italic 13.5px on
+  // neutral-400 — not the prototype's display-weight three-liner.
   const one = renderSlide(1);
-  expect(screen.getByTestId("e12-rail-return").textContent).toContain(
-    "tomorrow's beat starts by reading the spine",
-  );
+  expect(screen.queryByTestId("e12-rail-return")).toBeNull();
   expect(screen.queryByTestId("e12-thesis")).toBeNull();
   one.unmount();
 
@@ -625,6 +666,12 @@ test("pose 2 drops the rail's return label, and its thesis is one quiet line", (
   expect(line.style.color).toBe("var(--neutral-400)");
   expect(line.style.fontFamily).toBe("var(--serif)");
   expect(line.textContent).toBe(e12Content.thesis);
+  // ONE LINE, and asserted as the two declarations that make it one: the recap
+  // spans the rail's left edge to the canvas's right edge (1232 − 48), not the
+  // rail's own 356px, and it does not wrap. jsdom has no layout, so the wrap
+  // itself is a browser fact — measured at 1280×720, the line runs ~571px.
+  expect(thesis.style.width).toBe("1184px");
+  expect(line.style.whiteSpace).toBe("nowrap");
   // …with its keywords really highlighted, 1–3 of them.
   const keywords = [...line.querySelectorAll("em.text-copper-400")].map((k) => k.textContent);
   expect(keywords).toEqual([...e12Content.thesisKw]);
@@ -696,24 +743,23 @@ test("the guardrail is on BOTH working poses, because pose 2 is the one that pri
   expect(text).not.toMatch(/7 day|claude|routine/i);
 });
 
-test("the guardrail clears the return label on pose 1 and the recap on pose 2", () => {
-  // jsdom has no layout, so the claim is asserted as the two offsets that make it
-  // true. Measured at 1280×720: the rail's cards end at stage y=505, pose 1's
-  // return label runs 517→541, pose 2's recap starts at y=612 — so pose 1 sits at
-  // 549 and pose 2 at 517, and both blocks have air above and below.
+test("the guardrail sits at ONE offset on both poses, and clears the recap", () => {
+  // jsdom has no layout, so the claim is asserted as the offsets that make it
+  // true. With pose 1's return label deleted (2026-08-04), nothing sits between
+  // the cards and this block on either pose — so the two offsets are now the SAME
+  // number, and the block no longer jumps when the presenter steps between poses.
+  // Measured at 1280×720: the cards end at stage y=505 and the guardrail at y=517.
   const one = renderSlide(1);
-  const posePose1 = Number.parseFloat(screen.getByTestId("e12-guardrail").style.top);
-  const returnTop = Number.parseFloat(screen.getByTestId("e12-rail-return").style.top);
-  expect(posePose1).toBeGreaterThan(returnTop);
+  const pose1 = Number.parseFloat(screen.getByTestId("e12-guardrail").style.top);
   one.unmount();
 
   renderSlide(2);
   const pose2 = Number.parseFloat(screen.getByTestId("e12-guardrail").style.top);
-  expect(pose2).toBeLessThan(posePose1);
-  // The recap is bottom-anchored, so "above the recap" is the offset staying
-  // inside the rail's own height less the recap's two lines.
+  expect(pose2).toBe(pose1);
+  // The recap is bottom-anchored and now ONE line, so "above the recap" is the
+  // offset staying inside the rail's own height less that line and the heading.
   expect(screen.getByTestId("e12-thesis").style.bottom).toBe("0px");
-  expect(pose2).toBeLessThan(492 - 36 - 41);
+  expect(pose2).toBeLessThan(492 - 18 - 41);
 });
 
 // ── §12.1 call 3 — the type floors, enforced over the rendered tree ──────────
@@ -901,7 +947,6 @@ const HIGHLIGHTED: readonly { text: string; kw: readonly string[] }[] = [
   { text: M.right.verdict, kw: M.right.verdictKw },
   { text: M.right.gate.sub, kw: M.right.gate.subKw },
   ...M.quotes.map((q) => ({ text: q.text, kw: q.kw })),
-  { text: e12Content.returnArc, kw: e12Content.returnArcKw },
   { text: e12Content.guardrail.text, kw: e12Content.guardrail.textKw },
   // Kind 2's callback to the Ralph card — the only one (§12.1 call 2), and prose,
   // so §8.3 wants a keyword on it.
@@ -910,17 +955,13 @@ const HIGHLIGHTED: readonly { text: string; kw: readonly string[] }[] = [
   ...e12Content.parts.map((p) => ({ text: p.desc, kw: p.descKw })),
   ...P.heartbeat.kinds.map((k) => ({ text: k.desc, kw: k.descKw })),
   ...P.heartbeat.kinds.map((k) => ({ text: k.analogy, kw: k.analogyKw })),
-  { text: P.heartbeat.foot, kw: P.heartbeat.footKw },
   { text: P.beat.center, kw: P.beat.centerKw },
   { text: P.beat.exitTitle, kw: P.beat.exitTitleKw },
   { text: P.beat.exitSub, kw: P.beat.exitSubKw },
-  { text: P.beat.foot, kw: P.beat.footKw },
   ...P.checker.rungs.map((r) => ({ text: r.desc, kw: r.descKw })),
-  { text: P.checker.foot, kw: P.checker.footKw },
   { text: P.spine.wipe, kw: P.spine.wipeKw },
   { text: P.spine.lesson, kw: P.spine.lessonKw },
   ...P.spine.files.map((f) => ({ text: f.desc, kw: f.descKw })),
-  { text: P.spine.foot, kw: P.spine.footKw },
   { text: T.nodes.read.text, kw: T.nodes.read.kw },
   { text: T.nodes.find.text, kw: T.nodes.find.kw },
   { text: T.nodes.draft.text, kw: T.nodes.draft.kw },
@@ -931,7 +972,6 @@ const HIGHLIGHTED: readonly { text: string; kw: readonly string[] }[] = [
   { text: T.nodes.pass.text, kw: T.nodes.pass.kw },
   { text: T.nodes.pass.sub, kw: T.nodes.pass.subKw },
   { text: T.ret, kw: T.retKw },
-  { text: T.closer, kw: T.closerKw },
 ];
 
 /** Serif, but two to five words — a keyword "inside" one of these would be the

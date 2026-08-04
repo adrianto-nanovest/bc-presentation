@@ -229,14 +229,18 @@ check(
   await page.locator('[data-testid="e12-guardrail"]').innerText().then((t) => t.replace(/\s+/g, " ").trim()),
   "THE GUARDRAIL Cap what runs unattended — items per beat, spend, and an end date. A loop with no cap is a bill with no cap.",
 );
+// The return label is DELETED on both poses (owner call, 2026-08-04), so the
+// guardrail's only neighbour above it is the rail's last card. The check is the
+// same one — this block has air above it — measured against that card instead.
 {
   const gap = await page.evaluate(() => {
     const box = (id) => document.querySelector(`[data-testid="${id}"]`)?.getBoundingClientRect();
     const guard = box("e12-guardrail");
-    const ret = box("e12-rail-return");
-    return guard && ret ? Math.round(guard.top - ret.bottom) : null;
+    const lastCard = box("e12-card-spine");
+    return guard && lastCard ? Math.round(guard.top - lastCard.bottom) : null;
   });
-  check("pose 1 · the guardrail clears the return label", gap != null && gap >= 4, true);
+  check("pose 1 · the guardrail clears the rail's last card", gap != null && gap >= 4, true);
+  check("pose 1 · no return label is drawn", await page.locator('[data-testid="e12-rail-return"]').count(), 0);
 }
 await shot("01-pose1-rail-only");
 

@@ -186,7 +186,7 @@ async function audit() {
           // `.nav-zone`, NOT `[data-no-advance]`: that attribute means "a click
           // here must not advance the deck", and E.12's whole RAIL carries it
           // (`E12LoopAnatomy.tsx`). Excluding the attribute excluded the rail —
-          // four cards, the return label and the new guardrail — from the audit.
+          // its four cards, the guardrail and pose 2's recap — from the audit.
           if (el.closest(".nav-zone")) continue;
           const cs = getComputedStyle(el);
           // THE TEXT'S OWN BOX, not its element's. A `nowrap` block element is as

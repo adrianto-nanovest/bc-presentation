@@ -618,6 +618,11 @@ export const e11Content = {
  *      the strings are absent here rather than unused.
  *   gh#49 · 8. The recap is `thesis`, ONE line in E.11's footer style — not the
  *      prototype's display-weight three-liner, which is why `footnote` is gone.
+ *   2026-08-04 · EVERY FOOT LINE IS DELETED TOO. Each right-canvas panel closed on
+ *      one italic sentence on a ruled row, and pose 2 closed on `closer`; all five
+ *      are gone, along with pose 1's `returnArc` label. Same treatment as the
+ *      kickers above — the strings are ABSENT here, not left unused, so nothing
+ *      in this file describes something the slide no longer draws.
  *
  * KEYWORDS, per §8.3: prose carries a `*Kw` sibling, mono never does. Every
  * string below is in exactly one of four groups, and
@@ -631,9 +636,9 @@ export const e11Content = {
  *                both attributions. Labels, never sentences, so §8.3 forbids
  *                keywords on them.
  *   HIGHLIGHTED  every serif SENTENCE — the headline, both verdict reasons, the
- *                gate's line, both quotes, the return arc, the thesis, every rail
- *                and kind description, every analogy, every panel foot, every
- *                flow node and the closer. 1–3 keywords each.
+ *                gate's line, both quotes, the guardrail, the thesis, every rail
+ *                and kind description, every analogy and every flow node. 1–3
+ *                keywords each.
  *   MICRO-LABEL  the four turns, `you, again`, station and spine subtitles,
  *                `risky` / `approved` / `pass`, the stop conditions, the run
  *                steps, the gate widths and their descriptions, `also called
@@ -660,7 +665,7 @@ export const e12Content = {
         { who: "you", text: "you type a prompt" },
         { who: "agent", text: "the agent replies" },
         { who: "you", text: "you read the reply" },
-        { who: "you", text: "you type again" },
+        { who: "you", text: "you type a prompt again" },
       ],
       returnLabel: "you, again",
       verdictTitle: "You are holding the tool the whole time.",
@@ -764,9 +769,12 @@ export const e12Content = {
   // says "hover for details, click to pin/unpin", the same affordance E.9 and
   // G.7 teach, and a second wording of one gesture is a second thing to keep true.
   railHeading: "THE BIG LOOP · FOUR PARTS",
-  /** Pose 1 only (gh#49 correction 8) — pose 2 drops the label and keeps the arc. */
-  returnArc: "tomorrow's beat starts by reading the spine",
-  returnArcKw: ["reading the spine"],
+  /**
+   * NO RETURN-ARC LABEL. gh#49 correction 8 dropped it from pose 2; the owner
+   * dropped it from pose 1 too on 2026-08-04, so the string is GONE rather than
+   * unused — the dashed arc from SPINE back up to HEARTBEAT is the whole
+   * statement, and `triage.ret` says it in the example's own words on pose 2.
+   */
 
   /**
    * §12.1 CALL 1, CLOSED 2026-08-04 (gh#50) — THE `BUDGET` GUARDRAIL, and where
@@ -929,8 +937,6 @@ export const e12Content = {
         },
       ],
       axis: { left: "YOU HOLD IT", mid: "more and more unattended", right: "IT RUNS WITHOUT YOU" },
-      foot: "Learn one word: each single firing of the loop is called a beat.",
-      footKw: ["beat"],
     },
 
     beat: {
@@ -947,8 +953,6 @@ export const e12Content = {
       exitTitleKw: ["the beat ends"],
       exitSub: "back to the big loop: the checker, then the spine",
       exitSubKw: ["the checker, then the spine"],
-      foot: "The small loop has no heartbeat and no spine. When the beat ends, it remembers nothing.",
-      footKw: ["remembers nothing"],
     },
 
     checker: {
@@ -991,8 +995,6 @@ export const e12Content = {
         },
       ],
       gateLabel: "THE HUMAN GATE",
-      foot: "The weaker the checker, the more work passes through the human gate — done is a check, not an opinion.",
-      footKw: ["done is a check, not an opinion"],
     },
 
     spine: {
@@ -1028,8 +1030,6 @@ export const e12Content = {
       ],
       read: "read",
       write: "write",
-      foot: "No spine, no loop. An intern without the diary redoes yesterday's work forever — so does a loop.",
-      footKw: ["No spine, no loop"],
     },
   },
 
@@ -1070,8 +1070,6 @@ export const e12Content = {
     },
     ret: "the next candidate — and again tomorrow at 9:00",
     retKw: ["again tomorrow"],
-    closer: "You wake up to two PRs and one flagged decision. You typed nothing.",
-    closerKw: ["You typed nothing"],
   },
 
   /**
@@ -1143,8 +1141,8 @@ export function e13Beat2For(deckSet: DeckSetId): E13Beat {
 
 export const e13Content = {
   beat1: {
-    lineA: { text: "Three layers.", kw: ["Three layers"] },
-    lineB: { text: "One loop.", kw: ["loop"] },
+    lineA: { text: "Three layers. One loop.", kw: ["layers", "loop"] },
+    lineB: { text: "The fundamentals are built.", kw: ["fundamentals"] },
   },
   /** Beat 2 is NOT here: it depends on the deck set, so it is resolved by
    *  `e13Beat2For` and this object holds only what every deck prints alike. */

@@ -77,6 +77,22 @@
 //      elided, and Steinberger is `CREATOR OF OPENCLAW`, not "founder". Sources
 //      and the checks at `mindset.quotes` in `./content.tsx`.
 //
+// THE OWNER PASS OF 2026-08-04, five changes, all of them subtraction or grammar
+// and none of them new copy:
+//   1. Pose 0's relay is a THREE-ROW LOOP WITH A ONE-ROW ENTRY. The dashed return
+//      lands on row 02, not row 01, and the highlight runs 01 → 02 → 03 → 04 → 02
+//      → … Row 01 lights once. `LOOP_ROWS` in `./components/E12MindsetDiptych.tsx`.
+//   2. A PIN LOCKS THE CANVAS. Hovering another rail card still lights that card,
+//      but no longer swaps the panel the presenter parked. `active` in
+//      `./components/E12LoopAnatomy.tsx`.
+//   3. NO FOOT LINES anywhere: all four pose-1 panels and pose 2's closer, band
+//      and copy together (`PanelShell` in `./components/E12Primitives.tsx`), plus
+//      pose 1's return label under the rail.
+//   4. Pose 2's recap runs on ONE LINE, spanning both columns — the two-line wrap
+//      was the foot line's fault, and the row it wrapped to is now free.
+//   5. Pose 2's branch join carries ONE arrowhead, on the drop into
+//      `Update progress.md`, where three used to meet in a star.
+//
 // Productionized from `src/slides/prototype-gh19b-e12-loop-engineering/`, and
 // rewritten rather than lifted: the prototype is inline-styled, untested, and
 // carries dev-only key handlers. CSS vars only, no hex literals; no new fonts or
