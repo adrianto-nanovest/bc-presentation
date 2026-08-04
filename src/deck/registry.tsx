@@ -77,6 +77,6 @@ publishSectionLetters(composedDeck.letterOf);
 // deck and composes as one. It prints no FigLabel, so these values never reach
 // the screen — but `<Slide>` publishes a number for whatever it shows, and
 // deriving this one keeps the audience-facing paths free of a hardcoded
-// letter/number pair. (The five dev-only prototype routes still pass their own
-// hardcoded figures in; they are deleted with their directories in Phases 5–8.)
+// letter/number pair. (The one dev-only prototype route left, gh#16, still passes
+// its own hardcoded figure in; it is deleted with its directory in Phase 6.)
 export const hexLadderComposedDeck: ComposedDeck<SlideDef> = composeDeck([hexLadderDevSlide]);

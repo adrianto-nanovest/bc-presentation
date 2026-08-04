@@ -42,14 +42,9 @@ open "http://localhost:5173/?dev=proto16"
 State lives in the URL (`?dev=proto16&p=…&v=…&brand=…`) so any frame is
 shareable and reload-stable. The switcher bar is gated on `import.meta.env.DEV`.
 
-The route needs a two-line hatch in `src/deck/Deck.tsx` (**not committed on this
-branch** — that file also carries the gh#17/#18 hatches from parallel work):
-
-```tsx
-import { Proto16Route } from "@/slides/prototype-gh16-leader-slides";
-// …inside Deck(), before the hexladder branch:
-if (import.meta.env.DEV && params.get("dev") === "proto16") return <Proto16Route />;
-```
+The route's hatch is already wired in `src/deck/Deck.tsx`, immediately before the
+hexladder branch. It is the last prototype hatch left: the E.12 prototypes and
+their hatches came out in gh#51, and this one goes with this directory in Phase 6.
 
 Screenshots of every variant × brand × key step:
 `node src/slides/prototype-gh16-leader-slides/shoot.mjs` → `/tmp/proto16/`.

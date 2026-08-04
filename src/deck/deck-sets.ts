@@ -284,9 +284,9 @@ export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
  * id list accepts a new entry with no argument beside it, which is the drift
  * this guard exists to catch, arriving one review cycle later.
  *
- * NOT HERE, deliberately: the five `src/slides/prototype-gh*` directories. They
- * declare no `SlideDef`, so the guard never sees them, and Phases 5–8 delete
- * them — an entry would be a permanent record of a temporary thing.
+ * NOT HERE, deliberately: the `src/slides/prototype-gh*` directory that is left.
+ * It declares no `SlideDef`, so the guard never sees it, and Phase 6 deletes it —
+ * an entry would be a permanent record of a temporary thing.
  */
 export const ORPHANED_SLIDES: Readonly<Record<string, string>> = {
   "hex-ladder":
@@ -295,6 +295,6 @@ export const ORPHANED_SLIDES: Readonly<Record<string, string>> = {
     "reached only by typing `?dev=hexladder`, and kept for the colour " +
     "calibration `scripts/projection-test.mjs` runs. Held outside every list " +
     "above so it can never enter audience navigation — that route is NOT " +
-    "`import.meta.env.DEV`-gated the way the prototype routes are, so being " +
+    "`import.meta.env.DEV`-gated the way the prototype route is, so being " +
     "unreachable by navigation is the whole of what keeps it off a projector.",
 };

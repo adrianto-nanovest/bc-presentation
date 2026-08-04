@@ -1,8 +1,9 @@
 // PHASE 5's browser evidence — E.12 in depth, plus the three slides it moved.
 //
-// This replaces `scripts/p19b-shots.mjs` and `p19b-reduced.mjs`, which pointed at
-// `?dev=proto19b` and therefore proved things about the prototype and not about
-// the deck (spec §10.2, gh#50). Same checks, real slide, and they FAIL LOUDLY:
+// This replaces the two gh#19b prototype shot scripts, which pointed at that
+// prototype's dev hatch and therefore proved things about the prototype and not
+// about the deck (spec §10.2, gh#50). Both were deleted with the prototype in
+// gh#51. Same checks, real slide, and they FAIL LOUDLY:
 // every assertion prints `ok` / `FAIL` and a failure exits 1, so this is runnable
 // from a gate and not only readable by a human.
 //

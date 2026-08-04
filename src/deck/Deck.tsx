@@ -10,14 +10,6 @@ import {
 } from "./registry";
 // PROTOTYPE gh#16 — throwaway import; goes away with the prototype directory.
 import { Proto16Route } from "@/slides/prototype-gh16-leader-slides";
-// PROTOTYPE gh#17 — throwaway import; goes away with the prototype directory.
-import { Proto17Route } from "@/slides/prototype-gh17-e12-loop-canvas";
-// PROTOTYPE gh#18 — throwaway import; goes away with the prototype directory.
-import { Proto18Route } from "@/slides/prototype-gh18-e12-open-form";
-// PROTOTYPE gh#19 — throwaway import; goes away with the prototype directory.
-import { Proto19Route } from "@/slides/prototype-gh19-e12-the-loop";
-// PROTOTYPE gh#19b — throwaway import; goes away with the prototype directory.
-import { Proto19bRoute } from "@/slides/prototype-gh19b-e12-loop-engineering";
 
 declare global {
   interface Window {
@@ -70,22 +62,6 @@ export function Deck() {
     // PROTOTYPE gh#16 — throwaway. Remove with the prototype directory.
     if (import.meta.env.DEV && params.get("dev") === "proto16") {
       return <Proto16Route />;
-    }
-    // PROTOTYPE gh#17 — throwaway. Remove with the prototype directory.
-    if (import.meta.env.DEV && params.get("dev") === "proto17") {
-      return <Proto17Route />;
-    }
-    // PROTOTYPE gh#18 — throwaway. Remove with the prototype directory.
-    if (import.meta.env.DEV && params.get("dev") === "proto18") {
-      return <Proto18Route />;
-    }
-    // PROTOTYPE gh#19 — throwaway. Remove with the prototype directory.
-    if (import.meta.env.DEV && params.get("dev") === "proto19") {
-      return <Proto19Route />;
-    }
-    // PROTOTYPE gh#19b — throwaway. Remove with the prototype directory.
-    if (import.meta.env.DEV && params.get("dev") === "proto19b") {
-      return <Proto19bRoute />;
     }
     if (params.get("dev") === "hexladder") {
       const composed = hexLadderComposedDeck.slides[0];
