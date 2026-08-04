@@ -75,8 +75,14 @@ describe("every slide def", () => {
   });
 });
 
-test("e12-bridge-to-f keeps its historical id — Phase 5 renames it, not this ticket", () => {
-  // Spelled out because it is the one id a reader is most likely to "fix":
-  // E.12 · LOOP ENGINEERING is inserted in Phase 5, and THEN this becomes e13.
-  expect(defs.map((d) => d.id)).toContain("e12-bridge-to-f");
+test("the section-E bridge is e13, and e12 is left free for THE LOOP", () => {
+  // gh#47 completed the Phase 5 rename this test used to hold OFF. The bridge is
+  // `e13-bridge-to-f`; the `e12` slot belongs to E.12 · LOOP ENGINEERING, which
+  // inserts AHEAD of it. Spelled out because it is the id a reader is most likely
+  // to "fix" back — and TRAP 3 (Appendix B) is that same mix-up: #8's "E.12
+  // override" is the BRIDGE's beat 2, never THE LOOP's.
+  //
+  // The old id cannot return quietly: "names itself after its file" above would
+  // also have to move the file, and both deck-set lists name this id by hand.
+  expect(defs.map((d) => d.id)).toContain("e13-bridge-to-f");
 });

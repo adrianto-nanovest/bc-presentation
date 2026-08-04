@@ -1,4 +1,10 @@
-// E.12 — BRIDGE · BUILT (final slide of Section E)
+// BRIDGE · BUILT (final slide of Section E)
+//
+// The id is `e13-bridge-to-f` because E.12 · LOOP ENGINEERING inserts ahead of
+// it (§8.2). The id is opaque (Appendix B trap 8): the letter and number the
+// slide PRINTS derive from its composed position (§3), so today — before THE
+// LOOP lands — every deck still renders it as E.12. The id does not promise a
+// number.
 //
 // 2 steps:
 //   0 — beat 1 reveals (display-size headline + copper rule).
@@ -17,11 +23,11 @@ import { VARIANT } from "@/variant";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "./components/Reveal";
-import { e12Beat2For, e12Content as C } from "./content";
+import { e13Beat2For, e13Content as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
 
-export function E12BridgeToF() {
+export function E13BridgeToF() {
   const { stepIndex } = useDeck();
 
   // Beat 2 names the section E hands off to, and the leader deck cuts F
@@ -29,19 +35,19 @@ export function E12BridgeToF() {
   // module's own pick, off `VARIANT.deckSet` and not off a `letterOf` lookup: the
   // sentence names the section in prose, not as a letter, so there is no letter
   // to derive.
-  const beat2 = e12Beat2For(VARIANT.deckSet);
+  const beat2 = e13Beat2For(VARIANT.deckSet);
 
   const showBeat1 = stepIndex >= 0;
   const showBeat2 = stepIndex >= 1;
 
   return (
     <div
-      data-testid="e12-root"
+      data-testid="e13-root"
       style={{ position: "absolute", inset: 0, overflow: "hidden" }}
     >
       {/* Hero photo — full-bleed bridge. */}
       <div
-        data-testid="e12-hero"
+        data-testid="e13-hero"
         aria-hidden
         style={{
           position: "absolute",
@@ -54,7 +60,7 @@ export function E12BridgeToF() {
 
       {/* Vignette: bottom-left — anchors the headline against a dark mass. */}
       <div
-        data-testid="e12-overlay-bottom-left"
+        data-testid="e13-overlay-bottom-left"
         aria-hidden
         style={{
           position: "absolute",
@@ -68,7 +74,7 @@ export function E12BridgeToF() {
       {/* Vignette: top-left ellipse — protects FigLabel readability
           against the bright sky in the photo. */}
       <div
-        data-testid="e12-overlay-top-left"
+        data-testid="e13-overlay-top-left"
         aria-hidden
         style={{
           position: "absolute",
@@ -82,7 +88,7 @@ export function E12BridgeToF() {
       {/* Soft top edge gloom — keeps the FigLabel band legible across
           the full top of the slide. */}
       <div
-        data-testid="e12-overlay-top-gloom"
+        data-testid="e13-overlay-top-gloom"
         aria-hidden
         style={{
           position: "absolute",
@@ -97,7 +103,7 @@ export function E12BridgeToF() {
 
       {/* Bottom-left anchored beats. */}
       <div
-        data-testid="e12-beats"
+        data-testid="e13-beats"
         style={{
           position: "absolute",
           left: 48,
@@ -110,10 +116,10 @@ export function E12BridgeToF() {
         }}
       >
         <div
-          data-testid="e12-beat1"
+          data-testid="e13-beat1"
           style={{ display: "flex", flexDirection: "column", gap: 10 }}
         >
-          <Reveal on={showBeat1} delay={0} data-testid="e12-beat1-lineA">
+          <Reveal on={showBeat1} delay={0} data-testid="e13-beat1-lineA">
             <p
               style={{
                 fontFamily: "var(--display)",
@@ -127,7 +133,7 @@ export function E12BridgeToF() {
               {highlight(C.beat1.lineA.text, C.beat1.lineA.kw)}
             </p>
           </Reveal>
-          <Reveal on={showBeat1} delay={250} data-testid="e12-beat1-lineB">
+          <Reveal on={showBeat1} delay={250} data-testid="e13-beat1-lineB">
             <p
               style={{
                 fontFamily: "var(--display)",
@@ -145,7 +151,7 @@ export function E12BridgeToF() {
 
         <CopperRule on={showBeat1} width="30%" delay={400} />
 
-        <Reveal on={showBeat2} delay={150} data-testid="e12-beat2">
+        <Reveal on={showBeat2} delay={150} data-testid="e13-beat2">
           <p
             style={{
               fontFamily: "var(--display)",
@@ -166,12 +172,12 @@ export function E12BridgeToF() {
 
 // ───────────────────── slide def ─────────────────────
 
-export const e12Slide: SlideDef = {
-  id: "e12-bridge-to-f",
+export const e13Slide: SlideDef = {
+  id: "e13-bridge-to-f",
   steps: 2,
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "fundamentals",
-  render: () => <E12BridgeToF />,
+  render: () => <E13BridgeToF />,
 };

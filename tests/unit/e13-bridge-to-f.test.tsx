@@ -1,4 +1,8 @@
-// E.11 — BRIDGE · BUILT · slide tests.
+// The section-E bridge — BRIDGE · BUILT · slide tests.
+//
+// Named for the slide, not for a number: the letter and number it prints are
+// derived from its composed position (§3), so the FIG assertion below tracks
+// what the deck composes TODAY (E.12) and not the `e13` in the id.
 //
 // Covers the new 2-step design ported from
 // `claude-design-project/jsx/slides-c.jsx:167-196`.
@@ -12,10 +16,10 @@ import { render, screen, act } from "@testing-library/react";
 import { useDeck } from "@/deck/DeckContext";
 import { SlideHarness } from "../support/slide-harness";
 import {
-  E12BridgeToF,
-  e12Slide,
-} from "@/slides/foundation-core-section-e/e12-bridge-to-f";
-import { e12Beat2For, e12Content } from "@/slides/foundation-core-section-e/content";
+  E13BridgeToF,
+  e13Slide,
+} from "@/slides/foundation-core-section-e/e13-bridge-to-f";
+import { e13Beat2For, e13Content } from "@/slides/foundation-core-section-e/content";
 
 function AdvanceTo({ step }: { step: number }) {
   const { goTo } = useDeck();
@@ -24,9 +28,9 @@ function AdvanceTo({ step }: { step: number }) {
 
 function renderAtStep(step: number) {
   render(
-    <SlideHarness def={e12Slide}>
+    <SlideHarness def={e13Slide}>
       <AdvanceTo step={step} />
-      <E12BridgeToF />
+      <E13BridgeToF />
     </SlideHarness>,
   );
   act(() => {
@@ -34,61 +38,61 @@ function renderAtStep(step: number) {
   });
 }
 
-test("E.11 declares 2 steps with canonicalPose=1", () => {
-  expect(e12Slide.steps).toBe(2);
-  expect(e12Slide.canonicalPose).toBe(1);
-  expect(e12Slide.animationMode).toBe("step-reveal");
-  expect(e12Slide.sectionKey).toBe("fundamentals");
-  expect(e12Slide.surface).toBe("dark");
+test("the bridge declares 2 steps with canonicalPose=1", () => {
+  expect(e13Slide.steps).toBe(2);
+  expect(e13Slide.canonicalPose).toBe(1);
+  expect(e13Slide.animationMode).toBe("step-reveal");
+  expect(e13Slide.sectionKey).toBe("fundamentals");
+  expect(e13Slide.surface).toBe("dark");
 });
 
-test("E.11 renders the FIG label `FIG. E.11 · BRIDGE · BUILT`", () => {
+test("the bridge renders the FIG label the deck derives for it — today `E.12`", () => {
   renderAtStep(0);
   const fig = document.querySelector(".fig-label");
   expect(fig?.textContent).toMatch(/FIG\.\s*E\.12.*BRIDGE.*BUILT/i);
 });
 
-test("E.11 renders the bridge hero photo + three layered overlays", () => {
+test("the bridge renders its hero photo + three layered overlays", () => {
   renderAtStep(0);
 
-  const hero = screen.getByTestId("e12-hero");
+  const hero = screen.getByTestId("e13-hero");
   expect(hero).toBeInTheDocument();
   expect(hero.style.backgroundImage).toMatch(/e11-bridge\.jpg/);
 
-  expect(screen.getByTestId("e12-overlay-bottom-left")).toBeInTheDocument();
-  expect(screen.getByTestId("e12-overlay-top-left")).toBeInTheDocument();
-  expect(screen.getByTestId("e12-overlay-top-gloom")).toBeInTheDocument();
+  expect(screen.getByTestId("e13-overlay-bottom-left")).toBeInTheDocument();
+  expect(screen.getByTestId("e13-overlay-top-left")).toBeInTheDocument();
+  expect(screen.getByTestId("e13-overlay-top-gloom")).toBeInTheDocument();
 });
 
 test("step 0 → beat 1 visible, beat 2 hidden", () => {
   renderAtStep(0);
 
-  const lineA = screen.getByTestId("e12-beat1-lineA");
-  const lineB = screen.getByTestId("e12-beat1-lineB");
+  const lineA = screen.getByTestId("e13-beat1-lineA");
+  const lineB = screen.getByTestId("e13-beat1-lineB");
   expect(lineA.className).toMatch(/\bon\b/);
   expect(lineB.className).toMatch(/\bon\b/);
-  expect(lineA.textContent).toMatch(e12Content.beat1.lineA.text);
-  expect(lineB.textContent).toMatch(e12Content.beat1.lineB.text);
+  expect(lineA.textContent).toMatch(e13Content.beat1.lineA.text);
+  expect(lineB.textContent).toMatch(e13Content.beat1.lineB.text);
 
-  const beat2 = screen.getByTestId("e12-beat2");
+  const beat2 = screen.getByTestId("e13-beat2");
   expect(beat2.className).not.toMatch(/\bon\b/);
 });
 
 test("step 1 (canonicalPose) → both beats visible", () => {
   renderAtStep(1);
 
-  const lineA = screen.getByTestId("e12-beat1-lineA");
-  const lineB = screen.getByTestId("e12-beat1-lineB");
+  const lineA = screen.getByTestId("e13-beat1-lineA");
+  const lineB = screen.getByTestId("e13-beat1-lineB");
   expect(lineA.className).toMatch(/\bon\b/);
   expect(lineB.className).toMatch(/\bon\b/);
-  expect(lineA.textContent).toMatch(e12Content.beat1.lineA.text);
-  expect(lineB.textContent).toMatch(e12Content.beat1.lineB.text);
+  expect(lineA.textContent).toMatch(e13Content.beat1.lineA.text);
+  expect(lineB.textContent).toMatch(e13Content.beat1.lineB.text);
 
-  const beat2 = screen.getByTestId("e12-beat2");
+  const beat2 = screen.getByTestId("e13-beat2");
   expect(beat2.className).toMatch(/\bon\b/);
   // The STANDARD line: this file mounts the slide under the default variant
   // (`localhost` → `general` → deck set `standard`). Beat 2 is deck-set-scoped as
   // of gh#41 — the leader deck's line is asserted in
   // `variant-composition.test.tsx`, which is where a per-variant epoch is set up.
-  expect(beat2.textContent).toMatch(e12Beat2For("standard").text);
+  expect(beat2.textContent).toMatch(e13Beat2For("standard").text);
 });

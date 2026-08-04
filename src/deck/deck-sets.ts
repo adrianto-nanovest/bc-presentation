@@ -99,7 +99,7 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
   "e9-context-the-wall",
   "e10-harness-what-why",
   "e11-harness-practices",
-  "e12-bridge-to-f", // Phase 5 inserts E.12 · LOOP ENGINEERING before this and renames it
+  "e13-bridge-to-f",
   // techniques
   "f1-two-pillars",
   "f2-rag-ground-truth",
@@ -201,7 +201,7 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "e9-context-the-wall",
   "e10-harness-what-why",
   "e11-harness-practices",
-  "e12-bridge-to-f", // Phase 5 inserts THE LOOP before this and renames it `e13`
+  "e13-bridge-to-f",
   // tools — plus the relocated f8, which is why the override exists
   "g1-ecosystem-overview",
   "g2-claude-platforms",

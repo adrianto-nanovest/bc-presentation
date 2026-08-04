@@ -4,8 +4,8 @@
 // design source — with three differences:
 //   1. `const E<N> = {...}` → `export const e<N>Content = {...} as const`
 //   2. The window-globals attach is dropped (TS modules export instead).
-//   3. E.12's beat 2 is not a field but a PICK over the deck set, because the two
-//      decks hand section E off to different sections — see `e12Beat2For`.
+//   3. The bridge's beat 2 is not a field but a PICK over the deck set, because
+//      the two decks hand section E off to different sections — see `e13Beat2For`.
 //
 // Field names match the design source EXACTLY (e.g. `headlineKw`, `naivePrompt`,
 // `properLabels`, `spine[].pop`, `whyPoints`, `satellites`, `rings[].sub`,
@@ -16,8 +16,8 @@
 // Markup convention: data carries plain strings + a sibling `kw` / `*Kw` array
 // of substrings to highlight at render time. No inline `<em>` tags in data.
 //
-// One string here varies with the DECK SET — E.12's beat 2, see
-// `e12Beat2For`. Type-only import, so this module still pulls in nothing
+// One string here varies with the DECK SET — the bridge's beat 2, see
+// `e13Beat2For`. Type-only import, so this module still pulls in nothing
 // at runtime and stays plain data.
 import type { DeckSetId } from "@/deck-variants";
 
@@ -602,13 +602,17 @@ export const e11Content = {
 } as const;
 
 /** One reveal: the string, plus the substrings rendered as keywords. */
-export interface E12Beat {
+export interface E13Beat {
   text: string;
   kw: readonly string[];
 }
 
 /**
- * E.12's beat 2 — the ONE string in section E that depends on the deck set.
+ * The BRIDGE's beat 2 — the ONE string in section E that depends on the deck set.
+ *
+ * TRAP 3 (Appendix B) — this pick belongs to the bridge, `e13-bridge-to-f`. #8
+ * wrote it against "E.12" when E.12 still meant the bridge; E.12 is now THE LOOP,
+ * which never gets this pick. Named for the slide, not for a number.
  *
  * Beat 2 hands section E off by name, and the two decks hand off to different
  * sections: the standard deck runs F · TECHNIQUES next, and the leader deck cuts
@@ -622,7 +626,7 @@ export interface E12Beat {
  * `undefined` beat on a projector. Copy, never composition — `sectionOverrides`
  * stays composition-only (§4.1), so this does not live in the deck-set table.
  */
-const E12_BEAT2_BY_DECK_SET: Record<DeckSetId, E12Beat> = {
+const E13_BEAT2_BY_DECK_SET: Record<DeckSetId, E13Beat> = {
   standard: { text: "Next: the techniques that matter most.", kw: ["techniques that matter most"] },
   leader: { text: "Next: the platforms that bring them to life.", kw: ["platforms", "life"] },
 };
@@ -631,15 +635,15 @@ const E12_BEAT2_BY_DECK_SET: Record<DeckSetId, E12Beat> = {
  *  and the slide asks it — the same shape `titleContentFor` uses for the
  *  deck-set-scoped cover copy (gh#42). The table stays private so the pick is the
  *  only way in, and a caller cannot reach past it into the wrong deck set. */
-export function e12Beat2For(deckSet: DeckSetId): E12Beat {
-  return E12_BEAT2_BY_DECK_SET[deckSet];
+export function e13Beat2For(deckSet: DeckSetId): E13Beat {
+  return E13_BEAT2_BY_DECK_SET[deckSet];
 }
 
-export const e12Content = {
+export const e13Content = {
   beat1: {
     lineA: { text: "Three layers.", kw: ["Three layers"] },
-    lineB: { text: "The fundamentals are built.", kw: ["fundamentals"] },
+    lineB: { text: "One loop.", kw: ["loop"] },
   },
   /** Beat 2 is NOT here: it depends on the deck set, so it is resolved by
-   *  `e12Beat2For` and this object holds only what every deck prints alike. */
+   *  `e13Beat2For` and this object holds only what every deck prints alike. */
 } as const;

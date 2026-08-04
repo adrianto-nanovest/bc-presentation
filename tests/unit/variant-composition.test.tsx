@@ -263,36 +263,39 @@ describe("leader deck sets", () => {
   });
 });
 
-// ── E.12's beat 2 names the section E hands off to ────────────────────────────
+// ── the bridge's beat 2 names the section E hands off to ──────────────────────
 // §4.3, gh#41. The standard deck runs F · TECHNIQUES next; the leader deck cuts F,
 // so its next section is TOOLS ECOSYSTEM and beat 2 says so. Deck-set-scoped copy,
 // resolved by a typed pick in section E's own content module — `sectionOverrides`
 // carries composition facts only (§4.1).
 //
-// Read off the RENDERED slide, in the variant's own epoch: `e12Content` is data,
-// and asserting the data against itself would pass even if the slide printed the
-// other line.
+// TRAP 3 (Appendix B) — this override belongs to the BRIDGE, which gh#47 renamed
+// to `e13-bridge-to-f`. E.12 is THE LOOP, and THE LOOP never gets this pick.
+//
+// Read off the RENDERED slide, in the variant's own epoch: the content module is
+// data, and asserting the data against itself would pass even if the slide
+// printed the other line.
 async function bridgeBeat2For(id: VariantId): Promise<string> {
   useVariant(id);
   cleanup();
-  const [{ DeckProvider }, { SlideNumberProvider }, { composedDeck }, e12] = await Promise.all([
+  const [{ DeckProvider }, { SlideNumberProvider }, { composedDeck }, bridge] = await Promise.all([
     import("@/deck/DeckContext"),
     import("@/deck/SlideNumberContext"),
     import("@/deck/registry"),
-    import("@/slides/foundation-core-section-e/e12-bridge-to-f"),
+    import("@/slides/foundation-core-section-e/e13-bridge-to-f"),
   ]);
-  const row = composedDeck.slides.find((s) => s.def.id === "e12-bridge-to-f");
+  const row = composedDeck.slides.find((s) => s.def.id === "e13-bridge-to-f");
   if (!row) throw new Error(`the section-E bridge is not in ${id}'s composed deck`);
   const { container } = render(
-    <DeckProvider stepCounts={[e12.e12Slide.steps]}>
+    <DeckProvider stepCounts={[bridge.e13Slide.steps]}>
       <SlideNumberProvider
         value={{ letter: row.letter, num: row.num, sectionKey: row.sectionKey }}
       >
-        <e12.E12BridgeToF />
+        <bridge.E13BridgeToF />
       </SlideNumberProvider>
     </DeckProvider>,
   );
-  return container.querySelector('[data-testid="e12-beat2"]')?.textContent ?? "";
+  return container.querySelector('[data-testid="e13-beat2"]')?.textContent ?? "";
 }
 
 describe("the section-E bridge's beat 2", () => {
