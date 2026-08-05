@@ -157,27 +157,31 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 63 slides across FOURTEEN sections. The COUNT is gh#61's and the
+ * The leader deck — 64 slides across FOURTEEN sections. The COUNT is gh#58's and the
  * SECTION COUNT is gh#60's, and the gap between those two tickets is the thing to read
  * before verifying anything here. The Phase 4 floor was 56 and held no slide the
  * standard deck did not; gh#48's `e12-loop-engineering` was the first addition and
  * ships to BOTH sets, gh#53's `gap-capability-ladder` was the first slide that reached
  * THIS LIST ALONE, gh#54's `shape-agentic-org` is the second, gh#56's
  * `invest-own-proof` is the third, gh#57's `invest-chicken-egg` is the fourth, gh#60's
- * `mandate-enablement` is the fifth and gh#61's `mandate-phases-gates` is the sixth.
+ * `mandate-enablement` is the fifth, gh#61's `mandate-phases-gates` is the sixth and
+ * gh#58's `invest-security` is the seventh.
  *
- * A NEW SLIDE IS NOT A NEW RUN, and SIX LEADER-ONLY SLIDES HAVE COST ONLY FOUR PUSHES.
+ * A NEW SLIDE IS NOT A NEW RUN, and SEVEN LEADER-ONLY SLIDES HAVE COST ONLY FOUR
+ * PUSHES.
  * gh#57 was the first slide here to show the difference: it appends at the END of the
  * `invest` run gh#56 opened, so it claims no letter, forms no run and renumbers
  * nothing — every letter behind it is gh#56's, unedited. gh#61 did the same thing at
- * the end of the `mandate` run gh#60 opened. The other four — gh#53, gh#54, gh#56 and
+ * the end of the `mandate` run gh#60 opened, and gh#58 did it a third time at the end
+ * of `invest`. The other four — gh#53, gh#54, gh#56 and
  * gh#60 — each OPENED a run and each moved every letter behind it. A comment that
- * counts slides where it means pushes would send the next reader looking for two
+ * counts slides where it means pushes would send the next reader looking for three
  * renumberings that never happened.
  *
- * EVERY NEW RUN MOVES EVERY LETTER BEHIND IT — AND gh#57 AND gh#61 MOVED NOTHING,
- * BECAUSE NEITHER OPENED A RUN. That pair is §3.4 R2 working as designed and the one
- * thing to know before verifying anything against this deck. Today the runs read
+ * EVERY NEW RUN MOVES EVERY LETTER BEHIND IT — AND gh#57, gh#61 AND gh#58 MOVED
+ * NOTHING, BECAUSE NONE OF THEM OPENED A RUN. That trio is §3.4 R2 working as designed
+ * and the one thing to know before verifying anything against this deck. Today the runs
+ * read
  * `opening`(A) · `gap`(B) · `shape`(C) · `invest`(D) · `landscape`(E) ·
  * `mindset`(F) · `process`(G) · `fundamentals`(H) · `tools`(I) · `pitfalls`(J) ·
  * `mandate`(K) · `meta`(L) · `principles`(M) · `lab`(N) — so the closer is N.3.
@@ -186,10 +190,11 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * (E.12 → F.12 → G.12 → H.12, its file never opened once), gh#57 APPENDED INSIDE
  * `invest` and pushed nothing at all — the FIRST insert in this list of which that
  * is true — gh#60's `mandate` landed behind `pitfalls` (§3.6) and pushed only
- * `meta`, `principles` and `lab`, and gh#61 APPENDED INSIDE `mandate` and pushed
- * nothing either, the second such insert. §4.3's A–N was reached by APPENDING N, not
- * by pushing H, and every leader slide still unbuilt appends the way gh#57 and gh#61
- * did. Anyone checking a figure on a leader deck reads the COMPOSED deck, never a
+ * `meta`, `principles` and `lab`, gh#61 APPENDED INSIDE `mandate` and pushed
+ * nothing either, the second such insert, and gh#58 APPENDED INSIDE `invest` for the
+ * third. §4.3's A–N was reached by APPENDING N, not
+ * by pushing H, and every leader slide still unbuilt appends the way gh#57, gh#61 and
+ * gh#58 did. Anyone checking a figure on a leader deck reads the COMPOSED deck, never a
  * literal.
  *
  * The curriculum is the standard deck's, minus section F and with F.8 kept: it
@@ -248,22 +253,23 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // invest — the third leader-only run (gh#56), and the third push: the loop slide
   // prints H.12 here now and this push is what took the closer to M.3. It reads N.3
   // today, because gh#60's `mandate` run pushed it once more — see the doc above.
-  // §6.7 gives this run five slides and
-  // TWO of them exist, adjacent and in §6.7's order — gh#56's `invest-own-proof`
-  // (§6.7's D.2) and gh#57's `invest-chicken-egg` (§6.7's D.3). BOTH COMPOSE ONE
-  // NUMBER EARLIER THAN §6.7 GIVES THEM, as D.1 and D.2, because `invest-base-rates`
-  // (§6.7's D.1) is unbuilt and inserts AHEAD of both lines. That slide has no ticket
-  // at all: §11's Phase 7 row holds it, beside `gap-no-sop`, so it is not waiting on
-  // Phase 6. Both composed figures are derived per deck (§3.5) — nothing here and
-  // nothing in either slide pins one — and #58–#59 append D.4–D.5 behind these two
-  // without moving anything above them.
+  // §6.7 gives this run five slides and THREE of them exist, adjacent and in §6.7's
+  // order — gh#56's `invest-own-proof` (§6.7's D.2), gh#57's `invest-chicken-egg`
+  // (§6.7's D.3) and gh#58's `invest-security` (§6.7's D.4). ALL THREE COMPOSE ONE
+  // NUMBER EARLIER THAN §6.7 GIVES THEM, as D.1, D.2 and D.3, because
+  // `invest-base-rates` (§6.7's D.1) is unbuilt and inserts AHEAD of all three lines.
+  // That slide has no ticket at all: §11's Phase 7 row holds it, beside `gap-no-sop`,
+  // so it is not waiting on Phase 6. All three composed figures are derived per deck
+  // (§3.5) — nothing here and nothing in any of the three slides pins one — and #59
+  // appends D.5 behind them without moving anything above them.
   //
-  // gh#57 APPENDED, IT DID NOT INSERT: the second line lands at the end of the run,
-  // so no letter and no number below this block changed. What did change is every
-  // fixture ROW INDEX behind it, which is a different thing and is recorded in
+  // gh#57 AND gh#58 APPENDED, NEITHER INSERTED: each line lands at the end of the run,
+  // so no letter and no number below this block changed for either. What did change is
+  // every fixture ROW INDEX behind it, which is a different thing and is recorded in
   // `tests/unit/deck-numbering-fixture.test.tsx`.
   "invest-own-proof",
   "invest-chicken-egg",
+  "invest-security",
   // landscape
   "b1-evolution-journey",
   "b2-fields-terminology",
@@ -358,13 +364,13 @@ const LEADER_SLIDE_IDS: readonly string[] = [
  *
  * THE DIFFERENCE IS NO LONGER ONE NUMBER, which is why it is not stated as one
  * here. gh#41's leader deck was "the standard deck minus eight"; it is now that
- * minus eight PLUS its own slides, so the net is TWO shorter (65 against 63) and
+ * minus eight PLUS its own slides, so the net is ONE shorter (65 against 64) and
  * the two halves move independently — `tests/unit/deck-registry.test.ts` holds
  * them as separate constants for exactly that reason, and a single subtraction
  * written here would go stale on the next leader-only ADDITION, whether it opens a
  * run or joins one. It has been eight (gh#41), seven (gh#53), six (gh#54), five
- * (gh#56), four (gh#57), three (gh#60) and two (gh#61) — seven values in seven
- * tickets, none of which edited a standard-deck row.
+ * (gh#56), four (gh#57), three (gh#60), two (gh#61) and one (gh#58) — eight values in
+ * eight tickets, none of which edited a standard-deck row.
  */
 export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
   standard: { id: "standard", slides: STANDARD_SLIDE_IDS },

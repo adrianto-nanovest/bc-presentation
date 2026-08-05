@@ -1,16 +1,20 @@
-// Section WHY INVEST — every string its two built slides print, and the one axis
-// one of them varies on.
+// Section WHY INVEST — every string its three built slides print, and the two axes
+// two of them vary on.
 //
-// TWO SLIDES, ONE MODULE: `invest-own-proof` (§6.7's D.2) above, and
-// `invest-chicken-egg` (§6.7's D.3) in the block at the bottom of this file. The
+// THREE SLIDES, ONE MODULE: `invest-own-proof` (§6.7's D.2) above,
+// `invest-chicken-egg` (§6.7's D.3) in the middle block, and `invest-security`
+// (§6.7's D.4) in the block at the bottom of this file. The
 // module is the SECTION's — as in `leader-gap` and `leader-shape`, which are named
 // the same way — so a second slide's copy belongs IN it rather than beside it, and
 // §6.2's rule that the deck's three shadow-AI passes may share no image and no
-// statistic is easier to keep in one file than across two.
+// statistic is easier to keep in one file than across two. THAT REASON IS NOW PAID
+// OFF RATHER THAN PREDICTED: two of the three passes are in this file, D.3's block
+// and D.4's, and the words each of them may not use are stated over the other.
 //
-// Spec §6.7 (content for both) · §6.2 (the three shadow-AI passes, which bound
-// D.3's copy) · §4.4 slot 3 (D.2's brand axis — and the reason D.3 has none) ·
-// §4.5 (the thesis line) · §12.3 item 2 (the GEMVIS figures are vendor-reported).
+// Spec §6.7 (content for all three) · §6.2 (the three shadow-AI passes, which bound
+// D.3's and D.4's copy) · §4.4 slot 3 (D.2's brand axis) and slot 4 (D.4's) — and
+// the reason D.3 has none · §4.5 (the thesis line) · §12.2 (the vendor-claim gate
+// D.4 is held to) · §12.3 item 2 (the GEMVIS figures are vendor-reported).
 // Named by SECTION KEY and
 // not by letter: `invest` is D in §4.3's finished leader deck and D at this
 // ticket's floor, but the letter is derived per deck (§3.4 R2) and no file under
@@ -49,13 +53,14 @@
 // they are stated over that slide's own block below.
 //
 // WHAT IS DELIBERATELY NOT IN THIS FILE, because no ticket has rendered it yet:
-// §6.7's D.1 (`invest-base-rates`, 78% → 6%), D.4 (`invest-security`, #58) and D.5
-// (`invest-subscription`, #59). None of their copy is written here early. Dead copy
+// §6.7's D.1 (`invest-base-rates`, 78% → 6%) and D.5 (`invest-subscription`, #59).
+// Neither one's copy is written here early. Dead copy
 // that reads as finished is how unreviewed copy ships — the next edit "just fills it
 // in", and the argument nobody agreed to is on a projector. Same reasoning as the top
 // of `src/slides/leader-shape/content.ts`.
 //
-// D.3 CAME OFF THAT LIST when #57 rendered it (the block at the bottom of this file),
+// D.3 CAME OFF THAT LIST when #57 rendered it (the middle block of this file) and D.4
+// came off it when #58 rendered it (the block at the bottom),
 // AND THE LIST NAMED THE WRONG TICKET FOR D.1 — recorded rather than quietly deleted,
 // because the next author would otherwise go looking for a Phase 6 ticket that does
 // not exist. The old text said D.1 through D.5 "are #57–#59". Checked on 2026-08-05
@@ -490,14 +495,24 @@ export function ownProofFor(brand: Brand): OwnProofBlock {
 //      `9.2`, `self-hosted`, `on-prem`, `consumer account`, `workspace`,
 //      `governance retrofit`, `Culture, Risk, Governance, Ethics`).
 //
-//      BOTH OF THOSE PASSES ARE UNBUILT AS OF 2026-08-05, so this check is against
-//      their SPEC text and not against rendered copy — which is the honest limit of
+//      D.4 IS BUILT NOW — #58 rendered it into the block at the bottom of this file on
+//      2026-08-05 — so half of this check has stopped being a claim about spec text and
+//      become a claim about rendered copy, which is a strictly stronger thing.
+//      `tests/unit/invest-security.test.tsx` owes the mirror of it from the other side.
+//      TWO OF THE TEN D.4 TOKENS ABOVE ARE NOW HISTORICAL RATHER THAN RESERVED, and
+//      saying so is cheaper than letting the list quietly lie: D.4 prints NEITHER `6.7`
+//      NOR `9.2`. `docs/researches/2026-08-04-vendor-pricing-and-data-handling.md` §9
+//      traced both literals to the superseded Artificial Analysis Index v4.0 and #58
+//      shipped the v4.1 pair (`4` and `5.2`) that shipping B.4 already uses. Forbidding
+//      them here still costs nothing and still guards the escalation against a later
+//      author lifting the SPEC's old sentence, so the two patterns stay.
+//      B.2 IS STILL UNBUILT, so that half of the check remains against §6.2's spec text
+//      and not against rendered copy — which is the honest limit of
 //      it. `gap-no-sop` (B.2) sits in §11's Phase 7 row and `src/slides/leader-gap/`
-//      holds only the Capability Ladder; `invest-security` (D.4) is #58. The one place
-//      either pass's vocabulary is already on a stage is `leader-shape/content.ts`'s
+//      holds only the Capability Ladder. The one place
+//      B.2's vocabulary is already on a stage is `leader-shape/content.ts`'s
 //      governance decision ("where the data may go … before someone improvises"),
-//      which is C.1 indexing them on purpose — and nothing below repeats either
-//      anchor.
+//      which is C.1 indexing it on purpose — and nothing below repeats that anchor.
 //
 //      THE ONE ADJACENCY THAT CANNOT BE REMOVED, stated rather than hidden. §6.7
 //      prescribes "no audit trail" and "data outside the boundary" as two of THIS
@@ -522,16 +537,21 @@ export function ownProofFor(brand: Brand): OwnProofBlock {
 // forbids two passes from sharing. (Greps run 2026-08-05.)
 
 /**
- * One row of either list on this slide — a cost we paid, or a term of the pilot.
+ * One row of a short sans list in this section — a cost D.3 paid, a term of its pilot,
+ * or one of D.4's three exposures.
  *
- * ONE INTERFACE FOR BOTH, because the two lists are the same object twice: four short
+ * ONE INTERFACE FOR ALL THREE, because they are the same object three times: short
  * label-register strings, each with a stable `id` for whatever the renderer keys and
  * tags its rows with, at the same size in the same tier. `id` is kebab-case, like the
- * ledger's above, so the two slides' hooks read the same way in a test. Two identical
+ * ledger's above, so the three lists' hooks read the same way in a test. Duplicate
  * interfaces would exist only to drift apart, and
- * `./chicken-egg-geometry.ts` gives both lists ONE row height and ONE pitch for the
- * same reason — what differs between the bill and the terms is the budget each one
+ * `./chicken-egg-geometry.ts` gives D.3's two lists ONE row height and ONE pitch —
+ * `./security-geometry.ts` reuses the same two numbers for D.4's — for the same reason:
+ * what differs between a bill, a set of terms and an exposure is the budget each one
  * has, not the shape of a row.
+ *
+ * THE COUNT IS NOT PART OF THIS TYPE. D.3's two lists are four rows each and D.4's is
+ * three, and each list's own tuple annotation is where its count is refused.
  */
 export interface LineItem {
   id: string;
@@ -539,8 +559,9 @@ export interface LineItem {
    * A LABEL, and therefore keyword-free: each one is the name of a thing, and a
    * copper italic inside a name emphasises a fragment of it.
    *
-   * SENTENCE CASE, like the ledger's metric names above. §6.7 writes these eight
-   * strings inside running prose, so the words are §6.7's and the initial capital is
+   * SENTENCE CASE, like the ledger's metric names above. §6.7 writes all eleven of
+   * these strings — D.3's four costs and four terms, D.4's three exposures — inside
+   * running prose, so the words are §6.7's and the initial capital is
    * this file's — the row is a label, and a label that starts lower case reads as a
    * sentence that lost its first half.
    */
@@ -557,12 +578,14 @@ export interface LineItem {
  * cast, and a cast is the one construction that can be wrong in silence.
  *
  * IT IS ALSO WHAT MAKES THE COUNT READABLE FROM OUTSIDE. A tuple's `["length"]` is the
- * literal `4`, so `./chicken-egg-geometry.ts` pins its own copy of both counts to
- * these tuples through a TYPE-ONLY `import()` — no runtime import, which that module
- * needs in order to stay importable from bare Node.
+ * literal `4`, so `./chicken-egg-geometry.ts` pins its own copy of D.3's two counts to
+ * these tuples — and `./security-geometry.ts` pins D.4's domain count to the third —
+ * through a TYPE-ONLY `import()`: no runtime import, which both of those modules
+ * need in order to stay importable from bare Node.
  *
- * AND FOUR IS NOT A COPY EDIT. §6.7 names four costs and the issue's AC names four
- * pilot constraints; a fifth of either is a different argument, not a longer list.
+ * AND FOUR IS NOT A COPY EDIT. §6.7 names four costs, the issue's AC names four
+ * pilot constraints, and §6.7 names four governance domains; a fifth of any of them is
+ * a different argument, not a longer list.
  */
 type Four<T> = readonly [T, T, T, T];
 
@@ -746,3 +769,632 @@ export const investChickenEggContent = {
   pilotEyebrow: "INSTEAD — A 30-DAY PROOF PILOT",
   pilotConstraints: PILOT_CONSTRAINTS,
 } as const;
+
+// ───────────────────── §6.7's D.4 · where the data goes, and what answers it ─────────────────────
+//
+// THREE BEATS, AND THE THIRD ONE IS THE ONLY THING THE ROOM CAN ACT ON. Where your
+// data actually goes, across three destinations → your real exposure today is not the
+// vendor, it is shadow AI → the four governance domains as the SOP starter, with
+// "governance retrofit" named as what happens if they are written down later instead.
+// §6.7's beat order is kept in the reveal order and in the reading order.
+//
+// §12.2's GATE, AND THE BRANCH THAT SHIPPED: **the CATEGORY branch. No vendor's
+// current policy is asserted anywhere in this block.** §12.2 gives exactly two
+// options — every vendor-specific claim traces to the verification record, or the beat
+// describes the CATEGORY and asserts no named vendor's policy — and calls this the
+// highest-consequence place in the deck to be wrong, in a group with real compliance
+// obligations. The record exists and most of it is usable
+// (`docs/researches/2026-08-04-vendor-pricing-and-data-handling.md`, #52, read live
+// 2026-08-04), so this is a choice and not a fallback. Three reasons, in the order they
+// decided it:
+//
+//   1. BEAT 2's THESIS IS "YOUR EXPOSURE IS SHADOW AI, NOT THE VENDOR". A slide that
+//      spent beat 1 on one named vendor's retention window would spend beat 2 arguing
+//      against the frame it had just built. The category IS the argument here.
+//   2. §6's EIGHT CROSS-VENDOR PATTERNS ARE THE ONLY CLAIMS NO SINGLE VENDOR'S POLICY
+//      CHANGE CAN BREAK, and the record's own §11 says re-check every load-bearing URL
+//      after 2026-09-04. This deck is presented 18–19 August. A category claim sourced
+//      to a pattern that held at all three vendors on 2026-08-04 survives one of them
+//      changing its terms the week before the session; a quoted retention window does
+//      not, and nobody would notice it had stopped being true.
+//   3. THE RECORD'S §2 FORBIDS THE ONE VENDOR CLAIM A PRESENTER WOULD REACH FOR. No
+//      leniency, laxity or enforcement-posture claim about any vendor may appear on any
+//      slide (§6.7 keeps it verbal), and §7's F12 gives it no replacement sentence at
+//      all. Honoured here: none of `lenient`, `not strict`, `enforcement`, `tolerated`
+//      appears below, and none of the copy characterises what any vendor does in
+//      practice beyond what a published term states.
+//
+// So every claim below is lifted from §6 (the cross-vendor patterns) or §7 (the F1–F12
+// sentences), and none of `Anthropic`, `Google`, `OpenAI`, `Claude`, `Gemini`,
+// `ChatGPT`, `Bedrock`, `Vertex`, `Azure`, `gpt-oss`, `Workspace`, `GEAP` or `GDC`
+// appears in any string this block authors. Which sentence came from where:
+//
+//   · the headline and the first two contracts — §6 pattern 1 / F1 ("same brand, same
+//     screen, opposite default")
+//   · the third contract and the two figures' framing — §6 pattern 8 / F8 ("nobody
+//     sells you the frontier model for your own data centre")
+//   · the second contract's "an admin exists" — §6 pattern 2, stated as the CONTRAST
+//     beat 2 then pays off
+//   · beat 2's line and its three rows — §6 pattern 2 / F4, verbatim in substance
+//
+// THE ONE VENDOR NAME ON THE STAGE IS A CITATION, NOT A POLICY, AND IT IS GEMS' OWN
+// ARCHITECTURE. {@link OnPremCallback}'s `runs-it` arm prints "Google Cloud's published
+// GEMVIS customer story" as the source of the DigiTech callback (§4.4 slot 4). That is
+// a published claim about the room's own company's hardware, not an assertion about any
+// vendor's terms, so it is outside the rule above rather than an exception to it — and
+// it is the same citation `invest-own-proof` prints two slides earlier, worded the same
+// way and carrying the same `NOT_AUDITED` negation, so the deck cites one source once.
+// gh#57's `namesAVendor` proxy already allowlists it for exactly this reason. Do not
+// widen that allowlist to cover a policy claim.
+//
+// BEAT 1's TWO NUMBERS ARE `4` AND `5.2`, NOT §6.7's `6.7` AND `9.2`, AND THIS IS THE
+// SLIDE THAT CORRECTS THE SPEC. The research record's §9 traced both spec literals to
+// the SUPERSEDED Artificial Analysis Index v4.0 capture of 8 June 2026; §9.3 shows
+// `9.2` is a collision trap, because it is still live in v4.1 — as the CODING gap for
+// the UNRESTRICTED licence tier, where §6.7 uses it for tool-calling, so a reviewer
+// checking the spec against the current data finds the number, ticks it off and ships
+// something wrong on both axes. Shipping B.4 (`src/slides/landscape-section-b/
+// content.ts`) already uses Kimi K3 — the RESTRICTED tier — across all four of its
+// panels, at 4 / 1.8 / 5.2 / 4 with `Artificial Analysis · 2 August 2026`, so this
+// slide takes the same tier and says so on the stage rather than mixing tiers with the
+// slide the room saw an hour earlier. §9.4 assigns the one-line spec edit to this
+// ticket; it is made, with a dated amendment in §6.7.
+//
+//   · `4` AND NEVER `4.0`. v4.1 renders the Intelligence Index as INTEGERS (§9.5), so
+//     the decimal place does not exist and may not be invented.
+//   · NOTHING HERE IMPLIES OPEN WEIGHTS GOT WORSE. The Agentic index's scale changed in
+//     v4.1 (old max 77.8 → 55.3), so a smaller agentic gap is a scale change (§9.5).
+//     This block prints ONE capture, dated, and makes no comparison to an older one.
+//   · THE STALE "90% THE INTELLIGENCE, 1/15th THE COST" LINE IS NOT REUSED. §9.5 shows
+//     it does not reproduce on v4.1 data, so this slide makes no cost claim at all —
+//     that argument is D.5's, with D.5's own anchors.
+//
+// BEAT 3's PROVENANCE IS FRAMING 2, FOR BOTH BRANDS, WITH NO BRAND FORK. §10 of the
+// record traced Culture · Risk · Governance · Ethics to the bottom and found them
+// AUTHORED, not sourced: every in-repo mention converges on slide 19 of our OWN April
+// 2026 deck, and the four domains enter the corpus in a sibling repo's brainstorm as
+// the presenter's own question. The #52 acceptance criterion asking for them to be
+// sourced could not be met, and that is recorded rather than worked around.
+//
+//   · FRAMING 1 WAS NOT SHIPPED, AND WHY. §10.2 ranks "the GEMS event committee asked
+//     for guidance and SOP covering Culture, Risk, Governance, Ethics" strongest —
+//     it is the only externally originated instance (`docs/prompts/gems-catalyst.md:49`,
+//     under "Feedback from Event Committee"). It is also ARTIFACT-FREE: a verbally
+//     relayed note with nothing committed, and §11.1 item 12 lists getting it in
+//     writing as an open gap. A slide that printed it would be attributing a written
+//     requirement to a committee that has not written one, in front of that committee.
+//     If the minutes arrive before Aug 19 this is one string.
+//   · FRAMING 3 IS FORBIDDEN. "Sourced to a named external document" is unsupported.
+//   · SO THE LINE IS FRAMING 2's SHAPE — "the four domains WE PROPOSED to Sinar Mas
+//     Group HR" — and it prints the negation as well as the claim, which is gh#56's
+//     `NOT_AUDITED` idiom: never "Group requires", never "sourced to". BOTH BRANDS GET
+//     THE SAME LINE. §4.4's slot 4 is the on-prem callback and nothing else; a second
+//     brand slot here would be a provenance invented to fill a fork.
+//
+// §6.2's HARD CONSTRAINT — THIS IS THE THIRD PASS OF THE SHADOW-AI ESCALATION, and it
+// may share no image and no statistic with either of the other two (B.2 = condition ·
+// D.3 = rational behaviour · here = exposure). What is checked, and how:
+//
+//   · AGAINST D.3, WHICH IS BUILT AND IS IN THIS FILE. Read the block above and
+//     `tests/unit/invest-chicken-egg.test.tsx`, which holds thirteen reserved-token
+//     regexes over D.3's copy. NO IMAGE IS SHARED: D.3 draws a two-clause deadlock, a
+//     first-person past-tense confession on shared accounts, a ban, an itemised bill and
+//     a bordered pilot card; this slide draws a present-tense, second-person map of
+//     three destinations and an exposure nobody has paid for yet. Nothing below prints
+//     `deadlock`, `no budget without proof`, `shared accounts`, `banned repeatedly`,
+//     `WHAT IT COST`, `30-day`, `proof pilot`, `kill criterion` or `spend cap`, and
+//     no string BEAT 2 prints is in the first person or the past tense. Beat 2's is
+//     the scope, because beat 2 is the shadow-AI pass; `domainsProvenance` below IS
+//     first-person past ("we proposed"), on purpose — it is beat 3's provenance
+//     line, it names who authored the four domains, and it draws no shadow-AI image.
+//   · NO STATISTIC IS SHARED, AND BEAT 2 CARRIES ZERO NUMBERS AT ALL. That is the
+//     cheapest way to hold the rule and the only way to make it testable as an
+//     ABSENCE rather than as a list of forbidden values: D.3's only quantity is its
+//     30-day window, B.2's spec paragraph names no quantity, and a beat with no digit
+//     in it cannot collide with either. The two figures live in BEAT 1, where §6.7 puts
+//     them, and they are B.4's numbers rather than a second slide's new ones.
+//   · gh#57 DELIBERATELY LEFT `revoke` AND `produce` TO THIS SLIDE, and beat 2 spends
+//     both. The one adjacency §6.7 forces is `audit`: D.3's bill has "No audit trail"
+//     and this beat has "You cannot audit what was asked". The words touch and the
+//     images do not — a closed past-tense bill against an open present-tense exposure —
+//     which is exactly what D.3's own block says from the other side.
+//   · AGAINST B.2, WHICH IS UNBUILT. `gap-no-sop` sits in §11's Phase 7 row and
+//     `src/slides/leader-gap/` holds only the Capability Ladder, so this half of the
+//     check runs against §6.2's SPEC TEXT and not against rendered copy. Said that way
+//     rather than implying more, which is how gh#57's commit recorded the same limit.
+//     What is settled: none of `no SOP`, `no guidance` or `improvise` appears below,
+//     and beat 3 says where the SOP STARTS rather than that there is none — the
+//     absence of guidance is B.2's image and this slide does not draw it.
+//
+// THE KEYWORD RULE, this slide's own two lists. `kw` goes on PROSE ONLY, as everywhere
+// in this file.
+//
+//   · PROSE, each with a `*Kw` sibling — FIVE strings: `headline`, `verdict`,
+//     `exposureLine`, `retrofitLine`, and the brand callback's `line` (both arms).
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — `figLabel`, the three
+//     destination `label`s and their three `contract` lines, both `figure`s and both
+//     `metric`s, `priceSource`, `exposureEyebrow`, `sopEyebrow`, the three exposure
+//     `label`s, the four domain `name`s, `domainsProvenance`, and the callback's
+//     `source`. The sharpest cases are the four domains and the three contracts: a
+//     domain is a HEADING an SOP is written under, and a copper italic inside
+//     "GOVERNANCE" would emphasise a fragment of a heading; the contracts sit in the
+//     same 15px sans register as the exposure rows, where a serif copper italic reads
+//     as a rendering fault rather than as emphasis.
+//
+// NO LETTER AND NO NUMBER IN ANY RENDERED STRING, as everywhere under this directory
+// (§3.4 R2 / §3.5). This slide composes **D.3** today, one behind §6.7's **D.4**,
+// because `invest-base-rates` (§6.7's D.1) is unbuilt and holds no ticket — §11's
+// Phase 7 row has it. Do not "fix" the figure.
+
+/**
+ * Exactly three, held by the TYPE — the sibling of {@link Four} and there for the same
+ * reason: the error lands on the fourth entry, at the definition site, with no cast.
+ *
+ * THREE IS THE ARGUMENT, NOT A LENGTH. §6.7, §12.2 and the research record all frame
+ * beat 1 as three destinations, and `./security-geometry.ts` gives the stage a
+ * THREE-COLUMN grid whose columns ARE those destinations. A fourth destination has
+ * nowhere on the stage to go, which is a fact the geometry can only pin if the count is
+ * a literal type here.
+ */
+type Three<T> = readonly [T, T, T];
+
+/** Exactly two. Beat 1 quotes B.4's write-and-reason and tool-calling gaps and no
+ *  others — B.4's coding and multimodal panels are that slide's argument, not this
+ *  one's — and `./security-geometry.ts` gives the price band two of the grid's three
+ *  columns. A third figure would have to take the column the brand callback is in. */
+type Two<T> = readonly [T, T];
+
+/**
+ * One of beat 1's three destinations: the category, and what its contract says.
+ *
+ * A CATEGORY AND NEVER A PRODUCT. `label` names a kind of account, not a plan and not a
+ * vendor's SKU, which is what §12.2's category branch means in practice (see the block
+ * header). `contract` is one sentence lifted from the research record's cross-vendor
+ * patterns, true of the category at all three vendors the deck names on 2026-08-04, and
+ * it is the cell that carries the diagonal the headline states.
+ */
+export interface DataDestination {
+  id: string;
+  /** Mono LABEL register, stored SHOUTED. Never quoted in prose anywhere — the spec
+   *  writes these three in running text but no string on this stage or in any test
+   *  quotes the label itself — so the register's `textTransform` is a no-op on it and
+   *  the data reads as the stage does. Same call as `deadlockClauses` above. */
+  label: string;
+  /** The 15px sans LABEL register, keyword-free. One line, and it may not grow to two:
+   *  `./security-geometry.ts` cuts the box for one and the shelf under it is the
+   *  price band. */
+  contract: string;
+}
+
+/**
+ * One of beat 1's two numbers: the gap, and what it is a gap in.
+ *
+ * BOTH ARE B.4's, RE-QUOTED RATHER THAN RE-DERIVED. §6.7 says this is where B.4's
+ * message lands with its own numbers, so the two figures below are the strings that
+ * slide already prints for the same two metrics at the same licence tier from the same
+ * capture. Nothing here computes a gap: a slide that subtracted two scores would be a
+ * second derivation of a number the deck already publishes, and the two would drift.
+ */
+export interface PriceFigure {
+  id: string;
+  /** The gap, mono and keyword-free. `4 pts` carries no decimal place because v4.1
+   *  publishes the Intelligence Index as an integer (research §9.5) — `4.0` would be
+   *  invented precision. */
+  figure: string;
+  /** What the gap is in. A LABEL: it names a measurement, and a copper italic inside
+   *  one would emphasise a fragment of a name. */
+  metric: string;
+}
+
+/**
+ * One of beat 3's four governance domains.
+ *
+ * STORED TITLE CASE AND SHOUTED BY THE REGISTER, unlike `deadlockClauses` and unlike
+ * {@link DataDestination.label}. These four ARE quoted in prose — §6.7 writes
+ * "Culture, Risk, Governance, Ethics", the issue's AC quotes the same four, and the
+ * research record's §10 traces that exact spelling — so the data keeps the spelling
+ * every source uses and the CSS does the shouting. Same decision as `hubLabel` in
+ * `src/slides/leader-shape/content.ts`.
+ */
+export interface GovernanceDomain {
+  id: string;
+  /** A HEADING an SOP is written under. Keyword-free. */
+  name: string;
+}
+
+/**
+ * §4.4 slot 4 — what the organisation in the room already runs on its own hardware, or
+ * the stated fact that it runs none.
+ *
+ * A UNION, FOR `OwnProofBlock`'s REASON. "A source line attributing nothing" and "a
+ * sourced claim with no source" are both unrepresentable, and the arm that makes a
+ * claim is the only arm that has a `source` field to fill. The rejected model was one
+ * interface with `source?: string`: it type-checks with the callback's provenance
+ * missing, and the failure it permits is the one §12.3 item 2 exists to prevent — a
+ * vendor-published claim about a customer's architecture printed as if the deck had
+ * checked it.
+ *
+ * THE ABSENCE IS COPY, NOT AN EMPTY SLOT. #16's finding 4 and `leader-gap`'s
+ * "MineTech has nothing comparable to place on this ladder" both say the same thing:
+ * a brand with nothing to show gets a sentence saying so, because a blank band under a
+ * heading reads on a projector as a slide that failed to load. So `runs-none` carries
+ * real prose in the slot `runs-it` fills, and the renderer has no empty case.
+ */
+export type OnPremCallback =
+  | {
+      readonly kind: "runs-it";
+      /** Prose — the one sentence on this stage about the organisation in the room. */
+      readonly line: string;
+      readonly lineKw: readonly string[];
+      /** How the claim is known, in the same closed union `invest-own-proof` uses. The
+       *  source line below is composed from THIS value, so the chip's word and the
+       *  citation's word cannot disagree. */
+      readonly mark: EpistemicMark;
+      /**
+       * The citation, printed ON the stage rather than in a footnote (§12.3 item 2 —
+       * "cite attributed"). Mono, keyword-free: it is a citation, not a sentence the
+       * slide makes a point with, and it ends in {@link NOT_AUDITED} for the reason
+       * that constant exists.
+       */
+      readonly source: string;
+    }
+  | {
+      readonly kind: "runs-none";
+      /** Prose, and the whole of the slot. There is nothing to attribute, so there is
+       *  no `source` field to leave empty. */
+      readonly line: string;
+      readonly lineKw: readonly string[];
+    };
+
+/**
+ * BEAT 1 — the three destinations, in the order §6.7 and §12.2 both give them.
+ *
+ * THE ORDER IS AN ESCALATION OF WHO IS ACCOUNTABLE, which is why it is not re-sorted:
+ * nobody (a personal account has no administrator) → the company, by contract → you,
+ * because it is your hardware. Read across the row, the three `contract` cells are the
+ * diagonal the headline states: the screen does not change and the contract does.
+ *
+ * EVERY CELL IS A CATEGORY CLAIM AND NONE OF THEM IS A VENDOR'S POLICY. See the block
+ * header for the branch and the sourcing; in one line, each `contract` is true of the
+ * category at all three vendors the deck names, per the research record's §6, so no
+ * single vendor changing its terms before Aug 19 falsifies a word of it.
+ */
+const DESTINATIONS: Three<DataDestination> = [
+  {
+    id: "personal",
+    label: "PERSONAL CONSUMER ACCOUNT",
+    // §6 pattern 1 / F1. "commonly" is the record's own hedge and is load-bearing: it
+    // is the difference between a category claim and an assertion about three named
+    // vendors' current defaults.
+    contract: "Your conversations commonly train the model.",
+  },
+  {
+    id: "company-managed",
+    label: "COMPANY-MANAGED WORKSPACE",
+    // §6 pattern 1 (commercial terms bar training) plus pattern 2 read the other way.
+    // The admin half is here rather than in beat 2 because it is the CONTRAST beat 2
+    // pays off — the exposure is that the personal account has no administrator, and a
+    // room that has not been told an administrator exists anywhere hears that as a
+    // complaint about software.
+    contract: "Training is barred, and an admin exists.",
+  },
+  {
+    id: "self-hosted",
+    // The one label with a slash. §6.7, §12.2 and the record all name this destination
+    // twice over — "self-hosted / on-prem" — because the two words are not synonyms to
+    // an infrastructure lead, and dropping either one loses half the audience.
+    label: "SELF-HOSTED / ON-PREM",
+    // §6 pattern 8 / F8, compressed: none of the frontier vendors will sell you its best
+    // model to run in your own data centre. The two figures below are what that costs.
+    contract: "Your own hardware — and not the frontier.",
+  },
+];
+
+/**
+ * BEAT 1's PRICE — B.4's two gaps, at B.4's licence tier, from B.4's capture.
+ *
+ * NOT §6.7's `6.7` AND `9.2`. Both of those come from the superseded Index v4.0 and
+ * `9.2` is a collision trap; the block header carries the full argument and the spec
+ * was corrected by this ticket. The pair below is the one shipping B.4 uses.
+ *
+ * TWO, AND THE TUPLE HOLDS IT. §6.7 names two metrics; B.4's other two panels are that
+ * slide's argument and repeating them here would make beat 1 a benchmark slide.
+ */
+const PRICE_FIGURES: Two<PriceFigure> = [
+  {
+    id: "write-and-reason",
+    figure: "4 pts",
+    metric: "off the lead on write-and-reason",
+  },
+  {
+    id: "tool-calling",
+    figure: "5.2 pts",
+    metric: "back on tool-calling",
+  },
+];
+
+/**
+ * BEAT 2's THREE — the exposure, as the three things nobody can do about it.
+ *
+ * SECOND PERSON, PRESENT TENSE, AND NOT ONE DIGIT BETWEEN THEM. All three are §6.2's
+ * requirement working out in the copy: D.3's bill is what our workaround cost US and is
+ * closed; this is what YOU cannot do TODAY and is open. The absence of numbers is what
+ * makes "no shared statistic" testable as an absence rather than as a list.
+ *
+ * §6.7's ORDER — audit, revoke, produce — and it is not re-sorted. It escalates by who
+ * is asking: you, on your own initiative → HR, on the day someone leaves → an outside
+ * party who is entitled to an answer. The record's F4 is the same three in one
+ * sentence; three rows is what makes each one separately unmissable.
+ */
+const EXPOSURES: Three<LineItem> = [
+  { id: "cannot-audit", label: "You cannot audit what was asked" },
+  { id: "cannot-revoke", label: "You cannot revoke it when the person leaves" },
+  { id: "cannot-produce", label: "You cannot produce it when an auditor asks" },
+];
+
+/**
+ * BEAT 3's FOUR — the governance domains an SOP starts from, in §6.7's order.
+ *
+ * ALL FOUR RENDER, ALWAYS. The issue's AC is "renders all four", and the four are a set
+ * rather than a ranking: an SOP that covered three of them would be an SOP with a hole,
+ * and a stage that showed three would be making a claim about which one matters least.
+ * The tuple is what refuses a fifth, and `./security-geometry.ts` pins its own count to
+ * this one.
+ */
+const DOMAINS: Four<GovernanceDomain> = [
+  { id: "culture", name: "Culture" },
+  { id: "risk", name: "Risk" },
+  { id: "governance", name: "Governance" },
+  { id: "ethics", name: "Ethics" },
+];
+
+export const investSecurityContent = {
+  figLabel: "WHERE THE DATA GOES, AND WHAT ANSWERS IT",
+
+  /**
+   * The premise, and it IS beat 1's diagonal rather than an introduction to it.
+   *
+   * The research record's §1 names the one thing a Div Head is most likely to get
+   * wrong — the tier changes the CONTRACT, not the INTERFACE — and §6 pattern 1 states
+   * it as "same brand, same screen, opposite default". Putting that in the headline
+   * rather than in a fourth box under the table buys the stage a whole band and makes
+   * the three columns under it EVIDENCE for a claim the room has already read, instead
+   * of three facts it has to assemble.
+   *
+   * TWO SENTENCES AND NOT ONE CLAUSE. "The screen is the same, but the contract is not"
+   * is one concession; two full stops make it two statements, and the second one is the
+   * only one the slide is about — which is where the keyword goes.
+   */
+  headline: "The screen is the same. The contract is not.",
+  headlineKw: ["The contract is not"],
+
+  destinations: DESTINATIONS,
+  priceFigures: PRICE_FIGURES,
+
+  /**
+   * The two figures' provenance, on the stage and not in a footnote.
+   *
+   * IT HAS TO CARRY FOUR THINGS, and it is the only string on the slide that can: WHAT
+   * is being compared (the best open weights, against the frontier), WHO published it,
+   * WHEN it was captured, and WHICH LICENCE TIER. The tier is the half a reader would
+   * never guess and the half research §9.4 is emphatic about — "pick one tier; do not
+   * mix" — and this is the same tier, from the same capture, that B.4 disclosed to the
+   * same room earlier in the day.
+   *
+   * MONO, LOWER CASE, KEYWORD-FREE. A sentence-length citation set in uppercase mono is
+   * something nobody in the back row reads; `invest-own-proof`'s attribution drops the
+   * transform for the same reason and this line follows it.
+   *
+   * IT NAMES ONE CAPTURE AND MAKES NO COMPARISON TO AN EARLIER ONE. Research §9.5
+   * records that the Agentic index's scale changed in v4.1 (old max 77.8 → 55.3), so a
+   * smaller agentic gap than last quarter's is a scale change and not models getting
+   * worse. A line that quoted two dates would invite exactly that reading.
+   */
+  priceSource:
+    "Best open weights against the frontier — Artificial Analysis, 2 August 2026, " +
+    "commercial use restricted.",
+
+  /**
+   * BEAT 1's CONCLUSION, stated rather than implied — the issue's AC says so.
+   *
+   * THE TWO HALVES ARE ONE TRADE AND BOTH ARE MARKED. "Right for the sensitive
+   * workloads" alone is a recommendation to self-host and would send a division head
+   * off to price GPUs for everything; "wrong for everything else" alone is a
+   * recommendation not to. The pair is the decision, so the two keywords are the two
+   * halves of it — the same distribution of emphasis `workaround` above uses, and for
+   * the same reason.
+   *
+   * "Self-hosting" IS NAMED, and the subject is not left to the figures above. This is
+   * the sentence a Div Head repeats to an infrastructure lead, and a verdict whose
+   * subject has to be inferred from the box above it is a verdict that arrives without
+   * its subject.
+   */
+  verdict: "Self-hosting is right for the sensitive workloads, and wrong for everything else.",
+  verdictKw: ["the sensitive workloads", "everything else"],
+
+  /**
+   * BEAT 2's label. Mono, keyword-free.
+   *
+   * "TODAY" IS THE WORD THAT MAKES IT BEAT 2. Everything above this line is about a
+   * choice the room has not made yet; this is about the position it is already in,
+   * before any contract is signed and whatever beat 1 concludes. And "YOUR" is what
+   * turns the slide around: beats 1 and 3 are advice, and this one is a description of
+   * the room.
+   */
+  exposureEyebrow: "YOUR REAL EXPOSURE TODAY",
+
+  /**
+   * BEAT 2 — the whole thesis in one sentence.
+   *
+   * IT NAMES WHAT THE EXPOSURE IS NOT, FIRST. §6.7's beat is "your real exposure today
+   * is shadow AI, NOT the vendor", and the order matters on a slide whose first beat
+   * was three vendor contracts: a room that has just read about training defaults and
+   * retention will hear beat 3 as a procurement problem unless this sentence takes that
+   * frame away before it offers another. Which is also why no vendor is named anywhere
+   * on this stage — see the block header.
+   *
+   * "nobody administers it" IS THE RECORD'S F4, COMPRESSED. "A personal account has no
+   * administrator. Nobody in the company can list what was asked, export it for an
+   * audit, or revoke it when the person leaves." The first sentence is this line; the
+   * three that follow are the three rows under it.
+   */
+  exposureLine: "It is not the vendor. It is shadow AI, and nobody administers it.",
+  exposureLineKw: ["not the vendor", "nobody administers it"],
+
+  exposures: EXPOSURES,
+
+  /**
+   * BEAT 3's label. Mono, keyword-free.
+   *
+   * "WHERE THE SOP STARTS" AND NOT "THERE IS NO SOP". The absence of guidance is B.2's
+   * image (§6.2) and this slide may not draw it; what this beat owns is the STARTING
+   * POINT. The phrasing also keeps the four domains honest — they are where an SOP
+   * begins, not the SOP.
+   */
+  sopEyebrow: "WHERE THE SOP STARTS",
+
+  domains: DOMAINS,
+
+  /**
+   * BEAT 3's failure mode, named verbatim because the issue's AC names it verbatim.
+   *
+   * "governance retrofit" IS THE KEYWORD, which is the only place the emphasis can
+   * honestly go: "Start here now" is the ask and the retrofit is the cost of not, and a
+   * room remembers the cost. A retrofit is what governance becomes when it is written
+   * after the incident that needed it — the same work, done under a deadline set by
+   * somebody else — and naming it is what makes the four chips above an offer rather
+   * than a checklist.
+   *
+   * "Start here" POINTS AT THE FOUR CHIPS DIRECTLY ABOVE IT, which is why the sentence
+   * is short: the four domains have already been read, and re-listing them in prose
+   * would spend a line saying what the stage says.
+   */
+  retrofitLine: "Start here now. The alternative is a governance retrofit.",
+  retrofitLineKw: ["a governance retrofit"],
+
+  /**
+   * BEAT 3's provenance — framing 2 of the research record's §10.2, for both brands.
+   *
+   * IT PRINTS THE NEGATION AS WELL AS THE CLAIM, which is the whole point and is
+   * `NOT_AUDITED`'s idiom applied to a different kind of overclaim. §10 established that
+   * the four domains are AUTHORED and not sourced: they enter the corpus as the
+   * presenter's own question, and the only committed artifact that renders all four is
+   * our own April 2026 deck. §10.2 permits "we proposed" and forbids "Group requires",
+   * so the line says both — what we did, and what it is not. A slide that merely omitted
+   * the requirement claim would still be read as making it, because a Sinar Mas Group HR
+   * date beside four governance domains reads as a mandate unless something says
+   * otherwise.
+   *
+   * NO BRAND FORK. Both leader decks print this line unchanged: it is a fact about who
+   * wrote the four domains, and that is the same fact in both rooms. §4.4 gives this
+   * slide exactly one brand slot and it is the on-prem callback below.
+   *
+   * MONO, LOWER CASE, KEYWORD-FREE — the same register and the same reasoning as
+   * {@link investSecurityContent.priceSource}.
+   */
+  domainsProvenance:
+    "The four domains we proposed to Sinar Mas Group HR, April 2026 — not a Group requirement.",
+} as const;
+
+// ───────────────────── the brand axis (§4.4 slot 4) ─────────────────────
+
+/**
+ * How GEMS' on-prem claim is known, as a value — so the chip's word and the citation's
+ * word are one string.
+ *
+ * The same closed union `invest-own-proof` uses, and deliberately not a second one:
+ * both slides in this section are printing a Google Cloud customer story's claim about
+ * GEMS, and two spellings of "vendor-reported" in one section would be two epistemic
+ * vocabularies in one room.
+ */
+const GEMS_ON_PREM_MARK: EpistemicMark = "vendor-reported";
+
+/**
+ * GEMS — DigiTech already runs the third destination (§6.7, §4.4 slot 4).
+ *
+ * THIS IS THE ONE CLAIM ON THE SLIDE THAT IS ABOUT A NAMED ORGANISATION, and it is
+ * about the one in the room. Google Cloud's published GEMVIS customer story describes
+ * GEMVIS as hybrid infrastructure — sensitive mining data processed on private
+ * on-premises GPU servers for RAG, with higher-level reasoning called out to a managed
+ * platform (`docs/researches/2026-07-31-gems-digitech-ai-landscape.md`, which traces
+ * that to the customer story three times over). So beat 1's third destination is not a
+ * hypothetical for this room: it is already running, and the verdict above it is a
+ * description of a decision GEMS has already taken.
+ *
+ * VENDOR-REPORTED, AND SAID SO. A vendor writing about its own customer is an
+ * interested party — §12.3 item 2's whole point — so the mark and the citation travel
+ * with the claim, exactly as `invest-own-proof`'s four GEMVIS figures do. The two
+ * slides cite the same source in the same words on purpose.
+ */
+const GEMS_ON_PREM: OnPremCallback = {
+  kind: "runs-it",
+  // "already" is the word that makes this a callback rather than a case study: the room
+  // is not being shown what someone else did, it is being shown what it did.
+  line: "DigiTech already runs private on-prem GPU servers for sensitive-data RAG.",
+  lineKw: ["private on-prem GPU servers"],
+  mark: GEMS_ON_PREM_MARK,
+  source:
+    `Source: Google Cloud's published GEMVIS customer story — ${GEMS_ON_PREM_MARK}, ` +
+    `${NOT_AUDITED}.`,
+};
+
+/**
+ * Berau — MineTech runs none of it, STATED (§6.7, §4.4 slot 4).
+ *
+ * #16's FINDING 4 IS WHY THIS IS COPY AND NOT A BLANK. The same rule
+ * `src/slides/leader-gap/content.ts` follows for the Capability Ladder's missing
+ * marker: a brand with nothing in the slot gets a sentence saying so, because an empty
+ * band under a heading reads on a projector as a slide that did not finish loading, and
+ * because the absence is itself the finding a division head needs. The second sentence
+ * is what keeps it from sounding like an accusation — there is nothing to point at, so
+ * the decision beat 1 just described is still open here.
+ *
+ * NO SOURCE FIELD, AND THE TYPE IS WHY. Nobody published this absence; it is what the
+ * deck knows about the room. The `runs-none` arm has no `source` to fill, so a later
+ * edit cannot attribute it to a document that does not exist.
+ */
+const BERAU_ON_PREM: OnPremCallback = {
+  kind: "runs-none",
+  line: "MineTech runs none of this today. There is no on-prem server to point at.",
+  lineKw: ["none of this today"],
+};
+
+/**
+ * `general` — UNREACHABLE TODAY, and kept to the shortest honest thing.
+ *
+ * No `general-leader` variant is registered, so no composed deck asks for this block;
+ * it exists for the reason `GENERAL_BLOCK` above exists, and it is deliberately the
+ * thinnest of the three. It names no organisation and claims no hardware, which is the
+ * one failure that would matter here: a slot that fell through to another company's
+ * on-prem estate on the slide about where sensitive data goes.
+ */
+const GENERAL_ON_PREM: OnPremCallback = {
+  kind: "runs-none",
+  line: "This deck names no organisation, so it has no hardware of its own to name.",
+  lineKw: ["no hardware of its own"],
+};
+
+/**
+ * §4.4 slot 4, brand by brand.
+ *
+ * A `Record` keyed by `Brand` for `OWN_PROOF_BY_BRAND`'s reason: a fourth brand must
+ * FAIL TO COMPILE here rather than silently show one organisation another's
+ * infrastructure. On this slide that is the sharpest version of the argument in the
+ * deck — the slide is about where sensitive data goes, and the failure would be
+ * telling a room it runs private GPU servers it does not have.
+ */
+const ON_PREM_BY_BRAND: Record<Brand, OnPremCallback> = {
+  berau: BERAU_ON_PREM,
+  gems: GEMS_ON_PREM,
+  general: GENERAL_ON_PREM,
+};
+
+/**
+ * This slide's on-prem callback for one brand. Pass `VARIANT.brand`.
+ *
+ * THE ONLY WAY IN, exactly as `ownProofFor` is: the table above is not exported, so a
+ * rule over "every brand" is proved over `BRANDS` and not over this file's own key set.
+ */
+export function onPremCallbackFor(brand: Brand): OnPremCallback {
+  return ON_PREM_BY_BRAND[brand];
+}

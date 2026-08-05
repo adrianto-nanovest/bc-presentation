@@ -874,13 +874,26 @@ the governance recommendation, is indefensible in a Sinar Mas context.
 
 1. **Where your data actually goes** — personal consumer account / company-managed
    workspace / self-hosted. This is where B4's message lands with its own numbers:
-   open-weight is **6.7 points** off the lead on write-and-reason and **9.2 back** on
+   open-weight is **4 points** off the lead on write-and-reason and **5.2 back** on
    tool-calling, so self-hosting is right for sensitive workloads and wrong for everything
    else.
 2. **Your real exposure today is shadow AI, not the vendor** — data you cannot audit,
    revoke, or produce.
 3. **The four governance domains** (Culture, Risk, Governance, Ethics) as the SOP starter,
    with **"governance retrofit"** named as the failure mode.
+
+> **Amendment 2026-08-05 — beat 1's two numbers were `6.7` and `9.2`, and both were stale.**
+> `docs/researches/2026-08-04-vendor-pricing-and-data-handling.md` §9 traced them to the
+> superseded Artificial Analysis Index **v4.0** capture of 8 June 2026, which used a flat
+> closed/open binary and so cannot say which licence tier they came from. §9.3 records that
+> `9.2` is worse than merely stale: it is still live in v4.1, as the **Coding** gap for the
+> **unrestricted** tier, so a reviewer checking this line against the current data finds the
+> number and ships something wrong on both metric and tier. The pair above is v4.1's
+> **restricted**-tier gap — the tier shipping B4 already uses across all four of its panels
+> (`src/slides/landscape-section-b/content.ts`, `Artificial Analysis · 2 August 2026`) —
+> because mixing tiers between B4 and D.4 is the one failure §9.4 is emphatic about. Write
+> `4`, never `4.0`: v4.1 publishes the Intelligence Index as an integer. Owner: **#58**, per
+> §9.4.
 
 Brand callback (slot 4): GEMS — DigiTech already runs private on-prem GPU servers for
 sensitive-data RAG. Berau — none.
