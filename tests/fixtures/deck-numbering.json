@@ -1013,281 +1013,286 @@
     },
     {
       "index": 8,
+      "fig": "D.4",
+      "label": "FROM INDIVIDUAL SEATS TO A LINE ITEM"
+    },
+    {
+      "index": 9,
       "fig": "E.1",
       "label": "FROM RULES TO REASONING"
     },
     {
-      "index": 9,
+      "index": 10,
       "fig": "E.2",
       "label": "NESTED, NOT EQUAL"
     },
     {
-      "index": 10,
+      "index": 11,
       "fig": "E.3",
       "label": "MECHANICS & CONTROLS"
     },
     {
-      "index": 11,
+      "index": 12,
       "fig": "E.4",
       "label": "MODELS BY CATEGORY"
     },
     {
-      "index": 12,
+      "index": 13,
       "fig": "E.5",
       "label": "AI LANDSCAPE PARADOX"
     },
     {
-      "index": 13,
+      "index": 14,
       "fig": "F.1",
       "label": "MINDSET 1 / 5"
     },
     {
-      "index": 14,
+      "index": 15,
       "fig": "F.2",
       "label": "MINDSET 2 / 5"
     },
     {
-      "index": 15,
+      "index": 16,
       "fig": "F.3",
       "label": "MINDSET 3 / 5"
     },
     {
-      "index": 16,
+      "index": 17,
       "fig": "F.4",
       "label": "MINDSET 4 / 5"
     },
     {
-      "index": 17,
+      "index": 18,
       "fig": "F.5",
       "label": "MINDSET 5 / 5"
     },
     {
-      "index": 18,
+      "index": 19,
       "fig": "F.6",
       "label": "BRIDGE · FROM MINDSET TO MECHANICS"
     },
     {
-      "index": 19,
+      "index": 20,
       "fig": "G.1",
       "label": "THE TRAP"
     },
     {
-      "index": 20,
+      "index": 21,
       "fig": "G.2",
       "label": "THE CONVERGENCE"
     },
     {
-      "index": 21,
+      "index": 22,
       "fig": "G.3",
       "label": "ONE PROCESS · FOUR LEVELS"
     },
     {
-      "index": 22,
+      "index": 23,
       "fig": "G.4",
       "label": "WHICH LEVEL · WHEN"
     },
     {
-      "index": 23,
+      "index": 24,
       "fig": "G.5",
       "label": "THE NEXT QUESTION"
     },
     {
-      "index": 24,
+      "index": 25,
       "fig": "H.1",
       "label": "THE THREE LAYERS"
     },
     {
-      "index": 25,
+      "index": 26,
       "fig": "H.2",
       "label": "LAYER 1 · PROMPT"
     },
     {
-      "index": 26,
+      "index": 27,
       "fig": "H.3",
       "label": "LAYER 1 · STRUCTURE"
     },
     {
-      "index": 27,
+      "index": 28,
       "fig": "H.4",
       "label": "LAYER 1 · METHODOLOGIES"
     },
     {
-      "index": 28,
+      "index": 29,
       "fig": "H.5",
       "label": "LAYER 1 · EXAMPLES"
     },
     {
-      "index": 29,
+      "index": 30,
       "fig": "H.6",
       "label": "LIMITS OF PROMPTING"
     },
     {
-      "index": 30,
+      "index": 31,
       "fig": "H.7",
       "label": "LAYER 2 · CONTEXT"
     },
     {
-      "index": 31,
+      "index": 32,
       "fig": "H.8",
       "label": "CONTEXT STRATEGIES"
     },
     {
-      "index": 32,
+      "index": 33,
       "fig": "H.9",
       "label": "CONTEXT · PITFALLS"
     },
     {
-      "index": 33,
+      "index": 34,
       "fig": "H.10",
       "label": "LAYER 3 · HARNESS"
     },
     {
-      "index": 34,
+      "index": 35,
       "fig": "H.11",
       "label": "HARNESS · PRACTICES"
     },
     {
-      "index": 35,
+      "index": 36,
       "fig": "H.12",
       "label": "LOOP ENGINEERING"
     },
     {
-      "index": 36,
+      "index": 37,
       "fig": "H.13",
       "label": "BRIDGE · BUILT"
     },
     {
-      "index": 37,
+      "index": 38,
       "fig": "I.1",
       "label": "ECOSYSTEM"
     },
     {
-      "index": 38,
+      "index": 39,
       "fig": "I.2",
       "label": "CLAUDE PLATFORMS"
     },
     {
-      "index": 39,
+      "index": 40,
       "fig": "I.3",
       "label": "CLAUDE CAPABILITIES"
     },
     {
-      "index": 40,
+      "index": 41,
       "fig": "I.4",
       "label": "BUILT-IN TOOLS & COMMANDS"
     },
     {
-      "index": 41,
+      "index": 42,
       "fig": "I.5",
       "label": "GOOGLE"
     },
     {
-      "index": 42,
+      "index": 43,
       "fig": "I.6",
       "label": "OPENAI"
     },
     {
-      "index": 43,
+      "index": 44,
       "fig": "I.7",
       "label": "HEAD-TO-HEAD"
     },
     {
-      "index": 44,
+      "index": 45,
       "fig": "I.8",
       "label": "CAPABILITY MATRIX"
     },
     {
-      "index": 45,
+      "index": 46,
       "fig": "I.9",
       "label": "THE WORKFLOW"
     },
     {
-      "index": 46,
+      "index": 47,
       "fig": "I.10",
       "label": "BEYOND THE BIG THREE"
     },
     {
-      "index": 47,
+      "index": 48,
       "fig": "I.11",
       "label": "BRIDGE · WIELD"
     },
     {
-      "index": 48,
+      "index": 49,
       "fig": "J.1",
       "label": "THE TRAP"
     },
     {
-      "index": 49,
+      "index": 50,
       "fig": "J.2",
       "label": "THE DISCIPLINE"
     },
     {
-      "index": 50,
+      "index": 51,
       "fig": "J.3",
       "label": "BRIDGE · DISCIPLINE"
     },
     {
-      "index": 51,
+      "index": 52,
       "fig": "K.1",
       "label": "THE ENABLEMENT MODEL"
     },
     {
-      "index": 52,
+      "index": 53,
       "fig": "K.2",
       "label": "PHASES AND GATES"
     },
     {
-      "index": 53,
+      "index": 54,
       "fig": "L.1",
       "label": "THE PROCESS"
     },
     {
-      "index": 54,
+      "index": 55,
       "fig": "L.2",
       "label": "THE JOURNEY"
     },
     {
-      "index": 55,
+      "index": 56,
       "fig": "L.3",
       "label": "THE PORTFOLIO"
     },
     {
-      "index": 56,
+      "index": 57,
       "fig": "L.4",
       "label": "BRIDGE · RECIPE"
     },
     {
-      "index": 57,
+      "index": 58,
       "fig": "M.1",
       "label": "THE RECIPE"
     },
     {
-      "index": 58,
+      "index": 59,
       "fig": "M.2",
       "label": "FIVE PRINCIPLES"
     },
     {
-      "index": 59,
+      "index": 60,
       "fig": "M.3",
       "label": "BUILDING YOURSELF UP"
     },
     {
-      "index": 60,
+      "index": 61,
       "fig": "M.4",
       "label": "BUILDING SOMETHING THAT SHIPS"
     },
     {
-      "index": 61,
+      "index": 62,
       "fig": "N.1",
       "label": "PRACTICE · LAB"
     },
     {
-      "index": 62,
+      "index": 63,
       "fig": "N.2",
       "label": "THE PRACTICE LAB"
     },
     {
-      "index": 63,
+      "index": 64,
       "fig": "N.3",
       "label": "THANK YOU"
     }
@@ -1335,281 +1340,286 @@
     },
     {
       "index": 8,
+      "fig": "D.4",
+      "label": "FROM INDIVIDUAL SEATS TO A LINE ITEM"
+    },
+    {
+      "index": 9,
       "fig": "E.1",
       "label": "FROM RULES TO REASONING"
     },
     {
-      "index": 9,
+      "index": 10,
       "fig": "E.2",
       "label": "NESTED, NOT EQUAL"
     },
     {
-      "index": 10,
+      "index": 11,
       "fig": "E.3",
       "label": "MECHANICS & CONTROLS"
     },
     {
-      "index": 11,
+      "index": 12,
       "fig": "E.4",
       "label": "MODELS BY CATEGORY"
     },
     {
-      "index": 12,
+      "index": 13,
       "fig": "E.5",
       "label": "AI LANDSCAPE PARADOX"
     },
     {
-      "index": 13,
+      "index": 14,
       "fig": "F.1",
       "label": "MINDSET 1 / 5"
     },
     {
-      "index": 14,
+      "index": 15,
       "fig": "F.2",
       "label": "MINDSET 2 / 5"
     },
     {
-      "index": 15,
+      "index": 16,
       "fig": "F.3",
       "label": "MINDSET 3 / 5"
     },
     {
-      "index": 16,
+      "index": 17,
       "fig": "F.4",
       "label": "MINDSET 4 / 5"
     },
     {
-      "index": 17,
+      "index": 18,
       "fig": "F.5",
       "label": "MINDSET 5 / 5"
     },
     {
-      "index": 18,
+      "index": 19,
       "fig": "F.6",
       "label": "BRIDGE · FROM MINDSET TO MECHANICS"
     },
     {
-      "index": 19,
+      "index": 20,
       "fig": "G.1",
       "label": "THE TRAP"
     },
     {
-      "index": 20,
+      "index": 21,
       "fig": "G.2",
       "label": "THE CONVERGENCE"
     },
     {
-      "index": 21,
+      "index": 22,
       "fig": "G.3",
       "label": "ONE PROCESS · FOUR LEVELS"
     },
     {
-      "index": 22,
+      "index": 23,
       "fig": "G.4",
       "label": "WHICH LEVEL · WHEN"
     },
     {
-      "index": 23,
+      "index": 24,
       "fig": "G.5",
       "label": "THE NEXT QUESTION"
     },
     {
-      "index": 24,
+      "index": 25,
       "fig": "H.1",
       "label": "THE THREE LAYERS"
     },
     {
-      "index": 25,
+      "index": 26,
       "fig": "H.2",
       "label": "LAYER 1 · PROMPT"
     },
     {
-      "index": 26,
+      "index": 27,
       "fig": "H.3",
       "label": "LAYER 1 · STRUCTURE"
     },
     {
-      "index": 27,
+      "index": 28,
       "fig": "H.4",
       "label": "LAYER 1 · METHODOLOGIES"
     },
     {
-      "index": 28,
+      "index": 29,
       "fig": "H.5",
       "label": "LAYER 1 · EXAMPLES"
     },
     {
-      "index": 29,
+      "index": 30,
       "fig": "H.6",
       "label": "LIMITS OF PROMPTING"
     },
     {
-      "index": 30,
+      "index": 31,
       "fig": "H.7",
       "label": "LAYER 2 · CONTEXT"
     },
     {
-      "index": 31,
+      "index": 32,
       "fig": "H.8",
       "label": "CONTEXT STRATEGIES"
     },
     {
-      "index": 32,
+      "index": 33,
       "fig": "H.9",
       "label": "CONTEXT · PITFALLS"
     },
     {
-      "index": 33,
+      "index": 34,
       "fig": "H.10",
       "label": "LAYER 3 · HARNESS"
     },
     {
-      "index": 34,
+      "index": 35,
       "fig": "H.11",
       "label": "HARNESS · PRACTICES"
     },
     {
-      "index": 35,
+      "index": 36,
       "fig": "H.12",
       "label": "LOOP ENGINEERING"
     },
     {
-      "index": 36,
+      "index": 37,
       "fig": "H.13",
       "label": "BRIDGE · BUILT"
     },
     {
-      "index": 37,
+      "index": 38,
       "fig": "I.1",
       "label": "ECOSYSTEM"
     },
     {
-      "index": 38,
+      "index": 39,
       "fig": "I.2",
       "label": "CLAUDE PLATFORMS"
     },
     {
-      "index": 39,
+      "index": 40,
       "fig": "I.3",
       "label": "CLAUDE CAPABILITIES"
     },
     {
-      "index": 40,
+      "index": 41,
       "fig": "I.4",
       "label": "BUILT-IN TOOLS & COMMANDS"
     },
     {
-      "index": 41,
+      "index": 42,
       "fig": "I.5",
       "label": "GOOGLE"
     },
     {
-      "index": 42,
+      "index": 43,
       "fig": "I.6",
       "label": "OPENAI"
     },
     {
-      "index": 43,
+      "index": 44,
       "fig": "I.7",
       "label": "HEAD-TO-HEAD"
     },
     {
-      "index": 44,
+      "index": 45,
       "fig": "I.8",
       "label": "CAPABILITY MATRIX"
     },
     {
-      "index": 45,
+      "index": 46,
       "fig": "I.9",
       "label": "THE WORKFLOW"
     },
     {
-      "index": 46,
+      "index": 47,
       "fig": "I.10",
       "label": "BEYOND THE BIG THREE"
     },
     {
-      "index": 47,
+      "index": 48,
       "fig": "I.11",
       "label": "BRIDGE · WIELD"
     },
     {
-      "index": 48,
+      "index": 49,
       "fig": "J.1",
       "label": "THE TRAP"
     },
     {
-      "index": 49,
+      "index": 50,
       "fig": "J.2",
       "label": "THE DISCIPLINE"
     },
     {
-      "index": 50,
+      "index": 51,
       "fig": "J.3",
       "label": "BRIDGE · DISCIPLINE"
     },
     {
-      "index": 51,
+      "index": 52,
       "fig": "K.1",
       "label": "THE ENABLEMENT MODEL"
     },
     {
-      "index": 52,
+      "index": 53,
       "fig": "K.2",
       "label": "PHASES AND GATES"
     },
     {
-      "index": 53,
+      "index": 54,
       "fig": "L.1",
       "label": "THE PROCESS"
     },
     {
-      "index": 54,
+      "index": 55,
       "fig": "L.2",
       "label": "THE JOURNEY"
     },
     {
-      "index": 55,
+      "index": 56,
       "fig": "L.3",
       "label": "THE PORTFOLIO"
     },
     {
-      "index": 56,
+      "index": 57,
       "fig": "L.4",
       "label": "BRIDGE · RECIPE"
     },
     {
-      "index": 57,
+      "index": 58,
       "fig": "M.1",
       "label": "THE RECIPE"
     },
     {
-      "index": 58,
+      "index": 59,
       "fig": "M.2",
       "label": "FIVE PRINCIPLES"
     },
     {
-      "index": 59,
+      "index": 60,
       "fig": "M.3",
       "label": "BUILDING YOURSELF UP"
     },
     {
-      "index": 60,
+      "index": 61,
       "fig": "M.4",
       "label": "BUILDING SOMETHING THAT SHIPS"
     },
     {
-      "index": 61,
+      "index": 62,
       "fig": "N.1",
       "label": "PRACTICE · LAB"
     },
     {
-      "index": 62,
+      "index": 63,
       "fig": "N.2",
       "label": "THE PRACTICE LAB"
     },
     {
-      "index": 63,
+      "index": 64,
       "fig": "N.3",
       "label": "THANK YOU"
     }

@@ -76,7 +76,7 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
   ];
 }
 
-// ─ The leader deck, no longer the Phase 4 floor (gh#41, #53, #54, #56, #57, #60, #61, #58) ─
+// ─ The leader deck, no longer the Phase 4 floor (gh#41, #53, #54, #56, #57, #60, #61, #58, #59) ─
 
 /** The leader deck's spine: the standard one with `techniques` GONE, and FOUR runs
  *  the standard deck does not have — `gap`, `shape`, `invest` in front of
@@ -106,33 +106,34 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
  *  LONGEST deck the app composes, three sections past the standard one, and §4.3's
  *  final section count is reached.
  *
- *  AND gh#57, gh#61 AND gh#58 ARE WHAT EVERY REMAINING LEADER TICKET NOW LOOKS
- *  LIKE. Each APPENDED a row INSIDE a run that already existed —
+ *  AND gh#57, gh#61, gh#58 AND gh#59 ARE WHAT EVERY REMAINING LEADER TICKET NOW
+ *  LOOKS LIKE. Each APPENDED a row INSIDE a run that already existed —
  *  `invest-chicken-egg` behind `invest-own-proof`, `mandate-phases-gates` behind
- *  `mandate-enablement`, `invest-security` behind `invest-chicken-egg` — so none
- *  of the three moved a letter or a number anywhere in either deck, and each cost
- *  this table ONE character: the step on its own run's row below (`1 → 2`, then
- *  `2 → 3` for gh#58) is the whole of that ticket's diff here. A letter-keyed
- *  table would have been untouched by all three — which is the honest reading, and
- *  the reason the gh#60 case above is the one that argues for keys rather than
- *  these three.
+ *  `mandate-enablement`, `invest-security` behind `invest-chicken-egg`,
+ *  `invest-subscription` behind `invest-security` — so none of the four moved a
+ *  letter or a number anywhere in either deck, and each cost this table ONE
+ *  character: the step on its own run's row below (`1 → 2`, then `2 → 3` for
+ *  gh#58, then `3 → 4` for gh#59) is the whole of that ticket's diff here. A
+ *  letter-keyed table would have been untouched by all four — which is the honest
+ *  reading, and the reason the gh#60 case above is the one that argues for keys
+ *  rather than these four.
  *
  *  §4.3 gives `gap` five slides, `shape` four and `mandate` three, and §6.7 gives
  *  `invest` five; the four unbuilt `gap` slides raise `gap` to 5, the unbuilt
- *  C.3/C.4 raise `shape` to 4, #59 plus the unbuilt `invest-base-rates` raise
- *  `invest` to 5, and Phase 7's K.3 (`mandate-levers`) raises `mandate` to 3. None
- *  of them moves any other line. (The ticket numbers are checked, not guessed: #58
- *  was D.4 and landed as this file's `2 → 3`, #59 is D.5, while the four `gap`
- *  slides and `invest-base-rates` all sit in §11's PHASE 7 row and hold no issue
- *  at all — the list ends at #63 and #52–#63 are Phase 6.) */
+ *  C.3/C.4 raise `shape` to 4, the unbuilt `invest-base-rates` raises `invest` to
+ *  5, and Phase 7's K.3 (`mandate-levers`) raises `mandate` to 3. None of them
+ *  moves any other line. (The ticket numbers are checked, not guessed: #58 was
+ *  D.4 and landed as this file's `2 → 3`, #59 was D.5 and landed as the `3 → 4`,
+ *  while the four `gap` slides and `invest-base-rates` all sit in §11's PHASE 7
+ *  row and hold no issue at all — the list ends at #63 and #52–#63 are Phase 6.) */
 const LEADER_SPINE: readonly SectionRun[] = [
   ["opening", 2], // cover + A.1
   ["gap", 1], // `gap-capability-ladder` (gh#53) — leader-only, §4.3's B.5
   ["shape", 2], // `shape-agentic-org` (gh#54, leader-only) + the relocated f8 at C.2
   // `invest-own-proof` (gh#56) + `invest-chicken-egg` (gh#57) + `invest-security`
-  // (gh#58), all leader-only — §6.7's D.2, D.3 and D.4, composed D.1, D.2 and D.3
-  // while D.1 is unbuilt.
-  ["invest", 3],
+  // (gh#58) + `invest-subscription` (gh#59), all leader-only — §6.7's D.2–D.5,
+  // composed D.1–D.4 while D.1 is unbuilt.
+  ["invest", 4],
   ["landscape", 5],
   ["mindset", 6],
   ["process", 5],
@@ -159,21 +160,22 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
  *  ladder reached this deck and no other, 59 once gh#54's `shape-agentic-org` did
  *  the same, 60 once gh#56's `invest-own-proof` had too, 61 once gh#57's
  *  `invest-chicken-egg` joined that run, 62 once gh#60's `mandate-enablement`
- *  opened a new one, 63 once gh#61's `mandate-phases-gates` joined it, and 64 now
- *  that gh#58's `invest-security` has joined the `invest` run.
+ *  opened a new one, 63 once gh#61's `mandate-phases-gates` joined it, 64 once
+ *  gh#58's `invest-security` joined the `invest` run, and 65 now that gh#59's
+ *  `invest-subscription` has closed that run at §6.7's full length.
  *
- *  THREE OF THOSE SEVEN MOVED NO LETTER — gh#57 first, gh#61 second, gh#58 third —
- *  which is worth naming next to a count: each lengthened a run instead of opening
- *  one, so the run TABLE above gained no row for any of them, and A–N is gh#60's.
- *  A leader-only slide changes this number every time; what it does not always
- *  change is the letters.
+ *  FOUR OF THOSE EIGHT MOVED NO LETTER — gh#57 first, gh#61 second, gh#58 third,
+ *  gh#59 fourth — which is worth naming next to a count: each lengthened a run
+ *  instead of opening one, so the run TABLE above gained no row for any of them,
+ *  and A–N is gh#60's. A leader-only slide changes this number every time; what it
+ *  does not always change is the letters.
  *
  *  SO THE DIFFERENCE gh#41 PINNED HAS CHANGED, and that is the point of Phase 6
  *  rather than a regression: the leader deck is no longer "the standard deck minus
  *  eight", it is that minus eight PLUS its own slides. The assertion below states
  *  both halves separately so the next `gap`, `shape`, `invest` or `mandate` slide
  *  moves one number, not a sentence. */
-const LEADER_TOTAL_WITH_LAB = 64;
+const LEADER_TOTAL_WITH_LAB = 65;
 
 /** The eight cut F slides — `f1`–`f7` and `f9`, with `f8-your-agentic-os` kept
  *  and relocated. Held apart from the total above so a leader-only ADDITION can
@@ -183,22 +185,22 @@ const LEADER_CUT_F_SLIDES = 8;
 /**
  * SLIDES no standard deck runs: `gap-capability-ladder` (gh#53),
  * `shape-agentic-org` (gh#54), `invest-own-proof` (gh#56), `invest-chicken-egg`
- * (gh#57), `mandate-enablement` (gh#60), `mandate-phases-gates` (gh#61) and
- * `invest-security` (gh#58). Seven files that exist for this deck alone, spread
- * across FOUR runs — the count of leader-only SLIDES and the count of leader-only
- * RUNS stopped agreeing on gh#57.
+ * (gh#57), `mandate-enablement` (gh#60), `mandate-phases-gates` (gh#61),
+ * `invest-security` (gh#58) and `invest-subscription` (gh#59). Eight files that
+ * exist for this deck alone, spread across FOUR runs — the count of leader-only
+ * SLIDES and the count of leader-only RUNS stopped agreeing on gh#57.
  *
  * THIS IS NOT THE SAME NUMBER AS "SLIDES IN THE LEADER-ONLY RUNS", and gh#54 is
  * where the two stopped agreeing — read both assertions below before changing
  * either. The `shape` RUN holds two slides and only ONE of them is leader-only:
  * the other is `f8-your-agentic-os`, a standard-deck slide the leader list
  * RELOCATES into that run, so it counts toward the run's length and not toward
- * this constant. None of gh#56, gh#57, gh#60, gh#61 or gh#58 changed that: `invest`
- * and `mandate` are whole new runs and every slide in them is leader-only —
- * including the ones gh#57, gh#61 and gh#58 appended to runs that already existed —
- * so this constant and the run table rose together each time. What gh#57, gh#61 and
- * gh#58 did NOT raise is the count of leader-only RUNS, which is four and is not
- * this number.
+ * this constant. None of gh#56, gh#57, gh#60, gh#61, gh#58 or gh#59 changed that:
+ * `invest` and `mandate` are whole new runs and every slide in them is leader-only —
+ * including the ones gh#57, gh#61, gh#58 and gh#59 appended to runs that already
+ * existed — so this constant and the run table rose together each time. What gh#57,
+ * gh#61, gh#58 and gh#59 did NOT raise is the count of leader-only RUNS, which is
+ * four and is not this number.
  *
  * The split matters because the two constants answer different questions: this one
  * is the deck's slide-count arithmetic (a relocated slide is present in both decks
@@ -206,14 +208,14 @@ const LEADER_CUT_F_SLIDES = 8;
  * reconciles that with the run TABLE, where a relocated slide is indistinguishable
  * from a new one.
  */
-const LEADER_ONLY_SLIDES = 7;
+const LEADER_ONLY_SLIDES = 8;
 
 /** Standard-deck slides the leader list relocates INTO one of those leader-only
  *  runs: `f8-your-agentic-os` alone, moved to `shape` by the deck set's single
  *  `sectionOverrides` entry. Zero until gh#54, which is why one constant used to
- *  serve both assertions below, and still one after gh#56, gh#57, gh#60, gh#61 and
- *  gh#58 — a new RUN relocates nothing, and neither does a row appended inside
- *  one. */
+ *  serve both assertions below, and still one after gh#56, gh#57, gh#60, gh#61,
+ *  gh#58 and gh#59 — a new RUN relocates nothing, and neither does a row appended
+ *  inside one. */
 const RELOCATED_INTO_LEADER_ONLY_RUNS = 1;
 
 interface DeckCase {
@@ -226,7 +228,7 @@ interface DeckCase {
 // standard row moved. `general` has no leader variant — leaders are addressed per
 // organisation — so there are five rows, not six.
 //
-// This is not §4.3's finished leader deck. Today's floor is 64 slides across A–N,
+// This is not §4.3's finished leader deck. Today's floor is 65 slides across A–N,
 // and what is still missing is:
 //
 //   · `gap` holds 1 of its 5 slides — the other four are `gap-hardest-part`,
@@ -236,9 +238,9 @@ interface DeckCase {
 //     of the five, so it becomes B.5.
 //   · `shape` holds 2 of its 4 — C.3 (`shape-tam-kotter`) and C.4
 //     (`shape-middle-out`) are unbuilt and append after f8.
-//   · `invest` holds 3 of its 5 (§6.7) — `invest-base-rates` inserts AHEAD of the
-//     three built rows (Phase 7, no ticket) and #59 appends behind them, which is
-//     why each built slide composes one number earlier than §6.7's table gives it.
+//   · `invest` holds 4 of its 5 (§6.7) — only `invest-base-rates` is missing, and
+//     it inserts AHEAD of the four built rows (Phase 7, no ticket), which is why
+//     each built slide composes one number earlier than §6.7's table gives it.
 //   · `mandate` holds 2 of its 3 (§6.8) — Phase 7's `mandate-levers` APPENDS behind
 //     `mandate-phases-gates`, so it moves no letter when it lands. This was the LAST
 //     letterless row in A.1, and gh#60 emptied that list

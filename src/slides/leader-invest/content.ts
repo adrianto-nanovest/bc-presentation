@@ -1,9 +1,10 @@
-// Section WHY INVEST — every string its three built slides print, and the two axes
-// two of them vary on.
+// Section WHY INVEST — every string its four built slides print, and the three axes
+// three of them vary on.
 //
-// THREE SLIDES, ONE MODULE: `invest-own-proof` (§6.7's D.2) above,
-// `invest-chicken-egg` (§6.7's D.3) in the middle block, and `invest-security`
-// (§6.7's D.4) in the block at the bottom of this file. The
+// FOUR SLIDES, ONE MODULE: `invest-own-proof` (§6.7's D.2) above,
+// `invest-chicken-egg` (§6.7's D.3) in the second block, `invest-security`
+// (§6.7's D.4) in the third, and `invest-subscription` (§6.7's D.5, #59) in the
+// block at the bottom of this file. The
 // module is the SECTION's — as in `leader-gap` and `leader-shape`, which are named
 // the same way — so a second slide's copy belongs IN it rather than beside it, and
 // §6.2's rule that the deck's three shadow-AI passes may share no image and no
@@ -53,14 +54,15 @@
 // they are stated over that slide's own block below.
 //
 // WHAT IS DELIBERATELY NOT IN THIS FILE, because no ticket has rendered it yet:
-// §6.7's D.1 (`invest-base-rates`, 78% → 6%) and D.5 (`invest-subscription`, #59).
-// Neither one's copy is written here early. Dead copy
+// §6.7's D.1 (`invest-base-rates`, 78% → 6%). Its copy is not written here early.
+// Dead copy
 // that reads as finished is how unreviewed copy ships — the next edit "just fills it
 // in", and the argument nobody agreed to is on a projector. Same reasoning as the top
 // of `src/slides/leader-shape/content.ts`.
 //
-// D.3 CAME OFF THAT LIST when #57 rendered it (the middle block of this file) and D.4
-// came off it when #58 rendered it (the block at the bottom),
+// D.3 CAME OFF THAT LIST when #57 rendered it (the second block of this file), D.4
+// came off it when #58 rendered it, and D.5 came off it when #59 rendered the block
+// at the bottom,
 // AND THE LIST NAMED THE WRONG TICKET FOR D.1 — recorded rather than quietly deleted,
 // because the next author would otherwise go looking for a Phase 6 ticket that does
 // not exist. The old text said D.1 through D.5 "are #57–#59". Checked on 2026-08-05
@@ -1397,4 +1399,394 @@ const ON_PREM_BY_BRAND: Record<Brand, OnPremCallback> = {
  */
 export function onPremCallbackFor(brand: Brand): OnPremCallback {
   return ON_PREM_BY_BRAND[brand];
+}
+
+// ───────────────────── §6.7's D.5 · individual seats become a managed line item ─────────────────────
+//
+// THREE BEATS, AND THE THIRD ONE IS ARITHMETIC THE ROOM RUNS ITSELF. Today's individual
+// subscriptions, as four gaps (no admin, no visibility, nothing revoked on exit, no
+// volume leverage) → company-managed seats, as four capabilities (admin control, SSO,
+// central billing, usage analytics — and the analytics are what make the November
+// post-assessment mean anything) → the arithmetic as a FORMULA with named inputs,
+// tiered so it does not read as "buy everyone a seat". §6.7's beat order is kept in
+// the reveal order and in the reading order, and NO SINGLE TOTAL IS EVER PRINTED:
+// a formula with the room's own numbers in it invites no argument about the inputs,
+// and a hardcoded total is exactly that argument (#59's AC).
+//
+// §12.2's GATE, AND THE BRANCH THAT SHIPPED: **the RECORD branch — the opposite call
+// from D.4's, made for the opposite reason.** D.4 shipped the CATEGORY branch because
+// its beat 2 argues "your exposure is shadow AI, not the vendor", and naming vendors
+// would fight its own frame. This slide's beat 3 is a price the room is being asked
+// to compute, and a price with no vendor and no plan attached is not a price — so
+// every figure below traces to the #52 verification record
+// (`docs/researches/2026-08-04-vendor-pricing-and-data-handling.md`), and every one
+// carries CURRENCY, BILLING PERIOD and the DATE IT WAS READ (2026-08-04), in the same
+// string as the number. Which figure came from where:
+//
+//   · the three seat tiers — record §8.3's table, rows Claude Team Standard
+//     ($20/seat/mo annual, $25 monthly), Claude Team Premium ($100/seat/mo annual,
+//     $125 monthly) and Claude Enterprise ($20/seat/mo, annual only, all usage billed
+//     at API rates on top). USD-confirmed: `claude.com/pricing` renders USD from this
+//     geolocation (record §0.1), so none of these is caught by the IDR caveat.
+//   · the lever line — §8.3's own framing point 2: annual-vs-monthly is 20–25%
+//     cheaper at every vendor and needs no negotiation. The two monthly figures it
+//     quotes are the same §8.3 rows' monthly columns.
+//   · the Berau anchor — record §8.1, with all of its corrections honoured below.
+//   · the GEMS non-anchor — record §8.2, quoted as an absence and not replaced.
+//
+// WHY THE SUBSET IS CLAUDE'S THREE TIERS AND NOTHING ELSE. §8.3 offers nine rows and
+// this slide prints three, deliberately: the Berau anchor IS a Claude subscription
+// (§8.1), the closest thing GEMS has to a stated direction is "for claude better use
+// team plan" (§8.2 — a direction, not a price, and not printed), and three tiers of
+// ONE vendor's plans are what demonstrates TIERING, which is the argument. What is
+// deliberately NOT printed, and why:
+//
+//   · ChatGPT Go and every Google AI consumer plan — record §0.1: their USD prices
+//     are UNVERIFIED from this geolocation and no USD figure may be asserted.
+//   · Gemini Enterprise app rows — their billing period is UNVERIFIED (§8.3), and a
+//     price on this slide without its period fails the gate this block ships under.
+//   · ChatGPT Business and the Workspace rows — verified and usable, and omitted
+//     only because a cross-vendor comparison is a different slide's argument. If a
+//     session needs one, §8.3 has the sourced rows ready.
+//
+// "MEASURE VALUE, NOT ACTIVITY" IS THE CLOSER, AND §8.3 GIVES IT A HARD EDGE: the
+// Claude Enterprise seat fee buys ACCESS and no usage at all — every token is billed
+// on top at API rates — so seat count and spend are genuinely different quantities,
+// and a seat count is not adoption. The closer says all of that in one sentence
+// rather than implying it, because the AC requires the sentence on the slide.
+//
+// THE BRAND AXIS IS §4.4 SLOT 7 AND IT IS THE ANCHOR BLOCK ALONE. Berau has a real,
+// organizer-published local anchor; GEMS has none, STATED rather than papered over.
+// Three corrections from record §8.1 that the Berau arm must never lose:
+//
+//   1. IT IS A VOL-2 PRIZE, not Vol-1 — page 2 of the plan deck gives Vol-1 no
+//      subscription and no $204.
+//   2. $204 IS NOT CLAUDE PRO'S PRICE. It is the organizer's stated prize value, a
+//      $17 × 12 monthly-equivalent derivation; the vendor's actual published annual
+//      charge is $200 (read live 2026-08-04). The arm attributes the figure to the
+//      organizer and prints the vendor's own number beside it, so nobody in the room
+//      can catch the slide asserting a price the vendor does not publish.
+//   3. NO COMPETITION-WINDOW DATES. The plan deck says Jun–Jul where the spec says
+//      Sep–Oct (§8.1 correction 3), and the conflict is unresolved — so no date from
+//      either source prints. "Vol-2" is a volume, not a date.
+//
+// THE NOVEMBER TIE HAS NO BRAND FORK, and that is #59's own call: the issue's AC ties
+// beat 2's analytics to "the November post-assessment" for the slide, not per brand.
+// It is GEMS' W1-Nov gate by origin (§6.8), and for a Berau room it is the same
+// argument — the analytics are what a post-assessment measures adoption against.
+//
+// ADJACENCY WITH D.4, STATED RATHER THAN HIDDEN. This slide is NOT one of §6.2's
+// three shadow-AI passes, so no reserved-token rule binds it — but beat 1's third gap
+// ("Nothing revoked on exit") touches the vocabulary of D.4's second exposure ("You
+// cannot revoke it when the person leaves"), and §6.7 mandates both. The words touch
+// and the images do not: D.4's is an EXPOSURE nobody administers, this slide's is a
+// PROCUREMENT GAP a managed seat closes — and beat 2's SSO row is the closing of it.
+// No statistic is shared with any slide in this file: every number in this block is a
+// price, and no other block prints one.
+//
+// THE KEYWORD RULE, this slide's own two lists. `kw` goes on PROSE ONLY, as
+// everywhere in this file.
+//
+//   · PROSE, each with a `*Kw` sibling — THREE shared strings: `headline`,
+//     `analyticsLine`, `closer` — plus the anchor's `line` (every arm).
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — `figLabel`, the
+//     three eyebrows, the four gaps, the four capabilities, `formulaEyebrow`,
+//     `formula` (arithmetic, not a sentence), the three tier labels and their three
+//     price strings, `leverLine`, and both anchor `source` lines. The sharpest cases
+//     are the price strings: a copper italic inside "USD 20 /seat/mo" would
+//     emphasise a fragment of a quantity, and the price IS the quotation — the whole
+//     string is already in the quoted register.
+//
+// NO LETTER AND NO NUMBER IN ANY RENDERED STRING, as everywhere under this directory
+// (§3.4 R2 / §3.5). This slide composes **D.4** today, one behind §6.7's **D.5**,
+// because `invest-base-rates` (§6.7's D.1) is unbuilt and holds no ticket — §11's
+// Phase 7 row has it. Do not "fix" the figure.
+
+/**
+ * One row of beat 3's tier table: who the tier is for, and what its seat costs.
+ *
+ * THE PRICE IS ONE STRING AND THE GATE IS WHY. §12.2 requires currency, billing
+ * period and date-read ON every price; splitting them into fields would let a
+ * renderer print the number and trim the date for space, which is exactly the
+ * stale-price failure the gate exists to prevent. One string renders whole or not at all,
+ * and a test can hold "every price carries its date" as a regex over these three
+ * values without knowing the layout.
+ */
+export interface SeatTier {
+  id: string;
+  /** Who this tier is for — the TIERING, which is what keeps the formula from
+   *  reading as "buy everyone a seat". A LABEL, sentence case, keyword-free. */
+  tier: string;
+  /** The quoted list price: currency, amount, billing period, date read — verbatim
+   *  from record §8.3, read 2026-08-04. Mono, keyword-free. */
+  price: string;
+}
+
+/**
+ * §4.4 slot 7 — the local price anchor: Berau's organizer-published prize value,
+ * GEMS' stated absence of one, or the fact that this deck names no organisation.
+ *
+ * A UNION, for `OwnProofBlock`'s and `OnPremCallback`'s reason: the three arms make
+ * three different KINDS of claim, and the type is what stops an edit from moving a
+ * figure between them. `organizer-prize` is the only arm allowed to carry a number;
+ * `list-price-only` asserts an absence and cites the search that established it —
+ * record §8.2's whole finding is that NO official GEMS figure exists, and a `figure`
+ * field on that arm would be the slot an invented one arrives through.
+ */
+export type PriceAnchor =
+  | {
+      readonly kind: "organizer-prize";
+      /** Mono eyebrow over the anchor column. Keyword-free. */
+      readonly eyebrow: string;
+      /** Prose — the anchor itself, with its currency and period in the sentence. */
+      readonly line: string;
+      readonly lineKw: readonly string[];
+      /**
+       * The attribution, printed ON the stage (the §12.2 idiom this section always
+       * uses). It must attribute the figure to the ORGANIZER, deny that it is the
+       * vendor's price, and print the vendor's actual published charge with its own
+       * date — record §8.1's correction 2, all three halves. Mono, keyword-free.
+       */
+      readonly source: string;
+    }
+  | {
+      readonly kind: "list-price-only";
+      readonly eyebrow: string;
+      /** Prose — the stated absence, dated, pointing at the list prices as the only
+       *  anchor. Never a number: §8.2 forbids repurposing any adjacent figure. */
+      readonly line: string;
+      readonly lineKw: readonly string[];
+      /** What was searched and when, so the absence is a finding and not a shrug.
+       *  Mono, keyword-free. */
+      readonly source: string;
+    }
+  | {
+      readonly kind: "no-organisation";
+      /** Real copy in the slot the anchor would have used. Prose. */
+      readonly line: string;
+      readonly lineKw: readonly string[];
+    };
+
+/**
+ * BEAT 1 — what an individual subscription cannot give the company, in §6.7's order.
+ *
+ * FOUR, AND THE `Four` TUPLE HOLDS IT: §6.7 and the AC name exactly these four, and
+ * a fifth gap is a different argument. TERSE ON PURPOSE — four short absences down a
+ * column read as a deficit ledger, which is the beat; padding them into sentences
+ * would make beat 1 louder than the managed column it exists to be answered by.
+ */
+const SEAT_GAPS: Four<LineItem> = [
+  { id: "no-admin", label: "No admin" },
+  { id: "no-visibility", label: "No visibility" },
+  { id: "nothing-revoked", label: "Nothing revoked on exit" },
+  { id: "no-volume-leverage", label: "No volume leverage" },
+];
+
+/**
+ * BEAT 2 — what company-managed seats add, in §6.7's order.
+ *
+ * THE FOURTH ROW IS THE ONE THE SLIDE IS ABOUT: usage analytics are what
+ * {@link investSubscriptionContent.analyticsLine} ties to the November
+ * post-assessment, and the reveal order puts that sentence LAST so the beat ends on
+ * the payoff rather than on a feature list.
+ */
+const SEAT_CAPABILITIES: Four<LineItem> = [
+  { id: "admin-control", label: "Admin control" },
+  { id: "sso", label: "SSO" },
+  { id: "central-billing", label: "Central billing" },
+  { id: "usage-analytics", label: "Usage analytics" },
+];
+
+/**
+ * BEAT 3's TIER TABLE — record §8.3's three Claude rows, priced verbatim.
+ *
+ * THREE, AND THE `Three` TUPLE HOLDS IT — the same three-and-only-three the geometry
+ * cuts row shelves for. EVERY PRICE STRING CARRIES ITS OWN CURRENCY, PERIOD AND
+ * DATE-READ, per the block header; the tier labels carry the tiering, which is the
+ * half that answers "so we buy everyone a seat?" — most of a division rides the
+ * cheap tier, a few heavy builders ride the expensive one, and past 150 seats the
+ * plan changes shape.
+ */
+const SEAT_TIERS: Three<SeatTier> = [
+  {
+    id: "team-standard",
+    tier: "Most of the division — Claude Team Standard",
+    price: "USD 20 /seat/mo · billed annually · read 2026-08-04",
+  },
+  {
+    id: "team-premium",
+    tier: "A few heavy builders — Claude Team Premium",
+    price: "USD 100 /seat/mo · billed annually · read 2026-08-04",
+  },
+  {
+    id: "enterprise",
+    tier: "Above 150 seats — Claude Enterprise",
+    price: "USD 20 /seat/mo · annual only, usage on top · read 2026-08-04",
+  },
+];
+
+export const investSubscriptionContent = {
+  figLabel: "FROM INDIVIDUAL SEATS TO A LINE ITEM",
+
+  /**
+   * The premise, in §6.7's own words — the slide's title phrase is the claim.
+   *
+   * "become" IS THE VERB DOING THE WORK: beat 1 is what the seats are today, beat 2
+   * is what "managed" adds, and beat 3 is what "line item" means — a number a Div
+   * Head computes and defends, not one this deck hands them. The keyword is on the
+   * destination because the destination is what the room is being asked to buy.
+   */
+  headline: "Individual subscriptions become a managed line item.",
+  headlineKw: ["a managed line item"],
+
+  /** BEAT 1's label. Mono, keyword-free. "TODAY" does the same work it does on
+   *  D.4's exposure eyebrow: this column is the position the room is already in. */
+  gapsEyebrow: "TODAY — INDIVIDUAL SUBSCRIPTIONS",
+  gaps: SEAT_GAPS,
+
+  /** BEAT 2's label. Mono, keyword-free. */
+  seatsEyebrow: "COMPANY-MANAGED SEATS",
+  capabilities: SEAT_CAPABILITIES,
+
+  /** The third column's label over the November tie. Mono, keyword-free. */
+  analyticsEyebrow: "WHAT THE ANALYTICS BUY",
+
+  /**
+   * BEAT 2's payoff — the sentence the AC requires: analytics tied to the November
+   * post-assessment. Without this line, "usage analytics" is a feature; with it,
+   * the managed seat is the instrument the mandate's own measurement runs on.
+   * The keyword is on the assessment because that is the date the room already has.
+   */
+  analyticsLine:
+    "Usage analytics are what make the November post-assessment mean anything.",
+  analyticsLineKw: ["November post-assessment"],
+
+  /** BEAT 3's label — and the "RUN IT" is the AC's "runnable, not answered" said as
+   *  an instruction. Mono, keyword-free. */
+  formulaEyebrow: "THE ARITHMETIC — RUN IT FOR YOUR OWN DIVISION",
+
+  /**
+   * THE FORMULA, with its three named inputs: the room's own seat count, the tier
+   * table's price, and the twelve months that make it an annual line item.
+   *
+   * ARITHMETIC, NOT A SENTENCE — mono, keyword-free, and it computes NOTHING: no
+   * string in this block holds a product of these inputs, which is how "no single
+   * total is presented as the audience's answer" is held as an absence a test can
+   * grep for rather than a claim about intent. "tier by tier" is in the formula
+   * itself so the tiering is an input and not a footnote.
+   */
+  formula: "your seats × price / seat / month × 12, tier by tier",
+
+  tiers: SEAT_TIERS,
+
+  /**
+   * THE CHEAPEST LEVER ON THE SLIDE — record §8.3's framing point 2, with the two
+   * monthly figures that demonstrate it. Both carry their period ("billed monthly")
+   * and the shared date-read in the same string, per the gate. A LABEL-register
+   * sentence like D.4's contract lines, keyword-free.
+   */
+  leverLine:
+    "Billed monthly the same seats are USD 25 and USD 125 (read 2026-08-04) — " +
+    "annual billing is 20–25% cheaper, and it needs no negotiation.",
+
+  /**
+   * THE CLOSER — the AC's required sentence, with §8.3's hard edge attached.
+   *
+   * All three clauses are load-bearing: the imperative is the principle, "a seat
+   * count is not adoption" is the AC's explicit second half, and "a seat fee buys
+   * access, not usage" is the sourced fact that makes the distinction physical —
+   * the Enterprise tier above literally bills usage separately from the seat, so
+   * seat count and spend measure different things. Two keywords: the principle and
+   * the negation, which is the pair a Div Head repeats in November.
+   */
+  closer:
+    "Measure value, not activity — a seat count is not adoption, and a seat fee " +
+    "buys access, not usage.",
+  closerKw: ["Measure value, not activity", "not adoption"],
+} as const;
+
+// ───────────────────── the brand axis (§4.4 slot 7) ─────────────────────
+
+/**
+ * Berau — the organizer's published prize value as the local anchor (record §8.1).
+ *
+ * EVERY ONE OF §8.1's THREE CORRECTIONS IS IN THE STRINGS: it is named a Vol-2
+ * prize, the figure is attributed to the ORGANIZER with the vendor's actual $200
+ * annual charge printed beside it, and no competition-window date appears. The
+ * anchor earns its place because it is already local — a Claude seat has already
+ * been priced in this room, by this room's own organizer, so beat 3's inputs are
+ * not hypothetical here.
+ */
+const BERAU_ANCHOR: PriceAnchor = {
+  kind: "organizer-prize",
+  eyebrow: "THE ANCHOR THIS ROOM HAS",
+  line:
+    "The Vol-2 competition prize: one year of Claude, valued by the organizer at " +
+    "USD 204 / year.",
+  lineKw: ["USD 204 / year"],
+  source:
+    "The organizer's stated prize value, not the vendor's price — the vendor's " +
+    "published annual charge is USD 200 / year. Both read 2026-08-04.",
+};
+
+/**
+ * GEMS — no official internal figure, STATED (record §8.2).
+ *
+ * THE ABSENCE IS THE FINDING. §8.2 searched every GEMS source in the repo and found
+ * no seat price, budget, prize or procurement figure — and it explicitly forbids
+ * repurposing the adjacent figures (Rp 23.6bn is a reported benefit, not spend). So
+ * this arm points the room at the tier table's list prices, which are the only
+ * anchor the deck may honestly print, and says WHY in the same breath. The date is
+ * the issue's own "as of 2026-08-03"; the search that established the absence ran
+ * 2026-08-04 and the source line says so.
+ */
+const GEMS_ANCHOR: PriceAnchor = {
+  kind: "list-price-only",
+  eyebrow: "THE ANCHOR THIS ROOM DOES NOT HAVE",
+  line:
+    "No internal GEMS figure was official as of 2026-08-03. The list prices on " +
+    "the left are the only anchor.",
+  lineKw: ["No internal GEMS figure was official"],
+  source:
+    "Checked across every GEMS source in the verification record, 2026-08-04 — " +
+    "no seat price, budget, or prize exists to quote.",
+};
+
+/**
+ * `general` — UNREACHABLE TODAY, and kept to the shortest honest thing, for exactly
+ * `GENERAL_BLOCK`'s and `GENERAL_ON_PREM`'s reasons: no `general-leader` variant is
+ * registered, the arm exists so registering one would show NOBODY's figure rather
+ * than crash or fall through to another room's anchor, and it is deliberately the
+ * thinnest of the three. The formula and the tier table still render — list prices
+ * are the vendor's, not a brand's — so the one line here is only about the anchor.
+ */
+const GENERAL_ANCHOR: PriceAnchor = {
+  kind: "no-organisation",
+  line: "This deck names no organisation, so it has no local figure to anchor on.",
+  lineKw: ["no local figure"],
+};
+
+/**
+ * §4.4 slot 7, brand by brand.
+ *
+ * A `Record` keyed by `Brand`, for `OWN_PROOF_BY_BRAND`'s and `ON_PREM_BY_BRAND`'s
+ * reason: a fourth brand must FAIL TO COMPILE here rather than silently show one
+ * organisation another's price anchor — and on this slide the failure has a second
+ * face, which is showing GEMS a local figure §8.2 proved does not exist.
+ */
+const PRICE_ANCHOR_BY_BRAND: Record<Brand, PriceAnchor> = {
+  berau: BERAU_ANCHOR,
+  gems: GEMS_ANCHOR,
+  general: GENERAL_ANCHOR,
+};
+
+/**
+ * This slide's price anchor for one brand. Pass `VARIANT.brand`.
+ *
+ * THE ONLY WAY IN, exactly as `ownProofFor` and `onPremCallbackFor` are: the table
+ * above is not exported, so a rule over "every brand" is proved over `BRANDS` and
+ * not over this file's own key set.
+ */
+export function priceAnchorFor(brand: Brand): PriceAnchor {
+  return PRICE_ANCHOR_BY_BRAND[brand];
 }

@@ -13,13 +13,13 @@
 // contains, in the order §6.7 gives it; `src/deck/deck-sets.ts` says which decks
 // run it and where. §6.7 gives `invest` five slides — `invest-base-rates` (D.1),
 // `invest-own-proof` (D.2), `invest-chicken-egg` (D.3), `invest-security` (D.4) and
-// `invest-subscription` (D.5) — and the MIDDLE THREE exist today, adjacent and in
-// §6.7's order. THE ARRAY IS NOT PRE-SIZED FOR THE OTHER TWO: a placeholder entry
+// `invest-subscription` (D.5) — and the LAST FOUR exist today, adjacent and in
+// §6.7's order. THE ARRAY IS NOT PRE-SIZED FOR THE ONE REMAINING: a placeholder entry
 // is an id a deck set can compose into a blank slide. `invest-base-rates` INSERTS
-// AHEAD of all three lines below — the same shape as `src/slides/leader-gap/index.ts`,
-// where the one slide built is §4.3's last — and #59 appends D.5 behind them.
-// That insert is what turns the three derived figures below from D.1 · D.2 · D.3 into
-// D.2 · D.3 · D.4, and no file here changes for it.
+// AHEAD of all four lines below — the same shape as `src/slides/leader-gap/index.ts`,
+// where the one slide built is §4.3's last. That insert is what turns the four
+// derived figures below from D.1 · D.2 · D.3 · D.4 into D.2 · D.3 · D.4 · D.5, and
+// no file here changes for it.
 //
 // WHICH TICKET OWNS WHICH SLIDE, checked rather than assumed, because this comment
 // named the wrong one twice before 2026-08-05. #57 is **`invest-chicken-egg`** (§6.7's
@@ -31,14 +31,19 @@
 // of what this comment used to claim of #57 and of what it used to say #58 would do.
 // `invest-base-rates` has NO issue at all: §11's phase table puts it in the **Phase 7**
 // row ("Leader new slides, second tier", line 1408), beside `gap-no-sop`, so it is not
-// waiting on a Phase 6 ticket — it is not in this phase. #59 is D.5.
+// waiting on a Phase 6 ticket — it is not in this phase. #59 is D.5, **`invest-
+// subscription`** (§6.7's D.5, the fourth entry below), and it APPENDED behind the
+// three like #57 and #58 did — the run is closed at its §6.7 end and only D.1's
+// insert at the front remains.
 import type { SlideDef } from "@/deck/types";
 import { investOwnProofSlide } from "./invest-own-proof";
 import { investChickenEggSlide } from "./invest-chicken-egg";
 import { investSecuritySlide } from "./invest-security";
+import { investSubscriptionSlide } from "./invest-subscription";
 
 export const leaderInvestSlides: SlideDef[] = [
   investOwnProofSlide,
   investChickenEggSlide,
   investSecuritySlide,
+  investSubscriptionSlide,
 ];

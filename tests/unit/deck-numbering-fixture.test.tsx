@@ -274,8 +274,31 @@ interface ObservedDeck {
  *     none was: no removed row, no changed `fig` or `label` on any pre-existing
  *     row, only `"index"` lines shifting and the two new `D.3` rows arriving.
  *
+ * ON gh#59 NO FIGURE MOVED EITHER — the fourth entry in that list, and the same
+ * shape as gh#57, gh#61 and gh#58. `invest-subscription` APPENDED to the `invest`
+ * run behind `invest-security`, closing it at §6.7's full built length, so it took
+ * no letter (D was already claimed) and renumbered nothing. Both leader decks are
+ * one row longer at **65** — §11's Phase 6 count, reached — still FOURTEEN
+ * sections, still closing on **N.3**:
+ *
+ *   · ONE row was added per leader deck, and it is the only new label in the file:
+ *     `D.4 · FROM INDIVIDUAL SEATS TO A LINE ITEM`, at index 8, between
+ *     `D.3 · WHERE THE DATA GOES, AND WHAT ANSWERS IT` and `E.1 · FROM RULES TO
+ *     REASONING`. §6.7 numbers that slide D.5 and it composes as **D.4**, one
+ *     behind — the same reason all three of its siblings compose one behind their
+ *     spec numbers: `invest-base-rates` (§6.7's D.1) is unbuilt and inserts AHEAD
+ *     of the whole run when it lands. Derived (§3.5); do not pin it.
+ *   · EVERY OTHER ROW PRINTS WHAT IT PRINTED BEFORE, in all five decks. The loop
+ *     slide is still H.12, eight tickets in.
+ *   · The re-record still needed `ALLOW_MOVED_FIGURES=1`, for gh#57's reason
+ *     exactly: the one-row insert at index 8 reports all 114 later leader lines as
+ *     moved (two row-count lines plus 56 per deck). The diff, matched by label,
+ *     says none was: no removed row, no changed `fig` or `label` on any of the 128
+ *     pre-existing leader rows, only `"index"` lines shifting and the two new
+ *     `D.4` rows arriving.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all seven tickets. That is the assertion worth reading twice: a leader-only
+ * all eight tickets. That is the assertion worth reading twice: a leader-only
  * insert must not be able to touch a standard deck, and gh#54's relocation could
  * not either — f8 moved because a LEADER LIST moved it, and the standard list was
  * not edited. The fixture is where either failure would show.
@@ -290,8 +313,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 64, closer: "N.3" },
-  "gems-leader": { slides: 64, closer: "N.3" },
+  "berau-leader": { slides: 65, closer: "N.3" },
+  "gems-leader": { slides: 65, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

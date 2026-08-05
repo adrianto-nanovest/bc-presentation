@@ -41,12 +41,13 @@ export const slideCatalogue: readonly SlideDef[] = [
   // pool keeps each under its own section index.
   ...leaderShapeSlides,
   // Leader-only too (§6.7), and the third run in front of the curriculum. It holds
-  // THREE of its five slides today — gh#56's, gh#57's and gh#58's, in §6.7's order —
-  // and the two it does not are `invest-base-rates` (§6.7's D.1, no ticket, §11's
-  // Phase 7 row) and `invest-subscription` (D.5, #59). The pool grows a row per
+  // FOUR of its five slides today — gh#56's, gh#57's, gh#58's and gh#59's, in §6.7's
+  // order — and the one it does not is `invest-base-rates` (§6.7's D.1, no ticket,
+  // §11's Phase 7 row). The pool grows a row per
   // ticket, and which decks run them stays `./deck-sets.ts`'s answer. NOTHING IN THIS
   // FILE CHANGES FOR A NEW SLIDE IN AN EXISTING RUN: the spread reads the section's own
-  // array, so gh#57 and gh#58 each needed only the comment above corrected — this line
+  // array, so gh#57, gh#58 and gh#59 each needed only the comment above corrected —
+  // this line
   // said ONE until gh#58 and was wrong from gh#57 onward.
   ...leaderInvestSlides,
   ...landscapeSectionBSlides,

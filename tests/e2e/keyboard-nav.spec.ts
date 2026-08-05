@@ -85,9 +85,10 @@ test("a live section letter jumps to that section's first numbered slide", async
 // gh#60. A test that read `/K\.1/` and stopped would have passed all four while
 // asserting the wrong section, so every jump below names the label it lands on.
 //
-// gh#57 AND gh#58 ARE ABSENT FROM THAT LIST ON PURPOSE: each appended inside the
-// `invest` run, so neither moved a letter and this test did not change for either.
-// A new SLIDE is not a new RUN, and only runs reach this file.
+// gh#57, gh#58 AND gh#59 ARE ABSENT FROM THAT LIST ON PURPOSE: each appended
+// inside the `invest` run, so none of them moved a letter and this test did not
+// change for any of them. A new SLIDE is not a new RUN, and only runs reach this
+// file.
 test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
   page,
 }) => {
@@ -119,10 +120,10 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   await expect(page.locator(".fig-label")).toHaveText(/THE AGENTIC ORGANIZATION/);
 
   // `d` is WHY INVEST — the run gh#56 inserted, and on a standard deck the same key
-  // is PROCESS & METHODOLOGY. The run holds THREE slides since gh#58 appended D.3
-  // behind gh#57's D.2, so R5's "first NUMBERED slide of the run" is a real
+  // is PROCESS & METHODOLOGY. The run holds FOUR slides since gh#59 appended D.4
+  // behind gh#58's D.3, so R5's "first NUMBERED slide of the run" is a real
   // distinction here and not a one-slide coincidence: `d` must land on D.1 and not
-  // on the D.2 or D.3 behind it.
+  // on the D.2, D.3 or D.4 behind it.
   await page.keyboard.press("d");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*D\.1/);
   await expect(page.locator(".fig-label")).toHaveText(/PROOF FROM INSIDE THE COMPANY/);

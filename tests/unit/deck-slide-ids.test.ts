@@ -23,15 +23,16 @@ import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { findSlideDefs } from "../harvest/slide-defs";
 
-/** 75 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
+/** 76 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
  *  count of 67 files, `e12-loop-engineering` (gh#48), `gap-capability-ladder`
  *  (gh#53, the first leader-only file), `shape-agentic-org` (gh#54, the second),
  *  `invest-own-proof` (gh#56, the third), `invest-chicken-egg` (gh#57, the fourth),
  *  `mandate-enablement` (gh#60, the fifth), `mandate-phases-gates` (gh#61, the
- *  sixth) and `invest-security` (gh#58, the seventh). A migration sentinel, not the
- *  completeness proof — see the note on `findSlideDefs`; the scan is proven
- *  complete against the live decks in `deck-composed-numbering.test.ts`. */
-const EXPECTED_DEFS = 76;
+ *  sixth), `invest-security` (gh#58, the seventh) and `invest-subscription` (gh#59,
+ *  the eighth). A migration sentinel, not the completeness proof — see the note on
+ *  `findSlideDefs`; the scan is proven complete against the live decks in
+ *  `deck-composed-numbering.test.ts`. */
+const EXPECTED_DEFS = 77;
 
 /** `hexLadderDevSlide` is declared in `registry.tsx` beside `deckSlides`, so it
  *  has no file of its own to be named after. It is the ONLY def whose id is not

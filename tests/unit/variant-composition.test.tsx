@@ -268,22 +268,25 @@ describe("leader deck sets", () => {
       // with the deck instead of being dropped: which pair surrounds f8 is the
       // only thing that says the relocation still holds.
       //
-      // NEITHER gh#57 NOR gh#58 MOVED F8 AGAIN. `invest-chicken-egg` joined the
-      // END of that `invest` run and `invest-security` joined behind it, so f8's
-      // own neighbours are unchanged and only the row that hands back to the
-      // curriculum moved along by one each time. The two lines are asserted
-      // separately for that reason: the pair around f8 is the RELOCATION, and the
-      // row before `b1-evolution-journey` is the LENGTH of the run behind it.
+      // NONE OF gh#57, gh#58 OR gh#59 MOVED F8 AGAIN. `invest-chicken-egg` joined
+      // the END of that `invest` run, `invest-security` joined behind it and
+      // `invest-subscription` behind that, so f8's own neighbours are unchanged
+      // and only the row that hands back to the curriculum moved along by one each
+      // time. The two lines are asserted separately for that reason: the pair
+      // around f8 is the RELOCATION, and the row before `b1-evolution-journey` is
+      // the LENGTH of the run behind it.
       const at = ids.indexOf("f8-your-agentic-os");
       expect(ids[at - 1], id).toBe("shape-agentic-org");
       expect(ids[at + 1], id).toBe("invest-own-proof");
-      // And the run gh#56 opened still hands straight to the curriculum, three
-      // rows long since gh#58, so f8 is the last slide before section D and
+      // And the run gh#56 opened still hands straight to the curriculum, four
+      // rows long since gh#59 — `invest-subscription` between `invest-security`
+      // and `b1-evolution-journey` — so f8 is the last slide before section D and
       // section D the last before the landscape — the whole insert, stated as the
       // joins it makes.
       expect(ids[at + 2], id).toBe("invest-chicken-egg");
       expect(ids[at + 3], id).toBe("invest-security");
-      expect(ids[at + 4], id).toBe("b1-evolution-journey");
+      expect(ids[at + 4], id).toBe("invest-subscription");
+      expect(ids[at + 5], id).toBe("b1-evolution-journey");
       // And the run it left has closed up behind it: `g10` now hands straight to
       // the bridge, with no hole where f8 stood.
       expect(ids[ids.indexOf("g10-beyond-big-three") + 1], id).toBe("g11-bridge-to-h");
@@ -364,20 +367,20 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // seven ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
-      // into a deck that has no leader in the room. The first five would do it in
+      // eight ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
+      // into a deck that has no leader in the room. The first six would do it in
       // FRONT of the curriculum and renumber all 65 slides behind them; the two
       // `mandate` rows would do it between `pitfalls` and `meta` and renumber only
       // the last eleven — quieter, and therefore the ones most likely to reach a
       // projector.
       //
-      // SEVEN IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
-      // is gh#57's finding and gh#61 and gh#58 inherit it whole:
-      // `invest-chicken-egg`, `mandate-phases-gates` and `invest-security` each
-      // append to a run that ALREADY EXISTS in the leader list, but the standard
-      // list holds no `invest` row and no `mandate` row at all — so on a standard
-      // deck any one of them would arrive alone and claim a letter exactly as the
-      // four run-openers would.
+      // EIGHT IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
+      // is gh#57's finding and gh#61, gh#58 and gh#59 inherit it whole:
+      // `invest-chicken-egg`, `mandate-phases-gates`, `invest-security` and
+      // `invest-subscription` each append to a run that ALREADY EXISTS in the
+      // leader list, but the standard list holds no `invest` row and no `mandate`
+      // row at all — so on a standard deck any one of them would arrive alone and
+      // claim a letter exactly as the four run-openers would.
       //
       // AND `mandate-phases-gates` IS THE ONE WITH A SECOND FAILURE BEHIND THE
       // FIRST. §5.3 keeps #7's programme framing — the competition, the rewards,
@@ -393,6 +396,7 @@ describe("leader deck sets", () => {
           "invest-own-proof",
           "invest-chicken-egg",
           "invest-security",
+          "invest-subscription",
           "mandate-enablement",
           "mandate-phases-gates",
         ].filter((slide) => keys.has(slide)),
