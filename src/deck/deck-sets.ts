@@ -157,7 +157,7 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 65 slides across FOURTEEN sections. The COUNT is gh#59's and the
+ * The leader deck — 66 slides across FOURTEEN sections. The COUNT is gh#65's and the
  * SECTION COUNT is gh#60's, and the gap between those two tickets is the thing to read
  * before verifying anything here. The Phase 4 floor was 56 and held no slide the
  * standard deck did not; gh#48's `e12-loop-engineering` was the first addition and
@@ -165,24 +165,32 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * THIS LIST ALONE, gh#54's `shape-agentic-org` is the second, gh#56's
  * `invest-own-proof` is the third, gh#57's `invest-chicken-egg` is the fourth, gh#60's
  * `mandate-enablement` is the fifth, gh#61's `mandate-phases-gates` is the sixth,
- * gh#58's `invest-security` is the seventh and gh#59's `invest-subscription` is the
- * eighth.
+ * gh#58's `invest-security` is the seventh, gh#59's `invest-subscription` is the
+ * eighth and gh#65's `gap-hardest-part` is the ninth.
  *
- * A NEW SLIDE IS NOT A NEW RUN, and EIGHT LEADER-ONLY SLIDES HAVE COST ONLY FOUR
+ * A NEW SLIDE IS NOT A NEW RUN, and NINE LEADER-ONLY SLIDES HAVE COST ONLY FOUR
  * PUSHES.
  * gh#57 was the first slide here to show the difference: it appends at the END of the
  * `invest` run gh#56 opened, so it claims no letter, forms no run and renumbers
  * nothing — every letter behind it is gh#56's, unedited. gh#61 did the same thing at
  * the end of the `mandate` run gh#60 opened, gh#58 did it a third time at the end
- * of `invest`, and gh#59 a fourth, behind gh#58's row. The other four — gh#53, gh#54,
+ * of `invest`, and gh#59 a fourth, behind gh#58's row. Four others — gh#53, gh#54,
  * gh#56 and
  * gh#60 — each OPENED a run and each moved every letter behind it. A comment that
  * counts slides where it means pushes would send the next reader looking for four
  * renumberings that never happened.
  *
- * EVERY NEW RUN MOVES EVERY LETTER BEHIND IT — AND gh#57, gh#61, gh#58 AND gh#59 MOVED
- * NOTHING, BECAUSE NONE OF THEM OPENED A RUN. That quartet is §3.4 R2 working as
- * designed
+ * gh#65 IS NEITHER OF THOSE TWO THINGS, and it is the newest shape this list takes: it
+ * inserted `gap-hardest-part` at the HEAD of the `gap` run gh#53 opened. A head insert
+ * claims no letter, because the run already holds one, so nothing behind it moved —
+ * but it does renumber INSIDE its own run (R3), and that is the whole of its cost:
+ * `gap-capability-ladder` went from B.1 to B.2. ONE number, in one run, in two decks.
+ * `invest-base-rates` will do the same thing to the four `invest` rows below when it
+ * lands.
+ *
+ * EVERY NEW RUN MOVES EVERY LETTER BEHIND IT — AND gh#57, gh#61, gh#58, gh#59 AND
+ * gh#65 MOVED NO LETTER AT ALL, BECAUSE NONE OF THEM OPENED A RUN. That is §3.4 R2
+ * working as designed
  * and the one thing to know before verifying anything against this deck. Today the runs
  * read
  * `opening`(A) · `gap`(B) · `shape`(C) · `invest`(D) · `landscape`(E) ·
@@ -195,12 +203,14 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * is true — gh#60's `mandate` landed behind `pitfalls` (§3.6) and pushed only
  * `meta`, `principles` and `lab`, gh#61 APPENDED INSIDE `mandate` and pushed
  * nothing either, the second such insert, gh#58 APPENDED INSIDE `invest` for the
- * third and gh#59 for the fourth — closing that run at its §6.7 end. §4.3's A–N was
+ * third and gh#59 for the fourth — closing that run at its §6.7 end, and gh#65 went in
+ * at the HEAD of `gap`, which pushed no letter either. §4.3's A–N was
  * reached by APPENDING N, not
- * by pushing H, and every leader slide still unbuilt appends the way gh#57, gh#61,
- * gh#58 and
- * gh#59 did (or, for `invest-base-rates`, inserts at the front of a run that already
- * has a letter). Anyone checking a figure on a leader deck reads the COMPOSED deck,
+ * by pushing H, and every leader slide still unbuilt JOINS a run that already has a
+ * letter — appending the way gh#57, gh#61,
+ * gh#58 and gh#59 did, or inserting inside one the way gh#65 did (`invest-base-rates`
+ * at the front of `invest`, the three remaining §6.2–§6.4 slides between the two `gap`
+ * rows). Anyone checking a figure on a leader deck reads the COMPOSED deck,
  * never a
  * literal.
  *
@@ -208,8 +218,8 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * is the deck a leader can be walked through on Aug 18 whether or not the rest of
  * Phases 6–7 land. Those phases grow it to 73 slides (§4.3) by filling `gap`,
  * `shape`, `invest` and `mandate`; the section COUNT is now final at fourteen —
- * every remaining Phase 6/7 slide appends to a run that already exists — and every
- * id below survives that.
+ * every remaining Phase 6/7 slide joins a run that already exists, at its end or
+ * inside it — and every id below survives that.
  *
  * WHAT THIS LIST DOES NOT HOLD, and why:
  *
@@ -239,16 +249,29 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // opening — the cover claims no number, so A.1 is the second slot
   "title",
   "a1-what-youve-seen", // canonical slot: `a1-general` / `a1-gems` resolve behind it
-  // gap — the first leader-only run (gh#53). §4.3 gives it five slides and the
-  // ladder is the LAST of them, so the other four insert AHEAD of this line; the run
-  // itself sits here, in front of `landscape`, and that is what pushed every
-  // later letter in this deck by one (§3.4 R2).
+  // gap — the first leader-only run (gh#53). §4.3 gives it five slides, and TWO of
+  // them are here: `gap-hardest-part` (§6.1, gh#65) is the run's FIRST and
+  // `gap-capability-ladder` (§6.5, gh#53) its LAST, so the three still unbuilt insert
+  // BETWEEN the two lines below. The run itself sits here, in front of `landscape`,
+  // and that is what pushed every later letter in this deck by one (§3.4 R2).
   //
-  // THOSE FOUR HOLD NO TICKET, which this comment claimed otherwise until gh#57. §11
-  // puts `gap-hardest-part`, `gap-no-sop`, `gap-three-failures` and `gap-the-pattern`
-  // in the PHASE 7 row; the open issues run out at #63 and every one of #52–#63 is
-  // Phase 6 (`gh issue list`, 2026-08-05). The "#55–#58" named here before were C.1's
-  // focus walk and D.2–D.4 — none of them a `gap` slide.
+  // gh#65 IS THIS LIST'S FIRST HEAD-OF-RUN INSERT, and it is a third kind of edit —
+  // read it before verifying anything against this deck. gh#53, gh#54, gh#56 and
+  // gh#60 each OPENED a run and moved every letter behind it; gh#57, gh#61, gh#58 and
+  // gh#59 each APPENDED to the end of a run and moved nothing at all. This row landed
+  // at the HEAD of a run that already had its letter, so NO LETTER MOVED — `gap` was
+  // already B — and exactly ONE NUMBER did: R3 renumbers only inside the run that
+  // changed, so `gap-capability-ladder` went from B.1 to B.2 and no other figure in
+  // either leader deck moved. Both are derived per deck (§3.5); neither is written
+  // down here or in either slide.
+  //
+  // THE THREE THAT ARE LEFT HOLD NO TICKET, which this comment claimed otherwise
+  // until gh#57. §11 puts `gap-no-sop`, `gap-three-failures` and `gap-the-pattern` in
+  // the PHASE 7 row — gh#65 delivered the FIRST of that row's four `gap` slides, which
+  // is why it landed at the head — and the open issues run out at #63 with every one
+  // of #52–#63 in Phase 6 (`gh issue list`, 2026-08-05). The "#55–#58" named here
+  // before were C.1's focus walk and D.2–D.4 — none of them a `gap` slide.
+  "gap-hardest-part",
   "gap-capability-ladder",
   // shape — the second leader-only run (gh#54), and the second push. §4.3 gives
   // this run four slides — C.3 (`shape-tam-kotter`) and C.4 (`shape-middle-out`)
@@ -376,14 +399,18 @@ const LEADER_SLIDE_IDS: readonly string[] = [
  *
  * THE DIFFERENCE IS NO LONGER ONE NUMBER, which is why it is not stated as one
  * here. gh#41's leader deck was "the standard deck minus eight"; it is now that
- * minus eight PLUS its own slides, so the two lists are LEVEL (65 against 65) and
- * the two halves move independently — `tests/unit/deck-registry.test.ts` holds
+ * minus eight PLUS its own slides, and as of gh#65 THE LEADER LIST IS THE LONGER OF
+ * THE TWO for the first time (66 against 65) — so the difference is not a subtraction
+ * a reader can do in one direction any more. The two halves move independently:
+ * `tests/unit/deck-registry.test.ts` holds
  * them as separate constants for exactly that reason, and a single subtraction
  * written here would go stale on the next leader-only ADDITION, whether it opens a
- * run or joins one. It has been eight (gh#41), seven (gh#53), six (gh#54), five
- * (gh#56), four (gh#57), three (gh#60), two (gh#61), one (gh#58) and zero (gh#59) —
- * nine values in
- * nine tickets, none of which edited a standard-deck row.
+ * run or joins one. Standard MINUS leader has been eight (gh#41), seven (gh#53), six
+ * (gh#54), five (gh#56), four (gh#57), three (gh#60), two (gh#61), one (gh#58), zero
+ * (gh#59) and now MINUS ONE (gh#65) — ten values in
+ * ten tickets, none of which edited a standard-deck row. The sign flip is not a
+ * milestone anything depends on; it is the reason the two counts are asserted
+ * separately rather than as one difference.
  */
 export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
   standard: { id: "standard", slides: STANDARD_SLIDE_IDS },

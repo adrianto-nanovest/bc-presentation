@@ -384,8 +384,10 @@ export const mandateEnablementContent = {
  * §6.5 ends by saying its B.5 and K.2 are "the same object seen twice", and #61
  * requires the relationship to read that way on screen — same rung names, same
  * order, no re-labelling. B.5 IS THE SPEC'S DESIGNATION FOR THAT SLIDE AND NOT THE
- * DECK'S: §6.5 numbers the finished `gap` run of five, and with one of the five
- * built the composed leader decks derive B.1 for `gap-capability-ladder` today.
+ * DECK'S: §6.5 numbers the finished `gap` run of five, and with two of the five
+ * built the composed leader decks derive B.2 for `gap-capability-ladder` today — B.1
+ * until gh#65 put `gap-hardest-part` in front of it, which is the second value that
+ * sentence has held and the reason it is not a number anything here reads.
  * Every line below that is about the slide rather than about the spec therefore
  * names the basename (`./mandate-phases-gates.tsx` states the rule). There were two
  * ways to hold the criterion:

@@ -89,6 +89,13 @@ test("a live section letter jumps to that section's first numbered slide", async
 // inside the `invest` run, so none of them moved a letter and this test did not
 // change for any of them. A new SLIDE is not a new RUN, and only runs reach this
 // file.
+//
+// gh#65 IS THE EXCEPTION TO THAT SENTENCE, AND IT MOVED NO LETTER EITHER. It inserted
+// `gap-hardest-part` at the HEAD of the `gap` run, which already had its letter — so
+// `b` still jumps to `b`'s section, but R5 lands on the run's FIRST numbered slide and
+// that is now a different slide with a different label. This file changed because the
+// jump TARGET moved, not because the letter did, and the label assertion below is the
+// only thing that could tell the two apart.
 test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
   page,
 }) => {
@@ -99,18 +106,26 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   });
 
   // A STARTING POINT, NOT A CLAIM ABOUT WHICH SLIDE IS THERE. Index 6 held E.1 until
-  // gh#57 inserted D.2 in front of it and it now holds D.2 — nothing below reads the
+  // gh#57 inserted D.2 in front of it, then D.2 until gh#65 inserted a row at index 2
+  // and pushed it along to D.1 — nothing below reads the
   // starting slide, every assertion is about where a letter LANDS, and the index
   // assertion here only says the deck honoured `?slide=`. (The console watch above does
-  // now cover the new slide's mount, which is a gain rather than a coupling.)
+  // now cover whichever slide that is, which is a gain rather than a coupling.)
   await page.goto("/?variant=berau-leader&slide=6");
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "6");
 
   // `b` is THE GAP here — the leader-only run gh#53 put in front of the
   // curriculum. On a standard deck the same key lands on the landscape.
+  //
+  // AND IT LANDS ON A DIFFERENT SLIDE THAN IT DID BEFORE gh#65, at the same figure:
+  // that ticket inserted §6.1's slide at the head of this run, so R5's "first NUMBERED
+  // slide of the run" is now THE HARDEST PART and the capability ladder — which held
+  // this figure while it was the run's only slide — sits one row behind it. The letter
+  // did not move and the figure did not either; the SLIDE under them did, which is what
+  // the label assertion is here to catch.
   await page.keyboard.press("b");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*B\.1/);
-  await expect(page.locator(".fig-label")).toHaveText(/THE CAPABILITY LADDER/);
+  await expect(page.locator(".fig-label")).toHaveText(/THE HARDEST PART/);
 
   // `c` is THE SHAPE — the run gh#54 inserted, and the reason every letter behind
   // it moved. R5 lands the jump on the run's first numbered slide, so this is C.1

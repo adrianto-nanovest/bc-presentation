@@ -1,5 +1,15 @@
 // Section THE GAP — every string the section prints, and the one axis it varies on.
 //
+// TWO SLIDES LIVE IN THIS FILE AND THEY DISAGREE ABOUT WHETHER THIS SECTION HAS A
+// BRAND AXIS. The Capability Ladder (§6.5) exports one, because it puts an
+// organisation's own evidence in front of that organisation (§4.4 slot 2). THE
+// HARDEST PART (§6.1, at the bottom of this file) exports NONE: §4.4's seven slots
+// do not include it, the statistic it quotes is a third party's and the gap it names
+// is nobody's local fact, so there is nothing for a brand to vary. Look for a
+// `…For(brand)` resolver there and there is not one — `leader-mandate/content.ts`
+// makes the same call for K.1 and argues it at greater length. Neither answer is the
+// house style; the axis exists where the EVIDENCE varies and nowhere else.
+//
 // Spec §6.5 (content) · §7.2 (the visual contract #16 settled) · §4.4 slot 2 (the
 // brand axis). Named by SECTION KEY and not by letter: `gap` is B in §4.3's
 // finished leader deck and B again at this ticket's floor, but it was going to be
@@ -346,3 +356,197 @@ const LADDER_BY_BRAND: Record<Brand, LadderBrandBlock> = {
 export function capabilityLadderFor(brand: Brand): LadderBrandBlock {
   return LADDER_BY_BRAND[brand];
 }
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THE HARDEST PART — §6.1, the FIRST slide of this section's run.
+// ═════════════════════════════════════════════════════════════════════════════
+//
+// §6.1 is one line: "The hardest part is not the tools (70%). Opens the gap between
+// tool access and organizational capability." The statistic behind it is REUSED
+// VERBATIM, on the research's own verdict (`docs/researches/internal-hr-group.md`
+// §1.1 and §3.1: "Reuse quote verbatim"), and its attribution is printed ON the
+// slide rather than footnoted — the same rule the ladder's `source` fields keep.
+//
+// ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER. See the top of this
+// file: §4.4's seven slots do not list this slide, the statistic is BCG/McKinsey's
+// and not either organisation's, and a `Record<Brand, …>` here would be three
+// fillings of a slot with one honest occupant. The slide file imports no `VARIANT`
+// at all, which is what lets its test compare two variant epochs byte for byte.
+//
+// THE KEYWORD RULE, as stated at the top of this file and applied here without an
+// exception: `kw` on PROSE ONLY. The prose on this slide is the headline, the two
+// gap lines and the closer — four strings, four `*Kw` siblings. THE STATISTIC AND
+// ITS SOURCE ARE KEYWORD-FREE, and they are the sharpest case the rule has: a copper
+// italic inside a quoted figure emphasises a fragment of somebody else's sentence,
+// and inside an attribution it reads as the deck editing its own citation. The two
+// half labels and all eight list rows are labels and carry none either.
+//
+// THE 70/30 COLLISION WITH THE LADDER, recorded once here and once in
+// `./hardest-part-geometry.ts`, because this file is where a future editor would
+// create it. §6.5's L3 rung is defined as "Decision contract · 70/30 split" — that
+// 70/30 is how much of a bounded agentic DECISION the machine may take. THIS 70/30
+// is the ADOPTION-FAILURE split: how many failures are people and process against
+// how many are technology. The numbers agree by coincidence. So: nothing below
+// prints the phrase "70/30" (it is the ladder's), nothing below says "decision
+// contract", and `peopleItems`' first row says "Decision RIGHTS" — who owns a call —
+// which is org design and not the ladder's rung definition. Do not merge them, do
+// not cross-reference them on either stage, and do not "reuse" one number for the
+// other.
+//
+// WHAT THIS SLIDE MAY NOT SAY, because three siblings own it (§6.2, §6.3, §6.4), and
+// the first of the three is a constraint the SPEC states rather than a judgement
+// this file makes:
+//
+//   · SHADOW AI, SOPs, MISSING GUIDANCE, IMPROVISATION → §6.2 (`gap-no-sop`) owns
+//     the whole of it, and owns shadow AI as `condition`. §6.2 is explicit that the
+//     deck's three shadow-AI passes must share no image and no statistic, and the
+//     escalation "degenerates into repetition the moment two of the three passes
+//     share an image or a statistic". This slide therefore names none of it — not as
+//     tact, but because a first mention here would spend §6.2's `condition` beat
+//     before that slide gets to make it.
+//   · NANOVEST'S OWN FAILURES, first person → §6.3 (`gap-three-failures`). Nothing
+//     below is in the first person and nothing below is a story.
+//   · THE PATTERN ACROSS THOSE FAILURES → §6.4 (`gap-the-pattern`).
+//   · L1–L5, THE RUNGS, THE DECISION CONTRACT → §6.5, above in this file.
+//
+// THE ONE DELIBERATE ECHO, so a reviewer sees it was chosen and not leaked: the
+// capability line below says capability is "earned", and the ladder's L5 is
+// "Declared only when earned". That rhyme is the section's thesis stated at both
+// ends of its run — B.1 opens the gap, B.5 puts a ladder in it — and it is one
+// ordinary English word rather than a borrowed label. Nothing else is shared.
+
+/** One row of either half of the split. A LABEL, keyword-free by the rule above. */
+export interface SplitItem {
+  id: string;
+  /** Cut for ONE line: 397px (people) or 353px (technology) of 15px sans, which is
+   *  ≈50 and ≈44 characters. A reword past that wraps into the row under it. */
+  label: string;
+}
+
+/**
+ * §6.1's five structural contents of the people-&-process half.
+ *
+ * THE ORDER IS THE ARGUMENT and `./hardest-part-geometry.ts` lays it out
+ * column-major, so it reads top-to-bottom then across: who decides, how the work is
+ * shaped, who can do it, what they are rewarded for, and how anyone can tell. Each
+ * row is a NOUN plus what it costs — the noun alone ("Skills") reads as a training
+ * budget, which is the reading §6.1 exists to refuse.
+ *
+ * FIVE, and `./hardest-part-geometry.ts` pins the count: a sixth row deepens the
+ * sub-columns by arithmetic and the stage's floor clearance is what reports it.
+ */
+const PEOPLE_ITEMS: readonly SplitItem[] = [
+  { id: "decision-rights", label: "Decision rights — who owns the call." },
+  { id: "workflow", label: "Workflow redesign — the process changes shape." },
+  { id: "skills", label: "Skills — the habit, not the awareness." },
+  { id: "incentives", label: "Incentives — what faster work is rewarded for." },
+  { id: "measurement", label: "Measurement — what now counts as done." },
+];
+
+/**
+ * The three things the 30% is, i.e. the three things money already buys.
+ *
+ * EACH ROW NAMES ITS OWN PROCUREMENT INSTRUMENT — a subscription, a purchase order,
+ * an afternoon — because "Models · Licences · Tools" as three bare nouns is a list
+ * the room reads as difficulty. The point of the 30% is that none of it is hard,
+ * and the instrument is what says so in four words.
+ */
+const TECHNOLOGY_ITEMS: readonly SplitItem[] = [
+  { id: "models", label: "Models — a subscription away." },
+  { id: "licences", label: "Licences — a purchase order." },
+  { id: "tools", label: "Tools — installed in an afternoon." },
+];
+
+export const gapHardestPartContent = {
+  /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from
+   *  the composed deck (§3.5) and are authored nowhere. */
+  figLabel: "THE HARDEST PART",
+
+  /** §6.1's own claim, as the slide's title phrase. It refuses the reading a leader
+   *  arrives with — that this is a tooling decision — before any evidence lands. */
+  headline: "The hardest part is not the tools.",
+  headlineKw: ["not the tools"],
+
+  /** Mono LABEL over the quotation. Keyword-free. Says "reported" and "split" so the
+   *  room knows what kind of object it is about to read before it reads it. */
+  statisticEyebrow: "THE REPORTED SPLIT",
+
+  /**
+   * THE STATISTIC, VERBATIM — the research's own verdict, quoted and not adapted
+   * (`docs/researches/internal-hr-group.md` §3.1).
+   *
+   * KEYWORD-FREE, and this is the string the rule exists for: it is somebody else's
+   * sentence, and a copper italic inside it would be the deck emphasising a fragment
+   * of a quotation. It is also the number `./hardest-part-geometry.ts` cuts the split
+   * bar from — `PEOPLE_SHARE` is 0.70 because this string says 70% — so a reword that
+   * changed the figure and left the bar alone is a lie the test catches.
+   *
+   * "&" AND NOT "and", "people & process" AND NOT "people and process": verbatim
+   * means verbatim, and the ampersand is in the source.
+   */
+  statistic: "70% of AI adoption failures are people & process, not technology",
+
+  /**
+   * The attribution, printed ON the slide (the ladder's rule, applied to a figure
+   * this deck did not measure). Mono, keyword-free.
+   *
+   * WHAT IT CLAIMS AND WHAT IT DOES NOT. The research records the figure as
+   * BCG/McKinsey's and cites it as an adoption benchmark; we hold no primary URL and
+   * no read date for it, so this string says "reported by" and says that the deck
+   * QUOTES rather than measures. It carries no date it cannot support and no study
+   * title it cannot name — an invented citation is worse than a plain one, and this
+   * slide is the one place in the section where a leader is most likely to ask.
+   */
+  statisticSource:
+    "Reported by BCG / McKinsey — the adoption benchmark this deck quotes rather than measures.",
+
+  /** The 70% segment's label. Mono, keyword-free. It carries its own percentage so
+   *  the mass is never read against the wrong number, and NOT the phrase "70/30",
+   *  which is the ladder's (see the header). */
+  peopleLabel: "70% · PEOPLE & PROCESS",
+
+  /** The 30% segment's label. Mono, keyword-free, same construction. */
+  technologyLabel: "30% · TECHNOLOGY",
+
+  peopleItems: PEOPLE_ITEMS,
+  technologyItems: TECHNOLOGY_ITEMS,
+
+  /** Mono LABEL over band 4, and the one string that calls the thing a GAP — §6.1's
+   *  own word. Keyword-free. The two terms it abbreviates ("tool access",
+   *  "organizational capability") are spelled out in the two lines under it. */
+  gapEyebrow: "THE GAP · ACCESS AGAINST CAPABILITY",
+
+  /**
+   * The bought half of the gap. PROSE, so it carries keywords.
+   *
+   * Two properties in one sentence — it is PROCURED and it is INSTANT — because
+   * either alone is a fact and the pair is the argument: what a signature buys
+   * arrives complete, all at once, for everybody.
+   */
+  accessLine:
+    "Tool access is procured. It arrives instantly, the day the invoice clears, for everyone at once.",
+  accessLineKw: ["procured", "instantly"],
+
+  /**
+   * The built half. PROSE, and the mirror of the line above it: EARNED against
+   * procured, SLOWLY against instantly. "Never on an invoice" is the sentence's
+   * job — it is what makes the gap a gap rather than a delay, because no amount of
+   * the 30% closes it.
+   */
+  capabilityLine:
+    "Organizational capability is earned. It arrives slowly, one changed habit at a time, and never on an invoice.",
+  capabilityLineKw: ["earned", "slowly"],
+
+  /**
+   * The closer, and the frame for everything behind this slide. PROSE.
+   *
+   * IT IS THE SLIDE'S LAST ARRIVAL, full width and alone in its band, because it is
+   * the only sentence here addressed to the rest of the deck rather than to the
+   * statistic. IT COUNTS NOTHING AND NAMES NO POSITION — "everything after this",
+   * never "the next four slides" and never a letter — because the run this slide
+   * opens is composed per deck set (§3.4) and a sentence that counted its own
+   * successors would go stale the first time one was inserted or cut.
+   */
+  closer: "The tools are the 30%. Everything after this is the 70%.",
+  closerKw: ["the 70%"],
+} as const;

@@ -19,7 +19,9 @@ import type { SectionKey } from "./sections";
 // LEADER one at 14 sections — it ran 10 at the Phase 4 floor, against the standard
 // deck's 11, and passed it on gh#54. That 14 is §4.3's FINAL count: `gap`, `shape`,
 // `invest` and `mandate` arrived on gh#53, gh#54, gh#56 and gh#60, and every leader
-// slide still unbuilt appends to a run that exists. So the deck stops three
+// slide still unbuilt JOINS a run that exists rather than opening one — at its end,
+// or inside it the way gh#65's `gap-hardest-part` went in at the head of `gap`, which
+// claims no letter either. So the deck stops three
 // sections short of the cap, and the cap's failure mode stays theoretical.
 const RESERVED_NAV_KEYS = ["r", "u"] as const;
 const MAX_SECTIONS = 17;

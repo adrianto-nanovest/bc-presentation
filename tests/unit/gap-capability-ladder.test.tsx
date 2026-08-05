@@ -49,11 +49,16 @@ const POSES = [0, 1, 2, 3, 4] as const;
  * position to look up — which is itself the fact `deck-numbering-fixture` and
  * `deck-registry` prove, from the decks that do run it.
  *
- * B.1 rather than §4.3's B.5 because `gap` holds one slide today; #55–#58 put four
- * in front of it. Neither number is authored in the slide (§3.5), so this is a
+ * B.2 rather than §4.3's B.5 because `gap` holds two of its five slides: gh#65 put
+ * §6.1's `gap-hardest-part` at the head of the run, so this slide printed B.1 while it
+ * was the run's only member and prints B.2 now — one number, moved by R3 inside the run,
+ * with this slide's own file untouched. Phase 7's three remaining `gap` slides insert
+ * between the two and take it to B.5. (The "#55–#58" this note named before were never
+ * those four slides: #55 is C.1's focus walk and #56–#58 are D.2–D.4.) Neither number is
+ * authored in the slide (§3.5), so this is a
  * harness input and not a claim the slide makes.
  */
-const AT = { letter: "B", num: 1, sectionKey: "gap" } as const;
+const AT = { letter: "B", num: 2, sectionKey: "gap" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {

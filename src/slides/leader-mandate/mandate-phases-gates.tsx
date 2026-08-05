@@ -26,10 +26,12 @@
 // B.5 IS THE SPEC'S NAME FOR THAT SLIDE AND NOT THE DECK'S, which is why it stands
 // above only inside a §6.5 citation and why every other line in this directory
 // names the basename instead. §6.5 numbers `gap-capability-ladder` B.5 because it
-// describes the FINISHED `gap` run of five; one of those five is built, so the
-// composed leader decks derive B.1 for it today and will keep moving it until
-// #55–#58 land. The basename is what is true in both, which is the rule this file
-// states further down and the reason it is followed here.
+// describes the FINISHED `gap` run of five; two of those five are built, so the
+// composed leader decks derive B.2 for it today — B.1 until gh#65 landed §6.1's slide
+// at the head of the run — and it keeps moving until Phase 7 lands the other three
+// (§11; the "#55–#58" this comment named before are C.1's focus walk and D.2–D.4, none
+// of them a `gap` slide). The basename is what is true in both, which is the rule this
+// file states further down and the reason it is followed here.
 //
 // NO THIRD LADDER IS INVENTED (§6.6, #61's third AC). "Learn → Experiment → Build
 // → Integrate → Own" was cut from this deck precisely so the room would carry one

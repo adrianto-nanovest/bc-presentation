@@ -268,13 +268,20 @@ describe("leader deck sets", () => {
       // with the deck instead of being dropped: which pair surrounds f8 is the
       // only thing that says the relocation still holds.
       //
-      // NONE OF gh#57, gh#58 OR gh#59 MOVED F8 AGAIN. `invest-chicken-egg` joined
+      // NONE OF gh#57, gh#58, gh#59 OR gh#65 MOVED F8 AGAIN. `invest-chicken-egg`
+      // joined
       // the END of that `invest` run, `invest-security` joined behind it and
       // `invest-subscription` behind that, so f8's own neighbours are unchanged
       // and only the row that hands back to the curriculum moved along by one each
       // time. The two lines are asserted separately for that reason: the pair
       // around f8 is the RELOCATION, and the row before `b1-evolution-journey` is
       // the LENGTH of the run behind it.
+      //
+      // gh#65 IS THE ONE THAT PROVES THE OFFSETS ARE RELATIVE AND NOT ABSOLUTE. It
+      // inserted `gap-hardest-part` two rows IN FRONT of f8, so f8's own index moved
+      // and not one assertion below did: every offset is taken from `at`, which is
+      // looked up. A test that had written the indices out would have failed here on a
+      // ticket that changed nothing it is about.
       const at = ids.indexOf("f8-your-agentic-os");
       expect(ids[at - 1], id).toBe("shape-agentic-org");
       expect(ids[at + 1], id).toBe("invest-own-proof");
@@ -367,18 +374,20 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // eight ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
-      // into a deck that has no leader in the room. The first six would do it in
+      // nine ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
+      // into a deck that has no leader in the room. Seven of them would do it in
       // FRONT of the curriculum and renumber all 65 slides behind them; the two
       // `mandate` rows would do it between `pitfalls` and `meta` and renumber only
       // the last eleven — quieter, and therefore the ones most likely to reach a
       // projector.
       //
-      // EIGHT IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
-      // is gh#57's finding and gh#61, gh#58 and gh#59 inherit it whole:
+      // NINE IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
+      // is gh#57's finding and gh#61, gh#58, gh#59 and gh#65 inherit it whole:
       // `invest-chicken-egg`, `mandate-phases-gates`, `invest-security` and
-      // `invest-subscription` each append to a run that ALREADY EXISTS in the
-      // leader list, but the standard list holds no `invest` row and no `mandate`
+      // `invest-subscription` each append to the END of a run that ALREADY EXISTS in
+      // the leader list, and `gap-hardest-part` went in at the HEAD of one — a third
+      // category, and the leak is identical for all three. The standard list holds no
+      // `gap` row, no `invest` row and no `mandate`
       // row at all — so on a standard deck any one of them would arrive alone and
       // claim a letter exactly as the four run-openers would.
       //
@@ -391,6 +400,7 @@ describe("leader deck sets", () => {
       // the same epoch as the f8 lookup above, so it costs nothing to say.
       expect(
         [
+          "gap-hardest-part",
           "gap-capability-ladder",
           "shape-agentic-org",
           "invest-own-proof",
@@ -405,10 +415,13 @@ describe("leader deck sets", () => {
     }
   });
 
-  // NOT ASSERTED HERE: that a leader deck is eight slides shorter. That is a
+  // NOT ASSERTED HERE: how long a leader deck is against a standard one. It was
+  // eight slides shorter at the gh#41 floor, level after gh#59 and a slide LONGER
+  // since gh#65 — which is exactly why the number is not restated in this file. That
+  // is a
   // count, `deck-registry.test.ts` owns counts, and it already holds both leader
   // decks against their run-length encoding and the standard deck against the
-  // same eight. Restating it here would load two more module epochs — the
+  // same eight cut F slides. Restating it here would load two more module epochs — the
   // expensive part of this file — to re-prove another file's claim.
 
   test("still take their own brand's A.1 and K.2, by identity", async () => {
