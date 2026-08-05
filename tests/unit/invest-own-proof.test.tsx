@@ -90,8 +90,12 @@ const POSES = [0, 1, 2] as const;
  * position to look up — which is itself the fact `deck-numbering-fixture` and
  * `deck-registry` prove, from the decks that do run it.
  *
- * D.1 rather than §6.7's D.2 because `invest` holds one slide today; #57 puts
- * `invest-base-rates` in front of it. Neither the letter nor the number is authored
+ * D.1 rather than §6.7's D.2 because no slide sits in front of this one in the `invest`
+ * run: §6.7's D.1, `invest-base-rates`, is unbuilt. IT IS NOT #57 THAT BUILDS IT —
+ * that ticket is D.3 `invest-chicken-egg`, which APPENDED behind this slide and moved
+ * nothing here (this harness input is unchanged by it, and the fixture records D.1 for
+ * this slide and D.2 for that one). `invest-base-rates` holds no ticket at all; §11's
+ * phase table puts it in Phase 7. Neither the letter nor the number is authored
  * in the slide (§3.5), so this is a harness input and not a claim the slide makes —
  * and it is the number the two leader decks actually derive, which
  * `tests/fixtures/deck-numbering.json` records for both.
@@ -1020,8 +1024,9 @@ describe("keywords go on prose only", () => {
   });
 
   test("no authored string names a section letter", () => {
-    // §3.4 R2. This slide composes as D.1 today, becomes D.2 the moment #57's
-    // `invest-base-rates` lands in front of it, and everything behind the `invest`
+    // §3.4 R2. This slide composes as D.1 today and becomes D.2 the moment
+    // `invest-base-rates` (§6.7's D.1, Phase 7, no ticket — NOT #57, which built D.3
+    // behind this slide) lands in front of it, and everything behind the `invest`
     // run renumbers as the rest of Phase 6 lands — so a literal "D.1" or "SECTION
     // D" anywhere in this copy would be a lie on a projector within the week.
     for (const copy of authoredStrings()) {

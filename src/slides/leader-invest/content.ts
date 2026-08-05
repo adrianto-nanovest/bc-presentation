@@ -1,8 +1,17 @@
-// Section WHY INVEST — every string `invest-own-proof` prints, and the one axis
-// it varies on.
+// Section WHY INVEST — every string its two built slides print, and the one axis
+// one of them varies on.
 //
-// Spec §6.7 (content) · §4.4 slot 3 (the brand axis) · §4.5 (the thesis line) ·
-// §12.3 item 2 (the GEMVIS figures are vendor-reported). Named by SECTION KEY and
+// TWO SLIDES, ONE MODULE: `invest-own-proof` (§6.7's D.2) above, and
+// `invest-chicken-egg` (§6.7's D.3) in the block at the bottom of this file. The
+// module is the SECTION's — as in `leader-gap` and `leader-shape`, which are named
+// the same way — so a second slide's copy belongs IN it rather than beside it, and
+// §6.2's rule that the deck's three shadow-AI passes may share no image and no
+// statistic is easier to keep in one file than across two.
+//
+// Spec §6.7 (content for both) · §6.2 (the three shadow-AI passes, which bound
+// D.3's copy) · §4.4 slot 3 (D.2's brand axis — and the reason D.3 has none) ·
+// §4.5 (the thesis line) · §12.3 item 2 (the GEMVIS figures are vendor-reported).
+// Named by SECTION KEY and
 // not by letter: `invest` is D in §4.3's finished leader deck and D at this
 // ticket's floor, but the letter is derived per deck (§3.4 R2) and no file under
 // `src/slides/leader-invest/` may hold one. `src/slides/leader-shape/index.ts`
@@ -30,21 +39,30 @@
 // plus a sibling `*Kw` array of substrings to highlight at render time. No inline
 // `<em>` in data.
 //
-// THE KEYWORD RULE. `kw` goes on PROSE ONLY, and this slide has exactly two lines
-// of prose — the headline and the closer (plus `general`'s one-line refusal, which
+// THE KEYWORD RULE. `kw` goes on PROSE ONLY, and `invest-own-proof` has exactly two
+// lines of prose — the headline and the closer (plus `general`'s one-line refusal, which
 // no composed deck reaches). The eyebrow, all seven figures — GEMS' four and Berau's
 // three — their metric names, the epistemic chips and the attribution line are LABELS
 // in the mono or sans register, where a copper italic reads as a rendering fault, so
 // none of them has a `*Kw` sibling. The test holds that as a list, so a new string
-// has to pick a side.
+// has to pick a side. The rule is the same for D.3 and its two lists are different —
+// they are stated over that slide's own block below.
 //
-// WHAT IS DELIBERATELY NOT IN THIS FILE, because this ticket does not render it:
-// D.1 (`invest-base-rates`, 78% → 6%), D.3 (`invest-chicken-egg`, four beats),
-// D.4 (`invest-security`) and D.5 (`invest-subscription`) are #57–#59 and their own
-// tickets. None of their copy is written here early. Dead copy that reads as
-// finished is how unreviewed copy ships — the next edit "just fills it in", and the
-// argument nobody agreed to is on a projector. Same reasoning as the top of
-// `src/slides/leader-shape/content.ts`.
+// WHAT IS DELIBERATELY NOT IN THIS FILE, because no ticket has rendered it yet:
+// §6.7's D.1 (`invest-base-rates`, 78% → 6%), D.4 (`invest-security`, #58) and D.5
+// (`invest-subscription`, #59). None of their copy is written here early. Dead copy
+// that reads as finished is how unreviewed copy ships — the next edit "just fills it
+// in", and the argument nobody agreed to is on a projector. Same reasoning as the top
+// of `src/slides/leader-shape/content.ts`.
+//
+// D.3 CAME OFF THAT LIST when #57 rendered it (the block at the bottom of this file),
+// AND THE LIST NAMED THE WRONG TICKET FOR D.1 — recorded rather than quietly deleted,
+// because the next author would otherwise go looking for a Phase 6 ticket that does
+// not exist. The old text said D.1 through D.5 "are #57–#59". Checked on 2026-08-05
+// with `gh issue view 57` and `gh issue list`: #57 is D.3 (this ticket), #58 is D.4,
+// #59 is D.5, and NO issue covers `invest-base-rates` at all — §11's phase table puts
+// it in the PHASE 7 row ("Leader new slides, second tier", line 1408), next to
+// `gap-no-sop`. So D.1 is not waiting on a Phase 6 ticket; it is not in this phase.
 //
 // Type-only import for `Brand`, so nothing but the thesis constants below arrives at
 // runtime and this file stays plain data.
@@ -410,3 +428,321 @@ const OWN_PROOF_BY_BRAND: Record<Brand, OwnProofBlock> = {
 export function ownProofFor(brand: Brand): OwnProofBlock {
   return OWN_PROOF_BY_BRAND[brand];
 }
+
+// ───────────────────── §6.7's D.3 · the deadlock, and who can skip it ─────────────────────
+//
+// FOUR BEATS, AND BEAT 3 IS WHAT MAKES THE OTHER THREE SAYABLE. The deadlock (no
+// budget without proof, no proof without budget) → what we actually did, with the
+// bill itemised → it worked, management was convinced, full investment was released →
+// the turn, which is that the person in the chair does not have to repeat any of it.
+// §6.7 and the issue are explicit that beat 3 is LOAD-BEARING: without it beat 2 is
+// advice to breach somebody's terms of service, and with it the slide is a
+// consciously priced trade-off that ended legitimately — a story a Div Head can
+// repeat upward. So {@link investChickenEggContent.verdict} is not a summary and it
+// is not optional; it is the beat that licenses the two above it, and no arrangement
+// of this copy may let the argument stop at beat 2.
+//
+// THE VOICE TURNS ONCE, AND THAT TURN IS THE SLIDE. Beats 1–3 are FIRST PERSON PAST —
+// what we did, what it cost us, how it ended. Beat 4 is SECOND PERSON PRESENT — what
+// you do not have to repeat. Nothing in the first three beats is addressed to the
+// room and nothing in the fourth is a confession, which is what keeps a story about
+// breaking somebody's rules from reading as a recommendation to break them.
+//
+// NO BRAND AXIS, AND THAT IS A DECISION RATHER THAN AN OMISSION. §4.4's table of
+// seven brand × deckSet slots does not list this slide — slot 3 is `invest-own-proof`
+// and slot 4 is D.4's on-prem beat — and the reason is whose story it is: the
+// deadlock, the shared accounts and the ban are NANOVEST'S OWN, not the client's. A
+// resolver here would have to invent a version of this history for a division that
+// never lived it, which is the failure `ownProofFor` above exists to prevent arriving
+// from the other direction. One story, told the same way in both leader decks. Do not
+// add a resolver — there is nothing true to put in it.
+//
+// THE REGISTERS. `kw` on PROSE ONLY, as everywhere in this file. FOUR prose lines,
+// each with a `*Kw` sibling: `headline`, `workaround`, `verdict`, `turn`. Everything
+// else is a LABEL, carries no `*Kw` and may not gain one: `figLabel`, both
+// `deadlockClauses`, `costsEyebrow`, `pilotEyebrow`, and the eight `LineItem` labels.
+// The clauses are the sharpest case — they are a rule quoted in the mono register, and
+// a copper italic inside "NO BUDGET WITHOUT PROOF" would emphasise a fragment of a
+// rule.
+//
+// TWO ABSENCE RULES THIS COPY HOLDS (the issue's AC 5 and AC 6), both checkable by
+// grep over the strings below.
+//
+//   1. NO VENDOR, AND NO CLAIM ABOUT WEAK ENFORCEMENT. §6.7 keeps the vendor-leniency
+//      comparison ("ChatGPT seems not strict") OFF the slide and leaves it to the
+//      presenter's mouth: choosing a vendor by weakness of enforcement, printed three
+//      slides from the governance recommendation, is indefensible in a Sinar Mas
+//      context. So no vendor is named here at all — none of `ChatGPT`, `OpenAI`,
+//      `Claude`, `Anthropic`, `Gemini`, `Google`, `Copilot`, `Microsoft` — and none of
+//      `lenient`, `leniency`, `not strict`, `less strict`, `strict`, `unenforced`,
+//      `enforcement`, `blind eye`, `looks the other way`, `tolerated`, `got away`
+//      appears in any string. "banned repeatedly" is the OPPOSITE claim and it is
+//      required: enforcement happened, to us, more than once. It is also why beat 2
+//      cannot be softened — a workaround nobody ever caught would have cost nothing,
+//      and the bill is the point.
+//   2. NO TOKEN EITHER OF THE OTHER TWO SHADOW-AI PASSES OWNS (§6.2). The deck spends
+//      shadow AI three times with an enforced escalation — B.2 as CONDITION, D.4 beat
+//      2 as EXPOSURE, D.3 (here) as RATIONAL BEHAVIOUR — and §6.2 puts that in the
+//      spec rather than in the implementer's judgement, because the escalation
+//      degenerates into repetition the moment two passes share an image or a
+//      statistic. So this block carries none of B.2's condition vocabulary (`no SOP`,
+//      `no guidance`, `improvise`) and none of D.4's (`revoke`, `produce`, `6.7`,
+//      `9.2`, `self-hosted`, `on-prem`, `consumer account`, `workspace`,
+//      `governance retrofit`, `Culture, Risk, Governance, Ethics`).
+//
+//      BOTH OF THOSE PASSES ARE UNBUILT AS OF 2026-08-05, so this check is against
+//      their SPEC text and not against rendered copy — which is the honest limit of
+//      it. `gap-no-sop` (B.2) sits in §11's Phase 7 row and `src/slides/leader-gap/`
+//      holds only the Capability Ladder; `invest-security` (D.4) is #58. The one place
+//      either pass's vocabulary is already on a stage is `leader-shape/content.ts`'s
+//      governance decision ("where the data may go … before someone improvises"),
+//      which is C.1 indexing them on purpose — and nothing below repeats either
+//      anchor.
+//
+//      THE ONE ADJACENCY THAT CANNOT BE REMOVED, stated rather than hidden. §6.7
+//      prescribes "no audit trail" and "data outside the boundary" as two of THIS
+//      slide's four costs, while D.4 beat 2 is "data you cannot audit, revoke, or
+//      produce". The words touch. The images do not: D.3's four costs are a PAST-TENSE
+//      BILL in the first person — what our own workaround cost US — and D.4's is a
+//      PRESENT-TENSE EXPOSURE in the second person — what YOU cannot do today. D.3
+//      also names NONE OF D.4's THREE DESTINATIONS: no consumer account, no
+//      company-managed workspace, nothing self-hosted. Said that precisely, and not as
+//      "it names no account of any kind", because THIS SLIDE DOES NAME AN ACCOUNT —
+//      `workaround` below prints "shared accounts", which §6.7 requires and which beat 2
+//      cannot be written without. What D.4 owns is the three-way destination PICTURE, and
+//      "shared accounts" is none of the three. D.3 carries no statistic of D.4's either.
+//      That is the whole of what can be claimed here: two line items on a bill share two
+//      words with a later slide's exposure, and neither the picture nor the number is
+//      shared.
+//
+// THE ONLY QUANTITY IN THIS BLOCK IS `30-DAY`, AND IT IS D.3'S OWN. `grep -rn
+// "30-day\|30 day\|30-DAY" docs/specs/` returns exactly one spec line — §6.7's D.3
+// sentence, line 862 — and `30` appears nowhere in §6.2's B.2 paragraph or in §6.7's
+// D.4 paragraph. So the one number this slide prints cannot be the statistic §6.2
+// forbids two passes from sharing. (Greps run 2026-08-05.)
+
+/**
+ * One row of either list on this slide — a cost we paid, or a term of the pilot.
+ *
+ * ONE INTERFACE FOR BOTH, because the two lists are the same object twice: four short
+ * label-register strings, each with a stable `id` for whatever the renderer keys and
+ * tags its rows with, at the same size in the same tier. `id` is kebab-case, like the
+ * ledger's above, so the two slides' hooks read the same way in a test. Two identical
+ * interfaces would exist only to drift apart, and
+ * `./chicken-egg-geometry.ts` gives both lists ONE row height and ONE pitch for the
+ * same reason — what differs between the bill and the terms is the budget each one
+ * has, not the shape of a row.
+ */
+export interface LineItem {
+  id: string;
+  /**
+   * A LABEL, and therefore keyword-free: each one is the name of a thing, and a
+   * copper italic inside a name emphasises a fragment of it.
+   *
+   * SENTENCE CASE, like the ledger's metric names above. §6.7 writes these eight
+   * strings inside running prose, so the words are §6.7's and the initial capital is
+   * this file's — the row is a label, and a label that starts lower case reads as a
+   * sentence that lost its first half.
+   */
+  label: string;
+}
+
+/**
+ * Exactly four, held by the TYPE.
+ *
+ * A FIXED-LENGTH READONLY TUPLE, not a length-checked array type, and the reason is
+ * where the error lands. `readonly [T, T, T, T]` puts a fifth entry's error ON the
+ * fifth entry, at the definition site, with no cast anywhere. The alternative —
+ * `readonly T[] & { length: 4 }` — cannot be satisfied by an array literal without a
+ * cast, and a cast is the one construction that can be wrong in silence.
+ *
+ * IT IS ALSO WHAT MAKES THE COUNT READABLE FROM OUTSIDE. A tuple's `["length"]` is the
+ * literal `4`, so `./chicken-egg-geometry.ts` pins its own copy of both counts to
+ * these tuples through a TYPE-ONLY `import()` — no runtime import, which that module
+ * needs in order to stay importable from bare Node.
+ *
+ * AND FOUR IS NOT A COPY EDIT. §6.7 names four costs and the issue's AC names four
+ * pilot constraints; a fifth of either is a different argument, not a longer list.
+ */
+type Four<T> = readonly [T, T, T, T];
+
+/**
+ * BEAT 1 — the deadlock, as the two clauses that lock each other.
+ *
+ * EXACTLY TWO, AND THE TYPE SAYS SO: a two-clause cycle is what a deadlock IS. A third
+ * clause would make it a queue or a dependency chain — something with an end — and the
+ * slide's first beat would stop being the thing beats 2 to 4 answer.
+ *
+ * MONO LABEL REGISTER, keyword-free, and stored SHOUTED rather than title-cased
+ * (unlike `hubLabel` in `src/slides/leader-shape/content.ts`): neither string is ever
+ * quoted in prose, so the register's `textTransform` is a no-op on them and the data
+ * reads as the stage does.
+ *
+ * THE LOOP IS IN THE WORDS, NOT IN A DRAWN RING. Each clause is the other one with its
+ * two nouns swapped, which is what a room reads as a cycle — and it is why the pair
+ * gets two plain shelves in `./chicken-egg-geometry.ts` and no third box for an arrow
+ * to live in. Drawing the cycle would spend an `<svg>` on saying what the two strings
+ * already say to anyone who reads them in order.
+ */
+const DEADLOCK_CLAUSES: readonly [string, string] = [
+  "NO BUDGET WITHOUT PROOF",
+  "NO PROOF WITHOUT BUDGET",
+];
+
+/**
+ * BEAT 2's BILL — §6.7's four costs, verbatim and in §6.7's order.
+ *
+ * THE ORDER IS §6.7'S AND IT IS NOT RE-SORTED, because it reads as an escalation of
+ * WHOSE problem each one is: work lost (the person doing it) → no audit trail (the
+ * company's records) → data outside the boundary (the company's risk) → usage
+ * invisible to the people who later have to approve it (the desk the slide is
+ * addressed to). Sorted by length, or by severity as an author happens to see it, the
+ * bill would stop landing on the room.
+ *
+ * FOUR, AND THE `Four` TUPLE HOLDS IT. These are the AC's own list; a fifth cost is a
+ * different argument.
+ */
+const COSTS: Four<LineItem> = [
+  { id: "work-lost", label: "Work lost mid-stream" },
+  { id: "no-audit-trail", label: "No audit trail" },
+  { id: "data-outside-boundary", label: "Data outside the boundary" },
+  {
+    id: "usage-invisible",
+    label: "Usage invisible to the people who later have to approve it",
+  },
+];
+
+/**
+ * BEAT 4's TERMS — the four things that make the pilot approvable, in the issue's AC
+ * order.
+ *
+ * EVERY ONE OF THEM IS A LIMIT, which is the reason the card is an offer and not an
+ * ask: a handful of seats bounds the headcount, one named use case each bounds the
+ * scope, a kill criterion says in advance what stopping looks like, and a spend cap
+ * bounds the exposure. With the 30 days in `pilotEyebrow` that is four limits and a
+ * clock — everything a division head needs to say yes to it in one breath, and the
+ * reason this is the shortest copy on the slide.
+ */
+const PILOT_CONSTRAINTS: Four<LineItem> = [
+  { id: "seats", label: "A handful of seats" },
+  { id: "use-case", label: "One named use case each" },
+  { id: "kill-criterion", label: "A kill criterion" },
+  { id: "spend-cap", label: "A spend cap" },
+];
+
+export const investChickenEggContent = {
+  figLabel: "THE DEADLOCK, AND WHO CAN SKIP IT",
+
+  /**
+   * The premise, and it is deliberately about EVERY division rather than about ours.
+   *
+   * "Every division" is what makes the next three beats a case study instead of an
+   * anecdote: if the deadlock is structural, the room recognises it before the story
+   * starts, and the story is then evidence rather than an excuse. The keyword is on
+   * the sameness for the same reason — the one thing the first line has to land is that
+   * this deadlock is THEIRS, not something that once happened to a vendor.
+   */
+  headline: "Every division starts in the same deadlock.",
+  headlineKw: ["the same deadlock"],
+
+  deadlockClauses: DEADLOCK_CLAUSES,
+
+  /**
+   * BEAT 2 — what we actually did, in one sentence, with its price in the same
+   * breath.
+   *
+   * TWO KEYWORDS AND NOT ONE, which is the only distribution of emphasis that is
+   * honest here. "shared accounts" alone would highlight the act and leave the
+   * consequence unmarked — a slide that emphasises the workaround and mutes the ban is
+   * a slide recommending the workaround. The pair marks the trade: what we did, and
+   * what it got us. (`KeywordHighlight`'s own note allows 1–3 per chunk.)
+   *
+   * "So we did it" OPENS ON THE CONSEQUENCE OF BEAT 1 and not on a new subject: the
+   * deadlock above is the reason, and the sentence is the behaviour it produced. That is
+   * this slide's §6.2 pass — shadow AI as RATIONAL BEHAVIOUR — and it is carried by the
+   * causal "So" rather than by an adjective. Nothing here calls the workaround
+   * reasonable; the sentence's grammar does it, which is the only way a slide can say it
+   * without appearing to recommend it.
+   */
+  workaround: "So we did it on shared accounts, and we were banned repeatedly.",
+  workaroundKw: ["shared accounts", "banned repeatedly"],
+
+  /**
+   * The bill's label. Mono, keyword-free.
+   *
+   * PAST TENSE, AND THAT IS THE WORK IT DOES. "WHAT IT COST" says the bill is closed —
+   * it was paid, by us, and the four rows under it are a record. "WHAT IT COSTS" would
+   * make the same four rows a warning aimed at the room, which is D.4 beat 2's job and
+   * not this slide's (see the §6.2 note above).
+   */
+  costsEyebrow: "WHAT IT COST",
+  costs: COSTS,
+
+  /**
+   * BEAT 3 — the load-bearing one. Three sentences, in the order they happened.
+   *
+   * THE KEYWORD IS ON THE RELEASE OF THE INVESTMENT and not on "It worked", because
+   * the emphasis is the last thing the room takes away and "it worked" is a claim
+   * anybody can make about anything. "Full investment was released" is the fact that
+   * ends the story legitimately, and it is the clause a Div Head repeats upward.
+   *
+   * THREE SENTENCES AND NOT ONE, deliberately: they are three separate events —
+   * the work landed, the people with the budget were convinced, the money moved — and
+   * a single comma-spliced line would let a reader take the third as a restatement of
+   * the first.
+   *
+   * THE FOUR-WORD SPAN WRAPS, AND NARROWING IT TO `["released"]` WAS CONSIDERED AND
+   * DECLINED on 2026-08-05. Do not re-open it without new evidence; the review that
+   * raised it is recorded here so the next reader does not have to re-litigate it.
+   *   · WHAT WAS RAISED. The box is cut for two lines and the keyword breaks across them
+   *     — "Full investment was" (226.97px, ending x=769.31) then "released" (90.39px,
+   *     from x=48), measured in Chromium. A one-word span would keep §6.7's sentence
+   *     verbatim, move no geometry, and leave the load-bearing beat with an unbroken
+   *     copper phrase. `./components/ChickenEggBeats.tsx` records the three measurements
+   *     that rejected narrowing the BOX instead; this is the cheaper alternative it did
+   *     not consider.
+   *   · WHY IT IS STILL FOUR WORDS. The rendered frame was inspected, not argued about:
+   *     both fragments are copper italic, contiguous in reading order, and the second
+   *     starts at the column's left edge directly under the first — at projection
+   *     distance that reads as ONE wrapped emphasis, not as two marks. Against which the
+   *     copy cost is real and permanent: "released" alone emphasises the verb, and the
+   *     fact that ends this story legitimately is the whole clause. That is the argument
+   *     the paragraph above makes, and a split line box is a weaker reason to give it up
+   *     than a cosmetic one.
+   */
+  verdict: "It worked. Management was convinced. Full investment was released.",
+  verdictKw: ["Full investment was released"],
+
+  /**
+   * BEAT 4 — the turn, and the only sentence on the slide addressed to the room.
+   *
+   * "all three" AND NOT "beats 1–3". §6.7 phrases the turn as "you are the person who
+   * can skip beats 1–3" — the spec's own numbering of this slide's beats, which the room
+   * is never shown — so the printed line counts what the left column has just shown it
+   * instead: the deadlock, the workaround, and the bill. What is being skipped is the
+   * ROUTE, not the outcome: the person in the chair can authorise the proof directly, so
+   * none of the three steps we took to earn it has to happen again.
+   *
+   * THE ADDRESS CARRIES THE SENTENCE AND THE KEYWORD IS DELIBERATELY NOT ON IT. A copper
+   * italic on "You are the person who can" would emphasise the flattery; on "skip all
+   * three" it emphasises the offer, which is the thing being agreed to.
+   */
+  turn: "You are the person who can skip all three.",
+  turnKw: ["skip all three"],
+
+  /**
+   * The card's label. Mono, keyword-free — and the only quantity on the slide.
+   *
+   * "INSTEAD —" IS DOING REAL WORK. Without it the card reads as one more thing the
+   * slide is asking for; with it the card REPLACES the route the story just described,
+   * which is the whole shape of beat 4. The em dash is the deck's own (see `kicker` in
+   * `src/slides/leader-shape/content.ts`).
+   *
+   * IT IS THE WIDEST STRING IN THE OFFER COLUMN — 270.61px measured, against the
+   * card's 336px measure — so `./chicken-egg-geometry.ts` cut that column for THIS
+   * string rather than for the four terms under it. A wrapped eyebrow inside a
+   * bordered box reads as damage, not as a label.
+   */
+  pilotEyebrow: "INSTEAD — A 30-DAY PROOF PILOT",
+  pilotConstraints: PILOT_CONSTRAINTS,
+} as const;

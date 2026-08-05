@@ -33,9 +33,19 @@
 // meant to take away from the slide.
 //
 // THE LETTER IS NOT AUTHORED HERE, and the number moves. This slide composes as
-// **D.1** today — it is the only slide the `invest` run owns, behind `opening`, `gap`
-// and `shape` in both leader decks — and becomes D.2 the moment #57's
-// `invest-base-rates` (§6.7's D.1) lands in front of it. §6.7 numbers it D.2 because
+// **D.1** today — FIRST of the two slides the `invest` run now owns, behind `opening`,
+// `gap` and `shape` in both leader decks — and becomes D.2 the moment
+// `invest-base-rates` (§6.7's D.1) lands in front of it.
+//
+// THAT INSERT IS NOT #57, and this sentence named the wrong ticket until 2026-08-05.
+// #57 is D.3 `invest-chicken-egg`, which APPENDED BEHIND this slide (`./index.ts`,
+// `src/deck/deck-sets.ts`) and moved neither this slide's letter nor its number;
+// `tests/fixtures/deck-numbering.json` records D.1 here and D.2 there. `invest-base-rates`
+// holds no ticket at all — §11's phase table puts it in the **Phase 7** row ("Leader new
+// slides, second tier"), beside `gap-no-sop` — so the insert that renumbers this slide is
+// not waiting on a Phase 6 ticket. #58 is D.4 and #59 is D.5, both behind D.3.
+//
+// §6.7 numbers this slide D.2 because
 // §6.7 describes the FINISHED section; the composed deck numbers it D.1 because a
 // letter and a number are derived from what the deck actually holds (§3.5): `FigLabel`
 // takes a label only, and what §3.4 R2 renumbers is everything BEHIND this run. No

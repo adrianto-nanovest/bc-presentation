@@ -277,11 +277,18 @@ const AUDIT_WORDS =
 /**
  * The five figures a composed leader deck must derive (§3.5), as rendered text.
  *
- * ASSERTED AS LITERALS, and that is a decision with a known expiry. #57's
- * `invest-base-rates` is §6.7's D.1 and lands IN FRONT of this slide, which will make
- * this slide D.2 and move nothing else. When that happens this line must fail and be
- * updated — which is the point: a harness that accepted any letter would not notice a
- * run that landed in the wrong section, and the AC for this ticket names the letters.
+ * ASSERTED AS LITERALS, and that is a decision with a known expiry. `invest-base-rates`
+ * is §6.7's D.1 and lands IN FRONT of this slide, which will make this slide D.2 and move
+ * nothing else. When that happens this line must fail and be updated — which is the point:
+ * a harness that accepted any letter would not notice a run that landed in the wrong
+ * section, and the AC for this ticket names the letters.
+ *
+ * IT IS NOT #57 THAT DOES THAT, and this comment said so until 2026-08-05. #57 is D.3
+ * `invest-chicken-egg`, which APPENDED BEHIND this slide: the `invest` run now holds two
+ * slides, `invest-own-proof` is still D.1, and every literal in this table is still
+ * correct after it (re-run and re-checked, 131/131). `invest-base-rates` holds no issue at
+ * all — §11's phase table puts it in the PHASE 7 row, beside `gap-no-sop` — so the edit
+ * this comment predicts is not waiting on a Phase 6 ticket.
  */
 const FIGURES = {
   invest: "— FIG. D.1·PROOF FROM INSIDE THE COMPANY",
@@ -372,8 +379,11 @@ const FLOOR_TIER = "--neutral-300";
  *
  * gh#53's finding, and the exclusions are the same two:
  *   · `.nav-zone` — the NavBar's `Step` / `Slide` counters are 9px mono on
- *     `--copper-700`, they are on all 60 slides of every deck, and they are not
- *     projected copy.
+ *     `--copper-700`, they are on EVERY slide of EVERY deck, and they are not
+ *     projected copy. Stated as "every", not as a count: this comment read "all 60
+ *     slides of every deck" until 2026-08-05, and no single number describes shared
+ *     chrome — the leader decks are 61 slides since gh#57, `berau` and `gems` are 65
+ *     and `general` is 63.
  *   · `.fig-label .dot` — the `·` between the figure reference and the label, also
  *     `--copper-700`, also on every numbered slide in the deck.
  * Everything else inside the stage is audited, this slide's headline and its derived

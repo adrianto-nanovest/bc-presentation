@@ -144,11 +144,49 @@ interface ObservedDeck {
  *     is the half of that worth naming, because gh#54 had just moved it there.
  *   · ONE row was added, and it is the only new label in the file:
  *     `D.1 · PROOF FROM INSIDE THE COMPANY`. §6.7 numbers that slide D.2; it composes
- *     D.1 while #57's `invest-base-rates` is unbuilt, and both figures are derived
- *     (§3.5), which is why this record and not a comment is where the answer lives.
+ *     D.1 while `invest-base-rates` (§6.7's D.1) is unbuilt, and both figures are
+ *     derived (§3.5), which is why this record and not a comment is where the answer
+ *     lives. (That slide was attributed to **#57** here until gh#57 shipped and turned
+ *     out to be `invest-chicken-egg`; `invest-base-rates` holds no ticket at all.)
+ *
+ * THE LEADER ROWS MOVED A FOURTH TIME ON gh#57 — EXCEPT THAT NOT ONE FIGURE DID, and
+ * that is the whole of what this paragraph is for. `invest-chicken-egg` reached the
+ * leader lists alone, the fourth slide ever to do so, taking both decks to **61** rows.
+ * It APPENDED to the `invest` run gh#56 opened rather than opening a run of its own, so
+ * it claimed no letter, and:
+ *
+ *   · ZERO figures moved. Every letter and every number this file records is still
+ *     gh#56's: `invest` claims D, the loop slide still prints **H.12**, f8 still prints
+ *     **C.2**, `invest-own-proof` still prints **D.1**, and the closer is still **M.3**
+ *     across THIRTEEN sections A–M. The three tickets before this one each pushed every
+ *     letter behind their insert; this one pushed none, and re-using their sentence
+ *     here would have described an event that did not happen.
+ *   · ONE row was added, and it is the only new label in the file:
+ *     `D.2 · THE DEADLOCK, AND WHO CAN SKIP IT`. §6.7 numbers that slide D.3; it
+ *     composes D.2 for the same reason its sibling composes D.1 — `invest-base-rates`
+ *     (§6.7's D.1) is unbuilt, a §11 Phase 7 slide with no ticket — and both figures
+ *     are derived (§3.5), which is why this record and not a comment is where the
+ *     answer lives.
+ *   · RE-RECORDING STILL TOOK `ALLOW_MOVED_FIGURES=1`, AND THE REPORT IT PRINTED IS
+ *     NOT A LIST OF MOVED FIGURES. `figureDrift` compares `before[i]` against
+ *     `after[i]`, and the fixture is an INDEX-KEYED array, so a row inserted at index 6
+ *     shifts all 54 numbered rows behind it by one index and every one of them is
+ *     reported. The report read `slide 6: recorded E.1, renders D.2`, then `slide 7:
+ *     recorded E.2, renders E.1`, and so on to `slide 59: recorded M.3, renders M.2` —
+ *     110 lines in all, 54 per leader deck plus the two row-count lines. Read as pairs
+ *     it is one statement: what index *i* recorded is now at index *i*+1, unchanged.
+ *     THAT IS A DIFFERENT CASE FROM gh#53/gh#54/gh#56, where the reported moves were
+ *     real figure changes on rows that did not move — letters throughout for gh#53 and
+ *     gh#56, letters plus two renumbers for gh#54. Do not carry any of those three
+ *     sentences forward. The flag is genuinely required — the guard cannot tell a
+ *     shifted row from a moved figure, and widening it so that it could would blind it
+ *     to a real regression that happened to arrive alongside an insert.
+ *   · WHAT THE DIFF ITSELF SAYS, which is the check that settles it: `git diff` on the
+ *     fixture removes not one `"fig"` and not one `"label"` line. Every removed line is
+ *     an `"index"`, and the only added rows are the two `D.2` ones.
  *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all three tickets. That is the assertion worth reading twice: a leader-only insert
+ * all four tickets. That is the assertion worth reading twice: a leader-only insert
  * must not be able to touch a standard deck, and gh#54's relocation could not
  * either — f8 moved because a LEADER LIST moved it, and the standard list was not
  * edited. The fixture is where either failure would show.
@@ -163,8 +201,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 60, closer: "M.3" },
-  "gems-leader": { slides: 60, closer: "M.3" },
+  "berau-leader": { slides: 61, closer: "M.3" },
+  "gems-leader": { slides: 61, closer: "M.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

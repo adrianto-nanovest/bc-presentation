@@ -41,11 +41,14 @@
 // `stroke-dashoffset` sweep has no resting pair of values to transition between;
 // nothing here needs anything the shared primitive cannot do.
 import type { CSSProperties } from "react";
-// Section E's copy, which is the tree's de facto shared reveal primitive: 27 modules
+// Section E's copy, which is the tree's de facto shared reveal primitive: 28 modules
 // outside section E import this `Reveal`, THIS FILE INCLUDED — A.1 and the Capability
 // Ladder among them — where the section F duplicate has 5, and section G's third copy
 // has none at all outside its own directory. (Two more modules take only this file's
-// `CopperRule`, which is why a grep of `src/` for the path returns 29.) A FOURTH copy
+// `CopperRule`, which is why a grep of `src/` for the path returns 30.) It was 27 and
+// 29 when gh#56 wrote this line and gh#57 moved both by one, by adding the second
+// importer under this directory — `./ChickenEggBeats.tsx`, which carries the
+// measurement. A FOURTH copy
 // under this directory would be the wrong answer to three existing ones; centralising
 // them is a cleanup this ticket is not.
 import { Reveal } from "@/slides/foundation-core-section-e/components/Reveal";

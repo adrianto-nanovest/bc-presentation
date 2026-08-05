@@ -92,6 +92,11 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
     if (msg.type() === "error") problems.push(`console: ${msg.text()}`);
   });
 
+  // A STARTING POINT, NOT A CLAIM ABOUT WHICH SLIDE IS THERE. Index 6 held E.1 until
+  // gh#57 inserted D.2 in front of it and it now holds D.2 — nothing below reads the
+  // starting slide, every assertion is about where a letter LANDS, and the index
+  // assertion here only says the deck honoured `?slide=`. (The console watch above does
+  // now cover the new slide's mount, which is a gain rather than a coupling.)
   await page.goto("/?variant=berau-leader&slide=6");
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", "6");
 
@@ -109,8 +114,9 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   await expect(page.locator(".fig-label")).toHaveText(/THE AGENTIC ORGANIZATION/);
 
   // `d` is WHY INVEST — the run gh#56 inserted, and on a standard deck the same key
-  // is PROCESS & METHODOLOGY. The run holds one slide today, so this is both its
-  // first numbered slide and its last.
+  // is PROCESS & METHODOLOGY. The run holds TWO slides since gh#57 appended D.2, so
+  // R5's "first NUMBERED slide of the run" is now a real distinction here and not a
+  // one-slide coincidence: `d` must land on D.1 and not on the D.2 behind it.
   await page.keyboard.press("d");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*D\.1/);
   await expect(page.locator(".fig-label")).toHaveText(/PROOF FROM INSIDE THE COMPANY/);

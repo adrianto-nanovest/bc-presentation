@@ -157,11 +157,20 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 60 slides, THIRTEEN sections as of gh#56. The Phase 4 floor was
- * 56 and held no slide the standard deck did not; gh#48's `e12-loop-engineering`
- * was the first addition and ships to BOTH sets, gh#53's `gap-capability-ladder`
- * was the first slide that reached THIS LIST ALONE, gh#54's `shape-agentic-org` is
- * the second, and gh#56's `invest-own-proof` is the third.
+ * The leader deck — 61 slides across THIRTEEN sections. The COUNT is gh#57's and the
+ * SECTION COUNT is still gh#56's, and the gap between those two tickets is the thing
+ * to read before verifying anything here. The Phase 4 floor was 56 and held no slide the
+ * standard deck did not; gh#48's `e12-loop-engineering` was the first addition and
+ * ships to BOTH sets, gh#53's `gap-capability-ladder` was the first slide that reached
+ * THIS LIST ALONE, gh#54's `shape-agentic-org` is the second, gh#56's
+ * `invest-own-proof` is the third, and gh#57's `invest-chicken-egg` is the fourth.
+ *
+ * A NEW SLIDE IS NOT A NEW RUN, and gh#57 is the first leader-only slide here to show
+ * the difference: it appends at the END of the `invest` run gh#56 opened, so it claims
+ * no letter, forms no run and renumbers nothing — every letter below is gh#56's,
+ * unedited. The three tickets before it each opened a run and each moved every letter
+ * behind it; this one moved none, and a comment claiming otherwise would send the next
+ * reader looking for a fourth push that did not happen.
  *
  * EVERY NEW RUN MOVES EVERY LETTER BEHIND IT, which is §3.4 R2 working as designed
  * and the one thing to know before verifying anything against this deck. Today the
@@ -208,9 +217,15 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "title",
   "a1-what-youve-seen", // canonical slot: `a1-general` / `a1-gems` resolve behind it
   // gap — the first leader-only run (gh#53). §4.3 gives it five slides and the
-  // ladder is the LAST of them, so #55–#58 insert AHEAD of this line; the run
+  // ladder is the LAST of them, so the other four insert AHEAD of this line; the run
   // itself sits here, in front of `landscape`, and that is what pushed every
   // later letter in this deck by one (§3.4 R2).
+  //
+  // THOSE FOUR HOLD NO TICKET, which this comment claimed otherwise until gh#57. §11
+  // puts `gap-hardest-part`, `gap-no-sop`, `gap-three-failures` and `gap-the-pattern`
+  // in the PHASE 7 row; the open issues run out at #63 and every one of #52–#63 is
+  // Phase 6 (`gh issue list`, 2026-08-05). The "#55–#58" named here before were C.1's
+  // focus walk and D.2–D.4 — none of them a `gap` slide.
   "gap-capability-ladder",
   // shape — the second leader-only run (gh#54), and the second push. §4.3 gives
   // this run four slides — C.3 (`shape-tam-kotter`) and C.4 (`shape-middle-out`)
@@ -221,12 +236,21 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "f8-your-agentic-os",
   // invest — the third leader-only run (gh#56), and the third push: the loop slide
   // prints H.12 here now and the closer is M.3. §6.7 gives this run five slides and
-  // ONE of them exists; the row below is §6.7's D.2, and it composes one number
-  // earlier than that today because #57's `invest-base-rates` (§6.7's D.1) is
-  // unbuilt and inserts AHEAD of this line. Both figures are derived per deck
-  // (§3.5) — nothing here or in the slide pins either, and #58–#59 append D.3–D.5
-  // behind it without moving anything above.
+  // TWO of them exist, adjacent and in §6.7's order — gh#56's `invest-own-proof`
+  // (§6.7's D.2) and gh#57's `invest-chicken-egg` (§6.7's D.3). BOTH COMPOSE ONE
+  // NUMBER EARLIER THAN §6.7 GIVES THEM, as D.1 and D.2, because `invest-base-rates`
+  // (§6.7's D.1) is unbuilt and inserts AHEAD of both lines. That slide has no ticket
+  // at all: §11's Phase 7 row holds it, beside `gap-no-sop`, so it is not waiting on
+  // Phase 6. Both composed figures are derived per deck (§3.5) — nothing here and
+  // nothing in either slide pins one — and #58–#59 append D.4–D.5 behind these two
+  // without moving anything above them.
+  //
+  // gh#57 APPENDED, IT DID NOT INSERT: the second line lands at the end of the run,
+  // so no letter and no number below this block changed. What did change is every
+  // fixture ROW INDEX behind it, which is a different thing and is recorded in
+  // `tests/unit/deck-numbering-fixture.test.tsx`.
   "invest-own-proof",
+  "invest-chicken-egg",
   // landscape
   "b1-evolution-journey",
   "b2-fields-terminology",
@@ -305,12 +329,13 @@ const LEADER_SLIDE_IDS: readonly string[] = [
  *
  * THE DIFFERENCE IS NO LONGER ONE NUMBER, which is why it is not stated as one
  * here. gh#41's leader deck was "the standard deck minus eight"; it is now that
- * minus eight PLUS its own slides, so the net is FIVE shorter (65 against 60) and
+ * minus eight PLUS its own slides, so the net is FOUR shorter (65 against 61) and
  * the two halves move independently — `tests/unit/deck-registry.test.ts` holds
  * them as separate constants for exactly that reason, and a single subtraction
- * written here would go stale on the next leader-only insert. It has been eight
- * (gh#41), seven (gh#53), six (gh#54) and five (gh#56) — four values in four
- * tickets, none of which edited a standard-deck row.
+ * written here would go stale on the next leader-only ADDITION, whether it opens a
+ * run or joins one. It has been eight (gh#41), seven (gh#53), six (gh#54), five
+ * (gh#56) and four (gh#57) — five values in five tickets, none of which edited a
+ * standard-deck row.
  */
 export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
   standard: { id: "standard", slides: STANDARD_SLIDE_IDS },

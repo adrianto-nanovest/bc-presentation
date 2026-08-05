@@ -263,13 +263,20 @@ describe("leader deck sets", () => {
       // now the first row of section D rather than of section E. The line moved
       // with the deck instead of being dropped: which pair surrounds f8 is the
       // only thing that says the relocation still holds.
+      //
+      // gh#57 DID NOT MOVE F8 A THIRD TIME. `invest-chicken-egg` joined the END of
+      // that `invest` run, so f8's own neighbours are unchanged and only the row
+      // that hands back to the curriculum moved along by one. The two lines are
+      // asserted separately for that reason: the pair around f8 is the RELOCATION,
+      // and the row before `b1-evolution-journey` is the LENGTH of the run behind it.
       const at = ids.indexOf("f8-your-agentic-os");
       expect(ids[at - 1], id).toBe("shape-agentic-org");
       expect(ids[at + 1], id).toBe("invest-own-proof");
-      // And the run gh#56 inserted hands straight to the curriculum, so f8 is
-      // still the last slide before section D and section D the last before the
-      // landscape — the whole insert, stated as the two joins it makes.
-      expect(ids[at + 2], id).toBe("b1-evolution-journey");
+      // And the run gh#56 opened still hands straight to the curriculum, two rows
+      // long since gh#57, so f8 is the last slide before section D and section D the
+      // last before the landscape — the whole insert, stated as the joins it makes.
+      expect(ids[at + 2], id).toBe("invest-chicken-egg");
+      expect(ids[at + 3], id).toBe("b1-evolution-journey");
       // And the run it left has closed up behind it: `g10` now hands straight to
       // the bridge, with no hole where f8 stood.
       expect(ids[ids.indexOf("g10-beyond-big-three") + 1], id).toBe("g11-bridge-to-h");
@@ -309,14 +316,21 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // three ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
-      // in front of the curriculum in a deck that has no leader in the room, and
-      // renumber all 65 slides behind it. Read off the COMPOSED deck, in the same
+      // four ids written into `STANDARD_SLIDE_IDS` by accident would open a run in
+      // front of the curriculum in a deck that has no leader in the room, and
+      // renumber all 65 slides behind it. FOUR IDS AND STILL THREE KEYS as of gh#57,
+      // and the leak is per-id rather than per-key: `invest-chicken-egg` appends to
+      // an EXISTING run in the leader list, but the standard list holds no `invest`
+      // row at all, so on a standard deck it would arrive alone and claim a letter
+      // exactly as the other three would. Read off the COMPOSED deck, in the same
       // epoch as the f8 lookup above, so it costs nothing to say.
       expect(
-        ["gap-capability-ladder", "shape-agentic-org", "invest-own-proof"].filter((slide) =>
-          keys.has(slide),
-        ),
+        [
+          "gap-capability-ladder",
+          "shape-agentic-org",
+          "invest-own-proof",
+          "invest-chicken-egg",
+        ].filter((slide) => keys.has(slide)),
         id,
       ).toEqual([]);
     }

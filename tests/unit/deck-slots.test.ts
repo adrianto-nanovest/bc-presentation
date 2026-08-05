@@ -261,20 +261,21 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 60 slots — the F cut, F.8 kept, plus its own", () => {
+  test("gives the leader deck its own 61 slots — the F cut, F.8 kept, plus its own", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(60);
+    expect(leader.slides).toHaveLength(61);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
-    // leader deck now holds slides no standard deck does — three of them as of
-    // gh#56. Asserted as the two directions SEPARATELY rather than as one net
-    // number, so the next leader-only slide cannot mask a cut F slide creeping
-    // back in. The net has been eight, seven, six and now five; only these two
-    // lists say why.
+    // leader deck now holds slides no standard deck does — four of them as of
+    // gh#57, in three runs, because that ticket lengthened `invest` instead of
+    // opening a run. Asserted as the two directions SEPARATELY rather than as one
+    // net number, so the next leader-only slide cannot mask a cut F slide creeping
+    // back in. The net has been eight, seven, six, five and now four; only these
+    // two lists say why.
     const standardIds = new Set(standard.slides);
     const leaderIds = new Set(leader.slides);
     expect(standard.slides.filter((id) => !leaderIds.has(id))).toEqual([
@@ -291,6 +292,7 @@ describe("DECK_SET_COMPOSITION", () => {
       "gap-capability-ladder",
       "shape-agentic-org",
       "invest-own-proof",
+      "invest-chicken-egg",
     ]);
   });
 
@@ -320,20 +322,29 @@ describe("DECK_SET_COMPOSITION", () => {
   });
 
   test("opens the invest run right behind the shape run, in front of the curriculum", () => {
-    // gh#56, and the assertion is the INSERT POINT rather than an index: the run's
-    // one slide has to sit between the relocated f8 — the last row of `shape` — and
+    // gh#56 opened it and gh#57 gave it a second row, and the assertion is the two
+    // JOINS rather than an index: the run has to start immediately after the
+    // relocated f8 — the last row of `shape` — and end immediately before
     // `b1-evolution-journey`, the first row of the retained curriculum. Anywhere
     // else and the letters land somewhere else, which is the only way this deck
     // renumbers (§3.4 R2).
     //
-    // NO LETTER AND NO NUMBER IS NAMED HERE. §6.7 numbers this slide D.2 and it
-    // composes as D.1 while #57's `invest-base-rates` is unbuilt; both are derived
-    // per deck (§3.5), and the numbering fixture is where they are recorded.
+    // THE WHOLE RUN, IN ORDER, is what says gh#57 APPENDED rather than inserted:
+    // `invest-chicken-egg` behind `invest-own-proof`, which is §6.7's order and is
+    // also why no letter below this run moved. The two ids read as a pair, so a row
+    // slipped between them or ahead of them fails here by name.
+    //
+    // NO LETTER AND NO NUMBER IS NAMED HERE. §6.7 numbers these two slides D.2 and
+    // D.3 and they compose as D.1 and D.2 while `invest-base-rates` (§6.7's D.1) is
+    // unbuilt — a §11 PHASE 7 slide with no ticket, not #57, which is this run's
+    // second row. All four figures are derived per deck (§3.5), and the numbering
+    // fixture is where the composed pair is recorded.
     const { slides } = DECK_SET_COMPOSITION.leader;
     const at = slides.indexOf("invest-own-proof");
     expect(at).toBeGreaterThan(-1);
     expect(slides[at - 1]).toBe("f8-your-agentic-os");
-    expect(slides[at + 1]).toBe("b1-evolution-journey");
+    expect(slides.slice(at, at + 2)).toEqual(["invest-own-proof", "invest-chicken-egg"]);
+    expect(slides[at + 2]).toBe("b1-evolution-journey");
   });
 
   test("carries no section override on the standard deck, which needs none", () => {

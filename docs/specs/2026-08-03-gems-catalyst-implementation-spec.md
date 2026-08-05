@@ -1437,6 +1437,42 @@ Notes on ordering:
   **`invest-own-proof` composes as `D.1`, not §6.7's `D.2`**, because `invest-base-rates`
   (D.1) is a Phase 7 slide and does not exist yet; the figure is derived per deck (§3.5), so
   it becomes D.2 when that slide lands and no ticket may pin either value.
+- **Amendment 2026-08-05 — gh#57 shipped D.3, and the letters did NOT move.**
+  `invest-chicken-egg` reached both leader lists, the fourth slide ever to reach them alone.
+  Both leader decks are now **61 slides across 13 sections A–M, closer M.3** — the count is
+  new and **every letter is the one above it**, because this slide APPENDED to the `invest`
+  run gh#56 opened instead of opening a run of its own: the loop slide still prints `H.12`,
+  F.8 still prints `C.2`, `invest-own-proof` still prints `D.1`, and A.1's WHY INVEST row
+  still reads `SECTION D · WHY INVEST` with no edit to A.1. The three leader-only slides
+  before this one each pushed every letter behind them; **a new slide is not a new run**, and
+  this is the first record in this section of the difference. The standard decks are unmoved at 65 / K.3
+  and `general` at 63 / K.1 — proved per key, not asserted: `berau`, `gems` and `general` are
+  **byte-identical** to the previous `tests/fixtures/deck-numbering.json`, and the whole diff
+  is one added row per leader deck plus the `index` field of the 54 rows behind it.
+  **`invest-chicken-egg` composes as `D.2`, not §6.7's `D.3`**, for exactly the reason its
+  sibling composes `D.1`: `invest-base-rates` (§6.7's D.1) is a Phase 7 slide with no ticket
+  and inserts ahead of both. Both figures step one number the day it lands, both are derived
+  per deck (§3.5), and no ticket may pin either. **Re-recording the fixture still required
+  `ALLOW_MOVED_FIGURES=1`, and the 110-line report it printed lists no moved figure:** the
+  record is an index-keyed array, so a row inserted at index 6 shifts all 54 numbered rows
+  behind it and the guard — which compares `before[i]` with `after[i]` — cannot tell that
+  from a real move. Unlike gh#53/gh#54/gh#56, where the reported moves *were* real figure
+  changes on rows that stayed put — letters throughout for gh#53 and gh#56, letters plus two
+  renumbers for gh#54 — here the only figure the record gained is `D.2`, and not one `fig` or
+  `label` line left the file.
+  **§6.2's three-pass constraint is now half-checkable, and only half:** D.3 is the FIRST of
+  the three passes to reach a stage, so the check against the other two still runs against
+  their SPEC TEXT rather than against rendered copy — `invest-security` (D.4, #58) is in this
+  phase and unbuilt, `gap-no-sop` (B.2) is in Phase 7. That limit, and the one adjacency §6.7
+  forces (D.3's "no audit trail" and "data outside the boundary" against D.4 beat 2's "audit,
+  revoke, or produce" — past-tense bill in the first person against present-tense exposure in
+  the second, with no shared picture and no shared statistic), are recorded in
+  `src/slides/leader-invest/content.ts`. The 2026-08-04 amendment below is what buys the rest:
+  because D.3 and D.4 sit in the SAME phase, the pair becomes checkable against rendered copy
+  inside Phase 6, and B.2's pass not until Phase 7. **Phase 6 has now shipped 4 of its 8 new
+  slides** — `gap-capability-ladder`, `shape-agentic-org`, `invest-own-proof`,
+  `invest-chicken-egg` — and 57 + 4 = 61 leaves that row's end state of 65 / A–N / N.3 exactly
+  as written.
 - **Amendment 2026-08-04 — `invest-chicken-egg` was in no phase row.** §4.3 needs **16** new
   leader slides; Phases 6 and 7 as first written listed **15**. D.3 was the missing one.
   It is now in **Phase 6**, beside D.4, because §6.2's shadow-AI escalation (B.2 =

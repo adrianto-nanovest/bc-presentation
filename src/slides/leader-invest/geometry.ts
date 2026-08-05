@@ -37,6 +37,13 @@
 //
 // Pure data and pure functions. No React, no DOM, no work at module scope beyond
 // the arithmetic below — importable from a node test.
+//
+// THE SECTION HAS A SECOND SLIDE NOW AND ITS NUMBERS ARE NOT HERE: `invest-chicken-egg`
+// (§6.7's D.3) keeps its own two-column budget in `./chicken-egg-geometry.ts`, which
+// restates `STAGE`, `SIDE_MARGIN`, `CONTENT_WIDTH` and `NAV_ZONE_TOP` — pinning the first
+// two to this file's literal types through a type-only `import()` — because an
+// extensionless import of this module would cost that one the node-importability the
+// paragraph above claims for this one.
 
 export const STAGE = { width: 1280, height: 720 } as const;
 
