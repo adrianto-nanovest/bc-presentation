@@ -87,10 +87,65 @@
 //      pass by agreeing with a constant nobody rendered.
 //
 //   6. THE COMPOSED LETTERS. The letter is DERIVED (§3.5), so the only place `D.1`,
-//      `C.2`, `H.12`, `M.3` and A.1's `SECTION D · WHY INVEST` row exist as rendered
+//      `C.2`, `H.12`, `N.3` and A.1's `SECTION D · WHY INVEST` row exist as rendered
 //      text is a browser. Harvested from a walk of the WHOLE deck, once per brand, so
 //      "exactly one slide prints this" is part of the claim rather than "the first
 //      slide that matched".
+//
+// WHAT gh#64 FIXED IN HERE, recorded because two of the three were VACUOUS PASSES and
+// one of them invalidates a claim `3548028`'s commit message already made.
+//
+//   · THE COLOUR LADDER WAS NOT MEASURED UNDER `--reduced`, AND IT FAILED BY PASSING.
+//     The tiers were read off ONE probe re-coloured in a loop, and under `reduce` the
+//     global `transition-duration: 0.01ms !important` on `*` makes every immediate read
+//     return the value the element is transitioning FROM — so all seven tokens came back
+//     as the first one. `--neutral-300` resolved rgb(115,115,115) / luminance 0.1714
+//     instead of rgb(163,163,163) / 0.3663, the floor sat 2.1× too dark, and the
+//     `--copper-400` exemption was asserted over an EMPTY set. So gh#56's "131/131
+//     across both leader brands × both motion modes" was true as a COUNT — 131
+//     assertions did run and pass in both modes — and the colour half of it proved
+//     nothing under `--reduced`. Fixed with a fresh probe per token (`measure`'s `tiers`
+//     block) plus three assertions that make the collapse loud: seven tokens → seven
+//     distinct colours, the grey ladder descends, and the exemption set is non-empty.
+//     The GEOMETRY, SMIL, pose-walk and wrap halves were never affected — they read no
+//     tier.
+//
+//   · THE KEYWORD TIER WAS SOURCED TO DEAD CSS. `--copper-400` was justified as the tier
+//     "every `em.kw` renders in". `globals.css`'s `em.kw` resolves `--copper-300`, which
+//     is ABOVE this floor, and nothing under `src/` emits `class="kw"`. The tier is real;
+//     it arrives through `src/components/KeywordHighlight.tsx`'s `text-copper-400`. Same
+//     sentence gh#57 corrected in three other files — this was the fourth site.
+//
+//   · THE FULL-DECK WALK WAITED ON A CLOCK. `harvestDeck` settled on a flat 90ms and then
+//     read, and the closer's row came back with an EMPTY MARKER SET — the flake gh#64 was
+//     filed for. Attributed by A/B on one freshly restarted dev server, six runs each:
+//     the flat 90ms failed 2 of 6 (one of them this read), the stage wait 0 of 6. It now
+//     goes through this script's own `gotoSlide`, and two assertions make a recurrence
+//     loud instead of silent. See `harvestDeck` — including the fact that gh#64 first
+//     talked itself OUT of this race by probing with the fixed wait.
+//
+//   · THE CLOSER'S LETTER WENT STALE WHILE gh#64 WAS BEING WRITTEN. `gh#60`'s mandate run
+//     (`37c8989`) landed mid-ticket and took the leader decks from 61 slides to 63: the
+//     letters now run A to N, the closer prints `N.3·THANK YOU`, and leader `M.3` is a
+//     real but different slide (`BUILDING YOURSELF UP`, index 58). `D.1`, `C.2` and
+//     `H.12` did not move, which is how it is known only the tail shifted. See `FIGURES`.
+//
+//     THE OPERATIONAL LESSON, kept because it cost gh#64 two wrong conclusions in a row: a
+//     `vite` process started before `37c8989` went on serving the 61-slide composition, so
+//     every run against it went green on the OLD letter, and gh#64 first wrote this up as a
+//     stale module graph. It was not stale — THE TREE HAD MOVED UNDER IT. Same remedy
+//     either way: RESTART THE DEV SERVER, AND RE-CHECK `git log`, BEFORE TRUSTING A GREEN
+//     RUN. Neither shows in this script's output, and the slide COUNT it prints is the one
+//     number that would have revealed both.
+//
+// NOT FIXED BY gh#64 AND STILL PRESENT: the pose walk drops a `Space`. `page.keyboard
+// .press("Space")` is followed by a flat `POSE_MS` and nothing verifies the step counter
+// MOVED, so a dropped press shifts every downstream measurement by a pose and fails 9-16
+// assertions at once (`["01 / 03","02 / 03","02 / 02"]` — the two `ArrowUp`s then clamp
+// into the previous slide). Measured in BOTH the pre-gh#64 and post-gh#64 scripts, so it
+// is pre-existing and environmental, and it is why "20 consecutive green runs" is not a
+// property this script currently has in either version. gh#64's scope explicitly excludes
+// the pose walk; this needs its own ticket, and the fix is to wait on the counter.
 //
 // THE STAGE'S SCALE, handled explicitly for gh#54's reason. `useViewportScale`
 // CSS-transforms `.stage-wrap` by `min(w/1280, h/720)`, and gh53-verify reads raw
@@ -286,15 +341,36 @@ const AUDIT_WORDS =
  * IT IS NOT #57 THAT DOES THAT, and this comment said so until 2026-08-05. #57 is D.3
  * `invest-chicken-egg`, which APPENDED BEHIND this slide: the `invest` run now holds two
  * slides, `invest-own-proof` is still D.1, and every literal in this table is still
- * correct after it (re-run and re-checked, 131/131). `invest-base-rates` holds no issue at
- * all — §11's phase table puts it in the PHASE 7 row, beside `gap-no-sop` — so the edit
- * this comment predicts is not waiting on a Phase 6 ticket.
+ * correct after it. `invest-base-rates` holds no issue at all — §11's phase table puts it
+ * in the PHASE 7 row, beside `gap-no-sop` — so the edit this comment predicts is not
+ * waiting on a Phase 6 ticket.
+ *
+ * THE EXPIRY CAME DUE ON THE CLOSER, and it came due for a different reason than the one
+ * predicted above — and DURING gh#64, not before it. `gh#60`'s mandate run (`37c8989`,
+ * committed while gh#64 was in progress) took the leader decks from 61 slides to 63 and
+ * pushed the closer one section on: this table read `M.3·THANK YOU`, and a leader deck's
+ * closer is `N.3·THANK YOU`. `src/deck/deck-sets.ts` records the same push in prose, and
+ * `tests/fixtures/deck-numbering.json` agrees for both leader brands.
+ *
+ * `M.3` WAS THE WORST POSSIBLE SHAPE FOR THIS TO GO WRONG IN, which is why it is written
+ * down: leader `M.3` still EXISTS — it is `BUILDING YOURSELF UP` at index 58 — so this
+ * table was demanding a caption pairing that was never true rather than a letter that had
+ * vanished, and the failure said only `actual []`. The four literals here are NOT all from
+ * one epoch of the deck; `D.1`, `C.2` and `H.12` still pass unchanged, and that is the
+ * evidence that only the tail moved.
+ *
+ * WHY IT WAS NOT CAUGHT SOONER, recorded because it is a trap for every harness here: a
+ * `vite` process started before `37c8989` went on serving the 61-slide composition, so
+ * runs kept going green on the old letter. A fresh `npm run dev` fails it immediately and
+ * deterministically in both brands. RESTART THE DEV SERVER, AND RE-CHECK `git log`, BEFORE
+ * TRUSTING A GREEN RUN FROM THIS SCRIPT — on a shared tree neither is visible in its
+ * output, and the slide COUNT it prints is the one number that would have shown both.
  */
 const FIGURES = {
   invest: "— FIG. D.1·PROOF FROM INSIDE THE COMPANY",
   f8: "— FIG. C.2·YOUR AGENTIC OS",
   e12: "— FIG. H.12·LOOP ENGINEERING",
-  closer: "— FIG. M.3·THANK YOU",
+  closer: "— FIG. N.3·THANK YOU",
 };
 
 /** A.1's third agenda row, which exists only because `invest` started owning a slide
@@ -349,14 +425,36 @@ const PROSE_FLOOR = 10.5;
  *   · THE LUMINANCE GATE, which is the stricter reading of "not below the
  *     `--neutral-300` tier" and the one gh53-verify uses. It has to be stated with
  *     its exception, because the deck HAS a text colour dimmer than `--neutral-300`
- *     by luminance and uses it everywhere: `--copper-400` (0.314 against
- *     `--neutral-300`'s 0.366). It is the deck-wide keyword tier every `em.kw` in all
- *     five decks renders in, and it is the mono LABEL tier the sibling leader slide
- *     puts its kicker in (`PillarOrbit.tsx:288`, `monoLabel(11, "var(--copper-400)")`
- *     — this slide's eyebrow is the same 11px call). So the gate is: anything under
- *     the measured `--neutral-300` luminance must be EXACTLY `--copper-400`, and the
- *     elements it covers are printed by name. A third colour sneaking under the
- *     floor fails; a fourth element joining the copper label tier is reported.
+ *     by luminance and uses it everywhere: `--copper-400` (measured 0.2966 against
+ *     `--neutral-300`'s 0.3663 — both numbers come off the probe below, not off this
+ *     comment). It is the deck-wide keyword tier, and it arrives there THROUGH
+ *     `src/components/KeywordHighlight.tsx`, which renders
+ *     `<em className="text-copper-400 italic …">` — the name `ProofLedger.tsx` uses
+ *     for it. It is also the mono LABEL tier the sibling leader slide puts its kicker
+ *     in (`PillarOrbit.tsx:288`, `monoLabel(11, "var(--copper-400)")` — this slide's
+ *     eyebrow is the same 11px call). So the gate is: anything under the measured
+ *     `--neutral-300` luminance must be EXACTLY `--copper-400`, the set must be
+ *     NON-EMPTY, and the elements it covers are printed by name. A third colour
+ *     sneaking under the floor fails; a fourth element joining the copper label tier
+ *     is reported.
+ *
+ *     NOT `globals.css`'s `em.kw` RULE, which this comment cited until 2026-08-05
+ *     (gh#64, the fourth site of one wrong sentence — gh#57 corrected the other
+ *     three). That rule resolves a DIFFERENT token, `--copper-300` (#d99e6c, 0.4029),
+ *     which is ABOVE `--neutral-300` and so would not be under this floor at all; and
+ *     it is dead CSS — `grep -rnE 'class(Name)?="[^"]*\bkw\b"' src/` has no matches,
+ *     so nothing under `src/` ever emits `class="kw"` and the rule paints nothing on
+ *     any stage.
+ *
+ *     THE EXEMPTION HAS PRECEDENT, NOT A WRITTEN RULE, and gh#64 decided to leave it
+ *     that way rather than invent a shared allow-list module. The floor the deck
+ *     ENFORCES is `scripts/projection-test.mjs:93`'s literal grey list, and it names
+ *     `--neutral-400` alone — nothing in the tree forbids `--copper-400`, so there is
+ *     no rule to centralise yet. Two harnesses stating the same precedent, each with
+ *     its own measured numbers, is also the rule this file already follows for the
+ *     floors themselves: a shared constant both sides read proves only that the
+ *     number equals itself. `gh57-verify.mjs` states it the same way and names the
+ *     tier for its ROLE rather than calling it "exempt".
  *
  * A slide-level gate that failed on a deck-wide decision would be a gate everyone
  * learns to ignore — gh#53 recorded that finding after its first run flagged the
@@ -373,6 +471,15 @@ const BELOW_FLOOR_TIERS = [
 const LUMINANCE_EXEMPT_TIER = "--copper-400";
 /** The tier the floor itself is. */
 const FLOOR_TIER = "--neutral-300";
+/**
+ * Every token the probe resolves, in one list, because the DISTINCTNESS assertion is
+ * over exactly this set and a caller passing its own subset could weaken it.
+ *
+ * Seven tokens, seven colours. `globals.css` gives each of these a different value, so
+ * a run where two of them agree is a probe that read a transition rather than the
+ * cascade — see `measure`'s `tiers` block for the mechanism and gh#64 for the damage.
+ */
+const TIER_TOKENS = [...BELOW_FLOOR_TIERS, FLOOR_TIER, LUMINANCE_EXEMPT_TIER];
 
 /**
  * Deck CHROME, excluded from the floor audit by name and with the reason.
@@ -382,7 +489,7 @@ const FLOOR_TIER = "--neutral-300";
  *     `--copper-700`, they are on EVERY slide of EVERY deck, and they are not
  *     projected copy. Stated as "every", not as a count: this comment read "all 60
  *     slides of every deck" until 2026-08-05, and no single number describes shared
- *     chrome — the leader decks are 61 slides since gh#57, `berau` and `gems` are 65
+ *     chrome — the leader decks are 63 slides, `berau` and `gems` are 65
  *     and `general` is 63.
  *   · `.fig-label .dot` — the `·` between the figure reference and the label, also
  *     `--copper-700`, also on every numbered slide in the deck.
@@ -456,24 +563,64 @@ const n2 = (v) => (v == null ? null : Math.round(v * 100) / 100);
  * also how the five indices are DISCOVERED — §3 derives every position and the rest
  * of Phase 6 inserts four more `invest` slides, so a literal index would check
  * whatever slide 5 has become.
+ *
+ * IT WAITS ON THE MOUNT AND NOT ON A CLOCK, which replaces a flat `waitForTimeout(90)`
+ * and is gh#64's fix for the flake that ticket was filed against: `berau-leader · letters
+ * · the closer prints …`, `actual []`, an EMPTY MARKER SET for the closer.
+ *
+ * MEASURED, AND ATTRIBUTED BY A/B RATHER THAN BY ARGUMENT, because gh#64 first talked
+ * itself out of this race and was wrong. The pre-gh#64 script and this one were run
+ * ALTERNATELY, six times each, against the same freshly restarted dev server:
+ *
+ *   pre-gh#64 (flat 90ms)      6 runs, 2 failures — one of them this exact empty read
+ *   this version (stage wait) 6 runs, 0 failures
+ *
+ * The first attempt to disprove the race used THIS FILE'S OWN new wait in the probe, so it
+ * measured the fixed path and concluded the bug did not exist. The comparison that decides
+ * it is against the 90ms constant, and the 90ms constant is what flakes.
+ *
+ * THE MECHANISM IS NOT FULLY ESTABLISHED AND IS NOT GUESSED AT HERE. What is measured is
+ * that the row comes back with NO marker matched, so the read landed on a frame that did
+ * not hold this slide's subtree; 11 runs of the version below produced none. `Slide.tsx`
+ * renders the stage and `children` in ONE React commit with `FigLabel` inside `children`,
+ * so a visible stage is the signal that this slide's caption exists and is laid out —
+ * which is what `innerText` needs. Waiting on `.fig-label` itself is not available: the
+ * cover claims no number and prints none by design, so the selector that is always there
+ * is the stage. `settlePose` from `./lib/settle.mjs` would also work and is what the
+ * export scripts use, but it waits for ANIMATIONS to finish — this walk reads text, so the
+ * commit is the event it needs and the two extra passes would cost ~35s across 126
+ * navigations for nothing.
+ *
+ * AND THE WAIT ALONE IS NOT TRUSTED, because 6 green runs cannot prove a race is gone: the
+ * assertions in the letters block are what make a recurrence LOUD rather than silent. The
+ * pre-gh#64 script had no assertion on how many slides print no caption, so an empty row
+ * failed only when it happened to land on one of the four named slides and was invisible
+ * on the other 59.
+ *
+ * IT GOES THROUGH `gotoSlide` RATHER THAN A SECOND COPY OF THE RETRY. This function had
+ * its own two-attempt loop with no stage wait and no diagnostic; a first gh#64 draft
+ * bolted a `waitForSelector` onto it and got a bare `TimeoutError` stack out of a
+ * transient dev-server stall, naming neither the deck nor the slide. `gotoSlide` already
+ * owns all of it — three attempts, the stage, the fonts, and a dump of what the page threw
+ * and what it rendered instead — so the walk and the measurement now reach a slide the
+ * same way.
+ *
+ * AND EVERY ROW CARRIES THE INDEX THE STAGE REPORTED, so a row can be held against the
+ * index it was asked for instead of trusted. That is the assertion this walk was missing:
+ * a caption read off the wrong frame on any of the 59 slides nobody names was recorded and
+ * never checked.
  */
 async function harvestDeck(page, variant, slideCount) {
   const rows = [];
   for (let i = 0; i < slideCount; i++) {
-    for (const attempt of [1, 2]) {
-      try {
-        await page.goto(url(variant, { slide: i }), { waitUntil: "domcontentloaded" });
-        break;
-      } catch (err) {
-        if (attempt === 2) throw err;
-        await page.waitForTimeout(400);
-      }
-    }
-    await page.waitForTimeout(90);
+    await gotoSlide(variant, i);
     rows.push(
       await page.evaluate((markers) => {
         const at = (id) => document.querySelector(`[data-testid="${id}"]`);
         return {
+          // The index the STAGE says it is showing, so the row can be held against the
+          // index it was asked for rather than trusted (see the letters block).
+          reported: document.querySelector('[data-testid="slide"]')?.dataset.slideIndex ?? null,
           fig: document.querySelector(".fig-label")?.innerText.replace(/\s+/g, " ").trim() ?? null,
           found: Object.entries(markers)
             .filter(([, id]) => at(id))
@@ -550,10 +697,10 @@ function measure(page, ids, probeTiers) {
        * inline box, content edge.
        *
        * AN INLINE BOX IS AS WIDE AS ITS OWN TEXT, so measuring one against itself is
-       * the vacuous comparison this walks past. The closer's two `em.kw` spans and the
-       * headline's are inline; the box that actually constrains them is the `<p>` and
-       * the `<h1>`. Every fixed-width cell on this slide is a block or a flex item, so
-       * this returns the cell itself for the two the ticket names.
+       * the vacuous comparison this walks past. The closer's two keyword `<em>`s and
+       * the headline's are inline; the box that actually constrains them is the `<p>`
+       * and the `<h1>`. Every fixed-width cell on this slide is a block or a flex item,
+       * so this returns the cell itself for the two the ticket names.
        */
       const cellOf = (el) => {
         let a = el;
@@ -583,16 +730,55 @@ function measure(page, ids, probeTiers) {
         return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
       };
 
-      /** The deck's own colour ladder, resolved through the cascade rather than
-       *  transcribed — so a retuned `globals.css` moves the floor with it. */
-      const probe = document.createElement("div");
-      stage.appendChild(probe);
+      /**
+       * The deck's own colour ladder, resolved through the cascade rather than
+       * transcribed — so a retuned `globals.css` moves the floor with it.
+       *
+       * A FRESH PROBE PER TOKEN, AND TRANSITIONS KILLED ON IT, AND BOTH ARE LOAD-BEARING
+       * UNDER `reduce`. This script used the obvious shape until 2026-08-05 — ONE probe
+       * re-coloured in a loop — and it was WRONG the moment
+       * `prefers-reduced-motion: reduce` was on, in the worst possible direction: it
+       * failed by PASSING. The global rule in `globals.css` sets
+       * `transition-duration: 0.01ms !important` on `*`, and `transition-property`
+       * defaults to `all`, so under `reduce` every element on the page has a live
+       * transition on `color`; `getComputedStyle` immediately after an assignment then
+       * returns the value the element is transitioning FROM. Measured on this deck, this
+       * script's own printed output, same seven tokens, same line:
+       *
+       *   normal   --neutral-400 rgb(115,115,115) · --neutral-500 rgb(82,82,82)
+       *            · --neutral-700 rgb(38,38,38) · --neutral-800 rgb(23,23,23)
+       *            · --neutral-950 rgb(5,5,5) · --neutral-300 rgb(163,163,163)
+       *            · --copper-400 rgb(201,133,72)
+       *   reduce   all SEVEN rgb(115,115,115) — the first token, seven times
+       *
+       * The floor and the exempt tier are read in the same loop, so both moved. The floor
+       * came back at luminance 0.1714 instead of 0.3663 — 2.1× too dark, so any text
+       * genuinely under `--neutral-300` passed as above it; the exemption set went EMPTY,
+       * so "everything under the floor is exactly `--copper-400`" was asserted over
+       * nothing; and `TIERS[--copper-400]` was rgb(115,115,115), so the one comparison
+       * that could still have fired was against the wrong colour. `BELOW_FLOOR_COLORS`
+       * also became five copies of one string, which made the reverse lookup that names a
+       * violating tier report `--neutral-400` for a hit at any of the five. Proven by
+       * injection on 2026-08-05 rather than reasoned about: `rgb(140,140,140)` (luminance
+       * 0.2622, i.e. under this floor and not copper) planted on the attribution line
+       * exits 0 with 131 ok on the pre-gh#64 script under `--reduced`, and exits 1 here.
+       * `scripts/gh57-verify.mjs` was written against this fix rather than the bug.
+       *
+       * The distinctness assertion on `TIERS` below is the positive control: N tokens
+       * that resolve to fewer than N colours is a probe reading a transition, and it now
+       * fails loudly instead of silently moving the floor.
+       */
       const tiers = {};
       for (const name of probeTiers) {
+        const probe = document.createElement("div");
+        // Belt and braces: an inline `!important` outranks the author `!important` in
+        // the media query, so this probe has no transition to read across.
+        probe.style.setProperty("transition", "none", "important");
         probe.style.color = `var(${name})`;
+        stage.appendChild(probe);
         tiers[name] = getComputedStyle(probe).color;
+        probe.remove();
       }
-      probe.remove();
 
       /** One entry per element this slide owns, keyed by testid. */
       const box = (id) => {
@@ -625,9 +811,11 @@ function measure(page, ids, probeTiers) {
        *
        * TEXT NODES AND NOT ELEMENTS, which is `projection-test.mjs`'s decision and
        * the right one: the closer is one `<p>` holding four runs in two colours, and
-       * an element-level walk would read the `<p>`'s own inherited colour and miss
-       * both `em.kw` spans. A `Range` over the node gives the TEXT's own box and one
-       * client rect per line box, which is the only exact line count available.
+       * an element-level walk would read the `<p>`'s own inherited colour and miss both
+       * keyword spans — `KeywordHighlight`'s `<em className="text-copper-400 …">`,
+       * which is why `keyword` below matches the TAG. A `Range` over the node gives the
+       * TEXT's own box and one client rect per line box, which is the only exact line
+       * count available.
        */
       const runs = [];
       const walker = document.createTreeWalker(stage, NodeFilter.SHOW_TEXT);
@@ -802,7 +990,7 @@ console.log(
 // ───────────────── the stage, and the floor it draws ─────────────────
 
 await gotoSlide(PRIMARY, investRow.index, MOUNT_MS);
-const base = await measure(page, [], [...BELOW_FLOOR_TIERS, FLOOR_TIER, LUMINANCE_EXEMPT_TIER]);
+const base = await measure(page, [], TIER_TOKENS);
 
 // Every number below is a stage coordinate BECAUSE the conversion divides the scale
 // out. This asserts the conversion had nothing to do, which is the only way to know
@@ -822,10 +1010,12 @@ const MARGIN = { left: base.marginBand.left, right: base.marginBand.right };
 const HEADLINE_BOTTOM = base.headlineRow.bottom;
 /** The colour ladder, as the cascade resolves it in this page. */
 const TIERS = base.tiers;
-const FLOOR_LUMINANCE = (() => {
-  const c = TIERS[FLOOR_TIER].match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+const lumOf = (rgb) => {
+  const c = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
   return relativeLuminance(Number(c[1]), Number(c[2]), Number(c[3]));
-})();
+};
+const LUM = Object.fromEntries(TIER_TOKENS.map((t) => [t, lumOf(TIERS[t])]));
+const FLOOR_LUMINANCE = LUM[FLOOR_TIER];
 /** Every rgb string that is out of bounds for text, resolved not transcribed. */
 const BELOW_FLOOR_COLORS = BELOW_FLOOR_TIERS.map((t) => TIERS[t]);
 
@@ -833,9 +1023,52 @@ console.log(
   `      .nav-zone measured  top ${n2(NAV_TOP)}  height ${n2(base.navZone.height)}\n` +
     `      margin band         ${n2(MARGIN.left)}…${n2(MARGIN.right)}\n` +
     `      headline row bottom ${n2(HEADLINE_BOTTOM)}\n` +
-    `      ${FLOOR_TIER} ${TIERS[FLOOR_TIER]} → luminance ${FLOOR_LUMINANCE.toFixed(4)}\n` +
-    `      ${LUMINANCE_EXEMPT_TIER} ${TIERS[LUMINANCE_EXEMPT_TIER]} (the deck's keyword and mono-label tier)\n` +
-    `      out of bounds       ${BELOW_FLOOR_TIERS.map((t, i) => `${t} ${BELOW_FLOOR_COLORS[i]}`).join("  ")}`,
+    `      the ladder, resolved through the cascade${REDUCED ? " under `reduce`" : ""}:\n` +
+    TIER_TOKENS.map(
+      (t) =>
+        `        ${t.padEnd(14)} ${TIERS[t].padEnd(20)} luminance ${LUM[t].toFixed(4)}` +
+        `${t === FLOOR_TIER ? "   ← the floor" : ""}` +
+        `${t === LUMINANCE_EXEMPT_TIER ? "   ← the keyword and mono-label tier (KeywordHighlight)" : ""}`,
+    ).join("\n"),
+);
+
+// ───────────────── THE PROBE'S OWN POSITIVE CONTROL (gh#64) ─────────────────
+//
+// Every colour claim below rests on the ladder, so the ladder is checked before any of
+// them, and it is checked in the one way that catches the failure this script actually
+// had: under `--reduced` a shared probe reported ONE colour seven times, which moved
+// the floor from luminance 0.3663 to 0.1714 and emptied the exemption set — and the
+// run still exited 0 (gh#56's `3548028` claimed "both motion modes" on that). Two
+// assertions, because either alone can be passed by an accident:
+//
+//   · DISTINCTNESS. Seven different tokens must resolve to seven different colours.
+//     A collapse onto one value fails here by construction, whatever the value is.
+//   · THE ORDER. The ladder must DESCEND from the floor tier down through the five
+//     out-of-bounds greys. Distinctness alone would pass a probe that read seven
+//     different WRONG colours; a monotone ladder is what `globals.css` actually
+//     declares, so this is the shape of the truth rather than a fingerprint of it.
+//
+// Neither is transcribed: both are computed from what the page resolved, so retuning
+// `globals.css` moves them and only a BROKEN READ fails them.
+check(
+  `tiers · the ${TIER_TOKENS.length} tokens resolve to ${TIER_TOKENS.length} DIFFERENT colours, so the probe read the cascade and not a transition`,
+  new Set(TIER_TOKENS.map((t) => TIERS[t])).size,
+  TIER_TOKENS.length,
+);
+const GREY_LADDER = [FLOOR_TIER, ...BELOW_FLOOR_TIERS];
+check(
+  `tiers · the grey ladder descends ${GREY_LADDER.map((t) => `${t} ${LUM[t].toFixed(4)}`).join(" > ")}`,
+  GREY_LADDER.slice(0, -1).map((t, i) => LUM[t] > LUM[GREY_LADDER[i + 1]]),
+  GREY_LADDER.slice(0, -1).map(() => true),
+);
+// AND THE EXEMPT TIER IS UNDER THE FLOOR, which is the fact that makes the exemption a
+// real exemption rather than a spare clause. If `--copper-400` ever resolved ABOVE
+// `--neutral-300` the gate below would be vacuous for a second reason — nothing would
+// be under the floor at all — so it is asserted here and not assumed.
+check(
+  `tiers · ${LUMINANCE_EXEMPT_TIER} ${LUM[LUMINANCE_EXEMPT_TIER].toFixed(4)} really is under the ${FLOOR_TIER} floor ${FLOOR_LUMINANCE.toFixed(4)}`,
+  LUM[LUMINANCE_EXEMPT_TIER] < FLOOR_LUMINANCE,
+  true,
 );
 
 // The cross-checks the import is allowed to make: the module's restatements of the
@@ -980,6 +1213,39 @@ for (const variant of LEADER_VARIANTS) {
   const index = at("invest")[0].index;
 
   // ── THE COMPOSED LETTERS, off a full-deck walk (§3.5) ──
+  //
+  // THE WALK'S OWN POSITIVE CONTROL FIRST (gh#64). Every letter claim below is a
+  // comparison against an expected string, so a slide the walk read off the wrong frame
+  // fails only if it happens to be one of the four named slides — the other 59 are read
+  // and never checked. Two facts close that, and NEITHER is the one gh#64 first wrote
+  // here (a "did every slide mount" check, which `gotoSlide` makes true by construction
+  // and so cannot fail):
+  //
+  //   · EVERY ROW REPORTED THE INDEX IT WAS ASKED FOR, read off the stage's own
+  //     `data-slide-index`. `Deck.tsx` applies `?slide=` in a `useEffect`, so the first
+  //     commit of every page load renders slide 0 and the requested slide arrives on a
+  //     SECOND commit — a read between the two returns the cover's content under the
+  //     requested index's row. NOT OBSERVED FIRING, and the limit of that statement is
+  //     stated on purpose: it was only ever probed through the stage wait above, which is
+  //     the path that already closes the gap, so this says NOTHING about how often the old
+  //     flat 90ms landed between the two commits. It costs one string compare and it is
+  //     the assertion that would name the slide if it ever did.
+  //   · EXACTLY ONE SLIDE PRINTED NO CAPTION, AND IT IS THE DECK'S FIRST. Compared
+  //     against a literal `[0]` and not against `at("cover")`, which is the circular
+  //     form gh#64 wrote first: a walk that renders the cover under some other index
+  //     adds that index to BOTH sides at once and passes. The cover is slide 0 by
+  //     construction, and it is the only unnumbered slide in the deck (`FigLabel` throws
+  //     rather than print `A.null`).
+  check(
+    `${tag} · letters · every one of ${slideCount} rows reported the slide index it was asked for`,
+    harvest.filter((r) => String(r.index) !== r.reported).map((r) => `${r.index}→${r.reported}`),
+    [],
+  );
+  check(
+    `${tag} · letters · exactly one slide in ${slideCount} printed no caption, and it is slide 0`,
+    harvest.filter((r) => r.fig == null).map((r) => r.index),
+    [0],
+  );
   check(
     `${tag} · letters · this slide prints ${FIGURES.invest}`,
     at("invest").map((r) => r.fig),
@@ -1052,11 +1318,7 @@ for (const variant of LEADER_VARIANTS) {
     );
 
   async function auditPose(pose, direction) {
-    const state = await measure(page, REQUIRED, [
-      ...BELOW_FLOOR_TIERS,
-      FLOOR_TIER,
-      LUMINANCE_EXEMPT_TIER,
-    ]);
+    const state = await measure(page, REQUIRED, TIER_TOKENS);
     if (direction === "forward") await shot(`${variant}-pose${pose}`);
 
     const missing = REQUIRED.filter((id) => !state.boxes[id].mounted);
@@ -1275,10 +1537,24 @@ for (const variant of LEADER_VARIANTS) {
     ),
     [],
   );
+  // ITS NON-EMPTINESS, ASSERTED AND NOT OBSERVED (gh#64). The gate above is a "found
+  // nothing", so it passes over an empty set — and under `--reduced` that is exactly
+  // what it did, for 60 runs, because the broken probe put the floor 2.1× too dark and
+  // nothing on the stage fell under it. The slide HAS copper text at every pose (the
+  // eyebrow from pose 0, the closer's two keyword spans from pose 2), so an empty set
+  // is a broken measurement and never a clean slide. The number is not pinned: which
+  // runs are under the floor is a copy decision, and this asserts the channel is live.
+  check(
+    `${tag} · floors · …and that set is NON-EMPTY — ${underLuminance.length} runs measured under the floor`,
+    underLuminance.length > 0,
+    true,
+  );
   console.log(
     `      runs audited per pose (fwd 0,1,2 · back 1,0): ${auditedByPose.join(", ")}\n` +
-      `      under the luminance floor, all ${LUMINANCE_EXEMPT_TIER}: ` +
-      `${[...new Set(underLuminance.map((v) => v.owner ?? (v.keyword ? "em.kw" : v.label)))].join(", ") || "none"}`,
+      `      under the luminance floor, all ${LUMINANCE_EXEMPT_TIER} (${underLuminance.length} runs): ` +
+      // `em.kw` is NOT the fallback label any more (gh#64): a keyword span on this deck
+      // is a `KeywordHighlight` `<em>`, and `class="kw"` is emitted nowhere under `src/`.
+      `${[...new Set(underLuminance.map((v) => v.owner ?? (v.keyword ? "KeywordHighlight em" : v.label)))].join(", ") || "none"}`,
   );
   // The audit's own positive control: every check above it is a "found nothing", so a
   // walk that visited no runs would report a clean slide.

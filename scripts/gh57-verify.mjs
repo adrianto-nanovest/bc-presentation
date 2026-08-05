@@ -104,7 +104,8 @@
 //
 // A TRAP THIS SCRIPT FELL INTO AND NOW GUARDS, recorded because it is deck-wide and not
 // this slide's. Resolving the colour ladder through a PROBE ELEMENT — one probe re-coloured
-// in a loop, which is the idiom `scripts/gh56-verify.mjs:578-585` uses — IS WRONG UNDER
+// in a loop, which is the idiom `scripts/gh56-verify.mjs` used until gh#64 ported this fix
+// into it (it had the bug on all three counts this paragraph names) — IS WRONG UNDER
 // `prefers-reduced-motion: reduce`, and it fails by passing. The global rule in `globals.css` sets `transition-duration: 0.01ms !important`
 // on `*` and `transition-property` defaults to `all`, so under `reduce` every element has a
 // live transition on `color` and `getComputedStyle` right after an assignment returns the
