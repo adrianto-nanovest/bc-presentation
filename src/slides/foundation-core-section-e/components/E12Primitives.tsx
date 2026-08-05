@@ -179,7 +179,26 @@ export function E12Heading({
           <CopperRule on width="100%" />
         </div>
       </div>
-      {hint && <HintIcon />}
+      {/* THE ICON CENTERS ON THE LABEL LINE, not on the label+rule stack, and the
+          two numbers here are both measured against E9's heading — the one this
+          slide is asked to match, where a Chromium `Range` box puts the glyph's mid
+          and the label text's mid on the same y to the pixel.
+
+          Two corrections, in order. FLEX-START alone puts the icon's own 26px box
+          top at y=0, and that box carries 7px of pad above a 14px glyph, so the
+          glyph fell 6px under the label — into the gap above the rule. E9 never
+          shows it because its label has no fixed height, so the block strut is
+          already as tall as the icon box; this heading pins `labelH`, so it has to
+          say it. Then `HintIcon`'s pad is ASYMMETRIC (7 top, 5 bottom): centering
+          its box leaves the glyph 1px low, which is what `marginBottom: 2` pays
+          back — it makes the centered box symmetric around the glyph. */}
+      {hint && (
+        <div style={{ height: HEAD.labelH, display: "flex", alignItems: "center" }}>
+          <span style={{ display: "inline-flex", marginBottom: 2 }}>
+            <HintIcon />
+          </span>
+        </div>
+      )}
     </div>
   );
 }
