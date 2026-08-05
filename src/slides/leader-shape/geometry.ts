@@ -5,8 +5,8 @@
 // open risk against it: "the lowest satellite sits at y ≈ 620 … close to the
 // NavBar hover zone, and it grows on focus. Re-check clearance when rebuilt."
 // This module is that re-check, done in numbers rather than by eye, which is why
-// the ellipse is re-cut here instead of copied from
-// `src/slides/prototype-gh16-leader-slides/pillars-a-orbit.tsx`.
+// the ellipse is re-cut here instead of copied from the #16 orbit prototype
+// (the variant §7.1 picked).
 //
 // THE PROTOTYPE'S NUMBERS FAIL, and by how much: `HUB.y = 430`, `RY = 190`,
 // `SAT_H = 76` put the lowest pillar's centre at y = 620 and its box bottom at

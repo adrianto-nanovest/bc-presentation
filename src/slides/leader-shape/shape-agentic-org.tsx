@@ -1,9 +1,9 @@
 // THE AGENTIC ORGANIZATION — section C's centrepiece, and the deck's shape.
 //
 // Spec §6.6 (content) · §7.1 (the visual contract) · §4.4 slot 5 (the brand axis).
-// Productionized from `src/slides/prototype-gh16-leader-slides/pillars-a-orbit.tsx`
-// — variant A, which the owner picked on a browser walkthrough of all six #16
-// variants — and REWRITTEN, not lifted: the prototype is inline-styled end to end,
+// Productionized from the #16 orbit prototype — variant A, which the owner
+// picked on a browser walkthrough of all six #16 variants; §7.1 records the
+// verdict — and REWRITTEN, not lifted: the prototype is inline-styled end to end,
 // untested, fills two elements with hand-written rgba, and puts its lowest pillar
 // 26px inside the NavBar's hover band (§7.1's one recorded layout risk; see
 // `./geometry.ts`, which exists to fix it).

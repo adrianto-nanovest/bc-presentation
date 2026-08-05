@@ -64,7 +64,7 @@ describe("resolveClientVariant — ?variant= override", () => {
   });
 
   test("the override survives other query params and a hash", () => {
-    setLocation("http://localhost:5173/?dev=proto16&variant=gems-leader#x");
+    setLocation("http://localhost:5173/?dev=nonesuch&variant=gems-leader#x");
     expect(resolveClientVariant()).toEqual(VARIANTS["gems-leader"]);
   });
 

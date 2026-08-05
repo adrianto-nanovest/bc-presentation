@@ -8,8 +8,6 @@ import {
   hexLadderComposedDeck,
   hexLadderDevSlide,
 } from "./registry";
-// PROTOTYPE gh#16 — throwaway import; goes away with the prototype directory.
-import { Proto16Route } from "@/slides/prototype-gh16-leader-slides";
 
 declare global {
   interface Window {
@@ -59,10 +57,6 @@ export function Deck() {
   // via NavBar/keyboard.
   if (typeof window !== "undefined") {
     const params = new URLSearchParams(window.location.search);
-    // PROTOTYPE gh#16 — throwaway. Remove with the prototype directory.
-    if (import.meta.env.DEV && params.get("dev") === "proto16") {
-      return <Proto16Route />;
-    }
     if (params.get("dev") === "hexladder") {
       const composed = hexLadderComposedDeck.slides[0];
       // Its OWN provider, scoped to this one slide. `<Slide>` calls `useDeck` for

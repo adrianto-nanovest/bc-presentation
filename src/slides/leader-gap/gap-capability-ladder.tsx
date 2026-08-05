@@ -1,11 +1,11 @@
 // THE CAPABILITY LADDER — the slide a leader places themselves on.
 //
 // Spec §6.5 (content) · §7.2 (the visual contract) · §4.4 slot 2 (the brand axis).
-// Productionized from `src/slides/prototype-gh16-leader-slides/ladder-a-staircase.tsx`,
-// which the owner picked on a browser walkthrough of all six #16 variants — and
-// REWRITTEN, not lifted: the prototype is inline-styled end to end, untested, and
-// interpolates its markers between tread centres, which puts a fractional marker
-// in mid-air (see `./geometry.ts`).
+// Productionized from the #16 staircase prototype (variant A), which the owner
+// picked on a browser walkthrough of all six #16 variants — the verdict §7.2
+// records — and REWRITTEN, not lifted: the prototype is inline-styled end to
+// end, untested, and interpolates its markers between tread centres, which puts
+// a fractional marker in mid-air (see `./geometry.ts`).
 //
 // WHY THE SLIDE IS SHAPED THIS WAY. A leader who places themselves on a rung has
 // self-diagnosed; a leader who is TOLD where they sit argues with the next slide.
