@@ -122,9 +122,12 @@ describe("A.1 hook selection", () => {
 // K.2 pick moved out of `@/slides/reveal-and-closing` and into `@/deck/slots.ts`
 // (gh#40). `slice(-3)` still reads the lab run, because the lab still closes every
 // deck — at K in a standard deck, and in a leader deck at J at the gh#41 floor, at
-// K after gh#53's `gap` run, at L after gh#54's `shape` run and at M as of gh#56's
-// `invest` run. Four letters for one run in one deck, which is why this helper names
-// none of them and slices from the end instead.
+// K after gh#53's `gap` run, at L after gh#54's `shape` run, at M after gh#56's
+// `invest` run and at N as of gh#60's `mandate` run. FIVE letters for one run in
+// one deck, which is why this helper names none of them and slices from the end
+// instead — and gh#60 is the one that would have caught a helper written any other
+// way, because it is the first insert that moved this run without touching a
+// single letter in front of it.
 async function closingFor(id: VariantId) {
   useVariant(id);
   const [registry, k1, k2, k2Gems, k3] = await Promise.all([
@@ -177,8 +180,9 @@ describe("Practice Lab slides", () => {
 // and only the `· Leadership` suffix separated them, and the block here said so.
 // The leader deck now exists: the standard curriculum minus section F, with THREE
 // leader-only runs in front of it — `gap` (gh#53), `shape` (gh#54) and `invest`
-// (gh#56) — and `f8-your-agentic-os` kept, standing as of gh#54 at §4.3's C.2, the
-// second slide of that `shape` run.
+// (gh#56) — a FOURTH behind it, `mandate` (gh#60, between `pitfalls` and `meta`),
+// and `f8-your-agentic-os` kept, standing as of gh#54 at §4.3's C.2, the second
+// slide of that `shape` run. That is every run §4.3 asks for.
 //
 // IT SAT INSIDE THE RETAINED TOOLS RUN FROM gh#41 UNTIL THEN, which is what the
 // neighbour assertions below used to state. They were REWRITTEN rather than
@@ -305,6 +309,47 @@ describe("leader deck sets", () => {
     }
   });
 
+  test("compose the mandate run between the pitfalls run and the meta run", async () => {
+    // gh#60 and gh#61, read off the COMPOSED deck rather than the authored list —
+    // which is the half `deck-slots.test.ts` cannot see. Two things have to hold at
+    // once and only one of them is about position:
+    //
+    //   · the slide still carries `mandate` after resolution. The leader deck set
+    //     has a `sectionOverrides` table, and a slide re-keyed there would compose
+    //     into whatever run it was pointed at while the LIST still read correctly.
+    //   · the run holds exactly §6.8's slides, in §6.8's order, and sits between
+    //     the last `pitfalls` row and the first `meta` one. §3.6 puts the mandate
+    //     there and nowhere else: in front of `pitfalls` it would ask a leader to
+    //     authorize a programme before hearing what goes wrong with one, and
+    //     behind `meta` it would arrive after the deck has stopped making its
+    //     case.
+    //
+    // ORDER INSIDE THE RUN STARTED MATTERING ON gh#61, which is why the whole run
+    // is compared rather than counted. K.1 asks the room to name its own
+    // bottleneck and K.2 answers "and here is when any of it gets judged"; the two
+    // reversed compose perfectly well and argue backwards, and nothing but this
+    // line would notice.
+    //
+    // NO LETTER IS ASSERTED. `mandate` takes K and pushes `meta`/`principles`/`lab`
+    // along, all derived (§3.5); the numbering fixture records what that prints.
+    for (const id of LEADER_IDS) {
+      const keys = await sectionKeysFor(id);
+      const composed = [...keys];
+      const at = composed.findIndex(([slide]) => slide === "mandate-enablement");
+      expect(at, id).toBeGreaterThan(-1);
+      expect(composed[at][1], id).toBe("mandate");
+      expect(composed[at - 1]?.[1], id).toBe("pitfalls");
+      expect(composed[at + 2]?.[1], id).toBe("meta");
+      // THE WHOLE RUN, for the same reason the `shape` case above asserts one: a
+      // second `mandate` row elsewhere in the deck throws as R4 where it is
+      // non-adjacent and silently lengthens the run where it is not.
+      expect(
+        composed.filter(([, key]) => key === "mandate").map(([slide]) => slide),
+        id,
+      ).toEqual(["mandate-enablement", "mandate-phases-gates"]);
+    }
+  });
+
   test("leave f8 in `techniques` on every standard deck, and compose no leader-only slide there", async () => {
     // The negative half, and it is not implied by the positives: the override is a
     // DECK-SET property, and f8's own file still authors `techniques`. Were the
@@ -316,20 +361,35 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // four ids written into `STANDARD_SLIDE_IDS` by accident would open a run in
-      // front of the curriculum in a deck that has no leader in the room, and
-      // renumber all 65 slides behind it. FOUR IDS AND STILL THREE KEYS as of gh#57,
-      // and the leak is per-id rather than per-key: `invest-chicken-egg` appends to
-      // an EXISTING run in the leader list, but the standard list holds no `invest`
-      // row at all, so on a standard deck it would arrive alone and claim a letter
-      // exactly as the other three would. Read off the COMPOSED deck, in the same
-      // epoch as the f8 lookup above, so it costs nothing to say.
+      // six ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
+      // into a deck that has no leader in the room. The first four would do it in
+      // FRONT of the curriculum and renumber all 65 slides behind them; the two
+      // `mandate` rows would do it between `pitfalls` and `meta` and renumber only
+      // the last eleven — quieter, and therefore the ones most likely to reach a
+      // projector.
+      //
+      // SIX IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That is
+      // gh#57's finding and gh#61 inherits it whole: `invest-chicken-egg` and
+      // `mandate-phases-gates` each append to a run that ALREADY EXISTS in the
+      // leader list, but the standard list holds no `invest` row and no `mandate`
+      // row at all — so on a standard deck either one would arrive alone and claim
+      // a letter exactly as the four run-openers would.
+      //
+      // AND `mandate-phases-gates` IS THE ONE WITH A SECOND FAILURE BEHIND THE
+      // FIRST. §5.3 keeps #7's programme framing — the competition, the rewards,
+      // AI Forge, the post-assessment — out of the middle-management decks and
+      // reverses that for the leader decks only, in that slide. Composition is the
+      // whole of what scopes the reversal, so this line is also the mechanical form
+      // of "the standard decks keep the exclusion". Read off the COMPOSED deck, in
+      // the same epoch as the f8 lookup above, so it costs nothing to say.
       expect(
         [
           "gap-capability-ladder",
           "shape-agentic-org",
           "invest-own-proof",
           "invest-chicken-egg",
+          "mandate-enablement",
+          "mandate-phases-gates",
         ].filter((slide) => keys.has(slide)),
         id,
       ).toEqual([]);
@@ -500,21 +560,25 @@ describe("thank-you closer figure number", () => {
 
   test("lands on the letter the leader deck's own section count produces", async () => {
     // Same three lab slides — leaders run the same lab — so the NUMBER is .3 here
-    // for the standard deck's reason. The LETTER is on its fourth value: gh#41's F
+    // for the standard deck's reason. The LETTER is on its fifth value: gh#41's F
     // cut took the leader deck to ten sections and the closer to J.3, gh#53's
     // `gap` run took it to eleven and back to K.3 (two edits cancelling, which is
     // what this test read at the time), gh#54's `shape` run took it to twelve and
     // to L.3 — a letter no standard deck prints at all, which is when the two deck
-    // sets' closers first disagreed — and gh#56's `invest` run takes it to thirteen
-    // and to M.3.
+    // sets' closers first disagreed — gh#56's `invest` run took it to thirteen and
+    // to M.3, and gh#60's `mandate` run takes it to fourteen and to N.3.
     //
-    // Nothing renumbered the closer any of the four times; the letter is a
-    // function of position (§3.4 R2), and this line moving while
+    // gh#60 IS THE CLEANEST INSTANCE OF THE PROPERTY, and worth reading as such:
+    // the four earlier moves all edited something in front of this run, so a
+    // sceptic could argue the closer moved because the deck around it did. This
+    // one inserted ONE slide between `pitfalls` and `meta` — nothing in front of
+    // the mandate changed at all — and the closer still stepped a letter, because
+    // a letter is a function of position (§3.4 R2). This line moving while
     // `k3-thank-you.tsx` stayed shut IS the property under test.
     //
     // ONE leader deck, not both: this asserts the letter a POSITION produces, and
-    // the two leader decks share the position. That the other one records M.3 too
+    // the two leader decks share the position. That the other one records N.3 too
     // is in the numbering fixture, which pays no epoch cost to say so.
-    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*M\.3/);
+    expect(await closerFigLabelFor("berau-leader")).toMatch(/FIG\.\s*N\.3/);
   });
 });

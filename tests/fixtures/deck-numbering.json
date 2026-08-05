@@ -1224,56 +1224,66 @@
     {
       "index": 50,
       "fig": "K.1",
-      "label": "THE PROCESS"
+      "label": "THE ENABLEMENT MODEL"
     },
     {
       "index": 51,
       "fig": "K.2",
-      "label": "THE JOURNEY"
+      "label": "PHASES AND GATES"
     },
     {
       "index": 52,
-      "fig": "K.3",
-      "label": "THE PORTFOLIO"
+      "fig": "L.1",
+      "label": "THE PROCESS"
     },
     {
       "index": 53,
-      "fig": "K.4",
-      "label": "BRIDGE · RECIPE"
+      "fig": "L.2",
+      "label": "THE JOURNEY"
     },
     {
       "index": 54,
-      "fig": "L.1",
-      "label": "THE RECIPE"
+      "fig": "L.3",
+      "label": "THE PORTFOLIO"
     },
     {
       "index": 55,
-      "fig": "L.2",
-      "label": "FIVE PRINCIPLES"
+      "fig": "L.4",
+      "label": "BRIDGE · RECIPE"
     },
     {
       "index": 56,
-      "fig": "L.3",
-      "label": "BUILDING YOURSELF UP"
+      "fig": "M.1",
+      "label": "THE RECIPE"
     },
     {
       "index": 57,
-      "fig": "L.4",
-      "label": "BUILDING SOMETHING THAT SHIPS"
+      "fig": "M.2",
+      "label": "FIVE PRINCIPLES"
     },
     {
       "index": 58,
-      "fig": "M.1",
-      "label": "PRACTICE · LAB"
+      "fig": "M.3",
+      "label": "BUILDING YOURSELF UP"
     },
     {
       "index": 59,
-      "fig": "M.2",
-      "label": "THE PRACTICE LAB"
+      "fig": "M.4",
+      "label": "BUILDING SOMETHING THAT SHIPS"
     },
     {
       "index": 60,
-      "fig": "M.3",
+      "fig": "N.1",
+      "label": "PRACTICE · LAB"
+    },
+    {
+      "index": 61,
+      "fig": "N.2",
+      "label": "THE PRACTICE LAB"
+    },
+    {
+      "index": 62,
+      "fig": "N.3",
       "label": "THANK YOU"
     }
   ],
@@ -1531,56 +1541,66 @@
     {
       "index": 50,
       "fig": "K.1",
-      "label": "THE PROCESS"
+      "label": "THE ENABLEMENT MODEL"
     },
     {
       "index": 51,
       "fig": "K.2",
-      "label": "THE JOURNEY"
+      "label": "PHASES AND GATES"
     },
     {
       "index": 52,
-      "fig": "K.3",
-      "label": "THE PORTFOLIO"
+      "fig": "L.1",
+      "label": "THE PROCESS"
     },
     {
       "index": 53,
-      "fig": "K.4",
-      "label": "BRIDGE · RECIPE"
+      "fig": "L.2",
+      "label": "THE JOURNEY"
     },
     {
       "index": 54,
-      "fig": "L.1",
-      "label": "THE RECIPE"
+      "fig": "L.3",
+      "label": "THE PORTFOLIO"
     },
     {
       "index": 55,
-      "fig": "L.2",
-      "label": "FIVE PRINCIPLES"
+      "fig": "L.4",
+      "label": "BRIDGE · RECIPE"
     },
     {
       "index": 56,
-      "fig": "L.3",
-      "label": "BUILDING YOURSELF UP"
+      "fig": "M.1",
+      "label": "THE RECIPE"
     },
     {
       "index": 57,
-      "fig": "L.4",
-      "label": "BUILDING SOMETHING THAT SHIPS"
+      "fig": "M.2",
+      "label": "FIVE PRINCIPLES"
     },
     {
       "index": 58,
-      "fig": "M.1",
-      "label": "PRACTICE · LAB"
+      "fig": "M.3",
+      "label": "BUILDING YOURSELF UP"
     },
     {
       "index": 59,
-      "fig": "M.2",
-      "label": "THE PRACTICE LAB"
+      "fig": "M.4",
+      "label": "BUILDING SOMETHING THAT SHIPS"
     },
     {
       "index": 60,
-      "fig": "M.3",
+      "fig": "N.1",
+      "label": "PRACTICE · LAB"
+    },
+    {
+      "index": 61,
+      "fig": "N.2",
+      "label": "THE PRACTICE LAB"
+    },
+    {
+      "index": 62,
+      "fig": "N.3",
       "label": "THANK YOU"
     }
   ]

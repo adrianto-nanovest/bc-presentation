@@ -23,13 +23,22 @@
 // REAL composed leader deck, not a synthetic one, because a synthetic deck cannot
 // show that the deck's own composition is what collapses them.
 //
-// AS OF gh#56 THREE OF THEM RESOLVE — one on gh#53, one on gh#54, one on gh#56.
-// `gap` owns a slide, `shape` owns two and `invest` owns one, so THE GAP, THE SHAPE
-// and WHY INVEST print their letters and the curriculum range behind them shifted
-// one along each time — with no edit to A.1 any of the three times, which is the
-// whole claim. So this file holds both halves of the rule against the same real
-// decks: a movement with slides prints the letter the composer derived, one without
-// prints its name alone. ONE ROW IS STILL WITHOUT, and it is the last: THE MANDATE.
+// AS OF gh#60 ALL FIVE RESOLVE — one on gh#53, one on gh#54, one on gh#56, the last
+// on gh#60. Every movement owns at least one slide, so the leader agenda is complete
+// on screen for the first time and the REAL decks now print §3.6's published table
+// byte for byte — with no edit to A.1 on any of the four tickets, which is the whole
+// claim gh#43 made.
+//
+// THAT COSTS THIS FILE ITS ONLY LIVE NEGATIVE CASE, which is worth naming rather
+// than leaving to be discovered. The rule has two halves — a movement with slides
+// prints the letter the composer derived, a movement WITHOUT prints its name alone —
+// and until gh#60 a real deck demonstrated the second half. None does now. The half
+// is not dropped: `UNRESOLVED_ROWS` is kept and still walked (empty today, and
+// deliberately not deleted), and the `sectionPointerLabel` cases at the foot of this
+// file exercise the collapse directly against decks that do not run those keys. What
+// no live deck can show any more is that a deck's own COMPOSITION is what collapses a
+// row — so if a deck set ever drops a movement again, restore a real case here rather
+// than trusting the formatter tests to stand in for one.
 //
 // ONE EPOCH HOLDS ONE BRAND. `src/variant.ts` resolves `VARIANT` at module
 // scope, so a brand's A.1 and its composed deck only exist inside a module
@@ -42,7 +51,7 @@ import { cleanup, render, screen, act } from "@testing-library/react";
 import { HARVESTED_BRANDS, restoreLocation, standardVariantFor } from "../harvest/deck-numbering";
 import { VARIANTS, type Brand, type VariantId } from "@/deck-variants";
 import { composeDeck } from "@/deck/compose";
-import { sectionPointerLabel, type SectionKey } from "@/deck/sections";
+import { SECTION_NAMES, sectionPointerLabel, type SectionKey } from "@/deck/sections";
 import {
   a1Content,
   a1ContentFor,
@@ -62,42 +71,57 @@ const POINTERS_AS_SHIPPED = [
 ] as const;
 
 /**
- * What a leader deck prints TODAY — three movements in, one still to come.
+ * What a leader deck prints TODAY — ALL FIVE MOVEMENTS IN, none left to come.
  *
- * IT HAS NOW HAPPENED THREE TIMES. gh#53 wrote ONE id into one deck-set list and
+ * IT HAS NOW HAPPENED FOUR TIMES. gh#53 wrote ONE id into one deck-set list and
  * A.1 — which nobody opened — started printing `SECTION B · THE GAP`, because `gap`
  * now owned a slide. gh#54 did exactly the same thing for `shape`, and A.1 started
  * printing `SECTION C · THE SHAPE`. gh#56 did it for `invest`, and `SECTION D · WHY
- * INVEST` appeared the same way. That is gh#43's core claim being paid off for the
- * third time rather than a fixture being maintained: no literal letter exists
- * anywhere in A.1 for any of those edits to have contradicted, so none of them
- * could have left this slide behind.
+ * INVEST` appeared the same way. gh#60 did it for `mandate` — one id, written
+ * between `h3-bridge-to-i` and `i1-meta-process` — and `SECTION K · THE MANDATE`
+ * appeared with no A.1 file opened on any of the four occasions. That is gh#43's
+ * core claim paid off four times over rather than a fixture being maintained: no
+ * literal letter exists anywhere in A.1 for any of those edits to have contradicted,
+ * so none of them could have left this slide behind.
  *
- * ONE row is still a bare name: `mandate` owns no slides, and a name alone is the
- * honest output. Its letter arrives with its slides, the same way, and this list
- * will then hold five resolving rows and match §3.6's published table.
+ * gh#60 IS THE ONE THAT TESTED THE CLAIM FROM THE OTHER SIDE. The first three
+ * inserts all landed in FRONT of the curriculum, so each of them moved the fourth
+ * row's range as well as filling one of the first three — a row could have been
+ * "fixed" by a coincidence of everything shifting together. This one landed BEHIND
+ * `pitfalls`: the fifth row gained a letter and the curriculum range `SECTIONS E–J`
+ * did NOT move, because the mandate sits past its end. Two rows behaving
+ * differently under one edit is what a derived letter looks like and what a
+ * maintained fixture never does.
  *
- * The curriculum row moved WITH each insert — `SECTIONS B–G` before gh#53, `C–H`
- * after it, `D–I` after gh#54, `E–J` now. `gap` claims B, `shape` C and `invest` D,
- * so the retained standard run `landscape`…`pitfalls` starts three letters later
- * than gh#41 left it. The run itself is unchanged: section F is still cut, f8 sits
- * at C.2 inside the `shape` run this row does not span (gh#54), and gh#56's insert
- * went in front of `landscape` rather than into the range. It is also the one row
- * with a `SectionRef.name` — the letters are the deck's, the NAME is the movement's,
- * because no section is called THE CURRICULUM.
+ * The curriculum row moved WITH each of the first three inserts — `SECTIONS B–G`
+ * before gh#53, `C–H` after it, `D–I` after gh#54, `E–J` since gh#56, and `E–J`
+ * still. `gap` claims B, `shape` C and `invest` D, so the retained standard run
+ * `landscape`…`pitfalls` starts three letters later than gh#41 left it. The run
+ * itself is unchanged: section F is still cut, f8 sits at C.2 inside the `shape` run
+ * this row does not span (gh#54), gh#56's insert went in front of `landscape` rather
+ * than into the range, and gh#60's went behind `pitfalls` — one row past its last
+ * key, which is why the range ends at J and the mandate takes K. It is also the one
+ * row with a `SectionRef.name` — the letters are the deck's, the NAME is the
+ * movement's, because no section is called THE CURRICULUM.
  */
 const LEADER_POINTERS_TODAY = [
   "SECTION B · THE GAP",
   "SECTION C · THE SHAPE",
   "SECTION D · WHY INVEST",
   "SECTIONS E–J · THE CURRICULUM",
-  "THE MANDATE",
+  "SECTION K · THE MANDATE",
 ] as const;
 
 /** The rows whose movement owns no slide yet, by index — the ones that must print
- *  a name and nothing else. `gap` left this list on gh#53, `shape` on gh#54 and
- *  `invest` on gh#56; `mandate` is the last one in it. */
-const UNRESOLVED_ROWS = [4] as const;
+ *  a name and nothing else. `gap` left this list on gh#53, `shape` on gh#54,
+ *  `invest` on gh#56 and `mandate` on gh#60, so it is EMPTY.
+ *
+ *  KEPT, NOT DELETED, and the loop below still runs over it. What it encodes is the
+ *  RULE — a row whose section owns no slides may not invent a letter — and the rule
+ *  outlives today's instance of it: a deck set that ever drops a movement gets a
+ *  bare name again, and the assertion is already here to catch a letter appearing in
+ *  its place. Deleting an empty list is how a rule quietly stops being one. */
+const UNRESOLVED_ROWS: readonly number[] = [];
 
 /** §3.6's five movement questions, in order. Read back out of the DOM below. */
 const LEADER_QUESTIONS_AS_AUTHORED = [
@@ -143,21 +167,40 @@ interface RenderedA1 {
   /** `Reveal`'s per-card gate. The column can be at opacity 1 with every card
    *  still held back, which would put the pointers in the DOM and nowhere else. */
   cardsRevealed: boolean[];
-  /** The letter THIS EPOCH's composed deck gave the `gap` run, or `undefined`
-   *  where the deck runs no `gap` slide. Read off the same `composedDeck` the
-   *  render used, so the rendered pointer can be compared against the derivation
-   *  itself rather than against a letter this file also believes in. */
-  gapLetter: string | undefined;
-  /** The same, for `shape` — which became a resolving row on gh#54 and so needs
-   *  the same treatment. Two rows read this way, not one, because the rule is
-   *  "whatever the composer derived" and a single example can be satisfied by a
-   *  coincidence. */
-  shapeLetter: string | undefined;
-  /** And for `invest`, which became the third on gh#56. Read the same way for the
-   *  same reason: this row's letter is the one thing gh#56 could not author, since
-   *  the ticket edited no A.1 copy at all. */
-  investLetter: string | undefined;
+  /**
+   * THIS EPOCH's own `composedDeck.letterOf` — the composer's answer for any
+   * section key, `undefined` where the deck runs no slide under it.
+   *
+   * THE FUNCTION AND NOT THREE PRE-READ LETTERS, as of gh#60. It was
+   * `gapLetter` / `shapeLetter` / `investLetter` while those were the rows that
+   * had filled in, and a fourth field would have been the point at which one
+   * named accessor per movement stopped paying: all five rows resolve now, the
+   * rule over them is one rule, and {@link MOVEMENT_ROWS} states it once. Handing
+   * back the function keeps the important half — the pointer is compared against
+   * the SAME derivation the render used, never against a letter this file also
+   * believes in.
+   */
+  letterOf: (key: SectionKey) => string | undefined;
 }
+
+/**
+ * The four A.1 rows that point at exactly ONE section, and the key each points at.
+ *
+ * ROW 3 IS ABSENT ON PURPOSE: it spans the whole retained curriculum under a
+ * `SectionRef.name` override, so it prints a RANGE and is asserted separately.
+ *
+ * WRITTEN OUT RATHER THAN DERIVED FROM `a1ContentFor(...).questions`. The mapping
+ * from row to key is precisely what the rendered pointer is being checked against
+ * — read it off the content and the test would prove the content agrees with
+ * itself. Which keys the rows carry is pinned separately, against the authored
+ * `sectionRef`s, in the `a1ContentFor` block below.
+ */
+const MOVEMENT_ROWS: readonly { row: number; key: SectionKey }[] = [
+  { row: 0, key: "gap" }, // resolved on gh#53
+  { row: 1, key: "shape" }, // gh#54
+  { row: 2, key: "invest" }, // gh#56
+  { row: 4, key: "mandate" }, // gh#60 — the last, and the one behind the curriculum
+];
 
 /** Mounts the A.1 one VARIANT composes, out of that variant's own deck, at step
  *  1. Keyed by variant and not by brand since gh#41: one brand serves two decks,
@@ -221,9 +264,7 @@ async function renderA1For(variant: VariantId): Promise<RenderedA1> {
       .map((el) => el.children[1]?.firstElementChild?.textContent ?? ""),
     columnOpacity: (screen.getByTestId("a1-questions-column") as HTMLElement).style.opacity,
     cardsRevealed: cards.map((el) => el.classList.contains("on")),
-    gapLetter: composedDeck.letterOf("gap"),
-    shapeLetter: composedDeck.letterOf("shape"),
-    investLetter: composedDeck.letterOf("invest"),
+    letterOf: composedDeck.letterOf,
   };
 }
 
@@ -252,7 +293,7 @@ describe.each(HARVESTED_BRANDS)("%s's A.1 agenda pointers", (brand) => {
   });
 });
 
-// ── The real leader decks, with two movements filled in (gh#43, gh#53, gh#54) ──
+// ─ The real leader decks, every movement filled in (gh#43, #53, #54, #56, #60) ─
 
 describe.each(LEADER_VARIANTS)("%s's A.1 right column", (variant) => {
   test("prints the five movement questions, in order", async () => {
@@ -264,40 +305,46 @@ describe.each(LEADER_VARIANTS)("%s's A.1 right column", (variant) => {
     expect(cardsRevealed).toEqual([true, true, true, true, true]);
   });
 
-  test("prints THE GAP's, THE SHAPE's and WHY INVEST's letters, the curriculum range, and one bare name, with no undefined", async () => {
-    const { pointers, gapLetter, shapeLetter, investLetter } = await renderA1For(variant);
+  test("prints all four movement letters, the curriculum range, and no undefined", async () => {
+    const { pointers, letterOf } = await renderA1For(variant);
 
     expect(pointers).toEqual(LEADER_POINTERS_TODAY.map((p) => `${ARROW}${p}`));
     pointers.forEach((p) => {
       expect(p).not.toContain("undefined");
       expect(p).not.toContain("SECTION undefined");
     });
-    // The unresolved rows print a name and NOTHING else. Asserted separately from
-    // the equality above because this is the rule — a row whose section owns no
-    // slides may not invent a letter — and the strings are only today's instance
-    // of it.
+    // Half one of the rule: a row whose section owns no slides prints a name and
+    // NOTHING else — it may not invent a letter. EMPTY since gh#60 and still
+    // asserted; see `UNRESOLVED_ROWS` for why the loop stays.
     for (const row of UNRESOLVED_ROWS) {
       expect(pointers[row]).not.toContain("SECTION");
       expect(pointers[row]).not.toContain("·");
     }
-    // And the other half of the same rule, which became checkable against a REAL
-    // deck on gh#53 for `gap`, on gh#54 for `shape` and on gh#56 for `invest`: a row
-    // whose section owns slides prints the letter the composed deck derived for that
-    // run. Compared against `letterOf` and not against "B", "C" or "D", so these
-    // three assertions survive Phase 6 moving any of the runs, and fail if A.1 ever
-    // starts printing a letter of its own invention.
-    expect(gapLetter).toBeDefined();
-    expect(pointers[0]).toBe(`${ARROW}SECTION ${gapLetter} · THE GAP`);
-    expect(shapeLetter).toBeDefined();
-    expect(pointers[1]).toBe(`${ARROW}SECTION ${shapeLetter} · THE SHAPE`);
-    // gh#56's row, and the one this ticket could not have authored: it edited no A.1
-    // copy at all, so this string exists only because `invest` started owning a
-    // slide. It read `WHY INVEST`, letterless, until then.
-    expect(investLetter).toBeDefined();
-    expect(pointers[2]).toBe(`${ARROW}SECTION ${investLetter} · WHY INVEST`);
-    // The three are adjacent runs and must not collapse onto one letter — which is
-    // what a `shape` or `invest` row wrongly keyed would look like from here.
-    expect(new Set([gapLetter, shapeLetter, investLetter]).size).toBe(3);
+    // Half two, and the half that became checkable against a REAL deck one row at a
+    // time — `gap` on gh#53, `shape` on gh#54, `invest` on gh#56, `mandate` on gh#60:
+    // a row whose section owns slides prints the letter the composed deck DERIVED for
+    // that run. Compared against `letterOf` and against `SECTION_NAMES`, never
+    // against "B", "C", "D" or "K", so these assertions survive any future move of any
+    // of the four runs and fail the moment A.1 starts printing a letter of its own.
+    //
+    // NONE OF THESE FOUR STRINGS COULD HAVE BEEN AUTHORED BY THE TICKET THAT MADE IT
+    // APPEAR. Each of gh#53/54/56/60 wrote ONE id into ONE deck-set list and edited no
+    // A.1 copy at all; the row it filled had been printing a bare name until then.
+    for (const { row, key } of MOVEMENT_ROWS) {
+      const letter = letterOf(key);
+      expect(letter, `${variant}: no letter derived for "${key}"`).toBeDefined();
+      expect(pointers[row]).toBe(`${ARROW}SECTION ${letter} · ${SECTION_NAMES[key]}`);
+    }
+    // Four distinct runs, four distinct letters. A row wrongly keyed — pointed at a
+    // neighbour's section — reads correctly on its own and collapses two rows onto
+    // one letter, which is the only way this table can be wrong and still look right.
+    expect(new Set(MOVEMENT_ROWS.map(({ key }) => letterOf(key))).size).toBe(
+      MOVEMENT_ROWS.length,
+    );
+    // The one row that is a RANGE. `mandate` sits BEHIND the curriculum (gh#60), so
+    // this range did not move when the fifth row finally gained its letter — which is
+    // the two rows behaving differently under one edit that a maintained fixture
+    // could not produce.
     expect(pointers[3]).toContain("SECTIONS");
   });
 
@@ -321,28 +368,37 @@ describe.each(LEADER_VARIANTS)("%s's A.1 right column", (variant) => {
 // a component that printed the names and never a letter, and that fake would
 // only be exposed by a deck where the rows DO carry letters.
 //
-// So this mounts the SAME leader content against the deck Phases 6–7 compose
-// (§4.3's order) and expects §3.6's published table, byte for byte. It is the
-// ticket's core claim under test: the rows finish themselves when the slides
-// land, WITHOUT AN EDIT TO A.1.
+// So this mounts the SAME leader content against a deck NO DECK SET COMPOSES, and
+// expects that deck's letters.
+//
+// IT USED TO COMPOSE §4.3's ORDER AND EXPECT §3.6's PUBLISHED TABLE, and gh#60 is
+// why it no longer can. Until then the real leader decks were short of §4.3 —
+// `mandate` owned no slides — so a synthetic §4.3 deck was a composition the
+// renderer had genuinely never met, and matching the published table was the
+// claim. As of gh#60 the real decks ARE §4.3's fourteen sections and the tests
+// above assert the published table against them, byte for byte. A synthetic copy
+// of the same order would now be satisfied by a renderer that had memorised
+// today's five letters, which is precisely the fake this test exists to catch.
+//
+// SO THE SYNTHETIC DECK MOVED INSTEAD OF THE TEST BEING DELETED. It puts `mandate`
+// in FRONT of the movements, which no deck set does and §3.6 argues against, and
+// the order is chosen so that ALL FIVE rows land on a letter different from the one
+// the live decks give them (B/C/D/E–J/K becomes C/D/E/F–K/B). A renderer that had
+// stopped asking the deck fails on every row rather than on one.
 //
 // The letter table is published directly rather than by loading
 // `@/deck/registry` — the registry composes THIS request's deck and would
 // overwrite it (`@/deck/section-letters` documents that a later publish wins).
 
-/** §3.6's leader right column, once every movement owns slides.
- *
- *  AS OF gh#56 THE FIRST FOUR ROWS ARE ALREADY THIS, on the real decks above, and
- *  only THE MANDATE separates the two lists. That is the claim converging, not this
- *  test becoming redundant: the synthetic deck below is the one that proves the
- *  renderer follows a deck it has never seen — the real one cannot, because its
- *  fifth row still owns no slides. */
-const LEADER_POINTERS_WHEN_THE_MOVEMENTS_LAND = [
-  "SECTION B · THE GAP",
-  "SECTION C · THE SHAPE",
-  "SECTION D · WHY INVEST",
-  "SECTIONS E–J · THE CURRICULUM",
-  "SECTION K · THE MANDATE",
+/** What A.1's leader rows print against the deck below — and NOT what any deck set
+ *  composes. Every row differs from `LEADER_POINTERS_TODAY`; see above for why that
+ *  is now the point of this test rather than a side effect of it. */
+const LEADER_POINTERS_ON_A_DECK_NOBODY_COMPOSES = [
+  "SECTION C · THE GAP",
+  "SECTION D · THE SHAPE",
+  "SECTION E · WHY INVEST",
+  "SECTIONS F–K · THE CURRICULUM",
+  "SECTION B · THE MANDATE",
 ] as const;
 
 test("A.1's leader rows take their letters from the deck that is composed", async () => {
@@ -363,14 +419,17 @@ test("A.1's leader rows take their letters from the deck that is composed", asyn
     import("@/slides/opening-section-a/content"),
   ]);
 
-  // §4.3's leader deck: the four movements in front of the curriculum, THE
-  // MANDATE at K, `meta`/`principles`/`lab` behind it. Composed by the real
-  // composer, so it is a shape `composeDeck` could actually produce.
+  // A deck with THE MANDATE at B, ahead of the three movements it actually closes
+  // over. Deliberately not §4.3's order and not any deck set's — see the block
+  // above — and still composed by the REAL composer, so it is a shape `composeDeck`
+  // could produce and not a hand-written letter map expressing a deck that could
+  // never exist.
   publishSectionLetters(
     compose(
       (
         [
           "opening",
+          "mandate",
           "gap",
           "shape",
           "invest",
@@ -380,7 +439,6 @@ test("A.1's leader rows take their letters from the deck that is composed", asyn
           "fundamentals",
           "tools",
           "pitfalls",
-          "mandate",
           "meta",
           "principles",
           "lab",
@@ -409,9 +467,12 @@ test("A.1's leader rows take their letters from the deck that is composed", asyn
     vi.advanceTimersByTime(1200);
   });
 
-  expect(screen.getAllByTestId("a1-question-pointer").map((el) => el.textContent)).toEqual(
-    LEADER_POINTERS_WHEN_THE_MOVEMENTS_LAND.map((p) => `${ARROW}${p}`),
-  );
+  const pointers = screen.getAllByTestId("a1-question-pointer").map((el) => el.textContent);
+  expect(pointers).toEqual(LEADER_POINTERS_ON_A_DECK_NOBODY_COMPOSES.map((p) => `${ARROW}${p}`));
+  // And nothing here is what the live decks print. Stated as its own assertion
+  // because it is the property that makes this test worth running at all, and it is
+  // the one a future edit would silently destroy by "aligning" the two lists.
+  expect(pointers).not.toEqual(LEADER_POINTERS_TODAY.map((p) => `${ARROW}${p}`));
 });
 
 // ── The deck-set delta, as authored (§4.4 slot 1) ────────────────────────────

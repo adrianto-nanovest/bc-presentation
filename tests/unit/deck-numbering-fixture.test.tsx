@@ -47,7 +47,11 @@ const FIXTURE = path.resolve(__dirname, "../fixtures/deck-numbering.json");
  * nothing to do with what this assertion is about: the leader deck gained a twelfth
  * section and started printing `L`. A range typed here has to be edited every time
  * a section is added, and each edit is a chance to widen it past a real regression.
- * gh#56 is the payoff — a thirteenth section, `M` on screen, no edit to this line.
+ * gh#56 and gh#60 are the payoff — a thirteenth section and then a fourteenth, `M`
+ * and then `N` on screen, no edit to this line for either. §4.3 stops at fourteen,
+ * so the derivation has now outlived the whole run of section inserts it was
+ * written for: gh#57 and gh#61 each added a slide and, as every leader ticket after
+ * them will, no section at all.
  *
  * IT IS A SHAPE CHECK, NOT A RANGE GATE, which is why loosening the bound costs
  * nothing: what each deck actually prints, letter by letter, is pinned by the
@@ -185,8 +189,72 @@ interface ObservedDeck {
  *     fixture removes not one `"fig"` and not one `"label"` line. Every removed line is
  *     an `"index"`, and the only added rows are the two `D.2` ones.
  *
+ * THE LEADER ROWS MOVED A FIFTH TIME ON gh#60 — a pure insert again, and the
+ * SMALLEST one this file has recorded, which is the whole reason it is worth
+ * reading. `mandate-enablement` reached the leader lists alone, the fifth slide
+ * ever to do so, taking both decks to **62** rows and FOURTEEN sections. But
+ * `mandate` lands BEHIND `pitfalls` (§3.6) rather than in front of the curriculum,
+ * so it claims K with only THREE runs behind it — `meta`, `principles`, `lab`:
+ *
+ *   · 11 figures moved per leader deck, every one of them a LETTER and not a
+ *     number: `i1`…`i4` from K to L, `j1`…`j4` from L to M, `k1`…`k3` from M to N.
+ *     The closer is **N.3**.
+ *   · FORTY-NINE figures did not move, which is the number to check the diff
+ *     against. The loop slide is still **H.12** — where gh#56 left it, four letters
+ *     into a life in which its file has never been opened, and gh#57 did not touch
+ *     it either — and every curriculum figure in front of the mandate is untouched.
+ *     §4.3's fourteen sections A–N were reached by APPENDING N, not by pushing H,
+ *     exactly as §3.6's placement predicted, and this record is where that stops
+ *     being a claim.
+ *   · ONE row was added, and it is the only new label in the file:
+ *     `K.1 · THE ENABLEMENT MODEL`. §6.8 numbers that slide K.1 and it composes as
+ *     K.1 — the first Phase 6 leader slide whose spec number and composed number
+ *     agree, because `mandate` fills front-to-back and nothing inserts ahead of it.
+ *     It is derived all the same (§3.5); the agreement is a coincidence of build
+ *     order, not a licence to pin it.
+ *
+ * ON gh#61 NO FIGURE MOVED AT ALL — the second entry in this list of which that is
+ * true, gh#57 being the first, and the two of them are what every leader ticket
+ * from here looks like. `mandate-phases-gates` APPENDED to the run gh#60 opened
+ * rather than opening one, so it took no letter (K was already claimed) and
+ * renumbered nothing (R3 renumbers inside the run that changed, and this row is
+ * that run's last). Both leader decks are one row longer at **63**, still FOURTEEN
+ * sections, still closing on **N.3**:
+ *
+ *   · ONE row was added, and it is the only new label in the file:
+ *     `K.2 · PHASES AND GATES`, at index 51, between `K.1 · THE ENABLEMENT MODEL`
+ *     and `L.1 · THE PROCESS`. §6.8 numbers that slide K.2 and it composes as K.2 —
+ *     the second Phase 6 leader slide whose spec number and composed number agree,
+ *     for the same reason K.1's did: `mandate` fills front-to-back and nothing
+ *     inserts ahead of it. Still derived (§3.5); still not a licence to pin it.
+ *   · EVERY OTHER ROW PRINTS WHAT IT PRINTED BEFORE, in all five decks. The loop
+ *     slide is still H.12, six tickets into a life in which its file has never been
+ *     opened.
+ *   · AND THE RE-RECORD STILL NEEDED `ALLOW_MOVED_FIGURES=1`, which is the part to
+ *     know before the next ticket reads that override as a warning. gh#60 and gh#61
+ *     ship in ONE commit, so the record steps once — from gh#57's 61 rows to these
+ *     63 — and `figureDrift` compares the harvest with the record BY DECK INDEX, so
+ *     a two-row INSERT reports rows behind it as moved even when none of them
+ *     changed what it prints. The report was TWENTY lines: two row-count lines
+ *     (`61 slides recorded, 63 rendered`) and nine per leader deck, running
+ *     `slide 52: recorded K.3, renders L.1` down to `slide 60: recorded M.3,
+ *     renders N.1`. Nine and not eleven, because indices 50 and 51 recorded K.1 and
+ *     K.2 for `meta`'s first two rows and now render K.1 and K.2 for the two
+ *     `mandate` rows — the same FIGURES on different slides, which the index-keyed
+ *     detector cannot see at all. Index-keying is right for what this gate is FOR —
+ *     a Phase 3 regression renumbers a row IN PLACE, and matching by label would
+ *     wave through a slide that was renamed and renumbered in one edit — but it
+ *     cannot tell an insert from a renumber, and only the diff can.
+ *   · WHAT THE DIFF SAYS, matched BY LABEL and not by index, because an insert makes
+ *     every later row look moved when it is not: three standard decks byte-identical
+ *     per key; two leader decks each gaining exactly the two `mandate` rows and
+ *     stepping exactly eleven figures, every one of them a LETTER — `K.n → L.n`,
+ *     `L.n → M.n`, `M.n → N.n` — with NOT ONE number changed and not one row
+ *     removed. gh#53's 54 moves, gh#54's 55 and gh#60's 11 were real; gh#57's and
+ *     gh#61's were none at all. Read the diff, every time.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all four tickets. That is the assertion worth reading twice: a leader-only insert
+ * all six tickets. That is the assertion worth reading twice: a leader-only insert
  * must not be able to touch a standard deck, and gh#54's relocation could not
  * either — f8 moved because a LEADER LIST moved it, and the standard list was not
  * edited. The fixture is where either failure would show.
@@ -201,8 +269,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 61, closer: "M.3" },
-  "gems-leader": { slides: 61, closer: "M.3" },
+  "berau-leader": { slides: 63, closer: "N.3" },
+  "gems-leader": { slides: 63, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

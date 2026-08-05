@@ -19,6 +19,7 @@ import { openingSectionASlides } from "@/slides/opening-section-a";
 import { leaderGapSlides } from "@/slides/leader-gap";
 import { leaderShapeSlides } from "@/slides/leader-shape";
 import { leaderInvestSlides } from "@/slides/leader-invest";
+import { leaderMandateSlides } from "@/slides/leader-mandate";
 import { landscapeSectionBSlides } from "@/slides/landscape-section-b";
 import { mindsetSectionCSlides } from "@/slides/mindset-section-c";
 import { foundationCoreSlides } from "@/slides/foundation-core";
@@ -50,5 +51,12 @@ export const slideCatalogue: readonly SlideDef[] = [
   ...foundationTechniquesSectionFSlides,
   ...applicationSectionGSlides,
   ...applicationSectionHSlides,
+  // The fourth and last leader-only run (§6.8), and the only one that does NOT
+  // sit in front of the curriculum: `mandate` lands between `pitfalls` and `meta`
+  // (§3.6), which is why this line is HERE and not up with the other three. The
+  // order in this file carries no meaning — `./deck-sets.ts` owns it — so the
+  // placement buys nothing but a reader's ability to skim the pool and see the
+  // leader deck's shape in it. It holds TWO of its three slides today.
+  ...leaderMandateSlides,
   ...revealAndClosingSlides,
 ];

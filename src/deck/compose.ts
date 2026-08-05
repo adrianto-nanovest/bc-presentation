@@ -16,9 +16,11 @@ import type { SectionKey } from "./sections";
 // `r` (reset deck) and `u` (reset step). Section letters are handed out A, B,
 // C, …, so the 18th section would be assigned "R" and shadow the reset key.
 // The cap is that collision, not an arbitrary limit. The longest deck today is the
-// LEADER one at 13 sections — it ran 10 at the Phase 4 floor, against the standard
-// deck's 11, and passed it on gh#54 — and it reaches 14 once Phase 6's `mandate`
-// run lands, `gap`, `shape` and `invest` having arrived on gh#53, gh#54 and gh#56.
+// LEADER one at 14 sections — it ran 10 at the Phase 4 floor, against the standard
+// deck's 11, and passed it on gh#54. That 14 is §4.3's FINAL count: `gap`, `shape`,
+// `invest` and `mandate` arrived on gh#53, gh#54, gh#56 and gh#60, and every leader
+// slide still unbuilt appends to a run that exists. So the deck stops three
+// sections short of the cap, and the cap's failure mode stays theoretical.
 const RESERVED_NAV_KEYS = ["r", "u"] as const;
 const MAX_SECTIONS = 17;
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

@@ -11,8 +11,11 @@
 // FIVE LETTERS FOR ONE KEY, FOUR MOVES, no edit to this file for any of them —
 // which is the point of it, and the reason the chain is extended rather than
 // replaced each time: one entry would read as a coincidence. I is also where §4.3
-// leaves it: the one run still to come, `mandate`, lands BEHIND `pitfalls` (§3.6),
-// so it is the first Phase 6 insert that will move no curriculum letter at all.
+// leaves it, and gh#60 PROVED that rather than predicted it: the last run,
+// `mandate`, landed BEHIND `pitfalls` (§3.6), so it took K, pushed `meta` /
+// `principles` / `lab` to L/M/N, and left `tools` on I. The chain ends there —
+// every Phase 6/7 slide still unbuilt appends to a run that already exists, so no
+// key below can take a sixth letter.
 //
 // Pure data. No React, no DOM, no side effects — importable from a node test.
 

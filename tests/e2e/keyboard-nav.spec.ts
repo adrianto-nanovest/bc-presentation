@@ -69,20 +69,25 @@ test("a live section letter jumps to that section's first numbered slide", async
 });
 
 // The same two halves, on the deck whose letters DIFFER (§4.3). What differs has
-// itself changed four times now, which is why this asserts through the PRINTED
+// itself changed five times now, which is why this asserts through the PRINTED
 // FIGURE AND ITS LABEL and never through a slide index: gh#41's F cut took the
 // leader deck to ten sections closing at J, gh#53's `gap` run took it back to
-// eleven closing at K, gh#54's `shape` run took it to twelve closing at L, and
-// gh#56's `invest` run takes it to thirteen closing at M. Nothing in
-// `useKeyboardNav` was edited any of the four times; the map is the composed deck's
-// (§3.5).
+// eleven closing at K, gh#54's `shape` run took it to twelve closing at L,
+// gh#56's `invest` run took it to thirteen closing at M, and gh#60's `mandate`
+// run takes it to FOURTEEN closing at N — §4.3's finished shape, A–N. Nothing in
+// `useKeyboardNav` was edited any of the five times; the map is the composed
+// deck's (§3.5).
 //
 // SO THE FIGURE ALONE IS NOT ENOUGH, and gh#54 is where that stopped being a
 // theory. `k` prints K.1 in both decks and means two different sections — and it
-// has meant three different things in THIS deck: the practice lab at the gh#53
-// shape, PRINCIPLES after gh#54, THE META-PROCESS after gh#56. A test that read
-// `/K\.1/` and stopped would have passed all three while asserting the wrong
-// section, so every jump below names the label it lands on.
+// has meant FOUR different things in THIS deck: the practice lab at the gh#53
+// shape, PRINCIPLES after gh#54, THE META-PROCESS after gh#56, THE MANDATE after
+// gh#60. A test that read `/K\.1/` and stopped would have passed all four while
+// asserting the wrong section, so every jump below names the label it lands on.
+//
+// gh#57 IS ABSENT FROM THAT LIST ON PURPOSE: it appended inside the `invest` run,
+// so it moved no letter and this test did not change for it. A new SLIDE is not a
+// new RUN, and only runs reach this file.
 test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
   page,
 }) => {
@@ -121,34 +126,44 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*D\.1/);
   await expect(page.locator(".fig-label")).toHaveText(/PROOF FROM INSIDE THE COMPANY/);
 
-  // `k` is THE META-PROCESS here, NOT the practice lab and no longer PRINCIPLES —
-  // see the block comment. Same printed figure as a standard deck's lab, third
-  // different section behind it, which is why the label is asserted beside it.
+  // `k` is THE MANDATE as of gh#60 — the FOURTH section this one key has meant in
+  // this deck, and the sharpest case in the file. It printed K.1 at every one of
+  // those four shapes: the practice lab at gh#53, PRINCIPLES after gh#54, THE
+  // META-PROCESS after gh#56, the enablement model now. Four sections, one figure,
+  // one key — which is exactly why the label below is the assertion and a bare
+  // `/K\.1/` would have passed all four while meaning something different each time.
   await page.keyboard.press("k");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*K\.1/);
-  await expect(page.locator(".fig-label")).toHaveText(/THE PROCESS/);
+  await expect(page.locator(".fig-label")).toHaveText(/THE ENABLEMENT MODEL/);
 
-  // `l` is PRINCIPLES now. It was a no-op here until gh#54, the practice lab from
-  // gh#54 to gh#56, and each time the assertion moved with the deck rather than
-  // being deleted — which is the only way this file records that the letters move.
+  // `l` is THE META-PROCESS now, pushed off K by the `mandate` run. It was a no-op
+  // here until gh#54, the practice lab from gh#54 to gh#56, and PRINCIPLES until
+  // gh#60 — moved with the deck each time rather than deleted, which is the only way
+  // this file records that the letters move.
   await page.keyboard.press("l");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*L\.1/);
-  await expect(page.locator(".fig-label")).toHaveText(/THE RECIPE/);
+  await expect(page.locator(".fig-label")).toHaveText(/THE PROCESS/);
 
-  // `m` NOW CLAIMS A SECTION in this deck — the practice lab, pushed along to M by
-  // the `invest` run. It was the no-op case below until gh#56.
+  // `m` is PRINCIPLES now — the practice lab held it from gh#56 until gh#60.
   await page.keyboard.press("m");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*M\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/THE RECIPE/);
+
+  // `n` NOW CLAIMS A SECTION — the practice lab, pushed to N by the `mandate` run,
+  // and the no-op case below until gh#60. This is §4.3's finished shape: the leader
+  // deck runs A–N, and gh#60 was the last run it was waiting on.
+  await page.keyboard.press("n");
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*N\.1/);
   await expect(page.locator(".fig-label")).toHaveText(/PRACTICE · LAB/);
   const at = await page.getAttribute(slideAttr, "data-slide-index");
 
-  // `n` is the unclaimed letter in THIS deck now — the leader deck runs A–M, and N
-  // arrives with the rest of Phase 6 (§4.3 takes it to A–N, `mandate` being the one
-  // run still missing). The failure this guards is unchanged: a throw on the
-  // undefined lookup, or a fall-through that sends the deck to slide 0 mid-talk.
-  await page.keyboard.press("n");
+  // `o` is the unclaimed letter in THIS deck now — and unlike every shape before
+  // gh#60, no further run is coming to claim it: §4.3 ends at N. The failure this
+  // guards is unchanged: a throw on the undefined lookup, or a fall-through that
+  // sends the deck to slide 0 mid-talk.
+  await page.keyboard.press("o");
   await expect(page.locator(slideAttr)).toHaveAttribute("data-slide-index", String(at));
-  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*M\.1/);
+  await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*N\.1/);
   expect(problems).toEqual([]);
 });
 
