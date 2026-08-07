@@ -388,8 +388,8 @@ export const a1GeneralContent: A1Content = {
 //   - Usign's AI is limited to a validation assist, NOT open Q&A over document
 //     contents, which the public record does not support.
 //   - MIRRAX is in on INTERNAL ATTESTATION ONLY (it appears in DigiTech's own
-//     slide), so its description carries no metric, vendor or outcome.
-//   - Excluded: Databricks (publicly unverified) and AI-OCR (a GEMVIS
+//     slide), not LIVE in PRODUCTION.
+//   - Excluded: MIRRAX, Databricks (publicly unverified) and AI-OCR (a GEMVIS
 //     sub-capability). SiCantik and WIM are kept separate.
 //
 // Known and accepted: three of the five are field/ops systems, so back-office
@@ -415,6 +415,14 @@ export const a1GemsContent: A1Content = {
   // 6px of the rule. 1184px holds ~62 characters of the display serif and the old
   // 78-character line wrapped. The ownership turn is intact and now IMPERATIVE —
   // *they built, you build* — which is the same steer-4 job in half the words.
+  // Mirrax is excluded because it is not yet in Production, but here is the content:
+  //   {
+  //     label: "MIRRAX",
+  //     iconName: "Map",
+  //     description:
+  //       "Field monitoring and analysis across the mining area, read by machine vision.",
+  //     descriptionKw: ["read by machine vision"],
+  //   },
   tagline: "DigiTech built these for you. Now build with them.",
   taglineKw: ["built these for you", "build with them"],
   ruleHeader: "Already In Production",
@@ -448,13 +456,6 @@ export const a1GemsContent: A1Content = {
       description:
         "Approvals signed digitally, with an AI assistant checking the document first.",
       descriptionKw: ["checking the document first"],
-    },
-    {
-      label: "MIRRAX",
-      iconName: "Map",
-      description:
-        "Field monitoring and analysis across the mining area, read by machine vision.",
-      descriptionKw: ["read by machine vision"],
     },
   ],
   // Shared by reference, exactly as the general variant does: these cards ARE

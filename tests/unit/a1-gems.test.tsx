@@ -113,8 +113,7 @@ describe("A.1 (GEMS) copy", () => {
       ["GEMVIS", "MessageSquare"],
       ["SICANTIK", "Camera"],
       ["FAMOUS", "Truck"],
-      ["USIGN", "FileSignature"],
-      ["MIRRAX", "Map"],
+      ["USIGN", "FileSignature"]
     ]);
   });
 
@@ -135,10 +134,6 @@ describe("A.1 (GEMS) copy", () => {
       [
         "Approvals signed digitally, with an AI assistant checking the document first.",
         ["checking the document first"],
-      ],
-      [
-        "Field monitoring and analysis across the mining area, read by machine vision.",
-        ["read by machine vision"],
       ],
     ]);
   });
@@ -247,11 +242,6 @@ describe("A.1 (GEMS) claim discipline", () => {
     expect(usign?.description).not.toMatch(/ask|question|chat|any document/i);
   });
 
-  test("MIRRAX carries no metric, vendor, or outcome — internal attestation only", () => {
-    const mirrax = a1GemsContent.capabilities.find((c) => c.label === "MIRRAX");
-    expect(mirrax?.description).not.toMatch(/\d/); // no figures at all
-    expect(mirrax?.description).not.toMatch(/google|gemini|databricks|custodian/i);
-  });
 });
 
 // ── Render + mechanics ───────────────────────────────────────────────────────

@@ -228,7 +228,7 @@ export const b2Content: B2Content = {
         "Outputs text, images, video, audio, code — anything with a pattern.",
         "Underneath: statistics predicting \"what comes next\" — pixel by pixel, word by word.",
       ],
-      examples: ["DALL-E", "Sora", "Suno"],
+      examples: ["Nano Banana 2", "Gemini Omni Flash", "Suno"],
     },
     {
       tier: 5,
