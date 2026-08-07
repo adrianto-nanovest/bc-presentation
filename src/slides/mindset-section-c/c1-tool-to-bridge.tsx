@@ -35,7 +35,7 @@
 //   stepIndex 1 (canon):  Space press reveals the From/To pair:
 //     T+0ms:    FROM line slides up 12px (400ms).
 //     T+250ms:  TO line slides up 12px (400ms) + 4s ambient copper pulse
-//               begins on `standing capability`.
+//               begins on `never reached`.
 import { useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { SlideDef } from "@/deck/types";
@@ -276,7 +276,7 @@ function renderClarifier(text: string, word: string): ReactNode {
 }
 
 // Render the "To: ..." copy with the italic copper accent on
-// `standing capability`. When `pulse` is true (canonical pose), wrap the
+// `never reached`. When `pulse` is true (canonical pose), wrap the
 // accent in AmbientPulse for the 4s copper-glow loop.
 function renderToText(text: string, keywords: readonly string[], pulse: boolean): ReactNode {
   const kw = keywords[0];
