@@ -2,7 +2,7 @@
 // them varies on.
 //
 // Spec §6.8 (content) · §6.5 (the ladder K.2 maps onto) · §4.4 slot 6 (K.2's
-// brand axis) · §11 Phase 6 · §4.3's leader deck table. Named by SECTION KEY and
+// brand axis) · §11 Phases 6 and 7 · §4.3's leader deck table. Named by SECTION KEY and
 // not by letter: `mandate` is K in §4.3's finished leader deck and K in the deck
 // these tickets compose, and it is STILL not written down anywhere here. The
 // letter is derived per deck (§3.4 R2, §3.5) and no file under
@@ -10,9 +10,10 @@
 // named this directory on that rule before it existed.
 //
 // ─────────────────────────────────────────────────────────────────────────────
-// THE ONE THING TO READ BEFORE EDITING ANYTHING BELOW: THE TWO SLIDES IN THIS
-// FILE DISAGREE ABOUT WHETHER THIS SECTION HAS A BRAND AXIS, AND THE DISAGREEMENT
-// IS THE ARGUMENT, NOT AN INCONSISTENCY.
+// THE ONE THING TO READ BEFORE EDITING ANYTHING BELOW: THE THREE SLIDES IN THIS
+// FILE DISAGREE ABOUT WHETHER THIS SECTION HAS A BRAND AXIS — TWO EXPORT NO
+// BRAND PICK AND ONE DOES — AND THE DISAGREEMENT IS THE ARGUMENT, NOT AN
+// INCONSISTENCY. THE TWO THAT AGREE DO NOT EVEN AGREE FOR THE SAME REASON.
 //
 // K.1 (`mandate-enablement`) EXPORTS NO BRAND PICK. §6.8's model is "GENERIC
 // PILLARS AND TRACKS, ONE SPECIFIC BOTTLENECK". The pillars and the tracks are
@@ -39,47 +40,87 @@
 // axis exists here because the EVIDENCE exists here, which is exactly the test
 // K.1 failed and this slide passes; neither answer is the house style.
 //
-// WHAT DOES NOT VARY, ON EITHER SLIDE: the structure. K.1's pillars and tracks
-// are generic, and K.2's phases, gates and rungs are generic — the brand supplies
-// only the calendar, the citation and the ask. So the brand axis below is
-// deliberately NARROW: it carries no phase name, no gate and no rung, and
-// {@link PhasesGatesBrandBlock} is the whole of what an organisation may change.
+// K.3 (`mandate-levers`) EXPORTS NONE EITHER, AND NOT FOR K.1'S REASON — which is
+// why the two are argued separately rather than filed together as "the slides
+// without an axis". K.1 has no axis because its SUBJECT is generic by
+// construction and the one specific thing on its stage is somebody else's quoted
+// sentence. K.3 has no axis because its subject is THE PERSON IN THE ROOM, and
+// that person is the same person in both rooms: a BU or Division Head with a
+// calendar, a headcount and a budget line they already hold. Every one of the
+// four levers is an act inside that authority — it names no system, no
+// department, no vendor and no date — so there is nothing an organisation could
+// supply that would change one of them. A `Record<Brand, …>` here would be three
+// byte-identical blocks, and three byte-identical blocks are what a deck looks
+// like on the day somebody edits one of them and it starts asking two rooms for
+// different things without anybody deciding to. §6.8 gives this slide no brand
+// callback and §4.4 lists no slot for it; the section's variance is spent on K.2,
+// where two organisations have two real calendars.
+//
+// WHAT DOES NOT VARY, ON ANY OF THE THREE: the structure. K.1's pillars and
+// tracks are generic, K.2's phases, gates and rungs are generic, and K.3's four
+// levers are generic — the brand supplies only K.2's calendar, citation and ask.
+// So the brand axis below is deliberately NARROW: it carries no pillar, no track,
+// no phase name, no gate, no rung and no lever, and
+// {@link PhasesGatesBrandBlock} is the whole of what an organisation may change
+// anywhere in this section.
 // ─────────────────────────────────────────────────────────────────────────────
 //
 // Markup convention, as everywhere else in the deck: data carries plain strings
 // plus a sibling `*Kw` array of substrings to highlight at render time. No inline
 // `<em>` in data.
 //
-// THE KEYWORD RULE. `kw` goes on PROSE ONLY, on both slides. K.1's prose is the
-// headline, the four pillar lines, the three track lines, the bottleneck's
+// THE KEYWORD RULE. `kw` goes on PROSE ONLY, on all three slides. K.1's prose is
+// the headline, the four pillar lines, the three track lines, the bottleneck's
 // statement and the closer; K.2's is the headline, the four gate lines, the
-// beyond-the-roadmap line, the band's statement and the closer. Everything else
-// is the mono LABEL register: fig labels, headings, pillar and track names, PHASE
-// LABELS AND STATES, rung names, calendar rows, the bands' eyebrows and both
-// CITATIONS. A copper italic inside a mono label reads as a rendering fault, and
-// inside a citation it reads as the deck emphasising a fragment of somebody
-// else's sentence — so the two source lines are the sharpest case of the rule and
-// both tests hold the registers apart as lists.
+// beyond-the-roadmap line, the band's statement and the closer; K.3's is the
+// headline, the four lever lines, the band's statement and the closer.
+// Everything else is the mono LABEL register: fig labels, headings, pillar and
+// track names, PHASE LABELS AND STATES, rung names, calendar rows, LEVER LABELS,
+// AUTHORITY LABELS, the three bands' eyebrows and all three CITATIONS. A copper
+// italic inside a mono label reads as a rendering fault, and inside a citation it
+// reads as the deck emphasising a fragment of somebody else's sentence — so the
+// three source lines are the sharpest case of the rule and the tests hold the
+// registers apart as lists.
 //
-// WHAT IS DELIBERATELY NOT IN THIS FILE. §6.8 gives the `mandate` run three
-// slides, and the third — `mandate-levers` (K.3, four levers: calendar ·
-// champion · access and procurement · funding) — is Phase 7 and has no copy here.
-// Two consequences are load-bearing rather than tidy:
+// THE LEVER / PILLAR BOUNDARY, NOW STATED FROM BOTH SIDES. Until Phase 7 this
+// block reserved K.3 and warned the pillars off its territory in one direction
+// only: "a pillar says what has to exist, a lever says what the leader does on
+// Monday — if a pillar line ever starts with 'You', it has become a lever and
+// belongs two slides later." K.3 is in this file now, so the rule has a second
+// half and both halves are enforceable against real copy rather than against a
+// plan:
 //
-//   · NO LEVER IS PRE-EMPTED. K.1's `access` and `support` pillars name two of
-//     the same STRUCTURES, and they must keep naming structures: a pillar says
-//     what has to exist, a lever says what the leader does on Monday. If a pillar
-//     line ever starts with "You", it has become a lever and belongs two slides
-//     later. K.2's Berau closer is the ONE deliberate exception and says so where
-//     it is written.
-//   · K.1 STILL NAMES NO GATE, NO PHASE AND NO DATE, and that is now a fact about
-//     this file rather than a promise about a future one: the pillars stop at what
-//     the programme is made of, and everything about when it is judged is under
-//     K.2's heading below.
+//   · A PILLAR NAMES A STRUCTURE AND NEVER AN ACT. K.1's `access` and `support`
+//     pillars name two of the same subjects K.3's first and third levers act on,
+//     and they must keep naming structures. "Someone named to ask on the Tuesday
+//     after the room empties" is a thing that has to exist; "Name one person,
+//     protect their hours, and write it into their objectives" is a thing a
+//     leader does. The first is authored under {@link Pillar.line} and the second
+//     under {@link Lever.line}, and the file boundary between them is one screen,
+//     which is exactly why the rule is written down.
+//   · A LEVER NAMES AN ACT AND NEVER A STRUCTURE, WHICH IS THE HALF THAT IS NEW.
+//     A lever line that stopped at what the programme is made of would be K.1's
+//     pillar restated two slides later, and the room would have paid a click for
+//     it. Every one of the four is therefore an IMPERATIVE — the second person
+//     with the "you" left implicit — and {@link LEVERS} says so on the field.
+//   · K.2's BERAU CLOSER IS THE ONE DELIBERATE EXCEPTION on the pillar side and
+//     says so where it is written. It is an imperative on a slide of structures,
+//     and it earns it by being a fact with an expiry date rather than a standing
+//     practice.
+//   · K.1 STILL NAMES NO GATE, NO PHASE AND NO DATE, and K.3 names none either.
+//     The pillars stop at what the programme is made of, the levers stop at what
+//     the leader authorizes, and everything about when the programme is judged is
+//     under K.2's heading between them.
 //
-// Dead copy that reads as finished is how unreviewed copy ships — same reasoning
-// as `GENERAL_BLOCK` in `src/slides/leader-gap/content.ts` and the top of
-// `src/slides/leader-invest/content.ts`.
+// WHAT IS STILL DELIBERATELY NOT IN THIS FILE, now that the run is complete at
+// §6.8's three slides: NOTHING. There is no fourth block, no placeholder and no
+// half-authored draft below — the section is finished, and the next slide to join
+// it would be a spec change first. Dead copy that reads as finished is how
+// unreviewed copy ships, which is the reasoning `GENERAL_BLOCK` in
+// `src/slides/leader-gap/content.ts` and the top of
+// `src/slides/leader-invest/content.ts` both record; the one dead block in this
+// file is K.2's `general`, which is dead for a different reason (an unregistered
+// variant) and is kept to the thinnest honest thing for exactly that reason.
 //
 // THIS FILE IS NO LONGER NODE-IMPORTABLE, and that is a price K.2 pays on
 // purpose. It held "no imports at all, not even a type" while K.1 was alone here;
@@ -90,8 +131,8 @@
 // convenience. `leader-invest/content.ts` pays the identical price for §4.5's
 // thesis line and argues it at the same length. `./geometry.ts` is the module in
 // this directory that still holds the property — measured, not assumed — and
-// `./phases-gates-geometry.ts` gave it up for its own import, which its header
-// prices separately.
+// `./phases-gates-geometry.ts` and `./levers-geometry.ts` each gave it up for
+// their own import of it, which their headers price separately.
 import type { Brand } from "@/deck-variants";
 import { gapLadderContent, type Rung } from "@/slides/leader-gap/content";
 
@@ -177,8 +218,9 @@ const PILLARS: readonly Pillar[] = [
   {
     id: "support",
     label: "SUPPORT",
-    // THE PILLAR MOST AT RISK OF BECOMING A LEVER. K.3's second lever is "name a
-    // champion, protect them, put it in their objectives" — the leader's ACT.
+    // THE PILLAR MOST AT RISK OF BECOMING A LEVER, and the second lever is now in
+    // this file to be read against ({@link LEVERS}, `champion`): "Name one person,
+    // protect their hours, and write it into their objectives" — the leader's ACT.
     // This line says only that the role has to exist and has to be reachable
     // after the event, which is the structure the lever funds. "Someone named",
     // not "you name someone".
@@ -929,4 +971,364 @@ export const mandatePhasesGatesContent = {
    */
   beyondRoadmap: "No roadmap reaches this far yet. The gate is what would decide it.",
   beyondRoadmapKw: ["No roadmap reaches this far yet"],
+} as const;
+
+// ═════════════════════════════════════════════════════════════════════════════
+// K.3 · `mandate-levers` — the four levers, and the form beside them. No brand
+// axis; see the header for why this slide's reason is not K.1's. Everything
+// below belongs to it.
+// ═════════════════════════════════════════════════════════════════════════════
+
+// ───────────────────── who a lever could have to wait on ─────────────────────
+
+/**
+ * The four things a leader's act could be blocked by, as a closed set of ids.
+ *
+ * A `const` TUPLE AND NOT A BARE STRING, for the reason {@link PhaseId} is one:
+ * {@link Lever.needs} is keyed by this union, so a lever that names an authority
+ * this deck never drew a column for fails to compile rather than pointing at a
+ * cell the form does not have.
+ *
+ * THREE OF THE FOUR ARE HERE ONLY TO BE EMPTY, and that is the point rather than
+ * an oversight. §6.8's levers are the ones a BU or Division Head can pull ALONE —
+ * "nothing that needs the committee, Group-HR or a budget cycle they do not own" —
+ * and a slide that only ever drew the column it fills would be asserting that
+ * property in prose while the figure said nothing. Naming the three refusals is
+ * what turns the claim into something the room can check by counting.
+ */
+export const AUTHORITY_IDS = ["you", "committee", "groupHr", "budget"] as const;
+export type AuthorityId = (typeof AUTHORITY_IDS)[number];
+
+/** One column of the form — somebody or something a lever could have to wait on. */
+export interface Authority {
+  id: AuthorityId;
+  /**
+   * Mono, uppercase. A LABEL, and keyword-free by the rule at the top of this
+   * file.
+   *
+   * HELD TO `AUTHORITY_LABEL_BUDGET_CHARS` (`./levers-geometry.ts`). This is the
+   * narrowest box on the stage — one of four columns in a 492px form — and a head
+   * that wraps does not overflow its column, it pushes the form's head rule down
+   * into the first lever row.
+   */
+  label: string;
+}
+
+/**
+ * The one authority every lever on this slide needs, and the only one.
+ *
+ * EXPORTED AND NAMED, rather than written as the string `"you"` in the three
+ * places that care, for the same structural reason `STATED_NOT_MEASURED` above is
+ * a constant: it is the slide's whole claim, it is read by the guard below, by
+ * the figure that fills the cells and by the test that holds the property, and a
+ * claim spelled out three times is a claim two of the three can stop making.
+ */
+export const SOLE_AUTHORITY: AuthorityId = "you";
+
+/**
+ * The four columns, in the order the room reads them left to right.
+ *
+ * THE ORDER IS THE ANSWER FIRST. `YOU` is the leftmost column because the room
+ * reads left to right and the slide's answer is the first thing it should reach;
+ * the three refusals follow, and they follow in ascending order of how long each
+ * one would take — a committee meets, a group function has a queue, a budget cycle
+ * takes a year. Reversed, the figure would build suspense the deck has no reason
+ * to build: this is the section's ask, not its reveal.
+ *
+ * NONE OF THE THREE REFUSALS NAMES AN ORGANISATION, which is what keeps the form
+ * generic and what stops it asserting anything about either room's internal
+ * structure. `GROUP HR` is a function every group has and is deliberately not
+ * `NANOVEST GROUP HR` — the column asks whether the leader in this room needs
+ * THEIR group's HR to sign, and the answer is no. The band below cites a specific
+ * Group HR playbook by name, and it is a DIFFERENT organisation's; see
+ * {@link PLAYBOOK} on why the two must not be collapsed.
+ */
+const AUTHORITIES: readonly Authority[] = [
+  { id: "you", label: "YOU" },
+  { id: "committee", label: "THE COMMITTEE" },
+  { id: "groupHr", label: "GROUP HR" },
+  { id: "budget", label: "A BUDGET CYCLE" },
+];
+
+// ───────────────────── the levers ─────────────────────
+
+/** One thing the leader in the room does, and what it waits on. */
+export interface Lever {
+  id: string;
+  /**
+   * Mono, uppercase. A LABEL, keyword-free.
+   *
+   * A VERB PHRASE, NOT A NOUN, AND THAT IS THE REWORDING. The playbook these four
+   * come from labels them `Convene · Champion · Unblock access · Sustain the
+   * rhythm` — nouns, because they name what a group function OWNS. Printed here
+   * those labels would be the deck asking the room to authorize somebody else's
+   * job description. Every label below is an imperative addressed to the person
+   * sitting in front of it, which is the whole difference between the source and
+   * this slide and the reason {@link PLAYBOOK} quotes the source rather than
+   * repeating it.
+   */
+  label: string;
+  /**
+   * What that act actually is, in ONE LINE. Prose, so it carries keywords.
+   *
+   * AN INSTRUCTION AND NEVER A DEFINITION — the exact inverse of
+   * {@link Pillar.line}, and the second half of the lever/pillar boundary the
+   * header states. A line that described a structure would be K.1's pillar
+   * restated two slides later, and the room would have paid a click for it. Every
+   * one is an IMPERATIVE with the "you" left implicit, and each one names the
+   * thing the leader signs rather than the thing that then exists.
+   *
+   * HELD TO `LEVER_LINE_BUDGET_CHARS` (`./levers-geometry.ts`). The board budgets
+   * exactly one line per row, so a wrapped line does not overflow a box — it
+   * overlaps the row beneath it, which reads on a projector as a font that failed
+   * to load.
+   */
+  line: string;
+  lineKw: readonly string[];
+  /**
+   * Whose sign-off this lever waits on — the row's cells in the form.
+   *
+   * AN ARRAY, THOUGH IT ONLY EVER HOLDS ONE ENTRY, and the generality is what the
+   * figure runs on rather than slack left for a future that will not come. The
+   * form draws SIXTEEN cells and fills them from this field alone: filled where
+   * the row needs that column, a hairline frame where it does not. The rejected
+   * shape was a per-lever boolean beside a hand-written list of which cells stay
+   * empty — two lists that agree today and are one edit from a form with a filled
+   * cell nobody authored, which reads as a rendering fault rather than as a
+   * mistake.
+   *
+   * AND IT IS GUARDED AT MODULE LOAD. See {@link authorizableAlone}: a lever that
+   * needs anything but {@link SOLE_AUTHORITY} takes this module down in every deck
+   * that composes it, rather than drawing a second filled column under a headline
+   * that denies one exists.
+   */
+  needs: readonly AuthorityId[];
+}
+
+/**
+ * The guard that makes this slide's headline a property of the data.
+ *
+ * §6.8's levers are the ones a BU or Division Head can pull ALONE. That is not a
+ * tone this copy happens to take — it is the criterion that decides whether a
+ * sentence belongs on this stage at all, and the one thing about the slide a
+ * later author is most likely to relax by writing a fifth lever that is merely
+ * good advice. So it fails HERE, at load, in every deck that composes the slide,
+ * naming the lever and the authority it smuggled in.
+ *
+ * WHY NOT LEAVE IT TO THE TEST. A test reports the failure at CI, one commit
+ * later, by which time the offending lever reads as finished copy and the
+ * reviewer's question becomes "should we relax the rule?". A throw at load makes
+ * the answer visible in the same edit: the slide does not render, and the message
+ * says which criterion it failed. The test still holds the same property — the two
+ * are not redundant, they fail at different moments and to different people.
+ *
+ * @throws naming the lever, the authorities it named, and the criterion.
+ */
+function authorizableAlone(levers: readonly Lever[]): readonly Lever[] {
+  for (const lever of levers) {
+    if (lever.needs.length === 1 && lever.needs[0] === SOLE_AUTHORITY) continue;
+    throw new Error(
+      `authorizableAlone: lever "${lever.id}" waits on ` +
+        `${lever.needs.length === 0 ? "nobody at all" : lever.needs.join(", ")}, and every ` +
+        `lever on this slide must wait on "${SOLE_AUTHORITY}" and on nothing else ` +
+        `(§6.8). A lever a BU or Division Head cannot authorize alone is not a lever ` +
+        `this slide can print — it is an ask for somebody who is not in the room.`,
+    );
+  }
+  return levers;
+}
+
+/**
+ * The four levers, in the order the room reads them down the board.
+ *
+ * THE ORDER IS THE ORDER THEY GET PULLED IN, not a ranking: the time goes in the
+ * calendar before anybody is named to fill it, the champion is named before there
+ * is anybody to clear a seat for, access is cleared before there is anything to
+ * fund, and the funding is the one that has to survive the quarter. Nothing on
+ * the stage ranks them — one colour tier for all four labels, one for all four
+ * lines, one filled cell each — because a lever nobody pulls takes the other
+ * three down with it, exactly as K.1's pillars do.
+ *
+ * FOUR, AND THEY ARE THE PLAYBOOK'S FOUR, REWORDED. §6.8 names them and
+ * {@link PLAYBOOK} cites where they come from. A fifth would have to be a fifth
+ * lever in the source too, or the band under them stops being true — which is the
+ * cheapest guard this list has against growing by whatever felt missing on the
+ * day.
+ *
+ * EVERY ONE OF THEM IS SCOPED TO WHAT THE ROOM ALREADY OWNS, and that scoping is
+ * where the rewording actually happens — not in the verbs. "Fund it from the line
+ * you already hold" is a different ask from "fund it", and only one of the two
+ * survives {@link authorizableAlone}. Same for "under your own name" on the third:
+ * the leader sponsors the request, which is theirs to do, rather than approving a
+ * purchase, which may not be.
+ *
+ * `needs` IS WRITTEN AS A LITERAL ON EVERY ROW AND NOT AS `[SOLE_AUTHORITY]`, and
+ * the difference is the whole value of the guard. Spelled with the constant, all
+ * four rows would be boilerplate the guard could never fail — a check of the
+ * module against itself. Spelled as a literal, each lever ASSERTS whose signature
+ * it waits on and {@link authorizableAlone} CHECKS that assertion against the
+ * criterion, which is also the shape a fifth lever will be written in: an author
+ * adding one types what it needs, and finds out at load whether this slide can
+ * print it.
+ */
+const LEVERS: readonly Lever[] = authorizableAlone([
+  {
+    id: "calendar",
+    label: "BLOCK THE TIME",
+    // The playbook's `Convene` — "create attendance, visibility, and mandate" —
+    // as the two acts that actually create all three. "As work" is what makes
+    // attendance real; being in the room for the first session is the visibility
+    // and the mandate, and it is the half a leader delegates first.
+    line: "Put the sessions in the calendar as work, and be in the room for the first one.",
+    lineKw: ["as work", "be in the room"],
+    needs: ["you"],
+  },
+  {
+    id: "champion",
+    label: "NAME A CHAMPION",
+    // The playbook's `Champion` — "protect and recognize the champion role through
+    // performance criteria". THE HOURS ARE THE PROTECTION AND THE OBJECTIVES ARE
+    // THE RECOGNITION, and both are inside a Division Head's own authority: an
+    // objective line is theirs to write. K.1's SUPPORT pillar says the role has to
+    // exist; this says who signs for it.
+    line: "Name one person, protect their hours, and write it into their objectives.",
+    lineKw: ["protect their hours", "into their objectives"],
+    needs: ["you"],
+  },
+  {
+    id: "access",
+    label: "CLEAR ACCESS AND PROCUREMENT",
+    // The playbook's `Unblock access` — "accelerate IT provisioning". THE ACT IS
+    // THE SPONSORSHIP, NOT THE APPROVAL, which is the distinction that keeps this
+    // lever inside one person's authority: raising the request under your own name
+    // and dating it is what a Division Head does, and it is what turns a ticket
+    // nobody owns into one somebody answers. Indexes §6.7's D.5 without naming it
+    // — the room heard "seats" there.
+    line: "Raise the seat and tooling request under your own name, and put a date on it.",
+    lineKw: ["under your own name", "put a date on it"],
+    needs: ["you"],
+  },
+  {
+    id: "rhythm",
+    label: "FUND THE RHYTHM",
+    // The playbook's `Sustain the rhythm` — "preserve calendars, funding, and
+    // visibility" — plus the source's own review cadence, "adoption dashboards and
+    // quarterly reviews". "THE LINE YOU ALREADY HOLD" IS THE WHOLE REWORDING: it
+    // is what keeps the fourth lever off a budget cycle nobody in the room owns,
+    // and without it this is the one of the four that would fail
+    // {@link authorizableAlone}. "Review it yourself" rather than "review it",
+    // because a review somebody else runs is a report, and a report is what the
+    // programme already produces.
+    line: "Fund it from the line you already hold, and review it yourself every quarter.",
+    lineKw: ["the line you already hold", "every quarter"],
+    needs: ["you"],
+  },
+]);
+
+// ───────────────────── where the four came from ─────────────────────
+
+/**
+ * The Group HR playbook these four levers are reworded FROM — the section's third
+ * printing of the same three-line band, and the one that makes "reworded" honest
+ * rather than asserted.
+ *
+ * WHY THIS SLIDE HAS A BAND AT ALL, argued once here because a third band in
+ * three consecutive slides is the decision a reader will question first. The four
+ * levers are not the deck's invention. They are `Convene · Champion · Unblock
+ * access · Sustain the rhythm`, and printing them without their source would be
+ * this deck taking credit for somebody else's frame on the one slide where it asks
+ * the room for something. The band is also what lets the four rows above stay pure
+ * imperatives: the original wording lives here, once, instead of trailing every
+ * row as a parenthesis in a second register.
+ *
+ * THREE LINES, SAME SHAPE AND SAME REASONS AS K.1's BOTTLENECK AND K.2's BAND —
+ * see {@link BOTTLENECK} for the full argument, which this band inherits rather
+ * than restates:
+ *
+ *   · `eyebrow`    — what the room is looking at. Mono label.
+ *   · `statement`  — THE DECK'S OWN sentence, in the deck's words, unquoted.
+ *   · `provenance` — the playbook's OWN labels, in quotes and attributed. Mono,
+ *                    sentence case, keyword-free.
+ *
+ * THE TWO "GROUP HR"s ON THIS STAGE ARE DIFFERENT ORGANISATIONS, AND NOTHING MAY
+ * COLLAPSE THEM. The form's third column is the ROOM's group HR — the function a
+ * BU or Division Head would otherwise have to ask, and the column that stays
+ * empty. This citation is the DECK's own: Nanovest's, named, because it is the
+ * document the four levers were lifted from. That is why the column head is bare
+ * and this line carries the organisation's name; swapping either would make the
+ * slide say that the room's own HR wrote its levers, or that a deck's internal
+ * playbook has authority over somebody else's division.
+ *
+ * SOURCE: `docs/researches/2026-07-31-hr-group-agentic-org-analysis.md`, the
+ * Group-Wide Enablement Playbook — "Four HR Group levers: Convene · Champion ·
+ * Unblock access · Sustain the rhythm", with `Convene` as "create attendance,
+ * visibility, and mandate", `Champion` as "protect and recognize the champion role
+ * through performance criteria", `Unblock access` as "accelerate IT provisioning",
+ * `Sustain the rhythm` as "preserve calendars, funding, and visibility", and the
+ * deck's core message that "Group HR supplies institutional leverage".
+ * Cross-checked against `docs/researches/internal-hr-group.md`, which records the
+ * same playbook and the review cadence the fourth lever borrows.
+ */
+const PLAYBOOK = {
+  /** Mono label. Names what the band is — a provenance, not a further ask — so a
+   *  room three clicks into being asked for things does not read the citation as
+   *  a fifth lever. */
+  eyebrow: "WHERE THE FOUR CAME FROM",
+
+  /** The deck's own compression, in the deck's words. Prose, so it carries a
+   *  keyword; NO quotation marks, because it is not a quotation. */
+  statement: "The same four levers, written for the group and reworded for the room.",
+  statementKw: ["reworded for the room"],
+
+  /** The citation, on the slide rather than in a footnote. Keyword-free. The four
+   *  source labels are quoted verbatim and in the source's own order, which is
+   *  also the order of the four rows above — so a room that wants to check the
+   *  rewording can read straight across. */
+  provenance:
+    "Nanovest's own Group HR playbook lists four levers — “Convene · Champion · " +
+    "Unblock access · Sustain the rhythm” — as the institutional leverage Group HR supplies.",
+} as const;
+
+// ───────────────────── the slide ─────────────────────
+
+export const mandateLeversContent = {
+  figLabel: "THE FOUR LEVERS",
+
+  /**
+   * The whole slide in one sentence, and the claim the form below has to keep.
+   *
+   * A leader hears a list of asks and starts sorting it into what they can do and
+   * what they will have to take somewhere else. The headline answers that before
+   * the sorting starts, so the four rows can be read as four acts rather than as
+   * four requisitions — and the form is what stops the claim being a claim.
+   */
+  headline: "Four levers. Not one of them needs a signature but yours.",
+  headlineKw: ["a signature but yours"],
+
+  /** Mono headings, keyword-free. Each names its half's QUESTION rather than its
+   *  contents — the construction K.1's two headings use, two slides earlier, and
+   *  the reason this stage can also hang two of them on one shelf. */
+  leversHeading: "THE LEVERS · WHAT YOU DO ON MONDAY",
+  authorityHeading: "WHAT EACH ONE NEEDS BEFORE IT CAN HAPPEN",
+
+  levers: LEVERS,
+  authorities: AUTHORITIES,
+  playbook: PLAYBOOK,
+
+  /**
+   * The ask, and the last thing the mandate says before the deck moves on.
+   *
+   * IT DOES NOT RESTATE THE HEADLINE, which is the temptation on a slide whose
+   * headline is already its claim. The headline says the levers need nobody else;
+   * this says what follows from that and nothing more — that with nobody to wait
+   * for, the absence of a decision is itself the decision, and it is one the room
+   * takes rather than one that happens to it. That is the whole difference between
+   * a slide that describes an enablement model and a slide that asks for one.
+   *
+   * IT CLOSES THE SECTION. K.1 handed the room its own bottleneck to name, K.2
+   * handed it a gate, and there is no fourth slide to hand this to: the next thing
+   * the deck does is stop asking.
+   */
+  closer: "Not deciding is also a decision — and with nobody else to wait for, it is the one you take.",
+  closerKw: ["Not deciding is also a decision"],
 } as const;

@@ -416,11 +416,13 @@ interface ObservedDeck {
  *     pre-existing label (`THE CAPABILITY LADDER`), no label dropped, no letter
  *     touched. Read the diff, every time.
  *
- * ON gh#68 NO FIGURE MOVED AT ALL, and it is the FIRST leader-only ticket in this
- * list of which that is true. `shape-middle-out` reached the leader lists alone — the
+ * ON gh#68 NO FIGURE MOVED AT ALL — the FIFTH entry in that list, after gh#57, gh#61,
+ * gh#58 and gh#59, and the first of them to land in `shape`. `shape-middle-out`
+ * reached the leader lists alone — the
  * thirteenth slide ever to do so — taking both decks to **70** rows. Still FOURTEEN
- * sections, still closing on **N.3**. It is a FOURTH shape, and the cheapest one
- * there is: a TAIL APPEND, onto the end of the `shape` run gh#54 opened. It did not
+ * sections, still closing on **N.3**. It is gh#57's shape and not a fourth one, and
+ * the cheapest edit there is: a TAIL APPEND, onto the end of the `shape` run gh#54
+ * opened. It did not
  * open a run, so no letter moved; and unlike gh#65's head insert and gh#66's and
  * gh#67's mid-run ones it had no row BEHIND it inside its own run, so R3 had nothing
  * to renumber and no number moved either:
@@ -455,8 +457,53 @@ interface ObservedDeck {
  *     pre-existing label, no label dropped, no letter touched. Read the diff, every
  *     time — and on this ticket read it INSTEAD of the report, not after it.
  *
+ * ON gh#69 NO FIGURE MOVED EITHER — the SIXTH entry in that list, after gh#57, gh#61,
+ * gh#58, gh#59 and gh#68, and the same shape as all five: an APPEND at a run's END.
+ * `mandate-levers` reached the leader lists alone, the fourteenth slide ever to do so,
+ * taking both decks to **71** rows and CLOSING the `mandate` run at §6.8's three. It
+ * took no letter (K has been claimed since gh#60) and renumbered nothing (R3 renumbers
+ * only inside the run that changed, and this row is that run's LAST). Still FOURTEEN
+ * sections, still closing on **N.3**:
+ *
+ *   · ONE row was added per leader deck, and it is the only new label in the file:
+ *     `K.3 · THE FOUR LEVERS`, at index 59, between `K.2 · PHASES AND GATES` and
+ *     `L.1 · THE PROCESS`. §6.8 numbers that slide K.3 and it composes as K.3 — the
+ *     third `mandate` row whose spec number and composed number agree, for the reason
+ *     K.1's and K.2's did: `mandate` fills front-to-back and nothing inserts ahead of
+ *     it. The run being COMPLETE is what freezes that agreement, not a licence to pin
+ *     it; it is still derived (§3.5).
+ *   · EVERY OTHER ROW PRINTS WHAT IT PRINTED BEFORE, in all five decks — checked
+ *     offset-aware, `head[i]` against `new[i]` up to index 58 and against `new[i+1]`
+ *     from 59 on: 70 pre-existing rows per leader deck, ZERO with a changed `fig` or
+ *     `label`, none removed. The loop slide is still H.12, thirteen tickets into a life
+ *     in which its file has never been opened, f8 is still C.2, `C.3 · MIDDLE-OUT` is
+ *     where gh#68 left it, the four `invest` rows
+ *     are still D.1–D.4, the five `gap` rows still B.1–B.5, and `berau`, `gems` and
+ *     `general` are byte-identical per key (4931 / 4919 / 4765 bytes of
+ *     `JSON.stringify(deck, null, 2)`, unchanged since gh#67 — the entry above
+ *     measures the same three decks with the file's own indentation, which is the
+ *     whole of why its numbers are the larger ones).
+ *   · The re-record still needed `ALLOW_MOVED_FIGURES=1`, for gh#57's reason exactly —
+ *     and THE REPORT IS THE SMALLEST THIS FILE HAS RECORDED, which is the detail worth
+ *     taking from it. **24 lines**: two row-count lines (`70 slides recorded, 71
+ *     rendered`) and ELEVEN per leader deck, running `slide 59: recorded L.1, renders
+ *     K.3` down to `slide 69: recorded N.3, renders N.2`. gh#65, gh#66 and gh#67 each
+ *     printed 126 because their insert was at index 2–5 and every row behind it shifted,
+ *     and gh#68 printed 122 from index 9;
+ *     this one lands at index 59 with only `meta`, `principles` and `lab` behind it, so
+ *     the index-keyed detector has just eleven rows to mis-report. The line count tracks
+ *     WHERE the insert lands and nothing else — not the size of the change and not its
+ *     risk.
+ *   · WHAT THE DIFF SAYS, matched by LABEL and by ordered `(fig, label)` pair: all 70
+ *     pre-existing pairs survive IN ORDER, exactly one new pair appears
+ *     (`K.3 · THE FOUR LEVERS`), no pair is dropped and no `fig` changes. (A
+ *     label-keyed check alone mis-reports `THE TRAP` as `J.1 → G.1`: that label is
+ *     carried by TWO slides, `d1-the-trap` at G.1 and `h1-pitfall-wall` at J.1, and a
+ *     label→fig map keeps whichever it saw last. Both rows are unchanged. Labels are
+ *     not unique; match on the PAIR, in order.)
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all twelve tickets — thirteen leader-only slides now, since gh#67 brought two. That
+ * all thirteen tickets — fourteen leader-only slides now, since gh#67 brought two. That
  * is the assertion worth reading twice: a leader-only
  * insert must not be able to touch a standard deck, and gh#54's relocation could
  * not either — f8 moved because a LEADER LIST moved it, and the standard list was
@@ -472,8 +519,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 70, closer: "N.3" },
-  "gems-leader": { slides: 70, closer: "N.3" },
+  "berau-leader": { slides: 71, closer: "N.3" },
+  "gems-leader": { slides: 71, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

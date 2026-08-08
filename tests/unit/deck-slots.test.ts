@@ -261,17 +261,18 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 70 slots — the F cut, F.8 kept, plus its own", () => {
+  test("gives the leader deck its own 71 slots — the F cut, F.8 kept, plus its own", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(70);
+    expect(leader.slides).toHaveLength(71);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
-    // leader deck now holds slides no standard deck does — THIRTEEN of them as of
-    // gh#68, in FOUR runs, because gh#57, gh#61, gh#58, gh#59 and gh#68 each lengthened
+    // leader deck now holds slides no standard deck does — FOURTEEN of them as of
+    // gh#69, in FOUR runs, because gh#57, gh#61, gh#58, gh#59, gh#68 and gh#69 each
+    // lengthened
     // a
     // run at its end, gh#65 lengthened one at its head, and gh#66 and gh#67 lengthened
     // one in its middle — gh#67 by TWO rows, the only ticket so far to add more than
@@ -279,19 +280,19 @@ describe("DECK_SET_COMPOSITION", () => {
     // directions SEPARATELY rather
     // than as one net number, so the next leader-only slide cannot mask a cut F
     // slide creeping back in. The net has been eight, seven, six, five, four,
-    // three, two, one, zero, minus one, minus two, minus four and now MINUS FIVE —
-    // gh#59 made the
+    // three, two, one, zero, minus one, minus two, minus four, minus five and now
+    // MINUS SIX — gh#59 made the
     // two decks
     // the same
     // length for the first time and gh#65 made the leader deck the LONGER one, so a
     // net read in one direction would now read as a missing slide.
     //
-    // THE ORDER OF THE SECOND LIST IS THE LEADER DECK'S OWN, which is why the two
+    // THE ORDER OF THE SECOND LIST IS THE LEADER DECK'S OWN, which is why the three
     // `mandate` rows are last and in that order, and why `gap-hardest-part` is
     // FIRST: they are the only leader-only
     // slides that sit BEHIND the curriculum rather than in front of it, and
     // `filter` preserves both facts. A `mandate` row that had drifted up among the
-    // other eleven, either pair swapped, the four `invest` rows out of §6.7's
+    // other eleven, any pair swapped, the four `invest` rows out of §6.7's
     // order, the two `shape` rows reversed, or the five `gap` rows out of §4.3's
     // order, would fail here as an
     // ordering mismatch
@@ -329,6 +330,7 @@ describe("DECK_SET_COMPOSITION", () => {
       "invest-subscription",
       "mandate-enablement",
       "mandate-phases-gates",
+      "mandate-levers",
     ]);
   });
 
@@ -482,7 +484,8 @@ describe("DECK_SET_COMPOSITION", () => {
   });
 
   test("runs the mandate between the pitfalls bridge and the meta run", () => {
-    // gh#60 opened this run and gh#61 filled its second row. The insert point is
+    // gh#60 opened this run, gh#61 filled its second row and gh#69 its third and
+    // LAST. The insert point is
     // the WHOLE of what those tickets did to the composition — stated as the two
     // joins it makes, exactly as the `invest` case above is. `mandate` is the one
     // leader-only run §3.6 puts BEHIND the curriculum, so the pair that surrounds
@@ -502,24 +505,40 @@ describe("DECK_SET_COMPOSITION", () => {
     //
     // THE RUN IS ASSERTED AS A WHOLE, not as one row with two neighbours, and
     // gh#61 is why: it appended a second slide INSIDE the run, so the join that
-    // used to be `mandate-enablement` → `i1-meta-process` is now one row further
-    // along. Written as a slice, that growth is one line here and the two joins
+    // used to be `mandate-enablement` → `i1-meta-process` moved one row along, and
+    // gh#69's third row moved it one further. Written as a slice, that growth is one
+    // line here and the two joins
     // §3.6 actually constrains — what the run follows and what it hands to — stay
-    // asserted whatever its length becomes. Phase 7's K.3 appends to the array
-    // below and to nothing else.
+    // asserted whatever its length becomes. gh#69's K.3 proved that: it appended to
+    // the array below and to nothing else, and this test's two `slides[…]` joins did
+    // not move a character — only the slice's width and its last id.
+    //
+    // THE RUN IS COMPLETE, so the slice is now FINAL as well as derived. §6.8 asks
+    // for three `mandate` slides and all three are here, in §6.8's order, so a fourth
+    // id inside this window is a slide the spec does not ask for and fails as an
+    // ordering mismatch rather than composing quietly at the tail. That makes this
+    // the SECOND leader-only run to be closed, after `gap` (gh#67) — `shape` and
+    // `invest` are the two whose slices may still widen.
+    //
+    // K.3 IS ASSERTED AS THE RUN'S LAST ROW SEPARATELY, because the slice alone does
+    // not say it: a slice compares ids in order, and "this id is the one the run
+    // hands to `meta` from" is the fact §6.8 pins on this slide and the reason gh#69
+    // moved no number (R3 renumbers only behind the changed row, and there is nothing
+    // behind this one inside the run).
     const { slides } = DECK_SET_COMPOSITION.leader;
     const at = slides.indexOf("mandate-enablement");
     expect(at).toBeGreaterThan(-1);
     expect(slides[at - 1]).toBe("h3-bridge-to-i");
-    expect(slides.slice(at, at + 2)).toEqual(["mandate-enablement", "mandate-phases-gates"]);
-    expect(slides[at + 2]).toBe("i1-meta-process");
+    const run = slides.slice(at, at + 3);
+    expect(run).toEqual(["mandate-enablement", "mandate-phases-gates", "mandate-levers"]);
+    expect(run.at(-1)).toBe("mandate-levers");
+    expect(slides[at + 3]).toBe("i1-meta-process");
     // And they reach the leader list ALONE. The standard deck hands `h3` straight
     // to `i1`, which is the half a leader-only ticket has to keep true: one id
     // written into the wrong constant would insert a section in front of `meta`
     // in a deck with no leader in the room.
     const { slides: std } = DECK_SET_COMPOSITION.standard;
-    expect(std).not.toContain("mandate-enablement");
-    expect(std).not.toContain("mandate-phases-gates");
+    for (const id of run) expect(std, id).not.toContain(id);
     expect(std[std.indexOf("h3-bridge-to-i") + 1]).toBe("i1-meta-process");
   });
 

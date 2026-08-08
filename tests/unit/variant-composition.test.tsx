@@ -269,7 +269,7 @@ describe("leader deck sets", () => {
       // with the deck instead of being dropped: which pair surrounds f8 is the
       // only thing that says the relocation still holds.
       //
-      // NONE OF gh#57, gh#58, gh#59, gh#65, gh#66 OR gh#67 MOVED F8 AGAIN.
+      // NONE OF gh#57, gh#58, gh#59, gh#65, gh#66, gh#67 OR gh#69 MOVED F8 AGAIN.
       // `invest-chicken-egg`
       // joined
       // the END of that `invest` run, `invest-security` joined behind it and
@@ -286,6 +286,11 @@ describe("leader deck sets", () => {
       // front — which is why the line above this block did not move and every line
       // below it slid by one. A tail append is the only insert shape that can do
       // that: it lands between two runs without joining the second.
+      //
+      // gh#69 DID NOT TOUCH f8's INDEX EITHER, let alone its neighbours:
+      // `mandate-levers` appended behind the whole curriculum (§3.6), so it is
+      // entirely downstream of this assertion — the one tail append of the six that
+      // this block never sees.
       //
       // gh#65 IS THE ONE THAT PROVES THE OFFSETS ARE RELATIVE AND NOT ABSOLUTE. It
       // inserted `gap-hardest-part` two rows IN FRONT of f8, so f8's own index moved
@@ -347,7 +352,8 @@ describe("leader deck sets", () => {
   });
 
   test("compose the mandate run between the pitfalls run and the meta run", async () => {
-    // gh#60 and gh#61, read off the COMPOSED deck rather than the authored list —
+    // gh#60, gh#61 and gh#69, read off the COMPOSED deck rather than the authored
+    // list —
     // which is the half `deck-slots.test.ts` cannot see. Two things have to hold at
     // once and only one of them is about position:
     //
@@ -363,12 +369,20 @@ describe("leader deck sets", () => {
     //
     // ORDER INSIDE THE RUN STARTED MATTERING ON gh#61, which is why the whole run
     // is compared rather than counted. K.1 asks the room to name its own
-    // bottleneck and K.2 answers "and here is when any of it gets judged"; the two
+    // bottleneck, K.2 answers "and here is when any of it gets judged", and gh#69's
+    // K.3 closes with what the person in the room can authorize alone; any two of
+    // the three
     // reversed compose perfectly well and argue backwards, and nothing but this
     // line would notice.
     //
+    // THE RUN IS COMPLETE AS OF gh#69, so the comparison below is now §6.8's whole
+    // list and not a prefix of it — the SECOND leader-only run to reach its spec'd
+    // length, after `gap` (gh#67). A fourth `mandate` row would fail here by name.
+    //
     // NO LETTER IS ASSERTED. `mandate` takes K and pushes `meta`/`principles`/`lab`
     // along, all derived (§3.5); the numbering fixture records what that prints.
+    // gh#69 moved neither: K was already claimed, and an END append leaves R3
+    // nothing behind the new row to renumber inside the run.
     for (const id of LEADER_IDS) {
       const keys = await sectionKeysFor(id);
       const composed = [...keys];
@@ -376,14 +390,14 @@ describe("leader deck sets", () => {
       expect(at, id).toBeGreaterThan(-1);
       expect(composed[at][1], id).toBe("mandate");
       expect(composed[at - 1]?.[1], id).toBe("pitfalls");
-      expect(composed[at + 2]?.[1], id).toBe("meta");
+      expect(composed[at + 3]?.[1], id).toBe("meta");
       // THE WHOLE RUN, for the same reason the `shape` case above asserts one: a
       // second `mandate` row elsewhere in the deck throws as R4 where it is
       // non-adjacent and silently lengthens the run where it is not.
       expect(
         composed.filter(([, key]) => key === "mandate").map(([slide]) => slide),
         id,
-      ).toEqual(["mandate-enablement", "mandate-phases-gates"]);
+      ).toEqual(["mandate-enablement", "mandate-phases-gates", "mandate-levers"]);
     }
   });
 
@@ -398,20 +412,21 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // THIRTEEN ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
+      // FOURTEEN ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
       // into a deck that has no leader in the room. Eleven of them would do it in
-      // FRONT of the curriculum and renumber all 65 slides behind them; the two
+      // FRONT of the curriculum and renumber all 65 slides behind them; the three
       // `mandate` rows would do it between `pitfalls` and `meta` and renumber only
       // the last eleven — quieter, and therefore the ones most likely to reach a
       // projector.
       //
-      // THIRTEEN IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
-      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65, gh#66, gh#67 and gh#68
+      // FOURTEEN IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
+      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65, gh#66, gh#67, gh#68 and
+      // gh#69
       // inherit it
       // whole:
       // `invest-chicken-egg`, `mandate-phases-gates`, `invest-security`,
-      // `invest-subscription` and `shape-middle-out` each append to the END of a run
-      // that ALREADY EXISTS in
+      // `invest-subscription`, `shape-middle-out` and `mandate-levers` each append to
+      // the END of a run that ALREADY EXISTS in
       // the leader list, `gap-hardest-part` went in at the HEAD of one, and
       // `gap-no-sop`, `gap-three-failures` and `gap-the-pattern`
       // into the MIDDLE of one — a third and a fourth
@@ -419,7 +434,7 @@ describe("leader deck sets", () => {
       // LEADER DECK AND WHAT IT WOULD COST A STANDARD ONE ARE UNRELATED, which gh#68
       // shows most sharply: it is the cheapest edit the leader list has taken — no
       // letter, no number — and leaked into `STANDARD_SLIDE_IDS` it would be as
-      // expensive as any of the other twelve. The standard list holds no
+      // expensive as any of the other thirteen. The standard list holds no
       // `gap` row, no `invest` row and no `mandate`
       // row at all — so on a standard deck any one of them would arrive alone and
       // claim a letter exactly as the four run-openers would.
@@ -446,6 +461,7 @@ describe("leader deck sets", () => {
           "invest-subscription",
           "mandate-enablement",
           "mandate-phases-gates",
+          "mandate-levers",
         ].filter((slide) => keys.has(slide)),
         id,
       ).toEqual([]);
@@ -454,8 +470,8 @@ describe("leader deck sets", () => {
 
   // NOT ASSERTED HERE: how long a leader deck is against a standard one. It was
   // eight slides shorter at the gh#41 floor, level after gh#59, a slide LONGER
-  // since gh#65, two longer after gh#66, four longer after gh#67 and FIVE longer
-  // since gh#68 — which is exactly
+  // since gh#65, two longer after gh#66, four longer after gh#67, five longer after
+  // gh#68 and SIX longer since gh#69 — which is exactly
   // why the number is not
   // restated in this file. That
   // is a

@@ -81,7 +81,12 @@ export const slideCatalogue: readonly SlideDef[] = [
   // (§3.6), which is why this line is HERE and not up with the other three. The
   // order in this file carries no meaning — `./deck-sets.ts` owns it — so the
   // placement buys nothing but a reader's ability to skim the pool and see the
-  // leader deck's shape in it. It holds TWO of its three slides today.
+  // leader deck's shape in it. It holds ALL THREE of its slides as of gh#69 — the
+  // SECOND of the four leader-only runs to be complete, after `gap` (gh#67).
+  // NOTHING IN THIS FILE CHANGED FOR gh#69 either: the spread reads the section's own
+  // array, exactly as the three lines above record for gh#65/#66/#67 and
+  // gh#57/#58/#59, and an append at a run's END is no different here from a head or a
+  // mid-run insert — this line is the whole registration.
   ...leaderMandateSlides,
   ...revealAndClosingSlides,
 ];

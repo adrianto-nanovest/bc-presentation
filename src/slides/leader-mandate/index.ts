@@ -17,18 +17,26 @@
 // contains, in the order §6.8 gives it; `src/deck/deck-sets.ts` says which decks
 // run it and where. §6.8 gives `mandate` three slides — `mandate-enablement`
 // (K.1), `mandate-phases-gates` (K.2, brand-varying on slot 6) and
-// `mandate-levers` (K.3) — and the first two exist today.
+// `mandate-levers` (K.3) — AND ALL THREE NOW EXIST. The run is complete at
+// §4.3's count, so the next entry in this array would be a spec change first and
+// an edit here second.
 //
-// gh#61 IS THE FIRST INSERT IN THIS DECK THAT MOVES NOTHING AT ALL, which is the
+// gh#61 WAS THE FIRST INSERT IN THIS DECK THAT MOVED NOTHING AT ALL, which is the
 // prediction gh#60 made from the other side and is worth recording where it came
 // true. Appending INSIDE an existing run touches no letter (the run already had
 // one) and no number outside it (R3 renumbers only within a run, and this is the
 // run's last row), so both leader decks grew by one slide with every figure in
-// front of and behind the mandate unchanged. Phase 7's K.3 appends behind the
-// line below on the same terms. THE ARRAY IS STILL NOT PRE-SIZED FOR IT: a
+// front of and behind the mandate unchanged. gh#69's K.3 appends on exactly those
+// terms and is the second slide to prove them: same run, same tail, one more row.
+// THE ARRAY WAS NEVER PRE-SIZED FOR IT, and that was the right call — a
 // placeholder entry is an id a deck set can compose into a blank slide.
 import type { SlideDef } from "@/deck/types";
 import { mandateEnablementSlide } from "./mandate-enablement";
 import { mandatePhasesGatesSlide } from "./mandate-phases-gates";
+import { mandateLeversSlide } from "./mandate-levers";
 
-export const leaderMandateSlides: SlideDef[] = [mandateEnablementSlide, mandatePhasesGatesSlide];
+export const leaderMandateSlides: SlideDef[] = [
+  mandateEnablementSlide,
+  mandatePhasesGatesSlide,
+  mandateLeversSlide,
+];
