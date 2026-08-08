@@ -1,5 +1,5 @@
-// THEIR OWN PROOF — the first slide of the WHY INVEST run, and the one a Div Head
-// cannot argue with.
+// THEIR OWN PROOF — the SECOND slide of the WHY INVEST run since gh#70 put
+// `invest-base-rates` in front of it, and the one a Div Head cannot argue with.
 //
 // Spec §6.7 (content) · §4.4 slot 3 (the brand axis) · §4.5 (the thesis) · §12.3
 // item 2 (the GEMVIS figures' standing). No #16 prototype covers this slide, so
@@ -32,25 +32,28 @@
 // sentence they are evidence FOR missing, which is the one thing a leader is
 // meant to take away from the slide.
 //
-// THE LETTER IS NOT AUTHORED HERE, and the number moves. This slide composes as
-// **D.1** today — FIRST of the two slides the `invest` run now owns, behind `opening`,
-// `gap` and `shape` in both leader decks — and becomes D.2 the moment
-// `invest-base-rates` (§6.7's D.1) lands in front of it.
+// THE LETTER IS NOT AUTHORED HERE, and the number HAS moved. This slide composes as
+// **D.2** today — SECOND of the five slides the `invest` run now owns, behind
+// `invest-base-rates` — and D.2 is also §6.7's own number for it, so the two frames this
+// comment used to have to distinguish have agreed since 2026-08-08. It printed **D.1**
+// from gh#56 until that day, when gh#70 landed `invest-base-rates` (§6.7's D.1) at the
+// head of the run and this slide stepped one number WITH NO EDIT TO THIS FILE'S LOGIC —
+// the paragraph below is the whole of what gh#70 cost here.
 //
-// THAT INSERT IS NOT #57, and this sentence named the wrong ticket until 2026-08-05.
+// THAT INSERT WAS NOT #57, and this sentence named the wrong ticket until 2026-08-05.
 // #57 is D.3 `invest-chicken-egg`, which APPENDED BEHIND this slide (`./index.ts`,
 // `src/deck/deck-sets.ts`) and moved neither this slide's letter nor its number;
-// `tests/fixtures/deck-numbering.json` records D.1 here and D.2 there. `invest-base-rates`
-// holds no ticket at all — §11's phase table puts it in the **Phase 7** row ("Leader new
-// slides, second tier"), beside `gap-no-sop` — so the insert that renumbers this slide is
-// not waiting on a Phase 6 ticket. #58 is D.4 and #59 is D.5, both behind D.3.
+// the pre-gh#70 `tests/fixtures/deck-numbering.json` recorded D.1 here and D.2 there.
+// The sentence then said `invest-base-rates` "holds no ticket at all", which was true
+// when it was written — §11's phase table put it in the **Phase 7** row ("Leader new
+// slides, second tier"), beside `gap-no-sop`, with no issue behind it — and stopped being
+// true when **gh#70** was opened and built it. #58 is D.4 and #59 is D.5, both behind D.3.
 //
-// §6.7 numbers this slide D.2 because
-// §6.7 describes the FINISHED section; the composed deck numbers it D.1 because a
-// letter and a number are derived from what the deck actually holds (§3.5): `FigLabel`
-// takes a label only, and what §3.4 R2 renumbers is everything BEHIND this run. No
-// rendered string under `src/slides/leader-invest/` may name a letter or a number —
-// a comment may, and only by saying which of the two frames it is speaking in.
+// A letter and a number are derived from what the deck actually holds (§3.5): `FigLabel`
+// takes a label only, and what §3.4 R2 renumbers is everything BEHIND a new run — while a
+// head-of-run insert like gh#70's moves no letter at all and renumbers only inside its own
+// run (R3). No rendered string under `src/slides/leader-invest/` may name a letter or a
+// number — a comment may, and only by saying which frame it is speaking in.
 // `scripts/gh56-verify.mjs` reads the letter off the rendered page in both leader
 // decks, so this sentence is measured rather than asserted.
 import type { SlideDef } from "@/deck/types";

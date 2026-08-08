@@ -1,10 +1,13 @@
-// Section WHY INVEST — every string its four built slides print, and the three axes
-// three of them vary on.
+// Section WHY INVEST — every string its five slides print, and the three axes three of
+// them vary on.
 //
-// FOUR SLIDES, ONE MODULE: `invest-own-proof` (§6.7's D.2) above,
-// `invest-chicken-egg` (§6.7's D.3) in the second block, `invest-security`
-// (§6.7's D.4) in the third, and `invest-subscription` (§6.7's D.5, #59) in the
-// block at the bottom of this file. The
+// FIVE SLIDES, ONE MODULE, AND THE SECTION IS COMPLETE: `invest-own-proof` (§6.7's D.2)
+// above, `invest-chicken-egg` (§6.7's D.3) in the second block, `invest-security`
+// (§6.7's D.4) in the third, `invest-subscription` (§6.7's D.5, #59) in the fourth, and
+// `invest-base-rates` (§6.7's D.1, gh#70) in the block at the very bottom — FILED LAST
+// BECAUSE IT WAS BUILT LAST, not where §6.7 orders it, on the precedent
+// `src/slides/leader-gap/content.ts` sets (that file opens on §6.5 and appends in build
+// order). That block's own header carries the argument. The
 // module is the SECTION's — as in `leader-gap` and `leader-shape`, which are named
 // the same way — so a second slide's copy belongs IN it rather than beside it, and
 // §6.2's rule that the deck's three shadow-AI passes may share no image and no
@@ -22,10 +25,11 @@
 // that — the source of the check and its direction — and nothing about the copy itself
 // moved. No string in this file was edited by gh#66; the record around it was.
 //
-// Spec §6.7 (content for all three) · §6.2 (the three shadow-AI passes, which bound
-// D.3's and D.4's copy) · §4.4 slot 3 (D.2's brand axis) and slot 4 (D.4's) — and
-// the reason D.3 has none · §4.5 (the thesis line) · §12.2 (the vendor-claim gate
-// D.4 is held to) · §12.3 item 2 (the GEMVIS figures are vendor-reported).
+// Spec §6.7 (content for all five) · §6.2 (the three shadow-AI passes, which bound
+// D.3's and D.4's copy) · §4.4 slot 3 (D.2's brand axis), slot 4 (D.4's) and slot 7
+// (D.5's) — and the reason D.1 and D.3 have none · §4.5 (the thesis line) · §12.2 (the
+// vendor-claim gate D.4 and D.5 are held to) · §12.3 item 2 (the GEMVIS figures are
+// vendor-reported).
 // Named by SECTION KEY and
 // not by letter: `invest` is D in §4.3's finished leader deck and D at this
 // ticket's floor, but the letter is derived per deck (§3.4 R2) and no file under
@@ -63,25 +67,25 @@
 // has to pick a side. The rule is the same for D.3 and its two lists are different —
 // they are stated over that slide's own block below.
 //
-// WHAT IS DELIBERATELY NOT IN THIS FILE, because no ticket has rendered it yet:
-// §6.7's D.1 (`invest-base-rates`, 78% → 6%). Its copy is not written here early.
-// Dead copy
-// that reads as finished is how unreviewed copy ships — the next edit "just fills it
-// in", and the argument nobody agreed to is on a projector. Same reasoning as the top
-// of `src/slides/leader-shape/content.ts`.
+// NOTHING IS DELIBERATELY NOT IN THIS FILE ANY MORE, AND THAT IS NEW. This paragraph
+// carried a WAITING LIST from #56 until gh#70: the slides §6.7 names whose copy was not
+// to be written here early, because dead copy that reads as finished is how unreviewed
+// copy ships — the next edit "just fills it in", and the argument nobody agreed to is on
+// a projector. The list is now EMPTY. D.3 came off it when #57 rendered it (the second
+// block of this file), D.4 when #58 rendered it, D.5 when #59 rendered the fourth block,
+// and D.1 (`invest-base-rates`, 78% → 6%) when gh#70 rendered the block at the bottom.
+// §6.7's five slides all exist and `invest` is the SECOND leader-only run to be complete,
+// after `gap` (gh#67).
 //
-// D.3 CAME OFF THAT LIST when #57 rendered it (the second block of this file), D.4
-// came off it when #58 rendered it, and D.5 came off it when #59 rendered the block
-// at the bottom,
-// AND THE LIST NAMED THE WRONG TICKET FOR D.1 — recorded rather than quietly deleted,
-// because the next author would otherwise go looking for a Phase 6 ticket that does
-// not exist. The old text said D.1 through D.5 "are #57–#59". Checked on 2026-08-05
-// with `gh issue view 57` and `gh issue list`: #57 is D.3 (this ticket), #58 is D.4,
-// #59 is D.5, and NO issue covers `invest-base-rates` at all — §11's phase table puts
-// it in the PHASE 7 row ("Leader new slides, second tier", line 1408), next to
-// `gap-no-sop`. So D.1 is not waiting on a Phase 6 ticket; it is not in this phase.
-// `gap-no-sop` HAS SINCE COME OFF THAT ROW — gh#66 built it on 2026-08-08 — and D.1
-// still holds no ticket, which is why the two are named separately here.
+// AND THE LIST NAMED THE WRONG TICKET FOR D.1 FOR TWO MONTHS — kept here rather than
+// quietly deleted, because the correction is the record of how the mistake was found. The
+// old text said D.1 through D.5 "are #57–#59". Checked on 2026-08-05 with
+// `gh issue view 57` and `gh issue list`: #57 is D.3, #58 is D.4, #59 is D.5, and no
+// issue covered `invest-base-rates` at all — §11's phase table put it in the PHASE 7 row
+// ("Leader new slides, second tier"), next to `gap-no-sop`. Both of that row's names have
+// since been built: `gap-no-sop` as gh#66 on 2026-08-08, and D.1 as **gh#70**, which is
+// the ticket this comment could not name because it did not exist when the comment was
+// written.
 //
 // Type-only import for `Brand`, so nothing but the thesis constants below arrives at
 // runtime and this file stays plain data.
@@ -1014,9 +1018,10 @@ export const investChickenEggContent = {
 //     as a rendering fault rather than as emphasis.
 //
 // NO LETTER AND NO NUMBER IN ANY RENDERED STRING, as everywhere under this directory
-// (§3.4 R2 / §3.5). This slide composes **D.3** today, one behind §6.7's **D.4**,
-// because `invest-base-rates` (§6.7's D.1) is unbuilt and holds no ticket — §11's
-// Phase 7 row has it. Do not "fix" the figure.
+// (§3.4 R2 / §3.5). This slide composes **D.4** today, which is §6.7's own number for
+// it: it printed D.3 from #58 until gh#70 built `invest-base-rates` (§6.7's D.1) at the
+// head of the run, and stepped one number that day with no edit to any string. Do not
+// pin the figure.
 
 /**
  * Exactly three, held by the TYPE — the sibling of {@link Four} and there for the same
@@ -1588,9 +1593,10 @@ export function onPremCallbackFor(brand: Brand): OnPremCallback {
 //     string is already in the quoted register.
 //
 // NO LETTER AND NO NUMBER IN ANY RENDERED STRING, as everywhere under this directory
-// (§3.4 R2 / §3.5). This slide composes **D.4** today, one behind §6.7's **D.5**,
-// because `invest-base-rates` (§6.7's D.1) is unbuilt and holds no ticket — §11's
-// Phase 7 row has it. Do not "fix" the figure.
+// (§3.4 R2 / §3.5). This slide composes **D.5** today, which is §6.7's own number for
+// it: it printed D.4 from #59 until gh#70 built `invest-base-rates` (§6.7's D.1) at the
+// head of the run, and stepped one number that day with no edit to any string. Do not
+// pin the figure.
 
 /**
  * One row of beat 3's tier table: who the tier is for, and what its seat costs.
@@ -1880,3 +1886,247 @@ const PRICE_ANCHOR_BY_BRAND: Record<Brand, PriceAnchor> = {
 export function priceAnchorFor(brand: Brand): PriceAnchor {
   return PRICE_ANCHOR_BY_BRAND[brand];
 }
+
+// ───────────────────── §6.7's D.1 · the base rate, and the default it prices ─────────────────────
+//
+// FILED LAST BECAUSE IT WAS BUILT LAST, AND NOT WHERE §6.7 ORDERS IT. §6.7 numbers this
+// slide D.1 and the four blocks above D.2–D.5, so a reader arriving from the spec will
+// look for this block at the TOP of the file. It is at the bottom, on the precedent
+// `src/slides/leader-gap/content.ts` sets and keeps: that file opens on the Capability
+// Ladder (§6.5, its run's LAST slide) because gh#53 built it first, and every block since
+// has been APPENDED in build order. Filing by build order keeps a new slide's diff to one
+// appended block; filing by spec order would move four blocks the day a fifth arrives, and
+// the section's order is stated where it is composed — `../index.ts` and
+// `src/deck/deck-sets.ts` — not by scroll position here.
+//
+// §6.7 IS ONE LINE, "`invest-base-rates` — D.1. 78% → 6%.", and gh#70 is what says what
+// the two numbers are: **78% adoption versus 6% proper implementation**, the REPORTED
+// CONTEXT of the group HR agentic-organization deck's slide 3 (THE AGENTIC ORGANIZATION),
+// recorded at `docs/researches/2026-07-31-hr-group-agentic-org-analysis.md` line 106. The
+// whole of that source line is:
+//
+//     "Reported context: 25–55% productivity improvement; 78% adoption versus 6% proper
+//      implementation."
+//
+// TWO OF THOSE THREE FIGURES ARE ON THIS STAGE AND THE THIRD IS DELIBERATELY OFF IT. The
+// 25–55% productivity improvement sits in the same sentence and is a DIFFERENT CLAIM — what
+// adoption was worth to the organisations that got it right, not how many got there — and
+// proof of value is D.2's job, made with the room's OWN organisation rather than with a
+// third party's range. gh#70's AC reads "no other statistic is invented around them";
+// quoting a third figure from the same sentence would invent nothing and would still be a
+// second argument, and this slide makes one.
+//
+// ═══ WHAT THE ATTRIBUTION MAY CLAIM, AND IT IS LESS THAN B.1's. `gap-hardest-part`
+// (§6.1) quotes a statistic the research names an upstream owner for — "Reported by BCG /
+// McKinsey" — and its own content block records that it may claim no read date and no
+// study title, because we hold neither. THIS PAIR IS WEAKER PROVENANCE AGAIN: the research
+// files it under "Reported context" and names NO upstream owner at all — no publisher, no
+// study, no year, no sample. So the honest ceiling is WHERE WE READ IT, and
+// {@link investBaseRatesContent.statisticSource} says exactly that and stops. It must
+// never gain a consultancy, a year, an "n =", or the word "study" applied to anything but
+// the absence of one. An invented citation on the opening slide of the section that asks
+// for money is the single worst string this deck could print.
+//
+// ═══ THE POPULATION IS ORGANIZATIONS, AND THAT IS A READING RATHER THAN A QUOTATION.
+// Line 106 gives two bare percentages and names no denominator. gh#70 states it in its own
+// first sentence — "Most organizations adopt; almost none implement properly" — and slide 3
+// of the source deck is titled THE AGENTIC ORGANIZATION, so organizations is what the pair
+// is about. It is written down here because the figure on the stage draws MARKS, and a mark
+// has to be a mark OF something: {@link investBaseRatesContent.statisticEyebrow} is the one
+// string that carries the unit, and it is therefore the one string that would have to
+// change if the reading were ever contradicted. The two figures would not.
+//
+// ═══ THE FOUR UNRELATED 70/30s THIS SLIDE STAYS OUT OF, counted rather than remembered,
+// and written down here because TWO of them sit within a page of the pair above in the same
+// source deck. (1) §6.5's L3 rung is "Decision contract · 70/30 split" — how much of a
+// bounded agentic decision the machine may take. (2) §6.1's is the ADOPTION-FAILURE split,
+// quoted on B.1 and drawn there as a split bar. (3) The SAME research slide 3 that carries
+// this pair also "contrasts an older 70% execution / 30% planning-and-review split"
+// (analysis line 105, directly above the pair's own line 106). (4) HR slide 12's
+// sharpen-the-axe principle is 70% preparation /
+// 30% execution (`docs/researches/internal-hr-group.md` line 200). Four splits, one number,
+// no relation between any two of them — so NO STRING BELOW PRINTS 70, 30 OR THE PHRASE
+// "70/30", and no drawing on this stage partitions anything into two complementary parts,
+// which is also why the figure is not a bar (see `./base-rates-geometry.ts`).
+//
+// ═══ WHAT THIS SLIDE MAY NOT SAY, because a sibling owns each of these:
+//
+//   · THE HARDEST PART, the 70%, `procured` / `instantly` / `invoice` / `tool access` /
+//     `organizational capability` / `earned` / `people & process` → §6.1 (B.1). B.1 and
+//     this slide quote the SAME SOURCE DECK and quote DIFFERENT SLIDES of it — B.1 takes
+//     its 70% off "The Hardest Part Isn't the Tools", this takes the pair off "The Agentic
+//     Organization" — so no statistic is shared. No image is either: B.1's is one bar
+//     PARTITIONED 70/30, and this stage's is two COUNTS of one repeated mark.
+//   · SHADOW AI, SOPs, MISSING GUIDANCE, IMPROVISATION → §6.2 (B.2), and §6.2 binds the
+//     deck's three shadow-AI passes to share no image and no statistic. This slide is not
+//     one of the three and names none of it.
+//   · NANOVEST'S OWN FAILURES and THE PATTERN ACROSS THEM → §6.3 / §6.4 (B.3, B.4).
+//     Nothing below is in the first person and nothing below is a story.
+//   · L1–L5, THE RUNGS, `capability` → §6.5 (B.5).
+//   · THE SIX PILLARS, KOTTER/TAM, MIDDLE-OUT → §6.6 (section C).
+//   · THIS COMPANY'S OWN FIGURES, and any organisation's name → D.2, the block at the top
+//     of this file. NOT ONE ORGANISATION IS NAMED ON THIS STAGE, which is also why there is
+//     no brand axis (below): the argument is about everybody else.
+//   · THE DEADLOCK, SHARED ACCOUNTS, `you are the person who can skip` → D.3.
+//   · DATA RESIDENCY, THE THREE DESTINATIONS, SHADOW AI AS EXPOSURE → D.4.
+//   · SEATS, PRICES, THE ARITHMETIC → D.5. NO PRICE APPEARS BELOW: the closer prices the
+//     DEFAULT in the sense of "what it buys you", and the only currency on this stage is
+//     the two percentages.
+//
+// ═══ ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER — the second block in
+// this file to make that call, after D.3's, and the plainest of the two. §4.4's seven brand
+// × deckSet slots do not list this slide; the pair is a third party's reported context about
+// organisations in general, and neither Berau nor GEMS has a version of a base rate. A
+// `Record<Brand, …>` here would be one honest entry and two written by inventing evidence.
+// The slide file imports no `VARIANT` at all — the NINTH leader-only file in the tree to do
+// so, after gh#68's `shape-middle-out` and gh#69's `mandate-levers`, the two tickets before
+// this one, and
+// `./invest-base-rates.tsx` carries the measured census plus the correction to the "third"
+// two `leader-gap` headers still claim — which is what lets its test mount the same
+// component under both leader brands and prove the two rooms read identical bytes. Do not
+// invent variance here: the brand-varying proof is D.2's job, one slide later.
+//
+// ═══ THE KEYWORD RULE, applied without an exception: `kw` on PROSE ONLY.
+//
+//   · PROSE, each with a `*Kw` sibling — FOUR strings: `headline`, `adoptionReading`,
+//     `implementationReading`, `closer`.
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — EIGHT strings: `figLabel`,
+//     `statisticEyebrow`, `statisticSource`, both figures, both row labels, `readingEyebrow`.
+//     THE TWO FIGURES ARE THE SHARPEST CASE THE RULE HAS ANYWHERE IN THIS FILE: they are
+//     somebody else's quantities, and a copper italic inside "78%" would emphasise a
+//     fragment of a number. They are also what `./base-rates-geometry.ts` cuts the two mark
+//     fields from, so a reword that moved a figure and left the fields alone is a lie —
+//     welded by a cross-module assertion in the test, exactly as B.1 welds its bar.
+//
+// ═══ NO LETTER AND NO NUMBER IN ANY RENDERED STRING (§3.4 R2 / §3.5). This slide composes
+// as the FIRST of the `invest` run, which today means D.1 — §6.7's own number for it, and
+// the first time this directory's composed figures and §6.7's have agreed since gh#56. The
+// four slides behind it each gave up one number on the day this one landed and no file of
+// theirs was opened to do it. Neither figure is written down here: `FigLabel` takes a LABEL
+// only. THE TWO PERCENTAGES BELOW ARE THE ONLY NUMERALS ON THE STAGE.
+
+export const investBaseRatesContent = {
+  /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from the
+   *  composed deck (§3.5) and are authored nowhere. */
+  figLabel: "THE BASE RATE, AND THE DEFAULT IT PRICES",
+
+  /**
+   * The claim, as the slide's title phrase — and it lands BEFORE the pair on purpose.
+   *
+   * THE NUMBERS ARE EVIDENCE FOR THIS SENTENCE, NOT THE OTHER WAY ROUND (B.1's rule, and
+   * the same reason its headline precedes its statistic): a stage that opened on "78%"
+   * would make a room work out what the number was evidence for, and the first thing it
+   * would try is "we are doing well". This sentence refuses that reading before either
+   * figure arrives.
+   *
+   * IT IS A REFUSAL AND NOT AN ACCUSATION. "Adoption is not the achievement" says nothing
+   * about the room's own adoption — the slide names no organisation at all — so a Div Head
+   * who has already rolled out licences is being told what that puts them level with,
+   * rather than that it was wrong.
+   */
+  headline: "Adoption is not the achievement.",
+  headlineKw: ["not the achievement"],
+
+  /**
+   * The mono LABEL over the evidence, and it carries the UNIT the figure draws in.
+   *
+   * TWO DUTIES, ON PURPOSE. "THE REPORTED BASE RATE" says what kind of object the room is
+   * about to read — reported, not measured here, and a rate rather than a result. "ONE MARK
+   * IS ONE ORGANIZATION IN A HUNDRED" declares the denominator BEFORE a single mark is
+   * drawn, because a field of marks with no stated unit is decoration. Keyword-free; see
+   * the block header on why the unit is a reading rather than a quotation.
+   */
+  statisticEyebrow: "THE REPORTED BASE RATE · ONE MARK IS ONE ORGANIZATION IN A HUNDRED",
+
+  /**
+   * THE ATTRIBUTION, printed ON the stage and above the figures rather than under them.
+   *
+   * WHAT IT CLAIMS: where we read the pair, that the deck we read it in names no upstream
+   * study, and that this deck quotes rather than measures. WHAT IT DOES NOT CLAIM, because
+   * we hold none of it: a publisher, a consultancy, a study title, a year, a read date, a
+   * sample. The research records the pair as "Reported context" and names no owner — so
+   * naming one would be an invention, and an invented citation is worse than a plain one.
+   *
+   * IT IS DELIBERATELY THE FIRST THING UNDER THE EYEBROW, which is the opposite of B.1's
+   * order — that slide binds its citation 8px UNDER the sentence it attributes. The reason
+   * is the provenance: when the strongest thing that can be said about a number is where it
+   * was read, the stage says it FIRST and shows the numbers after, rather than letting a
+   * room read two large unattributed percentages and meet the caveat afterwards.
+   *
+   * Mono, keyword-free: it is a citation, not a sentence the slide makes a point with.
+   */
+  statisticSource:
+    "Reported as context in the group HR agentic-organization deck, which names no " +
+    "upstream study — a pair this deck quotes rather than measures.",
+
+  /**
+   * The majority rate, VERBATIM from the source's own "78% adoption".
+   *
+   * KEYWORD-FREE, and it is the number `./base-rates-geometry.ts` cuts the upper mark field
+   * from: `ADOPTION_SHARE` is 0.78 because this string says 78%. A reword that changed one
+   * and left the other is the failure nobody would see on a projector, so the two are welded
+   * by a cross-module assertion in `tests/unit/invest-base-rates.test.tsx`.
+   */
+  adoptionFigure: "78%",
+
+  /** The upper row's label. Mono, keyword-free. "HAVE" makes it a predicate of the figure
+   *  beside it, so the row reads as one sentence — the percentage is of ORGANIZATIONS, which
+   *  the eyebrow has already said. */
+  adoptionLabel: "HAVE ADOPTED AI",
+
+  /** The minority rate, VERBATIM from the source's own "6% proper implementation". The other
+   *  end of the same weld — `IMPLEMENTATION_SHARE` is 0.06 because this string says 6%. */
+  implementationFigure: "6%",
+
+  /** The lower row's label. Mono, keyword-free. "PROPERLY" is the source's own qualifier and
+   *  the slide never defines it: what proper implementation requires is B.1's, B.5's and
+   *  section C's argument, and a definition here would spend three of their beats. */
+  implementationLabel: "HAVE IMPLEMENTED IT PROPERLY",
+
+  /** The mono LABEL over the reading band. Mono, keyword-free, and it names the frame the
+   *  closer pays off — this section is about what a position is WORTH, so the two readings
+   *  under it are priced rather than described. */
+  readingEyebrow: "WHAT EACH RATE BUYS",
+
+  /**
+   * What the majority rate is worth. PROSE, so it carries keywords.
+   *
+   * THE SENTENCE MAKES NO CLAIM ABOUT DIFFICULTY, which is the boundary with B.1: that
+   * slide argues adoption is the EASY 30% and capability the hard 70%. This one argues only
+   * that adoption is CROWDED — nearly everyone is already there — and crowded is a fact
+   * about the base rate rather than about effort.
+   */
+  adoptionReading:
+    "Adoption is the common position. Almost every organization already holds it, " +
+    "so holding it proves nothing.",
+  adoptionReadingKw: ["the common position", "proves nothing"],
+
+  /**
+   * What the minority rate is worth. PROSE, and the mirror of the line beside it: COMMON
+   * against RARE, PROVES NOTHING against WORTH PAYING FOR.
+   *
+   * "WORTH PAYING FOR" IS THE SECTION'S OWN VERB and the reason this slide opens WHY
+   * INVEST: scarcity is the investment case, stated once and left for D.2 to evidence with
+   * the room's own numbers. It says nothing about HOW to reach the rare position — that is
+   * the rest of the deck — and it names no cost, which is D.5's.
+   */
+  implementationReading:
+    "Proper implementation is the rare one. Almost no organization reaches it, " +
+    "so reaching it is worth paying for.",
+  implementationReadingKw: ["the rare one", "worth paying for"],
+
+  /**
+   * THE CLOSER — gh#70's own sentence for what this slide is for, and the slide's last
+   * arrival. PROSE.
+   *
+   * ONE SENTENCE AND NOT TWO, WHICH IS A DECISION. B.1's closer is a pair whose second half
+   * frames the run behind it ("Everything after this is the 70%"), and a second sentence
+   * here would be that move made twice in one deck — the same objection
+   * `src/slides/leader-gap/content.ts` records about echoes between consecutive stages. It
+   * also counts nothing and names no position: the run this slide opens is composed per
+   * deck set (§3.4), so a sentence that counted its own successors would go stale the first
+   * time one was inserted or cut.
+   */
+  closer: "Doing what everyone does buys what everyone gets.",
+  closerKw: ["what everyone gets"],
+} as const;

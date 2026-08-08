@@ -86,11 +86,18 @@
 //      own rendered tagline (its first sentence) and not transcribed, so this cannot
 //      pass by agreeing with a constant nobody rendered.
 //
-//   6. THE COMPOSED LETTERS. The letter is DERIVED (§3.5), so the only place `D.1`,
+//   6. THE COMPOSED LETTERS. The letter is DERIVED (§3.5), so the only place `D.2`,
 //      `C.2`, `H.12`, `N.3` and A.1's `SECTION D · WHY INVEST` row exist as rendered
 //      text is a browser. Harvested from a walk of the WHOLE deck, once per brand, so
 //      "exactly one slide prints this" is part of the claim rather than "the first
 //      slide that matched".
+//
+//      `D.2` AND NOT `D.1` SINCE gh#70, which is this list's own prediction coming due
+//      and not a regression: gh#70 put `invest-base-rates` (§6.7's D.1) at the HEAD of
+//      the `invest` run, so this slide moved to §6.7's own D.2 and the three behind it
+//      each stepped one number. No letter moved and no file under
+//      `src/slides/leader-invest/` was opened to change a rendered string. See
+//      `FIGURES`.
 //
 // WHAT gh#64 FIXED IN HERE, recorded because two of the three were VACUOUS PASSES and
 // one of them invalidates a claim `3548028`'s commit message already made.
@@ -128,7 +135,9 @@
 //     (`37c8989`) landed mid-ticket and took the leader decks from 61 slides to 63: the
 //     letters now run A to N, the closer prints `N.3·THANK YOU`, and leader `M.3` is a
 //     real but different slide (`BUILDING YOURSELF UP`, index 58). `D.1`, `C.2` and
-//     `H.12` did not move, which is how it is known only the tail shifted. See `FIGURES`.
+//     `H.12` did not move at the time, which is how it was known only the tail shifted —
+//     and `D.1` has since become `D.2` on gh#70, for a reason that has nothing to do
+//     with gh#60's and everything to do with the head insert `FIGURES` predicted.
 //
 //     THE OPERATIONAL LESSON, kept because it cost gh#64 two wrong conclusions in a row: a
 //     `vite` process started before `37c8989` went on serving the 61-slide composition, so
@@ -332,18 +341,28 @@ const AUDIT_WORDS =
 /**
  * The five figures a composed leader deck must derive (§3.5), as rendered text.
  *
- * ASSERTED AS LITERALS, and that is a decision with a known expiry. `invest-base-rates`
- * is §6.7's D.1 and lands IN FRONT of this slide, which will make this slide D.2 and move
- * nothing else. When that happens this line must fail and be updated — which is the point:
- * a harness that accepted any letter would not notice a run that landed in the wrong
- * section, and the AC for this ticket names the letters.
+ * ASSERTED AS LITERALS, and that is a decision with a known expiry. THE EXPIRY CAME DUE
+ * ON gh#70, EXACTLY AS PREDICTED AND FOR THE PREDICTED REASON. This comment read
+ * "`invest-base-rates` is §6.7's D.1 and lands IN FRONT of this slide, which will make
+ * this slide D.2 and move nothing else. When that happens this line must fail and be
+ * updated" — it landed, this line failed, and it is updated. That is the point of the
+ * literal: a harness that accepted any letter would not notice a run that landed in the
+ * wrong section, and the AC for gh#56 names the letters.
+ *
+ * WHAT THE PREDICTION GOT RIGHT AND WHAT IT UNDERSTATED, recorded because both halves
+ * are useful. Right: the insert is at the run's HEAD, it claims no letter (`invest` has
+ * held D since gh#56), and this slide is now §6.7's own D.2. Understated: "and move
+ * nothing else" is true of this TABLE and false of the deck — R3 stepped all FOUR rows
+ * behind the insert inside the run (D.1→D.2, D.2→D.3, D.3→D.4, D.4→D.5), and only the
+ * first of the four is named here. `tests/fixtures/deck-numbering.json` holds all four.
  *
  * IT IS NOT #57 THAT DOES THAT, and this comment said so until 2026-08-05. #57 is D.3
- * `invest-chicken-egg`, which APPENDED BEHIND this slide: the `invest` run now holds two
- * slides, `invest-own-proof` is still D.1, and every literal in this table is still
- * correct after it. `invest-base-rates` holds no issue at all — §11's phase table puts it
- * in the PHASE 7 row, beside `gap-no-sop` — so the edit this comment predicts is not
- * waiting on a Phase 6 ticket.
+ * `invest-chicken-egg`, which APPENDED BEHIND this slide: the `invest` run held two
+ * slides then, `invest-own-proof` was still D.1, and every literal in this table was
+ * still correct after it. The prediction was right about the ticket, too, and its second
+ * clause is now spent as well: this comment said `invest-base-rates` "holds no issue at
+ * all — §11's phase table puts it in the PHASE 7 row, beside `gap-no-sop`". It holds
+ * #70; #66 took `gap-no-sop`; the Phase 7 row was filed as #65–#72.
  *
  * THE EXPIRY CAME DUE ON THE CLOSER, and it came due for a different reason than the one
  * predicted above — and DURING gh#64, not before it. `gh#60`'s mandate run (`37c8989`,
@@ -356,8 +375,16 @@ const AUDIT_WORDS =
  * down: leader `M.3` still EXISTS — it is `BUILDING YOURSELF UP` at index 58 — so this
  * table was demanding a caption pairing that was never true rather than a letter that had
  * vanished, and the failure said only `actual []`. The four literals here are NOT all from
- * one epoch of the deck; `D.1`, `C.2` and `H.12` still pass unchanged, and that is the
- * evidence that only the tail moved.
+ * one epoch of the deck; `C.2` and `H.12` still pass unchanged from gh#56's day, `N.3` is
+ * gh#60's and `D.2` is gh#70's, and that spread is itself the evidence that each move was
+ * local to the run that changed.
+ *
+ * gh#70 REPEATED `M.3`'s TRAP EXACTLY, and it is worth knowing that the shape recurs:
+ * leader `D.1` still EXISTS — it is `THE BASE RATE, AND THE DEFAULT IT PRICES`, the new
+ * head of the run — so this table again demanded a caption PAIRING that was never true
+ * rather than a letter that had vanished, and the failure again reads `actual []`. When
+ * a literal here fails, check which SLIDE holds the figure before concluding the letter
+ * moved.
  *
  * WHY IT WAS NOT CAUGHT SOONER, recorded because it is a trap for every harness here: a
  * `vite` process started before `37c8989` went on serving the 61-slide composition, so
@@ -367,7 +394,7 @@ const AUDIT_WORDS =
  * output, and the slide COUNT it prints is the one number that would have shown both.
  */
 const FIGURES = {
-  invest: "— FIG. D.1·PROOF FROM INSIDE THE COMPANY",
+  invest: "— FIG. D.2·PROOF FROM INSIDE THE COMPANY",
   f8: "— FIG. C.2·YOUR AGENTIC OS",
   e12: "— FIG. H.12·LOOP ENGINEERING",
   closer: "— FIG. N.3·THANK YOU",
@@ -489,8 +516,11 @@ const TIER_TOKENS = [...BELOW_FLOOR_TIERS, FLOOR_TIER, LUMINANCE_EXEMPT_TIER];
  *     `--copper-700`, they are on EVERY slide of EVERY deck, and they are not
  *     projected copy. Stated as "every", not as a count: this comment read "all 60
  *     slides of every deck" until 2026-08-05, and no single number describes shared
- *     chrome — the leader decks are 63 slides, `berau` and `gems` are 65
- *     and `general` is 63.
+ *     chrome — the leader decks are 72 slides as of gh#70, `berau` and `gems` are 65
+ *     and `general` is 63. (It read 63 for the leader decks until gh#70; the count has
+ *     moved on gh#65, gh#66, gh#67, gh#68, gh#69 and gh#70 since, which is the whole
+ *     reason the
+ *     exclusion is stated as "every" and not as a number.)
  *   · `.fig-label .dot` — the `·` between the figure reference and the label, also
  *     `--copper-700`, also on every numbered slide in the deck.
  * Everything else inside the stage is audited, this slide's headline and its derived
@@ -558,11 +588,12 @@ const n2 = (v) => (v == null ? null : Math.round(v * 100) / 100);
  * which of `SLIDE_MARKERS` is on the stage.
  *
  * A FULL WALK AND NOT A SEARCH, which is the difference that makes assertion 6 mean
- * something: "exactly one slide in this deck prints D.1" needs every slide looked at,
+ * something: "exactly one slide in this deck prints D.2" needs every slide looked at,
  * and a loop that stopped at the first match would pass a deck holding two. It is
- * also how the five indices are DISCOVERED — §3 derives every position and the rest
- * of Phase 6 inserts four more `invest` slides, so a literal index would check
- * whatever slide 5 has become.
+ * also how the five indices are DISCOVERED — §3 derives every position, and the four
+ * `invest` slides Phase 6 had left to insert when this was written have all landed
+ * (gh#57, gh#58, gh#59) along with gh#70's head insert, so a literal index would by now
+ * be checking whatever slide 5 has become.
  *
  * IT WAITS ON THE MOUNT AND NOT ON A CLOCK, which replaces a flat `waitForTimeout(90)`
  * and is gh#64's fix for the flake that ticket was filed against: `berau-leader · letters
@@ -1275,10 +1306,19 @@ for (const variant of LEADER_VARIANTS) {
     [[null], [true]],
   );
   // AND NOTHING ELSE IN THE DECK CLAIMS THIS SLIDE'S REFERENCE. The half a search
-  // cannot make: two slides deriving D.1 would both look right on their own.
+  // cannot make: two slides deriving D.2 would both look right on their own.
+  //
+  // THE REFERENCE IS D.2 SINCE gh#70 AND IS READ OFF `FIGURES.invest`, not re-typed.
+  // It was `D.1` until that ticket put `invest-base-rates` at the run's head, and the
+  // two lines went stale together — this one silently, because leader D.1 still exists
+  // and now belongs to another slide, so a re-typed literal would have gone on
+  // reporting "exactly one slide prints D.1" while comparing it against THIS slide's
+  // index. Deriving the prefix from the table above makes the pair impossible to move
+  // by halves; the observed side is still the browser's own walk.
+  const investFig = FIGURES.invest.split("·")[0].replace("— FIG. ", "");
   check(
-    `${tag} · letters · exactly one slide in ${slideCount} prints "D.1"`,
-    harvest.filter((r) => r.fig?.startsWith("— FIG. D.1·")).map((r) => r.index),
+    `${tag} · letters · exactly one slide in ${slideCount} prints "${investFig}"`,
+    harvest.filter((r) => r.fig?.startsWith(`— FIG. ${investFig}·`)).map((r) => r.index),
     [index],
   );
 

@@ -72,13 +72,17 @@ const LEADER_BRANDS: readonly Brand[] = ["berau", "gems"];
  *
  * `at` IS required here, the same case as all three siblings: unit tests resolve the
  * default `general` deck, `general` has no leader variant, and this slide reaches the
- * two leader deck sets alone. D.4 rather than §6.7's D.5 because `invest-base-rates`
- * (§6.7's D.1) is unbuilt and holds no ticket (§11's Phase 7 row) — the number the
- * two leader decks actually derive, which `tests/fixtures/deck-numbering.json`
+ * two leader deck sets alone. D.5, WHICH IS §6.7's D.5, since gh#70: this read D.4 from
+ * gh#59 until then, "rather than §6.7's D.5 because `invest-base-rates` (§6.7's D.1) is
+ * unbuilt and holds no ticket (§11's Phase 7 row)". #70 is the ticket, it built D.1 at
+ * the run's HEAD, and R3 stepped this row along with the three in front of it — so the
+ * `invest` run now prints D.1–D.5 and every slide in it derives its own §6.7 number. The
+ * number the two leader decks actually derive, which `tests/fixtures/deck-numbering.json`
  * records for both. A harness INPUT, not a claim the slide makes (§3.5); the day D.1
- * lands, all four slides in this directory move one number and no file here opens.
+ * landed, all four slides in this directory moved one number — exactly as predicted —
+ * and no file here opened.
  */
-const AT = { letter: "D", num: 4, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 5, sectionKey: "invest" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {
@@ -715,22 +719,32 @@ describe("prefers-reduced-motion: reduce", () => {
 // ── AC 1 · composition: last of the invest run, leader decks only ────────────
 
 describe("composition", () => {
-  test("closes the invest run — fourth and LAST, behind its three siblings", () => {
+  test("closes the invest run — FIFTH and last, behind its four siblings", () => {
     // The whole run, in order, off the leader deck set's own list: gh#59 APPENDED,
-    // so the four ids read as one sequence and the hand back to the curriculum
+    // so the ids read as one sequence and the hand back to the curriculum
     // moved along by exactly one. Both leader deck sets (`berau-leader`,
     // `gems-leader`) compose from THIS list — asserted against `VARIANTS` below —
     // so one assertion covers both rooms.
+    //
+    // FOURTH UNTIL gh#70 AND FIFTH SINCE, with this file's own slide never moving. That
+    // ticket inserted `invest-base-rates` at the run's HEAD, which lengthened the run in
+    // front of this row rather than behind it: this slide is still the run's LAST, still
+    // hands to `b1-evolution-journey`, and derives D.5 rather than D.4 (see `AT`). The
+    // ANCHOR moved with it — `at` keys on the run's first row, which is no longer
+    // `invest-own-proof` — because a slice taken from the old anchor would have run one
+    // row past the curriculum boundary and said nothing about the join this test is for.
+    // §6.7 asks for no sixth `invest` slide, so five is FINAL.
     const { slides } = DECK_SET_COMPOSITION.leader;
-    const at = slides.indexOf("invest-own-proof");
+    const at = slides.indexOf("invest-base-rates");
     expect(at).toBeGreaterThan(-1);
-    expect(slides.slice(at, at + 4)).toEqual([
+    expect(slides.slice(at, at + 5)).toEqual([
+      "invest-base-rates",
       "invest-own-proof",
       "invest-chicken-egg",
       "invest-security",
       "invest-subscription",
     ]);
-    expect(slides[at + 4]).toBe("b1-evolution-journey");
+    expect(slides[at + 5]).toBe("b1-evolution-journey");
     // Exactly the two leader variants ride the leader set — the "both leader deck
     // sets" half, held against the variant table rather than assumed.
     const leaderVariants = Object.values(VARIANTS)

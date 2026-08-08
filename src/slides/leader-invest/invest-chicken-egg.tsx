@@ -1,5 +1,6 @@
-// THE DEADLOCK, AND WHO CAN SKIP IT — the second slide of the WHY INVEST run, and
-// the only one in the deck that admits to breaking somebody's rules.
+// THE DEADLOCK, AND WHO CAN SKIP IT — the THIRD slide of the WHY INVEST run since gh#70
+// put `invest-base-rates` at its head, and the only one in the deck that admits to
+// breaking somebody's rules.
 //
 // Spec §6.7 (D.3's four beats, and "beat 3 is load-bearing") · §6.2 (the shadow-AI
 // escalation: B.2 as CONDITION, D.4 beat 2 as EXPOSURE, this slide as RATIONAL
@@ -48,14 +49,16 @@
 // no terms on it. An exported PDF has no presenter attached to it, so the exported
 // frame has to be the one that is safe to read alone.
 //
-// THE LETTER IS NOT AUTHORED HERE, and the number is one behind §6.7's. This slide
-// composes as **D.2** today — second in the `invest` run, behind `invest-own-proof` —
-// while §6.7 numbers it **D.3**, because §6.7 describes the FINISHED section and
-// `invest-base-rates` (§6.7's D.1) is unbuilt. That gap is §3.5 working as designed:
-// a letter and a number are derived from what the deck actually holds, `FigLabel`
-// takes a label only, and no rendered string under `src/slides/leader-invest/` may
-// name either. Do not "fix" the figure to D.3 — the day D.1 lands, both this slide
-// and its sibling move one number and no file here is opened.
+// THE LETTER IS NOT AUTHORED HERE, and the number CAUGHT UP with §6.7's. This slide
+// composes as **D.3** today — third in the `invest` run, behind `invest-base-rates` and
+// `invest-own-proof` — which is §6.7's own number for it. It printed **D.2** from #57
+// until 2026-08-08, one behind the spec, because §6.7 describes the FINISHED section and
+// `invest-base-rates` (§6.7's D.1) was unbuilt; gh#70 built it at the head of the run that
+// day and this slide stepped one number WITH NO EDIT TO ANY RENDERED STRING OR ANY
+// `SlideDef` FIELD IN THIS FILE. That is §3.5 working exactly as designed: a letter and a
+// number are derived from what the deck actually holds, `FigLabel` takes a label only, and
+// no rendered string under `src/slides/leader-invest/` may name either. Do not pin the
+// figure.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";

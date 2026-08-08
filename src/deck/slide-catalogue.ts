@@ -51,7 +51,9 @@ export const slideCatalogue: readonly SlideDef[] = [
   // because f8 joins it through `./deck-sets.ts`'s single `sectionOverrides` entry,
   // and f8 is a standard-deck slide composed from its OWN section index, so it is
   // not in this array and must not be. Neighbours on the projector, strangers in the
-  // pool. One row of §4.3's four is still unbuilt (`shape-tam-kotter`), and it will
+  // pool. One row of §4.3's four is still unbuilt (`shape-tam-kotter`), and as of gh#70
+  // it is the ONLY leader row left anywhere — `gap` closed on gh#67, `mandate` on gh#69
+  // and `invest` on gh#70. It will
   // arrive the same way: inside `@/slides/leader-shape`, not here.
   //
   // NOTHING IN THIS FILE CHANGED FOR gh#68 — the spread reads the section's own
@@ -59,15 +61,19 @@ export const slideCatalogue: readonly SlideDef[] = [
   // the `leaderInvestSlides` line below for gh#57/#58/#59, and that holds whether the
   // new row joins its section at the END, at the front, or in the middle.
   ...leaderShapeSlides,
-  // Leader-only too (§6.7), and the third run in front of the curriculum. It holds
-  // FOUR of its five slides today — gh#56's, gh#57's, gh#58's and gh#59's, in §6.7's
-  // order — and the one it does not is `invest-base-rates` (§6.7's D.1, no ticket,
-  // §11's Phase 7 row). The pool grows a row per
-  // ticket, and which decks run them stays `./deck-sets.ts`'s answer. NOTHING IN THIS
-  // FILE CHANGES FOR A NEW SLIDE IN AN EXISTING RUN: the spread reads the section's own
-  // array, so gh#57, gh#58 and gh#59 each needed only the comment above corrected —
-  // this line
-  // said ONE until gh#58 and was wrong from gh#57 onward.
+  // Leader-only too (§6.7), and the third run in front of the curriculum. It holds ALL
+  // FIVE of its slides as of gh#70 — the THIRD of the four leader-only runs to be
+  // complete, after `gap` (gh#67) and `mandate` (gh#69) — in §6.7's order: gh#70's
+  // `invest-base-rates` (D.1, the run's first), gh#56's `invest-own-proof` (D.2),
+  // gh#57's `invest-chicken-egg` (D.3), gh#58's `invest-security` (D.4) and gh#59's
+  // `invest-subscription` (D.5). The
+  // pool grows a row per ticket, and which decks run them stays `./deck-sets.ts`'s answer.
+  // NOTHING IN THIS FILE CHANGES FOR A NEW SLIDE IN AN EXISTING RUN: the spread reads the
+  // section's own array, so gh#57, gh#58, gh#59 and gh#70 each needed only the comment
+  // above corrected — this line said ONE until gh#58, was wrong from gh#57 onward, and
+  // said FOUR until gh#70 put a fifth row at the FRONT of the section's array, which this
+  // spread absorbed exactly as the `leaderGapSlides` line above records for gh#65's head
+  // insert and the `leaderShapeSlides` line records for gh#68's tail append.
   ...leaderInvestSlides,
   ...landscapeSectionBSlides,
   ...mindsetSectionCSlides,

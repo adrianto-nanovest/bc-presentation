@@ -90,17 +90,26 @@ const POSES = [0, 1, 2] as const;
  * position to look up — which is itself the fact `deck-numbering-fixture` and
  * `deck-registry` prove, from the decks that do run it.
  *
- * D.1 rather than §6.7's D.2 because no slide sits in front of this one in the `invest`
- * run: §6.7's D.1, `invest-base-rates`, is unbuilt. IT IS NOT #57 THAT BUILDS IT —
- * that ticket is D.3 `invest-chicken-egg`, which APPENDED behind this slide and moved
- * nothing here (this harness input is unchanged by it, and the fixture records D.1 for
- * this slide and D.2 for that one). `invest-base-rates` holds no ticket at all; §11's
- * phase table puts it in Phase 7. Neither the letter nor the number is authored
+ * D.2 SINCE gh#70, AND §6.7's OWN D.2 AT LAST. This read D.1 from gh#56 until gh#70, and
+ * the reason it read D.1 was stated here as "no slide sits in front of this one in the
+ * `invest` run: §6.7's D.1, `invest-base-rates`, is unbuilt". It is built — #70 built it,
+ * at the run's HEAD — so this slide is that run's SECOND row and derives D.2, the number
+ * §6.7 gave it in the first place. NOT ONE LINE OF THIS SLIDE WAS OPENED to make that
+ * happen; the composer moved the number, which is the whole of §3.5's point.
+ *
+ * THE OLD COMMENT'S OTHER HALF WAS RIGHT AND IS KEPT: it was not #57 that moved this
+ * slide. That ticket is D.3 `invest-chicken-egg`, which APPENDED behind this one and
+ * changed nothing here. What DID move it is the only shape that can — an insert in FRONT
+ * of it INSIDE its own run (§3.4 R3). ("`invest-base-rates` holds no ticket at all" was
+ * true when written and is now spent: #70 is the ticket, and §11's Phase 7 row was filed
+ * as #65–#72.)
+ *
+ * Neither the letter nor the number is authored
  * in the slide (§3.5), so this is a harness input and not a claim the slide makes —
  * and it is the number the two leader decks actually derive, which
  * `tests/fixtures/deck-numbering.json` records for both.
  */
-const AT = { letter: "D", num: 1, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 2, sectionKey: "invest" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {
@@ -1024,11 +1033,13 @@ describe("keywords go on prose only", () => {
   });
 
   test("no authored string names a section letter", () => {
-    // §3.4 R2. This slide composes as D.1 today and becomes D.2 the moment
-    // `invest-base-rates` (§6.7's D.1, Phase 7, no ticket — NOT #57, which built D.3
-    // behind this slide) lands in front of it, and everything behind the `invest`
-    // run renumbers as the rest of Phase 6 lands — so a literal "D.1" or "SECTION
-    // D" anywhere in this copy would be a lie on a projector within the week.
+    // §3.4 R2. This slide composed as D.1 from gh#56 until gh#70 and composes as D.2
+    // today, because `invest-base-rates` (§6.7's D.1, built by #70) landed in front of
+    // it and R3 stepped every row behind the insert inside the run. This comment
+    // predicted exactly that move and named the wrong absence — it said D.1 held "no
+    // ticket" — which is the reason the prediction is worth keeping and the ticket
+    // number is not: a literal "D.1" or "SECTION D" anywhere in this copy WOULD have
+    // become a lie on a projector, and it did, on 2026-08-08.
     for (const copy of authoredStrings()) {
       expect(copy).not.toMatch(/\bSECTIONS?\s+[A-N]\b/i);
       // A bare figure reference — `D.1`, `G.12`.

@@ -90,7 +90,7 @@
 //      and what this slide claims is that the count OUTSIDE `.nav-zone` is 0.
 //
 //   6. THE COMPOSED LETTER, AND THE DECK THAT MUST NOT HOLD THE SLIDE. The letter is
-//      DERIVED (§3.5), so `D.2` exists as rendered text nowhere but a browser. Harvested
+//      DERIVED (§3.5), so `D.3` exists as rendered text nowhere but a browser. Harvested
 //      from a walk of the WHOLE deck, once per brand, so "exactly one slide prints this"
 //      is part of the claim rather than "the first slide that matched". A standard
 //      variant is not skipped: it walks all 65 slides and exits 1 saying the deck
@@ -419,26 +419,59 @@ const FORBIDDEN_CONTROL = "ChatGPT seems not strict about enforcement";
  * imported anyway, for the same reason as everything else in this block, and it is worth
  * having because the composed FIGURE and the LABEL are printed by two different
  * mechanisms: the letter and the number are derived (§3.5) and the label is authored, so
- * a harness that checked only "the fig-label starts with D.2" would pass a slide that
+ * a harness that checked only "the fig-label starts with D.3" would pass a slide that
  * printed the sibling's label beside this slide's number.
+ *
+ * THE NUMBER IS D.3 SINCE gh#70 AND THE LABEL DID NOT MOVE, which is the split this
+ * comment argues for, demonstrated: gh#70 inserted `invest-base-rates` at the `invest`
+ * run's HEAD, R3 stepped this row from D.2 to D.3, and `content.ts` was never opened.
+ * The derived half moved; the authored half did not.
  */
-const FIG_LABEL = "— FIG. D.2·THE DEADLOCK, AND WHO CAN SKIP IT";
+const FIG_LABEL = "— FIG. D.3·THE DEADLOCK, AND WHO CAN SKIP IT";
 
 /**
  * The composed position, and it is a harness INPUT rather than a claim the slide makes.
  *
  * §3.5 derives both the letter and the index from what the deck holds, and no rendered
- * string under `src/slides/leader-invest/` may name either. Both leader decks run
- * `title · a1 · gap-capability-ladder · shape-agentic-org · f8-your-agentic-os ·
- * invest-own-proof · invest-chicken-egg`, so this slide is index 6 and D.2 — one number
- * behind §6.7's D.3, because §6.7 describes the finished section and `invest-base-rates`
- * is unbuilt. ASSERTED AS LITERALS WITH A KNOWN EXPIRY, which is the point: the day D.1
- * lands in front of this run, these two lines must fail and be updated, and a harness
- * that accepted any index and any letter would not notice a run that composed into the
- * wrong section.
+ * string under `src/slides/leader-invest/` may name either. ASSERTED AS LITERALS WITH A
+ * KNOWN EXPIRY, which is the point: a harness that accepted any index and any letter
+ * would not notice a run that composed into the wrong section.
+ *
+ * BOTH LITERALS ARE gh#70's, AND THE INDEX HAD BEEN STALE SINCE gh#65 — recorded because
+ * the two went wrong for different reasons and only one of them was predicted. This block
+ * read `index 6 and D.2` and justified it with the gh#57-era deck: `title · a1 ·
+ * gap-capability-ladder · shape-agentic-org · f8-your-agentic-os · invest-own-proof ·
+ * invest-chicken-egg`. That list is SIX rows short today. gh#65, gh#66 and gh#67 put
+ * `gap-hardest-part`, `gap-no-sop`, `gap-three-failures` and `gap-the-pattern` in FRONT
+ * of the ladder and gh#68 put `shape-middle-out` behind f8 — none of which moved a FIGURE
+ * on this slide, so the prediction below
+ * never fired and the INDEX rotted silently through FOUR tickets. (gh#69 moved NEITHER:
+ * `mandate-levers` appends seven runs BEHIND this row, so it left the index alone as well
+ * as the figure — the one leader-only ticket since gh#65 this block never had to be read
+ * against.) gh#70 then put
+ * `invest-base-rates` at the `invest` run's head — the sixth row, and the only one of the
+ * six that moved the figure too.
+ *
+ * SO THE LEADER DECKS RUN `title · a1 · gap-hardest-part · gap-no-sop ·
+ * gap-three-failures · gap-the-pattern · gap-capability-ladder · shape-agentic-org ·
+ * f8-your-agentic-os · shape-middle-out · invest-base-rates · invest-own-proof ·
+ * invest-chicken-egg` — this
+ * slide is index 12 and D.3, which is §6.7's own D.3 now that the run is complete. Both
+ * values are read off `tests/fixtures/deck-numbering.json`, which records 72 rows per
+ * leader deck.
+ *
+ * AN INDEX IS THE MOST FRAGILE THING THIS FILE PINS, and that is the lesson rather than
+ * the number: a figure moves only when something changes inside its own run, and an index
+ * moves when ANY row anywhere in front of it does. gh#68 is the proof at its cheapest —
+ * it moved NO letter and NO number anywhere in either leader deck, and it still moved
+ * this line, because its row sits in front of this one. gh#56's sibling script avoids
+ * this by
+ * DISCOVERING its index from a full-deck walk (`scripts/gh56-verify.mjs`, `harvestDeck`)
+ * and pinning only the caption. This one pins both, so it must be re-read against the
+ * fixture after every leader-only ticket, whether or not a figure moved.
  */
-const DECK_INDEX = 6;
-const FIGURE_PREFIX = "— FIG. D.2·";
+const DECK_INDEX = 12;
+const FIGURE_PREFIX = "— FIG. D.3·";
 
 /** Which slide is which, by a testid that is on the stage AT POSE 0. Every box on this
  *  slide is mounted at every pose (`Reveal` renders unconditionally and gates only its
@@ -580,10 +613,16 @@ function overlaps(a, b) {
  * this slide's marker is on the stage.
  *
  * A FULL WALK AND NOT A SEARCH, which is the difference that makes "exactly one slide in
- * this deck prints D.2" mean something: a loop that stopped at the first match would pass
- * a deck holding two. It is also how the index is DISCOVERED — §3 derives every position
- * and the rest of Phase 6 inserts three more `invest` slides — so the literal 6 above is
- * checked against a walk rather than used to find the slide.
+ * this deck prints D.3" mean something: a loop that stopped at the first match would pass
+ * a deck holding two. It is also how the index is CHECKED rather than trusted — §3 derives
+ * every position, and every `invest` slide still owed when this was written has since
+ * landed: gh#58's D.4 and gh#59's D.5 behind this one, and gh#70's D.1 in front of it. The
+ * run is complete at §6.7's five, so this slide's NUMBER is final; its INDEX is not, and
+ * would move again on any row added anywhere in front of the `invest` run.
+ *
+ * ("The rest of PHASE 6 inserts three more `invest` slides" is what this said, and it was
+ * two-thirds right: #58 and #59 are Phase 6, and `invest-base-rates` is PHASE 7 and landed
+ * as #70.)
  */
 async function harvestDeck(page, variant, slideCount) {
   const rows = [];
@@ -1585,7 +1624,7 @@ for (const variant of LEADER_VARIANTS) {
     FIG_LABEL,
   );
   // AND NOTHING ELSE IN THE DECK CLAIMS THIS REFERENCE. The half a search cannot make:
-  // two slides deriving D.2 would both look right on their own.
+  // two slides deriving D.3 would both look right on their own.
   check(
     `${tag} · composition · exactly one slide in ${slideCount} prints "${FIGURE_PREFIX}"`,
     harvest.filter((r) => r.fig?.startsWith(FIGURE_PREFIX)).map((r) => r.index),

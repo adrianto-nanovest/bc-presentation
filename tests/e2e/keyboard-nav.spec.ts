@@ -104,6 +104,20 @@ test("a live section letter jumps to that section's first numbered slide", async
 // printed figure and label rather than on an index. gh#67 did the same thing with TWO
 // rows, `gap-three-failures` and `gap-the-pattern`, closing the run at §4.3's five:
 // still no assertion moved, and `gap` will not grow again.
+//
+// gh#68 AND gh#69 ARE ABSENT FROM THIS FILE TOO, and for a third reason worth naming:
+// each appended at a run's TAIL — `shape-middle-out` onto `shape`, `mandate-levers` onto
+// `mandate` — so `c` and `k` still land on their run's FIRST numbered slide and no jump
+// in this file could have noticed either. A tail append is the
+// only insert shape that is invisible to R5 by construction.
+//
+// gh#70 IS gh#65's CASE A SECOND TIME, ON `d` INSTEAD OF `b`. `invest-base-rates` went
+// in at the HEAD of the `invest` run, which has held D since gh#56 — so `d` jumps to
+// the same letter and R5 still lands on D.1, and the SLIDE printing D.1 is a different
+// slide with a different label. Two tickets have now changed this file without moving
+// a letter, and in both of them the FIGURE assertion passed unchanged while the LABEL
+// assertion was the whole of the diff. That is the strongest argument this file makes
+// for why every jump names both.
 test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
   page,
 }) => {
@@ -117,7 +131,10 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   // gh#57 inserted D.2 in front of it, then D.2 until gh#65 inserted a row at index 2
   // and pushed it along to D.1, then C.2 once gh#66 pushed it again, and it holds B.5 —
   // the capability ladder — since gh#67 pushed it twice more. Five slides at one index
-  // in five tickets, and
+  // in five tickets, and then THREE tickets running that left it alone: gh#68's row went
+  // in at index 9, gh#69's at index 60 and gh#70's at index 10, every one of them BEHIND
+  // this one, and an insert cannot
+  // renumber or displace what precedes it. Either way
   // nothing below reads the
   // starting slide, every assertion is about where a letter LANDS, and the index
   // assertion here only says the deck honoured `?slide=`. (The console watch above does
@@ -146,13 +163,24 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   await expect(page.locator(".fig-label")).toHaveText(/THE AGENTIC ORGANIZATION/);
 
   // `d` is WHY INVEST — the run gh#56 inserted, and on a standard deck the same key
-  // is PROCESS & METHODOLOGY. The run holds FOUR slides since gh#59 appended D.4
-  // behind gh#58's D.3, so R5's "first NUMBERED slide of the run" is a real
+  // is PROCESS & METHODOLOGY. The run holds FIVE slides since gh#70 inserted D.1 at
+  // its head, ahead of gh#56's, gh#57's, gh#58's and gh#59's, so R5's "first NUMBERED
+  // slide of the run" is a real
   // distinction here and not a one-slide coincidence: `d` must land on D.1 and not
-  // on the D.2, D.3 or D.4 behind it.
+  // on the D.2, D.3, D.4 or D.5 behind it. Five is FINAL — §6.7 asks for no sixth.
+  //
+  // AND IT LANDS ON A DIFFERENT SLIDE THAN IT DID BEFORE gh#70, AT THE SAME FIGURE —
+  // the `b` case above, repeated on this key. `invest` has held D since gh#56 and R5
+  // still resolves to D.1; what changed is which slide prints D.1. PROOF FROM INSIDE
+  // THE COMPANY held it while it was the run's first row and prints D.2 now, one row
+  // behind. The figure line below did not move and could not have; the label line is
+  // the whole of what gh#70 cost this file, and a test that read `/D\.1/` and stopped
+  // would have gone on passing while landing somewhere else.
   await page.keyboard.press("d");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*D\.1/);
-  await expect(page.locator(".fig-label")).toHaveText(/PROOF FROM INSIDE THE COMPANY/);
+  await expect(page.locator(".fig-label")).toHaveText(
+    /THE BASE RATE, AND THE DEFAULT IT PRICES/,
+  );
 
   // `k` is THE MANDATE as of gh#60 — the FOURTH section this one key has meant in
   // this deck, and the sharpest case in the file. It printed K.1 at every one of

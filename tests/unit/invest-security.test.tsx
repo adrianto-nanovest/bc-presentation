@@ -84,13 +84,17 @@ const LEADER_BRANDS: readonly Brand[] = ["berau", "gems"];
  *
  * `at` IS required here, the same case as both siblings: unit tests resolve the default
  * `general` deck, `general` has no leader variant, and this slide reaches the two leader
- * deck sets alone. D.3 rather than §6.7's D.4 because `invest-base-rates` (§6.7's D.1)
- * is unbuilt and holds no ticket (§11's Phase 7 row) — the number the two leader decks
+ * deck sets alone. D.4, WHICH IS §6.7's D.4, since gh#70: this read D.3 from gh#58 until
+ * then, "rather than §6.7's D.4 because `invest-base-rates` (§6.7's D.1) is unbuilt and
+ * holds no ticket (§11's Phase 7 row)". #70 is the ticket, it built D.1 at the run's
+ * HEAD, and R3 stepped this row and the three others behind that insert — so the composed
+ * number and §6.7's agree here for the first time. The number the two leader decks
  * actually derive, which `tests/fixtures/deck-numbering.json` records for both. A
- * harness INPUT, not a claim the slide makes (§3.5); the day D.1 lands, all three
- * slides in this directory move one number and no file here opens.
+ * harness INPUT, not a claim the slide makes (§3.5); the day D.1 landed, FOUR slides in
+ * this directory moved one number each — the prediction said three, and gh#59 added the
+ * fourth in between — and no file here opened.
  */
-const AT = { letter: "D", num: 3, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 4, sectionKey: "invest" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {

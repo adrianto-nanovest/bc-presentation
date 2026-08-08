@@ -269,7 +269,7 @@ describe("leader deck sets", () => {
       // with the deck instead of being dropped: which pair surrounds f8 is the
       // only thing that says the relocation still holds.
       //
-      // NONE OF gh#57, gh#58, gh#59, gh#65, gh#66, gh#67 OR gh#69 MOVED F8 AGAIN.
+      // NONE OF gh#57, gh#58, gh#59, gh#65, gh#66, gh#67, gh#69 OR gh#70 MOVED F8 AGAIN.
       // `invest-chicken-egg`
       // joined
       // the END of that `invest` run, `invest-security` joined behind it and
@@ -292,6 +292,14 @@ describe("leader deck sets", () => {
       // entirely downstream of this assertion — the one tail append of the six that
       // this block never sees.
       //
+      // gh#70 DID NOT TOUCH F8'S PAIR EITHER, AND TWO TICKETS EARLIER IT WOULD HAVE.
+      // `invest-base-rates` went in at the HEAD of the `invest` run, and that head no
+      // longer sits at `at + 1`: gh#68 took that offset for `shape` two tickets before,
+      // so the new row landed at `at + 2` and BOTH of f8's neighbours are still gh#54's
+      // and gh#68's. The two rows are adjacent and neither ticket can see the other — a
+      // TAIL append to `shape` and a HEAD insert into `invest` land on the same JOIN
+      // from opposite sides of it, renumber inside different runs, and neither moves f8.
+      //
       // gh#65 IS THE ONE THAT PROVES THE OFFSETS ARE RELATIVE AND NOT ABSOLUTE. It
       // inserted `gap-hardest-part` two rows IN FRONT of f8, so f8's own index moved
       // and not one assertion below did: every offset is taken from `at`, which is
@@ -299,20 +307,32 @@ describe("leader deck sets", () => {
       // ticket that changed nothing it is about. gh#66 proved it a second time, with
       // `gap-no-sop` in the MIDDLE of that same run, and gh#67 a third — TWO rows in
       // the middle of it, pushing f8 two further along for no edit here at all.
+      //
+      // AND gh#68 AND gh#70 PROVE THE SAME POINT FROM THE OTHER DIRECTION, which is
+      // worth having both halves of. An insert IN FRONT of f8 moves f8's index and no
+      // offset here; an insert BEHIND it moves no index at all and rewrites the tail of
+      // this ladder, because every row after the insert point is one offset later than
+      // it was. Absolute indices would have failed on gh#65, gh#66 and gh#67, which
+      // changed nothing this test is about, and would have passed gh#68 and gh#70 at
+      // the top of the block while every line below silently named the wrong
+      // neighbour. Relative offsets fail on exactly the lines that moved.
       const at = ids.indexOf("f8-your-agentic-os");
       expect(ids[at - 1], id).toBe("shape-agentic-org");
       expect(ids[at + 1], id).toBe("shape-middle-out");
-      // And the run gh#56 opened still hands straight to the curriculum, four
-      // rows long since gh#59 — `invest-subscription` between `invest-security`
+      // And the run gh#56 opened still hands straight to the curriculum, FIVE
+      // rows long since gh#70 closed it at §6.7's length — `invest-base-rates` at its
+      // head, `invest-subscription` still between `invest-security`
       // and `b1-evolution-journey` — so `shape-middle-out` is the last slide before
       // section D and
       // section D the last before the landscape — the whole insert, stated as the
-      // joins it makes.
-      expect(ids[at + 2], id).toBe("invest-own-proof");
-      expect(ids[at + 3], id).toBe("invest-chicken-egg");
-      expect(ids[at + 4], id).toBe("invest-security");
-      expect(ids[at + 5], id).toBe("invest-subscription");
-      expect(ids[at + 6], id).toBe("b1-evolution-journey");
+      // joins it makes. Five is FINAL: §6.7 asks for no sixth `invest` slide, so this
+      // ladder of offsets stops growing at `at + 7`.
+      expect(ids[at + 2], id).toBe("invest-base-rates");
+      expect(ids[at + 3], id).toBe("invest-own-proof");
+      expect(ids[at + 4], id).toBe("invest-chicken-egg");
+      expect(ids[at + 5], id).toBe("invest-security");
+      expect(ids[at + 6], id).toBe("invest-subscription");
+      expect(ids[at + 7], id).toBe("b1-evolution-journey");
       // And the run it left has closed up behind it: `g10` now hands straight to
       // the bridge, with no hole where f8 stood.
       expect(ids[ids.indexOf("g10-beyond-big-three") + 1], id).toBe("g11-bridge-to-h");
@@ -412,29 +432,31 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // FOURTEEN ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
-      // into a deck that has no leader in the room. Eleven of them would do it in
+      // FIFTEEN ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
+      // into a deck that has no leader in the room. Twelve of them would do it in
       // FRONT of the curriculum and renumber all 65 slides behind them; the three
       // `mandate` rows would do it between `pitfalls` and `meta` and renumber only
       // the last eleven — quieter, and therefore the ones most likely to reach a
       // projector.
       //
-      // FOURTEEN IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
-      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65, gh#66, gh#67, gh#68 and
-      // gh#69
+      // FIFTEEN IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
+      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65, gh#66, gh#67, gh#68, gh#69
+      // and gh#70
       // inherit it
       // whole:
       // `invest-chicken-egg`, `mandate-phases-gates`, `invest-security`,
       // `invest-subscription`, `shape-middle-out` and `mandate-levers` each append to
       // the END of a run that ALREADY EXISTS in
-      // the leader list, `gap-hardest-part` went in at the HEAD of one, and
+      // the leader list, `gap-hardest-part` and `invest-base-rates` went in at the HEAD
+      // of one, and
       // `gap-no-sop`, `gap-three-failures` and `gap-the-pattern`
       // into the MIDDLE of one — a third and a fourth
       // category, and the leak is identical for all of them. WHAT AN INSERT COSTS THE
       // LEADER DECK AND WHAT IT WOULD COST A STANDARD ONE ARE UNRELATED, which gh#68
-      // shows most sharply: it is the cheapest edit the leader list has taken — no
-      // letter, no number — and leaked into `STANDARD_SLIDE_IDS` it would be as
-      // expensive as any of the other thirteen. The standard list holds no
+      // and gh#70 bracket: gh#68's and gh#69's are the cheapest edits the leader list
+      // has taken — no letter, no number — and gh#70's moved four numbers, and leaked
+      // into `STANDARD_SLIDE_IDS` any of the three would be exactly as
+      // expensive as any of the other twelve. The standard list holds no
       // `gap` row, no `invest` row and no `mandate`
       // row at all — so on a standard deck any one of them would arrive alone and
       // claim a letter exactly as the four run-openers would.
@@ -455,6 +477,7 @@ describe("leader deck sets", () => {
           "gap-capability-ladder",
           "shape-agentic-org",
           "shape-middle-out",
+          "invest-base-rates",
           "invest-own-proof",
           "invest-chicken-egg",
           "invest-security",
@@ -471,7 +494,8 @@ describe("leader deck sets", () => {
   // NOT ASSERTED HERE: how long a leader deck is against a standard one. It was
   // eight slides shorter at the gh#41 floor, level after gh#59, a slide LONGER
   // since gh#65, two longer after gh#66, four longer after gh#67, five longer after
-  // gh#68 and SIX longer since gh#69 — which is exactly
+  // gh#68, six longer after gh#69 and SEVEN longer
+  // since gh#70 — which is exactly
   // why the number is not
   // restated in this file. That
   // is a

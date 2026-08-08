@@ -1,5 +1,6 @@
-// WHERE THE DATA GOES, AND WHAT ANSWERS IT — the third slide of the WHY INVEST run, and
-// the one §12.2 calls the highest-consequence place in the deck to be wrong.
+// WHERE THE DATA GOES, AND WHAT ANSWERS IT — the FOURTH slide of the WHY INVEST run since
+// gh#70 put `invest-base-rates` at its head, and the one §12.2 calls the
+// highest-consequence place in the deck to be wrong.
 //
 // Spec §6.7 (D.4's three beats) · §4.4 slot 4 (the on-prem brand axis) · §8.1 / §6.4 (B.4's
 // numbers, which beat 1 re-quotes) · §12.2 (the vendor-claim gate) · §6.2 (the shadow-AI
@@ -90,15 +91,18 @@
 // is the same fact in both rooms, and a second brand slot there would be a provenance
 // invented to fill a fork.
 //
-// THE LETTER IS NOT AUTHORED HERE, and the number is one behind §6.7's. This slide composes
-// as **D.3** today — third in the `invest` run, behind `invest-own-proof` and
-// `invest-chicken-egg` — while §6.7 numbers it **D.4**, because §6.7 describes the FINISHED
-// section and `invest-base-rates` (§6.7's D.1) is unbuilt. That gap is §3.5 working as
-// designed: a letter and a number are derived from what the deck actually holds, `FigLabel`
-// takes a label only, and no rendered string under `src/slides/leader-invest/` may name
-// either. Do not "fix" the figure to D.4 — `invest-base-rates` holds no ticket at all (§11's
-// Phase 7 row has it), and the day it lands all three slides in this directory move one
-// number and no file here is opened.
+// THE LETTER IS NOT AUTHORED HERE, and the number CAUGHT UP with §6.7's. This slide composes
+// as **D.4** today — fourth in the `invest` run, behind `invest-base-rates`,
+// `invest-own-proof` and `invest-chicken-egg` — which is §6.7's own number for it. It
+// printed **D.3** from #58 until 2026-08-08, one behind the spec, because §6.7 describes the
+// FINISHED section and `invest-base-rates` (§6.7's D.1) was unbuilt. This comment also said
+// that slide "holds no ticket at all (§11's Phase 7 row has it)", which was true when it was
+// written and stopped being true when **gh#70** was opened; gh#70 landed it at the head of
+// the run and every slide in this directory stepped one number WITH NO FILE HERE OPENED FOR
+// A RENDERED STRING OR A `SlideDef` FIELD. That is §3.5 working as designed: a letter and a
+// number are derived from what the deck actually holds, `FigLabel` takes a label only, and
+// no rendered string under `src/slides/leader-invest/` may name either. Do not pin the
+// figure.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { VARIANT } from "@/variant";

@@ -1,5 +1,6 @@
-// INDIVIDUAL SEATS BECOME A MANAGED LINE ITEM — the last slide of the WHY INVEST run,
-// and the one whose beat 3 is arithmetic the room runs itself.
+// INDIVIDUAL SEATS BECOME A MANAGED LINE ITEM — still the LAST slide of the WHY INVEST
+// run, which is now complete at §6.7's five, and the one whose beat 3 is arithmetic the
+// room runs itself.
 //
 // Spec §6.7 (D.5's three beats) · §4.4 slot 7 (the price-anchor brand axis) · §12.2
 // (the vendor-claim gate) · §11's Phase 6 row. No #16 prototype covers it, so nothing
@@ -75,14 +76,18 @@
 // closer are brand-invariant: list prices are the vendor's, and the boundary is the
 // deck's.
 //
-// THE LETTER IS NOT AUTHORED HERE, and the number is one behind §6.7's. This slide
-// composes as **D.4** today — fourth and LAST in the `invest` run, behind
-// `invest-own-proof`, `invest-chicken-egg` and `invest-security` — while §6.7 numbers
-// it **D.5**, because `invest-base-rates` (§6.7's D.1) is unbuilt and holds no ticket
-// (§11's Phase 7 row has it). That gap is §3.5 working as designed: `FigLabel` takes
-// a label only, and no rendered string under `src/slides/leader-invest/` may name a
-// letter or a number. Do not "fix" the figure to D.5 — the day D.1 lands, all four
-// slides here move one number and no file in this directory is opened.
+// THE LETTER IS NOT AUTHORED HERE, and the number CAUGHT UP with §6.7's. This slide
+// composes as **D.5** today — fifth and LAST in the `invest` run, behind
+// `invest-base-rates`, `invest-own-proof`, `invest-chicken-egg` and `invest-security` —
+// which is §6.7's own number for it, and the LAST figure this slide will hold: the run is
+// COMPLETE at §6.7's five, so nothing more inserts in front of it. It printed **D.4** from
+// #59 until 2026-08-08, one behind the spec, because `invest-base-rates` (§6.7's D.1) was
+// unbuilt and — as this comment then correctly said — held no ticket; **gh#70** is the
+// ticket that did not exist when that was written, and the day it landed all four slides
+// here moved one number with no file in this directory opened for a rendered string or a
+// `SlideDef` field. That is §3.5 working as designed: `FigLabel` takes a label only, and no
+// rendered string under `src/slides/leader-invest/` may name a letter or a number. Do not
+// pin the figure.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { VARIANT } from "@/variant";

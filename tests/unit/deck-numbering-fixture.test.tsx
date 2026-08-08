@@ -502,8 +502,88 @@ interface ObservedDeck {
  *     label→fig map keeps whichever it saw last. Both rows are unchanged. Labels are
  *     not unique; match on the PAIR, in order.)
  *
+ * ON gh#70 FOUR FIGURES MOVED, AND EVERY ONE OF THEM IS A NUMBER — the most this file
+ * has ever recorded for one ticket, by four times. It is the FOURTH entry here to move
+ * a figure without opening a run, after gh#65, gh#66 and gh#67; gh#68 and gh#69 sit
+ * between them and moved none at all. It is also the SECOND HEAD-OF-RUN INSERT,
+ * gh#65 being the first and there being no third. `invest-base-rates` reached the
+ * leader lists alone, the FIFTEENTH slide ever to do so, taking both decks to **72**
+ * rows and CLOSING the `invest` run at §6.7's five — the THIRD of the four leader-only
+ * runs to be complete, after `gap` (gh#67) and `mandate` (gh#69). Still FOURTEEN
+ * sections, still closing on **N.3**. It went in at the HEAD of the `invest` run gh#56
+ * opened, so `invest` kept **D** and R3 renumbered every row behind it inside that run:
+ *
+ *   · ONE row was added per leader deck, at index 10, between `C.3 · MIDDLE-OUT` — the
+ *     row gh#68 appended two tickets earlier, and NOT `C.2 · YOUR AGENTIC OS`, which is
+ *     what sat there until that ticket landed — and `D.2 · PROOF FROM INSIDE THE
+ *     COMPANY`: `D.1 · THE BASE RATE, AND THE DEFAULT IT PRICES`. §6.7 numbers that
+ *     slide D.1 and it composes as D.1, and FOR THE FIRST TIME SINCE gh#56 OPENED THIS
+ *     RUN every slide in it prints its own spec number — D.1 through D.5, filled
+ *     front-to-back with no hole, exactly as gh#67 left `gap` and gh#69 left `mandate`.
+ *     Derived all the same (§3.5); the agreement is what a COMPLETE run looks like, not
+ *     a licence to pin one.
+ *   · FOUR existing rows changed, and all four are NUMBERS: `PROOF FROM INSIDE THE
+ *     COMPANY` **D.1 → D.2**, `THE DEADLOCK, AND WHO CAN SKIP IT` **D.2 → D.3**, `WHERE
+ *     THE DATA GOES, AND WHAT ANSWERS IT` **D.3 → D.4**, and `FROM INDIVIDUAL SEATS TO A
+ *     LINE ITEM` **D.4 → D.5**. Each had composed one number EARLIER than §6.7 gave it
+ *     for as long as D.1 was unbuilt, which is what the entries above predicted in as
+ *     many words; this is the record of that prediction coming due. THE COUNT IS
+ *     STRUCTURAL AND NOT NOTABLE: a head insert moves every row behind it inside its own
+ *     run, `gap` held ONE such row when gh#65 landed and `invest` held FOUR. Not one of
+ *     those four files was opened to change a rendered string. (gh#53's 54 moves, gh#56's
+ *     54 and gh#60's 11 were LETTERS; gh#54's two took a letter with them; gh#65, gh#66
+ *     and gh#67 moved one number each, and gh#68 and gh#69 moved none. Four pure number
+ *     moves has no precedent here.)
+ *   · NO LETTER MOVED ANYWHERE, in any of the five decks, and no row was removed.
+ *     `invest` has held D since gh#56, and a row at the FRONT of a run neither opens a
+ *     run nor closes one. The loop slide is still H.12 at index 42 — fourteen tickets
+ *     into a life in which its file has never been opened — f8 is still C.2 at index 8,
+ *     the ladder is still B.5 at index 6, gh#68's `C.3 · MIDDLE-OUT` is still C.3 at
+ *     index 9, gh#69's `K.3 · THE FOUR LEVERS` is still K.3 (index 59 → 60, its FIGURE
+ *     untouched), the closer is still N.3 at index 71 across FOURTEEN sections, and
+ *     `berau`, `gems` and `general` are byte-identical per key (4931 / 4919 / 4765
+ *     bytes of `JSON.stringify(deck, null, 2)`, unchanged since gh#67).
+ *   · The re-record still needed `ALLOW_MOVED_FIGURES=1`, and the report it printed is
+ *     **116 lines** — SHORTER than the 126 this file records for gh#65, gh#66 and gh#67
+ *     AND shorter than gh#68's 122, on the ticket that moved MORE figures than gh#65,
+ *     gh#66, gh#67, gh#68 and gh#69 put together (four against three). That
+ *     is the sharpest available proof of what the report's length actually measures: how
+ *     DEEP in the deck the insert landed, and how many indices behind it happen to keep
+ *     their recorded figure. It measures nothing about how many figures moved — gh#68
+ *     printed SIX MORE LINES than this ticket for ZERO moved figures, one index
+ *     shallower, and gh#69 printed 24 for zero from index 59. Two
+ *     row-count lines (`71 slides recorded, 72 rendered`) and 57 per leader deck, running
+ *     `slide 14: recorded E.1, renders D.5` down to `slide 70: recorded N.3, renders
+ *     N.2`. Read as pairs it is one statement, gh#57's: what index *i* recorded is now at
+ *     index *i*+1.
+ *
+ *     INDICES 10, 11, 12 AND 13 ARE ABSENT FROM IT, and so are 0–9 and 71. The four
+ *     recorded D.1, D.2, D.3 and D.4 and still render D.1, D.2, D.3 and D.4 — the same
+ *     FOUR FIGURES on four different SLIDES, which an index-keyed detector cannot see,
+ *     and four is the most this file has ever had to say that about. Indices 0–9 are
+ *     absent for R2's reason read from the other end: an insert cannot renumber what
+ *     precedes it, and index 9 is gh#68's row, one slot in front of this one and
+ *     untouched by it. Index 71 is absent for a third reason — the record held no row
+ *     there when the comparison ran, the deck being one row longer than the record, so
+ *     there was nothing to compare it with.
+ *
+ *     SO NOT ONE OF THIS TICKET'S FOUR REAL MOVES APPEARS IN THE REPORT AT ALL, which is
+ *     gh#67's finding at four times the size: `D.1 → D.2` and its three siblings are
+ *     nowhere in those 116 lines, and the nearest thing to any of them is index 14's
+ *     `E.1 → D.5`, which is not what happened to any slide. The report OVERSTATES this
+ *     ticket — 57 lines per deck for four moved figures — and MIS-STATES it, because not
+ *     one of those 57 lines is one of the four. ONLY the diff matched BY LABEL and by
+ *     ordered `(fig, label)` pair says what moved: one label added per leader deck
+ *     (`THE BASE RATE, AND THE DEFAULT IT PRICES`, at index 10), FOUR figures
+ *     changed on pre-existing labels, no label dropped, no letter touched, and the three
+ *     standard decks byte-identical per key. Measured that way the whole diff is TEN
+ *     lines: 2 added, 8 changed, 0 removed, 0 letters. (Match on the PAIR, in order, for
+ *     gh#69's reason — `THE TRAP` is carried by two slides and index 0 carries a null
+ *     label, so a label→fig map answers the wrong question.) Read the diff, every time.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all thirteen tickets — fourteen leader-only slides now, since gh#67 brought two. That
+ * all fourteen tickets — fifteen leader-only slides now, since gh#67 brought two.
+ * That
  * is the assertion worth reading twice: a leader-only
  * insert must not be able to touch a standard deck, and gh#54's relocation could
  * not either — f8 moved because a LEADER LIST moved it, and the standard list was
@@ -519,8 +599,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 71, closer: "N.3" },
-  "gems-leader": { slides: 71, closer: "N.3" },
+  "berau-leader": { slides: 72, closer: "N.3" },
+  "gems-leader": { slides: 72, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

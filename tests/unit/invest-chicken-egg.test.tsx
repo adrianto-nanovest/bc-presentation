@@ -121,15 +121,26 @@ const POSES = [0, 1, 2, 3] as const;
  * up — and the harness itself refuses `at` for any slide the default deck does hold, so
  * this cannot rot into a hardcoded number for a slide that has a derived one.
  *
- * **D.2, and not §6.7's D.3** — measured rather than assumed. Composing both leader
- * decks in their own module epoch on 2026-08-05 derives `invest-own-proof` at D.1 and
- * this slide at D.2, 61 slides to a deck, closer M.3. §6.7 numbers it D.3 because §6.7
- * describes the FINISHED section and `invest-base-rates` (§6.7's D.1) is unbuilt —
- * §11's phase table puts that one in Phase 7. Neither the letter nor the number is
- * authored in the slide (§3.5), so this is a harness INPUT and not a claim the slide
- * makes; the day D.1 lands, both leader slides move one number and no file here opens.
+ * **D.3, which is §6.7's D.3 at last** — measured rather than assumed, and re-measured on
+ * gh#70. This read D.2 from gh#57 until then, on a measurement recorded here: composing
+ * both leader decks in their own module epoch on 2026-08-05 derived `invest-own-proof` at
+ * D.1 and this slide at D.2, 61 slides to a deck, closer M.3. THAT MEASUREMENT IS HISTORY
+ * ON EVERY AXIS — the leader decks are 70 rows and close on N.3 — and the gap it explained
+ * is closed: §6.7 numbered this slide D.3 because §6.7 describes the FINISHED section, and
+ * gh#70 built `invest-base-rates` (§6.7's D.1) at the run's HEAD, so the section IS
+ * finished and every row in it derives its own spec number. Re-measured off
+ * `tests/fixtures/deck-numbering.json`, which records D.1–D.5 for the five `invest` rows
+ * in both leader decks.
+ *
+ * THE DAY THIS COMMENT PREDICTED HAS COME, AND IT COST THIS FILE ONE DIGIT — with one
+ * correction. It said "the day D.1 lands, both leader slides move one number"; FOUR moved,
+ * not two, because gh#58 and gh#59 had lengthened the run behind this slide in the
+ * meantime. What R3 renumbers is every row behind the insert inside its run, and no file
+ * under `src/slides/leader-invest/` was opened for any of the four. Neither the letter nor
+ * the number is authored in the slide (§3.5), so this is a harness INPUT and not a claim
+ * the slide makes.
  */
-const AT = { letter: "D", num: 2, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 3, sectionKey: "invest" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {
@@ -1395,10 +1406,11 @@ describe("§6.2 · shadow AI is RATIONAL BEHAVIOUR here, and nothing else's pass
 
 describe("the slide authors no letter and no number", () => {
   test("no string in the copy block names a section or a figure", () => {
-    // §3.4 R2 / §3.5. This slide composes as D.2 today and becomes D.3 the moment
-    // `invest-base-rates` lands in front of it, and everything behind the `invest` run
-    // renumbers as the rest of Phase 6 lands — so a literal "D.2" or "SECTION D"
-    // anywhere in this copy would be a lie on a projector within the week.
+    // §3.4 R2 / §3.5. This slide composed as D.2 from gh#57 until gh#70 and composes as
+    // D.3 today, because `invest-base-rates` landed in front of it at the run's head and
+    // R3 stepped every row behind the insert. This comment predicted that exact move; a
+    // literal "D.2" or "SECTION D" anywhere in this copy WOULD have become a lie on a
+    // projector, and it did, on 2026-08-08.
     for (const copy of authoredStrings()) {
       expect(copy, copy).not.toMatch(/\bSECTIONS?\s+[A-N]\b/i);
       expect(copy, copy).not.toMatch(/\b[A-N]\.\d+\b/);

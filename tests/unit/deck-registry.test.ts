@@ -77,7 +77,8 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
 }
 
 // ─ The leader deck, no longer the Phase 4 floor ─
-// gh#41 · #53 · #54 · #56 · #57 · #60 · #61 · #58 · #59 · #65 · #66 · #67 · #68 · #69
+// gh#41 · #53 · #54 · #56 · #57 · #60 · #61 · #58 · #59 · #65 · #66 · #67 · #68 · #69 ·
+// #70
 
 /** The leader deck's spine: the standard one with `techniques` GONE, and FOUR runs
  *  the standard deck does not have — `gap`, `shape`, `invest` in front of
@@ -107,7 +108,7 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
  *  LONGEST deck the app composes, three sections past the standard one, and §4.3's
  *  final section count is reached.
  *
- *  AND gh#57, gh#61, gh#58, gh#59, gh#65, gh#66, gh#67, gh#68 AND gh#69 ARE WHAT
+ *  AND gh#57, gh#61, gh#58, gh#59, gh#65, gh#66, gh#67, gh#68, gh#69 AND gh#70 ARE WHAT
  *  EVERY REMAINING
  *  LEADER
  *  TICKET
@@ -118,50 +119,68 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
  *  `gap-capability-ladder`, `gap-no-sop` BETWEEN those two, `gap-three-failures` and
  *  `gap-the-pattern` BETWEEN `gap-no-sop` and the ladder, `shape-middle-out` behind
  *  the relocated f8, `mandate-levers` behind
- *  `mandate-phases-gates` — so none of the nine moved
+ *  `mandate-phases-gates`, `invest-base-rates` in FRONT
+ *  of `invest-own-proof` — so none of the ten moved
  *  a letter anywhere in either
  *  deck, and each cost this table ONE
  *  character: the step on its own run's row below (`1 → 2`, then `2 → 3` for
  *  gh#58, then `3 → 4` for gh#59, and `gap`'s own `1 → 2` for gh#65, `2 → 3` for
- *  gh#66 and `3 → 5` for gh#67, `shape`'s own `2 → 3` for gh#68 and `mandate`'s own
- *  `2 → 3` for gh#69) is the whole of
+ *  gh#66 and `3 → 5` for gh#67, `shape`'s own `2 → 3` for gh#68, `mandate`'s own
+ *  `2 → 3` for gh#69 and `invest`'s own `4 → 5` for gh#70) is the whole of
  *  that ticket's diff here. A
- *  letter-keyed table would have been untouched by all nine — which is the honest
+ *  letter-keyed table would have been untouched by all ten — which is the honest
  *  reading, and the reason the gh#60 case above is the one that argues for keys
- *  rather than these nine.
+ *  rather than these ten.
  *
- *  gh#65, gh#66 AND gh#67 ARE THE ONES THAT MOVED A NUMBER, and that is the only
+ *  gh#65, gh#66, gh#67 AND gh#70 ARE THE ONES THAT MOVED A NUMBER, and that is the only
  *  distinction
  *  inside that
- *  group of nine. The other six APPENDED at a run's END, where R3 has nothing behind
- *  the new row to renumber — gh#57, gh#61, gh#58, gh#59, gh#68 and now gh#69; gh#65
+ *  group of ten. The other six APPENDED at a run's END, where R3 has nothing behind
+ *  the new row to renumber — gh#57, gh#61, gh#58, gh#59, gh#68 and gh#69; gh#65
  *  went in at
- *  the `gap` run's HEAD and gh#66 and gh#67
+ *  the `gap` run's HEAD, gh#66 and gh#67
  *  into its
- *  MIDDLE, so R3 renumbered
+ *  MIDDLE, and gh#70 at the `invest` run's HEAD, so R3 renumbered
  *  inside that run and `gap-capability-ladder` went B.1 → B.2, then B.2 → B.3, then
  *  B.3 → B.5.
  *  Still no letter, still
  *  one character here — but "no letter and no number" is gh#57's sentence, and
- *  gh#68's and gh#69's, not gh#65's, and the numbering fixture is where the
+ *  gh#68's and gh#69's, not gh#65's and least of all gh#70's, and the numbering
+ *  fixture is where the
  *  difference is recorded.
  *
+ *  AND gh#70 IS WHERE "ONE NUMBER PER TICKET" STOPS BEING TRUE, which is worth naming
+ *  because the three `gap` tickets above make it look like a rule. It stepped all FOUR
+ *  `invest` rows — `invest-own-proof` D.1 → D.2, `invest-chicken-egg` D.2 → D.3,
+ *  `invest-security` D.3 → D.4, `invest-subscription` D.4 → D.5 — for ONE row added.
+ *  What R3 renumbers is the rows BEHIND the insert INSIDE its run, and the ladder simply
+ *  happened to be the only such row for gh#65, gh#66 and gh#67. The ledger now has three
+ *  worked examples at ZERO — gh#68's tail append into `shape`, gh#69's into `mandate`,
+ *  and the gh#57/gh#61/gh#58/gh#59 appends before them — and one at FOUR, so the rule is
+ *  stated rather than guessed. Still one character here all the same: a run-length table
+ *  cannot tell four moved numbers from none.
+ *
  *  §4.3 gives `gap` five slides, `shape` four and `mandate` three, and §6.7 gives
- *  `invest` five. TWO OF THE FOUR ROWS BELOW ARE NOW FINAL. `gap` IS FULL AS OF gh#67 —
- *  the first of the four leader-only runs to reach its §4.3 length — and `mandate` IS
- *  FULL AS OF gh#69, the second, so both rows are FINAL and any further `gap` or
- *  `mandate` slide is a slide the spec does not ask for. The unbuilt
- *  `shape-tam-kotter` raises `shape` to 4 and the unbuilt `invest-base-rates` raises
- *  `invest` to
- *  5; those are the only two lines below that may still move, and neither
- *  moves any other line. (The ticket numbers are checked, not guessed: #58 was
+ *  `invest` five. THREE OF THE FOUR ROWS BELOW ARE NOW FINAL. `gap` IS FULL AS OF
+ *  gh#67 — the first of the four leader-only runs to reach its §4.3 length — `mandate`
+ *  IS FULL AS OF gh#69, the second, and `invest` IS FULL AS OF gh#70, the third, so all
+ *  three rows are FINAL and any further `gap`, `mandate` or `invest` slide is a slide
+ *  the spec does not ask for. ONE LINE BELOW MAY STILL MOVE, and it is `shape`: the
+ *  unbuilt `shape-tam-kotter` raises it from 3 to 4, and moves no other line. That is
+ *  also the LAST edit this table can take that moves a figure anywhere — it INSERTS,
+ *  between f8 and the row #68 appended, so R3 steps that one row; everything else §4.3
+ *  still asks for is built. (The ticket numbers are checked, not guessed, against
+ *  `gh issue list` on 2026-08-08: #58 was
  *  D.4 and landed as this file's `2 → 3`, #59 was D.5 and landed as the `3 → 4`,
  *  #65 was §6.1's B.1 and landed as `gap`'s `1 → 2`, #66 was §6.2's B.2 and landed
  *  as `gap`'s `2 → 3`, #67 was §6.3's B.3 and §6.4's B.4 together and landed as
- *  `gap`'s `3 → 5`, #68 landed as `shape`'s `2 → 3`, and #69 was §6.8's K.3 and
- *  landed as `mandate`'s `2 → 3`, while
- *  `invest-base-rates` still sits in §11's PHASE 7
- *  row and holds no issue at all — the list ended at #63 and #52–#63 are Phase 6.) */
+ *  `gap`'s `3 → 5`, #68 was §6.6's C.4 and landed as `shape`'s `2 → 3`, #69 was §6.8's
+ *  K.3 and landed as `mandate`'s `2 → 3`, and #70 was §6.7's D.1 and landed as
+ *  `invest`'s `4 → 5`. THE SENTENCE THAT USED TO END THIS PARENTHESIS IS SPENT: it read
+ *  "`invest-base-rates` still sits in §11's PHASE 7 row and holds no issue at all — the
+ *  list ended at #63". The list did not end at #63; #65–#72 were filed for Phase 7, #70
+ *  is the issue that comment said did not exist, and #71 holds the one slide still
+ *  owed.) */
 const LEADER_SPINE: readonly SectionRun[] = [
   ["opening", 2], // cover + A.1
   // `gap-hardest-part` (gh#65, §4.3's B.1) + `gap-no-sop` (gh#66, §4.3's B.2) +
@@ -174,12 +193,16 @@ const LEADER_SPINE: readonly SectionRun[] = [
   // is the only insert shape this table has recorded that moves NEITHER a letter nor
   // a number: `shape` has held C since gh#54, and R3 renumbers only inside the run
   // that changed, where this row has nothing behind it. Contrast `gap`'s row above,
-  // which rose the same way three times and cost one number each time.
+  // which rose the same way three times and cost one number each time, and `invest`'s
+  // below, which rose once and cost four.
   ["shape", 3],
-  // `invest-own-proof` (gh#56) + `invest-chicken-egg` (gh#57) + `invest-security`
-  // (gh#58) + `invest-subscription` (gh#59), all leader-only — §6.7's D.2–D.5,
-  // composed D.1–D.4 while D.1 is unbuilt.
-  ["invest", 4],
+  // `invest-base-rates` (gh#70, §6.7's D.1) + `invest-own-proof` (gh#56, D.2) +
+  // `invest-chicken-egg` (gh#57, D.3) + `invest-security` (gh#58, D.4) +
+  // `invest-subscription` (gh#59, D.5), all leader-only — §6.7's full run, and the
+  // composed figures agree with §6.7's for the first time since gh#56 opened it: this
+  // number is FINAL, the THIRD of the four to be, after `gap` (gh#67) and `mandate`
+  // (gh#69).
+  ["invest", 5],
   ["landscape", 5],
   ["mindset", 6],
   ["process", 5],
@@ -211,16 +234,17 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
  *  `invest-chicken-egg` joined that run, 62 once gh#60's `mandate-enablement`
  *  opened a new one, 63 once gh#61's `mandate-phases-gates` joined it, 64 once
  *  gh#58's `invest-security` joined the `invest` run, 65 once gh#59's
- *  `invest-subscription` closed that run at §6.7's full length, 66 once
+ *  `invest-subscription` reached that run's §6.7 END, 66 once
  *  gh#65's `gap-hardest-part` had opened the `gap` run from the front, 67 once
  *  gh#66's `gap-no-sop` sat behind it, 69 once gh#67's `gap-three-failures`
  *  and `gap-the-pattern` had closed that run at §4.3's five, 70 once gh#68's
- *  `shape-middle-out` sat at the tail of the `shape` run, and 71 now that gh#69's
- *  `mandate-levers` has closed the `mandate` run at §6.8's three.
+ *  `shape-middle-out` sat at the tail of the `shape` run, 71 once gh#69's
+ *  `mandate-levers` had closed the `mandate` run at §6.8's three, and 72 now that
+ *  gh#70's `invest-base-rates` has closed the `invest` run from ITS front.
  *
- *  NINE OF THOSE FOURTEEN MOVED NO LETTER — gh#57 first, gh#61 second, gh#58 third,
+ *  TEN OF THOSE FIFTEEN MOVED NO LETTER — gh#57 first, gh#61 second, gh#58 third,
  *  gh#59 fourth, gh#65 fifth, gh#66 sixth, gh#67 seventh, gh#68 eighth, gh#69
- *  ninth — which is
+ *  ninth, gh#70 tenth — which is
  *  worth naming next
  *  to a count:
  *  each lengthened
@@ -228,32 +252,38 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
  *  and A–N is gh#60's. A leader-only slide changes this number every time; what it
  *  does not always change is the letters.
  *
- *  AND gh#65, gh#66 AND gh#67 ARE STILL THE ONLY THREE OF THE NINE TO MOVE A NUMBER,
+ *  AND gh#65, gh#66, gh#67 AND gh#70 ARE THE ONLY FOUR OF THE TEN TO MOVE A NUMBER,
  *  which
  *  is the
  *  distinction a
- *  count cannot carry: they landed at the HEAD of the `gap` run and in its MIDDLE
+ *  count cannot carry: they landed at the HEAD of the `gap` run, in its MIDDLE, and at
+ *  the HEAD of `invest`,
  *  rather than at the end
  *  of one, so R3 renumbered inside that run and `gap-capability-ladder` went from B.1
- *  to B.2, then to B.3, then to B.5. No letter, one number, one run, per ticket — and
- *  gh#67 shows the row count of the insert does not change that arithmetic, because
+ *  to B.2, then to B.3, then to B.5. No letter, one number, one run, per `gap` ticket —
+ *  and gh#67 shows the row count of the insert does not change that arithmetic, because
  *  the ladder is the only row behind it inside the run. NEITHER gh#68 NOR gh#69
  *  JOINED THEM: each appended at the TAIL of a run — `shape` for gh#68, `mandate`
  *  for gh#69 — where R3 has nothing behind the new row to renumber, so each moved no
- *  letter AND no number, the cheapest edit any of the fourteen has been. The
- *  numbering
- *  fixture is where that is
+ *  letter AND no number, the cheapest edit any of the fifteen has been.
+ *
+ *  gh#70 IS WHERE THAT "ONE NUMBER" READING WOULD HAVE MISLED: one row added, FOUR
+ *  numbers moved (D.1 → D.2, D.2 → D.3, D.3 → D.4, D.4 → D.5), because four `invest`
+ *  rows sat behind the insert inside its own run where only the ladder sat behind the
+ *  `gap` ones. gh#68, gh#69 and gh#70 are the two ends of the same rule inside three
+ *  tickets: ZERO rows behind the insert, twice, and FOUR. The numbering
+ *  fixture is where all of that is
  *  recorded, and this constant only says the deck is one row longer.
  *
  *  SO THE DIFFERENCE gh#41 PINNED HAS CHANGED, and that is the point of Phase 6
  *  rather than a regression: the leader deck is no longer "the standard deck minus
  *  eight", it is that minus eight PLUS its own slides — and since gh#65 it is the
- *  LONGER of the two decks, 71 against 65 as of gh#69. The assertion below
- *  states both halves separately so the next `shape` or `invest`
- *  slide moves one number, not a sentence. (`gap` and `mandate` will move it no
- *  further: gh#67 and gh#69 closed those two runs at their spec'd lengths. TWO ROWS
- *  ARE STILL OWED, one per short run: `shape-tam-kotter` and `invest-base-rates`.) */
-const LEADER_TOTAL_WITH_LAB = 71;
+ *  LONGER of the two decks, 72 against 65 as of gh#70. The assertion below
+ *  states both halves separately so the LAST `shape`
+ *  slide moves one number, not a sentence. (`gap`, `mandate` and `invest` will move it
+ *  no further: gh#67, gh#69 and gh#70 closed those three runs at their spec'd lengths.
+ *  ONE ROW IS STILL OWED, in the one short run: `shape-tam-kotter`, on #71.) */
+const LEADER_TOTAL_WITH_LAB = 72;
 
 /** The eight cut F slides — `f1`–`f7` and `f9`, with `f8-your-agentic-os` kept
  *  and relocated. Held apart from the total above so a leader-only ADDITION can
@@ -266,9 +296,9 @@ const LEADER_CUT_F_SLIDES = 8;
  * (gh#57), `mandate-enablement` (gh#60), `mandate-phases-gates` (gh#61),
  * `invest-security` (gh#58), `invest-subscription` (gh#59), `gap-hardest-part`
  * (gh#65), `gap-no-sop` (gh#66), `gap-three-failures` and `gap-the-pattern`
- * (gh#67, the only ticket to bring two at once), `shape-middle-out` (gh#68) and
- * `mandate-levers` (gh#69).
- * Fourteen files that
+ * (gh#67, the only ticket to bring two at once), `shape-middle-out` (gh#68),
+ * `mandate-levers` (gh#69) and `invest-base-rates` (gh#70).
+ * Fifteen files that
  * exist for this deck alone, spread across FOUR runs — the count of leader-only
  * SLIDES and the count of leader-only RUNS stopped agreeing on gh#57.
  *
@@ -278,22 +308,24 @@ const LEADER_CUT_F_SLIDES = 8;
  * the third is `f8-your-agentic-os`, a standard-deck slide the leader list
  * RELOCATES into that run, so it counts toward the run's length and not toward
  * this constant. None of gh#56, gh#57, gh#60, gh#61, gh#58, gh#59, gh#65, gh#66,
- * gh#67, gh#68 or gh#69
+ * gh#67, gh#68, gh#69 or gh#70
  * changed
  * that: `gap`, `invest` and `mandate` are whole new runs and every slide in them is
  * leader-only — including the ones gh#57, gh#61, gh#58, gh#59, gh#68 and gh#69
  * appended to
  * runs that
- * already existed, gh#65's, which went in at the FRONT of one, and gh#66's and gh#67's,
- * which went
- * into the MIDDLE — so this constant
+ * already existed, gh#66's and gh#67's, which went into the MIDDLE of one, and gh#65's
+ * and gh#70's,
+ * which went in at the FRONT — so this constant
  * and the run table rose together each time. gh#68 IS THE ONE THAT RAISED BOTH INSIDE
  * `shape`, the run where they have differed by one since gh#54: `shape` went 2 → 3 in
  * the table above and this constant went 12 → 13, and the gap of one is f8, unchanged.
  * gh#69 raised both inside `mandate`, where they have never differed at all, 2 → 3
- * and 13 → 14.
+ * and 13 → 14. gh#70 raised both inside `invest`, where they have never differed
+ * either — 4 → 5 in the table and 14 → 15 here — because no slide is relocated into
+ * that run.
  * What gh#57,
- * gh#61, gh#58, gh#59, gh#65, gh#66, gh#67, gh#68 and gh#69 did NOT raise is the
+ * gh#61, gh#58, gh#59, gh#65, gh#66, gh#67, gh#68, gh#69 and gh#70 did NOT raise is the
  * count of
  * leader-only RUNS, which
  * is four and is not this number.
@@ -304,19 +336,22 @@ const LEADER_CUT_F_SLIDES = 8;
  * reconciles that with the run TABLE, where a relocated slide is indistinguishable
  * from a new one.
  */
-const LEADER_ONLY_SLIDES = 14;
+const LEADER_ONLY_SLIDES = 15;
 
 /** Standard-deck slides the leader list relocates INTO one of those leader-only
  *  runs: `f8-your-agentic-os` alone, moved to `shape` by the deck set's single
  *  `sectionOverrides` entry. Zero until gh#54, which is why one constant used to
  *  serve both assertions below, and still one after gh#56, gh#57, gh#60, gh#61,
- *  gh#58, gh#59, gh#65, gh#66, gh#67, gh#68 and gh#69 — a new RUN relocates nothing,
+ *  gh#58, gh#59, gh#65, gh#66, gh#67, gh#68, gh#69 and gh#70 — a new RUN relocates
+ *  nothing,
  *  and
  *  neither
  *  does a row written into an existing one, at its end, at its head or in its
  *  middle, alone or in a pair. gh#68 is the sharpest case: it added a row to the very
  *  run f8 was relocated INTO and this constant still reads one, because relocating is
- *  something a deck set does to an existing slide and gh#68 wrote a new one. */
+ *  something a deck set does to an existing slide and gh#68 wrote a new one. gh#70 is
+ *  the second sharpest: its row sits directly BEHIND gh#68's, one slot past f8, and it
+ *  moved four figures without touching f8's key, its run or its figure (C.2). */
 const RELOCATED_INTO_LEADER_ONLY_RUNS = 1;
 
 interface DeckCase {
@@ -329,9 +364,9 @@ interface DeckCase {
 // standard row moved. `general` has no leader variant — leaders are addressed per
 // organisation — so there are five rows, not six.
 //
-// This is not §4.3's finished leader deck. Today's floor is 71 slides across A–N,
-// and what is still missing is TWO ROWS, one each in `shape` and `invest` — `gap`
-// and `mandate` are both COMPLETE:
+// This is not §4.3's finished leader deck. Today's floor is 72 slides across A–N,
+// and what is still missing is ONE ROW, in `shape` — `gap`, `mandate` and `invest`
+// are all COMPLETE:
 //
 //   · `gap` IS COMPLETE — struck from this list rather than left standing, and the
 //     FIRST of the four leader-only runs to be finished. It holds all 5 of §4.3's
@@ -343,14 +378,22 @@ interface DeckCase {
 //     five, so it prints B.5 at last — it printed B.1 until gh#65, B.2 until gh#66 and
 //     B.3 until gh#67.
 //   · `shape` holds 3 of its 4 — gh#68's `shape-middle-out` APPENDED at the tail,
-//     behind f8, and only `shape-tam-kotter` is left. This line said both were
-//     unbuilt and that both "append after f8"; the second half was never going to
+//     behind f8, and only C.3 (#71 `shape-tam-kotter`) is left. This line said both
+//     were unbuilt and that both "append after f8"; the second half was never going to
 //     survive the first landing, because the survivor no longer appends — it
 //     INSERTS, between f8 and gh#68's row, and moves that row one number when it
-//     does (R3, inside `shape` alone). No ticket yet.
-//   · `invest` holds 4 of its 5 (§6.7) — only `invest-base-rates` is missing, and
-//     it inserts AHEAD of the four built rows (Phase 7, no ticket), which is why
-//     each built slide composes one number earlier than §6.7's table gives it.
+//     does (R3, inside `shape` alone). It is also the ONLY row this deck still owes.
+//   · `invest` IS COMPLETE TOO, struck from this list on gh#70 and the THIRD of the
+//     four to be finished — after `gap` (gh#67) and `mandate` (gh#69), not the second.
+//     It holds all 5 of §6.7's slides: gh#70's
+//     `invest-base-rates` at the front, then gh#56's `invest-own-proof`, gh#57's
+//     `invest-chicken-egg`, gh#58's `invest-security` and gh#59's
+//     `invest-subscription`. This line read "holds 4 of its 5 — only
+//     `invest-base-rates` is missing, and it inserts AHEAD of the four built rows
+//     (Phase 7, no ticket), which is why each built slide composes one number earlier
+//     than §6.7's table gives it" until gh#70 landed exactly that. It did, and all four
+//     stepped: D.1 → D.2, D.2 → D.3, D.3 → D.4, D.4 → D.5, with no file among the four
+//     opened. Every `invest` slide now prints its own §6.7 number.
 //   · `mandate` IS COMPLETE — struck from this list rather than left standing, and
 //     the SECOND of the four leader-only runs to be finished, after `gap`. It holds
 //     all 3 of §6.8's slides: gh#60's `mandate-enablement`, gh#61's
@@ -364,11 +407,16 @@ interface DeckCase {
 //     `shape-agentic-org`'s 9-step focus walk, which landed on gh#55. It moved step
 //     counts and not this table, exactly as this line used to predict.
 //
+// SO ONE SLIDE IS OWED AND IT MOVES EXACTLY ONE FIGURE, which is the shape of what is
+// left of Phase 7: `shape-tam-kotter` INSERTS between f8 and gh#68's row and steps that
+// row alone, because it is the only row behind it inside `shape`. Every insert that
+// could move MORE than one number is spent — gh#70 was the last, and it moved four.
+//
 // EVERY RUN §4.3 ASKS FOR NOW EXISTS — gh#60's `mandate` was the last one owed, so
 // §11's Phase 6 gate of 65 slides across A–N is now a COUNT and not a letter, and
 // gh#65 was the first Phase 7 slide to land, gh#66 the second, gh#67 the third and
-// fourth, gh#68 the fifth and gh#69 the sixth, which is why the
-// total above reads 71 and
+// fourth, gh#68 the fifth, gh#69 the sixth and gh#70 the seventh, which is why the
+// total above reads 72 and
 // not that gate. Phases
 // 6–7 grow the deck to 73 slides by lengthening runs that are already here, so the
 // SECTION COUNT is final at fourteen: from here on those tickets move one number in
@@ -442,7 +490,7 @@ test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the cut F section,
   expect(totalOf(leaderRuns("berau"))).toBe(LEADER_TOTAL_WITH_LAB);
   // The two tables have to disagree by exactly the cut MINUS the leader-only
   // slides. Eight cut and not nine: `f8-your-agentic-os` is kept, so the cut is
-  // `f1`–`f7` plus `f9`. FOURTEEN additions in FOUR runs — `gap-capability-ladder`
+  // `f1`–`f7` plus `f9`. FIFTEEN additions in FOUR runs — `gap-capability-ladder`
   // (gh#53), `shape-agentic-org` (gh#54), `invest-own-proof` (gh#56),
   // `invest-chicken-egg` (gh#57, the second row of that same `invest` run),
   // `mandate-enablement` (gh#60), `mandate-phases-gates` (gh#61, the second row of
@@ -450,12 +498,14 @@ test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the cut F section,
   // the third and fourth rows of `invest`), `gap-hardest-part` (gh#65, the FIRST
   // row of `gap`), `gap-no-sop` (gh#66, its second), `gap-three-failures` plus
   // `gap-the-pattern` (gh#67, its third and fourth, closing that run at §4.3's five)
-  // `shape-middle-out` (gh#68, the LAST row of `shape`)
-  // and `mandate-levers` (gh#69, the THIRD row of `mandate`, closing THAT run at
+  // `shape-middle-out` (gh#68, the LAST row of `shape`),
+  // `mandate-levers` (gh#69, the THIRD row of `mandate`, closing THAT run at
   // §6.8's three)
+  // and `invest-base-rates` (gh#70, the FIRST row of `invest`, closing THAT run at
+  // §6.7's five from the other end)
   // — and the relocated f8 is in NEITHER number, because it is
-  // present in both decks and cancels out of a difference. Fourteen additions against
-  // eight cuts is why the difference below is NEGATIVE: the leader deck is six
+  // present in both decks and cancels out of a difference. Fifteen additions against
+  // eight cuts is why the difference below is NEGATIVE: the leader deck is seven
   // slides longer than the standard one, which it had never been at all before gh#65.
   expect(OBSERVED_TOTAL_WITH_LAB - LEADER_TOTAL_WITH_LAB).toBe(
     LEADER_CUT_F_SLIDES - LEADER_ONLY_SLIDES,
