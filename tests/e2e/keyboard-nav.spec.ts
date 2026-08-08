@@ -96,6 +96,12 @@ test("a live section letter jumps to that section's first numbered slide", async
 // that is now a different slide with a different label. This file changed because the
 // jump TARGET moved, not because the letter did, and the label assertion below is the
 // only thing that could tell the two apart.
+//
+// gh#66 IS BACK ON THE OTHER SIDE OF IT: `gap-no-sop` went in BETWEEN
+// `gap-hardest-part` and the ladder, so the `gap` run's FIRST numbered slide is
+// unchanged and no assertion in this file moved. The run is one row longer and every
+// jump below lands exactly where it did — which is the point of asserting on the
+// printed figure and label rather than on an index.
 test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
   page,
 }) => {
@@ -107,7 +113,8 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
 
   // A STARTING POINT, NOT A CLAIM ABOUT WHICH SLIDE IS THERE. Index 6 held E.1 until
   // gh#57 inserted D.2 in front of it, then D.2 until gh#65 inserted a row at index 2
-  // and pushed it along to D.1 — nothing below reads the
+  // and pushed it along to D.1, and it holds C.2 since gh#66 pushed it once more —
+  // nothing below reads the
   // starting slide, every assertion is about where a letter LANDS, and the index
   // assertion here only says the deck honoured `?slide=`. (The console watch above does
   // now cover whichever slide that is, which is a gain rather than a coupling.)

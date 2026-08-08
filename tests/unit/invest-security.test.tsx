@@ -13,7 +13,11 @@
 //   2. §6.2's THIRD PASS COLLIDING WITH THE OTHER TWO. D.3's own test file names the
 //      mirror check this file owes ("`#58` MUST RUN THE MIRROR OF THIS CHECK FROM THE
 //      OTHER SIDE") — none of D.3's reserved vocabulary here, none of B.2's, and beat 2
-//      carrying ZERO digits so "no shared statistic" is an absence, not a list.
+//      carrying ZERO digits so "no shared statistic" is an absence, not a list. SINCE
+//      gh#66 THAT CHECK IS RENDERED ON BOTH SIDES: B.2 (`gap-no-sop`) is built, its copy
+//      module is imported here, and the rule runs in both directions — B.2's image
+//      tokens forbidden in beat 2, beat 2's forbidden in B.2, and no three-word phrase
+//      shared either way.
 //   3. A NUMBER THAT MOVED. Beat 1's two gaps are B.4's OWN, re-quoted (spec §6.7 as
 //      amended 2026-08-05) — so they are cross-checked against `b4Content` itself, and
 //      the day B.4 refreshes to a new capture this file fails until D.4 follows.
@@ -65,6 +69,10 @@ import {
 // identity is a comparison and not a comment (§6.7's amendment: "the pair above is
 // v4.1's restricted-tier gap — the tier shipping B4 already uses").
 import { b4Content } from "@/slides/landscape-section-b/content";
+// B.2's own copy — §6.2's `condition` pass (`gap-no-sop`, gh#66). Imported for the same
+// reason D.3's is: the escalation's disjointness is checked against what the other two
+// passes actually print, not against a transcription that cannot go stale loudly.
+import { gapNoSopContent } from "@/slides/leader-gap/content";
 import { BRANDS, type Brand } from "@/deck-variants";
 
 const C = investSecurityContent;
@@ -208,7 +216,9 @@ function authoredStrings(): string[] {
   return out;
 }
 
-/** BEAT 2's strings alone — the scope of the zero-digit and grammar rules. */
+/** BEAT 2's strings alone — the scope of the zero-digit, grammar and §6.2 image rules.
+ *  Beat 2 IS this slide's shadow-AI pass; beats 1 and 3 are held to the whole-block
+ *  token gate below but not to the image rules, which are about the pass. */
 function beat2Strings(): string[] {
   return walkStrings({
     eyebrow: C.exposureEyebrow,
@@ -216,6 +226,36 @@ function beat2Strings(): string[] {
     lineKw: C.exposureLineKw,
     exposures: C.exposures,
   });
+}
+
+/** Every string B.2 authors. `gap-no-sop` has no brand axis and no `…For(brand)`
+ *  resolver — the slide file imports no `VARIANT` at all — so its copy block IS its
+ *  rendered string set, the same way this file's `authoredStrings()` is D.4's. */
+function b2Strings(): string[] {
+  return walkStrings(gapNoSopContent);
+}
+
+/**
+ * The set of every N-word phrase in a string set, lowercased and stripped of
+ * punctuation so "rule." and "rule" are the same word. The twin of the helper in
+ * `invest-chicken-egg.test.tsx`; both files run the rule from their own side.
+ *
+ * THREE WORDS IS THE THRESHOLD THE COPY CHOSE, not a number picked to make the test
+ * pass. Measured on 2026-08-08 against the shipped blocks: B.2 and beat 2 share exactly
+ * one two-word phrase (`is not`) and ZERO three-word phrases. Two-word overlap of
+ * function words is unavoidable in English and proves nothing; a shared three-word
+ * phrase between two passes of the same escalation is copy that was lifted.
+ */
+function phrases(strings: readonly string[], n: number): Set<string> {
+  const words = strings
+    .join(" ")
+    .toLowerCase()
+    .replace(/[^a-z0-9'\s-]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  const out = new Set<string>();
+  for (let i = 0; i + n <= words.length; i += 1) out.add(words.slice(i, i + n).join(" "));
+  return out;
 }
 
 // ── the slide def ────────────────────────────────────────────────────────────
@@ -404,13 +444,20 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
 
   test("carries ZERO digits — the no-shared-statistic guarantee held as an absence", () => {
     // §6.2 forbids sharing a statistic with B.2 or D.3. D.3's only quantity is its
-    // 30-day window and B.2's spec paragraph names none — but a list of forbidden
-    // values goes stale the day either slide gains a number, and a beat with no digit
-    // at all cannot collide with anything.
+    // 30-day window and B.2 — BUILT SINCE gh#66 — prints no digit in any rendered
+    // string, which is asserted below rather than read off its spec paragraph. A list of
+    // forbidden values would go stale the day either slide gained a number; a beat with
+    // no digit at all cannot collide with anything.
     const strings = beat2Strings();
     expect(strings.length, "a rule over an empty set proves nothing").toBeGreaterThan(5);
     for (const copy of strings) {
       expect(copy, `digit in beat 2: ${JSON.stringify(copy)}`).not.toMatch(/\d/);
+    }
+    // THE OTHER SIDE OF THE SAME GUARANTEE, now that there is copy to check it against.
+    const b2 = b2Strings();
+    expect(b2.length, "a rule over an empty set proves nothing").toBeGreaterThan(10);
+    for (const copy of b2) {
+      expect(copy, `digit in B.2: ${JSON.stringify(copy)}`).not.toMatch(/\d/);
     }
   });
 
@@ -441,10 +488,15 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
   test("shares no reserved vocabulary with D.3 — the mirror of gh#57's own token gate", () => {
     // THE DEBT NAMED IN `invest-chicken-egg.test.tsx`: "its own unit test owes the
     // symmetric rule" — none of D.3's vocabulary in D.4's copy. Transcribed from that
-    // file's list, plus `improvise`/`no guidance`/`no SOP` for B.2 — WHICH IS UNBUILT
-    // (`gap-no-sop`, §11 Phase 7), so the B.2 half runs against §6.2's spec text and
-    // not against rendered copy; stated here the way gh#57's commit recorded the same
-    // limit, and nothing more is implied.
+    // file's list, plus `improvise`/`no guidance`/`no SOP` for B.2.
+    //
+    // THE B.2 HALF IS NO LONGER A CLAIM ABOUT SPEC TEXT. gh#66 shipped `gap-no-sop` on
+    // 2026-08-08, so B.2's copy module is imported at the top of this file and the
+    // IMAGE tokens below are read off its rendered strings. The three SPEC tokens stay:
+    // B.2 spends §6.2's verb (`improvises a rule`, once) and prints neither `no
+    // guidance` nor `no SOP`, so those two still have no rendered source and their
+    // controls still fire against §6.2's own sentence and slide id — which is the only
+    // place they exist, stated rather than implied.
     //
     // `audit` is deliberately NOT forbidden: §6.7 prescribes "no audit trail" as one of
     // D.3's costs AND "cannot audit" as this beat's first row. The words touch, the
@@ -461,16 +513,35 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
       ["kill criterion", /\bkill criteri\w*\b/i],
       ["spend cap", /\bspend cap\b/i],
     ];
-    const B2_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
+    const B2_SPEC_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
       ["no SOP", /\bno[-\s]SOP\b/i],
       ["no guidance", /\bno guidance\b/i],
       ["improvise", /\bimprovis\w*\b/i],
     ];
+    // B.2's RENDERED image, read off `gapNoSopContent`: a lopsided diptych of three
+    // things the organisation handed out against four questions it never wrote an
+    // answer to, and the silence behind them. Each pattern is fired against B.2's own
+    // strings below, so a list that drifted fails loudly instead of passing vacuously.
+    const B2_IMAGE_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
+      ["the rule nobody wrote", /\brule nobody wrote\b/i],
+      ["wrote their own", /\bwrote their own\b/i],
+      ["never wrote down", /\bnever wrote down\b/i],
+      ["handed out", /\bhanded out\b/i],
+      ["a login", /\blogin\w*\b/i],
+      ["a demonstration", /\bdemonstrat\w*\b/i],
+      ["encouragement", /\bencourag\w*\b/i],
+      ["which work may", /\bwhich work may\b/i],
+      ["the silence", /\bsilence\b/i],
+      ["still gets answered", /\bstill gets answered\b/i],
+      ["no rule to break", /\bno rule to break\b/i],
+      ["the leader's job", /\bleader['’]s job\b/i],
+    ];
 
+    const forbidden = [...D3_TOKENS, ...B2_SPEC_TOKENS, ...B2_IMAGE_TOKENS];
     const strings = authoredStrings();
     expect(strings.length).toBeGreaterThan(30);
     for (const copy of strings) {
-      for (const [name, pattern] of [...D3_TOKENS, ...B2_TOKENS]) {
+      for (const [name, pattern] of forbidden) {
         expect(pattern.test(copy), `${name} in ${JSON.stringify(copy)}`).toBe(false);
       }
     }
@@ -479,27 +550,105 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
       const { container, unmount } = renderSlide(onPremCallbackFor(brand), 3);
       const text = container.textContent ?? "";
       expect(text, "positive control: the stage is not empty").toContain(C.verdict);
-      for (const [name, pattern] of [...D3_TOKENS, ...B2_TOKENS]) {
+      for (const [name, pattern] of forbidden) {
         expect(pattern.test(text), `${name} reached the ${brand} stage`).toBe(false);
       }
       unmount();
     }
 
-    // POSITIVE CONTROLS — every regex fired against the source it was read off, so
-    // twelve patterns that matched nothing cannot make the rules above pass on any
-    // copy at all. D.3's copy is imported, not transcribed: the controls fire against
-    // what that slide actually prints today.
+    // POSITIVE CONTROLS — every regex fired against the source it was read off, so a
+    // pattern that matched nothing cannot make the rules above pass on any copy at all.
+    // BOTH OTHER PASSES' COPY IS IMPORTED, NOT TRANSCRIBED: the controls fire against
+    // what D.3 and B.2 actually print today.
     const d3 = walkStrings(investChickenEggContent).join(" \n ");
     for (const [name, pattern] of D3_TOKENS) {
       expect(pattern.test(d3), `${name} no longer fires on D.3's own copy`).toBe(true);
     }
-    const b2Sources = ["There is no guidance, so people improvise.", "gap-no-sop"];
-    for (const [name, pattern] of B2_TOKENS) {
+    const b2 = b2Strings();
+    for (const [name, pattern] of B2_IMAGE_TOKENS) {
+      expect(
+        b2.some((line) => pattern.test(line)),
+        `${name} no longer fires on B.2's own copy`,
+      ).toBe(true);
+    }
+    // The rendered copy is listed FIRST, so `improvise` is controlled against what B.2
+    // prints and only the two tokens with no rendered source fall back to the spec.
+    const b2Sources = [...b2, "There is no guidance, so people improvise.", "gap-no-sop"];
+    for (const [name, pattern] of B2_SPEC_TOKENS) {
       expect(
         b2Sources.some((line) => pattern.test(line)),
         name,
       ).toBe(true);
     }
+    expect(b2.some((line) => /\bimprovis\w*\b/i.test(line))).toBe(true);
+    expect(b2.some((line) => /\bno guidance\b/i.test(line))).toBe(false);
+    expect(b2.some((line) => /\bno[-\s]SOP\b/i.test(line))).toBe(false);
+  });
+
+  test("and B.2 carries none of beat 2's exposure vocabulary — the rule read back", () => {
+    // THE DIRECTION THAT ONLY BECAME CHECKABLE WITH gh#66. Until B.2 shipped, this file
+    // could forbid arrivals into D.4 and nothing else; a token migrating the other way
+    // would have been invisible from here. Scoped to BEAT 2's vocabulary, because beat 2
+    // is this slide's §6.2 pass — beats 1 and 3 are a hardware recommendation and a
+    // governance starting point, and neither is a shadow-AI pass B.2 could collide with.
+    //
+    // `audit` IS IN THE LIST HERE AND NOT IN D.3's. The adjacency §6.7 forces is between
+    // D.3's closed bill ("No audit trail") and this beat's open exposure ("You cannot
+    // audit what was asked"); B.2 is not party to it and prints no audit word at all.
+    const BEAT2_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
+      ["shadow AI", /\bshadow ai\b/i],
+      ["administers", /\badminister\w*\b/i],
+      ["the vendor", /\bvendors?\b/i],
+      ["exposure", /\bexposure\w*\b/i],
+      ["audit", /\baudit\w*\b/i],
+      ["revoke", /\brevoke\w*\b/i],
+      ["produce", /\bproduce\b/i],
+      ["you cannot", /\byou cannot\b/i],
+    ];
+    const b2 = b2Strings();
+    expect(b2.length, "a rule over an empty set proves nothing").toBeGreaterThan(10);
+    for (const copy of b2) {
+      for (const [name, pattern] of BEAT2_TOKENS) {
+        expect(pattern.test(copy), `beat 2's ${name} in B.2's ${JSON.stringify(copy)}`).toBe(false);
+      }
+    }
+    // POSITIVE CONTROL: every pattern fires on beat 2's own copy, so eight dead regexes
+    // cannot make the rule above pass on any copy.
+    const beat2 = beat2Strings();
+    for (const [name, pattern] of BEAT2_TOKENS) {
+      expect(
+        beat2.some((line) => pattern.test(line)),
+        `${name} no longer fires on beat 2's own copy`,
+      ).toBe(true);
+    }
+    // AND THE NAME ITSELF: D.4 beat 2 is the pass that says "shadow AI" out loud and B.2
+    // is the pass that describes the condition without labelling it. Both halves are
+    // asserted, because the escalation's last step is the naming.
+    expect(C.exposureLine).toContain("shadow AI");
+    expect(b2.some((line) => /\bshadow\b/i.test(line))).toBe(false);
+  });
+
+  test("beat 2 shares no three-word phrase with B.2, in either direction", () => {
+    // THE RULE THAT DOES NOT DEPEND ON A HAND-WRITTEN LIST, and the twin of the one in
+    // `invest-chicken-egg.test.tsx`. Set intersection over every three-word phrase either
+    // pass prints — symmetric by construction, so it is asserted once — which catches the
+    // failure a token list cannot see: a sentence lifted across using words nobody
+    // thought to reserve.
+    const b2 = phrases(b2Strings(), 3);
+    const beat2 = phrases(beat2Strings(), 3);
+    expect(b2.size, "positive control: B.2 has phrases to share").toBeGreaterThan(50);
+    expect(beat2.size, "positive control: beat 2 has phrases to share").toBeGreaterThan(10);
+    expect([...beat2].filter((p) => b2.has(p))).toEqual([]);
+
+    // The control that keeps the rule honest: one of B.2's own sentences, run through as
+    // if this beat had lifted it, IS caught — across punctuation and capitals.
+    const lifted = phrases(["Nobody wrote the rule; so EVERYBODY wrote their own!"], 3);
+    expect([...lifted].filter((p) => b2.has(p)).length).toBeGreaterThan(3);
+
+    // AND THE WHOLE SLIDE, not only its shadow-AI beat: beat 1's hardware map and beat
+    // 3's governance domains have no reason to touch B.2 either, and this is free.
+    const whole = phrases(authoredStrings(), 3);
+    expect([...whole].filter((p) => b2.has(p))).toEqual([]);
   });
 });
 

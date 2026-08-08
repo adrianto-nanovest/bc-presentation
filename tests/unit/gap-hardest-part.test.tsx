@@ -863,7 +863,7 @@ describe("the composed decks", () => {
   const LEADER_BRANDS: readonly Brand[] = ["berau", "gems"];
   const ALL_BRANDS = Object.keys(BRANDS) as Brand[];
 
-  test("opens the gap run in both leader decks — ahead of the ladder, and it is the jump target", () => {
+  test("opens the gap run in both leader decks — ahead of the rest, and it is the jump target", () => {
     // WHAT IS CHECKED HERE AND NOT IN `deck-slots.test.ts`: that one is about the
     // authored list, this is about what `composeDeck` derives from it — the run this
     // slide belongs to, the row behind it, and the fact that a section jump now lands
@@ -880,15 +880,16 @@ describe("the composed decks", () => {
       const row = slides[at];
       expect(row.sectionKey, brand).toBe("gap");
       // THE HEAD OF THE RUN, stated as the two facts that make it one: the row in front
-      // carries another key, so this slide starts the run, and the row behind is the
-      // ladder. A slide that had landed at the run's END would pass a `toContain` check
+      // carries another key, so this slide starts the run, and the row behind it is the
+      // run's second slide — `gap-no-sop` since gh#66, the ladder before that. A slide
+      // that had landed at the run's END would pass a `toContain` check
       // and fail both of these.
       expect(slides[at - 1].sectionKey, brand).not.toBe("gap");
-      expect(slides[at + 1].def.id, brand).toBe("gap-capability-ladder");
+      expect(slides[at + 1].def.id, brand).toBe("gap-no-sop");
       expect(
         slides.filter((s) => s.sectionKey === "gap").map((s) => s.def.id),
         brand,
-      ).toEqual(["gap-hardest-part", "gap-capability-ladder"]);
+      ).toEqual(["gap-hardest-part", "gap-no-sop", "gap-capability-ladder"]);
       // R5 — the run's jump target is its first numbered slide, and this slide is
       // numbered, so pressing the `gap` run's letter lands on this stage. The letter is
       // read off the composed row rather than typed.

@@ -12,6 +12,16 @@
 // OFF RATHER THAN PREDICTED: two of the three passes are in this file, D.3's block
 // and D.4's, and the words each of them may not use are stated over the other.
 //
+// AND THE THIRD PASS IS NOW BUILT TOO — gh#66 shipped B.2 (`gap-no-sop`) into
+// `src/slides/leader-gap/content.ts` on 2026-08-08, which changes what the two blocks
+// below can honestly claim. Until that day the B.2 half of every disjointness note in
+// this file was a claim about §6.2's SPEC TEXT, said so, and could be nothing more.
+// It is now a claim about RENDERED COPY on both sides: `tests/unit/invest-chicken-
+// egg.test.tsx` and `tests/unit/invest-security.test.tsx` both IMPORT `gapNoSopContent`
+// and run the rule in both directions. What changed in the comments below is exactly
+// that — the source of the check and its direction — and nothing about the copy itself
+// moved. No string in this file was edited by gh#66; the record around it was.
+//
 // Spec §6.7 (content for all three) · §6.2 (the three shadow-AI passes, which bound
 // D.3's and D.4's copy) · §4.4 slot 3 (D.2's brand axis) and slot 4 (D.4's) — and
 // the reason D.3 has none · §4.5 (the thesis line) · §12.2 (the vendor-claim gate
@@ -70,6 +80,8 @@
 // #59 is D.5, and NO issue covers `invest-base-rates` at all — §11's phase table puts
 // it in the PHASE 7 row ("Leader new slides, second tier", line 1408), next to
 // `gap-no-sop`. So D.1 is not waiting on a Phase 6 ticket; it is not in this phase.
+// `gap-no-sop` HAS SINCE COME OFF THAT ROW — gh#66 built it on 2026-08-08 — and D.1
+// still holds no ticket, which is why the two are named separately here.
 //
 // Type-only import for `Brand`, so nothing but the thesis constants below arrives at
 // runtime and this file stays plain data.
@@ -508,13 +520,36 @@ export function ownProofFor(brand: Brand): OwnProofBlock {
 //      shipped the v4.1 pair (`4` and `5.2`) that shipping B.4 already uses. Forbidding
 //      them here still costs nothing and still guards the escalation against a later
 //      author lifting the SPEC's old sentence, so the two patterns stay.
-//      B.2 IS STILL UNBUILT, so that half of the check remains against §6.2's spec text
-//      and not against rendered copy — which is the honest limit of
-//      it. `gap-no-sop` (B.2) sits in §11's Phase 7 row and `src/slides/leader-gap/`
-//      holds only the Capability Ladder. The one place
-//      B.2's vocabulary is already on a stage is `leader-shape/content.ts`'s
-//      governance decision ("where the data may go … before someone improvises"),
-//      which is C.1 indexing it on purpose — and nothing below repeats that anchor.
+//      B.2 IS BUILT NOW TOO, AND THIS PASSAGE USED TO SAY THE OPPOSITE. Until
+//      2026-08-08 it read "B.2 IS STILL UNBUILT, so that half of the check remains
+//      against §6.2's spec text and not against rendered copy", and that was the honest
+//      limit at the time. gh#66 rendered `gap-no-sop` into
+//      `src/slides/leader-gap/content.ts` (export `gapNoSopContent`, figLabel "THE RULE
+//      NOBODY WROTE"), so BOTH halves of this check are now claims about rendered copy.
+//      `tests/unit/invest-chicken-egg.test.tsx` imports that module and runs the rule in
+//      BOTH directions: none of B.2's image tokens in this block, none of this block's
+//      nine reserved tokens in B.2's strings, no three-word phrase shared either way,
+//      and — the statistic half — B.2 prints no digit in any rendered string, asserted
+//      rather than quoted, against this block's single quantity.
+//      WHAT B.2 ACTUALLY PRINTS, so the three tokens above can be read for what they
+//      now are: it spends §6.2's verb ONCE ("Everyone improvises a rule that works for
+//      them"), and it prints NEITHER `no guidance` NOR `no SOP` anywhere. So `improvise`
+//      is a live reservation against rendered copy and the other two are reservations
+//      against the SPEC's phrasing only — kept, because a later author lifting §6.2's
+//      sentence into this slide is a different failure from lifting B.2's copy, and both
+//      are cheap to forbid. B.2's own image is a lopsided diptych — three things the
+//      organisation handed out against four questions each followed by an EMPTY RULE —
+//      and this slide draws none of it: no login, no demonstration, no encouragement, no
+//      silence, no unanswered question.
+//      The one place B.2's vocabulary was already on a stage before it shipped is
+//      `leader-shape/content.ts`'s governance decision ("where the data may go … before
+//      someone improvises"), which is C.1 indexing it on purpose — B.2's own header
+//      records the same anchor from the other end, and nothing below repeats it.
+//      THE READING OF ALL THREE PASSES IN DECK ORDER — the check §6.2 actually turns on,
+//      which no token rule replaces — is recorded ONCE, in D.4's block at the bottom of
+//      this file, because D.4 is the pass the escalation ends on. In one line for this
+//      block: D.3 adds an ACT to B.2's absence and never restates it — the reason it
+//      gives for the workaround is the budget deadlock above, not a missing rule.
 //
 //      THE ONE ADJACENCY THAT CANNOT BE REMOVED, stated rather than hidden. §6.7
 //      prescribes "no audit trail" and "data outside the boundary" as two of THIS
@@ -536,7 +571,11 @@ export function ownProofFor(brand: Brand): OwnProofBlock {
 // "30-day\|30 day\|30-DAY" docs/specs/` returns exactly one spec line — §6.7's D.3
 // sentence, line 862 — and `30` appears nowhere in §6.2's B.2 paragraph or in §6.7's
 // D.4 paragraph. So the one number this slide prints cannot be the statistic §6.2
-// forbids two passes from sharing. (Greps run 2026-08-05.)
+// forbids two passes from sharing. (Greps run 2026-08-05.) SINCE 2026-08-08 THE B.2 HALF
+// OF THAT IS STRONGER THAN A GREP OF THE SPEC: `gap-no-sop` is built and prints NO DIGIT
+// IN ANY RENDERED STRING, which `tests/unit/invest-chicken-egg.test.tsx` asserts over
+// the imported copy rather than reading off B.2's own comment. A pass with no numeral in
+// it cannot share a statistic with anything.
 
 /**
  * One row of a short sans list in this section — a cost D.3 paid, a term of its pilot,
@@ -892,21 +931,72 @@ export const investChickenEggContent = {
 //   · NO STATISTIC IS SHARED, AND BEAT 2 CARRIES ZERO NUMBERS AT ALL. That is the
 //     cheapest way to hold the rule and the only way to make it testable as an
 //     ABSENCE rather than as a list of forbidden values: D.3's only quantity is its
-//     30-day window, B.2's spec paragraph names no quantity, and a beat with no digit
-//     in it cannot collide with either. The two figures live in BEAT 1, where §6.7 puts
-//     them, and they are B.4's numbers rather than a second slide's new ones.
+//     30-day window, B.2's RENDERED COPY names no quantity — no digit in any of its
+//     fifteen strings, asserted in this slide's test since gh#66 rather than read off
+//     §6.2's paragraph — and a beat with no digit in it cannot collide with either. The
+//     two figures live in BEAT 1, where §6.7 puts them, and they are B.4's numbers
+//     rather than a second slide's new ones.
 //   · gh#57 DELIBERATELY LEFT `revoke` AND `produce` TO THIS SLIDE, and beat 2 spends
 //     both. The one adjacency §6.7 forces is `audit`: D.3's bill has "No audit trail"
 //     and this beat has "You cannot audit what was asked". The words touch and the
 //     images do not — a closed past-tense bill against an open present-tense exposure —
 //     which is exactly what D.3's own block says from the other side.
-//   · AGAINST B.2, WHICH IS UNBUILT. `gap-no-sop` sits in §11's Phase 7 row and
-//     `src/slides/leader-gap/` holds only the Capability Ladder, so this half of the
-//     check runs against §6.2's SPEC TEXT and not against rendered copy. Said that way
-//     rather than implying more, which is how gh#57's commit recorded the same limit.
-//     What is settled: none of `no SOP`, `no guidance` or `improvise` appears below,
-//     and beat 3 says where the SOP STARTS rather than that there is none — the
-//     absence of guidance is B.2's image and this slide does not draw it.
+//   · AGAINST B.2, WHICH IS BUILT NOW — AND THIS BULLET USED TO SAY IT WAS NOT. Until
+//     2026-08-08 it read "AGAINST B.2, WHICH IS UNBUILT … so this half of the check runs
+//     against §6.2's SPEC TEXT and not against rendered copy", which was true and is the
+//     limit gh#57's commit recorded. gh#66 rendered `gap-no-sop` into
+//     `src/slides/leader-gap/content.ts` (`gapNoSopContent`, fifteen rendered strings),
+//     so this half is now a claim about rendered copy and it is checked in BOTH
+//     directions by `tests/unit/invest-security.test.tsx`, which imports that module:
+//     none of B.2's image tokens (`handed out`, `login`, `demonstration`,
+//     `encouragement`, `silence`, `still gets answered`, `no rule to break`, `the
+//     leader's job`, `wrote their own`, `never wrote down`, `which work may`, `the rule
+//     nobody wrote`) in this block, none of beat 2's (`shadow AI`, `administers`,
+//     `vendor`, `exposure`, `audit`, `revoke`, `produce`, `you cannot`) in B.2's
+//     strings, and no three-word phrase shared either way. What was already settled
+//     stands: none of `no SOP`, `no guidance` or `improvise` appears below, and beat 3
+//     says where the SOP STARTS rather than that there is none — the absence of guidance
+//     is B.2's image and this slide does not draw it. B.2 prints no digit at all, which
+//     is now asserted against its copy rather than inferred from its spec paragraph, so
+//     the no-shared-statistic half holds as an absence on both sides.
+//   · THE NAME IS STILL THIS SLIDE'S, AND THAT IS NOW A FACT ABOUT TWO RENDERED BLOCKS
+//     RATHER THAN A PLAN. B.2 describes the condition and never prints "shadow AI";
+//     beat 2's `exposureLine` is where the deck labels it, at the last step of the
+//     escalation. Both halves are asserted in this slide's test.
+//
+// THE ESCALATION, READ IN DECK ORDER ON 2026-08-08 — all three passes, end to end, in
+// the order a room meets them. This is the reading §6.2's constraint actually turns on;
+// the token and phrase rules in the two test files are guards against the cheapest way
+// to break it, not a substitute for it. What was read and what it showed:
+//
+//   · B.2 (`gapNoSopContent`) — CONDITION. A login, a demonstration, encouragement in
+//     writing, against four questions nobody wrote an answer to, then "Nobody broke a
+//     rule. There was no rule to break." Third person, impersonal, no actor blamed, no
+//     digit, and the phenomenon is never named. It describes an ABSENCE and stops.
+//   · D.3 (this file's second block) — RATIONAL BEHAVIOUR. First person, past tense:
+//     the budget deadlock, "So we did it on shared accounts, and we were banned
+//     repeatedly", a closed four-line bill, then the pilot that would have avoided it.
+//     IT NEVER RESTATES B.2's CONDITION — the reason it gives for the behaviour is the
+//     deadlock, not a missing rule — so the second pass adds an ACT rather than
+//     repeating the absence that preceded it.
+//   · D.4 beat 2 (this block) — EXPOSURE. Second person, present tense: "You cannot
+//     audit what was asked", "revoke it when the person leaves", "produce it when an
+//     auditor asks", and only here "It is not the vendor. It is shadow AI, and nobody
+//     administers it." The third pass adds what cannot be undone, and names it.
+//
+//   THE ESCALATION IS CARRIED BY GRAMMAR AS WELL AS BY CONTENT, which is the part a
+//   token rule cannot see: impersonal → first-person past → second-person present.
+//   Absence, then act, then consequence you cannot reverse. Read in that order none of
+//   the three is redundant, and read in any other order the last one arrives as an
+//   accusation.
+//
+//   THE CLOSEST THING TO AN OVERLAP, recorded rather than hidden: `nobody` occurs in
+//   both B.2 ("Nobody wrote the rule") and beat 2 ("nobody administers it"). Different
+//   referent, different clause, and it is a pronoun — forbidding it would be a rule
+//   about English, not about images. The measured word overlap between the two blocks is
+//   `nobody`, `what`, `asked`, `when`, `leaves` and nothing else of four letters or
+//   more; between B.2 and D.3 it is `what`, `work`, `have`, `case`. No image word is in
+//   either list.
 //
 // THE KEYWORD RULE, this slide's own two lists. `kw` goes on PROSE ONLY, as everywhere
 // in this file.

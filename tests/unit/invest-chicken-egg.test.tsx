@@ -28,9 +28,13 @@
 //      as a RULE over every rendered string and every string the copy block authors —
 //      the way `./invest-own-proof.test.tsx` holds `NOT_AUDITED` — with the positive
 //      control that keeps it from passing on an empty stage.
-//   3. A SECOND PASS AT SHADOW AI THAT REPEATS THE FIRST (§6.2). Both other passes are
-//      UNBUILT, so what is checkable here is a token guard, and its limits are stated
-//      where it lives rather than glossed.
+//   3. A SECOND PASS AT SHADOW AI THAT REPEATS THE FIRST (§6.2). ALL THREE PASSES ARE
+//      NOW BUILT — #58 shipped D.4 and gh#66 shipped B.2 (`gap-no-sop`) — so this is no
+//      longer a token guard held against spec text on one side. B.2's copy module is
+//      IMPORTED here and the rule is run over its rendered strings in BOTH directions:
+//      none of B.2's image tokens in D.3's copy, none of D.3's in B.2's, no phrase of
+//      three words shared either way, and no statistic shared because B.2 prints no
+//      digit at all. The limits of a token rule are still stated where it lives.
 //   4. A COST OR A TERM THAT MOVED. Eight short labels quoted from §6.7 and from the
 //      issue's AC. "no audit trail" losing its row, or the four costs re-sorted into an
 //      order that stops escalating, is a review-proof edit and a string comparison here.
@@ -58,6 +62,10 @@ import {
   investOwnProofContent,
   ownProofFor,
 } from "@/slides/leader-invest/content";
+// B.2's OWN COPY — §6.2's `condition` pass (`gap-no-sop`, gh#66). Imported rather than
+// transcribed so the disjointness rules below run against what that slide actually
+// prints today and fail the day either side's copy moves toward the other.
+import { gapNoSopContent } from "@/slides/leader-gap/content";
 import { BRANDS, type Brand } from "@/deck-variants";
 import {
   CARD_EYEBROW_TOP,
@@ -1047,7 +1055,7 @@ describe("no vendor-leniency or enforcement-weakness claim, anywhere", () => {
 // ── AC 6 · §6.2's three shadow-AI passes stay disjoint ───────────────────────
 
 /**
- * B.2's vocabulary — shadow AI as CONDITION (§6.2: "There is no guidance, so people
+ * B.2's SPEC vocabulary — shadow AI as CONDITION (§6.2: "There is no guidance, so people
  * improvise"). `improvis\w*` rather than the bare stem, because "improvised" and
  * "improvises" are the same IMAGE and a rule that let them through would be a rule
  * about spelling.
@@ -1055,15 +1063,99 @@ describe("no vendor-leniency or enforcement-weakness claim, anywhere", () => {
  * TWO OF THE THREE ARE §6.2's WORDS AND THE THIRD IS ITS SLIDE ID, which is why `no SOP`
  * takes `[-\s]`: the literal string "no SOP" appears nowhere in the spec (checked by grep on
  * 2026-08-05) — what §6.2 owns is the id `gap-no-sop`, and the hyphen is how that name is
- * spelled everywhere it appears. So the pattern matches both spellings, D.3 may print
- * neither, and the positive control below can fire it against a real source instead of
- * against a sentence edited to make it fire.
+ * spelled everywhere it appears. So the pattern matches both spellings and D.3 may print
+ * neither.
+ *
+ * THIS LIST SURVIVES B.2 SHIPPING, and its positive controls now split in two. gh#66
+ * rendered `gap-no-sop`, and the shipped copy spends §6.2's verb (`improvises a rule`,
+ * once) while spelling the other two ideas in its own words — it prints neither `no
+ * guidance` nor `no SOP` anywhere. So `improvise` is controlled against B.2's RENDERED
+ * copy below, and the other two stay controlled against §6.2's spec sentence and slide
+ * id, which is where they are still the only source. Deleting them would drop the guard
+ * against a later author lifting the SPEC's phrasing into this slide, which costs
+ * nothing to keep and is a different failure from lifting B.2's rendered copy — that
+ * second failure is what {@link B2_IMAGE_TOKENS} and the phrase rule below hold.
  */
-const B2_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
+const B2_SPEC_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["no SOP", /\bno[-\s]SOP\b/i],
   ["no guidance", /\bno guidance\b/i],
   ["improvise", /\bimprovis\w*\b/i],
 ];
+
+/**
+ * B.2's RENDERED image, read off `gapNoSopContent` (gh#66) rather than off §6.2.
+ *
+ * WHAT AN "IMAGE TOKEN" IS HERE: the words that carry the picture B.2 draws — a
+ * lopsided diptych of three things that were handed out against four questions nobody
+ * wrote an answer to, and the silence behind them. Every pattern below is fired against
+ * B.2's own strings in the control test, so a list that drifted out of date fails loudly
+ * instead of passing vacuously.
+ *
+ * WHAT IS DELIBERATELY NOT IN IT. B.2 and this slide share four words of four letters or
+ * more — `what`, `work`, `have`, `case` (measured, not assumed; see the phrase rule's
+ * note) — and not one of them is an image. A rule that forbade ordinary English would be
+ * turned off inside a week, and a rule that is off catches nothing.
+ */
+const B2_IMAGE_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
+  ["the rule nobody wrote", /\brule nobody wrote\b/i],
+  ["wrote their own", /\bwrote their own\b/i],
+  ["never wrote down", /\bnever wrote down\b/i],
+  ["handed out", /\bhanded out\b/i],
+  ["a login", /\blogin\w*\b/i],
+  ["a demonstration", /\bdemonstrat\w*\b/i],
+  ["encouragement", /\bencourag\w*\b/i],
+  ["which work may", /\bwhich work may\b/i],
+  ["the silence", /\bsilence\b/i],
+  ["still gets answered", /\bstill gets answered\b/i],
+  ["no rule to break", /\bno rule to break\b/i],
+  ["the leader's job", /\bleader['’]s job\b/i],
+];
+
+/**
+ * D.3's OWN reserved vocabulary — the list `invest-security.test.tsx` already holds this
+ * slide's copy to, restated here so the SAME rule can be run in the other direction
+ * against B.2. A token can migrate either way and only the receiving file notices.
+ */
+const D3_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
+  ["deadlock", /\bdeadlock\w*\b/i],
+  ["no budget without proof", /\bno budget without proof\b/i],
+  ["shared accounts", /\bshared account\w*\b/i],
+  ["banned", /\bbann?ed\b/i],
+  ["what it cost", /\bwhat it cost\b/i],
+  ["30-day", /\b30[-\s]day\b/i],
+  ["proof pilot", /\bproof pilot\b/i],
+  ["kill criterion", /\bkill criteri\w*\b/i],
+  ["spend cap", /\bspend cap\b/i],
+];
+
+/** Every string B.2 authors — `gap-no-sop` has no brand axis and no `…For(brand)`
+ *  resolver, so its whole copy block is its whole rendered string set. */
+function b2Strings(): string[] {
+  return walkStrings(gapNoSopContent);
+}
+
+/**
+ * The set of every N-word phrase in a string set, lowercased and stripped of
+ * punctuation so "rule." and "rule" are the same word.
+ *
+ * THREE WORDS IS THE THRESHOLD THE COPY CHOSE, not a number picked to make the test
+ * pass. Measured on 2026-08-08 against the shipped blocks: B.2 and D.3 share exactly two
+ * two-word phrases (`what it`, `is not`) and ZERO three-word phrases; B.2 and D.4 beat 2
+ * share one two-word phrase (`is not`) and zero three-word ones. Two-word overlap of
+ * function words is unavoidable in English and proves nothing; a shared three-word
+ * phrase between two passes of the same escalation is copy that was lifted.
+ */
+function phrases(strings: readonly string[], n: number): Set<string> {
+  const words = strings
+    .join(" ")
+    .toLowerCase()
+    .replace(/[^a-z0-9'\s-]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  const out = new Set<string>();
+  for (let i = 0; i + n <= words.length; i += 1) out.add(words.slice(i, i + n).join(" "));
+  return out;
+}
 
 /**
  * D.4's vocabulary — shadow AI as EXPOSURE, plus the two statistics and the three data
@@ -1091,26 +1183,22 @@ const D4_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
 describe("§6.2 · shadow AI is RATIONAL BEHAVIOUR here, and nothing else's pass", () => {
   // WHAT THIS BLOCK IS AND IS NOT. §6.2 forbids any two of the deck's three shadow-AI
   // passes from sharing an image or a statistic — B.2 as CONDITION, D.4 beat 2 as
-  // EXPOSURE, D.3 (this slide) as RATIONAL BEHAVIOUR. BOTH OTHER PASSES ARE UNBUILT as
-  // of 2026-08-05: `gap-no-sop` sits in §11's Phase 7 row and `src/slides/leader-gap/`
-  // holds only the Capability Ladder; `invest-security` is #58. So there is no rendered
-  // copy to diff against, and what is checkable here is a rule over the TOKENS THE SPEC
-  // RESERVES for those two passes, transcribed from §6.2 and §6.7's D.4 paragraph.
+  // EXPOSURE, D.3 (this slide) as RATIONAL BEHAVIOUR. ALL THREE ARE NOW BUILT: #58
+  // shipped `invest-security` on 2026-08-05 and gh#66 shipped `gap-no-sop` on
+  // 2026-08-08. So the half of this block that ran against §6.2's SPEC TEXT until gh#66
+  // now runs against B.2's RENDERED COPY, imported from `@/slides/leader-gap/content`,
+  // and it runs in BOTH DIRECTIONS: B.2's image tokens are forbidden here, D.3's are
+  // forbidden in B.2's strings, no three-word phrase is shared either way, and B.2's
+  // zero-digit guarantee is asserted rather than quoted from its comment.
   //
-  // A TOKEN LIST IS NOT A PROOF ABOUT IMAGES. Two slides can share a picture without
-  // sharing a word — "people route around a control" is one image whether it is spelled
-  // with "improvise" or not — and no grep will ever see that. This block is a guard
-  // against the CHEAPEST way to break §6.2 (lifting the other pass's vocabulary), and
-  // the issue's AC is explicit that the real check is a human reading all three passes
-  // and recording the result in a comment on #57. Nothing here discharges that.
-  //
-  // #58 MUST RUN THE MIRROR OF THIS CHECK FROM THE OTHER SIDE. When `invest-security`
-  // ships, its own unit test owes the symmetric rule: none of D.3's vocabulary in D.4's
-  // copy — `deadlock`, `no budget without proof`, `shared accounts`, `banned
-  // repeatedly`, `WHAT IT COST`, `30-day`, `proof pilot`, `kill criterion`, `spend cap`
-  // — and the same for `gap-no-sop` when Phase 7 builds B.2. Held from one side only,
-  // this rule stops the day the other slide is written, because a token can migrate in
-  // either direction and only the receiving file's tests would notice.
+  // A TOKEN LIST IS STILL NOT A PROOF ABOUT IMAGES. Two slides can share a picture
+  // without sharing a word — "people route around a control" is one image whether it is
+  // spelled with "improvise" or not — and no grep will ever see that. What changed with
+  // gh#66 is the SOURCE of the tokens (B.2's actual strings, not a spec paragraph) and
+  // the DIRECTION (both), not the kind of claim. The issue's AC is still explicit that
+  // the real check is a human reading all three passes in deck order and recording the
+  // result; `src/slides/leader-invest/content.ts` holds that record for gh#66 and
+  // nothing here discharges it.
   //
   // THE ONE ADJACENCY THAT CANNOT BE REMOVED, stated rather than hidden: §6.7 prescribes
   // "no audit trail" and "data outside the boundary" as two of THIS slide's four costs,
@@ -1124,8 +1212,9 @@ describe("§6.2 · shadow AI is RATIONAL BEHAVIOUR here, and nothing else's pass
     const strings = authoredStrings();
     expect(strings.length, "a rule over an empty set proves nothing").toBeGreaterThan(0);
 
+    const forbidden = [...B2_SPEC_TOKENS, ...B2_IMAGE_TOKENS, ...D4_TOKENS];
     for (const copy of strings) {
-      for (const [name, pattern] of [...B2_TOKENS, ...D4_TOKENS]) {
+      for (const [name, pattern] of forbidden) {
         expect(pattern.test(copy), `${name} in ${JSON.stringify(copy)}`).toBe(false);
       }
     }
@@ -1134,35 +1223,109 @@ describe("§6.2 · shadow AI is RATIONAL BEHAVIOUR here, and nothing else's pass
     const { container, unmount } = renderSlide(3);
     const text = container.textContent ?? "";
     expect(text, "positive control: the stage is not empty").toContain(C.verdict);
-    for (const [name, pattern] of [...B2_TOKENS, ...D4_TOKENS]) {
+    for (const [name, pattern] of forbidden) {
       expect(pattern.test(text), `${name} reached the stage`).toBe(false);
     }
     unmount();
   });
 
-  test("and the token patterns actually fire, including the word-boundary case", () => {
-    // POSITIVE CONTROLS FOR THE RULE ITSELF. Thirteen regexes that matched nothing would
-    // make the test above pass on any copy at all — including copy lifted verbatim from
-    // D.4 — so every one of them is fired here against the SOURCE IT WAS READ OFF.
+  test("and B.2 carries none of D.3's — the same rule read from the other side", () => {
+    // THE OTHER DIRECTION, WHICH ONLY BECAME CHECKABLE WHEN gh#66 SHIPPED B.2. A token
+    // can migrate either way, and until B.2 existed this file could only forbid arrivals.
+    // `gap-no-sop` has no brand axis, so its copy block IS its rendered string set.
+    const b2 = b2Strings();
+    expect(b2.length, "a rule over an empty set proves nothing").toBeGreaterThan(10);
+    for (const copy of b2) {
+      for (const [name, pattern] of D3_TOKENS) {
+        expect(pattern.test(copy), `D.3's ${name} in B.2's ${JSON.stringify(copy)}`).toBe(false);
+      }
+    }
+    // POSITIVE CONTROL for the list itself: every one of D.3's nine patterns fires on
+    // D.3's OWN copy, so nine dead regexes cannot make the rule above pass on any copy.
+    const d3 = authoredStrings().join(" \n ");
+    for (const [name, pattern] of D3_TOKENS) {
+      expect(pattern.test(d3), `${name} no longer fires on D.3's own copy`).toBe(true);
+    }
+  });
+
+  test("shares no three-word phrase with B.2, in either direction", () => {
+    // THE RULE THAT DOES NOT DEPEND ON A HAND-WRITTEN LIST. Both token lists are
+    // judgement calls about which words carry an image; this one is not. It is set
+    // intersection over every three-word phrase either slide prints, and it catches the
+    // failure a token list cannot see by construction — a sentence lifted from one pass
+    // into the other using words nobody thought to reserve.
     //
-    // §6.2's OWN SENTENCE IS QUOTED VERBATIM, and it does not contain all three tokens.
-    // Spec line 773 reads "There is no guidance, so people improvise." — `no guidance` and
-    // `improvise` come from there; `no SOP` comes from the SLIDE ID §6.2 gives that pass,
-    // `gap-no-sop`. Both sources are listed, and the assertion is `.some()` over them the
-    // way D.4's is, because a control that edits the spec's words to make itself fire is a
-    // control that proves the edit and not the regex. (This line read
-    // "There is no guidance and no SOP, so people improvise." until 2026-08-05, which was
-    // exactly that.)
+    // SYMMETRIC BY CONSTRUCTION: phrase overlap is the same set from both sides, and it
+    // is asserted as one empty intersection rather than twice.
+    const b2 = phrases(b2Strings(), 3);
+    const d3 = phrases(authoredStrings(), 3);
+    expect(b2.size, "positive control: B.2 has phrases to share").toBeGreaterThan(50);
+    expect(d3.size, "positive control: D.3 has phrases to share").toBeGreaterThan(50);
+    expect([...d3].filter((p) => b2.has(p))).toEqual([]);
+
+    // AND THE CONTROL THAT KEEPS THE RULE HONEST: the intersection is empty because the
+    // copy is disjoint, not because `phrases()` never matches anything. One of B.2's own
+    // sentences, put through the rule as if this slide had lifted it, is caught — and it
+    // is caught across the punctuation and the capitals, which is what the normalisation
+    // is for.
+    const lifted = phrases(["Nobody wrote the rule; so EVERYBODY wrote their own!"], 3);
+    expect([...lifted].filter((p) => b2.has(p)).length).toBeGreaterThan(3);
+  });
+
+  test("cannot share a statistic with B.2, because B.2 prints no digit at all", () => {
+    // §6.2's second half — no shared STATISTIC — held as an absence on B.2's side and as
+    // a single quantity on this one. Asserted over B.2's imported copy rather than
+    // trusted from its comment: the day `gap-no-sop` gains a number, this fails here and
+    // in `invest-security.test.tsx`, which is exactly when the rule needs re-arguing.
+    for (const copy of b2Strings()) {
+      expect(copy, `digit in B.2: ${JSON.stringify(copy)}`).not.toMatch(/\d/);
+    }
+    // D.3's side of it: exactly one quantity, the 30-day window (see the test below).
+    expect(authoredStrings().filter((copy) => /\d/.test(copy))).toEqual([
+      "INSTEAD — A 30-DAY PROOF PILOT",
+    ]);
+  });
+
+  test("and the token patterns actually fire, including the word-boundary case", () => {
+    // POSITIVE CONTROLS FOR THE RULE ITSELF. Regexes that matched nothing would make the
+    // test above pass on any copy at all — including copy lifted verbatim from D.4 — so
+    // every one of them is fired here against the SOURCE IT WAS READ OFF.
+    //
+    // B.2's IMAGE TOKENS FIRE AGAINST B.2's RENDERED COPY, which is what gh#66 changed:
+    // until B.2 shipped there was nothing to fire them against but a spec paragraph.
+    const b2 = b2Strings();
+    for (const [name, pattern] of B2_IMAGE_TOKENS) {
+      expect(
+        b2.some((line) => pattern.test(line)),
+        `${name} no longer fires on B.2's own copy`,
+      ).toBe(true);
+    }
+
+    // §6.2's OWN SENTENCE IS STILL QUOTED VERBATIM, for the two SPEC tokens B.2 chose not
+    // to print. Spec line 773 reads "There is no guidance, so people improvise." — `no
+    // guidance` and `improvise` come from there; `no SOP` comes from the SLIDE ID §6.2
+    // gives that pass, `gap-no-sop`. The rendered copy is listed FIRST, so `improvise`
+    // is controlled against what B.2 actually prints ("Everyone improvises a rule …")
+    // and only the two tokens with no rendered source fall back to the spec. A control
+    // that edits the spec's words to make itself fire is a control that proves the edit
+    // and not the regex. (This line read "There is no guidance and no SOP, so people
+    // improvise." until 2026-08-05, which was exactly that.)
     const b2Sources = [
+      ...b2, // B.2's rendered copy, where `improvises` is spelled
       "There is no guidance, so people improvise.", // §6.2, spec line 773
       "gap-no-sop", // §6.2's slide id, where `no SOP` is spelled
     ];
-    for (const [name, pattern] of B2_TOKENS) {
+    for (const [name, pattern] of B2_SPEC_TOKENS) {
       expect(
         b2Sources.some((line) => pattern.test(line)),
         name,
       ).toBe(true);
     }
+    // AND THE HALF OF THAT WHICH IS NOW A FACT ABOUT RENDERED COPY: B.2 spends §6.2's
+    // verb and neither of its other two phrasings, so the split above is not a guess.
+    expect(b2.some((line) => /\bimprovis\w*\b/i.test(line))).toBe(true);
+    expect(b2.some((line) => /\bno guidance\b/i.test(line))).toBe(false);
+    expect(b2.some((line) => /\bno[-\s]SOP\b/i.test(line))).toBe(false);
     const d4Lines = [
       "data you cannot audit, revoke, or produce",
       "open-weight is 6.7 points off the lead and 9.2 back on tool-calling",

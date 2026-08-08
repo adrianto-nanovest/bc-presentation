@@ -335,8 +335,46 @@ interface ObservedDeck {
  *     pre-existing label (`THE CAPABILITY LADDER`), no label dropped, no letter
  *     touched. Read the diff, every time.
  *
+ * ON gh#66 ONE FIGURE MOVED AGAIN, the second ticket in this list of which that is
+ * true, and the first MID-RUN insert of any of them. `gap-no-sop` reached the leader
+ * lists alone, the tenth slide ever to do so, taking both decks to **67** rows — still
+ * FOURTEEN sections, still closing on **N.3**. It is a third shape again: it did not
+ * OPEN a run, it did not APPEND to one's end, and unlike gh#65 it did not land at a
+ * run's HEAD either — it went in BETWEEN `gap-hardest-part` and the ladder, so `gap`
+ * kept **B** and R3 renumbered only behind the new row, inside that run:
+ *
+ *   · ONE row was added per leader deck, at index 3, between `B.1 · THE HARDEST PART`
+ *     and the ladder: `B.2 · THE RULE NOBODY WROTE`. §4.3 and §6.2 both number that
+ *     slide B.2 and it composes as B.2 — the `gap` run is filled from the front as far
+ *     as this row, so the spec number and the composed number happen to agree. Derived
+ *     all the same (§3.5); the agreement is a coincidence of where in the run this
+ *     slide sits, not a licence to pin it, and the two unbuilt §6.3/§6.4 slides land
+ *     BEHIND it, so it keeps B.2 when they do.
+ *   · ONE existing row changed, and it is the ONLY changed figure in the file:
+ *     `THE CAPABILITY LADDER` went **B.2 → B.3**. It held B.1 until gh#65 and B.2
+ *     until this ticket. §6.5 numbers the ladder B.5 and it will print that once the
+ *     two remaining `gap` slides land in front of it — two more numbers this row has
+ *     yet to hold, neither of which any ticket may pin.
+ *   · NO LETTER MOVED ANYWHERE, in any of the five decks, and no row was removed. The
+ *     loop slide is still H.12 — ten tickets into a life in which its file has never
+ *     been opened — f8 is still C.2, the four `invest` rows are still D.1–D.4, and
+ *     `berau`, `gems` and `general` are byte-identical per key.
+ *   · The re-record still needed `ALLOW_MOVED_FIGURES=1`, and the report it printed is
+ *     the same size as gh#65's: **126 lines** — two row-count lines
+ *     (`66 slides recorded, 67 rendered`) and 62 per leader deck, running
+ *     `slide 4: recorded C.1, renders B.3` down to `slide 65: recorded N.3, renders
+ *     N.2`. Read as pairs it is one statement, gh#57's: what index *i* recorded is now
+ *     at index *i*+1. Index 3 is absent from it, because it recorded B.2 and renders
+ *     B.2 — the same FIGURE on a different SLIDE, which an index-keyed detector cannot
+ *     see — and the ladder's real B.2 → B.3 appears in it only as index 4's
+ *     `C.1 → B.3`, which is not what happened to any slide. So the report both
+ *     overstates and mis-states this ticket too, and ONLY the diff matched BY LABEL
+ *     says what moved: one label added (`THE RULE NOBODY WROTE`), one figure changed
+ *     on a pre-existing label (`THE CAPABILITY LADDER`), no label dropped, no letter
+ *     touched. Read the diff, every time.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all nine tickets. That is the assertion worth reading twice: a leader-only
+ * all ten tickets. That is the assertion worth reading twice: a leader-only
  * insert must not be able to touch a standard deck, and gh#54's relocation could
  * not either — f8 moved because a LEADER LIST moved it, and the standard list was
  * not edited. The fixture is where either failure would show.
@@ -351,8 +389,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 66, closer: "N.3" },
-  "gems-leader": { slides: 66, closer: "N.3" },
+  "berau-leader": { slides: 67, closer: "N.3" },
+  "gems-leader": { slides: 67, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

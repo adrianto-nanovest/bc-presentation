@@ -550,3 +550,269 @@ export const gapHardestPartContent = {
   closer: "The tools are the 30%. Everything after this is the 70%.",
   closerKw: ["the 70%"],
 } as const;
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THE RULE NOBODY WROTE — §6.2, the SECOND slide of this section's run.
+// ═════════════════════════════════════════════════════════════════════════════
+//
+// §6.2 is one line plus a constraint: "There is no guidance, so people improvise.
+// Shadow AI appears three times in the deck with enforced escalation and no shared
+// image or statistic: B.2 = condition · D.4 beat 2 = exposure · D.3 = rational
+// behaviour. This constraint belongs in the spec, not in the implementer's judgement."
+// THIS BLOCK IS THE `condition` PASS, and everything below is written to be the
+// FIRST of the three the room meets: the organisation handed people tools and never
+// wrote the rules, and shadow AI is what that vacuum produces. Not blame — nobody here
+// broke anything. Not behaviour — what people then did is D.3's slide. Not exposure —
+// what nobody can do about it afterwards is D.4 beat 2's.
+//
+// ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER — the same call the
+// slide above it makes, for the same reason. §4.4's seven brand × deckSet slots do not
+// list this slide, and an absence of written guidance is not an organisation's own
+// evidence: we hold no SOP inventory for either brand and would be inventing one to
+// fill a fork. `mandate-enablement` and `gapHardestPartContent` are the precedents.
+// The slide file imports no `VARIANT` at all, which is what lets a test mount it under
+// both leader brands and compare byte for byte.
+//
+// ═══ HOW THE THREE-PASS CONSTRAINT IS HELD, AND IT IS NOW CHECKABLE AGAINST RENDERED
+// COPY ON BOTH SIDES. D.3 (`invest-chicken-egg`) and D.4 (`invest-security`) both
+// shipped before this slide — `src/slides/leader-invest/content.ts` holds them — so the
+// half of the check that both of those blocks had to run against §6.2's SPEC TEXT runs
+// here against actual strings. What was compared, and what it found:
+//
+//   · NO SHARED IMAGE. D.3 draws a two-clause deadlock, a first-person past-tense
+//     confession, an itemised bill and a bordered pilot card. D.4 draws a three-column
+//     map of destinations, a price band and four governance chips. THIS SLIDE DRAWS
+//     NEITHER: it is a lopsided diptych — three things that were handed out, against
+//     four questions each followed by an EMPTY RULE where the answer was never written.
+//     The blank line is this pass's image and it appears on no other slide in the deck.
+//   · NO SHARED TOKEN. None of D.3's — `deadlock`, `no budget without proof`,
+//     `shared accounts`, `banned repeatedly`, `WHAT IT COST`, `30-day`, `proof pilot`,
+//     `kill criterion`, `spend cap` — appears in any string below. None of D.4's —
+//     `revoke`, `produce`, `audit`, `self-hosted`, `on-prem`, `consumer account`,
+//     `workspace`, `governance retrofit`, `Culture`, `Risk`, `Governance`, `Ethics`,
+//     `4 pts`, `5.2 pts`, `Artificial Analysis` — appears either. `produce` is the one
+//     worth naming twice: an eyebrow reading "THE CONDITION IT PRODUCES" was written
+//     and rejected for that collision alone, and nothing below uses any form of the
+//     word.
+//   · NO SHARED STATISTIC, HELD AS AN ABSENCE. **THIS SLIDE CARRIES NO STATISTIC AND
+//     NO DIGIT AT ALL** — not one numeral in any rendered string. That is the cheapest
+//     way to hold the rule and the only way to make it testable as an absence rather
+//     than as a list of forbidden values: D.3's only quantity is its 30-day window,
+//     D.4's are its two index gaps, and a slide with no digit in it cannot collide with
+//     either. It also keeps this pass the QUIETEST of the three, which is what the
+//     escalation needs — a condition that arrived with a number would be making the
+//     exposure argument early.
+//   · THE ESCALATION READS condition → behaviour → exposure IN DECK ORDER, which is why
+//     this slide stops where it does. It says the questions were never answered and
+//     that everyone answers them privately. It does NOT say what any of those private
+//     answers were (D.3), and it does NOT say what nobody can do about them afterwards
+//     (D.4 beat 2). Each of those is a slide later in the same room.
+//   · IT DOES NOT PRINT THE PHRASE "SHADOW AI", DELIBERATELY. D.4 beat 2 names it
+//     ("It is not the vendor. It is shadow AI, and nobody administers it."), and naming
+//     it here would spend the label two passes early on the pass that has the least
+//     right to it: a CONDITION is described, not labelled, and a room that has been
+//     handed the term at B.2 hears D.4's naming as a repetition rather than as the
+//     escalation's last step. §6.2 requires the passes to share no image and no
+//     statistic; keeping the NAME for the pass that acts on it is this file's own call,
+//     and it costs nothing — the copy below describes the condition completely.
+//
+// THE ONE WORD THIS SLIDE IS SUPPOSED TO ECHO, so a reviewer sees it was chosen. C.1's
+// governance decision (`leader-shape/content.ts`) says the leader writes it down
+// "before someone improvises", and `leader-mandate/content.ts` says "enough to stop
+// improvising" — both of those are indexes pointing AT this slide, recorded in their own
+// files as such. So {@link gapNoSopContent.consequenceLine} says "improvises", once,
+// which is the anchor being paid off rather than a borrowed phrase. §6.2's own sentence
+// is "there is no guidance, so people improvise"; the word is B.2's, and the two slides
+// that pre-spent it did so pointing here.
+//
+// WHAT THIS SLIDE MAY NOT SAY, beyond the three-pass constraint above:
+//
+//   · THE 70/30 SPLIT, "procured", "earned", "invoice", "tool access" → B.1's, one
+//     slide earlier in the same run. Re-spending its statistic or its vocabulary in the
+//     slide directly behind it is how a run starts sounding like one long slide, and
+//     the two arguments are different: B.1 says the hard part is not the tools, this
+//     one says nobody wrote the rules for them. Nothing below prints a percentage, and
+//     nothing below re-uses B.1's verbs.
+//   · NANOVEST'S OWN FAILURES, FIRST PERSON → §6.3 (`gap-three-failures`). Nothing
+//     below is a story and nothing below is in the first person singular.
+//   · THE PATTERN ACROSS THOSE FAILURES → §6.4 (`gap-the-pattern`).
+//   · L1–L5 AND THE DECISION CONTRACT → §6.5, at the top of this file.
+//   · WHAT THE RULE SHOULD SAY. The closer names writing one as the leader's job and
+//     stops there. The four governance domains an SOP starts from are D.4 beat 3's, and
+//     a starter list here would be that beat arriving four slides early.
+//
+// THE KEYWORD RULE, applied without an exception: `kw` on PROSE ONLY.
+//
+//   · PROSE, each with a `*Kw` sibling — FOUR strings: `headline`, `conditionLine`,
+//     `consequenceLine`, `closer`.
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — ELEVEN strings:
+//     `figLabel`, `issuedEyebrow`, `unwrittenEyebrow`, `conditionEyebrow`, the three
+//     `issued` labels and the four `questions` labels.
+//     THE FOUR QUESTIONS ARE THE SHARPEST CASE, because they are sentence-shaped and
+//     the Capability Ladder's own `question` field at the top of this file DOES carry a
+//     `questionKw`. The difference is arity: that ladder asks ONE question and the
+//     emphasis inside it is the argument, while four highlighted questions would put
+//     four copper italics down one column and rank four things the slide ranks by order
+//     alone. D.4's three exposure rows are the shipped precedent — sentence-shaped,
+//     label register, keyword-free — and these follow it.
+//
+// NO LETTER AND NO NUMBER IN ANY RENDERED STRING (§3.4 R2 / §3.5). This slide composes
+// as the SECOND of the `gap` run, which is B.2 in today's leader decks and is derived
+// per deck by the composer; `FigLabel` takes a LABEL only. Do not write either down.
+
+/** One row of either column of the diptych. A LABEL, keyword-free by the rule above. */
+export interface NoSopItem {
+  id: string;
+  /**
+   * Cut for ONE line: 420px (what was handed out) or 696px (a question) of 15px sans,
+   * which is ≈56 and ≈94 characters. A reword past that wraps into the row under it —
+   * and in the right column it wraps onto the empty rule that belongs to it, which is
+   * the one failure on this stage a reader would misread as a design.
+   */
+  label: string;
+}
+
+/** Exactly three, held by the TYPE — the fixed-length tuple idiom
+ *  `leader-invest/content.ts` argues at length: a fourth entry's error lands ON the
+ *  fourth entry, at the definition site, with no cast anywhere. */
+type Three<T> = readonly [T, T, T];
+
+/** Exactly four, the same way. */
+type Four<T> = readonly [T, T, T, T];
+
+/**
+ * WHAT THE ORGANISATION HANDED OUT — three things, and every one of them is a thing it
+ * did RIGHT.
+ *
+ * THAT IS THE WHOLE POINT OF THE COLUMN. A list of failures on the left would make the
+ * slide an accusation, and §6.2's beat is a CONDITION: access, a demonstration and
+ * encouragement are exactly what a competent organisation issues when it wants a tool
+ * adopted. The vacuum on the right is what was left out of an otherwise good rollout,
+ * which is why nobody in the room has to defend anything to agree with it.
+ *
+ * EACH ROW NAMES ITS OWN MOMENT — the day it was asked for, the room it was shown in,
+ * the fact that the encouragement was written down. The last one is deliberate and it
+ * is the column's sharpest row: the encouragement got written down and the rules did
+ * not.
+ */
+const ISSUED: Three<NoSopItem> = [
+  { id: "login", label: "A login, the first day someone asked for one." },
+  { id: "demonstration", label: "A demonstration, and a room told to try it." },
+  { id: "encouragement", label: "Encouragement from the top, in writing." },
+];
+
+/**
+ * WHAT WAS NEVER WRITTEN DOWN — four questions, in an escalation, each one a clause an
+ * SOP would have had.
+ *
+ * THE ORDER IS THE ARGUMENT and it is not re-sorted: permission (what may go in) →
+ * prohibition (what may never) → arbitration (who settles the unclear case) →
+ * disclosure (who hears about it afterwards). Read down, they are the four things a
+ * person needs before they can use a new tool safely, and none of them has an answer
+ * anybody could look up.
+ *
+ * FIRST PERSON SINGULAR, AND EVERY ONE ENDS IN "?". These are the questions as the
+ * person at the desk asks them, not as a policy author would phrase them — "which work
+ * may I put into it", not "permitted data classes" — because the condition is what it
+ * feels like to be that person with nobody to ask. The question mark is what the empty
+ * rule beneath each one answers with silence.
+ *
+ * FOUR, AND `./no-sop-geometry.ts` PINS THE COUNT: a fifth deepens the right column,
+ * moves the rule, band 2 and the closer, and the stage's floor clearance is what
+ * reports it.
+ */
+const QUESTIONS: Four<NoSopItem> = [
+  { id: "may-go-in", label: "Which work may I put into it?" },
+  { id: "may-never", label: "Which work may never go near it?" },
+  { id: "who-decides", label: "Who decides when a case is not obvious?" },
+  { id: "who-hears", label: "Who do I tell when I have already used it?" },
+];
+
+export const gapNoSopContent = {
+  /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from the
+   *  composed deck (§3.5) and are authored nowhere. */
+  figLabel: "THE RULE NOBODY WROTE",
+
+  /**
+   * §6.2's condition, as one sentence with its consequence attached.
+   *
+   * TWO CLAUSES, AND THE SECOND IS THE SLIDE. "Nobody wrote the rule" is the absence;
+   * "so everybody wrote their own" is what an absence of guidance PRODUCES, which is
+   * the beat this slide owns. The keyword sits on the second half for that reason — the
+   * room already agrees with the first.
+   *
+   * "Nobody" AND "everybody", NOT "we" AND "they". No party is named and no party is
+   * blamed: an organisation that did not write something down is not a group of people
+   * who did something wrong, and the moment this line acquires a subject it becomes
+   * §6.3's confession or an accusation aimed at the room.
+   */
+  headline: "Nobody wrote the rule. So everybody wrote their own.",
+  headlineKw: ["everybody wrote their own"],
+
+  /** The left column's heading. Mono, keyword-free. Says HANDED OUT rather than
+   *  "provided" or "rolled out" — it is the plainest verb for the act, and the column
+   *  under it is a list of good decisions. */
+  issuedEyebrow: "WHAT THE ORGANISATION HANDED OUT",
+
+  /** The right column's heading. Mono, keyword-free, and it OPENS ON "AND" so the two
+   *  headings are read as one sentence across the gutter: what it handed out, and what
+   *  it never wrote down. Neither column argues anything on its own. */
+  unwrittenEyebrow: "AND WHAT IT NEVER WROTE DOWN",
+
+  issued: ISSUED,
+  questions: QUESTIONS,
+
+  /** Band 2's heading. Mono, keyword-free. NAMES NO ACTOR — it is the condition that
+   *  follows, not somebody's decision — and it is the string that would have read "THE
+   *  CONDITION IT PRODUCES" if `produce` were not D.4 beat 2's word (see the header). */
+  conditionEyebrow: "WHAT THE SILENCE LEAVES BEHIND",
+
+  /**
+   * The condition itself. PROSE.
+   *
+   * "still gets answered" IS THE KEYWORD AND THE WHOLE ARGUMENT: an unanswered question
+   * does not stay unanswered, it gets answered somewhere nobody can see. The three
+   * qualifiers after the dash are what make it a condition rather than a fault —
+   * privately, at one desk, under time pressure, by someone doing their job.
+   *
+   * "that afternoon" AND NOT A DURATION. No digit appears anywhere in this block (see
+   * the header); the pressure is carried by the ordinary word for it.
+   */
+  conditionLine:
+    "A question nobody answers still gets answered — privately, at one desk, by whoever " +
+    "needed to finish something that afternoon.",
+  conditionLineKw: ["still gets answered"],
+
+  /**
+   * What the condition leaves behind. PROSE.
+   *
+   * "improvises" IS THE ONE DELIBERATE ECHO in this block — §6.2's own verb, and the
+   * word C.1 and K.1 both point here with (see the header). It appears exactly once.
+   *
+   * THE SECOND HALF IS THE COST AND IT IS NOT AN ACCUSATION: the rules are not wrong,
+   * they are unreadable. That distinction is what keeps this slide a condition and
+   * leaves the consequences to the two passes behind it.
+   */
+  consequenceLine:
+    "Everyone improvises a rule that works for them, and not one of those rules is written " +
+    "where anybody else can read it.",
+  consequenceLineKw: ["improvises a rule", "written where anybody else can read it"],
+
+  /**
+   * The closer, and the slide's last arrival. PROSE.
+   *
+   * IT REFUSES THE READING THE ROOM ARRIVES AT ON ITS OWN. By the time a leader has read
+   * four unanswered questions, the available conclusion is that somebody is being
+   * careless — and that conclusion, reached here, poisons the two slides that come after
+   * it, because a room that has decided this is a discipline problem hears the next
+   * slide's story as a confession of misconduct and the one after that as a threat. So
+   * the last sentence on the stage says the opposite in the plainest words available,
+   * and then hands the room the job: the rule is missing, and writing it is theirs.
+   *
+   * IT NAMES NO SLIDE AND COUNTS NOTHING. "the leader's job" and never "the next four
+   * slides" — the run is composed per deck set (§3.4) and a sentence that pointed at its
+   * own successors would go stale the first time one was inserted or cut.
+   */
+  closer: "Nobody broke a rule. There was no rule to break — and writing one is the leader's job.",
+  closerKw: ["no rule to break"],
+} as const;
