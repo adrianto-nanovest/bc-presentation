@@ -816,3 +816,571 @@ export const gapNoSopContent = {
   closer: "Nobody broke a rule. There was no rule to break — and writing one is the leader's job.",
   closerKw: ["no rule to break"],
 } as const;
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THREE THINGS WE GOT WRONG — §6.3, the THIRD slide of this section's run.
+// ═════════════════════════════════════════════════════════════════════════════
+//
+// §6.3 is two sentences: "Nanovest failures, first person. HR p16–18 outcomes are cut —
+// outcomes brag, failures transfer, and the confession pays the credibility debt before
+// L.2/L.3 arrive." Everything below is that confession: three dated entries, in the
+// order they happened, each one a decision that was ours and a consequence that was
+// ours too. The slide lays them down and stops — it does not generalise them, which is
+// the slide directly behind this one (§6.4).
+//
+// ═══ PROVENANCE — TWICE DOCUMENTED, NOTHING INVENTED. Every fact below is Nanovest's
+// own record, written down twice before this deck existed:
+//
+//   · `docs/researches/2026-07-31-hr-group-agentic-org-analysis.md`, slides 5, 6 and 7
+//     (≈ lines 126–158): "Tools Without Direction" (Q1 2025 — five-plus tools with no
+//     standard, knowledge trapped with individuals), "Building Without Strategy"
+//     (Q2–Q4 2025 — a custom knowledge base, an internal document crawler and six of
+//     ten connectors scrapped or displaced; four company-specific ones survived) and
+//     "Enabling Without Empowering" (mid-2025 through Q1 2026 — departments became
+//     consumers, and the central committee became the delivery bottleneck).
+//   · `docs/researches/internal-hr-group.md` §1.3 (≈ lines 33–41) and its slide-by-slide
+//     reuse table (≈ lines 193–195), which grade all three ESSENTIAL for exactly the
+//     reason this slide exists: "the presentation admits failure, which makes Nanovest
+//     credible as a guide, not a sales pitch."
+//
+// The three quantities below — five tools, three quarters, six of ten connectors and
+// the four company-specific survivors — come from those two documents and from nowhere
+// else. Nothing here is rounded up, and nothing here is a number this deck measured.
+//
+// ═══ HR p16–18 OUTCOMES ARE CUT, AND THE CUT IS §6.3's, NOT A PREFERENCE. A PDF page N
+// is source slide N−1, so p16–18 are HR slides 15, 16 and 17: the app-performance
+// benchmark, the support chatbot and the capability-calibration pair. NONE of their
+// vocabulary appears in any string below — not the multiples, not the competitor names,
+// not the deflection figure, not the ownership chain, not the preparation/implementation
+// split. `tests/unit/gap-three-failures.test.tsx` holds that as a regex list fired
+// against the sentences the research actually prints, so the list cannot rot into a set
+// of patterns that match nothing.
+//
+// The reason is one line of §6.3 and it is worth keeping in front of whoever edits this
+// block next: OUTCOMES BRAG, FAILURES TRANSFER. A leader who is shown a 6.90× multiple
+// learns that somebody else's team is good; a leader who is shown three decisions that
+// cost real quarters can check them against their own. The confession is also what pays
+// for the two later sections that ask this room for money and authority — a deck that
+// arrives with only its wins has spent nothing before it asks.
+//
+// ═══ THE VOICE, AND IT IS TESTABLE. The three failures are FIRST PERSON PLURAL: "we
+// bought", "we built", "we owned". The closer turns to FIRST PERSON SINGULAR — "Every
+// one of these calls was mine" — because the person standing in front of the room is the
+// person who made them, and a confession delivered in the passive is not a confession.
+//
+// THERE IS NO SECOND PERSON ANYWHERE ON THIS STAGE. Not one "you", "your" or "yours",
+// and the test holds it word-boundary and case-insensitive over every rendered string.
+// That single property is what separates this slide from three others that are allowed
+// to make the turn it may not:
+//
+//   · D.3 (`leader-invest/content.ts`, `invest-chicken-egg`) ends its fourth beat on
+//     "You are the person who can skip all three." — the same three failures, handed to
+//     the room as a shortcut.
+//   · M.1 (`reveal-and-closing/content.ts`, `j1-humility-intro`) prints "— Hard-earned
+//     lessons. So you skip my mistakes."
+//   · M.2 (`j2-five-principles`) prints "Each one earned. Each one yours to skip past."
+//
+// All three were read before this block was written. THIS SLIDE MAY NOT MAKE THE "SO YOU
+// CAN SKIP IT" MOVE: it is D.3's beat and M.1/M.2's whole register, and a confession that
+// arrives already converted into a favour for the listener is a sales pitch with a
+// humble first paragraph. B.3 admits three things and stops.
+//
+// ═══ TOKENS THE NEIGHBOURS OWN, CHECKED AGAINST THEIR REAL STRINGS RATHER THAN FROM
+// MEMORY. Nothing below re-spends any of:
+//
+//   · D.3's — `deadlock`, `no budget without proof`, `shared accounts`, `banned`,
+//     `what it cost`, `30-day`, `proof pilot`, `kill criterion`, `spend cap`.
+//   · B.2's, one slide up in this same run — `the rule nobody wrote`, `wrote their own`,
+//     `never wrote down`, `handed out`, `login`, `demonstration`, `encouragement`,
+//     `which work may`, `silence`, `still gets answered`, `no rule to break`, `the
+//     leader's job`, and §6.2's own `no guidance` / `improvise` / `no-SOP`.
+//   · B.1's, two slides up — `procured`, `instantly`, `invoice`, `tool access`, `70%`,
+//     `30%`, `70/30`, `people & process`, `earned`, `capability`, `technology`.
+//   · L.3's summary of these same three failures (`reveal-and-closing/content.ts`,
+//     `i3-portfolio`): "three honest failures — methodology, strategy, empowerment".
+//     THAT TRIPLE IS THE ONE PARAPHRASE THIS SLIDE MAY NOT USE, and the reason is that
+//     it is already rendered somewhere else in the same deck. The three titles below name
+//     the DECISION instead of the discipline — what was bought, what was built, what was
+//     owned — which is also the register a confession is written in.
+//
+// THE DELIBERATE ECHO: NONE. B.1 and B.2 sit directly in front of this slide in the same
+// run, and this block shares no vocabulary with either by design — the three arguments
+// are different (the hard part is not the tools · nobody wrote the rules · here is what
+// we got wrong), and a run that rhymes across three consecutive stages reads as one long
+// slide. Said out loud here so a reviewer can see the absence was chosen.
+//
+// ═══ WHAT THIS SLIDE MAY NOT SAY, because three siblings own it:
+//
+//   · THE PATTERN ACROSS THE THREE FAILURES → §6.4 (`gap-the-pattern`), the slide
+//     directly behind this one. Nothing below generalises, summarises or counts a lesson;
+//     three entries are laid down and the closer owns them rather than explaining them.
+//   · L1–L5, THE RUNGS AND THE DECISION CONTRACT → §6.5, at the top of this file.
+//   · SHADOW AI, IN ANY OF ITS THREE PASSES → §6.2 (`gap-no-sop`, condition), §6.7 (D.3
+//     rational behaviour, D.4 beat 2 exposure). Nothing below is about anybody using a
+//     tool they were not given.
+//
+// ═══ ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER — the third block in
+// this file to make that call, and the plainest case of the three. §4.4's seven brand ×
+// deckSet slots do not list this slide, and these failures are NANOVEST'S OWN: they are
+// the same three admissions in a Berau room and in a GEMS room, because the organisation
+// that made them is the one presenting. Varying them by audience would mean either
+// inventing a second organisation's failures or editing our own to flatter a room, and
+// both are worse than the shared block. The slide file imports no `VARIANT` at all,
+// which is what lets its test mount it under both leader brands and compare byte for
+// byte.
+//
+// ═══ THE KEYWORD RULE, applied without an exception: `kw` on PROSE ONLY.
+//
+//   · PROSE, each with a `*Kw` sibling — EIGHT strings: `headline`, `closer`, and each
+//     failure's `did` and `cost`.
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — EIGHT strings:
+//     `figLabel`, `ledgerEyebrow`, the three `period`s and the three `title`s. The three
+//     TITLES are the sharpest case here: they are sentence-shaped ("WE BOUGHT BEFORE WE
+//     AGREED") and would take emphasis happily. They are labels because they are the
+//     ledger's entry names — set in mono caps, read as a column down the stage — and a
+//     copper italic inside a mono label reads as a rendering fault everywhere else in
+//     this deck.
+//
+// ═══ NO LETTER AND NO NUMBER IN ANY RENDERED STRING (§3.4 R2 / §3.5). This slide
+// composes as the THIRD of the `gap` run today; the figure reference in front of the
+// label is DERIVED by the composer, and `FigLabel` takes a LABEL only. The four-digit
+// years below are dates in the ledger's own rail and are the only figures on the stage.
+
+/**
+ * One entry in the ledger: when it happened, what it was called, what we did, what it
+ * cost.
+ *
+ * FOUR FIELDS AND TWO REGISTERS, and the split is the keyword rule drawn in the type.
+ * `period` and `title` are LABELS and carry no `*Kw` sibling — they are the ledger's rail
+ * and its entry names. `did` and `cost` are PROSE and each carries one.
+ *
+ * `did` THEN `cost`, ALWAYS IN THAT ORDER, and never one without the other: an entry
+ * that named a decision with no consequence is a boast in the shape of an admission, and
+ * an entry that named a consequence with no decision is a complaint about the weather.
+ * The pair is what makes it a record.
+ */
+export interface RecordedFailure {
+  id: string;
+  /**
+   * When it happened. Mono LABEL, keyword-free, right-aligned to the spine.
+   *
+   * EN DASH FOR A RANGE — "Q2–Q4 2025", "2025–2026" — matching every other range in this
+   * deck (the Capability Ladder's "NANOVEST · L1–L2" at the top of this file). A hyphen
+   * here is a typographic bug, not an abbreviation.
+   */
+  period: string;
+  /**
+   * What the entry is called. Mono caps LABEL, keyword-free.
+   *
+   * EVERY TITLE NAMES A DECISION AND OPENS ON "WE", which is what keeps this a confession
+   * rather than a lesson: "WE BOUGHT BEFORE WE AGREED" is a thing somebody chose, while
+   * "TOOLS WITHOUT METHODOLOGY" — the research's own heading — is a category. It also
+   * keeps the three titles clear of L.3's rendered summary of these same failures
+   * ("methodology, strategy, empowerment"; see the header).
+   */
+  title: string;
+  /** What we did. PROSE. First person plural, past tense, no qualifier. */
+  did: string;
+  didKw: readonly string[];
+  /** What it cost. PROSE. The consequence, stated as flatly as the decision. */
+  cost: string;
+  costKw: readonly string[];
+}
+
+/**
+ * The three, IN THE ORDER THEY HAPPENED — and the order is not a ranking.
+ *
+ * A LEDGER IS KEPT IN ORDER, which is the whole reason `./three-failures-geometry.ts`
+ * draws a dated rail and a spine rather than three cards. Read down, the three are also
+ * an escalation in what was at stake: a quarter of inconsistent output, then three
+ * quarters of work the market shipped anyway, then a whole organisation's ability to
+ * build for itself. Nothing below says that out loud — saying it is §6.4's slide.
+ *
+ * EXACTLY THREE, HELD BY THE TYPE, using the fixed-length tuple idiom already declared
+ * in this file for `gapNoSopContent`'s issued column: a fourth entry's error lands ON the
+ * fourth entry, at the definition site, with no cast anywhere. `./three-failures-geometry.ts`
+ * pins its own count to this tuple's `length`, so a fourth entry fails to compile there
+ * too rather than silently pushing the closer through the NavBar's hover band.
+ */
+const FAILURES: Three<RecordedFailure> = [
+  {
+    id: "tools-before-method",
+    period: "Q1 2025",
+    title: "WE BOUGHT BEFORE WE AGREED",
+    /** HR slide 5: five-plus tools explored with no standard between them. The sentence
+     *  puts the ORDER of the two acts in the keyword, because the tools were not the
+     *  mistake — buying them before agreeing how to use them was. */
+    did: "We put five tools in front of the team before we had agreed on one method for using any of them.",
+    didKw: ["before we had agreed on one method"],
+    /** HR slide 5's second half: inconsistent, non-scalable output, and knowledge trapped
+     *  with the individuals who found it. The keyword is the durable half — a result
+     *  nobody else can reuse is a result the organisation did not get. */
+    cost: "Every result looked different, none of it was reusable, and whatever worked stayed inside whoever found it.",
+    costKw: ["stayed inside whoever found it"],
+  },
+  {
+    id: "built-what-existed",
+    period: "Q2–Q4 2025",
+    title: "WE BUILT WHAT ALREADY EXISTED",
+    /** HR slide 6: a custom knowledge base and an internal document crawler, built over
+     *  three quarters while the external ecosystem shipped both. "three quarters" is the
+     *  cost of the decision stated as time, which is the only currency this slide spends. */
+    did: "We spent three quarters building our own knowledge base and our own document crawler, while the market shipped both.",
+    didKw: ["while the market shipped both"],
+    /** HR slide 6's scrapped-against-survived column, verbatim in its arithmetic: six of
+     *  ten connectors scrapped or displaced, four company-specific ones retained. The
+     *  keyword is the finding rather than the loss — what survived is exactly what nobody
+     *  outside could have written, and that is the reusable half of this entry. */
+    cost: "Six of our ten connectors were scrapped or overtaken. The four that survived were the four nobody else could have written for us.",
+    costKw: ["nobody else could have written for us"],
+  },
+  {
+    id: "owned-their-work",
+    period: "2025–2026",
+    title: "WE OWNED WHAT THEY SHOULD HAVE",
+    /** HR slide 7: the committee ran pilots for Operations, Data, Product and Legal, and
+     *  showcased the wins. THE PRIDE IS IN THE SENTENCE ON PURPOSE — the failure is not
+     *  that the work was bad, it is that the work was ours, and an admission that leaves
+     *  out why it felt right at the time is an admission nobody learns anything from. */
+    did: "We built the solution for every department that asked, and we were proud of how fast we delivered.",
+    didKw: ["proud of how fast we delivered"],
+    /** HR slide 7's core message: departments became consumers rather than owners, and the
+     *  central team became the delivery bottleneck. "the queue" and NOT "the bottleneck" —
+     *  `leader-mandate/content.ts` renders "Naming the bottleneck is the part only you can
+     *  do" in K.1, and a word this deck has already given to another slide's closer is a
+     *  word this one does not get to spend. */
+    cost: "They became consumers of what we made, and we became the queue that every change had to pass through.",
+    costKw: ["the queue that every change had to pass through"],
+  },
+];
+
+export const gapThreeFailuresContent = {
+  /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from the
+   *  composed deck (§3.5) and are authored nowhere. */
+  figLabel: "THREE THINGS WE GOT WRONG",
+
+  /**
+   * §6.3's confession as one sentence. PROSE.
+   *
+   * "We got here" IS THE FIRST HALF AND IT IS LOAD-BEARING. Without it the line is an
+   * apology; with it, the three failures below are the route to whatever this deck is
+   * about to recommend, which is the only honest reason to put them on a stage in front
+   * of people being asked for money. The keyword sits on the failing rather than on the
+   * arriving, because the room already believes the arriving.
+   */
+  headline: "We got here by failing three times first.",
+  headlineKw: ["failing three times"],
+
+  /**
+   * Band 1's one heading. Mono LABEL, keyword-free.
+   *
+   * "IN ORDER" IS THE INSTRUCTION FOR READING THE FIGURE — the stage is a dated rail with
+   * a spine down it, and the eyebrow is what says the sequence is chronological rather
+   * than a ranking of how bad each one was. It says RECORD and not "lessons": a lesson is
+   * a thing extracted from a failure, and extracting them is §6.4's slide.
+   */
+  ledgerEyebrow: "THE RECORD, IN ORDER",
+
+  failures: FAILURES,
+
+  /**
+   * The closer, and the slide's last arrival. PROSE, and the one line in first person
+   * SINGULAR.
+   *
+   * TWO SENTENCES, AND THE SECOND IS THE SLIDE. "None of this is borrowed" refuses the
+   * reading a room reaches for by default — that these are case studies, or somebody
+   * else's cautionary tales — and the second sentence puts a name behind them. It is the
+   * reason `../gap-three-failures.tsx` exports it as the canonical pose: three admissions
+   * with no line owning them is a page that travels badly.
+   *
+   * IT DOES NOT TURN TO THE ROOM. No "so you can skip them", no "learn from us" — that
+   * turn belongs to D.3's fourth beat and to M.1/M.2 (see the header), and made here it
+   * would convert the confession into the favour it is trying not to be.
+   */
+  closer: "None of this is borrowed. Every one of these calls was mine.",
+  closerKw: ["Every one of these calls was mine"],
+} as const;
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THE PATTERN — §6.4, the FOURTH slide of this section's run.
+// ═════════════════════════════════════════════════════════════════════════════
+//
+// §6.4 IS ONE LINE — "The pattern across the three failures" — AND THAT IS NOT AN
+// OVERSIGHT IN THE SPEC. B.4 HAS NO CONTENT OF ITS OWN: it is the SHAPE of B.3, which is
+// why the two ship on one ticket and why this block sits directly under
+// `gapThreeFailuresContent` above. B.3 lays down three first-person Nanovest failures;
+// this block says what all three were the same. Every string below is derivable from the
+// three entries above it, and nothing below introduces a fourth fact.
+//
+// WHAT THE GENERALISATION IS FOR. It hands the argument to §6.5's Capability Ladder by
+// proving §6.1's claim on the presenter's own record: B.1 asserts that the hardest part
+// is not the tools — about the world, on somebody else's statistic — and B.4 says the
+// same thing about three failures the presenter owns, then names what was missing as a
+// CAPABILITY. Without that last move B.4 is a second telling of B.3 with a lesson
+// attached, and the ladder behind it arrives as the next thing the deck has rather than
+// as the next thing the room wants.
+//
+// ═══ PROVENANCE, AND WHERE THIS DECK DEPARTS FROM IT.
+//
+//   · THE HR ORIGINAL DREW THIS PATTERN ITSELF.
+//     `docs/researches/2026-07-31-hr-group-agentic-org-analysis.md` slide 8 ("The Pattern
+//     Emerges") reduces the same three failures to three lessons — methodology over
+//     tools · research over building · champions over labour — and to three shifts: code
+//     → knowledge, implementors → enablers, build it → enable it.
+//     `docs/researches/internal-hr-group.md` §1.4 records the same slide as "the core
+//     teaching moment", and §3.3 keeps its one-line root cause: "Tools Without Direction +
+//     Tools Without Strategy + Tools Without Empowerment = Noise" — i.e. the original had
+//     already noticed that three failures were one.
+//   · §6.4's REFRAME IS THE DECK'S OWN, AND IT IS THE WHOLE VALUE THIS BLOCK ADDS. HR's
+//     pattern points at ENABLEMENT; this one points at CAPABILITY. Enablement describes
+//     what the team changed about itself, and it is a true description — but it is a story
+//     about a team, and the next slide is a ladder an ORGANISATION is placed on. Capability
+//     is a property the organisation either has or does not, which is the only one of the
+//     two a ladder can measure. So the three reductions below name what each failure was
+//     MISSING rather than what the team learned, and the verdict says "a capability the
+//     organisation did not have yet".
+//   · NONE OF THE HR VOCABULARY SURVIVES THE REFRAME, and that is deliberate rather than
+//     incidental: no `methodology`, no `empowerment`, no `enable`/`enabler`/`enablement`,
+//     no `mindset`. Two of those are already RENDERED elsewhere in this deck — L.3's
+//     portfolio panel (`reveal-and-closing/content.ts`) prints "three honest failures —
+//     methodology, strategy, empowerment" and "mindset flip — 'how to build?' → 'how to
+//     enable?'" — so a leader deck running both would say the same thing twice, forty
+//     slides apart, in two different voices. `tests/unit/gap-the-pattern.test.tsx` holds
+//     that against L.3's real strings.
+//
+// ═══ THE DELIBERATE ECHO OF B.1, RECORDED SO A REVIEWER SEES IT WAS CHOSEN.
+//
+// `gapHardestPartContent` headlines "The hardest part is not the tools." and labels its
+// own band "THE GAP · ACCESS AGAINST CAPABILITY". {@link gapThePatternContent.capabilityLine}
+// closes that loop ON PURPOSE — it is the section's thesis stated once as an assertion
+// about the world and once as a finding about ourselves, which is the pair §6.1 and §6.4
+// exist to make. This is the same kind of note `gapHardestPartContent` keeps about its own
+// "earned" rhyme with the ladder: an echo is a second slide reaching the same conclusion
+// by its own route, and a re-spend is the first slide's sentence arriving late.
+//
+// SO NONE OF B.1'S ACTUAL VOCABULARY IS RE-SPENT: not `procured`, `instantly`, `invoice`,
+// `tool access`, `70%`, `30%`, `70/30`, `people & process`, `earned` — and not
+// `technology`, which is the other half of B.1's quoted split. The closer below says
+// "buying" rather than "procured" for exactly that reason, and it is the better word here
+// anyway: B.1 is about what a signature BUYS, and this slide is about what no signature
+// could have bought.
+//
+// ═══ WHAT THIS SLIDE MAY NOT SAY.
+//
+//   · L1–L5, `rung`, `ladder`, `level`, `decision contract` → §6.5, at the top of this
+//     file. This slide HANDS OFF to that one, and the point of a handoff is that the
+//     receiving slide gets to introduce its own vocabulary. Checked against the shipped
+//     `gapLadderContent` rather than against §6.5's text.
+//   · SHADOW AI, in any of its three passes → §6.2 (`condition`, above in this file) and
+//     §6.7 (D.3 `rational behaviour`, D.4 beat 2 `exposure`). Nothing below is about tools
+//     anybody reached for unasked; all three reductions are about tools the organisation
+//     chose deliberately and got wrong.
+//   · THE HR p16–18 OUTCOMES §6.3 CUTS — the performance multiple, the chatbot's name and
+//     its conversation and deflection figures, the four benchmarked apps, "same codebase",
+//     "one large prompt". Outcomes brag and failures transfer; a slide that GENERALISES the
+//     failures is exactly where a win would come back in through the back door, so nothing
+//     below carries a number at all.
+//   · A SUCCESSOR, OR A COUNT OF ITS SUCCESSORS. No "the next slide", no "the next four",
+//     no letter. `gapHardestPartContent.closer` and `gapNoSopContent.closer` both record
+//     this rule: the run is composed per deck set (§3.4) and a sentence that pointed at its
+//     own successors goes stale the first time one is inserted or cut.
+//
+// ═══ THE VOICE, WHICH IS THE PROPERTY THIS PAIR OF SLIDES LIVES OR DIES ON.
+//
+// B.3 is first person — `we`, then `I`. B.4 STAYS first person plural for the pattern
+// (`we added`, `without us`) and turns IMPERSONAL for the verdict (`the organisation`).
+// The switch is the structure: the record is ours, the claim it licenses is general.
+// THERE IS NO SECOND PERSON ANYWHERE ON THIS SLIDE — the same hard property B.3 keeps, and
+// it is what holds the pair as a confession rather than a lecture. One `you` turns three
+// admitted failures into an accusation aimed at the room, and a room that has been accused
+// stops hearing the pattern. There is no first person SINGULAR either: B.3 ends on "Every
+// one of these calls was mine", and repeating that move here would make the generalisation
+// a second confession instead of a claim.
+//
+// ═══ NO NUMBER, ANYWHERE. Not one numeral in any string below. B.2 above holds the same
+// absence for §6.2's no-shared-statistic rule; here it is doing a different job. A pattern
+// stated with a figure in it invites the room to check the figure instead of the pattern,
+// and B.3 next door already spends every quantity this history has (five tools, three
+// quarters, six of ten connectors). The one thing B.4 adds is the shape, and a shape has
+// no magnitude.
+//
+// ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER — the third such call in
+// this file. §4.4's seven brand × deckSet slots do not list this slide, and the failures it
+// generalises are the PRESENTER'S: neither leader room owns this record and neither is
+// being shown its own evidence, so there is nothing for a brand to vary. The slide file
+// imports no `VARIANT` at all, which is what lets a test mount it under both leader brands
+// and compare byte for byte.
+//
+// THE KEYWORD RULE, applied without an exception: `kw` on PROSE ONLY.
+//
+//   · PROSE, each with a `*Kw` sibling — FOUR strings: `headline`, `pattern`,
+//     `capabilityLine`, `closer`.
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — SIX strings: `figLabel`,
+//     `reductionEyebrow`, `sameEyebrow` and the three `reductions` labels.
+//     THE THREE REDUCTIONS ARE THE SHARPEST CASE. They are the most quotable copy on the
+//     stage and they would take emphasis happily — but three copper italics down one
+//     column would RANK three things this slide exists to say are the same, which is the
+//     one claim the figure must not make. `gapNoSopContent`'s four questions are the
+//     shipped precedent for sentence-shaped copy held in the label register.
+//
+// NO LETTER AND NO NUMBER IN ANY RENDERED STRING (§3.4 R2 / §3.5). This slide composes as
+// the FOURTH of the `gap` run, which is B.4 in today's leader decks and is derived per deck
+// by the composer; `FigLabel` takes a LABEL only. Do not write either down.
+
+/**
+ * One failure, reduced to the half that was missing. A LABEL, keyword-free by the rule
+ * above.
+ *
+ * Cut for ONE line: 480px of 15px sans, which is ≈64 characters. The longest below is 42.
+ * A reword past the measure wraps into the air under it and the brace beside the column
+ * stops bracketing three rows — see `./the-pattern-geometry.ts`, which derives the
+ * hairline's span from the row placement function for exactly that reason.
+ */
+export interface PatternReduction {
+  id: string;
+  label: string;
+}
+
+/**
+ * THE THREE, IN B.3's ORDER, EACH REDUCED TO WHAT IT WAS MISSING.
+ *
+ * THE PARALLEL CONSTRUCTION IS THE IMAGE'S ARGUMENT, and it is the reason these are not
+ * restatements of `FAILURES`' sentences above. Every one is an `X, with no Y` noun phrase:
+ * what we added, then the half that was absent. Read down the column, the three RHYME —
+ * and the room sees them rhyme before the slide says so, which is what makes the brace
+ * beside them a description rather than an assertion. A row rewritten as a sentence, or
+ * one of the three given a different shape, silently deletes that.
+ *
+ * WHAT EACH ONE REDUCES, entry by entry, so the mapping back to B.3 is checkable:
+ *   · `no-method`   ← "WE BOUGHT BEFORE WE AGREED". Five tools, no agreed method — and the
+ *                     missing half is not the agreement, it is that nothing was REPEATABLE
+ *                     by anybody who was not in the room.
+ *   · `no-research` ← "WE BUILT WHAT ALREADY EXISTED". Three quarters of building, and the
+ *                     missing half is the looking that would have come first.
+ *   · `no-owner`    ← "WE OWNED WHAT THEY SHOULD HAVE". Solutions delivered fast, and the
+ *                     missing half is anybody on the other side who owned what arrived.
+ *
+ * NO ROW NAMES A LESSON. "Research first" and "build with people, not for them" are the HR
+ * original's phrasings (§3.2, §3.3 of `docs/researches/internal-hr-group.md`) and they are
+ * INSTRUCTIONS — a slide of instructions is a slide the room can agree with and forget.
+ * These are diagnoses, and a diagnosis is what a capability claim can be built on.
+ *
+ * ORDER IS B.3's, NEVER RE-SORTED. The room has just read the three in that sequence; a
+ * reordering here would cost the reader a lookup on the one slide whose whole job is to be
+ * instantaneous.
+ *
+ * EXACTLY THREE, HELD BY THE TYPE, using the fixed-length tuple idiom already declared in
+ * this file. `./the-pattern-geometry.ts` pins its own count to this tuple's `length`, so a
+ * fourth entry fails to compile there too — and a fourth would do more than deepen a
+ * column: the brace re-centres on the taller span, so the stub and the whole statement
+ * block move with it.
+ */
+const REDUCTIONS: Three<PatternReduction> = [
+  { id: "no-method", label: "Tools, with no method anyone could repeat." },
+  { id: "no-research", label: "Builds, with no research in front of them." },
+  { id: "no-owner", label: "Delivery, with no owner behind it." },
+];
+
+export const gapThePatternContent = {
+  /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from the
+   *  composed deck (§3.5) and are authored nowhere. */
+  figLabel: "THE PATTERN",
+
+  /**
+   * §6.4 in one sentence, and the second half is the only new thing on the stage. PROSE.
+   *
+   * "Three failures" is a count the room has just watched being laid down, so it carries
+   * no keyword — it is the given. "The same shape every time" is the claim, and SHAPE is
+   * the deliberate word: not "the same mistake" (which would be an apology for one error
+   * repeated), not "the same lesson" (which would be the HR original's frame), but the
+   * form the three share. The stage draws that form as a brace, so the headline and the
+   * figure are saying one thing in two media.
+   */
+  headline: "Three failures. The same shape every time.",
+  headlineKw: ["The same shape every time"],
+
+  /** The left column's heading. Mono, keyword-free. It says what the column IS — three
+   *  things already told, compressed — so nobody reads three short phrases as three new
+   *  claims arriving without evidence. */
+  reductionEyebrow: "THE THREE, IN ONE LINE EACH",
+
+  reductions: REDUCTIONS,
+
+  /** The right block's heading. Mono, keyword-free, and PAST TENSE: the pattern is a
+   *  finding about a record that is closed, not a diagnosis of how things stand today.
+   *  The present tense would make it a claim about the organisation now, which is the
+   *  verdict's job one band lower and not this block's. */
+  sameEyebrow: "WHAT WAS THE SAME",
+
+  /**
+   * THE PATTERN ITSELF — the one statement the three reductions instantiate. PROSE, and
+   * the brightest thing in its band.
+   *
+   * TWO SENTENCES, AND THE SECOND IS THE SLIDE. "Each time we added something" is the half
+   * the room already believes and the half that sounds like competence — tools, builds,
+   * delivery, all of it real work. "Not once did we add the ability to run it without us"
+   * is what all three were missing, and the keyword sits there for that reason.
+   *
+   * "without us" IS THE HINGE AND IT IS FIRST PERSON ON PURPOSE. The absence is not that a
+   * capability was missing in the abstract; it is that everything built kept needing the
+   * people who built it. That is what makes the verdict below a claim about the
+   * ORGANISATION rather than a complaint about resourcing — and it is the sentence the
+   * Capability Ladder is a ladder FOR.
+   *
+   * "the ability to run it" AND NOT "ownership", "adoption" or "enablement": the first is
+   * K.1's word, the second is the deck's most over-used noun, and the third is the HR
+   * original's frame this block deliberately leaves behind (see the header).
+   */
+  pattern:
+    "Each time we added something. Not once did we add the ability to run it without us.",
+  patternKw: ["the ability to run it without us"],
+
+  /**
+   * THE VERDICT — band 2, full width, alone. PROSE.
+   *
+   * IT REFUSES BEFORE IT NAMES, and the order is the argument. After three entries about
+   * tools, builds and delivery, the conclusion a leader arrives at unaided is that this was
+   * a tooling problem — the wrong tools, or too many, or the wrong sequence of buying them.
+   * That reading is available, it is wrong, and it is fatal to everything behind this
+   * slide, so the first sentence spends itself refusing it and the second says what was
+   * actually missing.
+   *
+   * THIS IS THE ECHO OF B.1, AND IT IS CHOSEN — see the header. B.1 asserts the same thing
+   * about the world with a third party's statistic; this line proves it on the presenter's
+   * own record, which is the only form of the claim a room can check. None of B.1's
+   * vocabulary is re-spent: "a tooling problem" and not "tool access", "not one of the
+   * three" and not a percentage.
+   *
+   * "did not have YET" is the last word and it is load-bearing. Without it the sentence is
+   * a verdict on an organisation; with it, it is a description of a position — which is
+   * what makes the next slide's staircase the obvious thing to want.
+   *
+   * IMPERSONAL, DELIBERATELY. The pattern above it is `we`; this is `the organisation`,
+   * because a capability is a property of an org and not of the people who admitted the
+   * failures. Cut for ONE line: 104 characters, ≈881px in a 1184px box.
+   */
+  capabilityLine:
+    "Not one of the three was a tooling problem. Each one was a capability the " +
+    "organisation did not have yet.",
+  capabilityLineKw: ["a capability the organisation did not have yet"],
+
+  /**
+   * The closer, and the slide's last arrival. PROSE.
+   *
+   * THE WHOLE SECTION'S ARGUMENT IN ONE LINE, which is what earns it its own band. "Three
+   * failures, one absence" is the reduction the stage has just drawn, restated as
+   * arithmetic; "no amount of buying would have closed it" is what that arithmetic means
+   * for the person in the room who controls a budget — and it is the sentence that makes
+   * the Capability Ladder a request for something other than money.
+   *
+   * "buying" AND NOT "procurement" OR "procured": B.1 owns that verb (see the header), and
+   * the plain word is the better one here anyway — B.1 is about what a signature BUYS, and
+   * this is about what no signature could have bought.
+   *
+   * IT NAMES NO SUCCESSOR AND COUNTS NOTHING. "no amount of buying" and never "the next
+   * slide" — the run is composed per deck set (§3.4) and a sentence that pointed at its own
+   * successors would go stale the first time one was inserted or cut.
+   */
+  closer: "Three failures, one absence — and no amount of buying would have closed it.",
+  closerKw: ["no amount of buying would have closed it"],
+} as const;

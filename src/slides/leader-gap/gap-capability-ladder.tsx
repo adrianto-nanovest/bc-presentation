@@ -30,15 +30,17 @@
 // closer nobody outside the room ever reads.
 //
 // THE LETTER IS NOT AUTHORED HERE, and this slide is the reason that rule earns
-// its keep — it has now printed two different numbers without this file being opened
-// for either. It is the LAST slide of the `gap` run (§4.3, §6.5), and it was that run's
-// only slide until gh#65 put `gap-hardest-part` (§6.1) in front of it: it printed B.1
-// then and prints B.2 now, and it will print B.5 once §11's Phase 7 lands the three
-// remaining `gap` slides — `gap-no-sop` (§6.2), `gap-three-failures` (§6.3) and
-// `gap-the-pattern` (§6.4) — between the two. (An earlier revision of this comment
-// credited "#55–#58" with those four inserts. Those issue numbers were never right:
-// #55 is C.1's focus walk and #56–#58 are D.2–D.4, and the four second-tier `gap`
-// slides hold no ticket beyond gh#65's.) Its own arrival pushed the loop slide from
+// its keep — it has now printed FOUR different numbers without this file being opened
+// for any of them. It is the LAST slide of the `gap` run (§4.3, §6.5), and it was that
+// run's only slide until gh#65 put `gap-hardest-part` (§6.1) in front of it: it printed
+// B.1 then, B.2 after gh#65, B.3 after gh#66's `gap-no-sop` (§6.2), and B.5 now that
+// gh#67 has landed `gap-three-failures` (§6.3) and `gap-the-pattern` (§6.4) between
+// gh#66's row and this one. B.5 is §6.5's own number and the LAST this slide will hold:
+// the `gap` run is COMPLETE at §4.3's five, so nothing more inserts in front of it.
+// (An earlier revision of this comment
+// credited "#55–#58" with those inserts. Those issue numbers were never right:
+// #55 is C.1's focus walk and #56–#58 are D.2–D.4; the four second-tier `gap`
+// slides landed as gh#65, gh#66 and gh#67.) Its own arrival pushed the loop slide from
 // E.12 to F.12 in both leader decks, and gh#54's `shape` run has since pushed it to
 // G.12 — one insert each, both in front of the curriculum, both costing no edit to any
 // slide behind them (§3.4 R2). gh#65 pushed no letter at all and renumbered only

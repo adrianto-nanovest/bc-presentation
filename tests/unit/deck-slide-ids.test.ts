@@ -23,19 +23,22 @@ import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { findSlideDefs } from "../harvest/slide-defs";
 
-/** 78 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
+/** 80 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
  *  count of 67 files, `e12-loop-engineering` (gh#48), `gap-capability-ladder`
  *  (gh#53, the first leader-only file), `shape-agentic-org` (gh#54, the second),
  *  `invest-own-proof` (gh#56, the third), `invest-chicken-egg` (gh#57, the fourth),
  *  `mandate-enablement` (gh#60, the fifth), `mandate-phases-gates` (gh#61, the
  *  sixth), `invest-security` (gh#58, the seventh), `invest-subscription` (gh#59,
  *  the eighth), `gap-hardest-part` (gh#65, the ninth — and the first of them to
- *  land at the HEAD of a run that already existed) and `gap-no-sop` (gh#66, the
- *  tenth, and the first to land in the MIDDLE of one). A migration sentinel, not the
+ *  land at the HEAD of a run that already existed), `gap-no-sop` (gh#66, the
+ *  tenth, and the first to land in the MIDDLE of one), and `gap-three-failures` and
+ *  `gap-the-pattern` (gh#67, the eleventh and twelfth — the first ticket to add TWO
+ *  files at once, and the one that closes the `gap` run at §4.3's five). A migration
+ *  sentinel, not the
  *  completeness proof — see the note on
  *  `findSlideDefs`; the scan is proven complete against the live decks in
  *  `deck-composed-numbering.test.ts`. */
-const EXPECTED_DEFS = 79;
+const EXPECTED_DEFS = 81;
 
 /** `hexLadderDevSlide` is declared in `registry.tsx` beside `deckSlides`, so it
  *  has no file of its own to be named after. It is the ONLY def whose id is not

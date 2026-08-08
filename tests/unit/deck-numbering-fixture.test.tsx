@@ -373,8 +373,52 @@ interface ObservedDeck {
  *     on a pre-existing label (`THE CAPABILITY LADDER`), no label dropped, no letter
  *     touched. Read the diff, every time.
  *
+ * ON gh#67 ONE FIGURE MOVED AGAIN, the third ticket in this list of which that is true
+ * and the FIRST to add TWO rows at once. `gap-three-failures` and `gap-the-pattern`
+ * reached the leader lists together — the eleventh and twelfth slides ever to reach
+ * them alone — taking both decks to **69** rows and CLOSING the `gap` run at §4.3's
+ * five. Still FOURTEEN sections, still closing on **N.3**. It is gh#66's shape at two
+ * rows rather than one: both land BETWEEN `gap-no-sop` and the ladder, so `gap` kept
+ * **B** and R3 renumbered only behind them, inside that run:
+ *
+ *   · TWO rows were added per leader deck, at indices 4 and 5, between
+ *     `B.2 · THE RULE NOBODY WROTE` and the ladder: `B.3 · THREE THINGS WE GOT WRONG`
+ *     and `B.4 · THE PATTERN`. §4.3/§6.3 number the first B.3 and §4.3/§6.4 number the
+ *     second B.4, and they compose as B.3 and B.4 — the `gap` run is now filled
+ *     front-to-back with no hole, so every spec number in it agrees with its composed
+ *     number for the first time. Derived all the same (§3.5); the agreement is what a
+ *     COMPLETE run looks like, not a licence to pin one.
+ *   · ONE existing row changed, and it is the ONLY changed figure in the file:
+ *     `THE CAPABILITY LADDER` went **B.3 → B.5**. It held B.1 until gh#65, B.2 until
+ *     gh#66 and B.3 until this ticket, and B.5 is §6.5's own number — the LAST it will
+ *     ever hold, because §4.3 asks for no sixth `gap` slide. TWO rows added and ONE
+ *     figure changed is not a coincidence: the ladder is the only row behind the
+ *     insert inside that run, so the row count of a mid-run insert and the count of
+ *     figures it moves are independent.
+ *   · NO LETTER MOVED ANYWHERE, in any of the five decks, and no row was removed. The
+ *     loop slide is still H.12 — eleven tickets into a life in which its file has
+ *     never been opened — f8 is still C.2, the four `invest` rows are still D.1–D.4,
+ *     and `berau`, `gems` and `general` are byte-identical per key.
+ *   · The re-record still needed `ALLOW_MOVED_FIGURES=1`, and the report is the same
+ *     size as gh#65's and gh#66's — **126 lines**, which is the point worth taking
+ *     from it: two row-count lines (`67 slides recorded, 69 rendered`) and 62 per
+ *     leader deck, running `slide 5: recorded C.1, renders B.4` down to `slide 66:
+ *     recorded N.3, renders N.1`. A TWO-row insert produced no more lines than a
+ *     one-row insert did, because the report is index-keyed and saturates: every row
+ *     behind the insert is listed once whatever the offset. Read as pairs it is one
+ *     statement, gh#57's, with the offset now TWO: what index *i* recorded is at
+ *     index *i*+2. Indices 2, 3 and 4 are absent from it — 2 and 3 recorded B.1/B.2
+ *     and render B.1/B.2, and 4 recorded the ladder's B.3 and renders THREE THINGS WE
+ *     GOT WRONG's B.3, the same FIGURE on a different SLIDE, which an index-keyed
+ *     detector cannot see. The ladder's real B.3 → B.5 never appears in the report at
+ *     all. So ONLY the diff matched BY LABEL says what moved: two labels added
+ *     (`THREE THINGS WE GOT WRONG`, `THE PATTERN`), one figure changed on a
+ *     pre-existing label (`THE CAPABILITY LADDER`), no label dropped, no letter
+ *     touched. Read the diff, every time.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all ten tickets. That is the assertion worth reading twice: a leader-only
+ * all eleven tickets — twelve leader-only slides now, since gh#67 brought two. That
+ * is the assertion worth reading twice: a leader-only
  * insert must not be able to touch a standard deck, and gh#54's relocation could
  * not either — f8 moved because a LEADER LIST moved it, and the standard list was
  * not edited. The fixture is where either failure would show.
@@ -389,8 +433,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 67, closer: "N.3" },
-  "gems-leader": { slides: 67, closer: "N.3" },
+  "berau-leader": { slides: 69, closer: "N.3" },
+  "gems-leader": { slides: 69, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

@@ -261,23 +261,25 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 67 slots — the F cut, F.8 kept, plus its own", () => {
+  test("gives the leader deck its own 69 slots — the F cut, F.8 kept, plus its own", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(67);
+    expect(leader.slides).toHaveLength(69);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
-    // leader deck now holds slides no standard deck does — TEN of them as of
-    // gh#66, in FOUR runs, because gh#57, gh#61, gh#58 and gh#59 each lengthened a
-    // run at its end, gh#65 lengthened one at its head and gh#66 lengthened one in
-    // its middle. Asserted as the two
+    // leader deck now holds slides no standard deck does — TWELVE of them as of
+    // gh#67, in FOUR runs, because gh#57, gh#61, gh#58 and gh#59 each lengthened a
+    // run at its end, gh#65 lengthened one at its head, and gh#66 and gh#67 lengthened
+    // one in its middle — gh#67 by TWO rows, the only ticket so far to add more than
+    // one. Asserted as the two
     // directions SEPARATELY rather
     // than as one net number, so the next leader-only slide cannot mask a cut F
     // slide creeping back in. The net has been eight, seven, six, five, four,
-    // three, two, one, zero, minus one and now MINUS TWO — gh#59 made the two decks
+    // three, two, one, zero, minus one, minus two and now MINUS FOUR — gh#59 made the
+    // two decks
     // the same
     // length for the first time and gh#65 made the leader deck the LONGER one, so a
     // net read in one direction would now read as a missing slide.
@@ -287,8 +289,8 @@ describe("DECK_SET_COMPOSITION", () => {
     // FIRST: they are the only leader-only
     // slides that sit BEHIND the curriculum rather than in front of it, and
     // `filter` preserves both facts. A `mandate` row that had drifted up among the
-    // other eight, either pair swapped, the four `invest` rows out of §6.7's
-    // order, or the three `gap` rows out of §6.2's order, would fail here as an
+    // other ten, either pair swapped, the four `invest` rows out of §6.7's
+    // order, or the five `gap` rows out of §4.3's order, would fail here as an
     // ordering mismatch
     // before it ever reached the
     // letter assertions.
@@ -307,6 +309,8 @@ describe("DECK_SET_COMPOSITION", () => {
     expect(leader.slides.filter((id) => !standardIds.has(id))).toEqual([
       "gap-hardest-part",
       "gap-no-sop",
+      "gap-three-failures",
+      "gap-the-pattern",
       "gap-capability-ladder",
       "shape-agentic-org",
       "invest-own-proof",
@@ -332,16 +336,20 @@ describe("DECK_SET_COMPOSITION", () => {
 
   test("runs the gap between the agenda and the shape run, hardest part first", () => {
     // gh#53 opened this run with its LAST slide, gh#65 put its FIRST one in front of
-    // that and gh#66 landed a third BETWEEN them, which is a shape no other run in this
+    // that, gh#66 landed a third BETWEEN them and gh#67 landed the remaining TWO behind
+    // gh#66's, which is a shape no other run in this
     // list has taken: every leader-only
     // ticket before gh#65 either opened a run or appended to the end of one. So the run
     // is
     // asserted AS A WHOLE, in order, exactly as the `invest` and `mandate` cases below
     // are — and here the order is the half that carries the argument. §6.1 opens the
-    // gap between tool access and organizational capability; §6.5 puts a ladder in that
-    // gap. The two reversed compose perfectly well and hand the room a measuring
-    // instrument for a gap it has not been shown yet, and nothing but this line would
-    // notice.
+    // gap between tool access and organizational capability; §6.3 and §6.4 pay the
+    // credibility debt with Nanovest's own failures and the pattern across them; §6.5
+    // puts a ladder in that
+    // gap. Any of them reversed composes perfectly well and argues backwards — a
+    // measuring instrument handed to a room that has not been shown the gap yet, or a
+    // pattern named before the failures it is drawn from — and nothing but this line
+    // would notice.
     //
     // THE TWO JOINS ARE WHAT §4.3 CONSTRAINS: the run follows the agenda — it is the
     // first argument a leader deck makes — and it hands to `shape-agentic-org`. A row
@@ -349,17 +357,19 @@ describe("DECK_SET_COMPOSITION", () => {
     // agenda; one slipped behind the ladder would split the run and throw at module
     // load (R4).
     //
-    // THE LADDER IS STILL LAST, and that is not implied by the slice: §11's Phase 7
-    // inserts two more `gap` slides BETWEEN `gap-no-sop` and the ladder, so this run
-    // grows in the
-    // middle — which is exactly what gh#66 did. The `at(-1)` assertion is what keeps
-    // saying "the ladder closes the gap"
-    // through those edits, whatever the length becomes.
+    // THE LADDER IS STILL LAST, and that is not implied by the slice. That sentence
+    // used to end "§11's Phase 7 inserts two more `gap` slides BETWEEN `gap-no-sop`
+    // and the ladder, so this run grows in the middle" — SPENT: gh#67 landed both of
+    // them, and §4.3 asks for no sixth `gap` slide, so THIS RUN IS COMPLETE at five
+    // and stops growing. The `at(-1)` assertion kept saying "the ladder closes the
+    // gap" through gh#65's head insert, gh#66's one-row mid-run insert and gh#67's
+    // two-row one, and it is now a guard against a row being ADDED to a finished run
+    // rather than a hedge against a length nobody knows yet.
     //
     // NO LETTER AND NO NUMBER IS NAMED HERE. `gap` takes the letter its position gives
     // it and the rows inside it are numbered by R3 — gh#65's arrival moved the ladder's
-    // own number and gh#66's moved it again, both derived per deck (§3.5) and recorded
-    // in the numbering fixture, not here.
+    // own number, gh#66's moved it again and gh#67's moved it to its §6.5 B.5, all
+    // derived per deck (§3.5) and recorded in the numbering fixture, not here.
     const { slides } = DECK_SET_COMPOSITION.leader;
     const at = slides.indexOf("gap-hardest-part");
     const handsTo = slides.indexOf("shape-agentic-org");
@@ -371,7 +381,13 @@ describe("DECK_SET_COMPOSITION", () => {
     // outside a fixed-width window.
     expect(slides[at - 1]).toBe("a1-what-youve-seen");
     const run = slides.slice(at, handsTo);
-    expect(run).toEqual(["gap-hardest-part", "gap-no-sop", "gap-capability-ladder"]);
+    expect(run).toEqual([
+      "gap-hardest-part",
+      "gap-no-sop",
+      "gap-three-failures",
+      "gap-the-pattern",
+      "gap-capability-ladder",
+    ]);
     expect(run.at(-1)).toBe("gap-capability-ladder");
 
     // And they reach the leader list ALONE — the half every leader-only ticket has to
@@ -393,9 +409,9 @@ describe("DECK_SET_COMPOSITION", () => {
     expect(c1).toBeGreaterThan(-1);
     expect(slides[c1 + 1]).toBe("f8-your-agentic-os");
     // And it comes straight after the `gap` run — §4.3's C follows B. Still the
-    // LADDER on the other side of that join after gh#65 and gh#66: those tickets
+    // LADDER on the other side of that join after gh#65, gh#66 and gh#67: those tickets
     // lengthened `gap` at its HEAD and in its MIDDLE, so the run's last row is the one
-    // it always was.
+    // it always was — and, `gap` being complete, the one it stays.
     expect(slides[c1 - 1]).toBe("gap-capability-ladder");
   });
 

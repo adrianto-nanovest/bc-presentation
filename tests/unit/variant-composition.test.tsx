@@ -268,7 +268,8 @@ describe("leader deck sets", () => {
       // with the deck instead of being dropped: which pair surrounds f8 is the
       // only thing that says the relocation still holds.
       //
-      // NONE OF gh#57, gh#58, gh#59, gh#65 OR gh#66 MOVED F8 AGAIN. `invest-chicken-egg`
+      // NONE OF gh#57, gh#58, gh#59, gh#65, gh#66 OR gh#67 MOVED F8 AGAIN.
+      // `invest-chicken-egg`
       // joined
       // the END of that `invest` run, `invest-security` joined behind it and
       // `invest-subscription` behind that, so f8's own neighbours are unchanged
@@ -282,7 +283,8 @@ describe("leader deck sets", () => {
       // and not one assertion below did: every offset is taken from `at`, which is
       // looked up. A test that had written the indices out would have failed here on a
       // ticket that changed nothing it is about. gh#66 proved it a second time, with
-      // `gap-no-sop` in the MIDDLE of that same run.
+      // `gap-no-sop` in the MIDDLE of that same run, and gh#67 a third — TWO rows in
+      // the middle of it, pushing f8 two further along for no edit here at all.
       const at = ids.indexOf("f8-your-agentic-os");
       expect(ids[at - 1], id).toBe("shape-agentic-org");
       expect(ids[at + 1], id).toBe("invest-own-proof");
@@ -375,20 +377,22 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // TEN ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
-      // into a deck that has no leader in the room. Eight of them would do it in
+      // TWELVE ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
+      // into a deck that has no leader in the room. Ten of them would do it in
       // FRONT of the curriculum and renumber all 65 slides behind them; the two
       // `mandate` rows would do it between `pitfalls` and `meta` and renumber only
       // the last eleven — quieter, and therefore the ones most likely to reach a
       // projector.
       //
-      // TEN IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
-      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65 and gh#66 inherit it whole:
+      // TWELVE IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
+      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65, gh#66 and gh#67 inherit it
+      // whole:
       // `invest-chicken-egg`, `mandate-phases-gates`, `invest-security` and
       // `invest-subscription` each append to the END of a run that ALREADY EXISTS in
-      // the leader list, `gap-hardest-part` went in at the HEAD of one and `gap-no-sop`
+      // the leader list, `gap-hardest-part` went in at the HEAD of one, and
+      // `gap-no-sop`, `gap-three-failures` and `gap-the-pattern`
       // into the MIDDLE of one — a third and a fourth
-      // category, and the leak is identical for all four. The standard list holds no
+      // category, and the leak is identical for all of them. The standard list holds no
       // `gap` row, no `invest` row and no `mandate`
       // row at all — so on a standard deck any one of them would arrive alone and
       // claim a letter exactly as the four run-openers would.
@@ -404,6 +408,8 @@ describe("leader deck sets", () => {
         [
           "gap-hardest-part",
           "gap-no-sop",
+          "gap-three-failures",
+          "gap-the-pattern",
           "gap-capability-ladder",
           "shape-agentic-org",
           "invest-own-proof",
@@ -420,7 +426,8 @@ describe("leader deck sets", () => {
 
   // NOT ASSERTED HERE: how long a leader deck is against a standard one. It was
   // eight slides shorter at the gh#41 floor, level after gh#59, a slide LONGER
-  // since gh#65 and two longer since gh#66 — which is exactly why the number is not
+  // since gh#65, two longer after gh#66 and FOUR longer since gh#67 — which is exactly
+  // why the number is not
   // restated in this file. That
   // is a
   // count, `deck-registry.test.ts` owns counts, and it already holds both leader

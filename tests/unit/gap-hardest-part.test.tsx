@@ -884,12 +884,24 @@ describe("the composed decks", () => {
       // run's second slide — `gap-no-sop` since gh#66, the ladder before that. A slide
       // that had landed at the run's END would pass a `toContain` check
       // and fail both of these.
+      //
+      // AND THE WHOLE RUN, which is now §4.3's five and FINAL: gh#67 landed
+      // `gap-three-failures` and `gap-the-pattern` between `gap-no-sop` and the ladder,
+      // completing the first of the four leader-only runs. This line grew with the run
+      // through gh#66 and gh#67 and stops growing here — a sixth `gap` id would be a
+      // slide §4.3 does not ask for, and this is where it fails.
       expect(slides[at - 1].sectionKey, brand).not.toBe("gap");
       expect(slides[at + 1].def.id, brand).toBe("gap-no-sop");
       expect(
         slides.filter((s) => s.sectionKey === "gap").map((s) => s.def.id),
         brand,
-      ).toEqual(["gap-hardest-part", "gap-no-sop", "gap-capability-ladder"]);
+      ).toEqual([
+        "gap-hardest-part",
+        "gap-no-sop",
+        "gap-three-failures",
+        "gap-the-pattern",
+        "gap-capability-ladder",
+      ]);
       // R5 — the run's jump target is its first numbered slide, and this slide is
       // numbered, so pressing the `gap` run's letter lands on this stage. The letter is
       // read off the composed row rather than typed.

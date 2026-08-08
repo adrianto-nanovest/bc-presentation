@@ -32,13 +32,15 @@ import { revealAndClosingSlides } from "@/slides/reveal-and-closing";
 export const slideCatalogue: readonly SlideDef[] = [
   ...openingSectionASlides,
   // Leader-only (§4.3). In the POOL like everything else — "which decks run it"
-  // is `./deck-sets.ts`'s answer, and only the two leader lists name it. It holds
-  // THREE of its five slides today: gh#65's `gap-hardest-part` (§6.1, the run's
-  // first), gh#66's `gap-no-sop` (§6.2, its second) and gh#53's
-  // `gap-capability-ladder` (§6.5, the run's last). NOTHING IN THIS FILE CHANGED FOR
-  // gh#65 OR gh#66 — the spread reads the section's own array, exactly as the
-  // `leaderInvestSlides` line below records for gh#57/#58/#59, and that holds whether
-  // the new row joins its section at the end, at the FRONT, or in the MIDDLE.
+  // is `./deck-sets.ts`'s answer, and only the two leader lists name it. It holds ALL
+  // FIVE of its slides as of gh#67 — the first of the four leader-only runs to be
+  // complete: gh#65's `gap-hardest-part` (§6.1, the run's first), gh#66's
+  // `gap-no-sop` (§6.2, its second), gh#67's `gap-three-failures` (§6.3) and
+  // `gap-the-pattern` (§6.4), and gh#53's `gap-capability-ladder` (§6.5, the run's
+  // last). NOTHING IN THIS FILE CHANGED FOR gh#65, gh#66 OR gh#67 — the spread reads
+  // the section's own array, exactly as the `leaderInvestSlides` line below records
+  // for gh#57/#58/#59, and that holds whether the new row joins its section at the
+  // end, at the FRONT, or in the MIDDLE, and whether it arrives alone or in a pair.
   ...leaderGapSlides,
   // Section C's centrepiece, and the reason `f8-your-agentic-os` finally sits at
   // C.2 rather than inside the retained TOOLS run — see `./deck-sets.ts`. The two

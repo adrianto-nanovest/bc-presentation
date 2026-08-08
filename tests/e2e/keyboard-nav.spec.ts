@@ -101,7 +101,9 @@ test("a live section letter jumps to that section's first numbered slide", async
 // `gap-hardest-part` and the ladder, so the `gap` run's FIRST numbered slide is
 // unchanged and no assertion in this file moved. The run is one row longer and every
 // jump below lands exactly where it did — which is the point of asserting on the
-// printed figure and label rather than on an index.
+// printed figure and label rather than on an index. gh#67 did the same thing with TWO
+// rows, `gap-three-failures` and `gap-the-pattern`, closing the run at §4.3's five:
+// still no assertion moved, and `gap` will not grow again.
 test("the leader deck's own letters jump, and a letter it does not claim is a no-op", async ({
   page,
 }) => {
@@ -113,7 +115,9 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
 
   // A STARTING POINT, NOT A CLAIM ABOUT WHICH SLIDE IS THERE. Index 6 held E.1 until
   // gh#57 inserted D.2 in front of it, then D.2 until gh#65 inserted a row at index 2
-  // and pushed it along to D.1, and it holds C.2 since gh#66 pushed it once more —
+  // and pushed it along to D.1, then C.2 once gh#66 pushed it again, and it holds B.5 —
+  // the capability ladder — since gh#67 pushed it twice more. Five slides at one index
+  // in five tickets, and
   // nothing below reads the
   // starting slide, every assertion is about where a letter LANDS, and the index
   // assertion here only says the deck honoured `?slide=`. (The console watch above does
