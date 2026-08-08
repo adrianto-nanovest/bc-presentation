@@ -23,7 +23,7 @@ import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { findSlideDefs } from "../harvest/slide-defs";
 
-/** 83 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
+/** 84 files under `src/slides/` plus `hexLadderDevSlide` in the registry — gh#34's
  *  count of 67 files, `e12-loop-engineering` (gh#48), `gap-capability-ladder`
  *  (gh#53, the first leader-only file), `shape-agentic-org` (gh#54, the second),
  *  `invest-own-proof` (gh#56, the third), `invest-chicken-egg` (gh#57, the fourth),
@@ -36,22 +36,27 @@ import { findSlideDefs } from "../harvest/slide-defs";
  *  files at once, and the one that closes the `gap` run at §4.3's five),
  *  `shape-middle-out` (gh#68, the thirteenth, at the TAIL of the `shape` run),
  *  `mandate-levers` (gh#69, the fourteenth, appended at the END of the `mandate` run
- *  and closing it at §6.8's three), and `invest-base-rates` (gh#70, the FIFTEENTH —
+ *  and closing it at §6.8's three), `invest-base-rates` (gh#70, the fifteenth —
  *  the SECOND to land at the head of an existing run, and the one that closes
- *  `invest` at §6.7's five from its front). A migration
+ *  `invest` at §6.7's five from its front), and `shape-tam-kotter` (gh#71, the
+ *  SIXTEENTH — a MID-RUN insert between `f8-your-agentic-os` and `shape-middle-out`,
+ *  and the one that closes `shape` at §4.3's four and the leader deck itself at 73
+ *  rows). A migration
  *  sentinel, not the
  *  completeness proof — see the note on
  *  `findSlideDefs`; the scan is proven complete against the live decks in
  *  `deck-composed-numbering.test.ts`.
  *
- *  A FILE IS COUNTED HERE AND A FIGURE IS NOT, and the three tickets before this one
+ *  A FILE IS COUNTED HERE AND A FIGURE IS NOT, and the four tickets before this line
  *  make the point from every end available: gh#68 added ONE file and moved NO figure at
  *  all, gh#69 added ONE file and moved NO figure either, gh#70 added ONE file and moved
- *  FOUR composed figures — and this number went up by exactly one on each of the three.
- *  Only the file count reaches it. What the four moved to is derived (§3.5) and
+ *  FOUR composed figures, gh#71 added ONE file and moved exactly ONE — and this number
+ *  went up by exactly one on each of the four.
+ *  Only the file count reaches it. What each of those figures moved to is derived (§3.5)
+ *  and
  *  recorded in `tests/fixtures/deck-numbering.json`, which is the artifact that
- *  distinguishes the three; nothing here does or should. */
-const EXPECTED_DEFS = 84;
+ *  distinguishes the four; nothing here does or should. */
+const EXPECTED_DEFS = 85;
 
 /** `hexLadderDevSlide` is declared in `registry.tsx` beside `deckSlides`, so it
  *  has no file of its own to be named after. It is the ONLY def whose id is not

@@ -966,3 +966,570 @@ export const shapeMiddleOutContent = {
    *  phrase here addressed to the person in the chair. */
   closerKw: ["through you"],
 } as const;
+
+// ═════════════════════════════════════════════════════════════════════════════
+// TAM AND KOTTER — §6.6's adoption/change-management frame, and the only slide in
+// the leader deck that argues from published work rather than from this company.
+// ═════════════════════════════════════════════════════════════════════════════
+//
+// §6.6 gives this slide one line — "Adoption/change-management frame" — and one
+// sentence of context two paragraphs later: HR p15's four principles are NOT
+// authored as a slide, and each backing is delivered natively instead, with
+// "Kotter/TAM in C.3". So this block is one of those four backings, and its job is
+// to hand the room a NAMED, CITABLE frame for the claim the slide behind it makes
+// on its own authority. THE ATTRIBUTIONS ARE THE POINT AND NOT THE FOOTNOTE: every
+// other slide in this run argues from what this group does, and a division head can
+// discount all of it as one consultant's opinion. Two models with an author and a
+// year on them cannot be discounted that way, which is the entire reason the year
+// is on the stage rather than in a comment.
+//
+// WHO IS BEING ARGUED WITH, AND WHAT THE TWO HALVES DO. The leader deck's room is
+// BU and Division Heads. The left frame explains why a PERSON starts — belief in
+// usefulness, belief in ease, and the external conditions a leader actually sets.
+// The right frame explains why an ORGANISATION stops — a sequence, run out of
+// order, stalling. Neither is sufficient alone, and the line under both of them is
+// the whole slide in one sentence.
+//
+// ═══ THE NO-THIRD-LADDER GUARDRAIL, AND THE SIX THINGS THAT HOLD IT. §6.6 refuses
+// a third ordered vocabulary beside `gap-capability-ladder`'s L1–L5 and
+// `mandate-phases-gates`'s P0–P3 in as many words, and the reference this slide was
+// drawn from prints its five change steps as `01`…`05` badges on a rising
+// staircase, which is exactly the object that refusal names. So the sequence ships
+// and the SCALE does not, and each of these is checkable rather than asserted:
+//
+//   1. NO NUMERAL ON ANY LINK, and no ordinal FIELD for one to be printed from.
+//      {@link ChainNode} carries an id, a label and a caption and nothing else;
+//      there is no `step`, `order`, `index` or `badge` anywhere in this block for a
+//      renderer to reach for, and adding one would be visible in a diff of five
+//      lines.
+//   2. NO RANK ACROSS THE FIVE. One colour tier for all five labels and one for all
+//      five captions — `./components/TamKotterFrames.tsx` states that in its tier
+//      table, and it is the same call `mandate-levers` makes about its four levers
+//      for the same reason: a brighter first link, or five links fading out down
+//      the frame, is a ladder drawn without a single digit.
+//   3. NO ASCENT AND NO PROGRESSION IN THE GEOMETRY.
+//      `./tam-kotter-geometry.ts` gives all five links the same height, the same
+//      width and the same left edge, and places them at `i × pitch` — so no ONE
+//      link can be indented, raised or grown relative to its neighbours. The five
+//      are inset from the spine by a single shared constant, which is a property of
+//      the chain and not of any link in it. Equal geometry is the anti-ladder
+//      guarantee, and it lives in a geometry module precisely so a copy edit cannot
+//      undo it.
+//   4. ORDER IS CARRIED BY POSITION AND CONNECTORS ONLY: top-to-bottom placement,
+//      4px rules and arrowheads, on both sides of the stage. The LEFT frame is a
+//      causal chain and carries its own order that way; if that is enough to say
+//      "external factors shape belief", it is enough to say "urgency comes before
+//      coalition". The two halves differ in SHAPE — the left forks and merges, the
+//      right runs one unbroken spine — and that difference is the two models', not
+//      a ranking of the things inside either one.
+//   5. THE VOCABULARY IS REFUSED BY WORD, with ONE stated exception. None of
+//      `level`, `levels`, `maturity`, `rung`, `tier`, `tiers`, `ladder`, `L1`–`L5`,
+//      `P0`–`P3` or `phase` appears in any rendered string below. `step` DOES —
+//      twice, and both are load-bearing: the change model's own title is an
+//      eight-step model, and the closer's claim is that leaders skip steps. Both
+//      sit in the FRAME's chrome and in its verdict; neither is attached to a link,
+//      and no link's label or caption contains the word. That is the difference
+//      between naming somebody else's model and building a new one.
+//   6. THE ORDER CLAIM IS COPY, NOT A SCALE. "The order matters" is a sentence in
+//      {@link KOTTER_CLOSER}, said once, where the room can agree or disagree with
+//      it. A numbered staircase would make the same claim structurally, everywhere,
+//      permanently, and without saying it.
+//
+// ═══ THIS BLOCK PRINTS DIGITS, AND THE BLOCK ABOVE IT FORBIDS THEM. MIDDLE-OUT's
+// guardrail 2 is "NO DIGIT IN ANY RENDERED STRING AT ALL", and this block breaks it
+// three times: `1989`, `1996` and the `8` in the change model's title. The two rules
+// are not in conflict, because they are protecting different things. Middle-out's
+// stage is three stacked bands one careless number away from being a maturity scale,
+// so it bans the character outright — an absence is testable in a way a list of
+// forbidden values is not. This stage's numerals are all inside ATTRIBUTIONS: they
+// are years and a published model's own name, they sit in the frame header where
+// nothing is ordered, and not one of them is attached to a link, a node or a factor.
+// A reader who finds a digit under this directory should check WHICH block it is in
+// before deleting it, and this paragraph is why.
+//
+// ═══ NO BRAND AXIS, AND ISSUE #71 SAYS SO IN AS MANY WORDS: no brand slot,
+// identical copy under both brands, do not invent variance. So this block exports no
+// `…For(brand)` resolver and the slide file imports no `VARIANT` at all — the same
+// call `shapeMiddleOutContent` makes at the top of this file's second block, and the
+// same reasoning taken one step further: §4.4's seven brand × deckSet slots do not
+// list this slide, and a PUBLISHED MODEL is nobody's local evidence at all. Davis
+// (1989) says the same thing in both rooms, and a `Record<Brand, …>` here would be
+// three byte-identical blocks — which is what a deck looks like on the day somebody
+// edits one of them. What that buys is a test that mounts the stage under both
+// leader brands and compares byte for byte.
+//
+// ═══ WHAT THIS SLIDE MAY NOT SAY, checked against RENDERED COPY on every side:
+//
+//   · "You decide …" ×6 AND "Every one of these is a decision on your desk." → THE
+//     AGENTIC ORGANIZATION's, at the top of this same file and two slides ahead in
+//     the same run. Nothing below opens on that stem, and the word `decision`
+//     appears nowhere in this block. The nearest approach is the intention node's
+//     "Decide to use", which is the model's own construct rendered in the model's
+//     own two words, and reads as a label rather than as an ask.
+//   · "Adoption is not top-down. It spreads out from the middle." AND the trio
+//     top-down / bottom-up / middle-out → MIDDLE-OUT's, one slide behind this one.
+//     None of the three words appears below, and the headline here deliberately
+//     does NOT use the noun `adoption` in its claim — the two slides are adjacent,
+//     and two headlines opening on the same noun would read as one slide that
+//     re-rendered. `adoption` appears once, in the change model's attribution,
+//     where it is describing what the model was condensed FOR.
+//   · "The hardest part is not the tools." AND THE 70/30 → `gap-hardest-part`'s. The
+//     word `tools` appears nowhere below and no percentage does either.
+//   · "Nobody wrote the rule. So everybody wrote their own." → `gap-no-sop`'s.
+//     Nothing below borrows it. `Training & support` is the nearest miss and is a
+//     named factor of the acceptance model rather than a claim about this company.
+//   · `mandate-levers`' four acts — Convene · Champion · Unblock access · Sustain
+//     the rhythm — ARE what a leader pulls to move the external factors this slide
+//     names, AND THAT OVERLAP SHIPS RATHER THAN BEING AN OVERSIGHT. It is the point:
+//     §6.6 wants this frame to be the thing K.3's levers are pushing ON. So the
+//     vocabulary is deliberately NOT shared — no `convene`, no `champion`, no
+//     `unblock`, no `rhythm` below — and the connection is made by the room, in the
+//     section behind this one, which is the only place it can be made honestly.
+//
+// ═══ THE KEYWORD RULE, applied with one register added and no exception made: `kw`
+// on PROSE ONLY.
+//
+//   · PROSE, each with a `*Kw` sibling — FOUR strings: `headline`, the two frames'
+//     `closer`s, and `unifier`. Those four are the only sentences on this stage that
+//     make a claim, and each takes one emphasis (the unifier takes two, because its
+//     claim is a conjunction — the same call `shapeMiddleOutContent`'s middle band
+//     records).
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — `figLabel`, the two
+//     `frameLabel`s, and the nine {@link ChainNode} `label`s. Mono uppercase, where a
+//     copper italic reads as a rendering fault.
+//   · CAPTIONS, a THIRD register this block adds and which also carries no `*Kw` —
+//     the nine node `caption`s and the four `factors`. They are 12px sans glosses of
+//     one line, and an italic fragment inside a nine-word gloss emphasises nothing
+//     while making the stage look like it is trying to. They are also the strings a
+//     reader is most likely to mistake for prose, which is why they are named here.
+//
+//   NO `*Kw` ARRAY IN THIS BLOCK MAY NAME A MODEL, AN AUTHOR OR A FIGURE. Not `TAM`,
+//   not `Kotter`, not `Davis`, and no letter or number of any kind: a highlight is an
+//   emphasis inside a sentence the room is reading, and emphasising a proper name
+//   would turn a citation into a slogan. The two attributions carry no `*Kw` at all,
+//   which is how that rule is kept rather than merely stated.
+//
+// NO LETTER AND NO FIGURE NUMBER IN ANY RENDERED STRING (§3.4 R2 / §3.5). As a
+// derived and non-authoritative observation: this slide inserts ahead of MIDDLE-OUT
+// in §4.3's `shape` run and steps that slide one figure along without its file being
+// opened — which is precisely why neither value is written down anywhere, here or in
+// the three modules beside this one. `FigLabel` takes a LABEL only and the composer
+// supplies the rest.
+
+// ───────────────────── the two chains ─────────────────────
+
+/** Exactly four, held by the TYPE — the fixed-length tuple idiom
+ *  `leader-invest/content.ts` argues at length: a fifth entry's error lands ON the
+ *  fifth entry, at the definition site, with no cast anywhere.
+ *  `./tam-kotter-geometry.ts` reads `FACTOR_COUNT` off this length and lays the four
+ *  out as a 2×2 block, so a fifth would have nowhere to go. */
+type Four<T> = readonly [T, T, T, T];
+
+/** Exactly five — the change model, condensed. The tuple is also the other end of
+ *  `KOTTER_LINK_COUNT` in `./tam-kotter-geometry.ts`, which divides the frame's
+ *  height by it: a sixth link would push both chains through the frame's own floor,
+ *  and the type refuses it before the arithmetic has to. */
+type Five<T> = readonly [T, T, T, T, T];
+
+/** Exactly two — the two beliefs, which the acceptance model treats as a pair and
+ *  never as a sequence. `./tam-kotter-geometry.ts` splits one tier into exactly two
+ *  columns, so a third belief would have no column and a single belief would leave
+ *  one standing at half the frame's width. */
+type Two<T> = readonly [T, T];
+
+/**
+ * One box in either chain — and it is deliberately the SAME interface on both sides
+ * of the stage.
+ *
+ * ONE NODE TYPE FOR NINE BOXES, and that is the structural half of the
+ * no-third-ladder guardrail. The four constructs of the acceptance model and the
+ * five links of the change model are the same KIND of object — a named thing with a
+ * one-line gloss — so they are one type, they render through one component and they
+ * are placed by two functions that differ only in the shape of the chain. The moment
+ * the right-hand five needed a field the left-hand four did not have, they would
+ * have become a different kind of thing, and the first field they would need is an
+ * ordinal.
+ *
+ * THERE IS NO `order`, `step`, `index` OR `badge` FIELD, AND THERE MUST NOT BE ONE.
+ * Order is the ARRAY's, and the array's order is turned into a position by
+ * `./tam-kotter-geometry.ts` and into nothing else. A field here would be a number
+ * with a name, one line of JSX away from being printed.
+ */
+export interface ChainNode {
+  id: string;
+  /**
+   * WHAT THIS NODE IS. A mono LABEL, keyword-free by the rule above.
+   *
+   * THE ACCEPTANCE MODEL'S FOUR ARE DAVIS'S OWN CONSTRUCT NAMES and are not the
+   * deck's to reword — "Perceived Usefulness" is a term with a literature behind it
+   * and "How useful people think it is" is a paraphrase of one. The change model's
+   * five are the condensed form the AI-adoption literature prints, which is what the
+   * attribution says out loud.
+   */
+  label: string;
+  /**
+   * WHAT IT MEANS, IN ONE LINE. The CAPTION register — 12px sans, keyword-free.
+   *
+   * EVERY ONE IS SHORT ENOUGH TO BE READ WHILE THE PRESENTER IS STILL TALKING, which
+   * is the whole reason the register exists: nine boxes each carrying a sentence
+   * would be a page, and a room reads a page instead of listening to it. The two
+   * belief captions are QUESTIONS because that is how the constructs are actually
+   * elicited — a person deciding whether to use something is asking themselves
+   * exactly those two things — and a question is the one form of caption a leader
+   * cannot skim past as a definition.
+   */
+  caption: string;
+}
+
+/**
+ * The top of the causal chain — what shapes belief, and the four things that shape
+ * it.
+ *
+ * THE ONLY NODE ON THE STAGE THAT CARRIES A LIST, and the reason it is a separate
+ * type rather than an optional field on {@link ChainNode} is the reason
+ * `shapeMiddleOutContent`'s `Band` refuses optional claim rows: an optional field
+ * lets a node ship with neither a list nor a reason for having none, and a box that
+ * renders half its own layout is indistinguishable on a projector from a slide that
+ * failed to load. Here the split is stronger still — exactly one node in nine has
+ * factors, the geometry gives that one node its own height, and a type that admitted
+ * a second would be describing a stage that cannot be drawn.
+ */
+export interface FactorNode extends ChainNode {
+  /**
+   * THE FOUR CONDITIONS A LEADER ACTUALLY SETS, and the half of the acceptance model
+   * this room can act on.
+   *
+   * A SET, NOT A SEQUENCE. Nothing in the model orders these four, they are drawn as
+   * a 2×2 block for exactly that reason, and each carries a square mark rather than
+   * a number. The array order is the READING order of that block and nothing else —
+   * re-sorting it moves four strings and changes no claim, which is the test of
+   * whether an order is a rank.
+   *
+   * THEY ARE THE POINT OF THE LEFT FRAME IN THIS ROOM. Perceived usefulness and
+   * perceived ease of use are things that happen inside somebody else's head, and a
+   * leader who left this slide believing adoption is a matter of persuasion would
+   * have taken the wrong half. These four are the inputs, they are all inside a
+   * division head's authority, and the frame's closer says so in a sentence.
+   */
+  factors: Four<string>;
+}
+
+// ───────────────────── the acceptance model ─────────────────────
+
+/**
+ * The four external factors, in reading order.
+ *
+ * SET IN THE MODEL'S OWN VOCABULARY, WHICH IS ALSO THE MODEL'S OWN SPELLING.
+ * `modeling` is American and the leader tree's rendered prose is British —
+ * `organisation` and `authorise` appear across the four leader content modules — and
+ * that is not an oversight here. The whole left frame is quoted vocabulary: the four
+ * construct labels are Davis's names and include `Behavioral Intention`, so
+ * anglicising one word of the factor list while leaving the constructs alone would
+ * produce a frame written in two spellings. The deck's own sentences on this stage —
+ * the headline, both closers and the unifying line — are the deck's, and none of
+ * them carries an American form.
+ *
+ * `Infrastructure readiness` IS THE ONE A ROOM FORGETS, and it is last because it is
+ * the one a division head is most likely to discover the hard way: the other three
+ * are things a leader does, and this one is a thing that either is or is not true
+ * before any of them work.
+ */
+const EXTERNAL_FACTORS: Four<string> = [
+  "Training & support",
+  "Leadership modeling",
+  "Peer influence",
+  "Infrastructure readiness",
+];
+
+/**
+ * The top of the causal chain.
+ *
+ * "what shapes belief" IS LOWER CASE AND IT IS NOT A MISTAKE. It is the only caption
+ * on the stage that is a gloss on the node's own name rather than a statement about
+ * the world, and sentence case would make it look like a claim that had lost its
+ * verb. It also names the word the whole left frame turns on — `belief` — one line
+ * before the two nodes that hold it, and one frame before the unifying line spends
+ * it.
+ */
+const EXTERNAL_FACTORS_NODE: FactorNode = {
+  id: "external-factors",
+  label: "EXTERNAL FACTORS",
+  caption: "what shapes belief",
+  factors: EXTERNAL_FACTORS,
+};
+
+/**
+ * The two beliefs, as a PAIR and never as a sequence.
+ *
+ * THE MODEL DOES NOT RANK THEM AND NEITHER DOES THE STAGE: two nodes of one width on
+ * one line, arriving on one pose at one delay. Usefulness first in the array only
+ * because it is first in the model's own name for itself, and because the room reads
+ * left to right — not because a person weighs it more.
+ *
+ * BOTH CAPTIONS ARE FIRST-PERSON QUESTIONS, and the second one is deliberately the
+ * unflattering form. "Is this hard to learn and use?" is what a person actually asks;
+ * "Is this easy to use?" is what a slide asks on their behalf, and the difference is
+ * whether the room hears an objection or a feature list.
+ */
+const BELIEFS: Two<ChainNode> = [
+  {
+    id: "usefulness",
+    label: "PERCEIVED USEFULNESS",
+    caption: "Will this help me do my job better?",
+  },
+  {
+    id: "ease-of-use",
+    label: "PERCEIVED EASE OF USE",
+    caption: "Is this hard to learn and use?",
+  },
+];
+
+/** Where the two beliefs meet. The model's own construct name, and a two-word gloss:
+ *  what a person has done by this point is decide, and nothing more. */
+const BEHAVIORAL_INTENTION: ChainNode = {
+  id: "intention",
+  label: "BEHAVIORAL INTENTION",
+  caption: "Decide to use",
+};
+
+/** The end of the chain, and the only thing on it anybody can measure. "Real
+ *  adoption" is two words because the node is the punchline and a longer gloss would
+ *  explain it: everything above this box is why, and this box is whether. */
+const ACTUAL_USE: ChainNode = {
+  id: "actual-use",
+  label: "ACTUAL USE",
+  caption: "Real adoption",
+};
+
+/**
+ * The acceptance model's verdict, and the sentence that turns the left frame from a
+ * diagram into an instruction.
+ *
+ * IT POINTS AT THE ONLY TIER A LEADER CAN TOUCH. Two of the four tiers are beliefs
+ * held by other people and the third is their decision; the frame would be a
+ * fatalistic picture if it stopped there. "Shape the external factors" is the one
+ * verb in the frame that is addressed to the room, and "belief follows" is the
+ * model's actual claim — not that belief can be argued into somebody, but that it is
+ * downstream of conditions somebody else sets.
+ */
+const TAM_CLOSER = "Shape the external factors — and belief follows.";
+
+// ───────────────────── the change model ─────────────────────
+
+/**
+ * The five links, in the order the model runs them.
+ *
+ * THE ARRAY IS THE ORDER AND IT IS THE ONLY PLACE THE ORDER LIVES. There is no
+ * ordinal field, no numeral in any string, and nothing in
+ * `./tam-kotter-geometry.ts` that turns an index into a printed character — the
+ * chain's order reaches the stage as five positions and four connecting rules, which
+ * is exactly how the acceptance model's causal order reaches it on the other side of
+ * the stage. See guardrails 1–6 in this block's header.
+ *
+ * WHY THESE FIVE AND NOT THE SOURCE MODEL'S EIGHT. The condensation is the
+ * AI-adoption literature's rather than this deck's, which is what the attribution
+ * says; eight links would not fit the frame at a legible register, and — more to the
+ * point — a room that is given eight steps hears a project plan, while a room given
+ * five hears a shape it can check its own last initiative against.
+ *
+ * EVERY CAPTION IS A QUESTION OR AN IMPERATIVE, AND NONE IS A DESCRIPTION. "Why must
+ * we change now?" is answerable in the room; "Establish a sense of urgency" is a
+ * thing to nod at. The two halves of the stage share that discipline: the acceptance
+ * model's beliefs are questions a person asks themselves, and the change model's
+ * links are questions a leader has to answer out loud.
+ */
+const KOTTER_LINKS: Five<ChainNode> = [
+  {
+    id: "urgency",
+    label: "CREATE URGENCY",
+    // "now" IS THE LOAD-BEARING WORD. Every leader in the room already agrees that
+    // this matters; the question that stalls an initiative is why it matters this
+    // quarter rather than next, and a link that asked "why must we change?" would be
+    // the version everybody passes.
+    caption: "Why must we change now?",
+  },
+  {
+    id: "coalition",
+    label: "BUILD COALITION",
+    // "together" AND NOT "who owns this?". An owner is a person a room can appoint
+    // and then leave alone, which is precisely the failure this link exists to
+    // prevent — and naming a single champion is `mandate-levers`' own lever, printed
+    // there in its own words.
+    caption: "Who will lead this together?",
+  },
+  {
+    id: "enable",
+    label: "ENABLE ACTION",
+    // "Remove the barriers" AND NOT "empower" OR "enable teams". A barrier is a
+    // specific thing somebody can name on a Monday — an approval, a licence, a
+    // blocked domain — and removing one is an act. Empowerment is a value.
+    caption: "Remove the barriers",
+  },
+  {
+    id: "wins",
+    label: "GENERATE WINS",
+    // "early, tangible" IS THE WHOLE CONDITION. A win that arrives late is a report
+    // and a win nobody can point at is a claim; the model's requirement is that the
+    // organisation SEES something work before its patience runs out.
+    caption: "Show early, tangible results",
+  },
+  {
+    id: "anchor",
+    label: "ANCHOR IN CULTURE",
+    // "not a project" IS THE SENTENCE THE WHOLE RIGHT FRAME IS FOR, and it is the
+    // one line on this stage that names the failure mode by its real name: an
+    // initiative that ends is an initiative that was a project, and the last link is
+    // the one every stalled rollout skipped.
+    caption: "Make it how we work, not a project",
+  },
+];
+
+/**
+ * The change model's verdict, and the one sentence on this stage that makes a claim
+ * about what happens in this industry.
+ *
+ * "Most" AND NOT "AI initiatives stall …". The hedge is the honest form — this block
+ * carries no measured figure and prints no percentage, so an unhedged universal
+ * would be a statistic the deck cannot source. §12.2 is the standing rule about
+ * reported claims, and the cheapest way to honour it here is to say `Most` and mean
+ * it.
+ *
+ * "skip steps" IS THE ONE PLACE THE WORD `step` TOUCHES THE FIVE LINKS, and it is a
+ * verdict rather than a label — see guardrail 5 in this block's header. "The order
+ * matters" is the claim the numbered staircase in the reference makes structurally
+ * and this stage refuses to make structurally: it is said, once, in a sentence the
+ * room can disagree with.
+ */
+const KOTTER_CLOSER = "Most AI initiatives stall when leaders skip steps. The order matters.";
+
+// ───────────────────── shared copy ─────────────────────
+
+export const shapeTamKotterContent = {
+  /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from
+   *  the composed deck (§3.5) and are authored nowhere. It names the two frames'
+   *  shared subject rather than either model, because the caption sits above BOTH of
+   *  them and a label naming one would rank it. */
+  figLabel: "ADOPTION FRAMEWORKS",
+
+  /**
+   * The claim, and the shape of the stage under it: two models, two halves, two
+   * questions.
+   *
+   * "Two models explain …" AND NOT "Two models EXIST". The verb is the whole point —
+   * this is not a literature review, it is the assertion that the thing the room has
+   * been treating as a mystery has a published answer, and that the answer has two
+   * parts because the failure has two parts.
+   *
+   * IT DOES NOT OPEN ON THE NOUN `adoption`, deliberately. MIDDLE-OUT's headline is
+   * "Adoption is not top-down. It spreads out from the middle." and stands one click
+   * behind this one; two adjacent headlines opening on the same noun read as one
+   * slide that re-rendered. `people adopt` is the verb form and the person doing it,
+   * which is also what the left frame is about.
+   *
+   * MEASURED TO ONE LINE UNDER BOTH FACES: 799.08px with Instrument Serif and
+   * 980.42px with the Georgia fallback, against `.slide-headline-row`'s 1184px
+   * measure — 83% on the wide face. `HEADLINE_BUDGET_CHARS` in
+   * `./tam-kotter-geometry.ts` holds the same arithmetic as a number a test can
+   * check, and it exists because the sibling slide's drafted headline wrapped on the
+   * fallback face and painted straight through the shelf under it.
+   */
+  headline: "Two models explain why people adopt, and why it sticks.",
+  /** One keyword, on the SECOND half. The room already believes people adopt things
+   *  they find useful; what it has not been given is any account of why a rollout
+   *  survives the quarter, and the italic is the last thing the room takes away
+   *  before the two frames start arguing it. It also sets up the unifying line at the
+   *  foot of the stage, which is the sentence that answers it. */
+  headlineKw: ["why it sticks"],
+
+  /**
+   * THE LEFT FRAME — the acceptance model.
+   *
+   * `frameLabel` IS THE ACRONYM AND `attribution` IS WHAT IT STANDS FOR, in that
+   * order, which is the order a room needs them in: the acronym is what the
+   * presenter will say out loud and what a leader may already have heard, and the
+   * expansion under it is what makes it citable. Both are on the stage from the first
+   * pose, because a frame that named itself later would be a diagram the room had to
+   * hold unlabelled.
+   *
+   * THE YEAR IS ON THE STAGE AND NOT IN THIS COMMENT. §12.2's rule about reported
+   * claims is usually a cost; here it is the slide's entire value — see this block's
+   * header on why a division head can discount an opinion and cannot discount a
+   * citation.
+   */
+  tam: {
+    frameLabel: "TAM FRAMEWORK",
+    /** A CITATION, and therefore keyword-free: an italic inside an attribution would
+     *  turn a source line into a slogan. The em dash is the deck's own. */
+    attribution: "Technology Acceptance Model — Davis (1989)",
+    source: EXTERNAL_FACTORS_NODE,
+    beliefs: BELIEFS,
+    intention: BEHAVIORAL_INTENTION,
+    use: ACTUAL_USE,
+    closer: TAM_CLOSER,
+    /** The emphasis lands on the CONSEQUENCE and not on the instruction. "Shape the
+     *  external factors" is the ask and the room will hear it as one either way;
+     *  "belief follows" is the part that is counter-intuitive to a leader who has
+     *  been trying to persuade people, and it is the half worth carrying out of the
+     *  room. */
+    closerKw: ["belief follows"],
+  },
+
+  /**
+   * THE RIGHT FRAME — the change model, condensed.
+   *
+   * THE ATTRIBUTION DOES THREE JOBS IN ONE LINE and every one of them is load-bearing:
+   * it names the model, it says out loud that what is on the stage is a CONDENSED
+   * form rather than the model itself, and it cites the author and the year. The
+   * middle job is the one a lazier line would drop — five links under a title that
+   * said "8-Step Model" without the word `condensed` would be the deck quietly
+   * mis-citing a published model, which is exactly the failure §12.2 exists to
+   * prevent.
+   */
+  kotter: {
+    frameLabel: "CHANGE MANAGEMENT FRAMEWORK",
+    /** A CITATION, keyword-free for the same reason as the one above it. The `8` is
+     *  one of this block's three rendered digits and is part of the model's published
+     *  name — see the header on why this block prints digits and the one above it
+     *  bans them. */
+    attribution: "Kotter's 8-Step Model — condensed for AI adoption (Kotter, 1996)",
+    links: KOTTER_LINKS,
+    closer: KOTTER_CLOSER,
+    /** The emphasis lands on the ORDER claim, which is the half of the sentence this
+     *  frame's whole geometry refuses to make on its own — see guardrail 6. The
+     *  diagnosis ("Most AI initiatives stall") is the setup; the italic is the
+     *  finding. */
+    closerKw: ["The order matters"],
+  },
+
+  /**
+   * The line under both frames, and the sentence the whole stage exists to earn.
+   *
+   * VERBATIM FROM THE SOURCE DECK. `docs/researches/internal-hr-group.md` records
+   * this line on the original's own frameworks page in exactly these words, capitals
+   * included, and it is the one string on this stage that is quoted rather than
+   * written. Rewriting an owner-facing line to prove the port was not a copy would be
+   * the worst reason to change copy.
+   *
+   * THE CAPITALS ARE THE SOURCE'S EMPHASIS AND THEY ARE KEPT. They also do work the
+   * highlight cannot: `STICK` is the third capital and carries NO keyword, so the
+   * sentence has three stressed words and two copper italics — the two conditions are
+   * marked as a pair, and the outcome is left as the thing they produce.
+   *
+   * IT IS THE ONLY PLACE ON THE STAGE WHERE THE TWO FRAMES TOUCH. Neither closer
+   * mentions the other model, the two chains are drawn in two boxes that never
+   * connect, and this line is the connection — which is why it lands on its own pose,
+   * last, with both frames complete above it.
+   */
+  unifier: "Without BELIEF people don't start; without SEQUENCE change doesn't STICK.",
+  /**
+   * TWO KEYWORDS AND NOT ONE, because the claim is a conjunction — the same call
+   * `shapeMiddleOutContent`'s middle band records about its own two-part line. An
+   * italic on one condition would say the other is the lesser of the two, and the
+   * slide's entire structure is two equal frames.
+   *
+   * `BELIEF` is the left frame's word and `SEQUENCE` is the right frame's, so the two
+   * emphases are also the two halves of the stage, named in the order the room read
+   * them.
+   */
+  unifierKw: ["BELIEF", "SEQUENCE"],
+} as const;

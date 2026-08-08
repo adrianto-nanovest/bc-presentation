@@ -39,8 +39,10 @@
 // `gap-no-sop.test.tsx`, which hands the question to `deck-registry.test.ts`. #68's AC
 // names the tail position out loud — "unit test covers … the slide's tail position in
 // the run" — so the last two describes compose both leader decks for real. What they
-// deliberately do NOT pin is the composed NUMBER: this slide prints C.3 today and C.4
-// the day `shape-tam-kotter` lands (§4.3), so the stable facts are the LETTER, the run's
+// deliberately do NOT pin is the composed NUMBER: this slide printed C.3 until
+// `shape-tam-kotter` landed on gh#71 and prints C.4 now (§4.3), with no edit to any file
+// this test covers — which is exactly why the number was never pinned. The stable facts
+// are the LETTER, the run's
 // membership and the fact that this row is LAST. `AT` below is only a harness input for
 // the single-epoch tests, which resolve the default `general` deck — a deck that runs no
 // leader slide at all.
@@ -126,8 +128,12 @@ const BOTTOM = BOTTOM_BAND_INDEX;
  * and this slide reaches the leader deck sets alone. The PAIR itself is a harness INPUT
  * and not a claim — the composed describes at the bottom read the real value off the real
  * deck, and pin only the letter and the tail position, never the number.
+ *
+ * It reads 4 rather than gh#68's 3 because gh#71 inserted C.3 ahead of this row. Nothing
+ * asserts the value, so the edit is bookkeeping and not a fix: a harness input that
+ * contradicts the deck it stands in for teaches the next reader the wrong number.
  */
-const AT = { letter: "C", num: 3, sectionKey: "shape" } as const;
+const AT = { letter: "C", num: 4, sectionKey: "shape" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {
@@ -1416,9 +1422,10 @@ describe("the keyword rule", () => {
   });
 
   test("no authored string names a letter or a figure", () => {
-    // §3.4 R2 / §3.5. This slide composes as the THIRD `shape` row today and becomes the
-    // fourth once `shape-tam-kotter` inserts ahead of it, so a literal "C.3" or "SECTION
-    // C" in this copy would be a lie on a projector within the week. The digit rule above
+    // §3.4 R2 / §3.5. This slide composed as the THIRD `shape` row until gh#71 inserted
+    // `shape-tam-kotter` ahead of it and is the FOURTH now, so a literal "C.3" or "SECTION
+    // C" in this copy would have become a lie on a projector inside three days — which is
+    // no longer a hypothetical. The digit rule above
     // already forbids every numeral; these hold the SHAPES, so a failure says which kind
     // of reference was written.
     const FIGURE = /\b[A-N]\.\d+\b/;
@@ -1731,36 +1738,48 @@ describe("the composed leader decks", () => {
 
   afterAll(restoreLocation);
 
-  test("this slide is the LAST `shape` row, immediately behind f8-your-agentic-os", async () => {
+  test("this slide is the LAST `shape` row, immediately behind gh#71's C.3", async () => {
     for (const variant of LEADER) {
       const deck = await deckFor(variant);
       const run = deck.slides.filter((s) => s.sectionKey === "shape");
 
       // THE WHOLE RUN, ENUMERATED. Kept as a whole-run comparison rather than narrowed to
-      // "the last one is mine", because the failure worth catching is a fourth row
-      // arriving in the WRONG place — between C.1 and f8, where `shape-tam-kotter` is due
-      // — and a narrowed assertion would stay green through exactly that.
+      // "the last one is mine", because the failure worth catching is a row
+      // arriving in the WRONG place — between C.1 and f8, one slot ahead of where gh#71's
+      // `shape-tam-kotter` landed
+      // — and a narrowed assertion would stay green through exactly that. The run is
+      // COMPLETE at §4.3's four now, so this is the whole list and a fifth row fails here
+      // by name.
       expect(run.map((s) => s.def.id), variant).toEqual([
         "shape-agentic-org",
         "f8-your-agentic-os",
+        "shape-tam-kotter",
         "shape-middle-out",
       ]);
       expect(run[run.length - 1].def.id, variant).toBe("shape-middle-out");
 
-      // IMMEDIATELY BEHIND f8, in the DECK's order and not merely in the run's — the two
+      // IMMEDIATELY BEHIND ITS PREDECESSOR, in the DECK's order and not merely in the
+      // run's — the two
       // are the same thing only while the run is contiguous, which is what R4 requires and
       // what a `sectionOverrides` edit could break without touching the list above.
+      //
+      // THAT PREDECESSOR IS gh#71'S ROW AND WAS f8 UNTIL IT LANDED, which is why the
+      // neighbour is looked up from the run rather than named: the claim this line makes
+      // is CONTIGUITY, and `run.at(-2)` states it without being a second copy of the
+      // enumeration above.
       const at = deck.slides.findIndex((s) => s.def.id === "shape-middle-out");
-      const f8 = deck.slides.findIndex((s) => s.def.id === "f8-your-agentic-os");
+      const before = deck.slides.findIndex((s) => s.def.id === run.at(-2)?.def.id);
       expect(at, `${variant} composes shape-middle-out`).toBeGreaterThan(-1);
-      expect(at, variant).toBe(f8 + 1);
+      expect(at, variant).toBe(before + 1);
       expect(deck.slides[at].sectionKey, variant).toBe("shape");
 
       // THE LETTER IS PINNED AND THE NUMBER IS NOT. `shape` is C in both leader decks and
       // §4.3 keeps it there — the runs in front of it are settled — so C is a stable fact
       // worth pinning as a literal, exactly as C.1's own test pins it. The NUMBER is not:
-      // this row prints C.3 today and C.4 the day `shape-tam-kotter` inserts ahead of it,
-      // so it is asserted only as "however long the run is", which is true under both.
+      // this row printed C.3 until `shape-tam-kotter` inserted ahead of it on gh#71 and
+      // prints C.4 now,
+      // so it is asserted only as "however long the run is", which was true under both and
+      // is the reason this line survived that ticket unedited.
       expect(deck.letterOf("shape"), variant).toBe("C");
       expect(deck.slides[at].letter, variant).toBe("C");
       expect(deck.slides[at].num, variant).toBe(run.length);

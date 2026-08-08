@@ -2232,18 +2232,26 @@ describe("the composed leader deck", () => {
       // in the same edit that moved the row.
       //
       // THIS SLIDE'S TEST ENUMERATES THE WHOLE RUN, WHICH MAKES IT A FILE EVERY
-      // `shape` TICKET HAS TO OPEN — gh#68 is the first to find that out. The four
-      // assertions above are about C.1 and C.2 and NONE of them moved when
-      // `shape-middle-out` appended at the tail: this slide is still C.1 and f8 still
-      // C.2, because a tail append renumbers nothing in front of it. Only this line
-      // moved. Kept as a whole-run comparison rather than narrowed back to the pair,
-      // because the failure worth catching is a third row arriving in the WRONG
-      // place — between C.1 and f8, where `shape-tam-kotter` is due — and a narrowed
+      // `shape` TICKET HAS TO OPEN — gh#68 was the first to find that out and gh#71 the
+      // second and last. The four
+      // assertions above are about C.1 and C.2 and NONE of them moved on either ticket:
+      // this slide is still C.1 and f8 still
+      // C.2, because neither a tail append nor an insert BEHIND f8 renumbers anything in
+      // front of it. Only this line
+      // moved, twice. Kept as a whole-run comparison rather than narrowed back to the
+      // pair,
+      // because the failure worth catching is a row arriving in the WRONG
+      // place — between C.1 and f8, which is one slot ahead of where gh#71's C.3 landed
+      // — and a narrowed
       // assertion would stay green through exactly that.
+      //
+      // THE RUN IS COMPLETE at §4.3's four as of gh#71, so this is now the whole list
+      // and a fifth row would fail here by name.
       const shapeRun = deck.slides.filter((s) => s.sectionKey === "shape");
       expect(shapeRun.map((s) => s.def.id), variant).toEqual([
         "shape-agentic-org",
         "f8-your-agentic-os",
+        "shape-tam-kotter",
         "shape-middle-out",
       ]);
     }

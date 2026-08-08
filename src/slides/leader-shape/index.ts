@@ -13,15 +13,31 @@
 // ORDER IS THE SECTION'S, NOT THE DECK'S. This array says what the section
 // contains, in the order §4.3 gives it; `src/deck/deck-sets.ts` says which decks
 // run it and where. §4.3 gives `shape` four slides — `shape-agentic-org`,
-// `f8-your-agentic-os`, `shape-tam-kotter`, `shape-middle-out` — and only TWO of
-// them are leader-shape files: F.8 is a RELOCATED standard-deck slide that joins
-// this run through `sectionOverrides` and is composed from its own directory, so
-// it does not belong in this array, and `shape-tam-kotter` (§4.3's C.3) has no
-// ticket yet — it is the one slot of the four still to be built, and it inserts
-// BETWEEN the two entries below, which is why the array order below is the
-// section's and not the order the files were written in.
+// `f8-your-agentic-os`, `shape-tam-kotter`, `shape-middle-out` — and THREE of them
+// are leader-shape files: F.8 is a RELOCATED standard-deck slide that joins this
+// run through `sectionOverrides` and is composed from its own directory, so it does
+// not belong in this array and the array is one shorter than the run for that
+// reason alone.
+//
+// THE RUN IS COMPLETE AS OF gh#71, at §4.3's four. It is the THIRD of the four
+// leader-only runs to reach its spec'd length, after `gap` (gh#67) and `mandate`
+// (gh#69); a fifth `shape` slide would be a slide §4.3 does not ask for, so nothing
+// more is appended or inserted here.
+//
+// AND THE ORDER BELOW IS NOT THE ORDER THE FILES WERE WRITTEN IN, which is the
+// whole point of saying it is the section's. `shape-tam-kotter` was built LAST
+// (§11's Phase 7 puts it there, as the slide that becomes a spoken minute if the
+// phase slips) and sits SECOND, because §4.3's C.3 falls between f8 and C.4. Its
+// insert is what stepped `shape-middle-out` from C.3 to C.4 without that file being
+// opened — R3 renumbering inside the run that changed, derived per composed deck
+// (§3.5), written down in no file under this directory.
 import type { SlideDef } from "@/deck/types";
 import { shapeAgenticOrgSlide } from "./shape-agentic-org";
+import { shapeTamKotterSlide } from "./shape-tam-kotter";
 import { shapeMiddleOutSlide } from "./shape-middle-out";
 
-export const leaderShapeSlides: SlideDef[] = [shapeAgenticOrgSlide, shapeMiddleOutSlide];
+export const leaderShapeSlides: SlideDef[] = [
+  shapeAgenticOrgSlide,
+  shapeTamKotterSlide,
+  shapeMiddleOutSlide,
+];

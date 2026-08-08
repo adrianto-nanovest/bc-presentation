@@ -42,23 +42,26 @@ export const slideCatalogue: readonly SlideDef[] = [
   // for gh#57/#58/#59, and that holds whether the new row joins its section at the
   // end, at the FRONT, or in the MIDDLE, and whether it arrives alone or in a pair.
   ...leaderGapSlides,
-  // Leader-only too (§4.3), and it holds TWO defs as of gh#68 — gh#54's
+  // Leader-only too (§4.3), and it holds THREE defs as of gh#71 — gh#54's
   // `shape-agentic-org`, section C's centrepiece and the reason
   // `f8-your-agentic-os` finally sits at C.2 rather than inside the retained TOOLS
-  // run, and gh#68's `shape-middle-out`, appended at the tail of the section's own
+  // run, gh#71's `shape-tam-kotter` (§6.6's C.3), inserted mid-array, and gh#68's
+  // `shape-middle-out`, appended at the tail of the section's own
   // array. THE POOL AND THE COMPOSED RUN DO NOT AGREE ON THE COUNT HERE, and this is
-  // the one section where they never will: the run is THREE rows on a leader deck
+  // the one section where they never will: the run is FOUR rows on a leader deck
   // because f8 joins it through `./deck-sets.ts`'s single `sectionOverrides` entry,
   // and f8 is a standard-deck slide composed from its OWN section index, so it is
   // not in this array and must not be. Neighbours on the projector, strangers in the
-  // pool. One row of §4.3's four is still unbuilt (`shape-tam-kotter`), and as of gh#70
-  // it is the ONLY leader row left anywhere — `gap` closed on gh#67, `mandate` on gh#69
-  // and `invest` on gh#70. It will
-  // arrive the same way: inside `@/slides/leader-shape`, not here.
+  // pool — three defs here, four rows there, permanently.
   //
-  // NOTHING IN THIS FILE CHANGED FOR gh#68 — the spread reads the section's own
+  // THE RUN IS COMPLETE AS OF gh#71, at §4.3's four, and it is the LAST of the four
+  // leader-only runs to close: `gap` on gh#67, `mandate` on gh#69, `invest` on gh#70,
+  // `shape` here. NO LEADER ROW IS OWED ANYWHERE, so this line said "one row still
+  // unbuilt" for the last time.
+  //
+  // NOTHING IN THIS FILE CHANGED FOR gh#68 OR gh#71 — the spread reads the section's own
   // array, exactly as the `leaderGapSlides` line above records for gh#65/#66/#67 and
-  // the `leaderInvestSlides` line below for gh#57/#58/#59, and that holds whether the
+  // the `leaderInvestSlides` line below for gh#57/#58/#59/#70, and that holds whether the
   // new row joins its section at the END, at the front, or in the middle.
   ...leaderShapeSlides,
   // Leader-only too (§6.7), and the third run in front of the curriculum. It holds ALL

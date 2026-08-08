@@ -428,11 +428,13 @@ interface ObservedDeck {
  * to renumber and no number moved either:
  *
  *   · ONE row was added per leader deck, at index 9, behind `C.2 · YOUR AGENTIC OS`:
- *     `C.3 · MIDDLE-OUT`. §4.3 numbers that slide C.4 and it composes as **C.3**,
- *     because `shape-tam-kotter` (§4.3's C.3) is unbuilt and inserts AHEAD of it —
- *     the same one-early arithmetic the four `invest` rows have lived with since
- *     gh#56. Derived per deck (§3.5). NOTHING PINS EITHER VALUE: the slide will hold
- *     C.4 the day the missing row lands, and that day is the whole reason no ticket
+ *     `C.3 · MIDDLE-OUT`. §4.3 numbers that slide C.4 and it composed as **C.3**,
+ *     because `shape-tam-kotter` (§4.3's C.3) was unbuilt then and inserted AHEAD of it
+ *     later —
+ *     the same one-early arithmetic the four `invest` rows lived with from
+ *     gh#56 until gh#70. Derived per deck (§3.5). NOTHING PINNED EITHER VALUE: this
+ *     entry said the slide "will hold C.4 the day the missing row lands", and gh#71 is
+ *     the day — see that entry below. It is the whole reason no ticket
  *     may write a `shape` figure into a source file.
  *   · ZERO existing rows changed. Not one figure in any of the five decks. gh#65,
  *     gh#66 and gh#67 each moved exactly one (`THE CAPABILITY LADDER`, three times);
@@ -581,8 +583,59 @@ interface ObservedDeck {
  *     gh#69's reason — `THE TRAP` is carried by two slides and index 0 carries a null
  *     label, so a label→fig map answers the wrong question.) Read the diff, every time.
  *
+ * ON gh#71 ONE FIGURE MOVED, AND IT IS A NUMBER — the FIFTH entry here to move a figure
+ * without opening a run, after gh#65, gh#66, gh#67 and gh#70, and the THIRD MID-RUN
+ * insert, after gh#66's and gh#67's. `shape-tam-kotter` reached the leader lists alone,
+ * the SIXTEENTH slide ever to do so, taking both decks to **73** rows and CLOSING the
+ * `shape` run at §4.3's four — the FOURTH and LAST of the leader-only runs to be
+ * complete, after `gap` (gh#67), `mandate` (gh#69) and `invest` (gh#70). §4.3's finished
+ * leader deck, reached. Still FOURTEEN sections, still closing on **N.3**. It went in
+ * BETWEEN the relocated f8 and the row gh#68 appended, so `shape` kept **C** and R3
+ * renumbered only behind the new row, inside that run:
+ *
+ *   · ONE row was added per leader deck, at index 9, between `C.2 · YOUR AGENTIC OS` and
+ *     the row gh#68 appended: `C.3 · ADOPTION FRAMEWORKS`. §4.3 and §6.6 both number that
+ *     slide C.3 and it composes as C.3 — the `shape` run is now filled front-to-back with
+ *     no hole, so every spec number in it agrees with its composed number, which is what a
+ *     COMPLETE run looks like and not a licence to pin one. Derived (§3.5).
+ *   · ONE existing row changed, and it is the ONLY changed figure in the file:
+ *     `MIDDLE-OUT` went **C.3 → C.4**. It held C.3 from gh#68 until this ticket, and C.4
+ *     is §4.3's own number for it — the LAST it will ever hold, because §4.3 asks for no
+ *     fifth `shape` slide. NOT ONE BYTE of `shape-middle-out.tsx`, its geometry, its walk
+ *     or its content module changed to make that happen; the only edits to that slide's
+ *     files were comment lines this ticket made false. That is §3.5's whole claim,
+ *     demonstrated on the one row it was written for.
+ *   · NO LETTER MOVED ANYWHERE, in any of the five decks, and no row was removed. All
+ *     fourteen letters A–N are the same set before and after. The loop slide is still
+ *     H.12 — fifteen tickets into a life in which its file has never been opened, index
+ *     42 → 43 — f8 is still C.2 at index 8, the ladder still B.5 at index 6, the five
+ *     `invest` rows still D.1–D.5, gh#69's `K.3 · THE FOUR LEVERS` still K.3 (index
+ *     60 → 61, its FIGURE untouched), the closer still N.3 at index 72, and `berau`,
+ *     `gems` and `general` are byte-identical per key — 4914 / 4902 / 4749 bytes of
+ *     `JSON.stringify(deck, null, 2)`, verified equal STRING-FOR-STRING and not merely
+ *     equal in length. (Those three numbers are measured, and they are not the
+ *     4931 / 4919 / 4765 the gh#69 and gh#70 entries above quote for the same three
+ *     decks; that trio does not reproduce at any commit from gh#67 on. What this ticket
+ *     verified is the comparison, which is the load-bearing half — the byte counts are
+ *     a fingerprint printed beside it.)
+ *   · The re-record still needed `ALLOW_MOVED_FIGURES=1`, and the report is **126 lines**
+ *     — the same size as gh#65's, gh#66's and gh#67's, for the same reason and not for
+ *     theirs: two row-count lines (`72 slides recorded, 73 rendered`) and 63 per leader
+ *     deck, running `slide 10: recorded D.1, renders C.4` down to `slide 71: recorded
+ *     N.3, renders N.2`. It SATURATES again — every row behind index 9 is listed once —
+ *     and every one of those 126 lines is noise: read as pairs it is gh#57's one
+ *     statement, that what index *i* recorded is at index *i*+1. Index 9 is absent from
+ *     it, because it recorded gh#68's C.3 and renders this slide's C.3 — the same FIGURE
+ *     on a different SLIDE, which an index-keyed detector cannot see — and the real
+ *     C.3 → C.4 appears only as index 10's `D.1 → C.4`, which is not what happened to any
+ *     slide. So ONLY the diff matched BY LABEL and by ordered `(fig, label)` pair says
+ *     what moved: one label added per leader deck (`ADOPTION FRAMEWORKS`), ONE figure
+ *     changed on a pre-existing label (`MIDDLE-OUT`), no label dropped, no letter
+ *     touched, and all 72 pre-existing rows surviving IN ORDER offset-aware with that one
+ *     exception. Read the diff, every time.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all fourteen tickets — fifteen leader-only slides now, since gh#67 brought two.
+ * all fifteen tickets — sixteen leader-only slides now, since gh#67 brought two.
  * That
  * is the assertion worth reading twice: a leader-only
  * insert must not be able to touch a standard deck, and gh#54's relocation could
@@ -599,8 +652,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 72, closer: "N.3" },
-  "gems-leader": { slides: 72, closer: "N.3" },
+  "berau-leader": { slides: 73, closer: "N.3" },
+  "gems-leader": { slides: 73, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

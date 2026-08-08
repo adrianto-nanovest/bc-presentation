@@ -66,8 +66,10 @@
 // inventing a fact to fill a fork. What it buys is a test that mounts the same component
 // under both leader brands and compares byte for byte.
 //
-// THE LETTER IS NOT AUTHORED HERE. This slide composes as the THIRD of the `shape` run
-// today and becomes the fourth once `shape-tam-kotter` inserts ahead of it (§4.3), so
+// THE LETTER IS NOT AUTHORED HERE, AND gh#71 IS THE PROOF RATHER THAN THE PROMISE. This
+// slide composed as the THIRD of the `shape` run from gh#68 until `shape-tam-kotter`
+// inserted ahead of it (§4.3), and it is the FOURTH now — a figure that changed without
+// this file, its geometry, its walk or its content module being opened for it, because
 // neither figure is written down in any file under `src/slides/leader-shape/`:
 // `FigLabel` takes a LABEL only and the composer derives the rest (§3.5).
 import type { SlideDef } from "@/deck/types";
@@ -111,8 +113,8 @@ export function ShapeMiddleOut() {
 // see the header.
 export const shapeMiddleOutSlide: SlideDef = {
   // The file's basename, frozen at the moment the file was named, and not a section
-  // reference: this slide prints C.3 in today's leader decks and C.4 the day
-  // `shape-tam-kotter` lands, under an id that never changes.
+  // reference: this slide printed C.3 in the leader decks until `shape-tam-kotter`
+  // landed on gh#71 and prints C.4 now, under an id that never changed.
   id: "shape-middle-out",
   // FIVE, IMPORTED AND NOT TYPED. `STEP_COUNT` is `chart + one beat per band +
   // translations`, counted off `shapeMiddleOutContent.bands` — so a fourth band makes
