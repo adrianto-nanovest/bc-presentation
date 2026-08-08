@@ -42,11 +42,22 @@ export const slideCatalogue: readonly SlideDef[] = [
   // for gh#57/#58/#59, and that holds whether the new row joins its section at the
   // end, at the FRONT, or in the MIDDLE, and whether it arrives alone or in a pair.
   ...leaderGapSlides,
-  // Section C's centrepiece, and the reason `f8-your-agentic-os` finally sits at
-  // C.2 rather than inside the retained TOOLS run — see `./deck-sets.ts`. The two
-  // are neighbours in the composed leader deck and NOT here: one is a leader-only
-  // file and the other a standard-deck slide the leader list relocates, so the
-  // pool keeps each under its own section index.
+  // Leader-only too (§4.3), and it holds TWO defs as of gh#68 — gh#54's
+  // `shape-agentic-org`, section C's centrepiece and the reason
+  // `f8-your-agentic-os` finally sits at C.2 rather than inside the retained TOOLS
+  // run, and gh#68's `shape-middle-out`, appended at the tail of the section's own
+  // array. THE POOL AND THE COMPOSED RUN DO NOT AGREE ON THE COUNT HERE, and this is
+  // the one section where they never will: the run is THREE rows on a leader deck
+  // because f8 joins it through `./deck-sets.ts`'s single `sectionOverrides` entry,
+  // and f8 is a standard-deck slide composed from its OWN section index, so it is
+  // not in this array and must not be. Neighbours on the projector, strangers in the
+  // pool. One row of §4.3's four is still unbuilt (`shape-tam-kotter`), and it will
+  // arrive the same way: inside `@/slides/leader-shape`, not here.
+  //
+  // NOTHING IN THIS FILE CHANGED FOR gh#68 — the spread reads the section's own
+  // array, exactly as the `leaderGapSlides` line above records for gh#65/#66/#67 and
+  // the `leaderInvestSlides` line below for gh#57/#58/#59, and that holds whether the
+  // new row joins its section at the END, at the front, or in the middle.
   ...leaderShapeSlides,
   // Leader-only too (§6.7), and the third run in front of the curriculum. It holds
   // FOUR of its five slides today — gh#56's, gh#57's, gh#58's and gh#59's, in §6.7's

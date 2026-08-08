@@ -261,24 +261,26 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 69 slots — the F cut, F.8 kept, plus its own", () => {
+  test("gives the leader deck its own 70 slots — the F cut, F.8 kept, plus its own", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(69);
+    expect(leader.slides).toHaveLength(70);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
-    // leader deck now holds slides no standard deck does — TWELVE of them as of
-    // gh#67, in FOUR runs, because gh#57, gh#61, gh#58 and gh#59 each lengthened a
+    // leader deck now holds slides no standard deck does — THIRTEEN of them as of
+    // gh#68, in FOUR runs, because gh#57, gh#61, gh#58, gh#59 and gh#68 each lengthened
+    // a
     // run at its end, gh#65 lengthened one at its head, and gh#66 and gh#67 lengthened
     // one in its middle — gh#67 by TWO rows, the only ticket so far to add more than
     // one. Asserted as the two
     // directions SEPARATELY rather
     // than as one net number, so the next leader-only slide cannot mask a cut F
     // slide creeping back in. The net has been eight, seven, six, five, four,
-    // three, two, one, zero, minus one, minus two and now MINUS FOUR — gh#59 made the
+    // three, two, one, zero, minus one, minus two, minus four and now MINUS FIVE —
+    // gh#59 made the
     // two decks
     // the same
     // length for the first time and gh#65 made the leader deck the LONGER one, so a
@@ -289,8 +291,9 @@ describe("DECK_SET_COMPOSITION", () => {
     // FIRST: they are the only leader-only
     // slides that sit BEHIND the curriculum rather than in front of it, and
     // `filter` preserves both facts. A `mandate` row that had drifted up among the
-    // other ten, either pair swapped, the four `invest` rows out of §6.7's
-    // order, or the five `gap` rows out of §4.3's order, would fail here as an
+    // other eleven, either pair swapped, the four `invest` rows out of §6.7's
+    // order, the two `shape` rows reversed, or the five `gap` rows out of §4.3's
+    // order, would fail here as an
     // ordering mismatch
     // before it ever reached the
     // letter assertions.
@@ -313,6 +316,13 @@ describe("DECK_SET_COMPOSITION", () => {
       "gap-the-pattern",
       "gap-capability-ladder",
       "shape-agentic-org",
+      // gh#68, and NOT adjacent to the row above it in the leader LIST: f8 stands
+      // between them there. It is adjacent HERE because this array is the leader list
+      // MINUS every id the standard deck also holds, and f8 is exactly such an id —
+      // relocated, not leader-only. So the gap in this sequence is the proof the
+      // filter is doing its job, and a `shape-middle-out` that had drifted in front
+      // of `shape-agentic-org` would fail here as an ordering mismatch.
+      "shape-middle-out",
       "invest-own-proof",
       "invest-chicken-egg",
       "invest-security",
@@ -399,15 +409,31 @@ describe("DECK_SET_COMPOSITION", () => {
     expect(std[std.indexOf("a1-what-youve-seen") + 1]).toBe("b1-evolution-journey");
   });
 
-  test("puts C.1 and C.2 next to each other, in that order", () => {
+  test("runs the shape as C.1, the relocated C.2 and gh#68's tail row, in that order", () => {
     // ADJACENCY IS THE COMPOSITION FACT the override serves, and it is separate
     // from the value: `shape` on a row parked elsewhere in the list is still one
     // key forming two runs. Asserted on the LIST, so the failure names the edit
     // that broke it rather than surfacing as an R4 throw two files away.
+    //
+    // THE THIRD ROW IS gh#68'S AND IT APPENDED, which is why the pair above it is
+    // untouched: `shape-middle-out` went on the TAIL of this run, so it opened
+    // nothing, split nothing and had no row behind it to renumber. It is asserted as
+    // part of the run rather than on its own, for the reason the `gap`, `invest` and
+    // `mandate` cases in this file give: a row slipped BETWEEN f8 and it — which is
+    // exactly where the unbuilt `shape-tam-kotter` goes — has to fail by name here,
+    // not two files away.
+    //
+    // NO LETTER AND NO NUMBER IS NAMED HERE. `shape` takes the letter its position
+    // gives it, and R3 numbers the rows inside it — all derived per deck (§3.5) and
+    // recorded in the numbering fixture.
     const { slides } = DECK_SET_COMPOSITION.leader;
     const c1 = slides.indexOf("shape-agentic-org");
     expect(c1).toBeGreaterThan(-1);
-    expect(slides[c1 + 1]).toBe("f8-your-agentic-os");
+    expect(slides.slice(c1, c1 + 3)).toEqual([
+      "shape-agentic-org",
+      "f8-your-agentic-os",
+      "shape-middle-out",
+    ]);
     // And it comes straight after the `gap` run — §4.3's C follows B. Still the
     // LADDER on the other side of that join after gh#65, gh#66 and gh#67: those tickets
     // lengthened `gap` at its HEAD and in its MIDDLE, so the run's last row is the one
@@ -418,10 +444,16 @@ describe("DECK_SET_COMPOSITION", () => {
   test("opens the invest run right behind the shape run, in front of the curriculum", () => {
     // gh#56 opened it, gh#57 gave it a second row, gh#58 a third and gh#59 a
     // fourth, and the assertion is the two JOINS rather than an index: the run has
-    // to start immediately after the relocated f8 — the last row of `shape` — and
+    // to start immediately after the LAST ROW OF `shape` and
     // end immediately before `b1-evolution-journey`, the first row of the retained
     // curriculum. Anywhere else and the letters land somewhere else, which is the
     // only way this deck renumbers (§3.4 R2).
+    //
+    // THAT LAST ROW IS NO LONGER f8, and gh#68 is why — the one line in this test
+    // that ticket touched. `shape-middle-out` appended behind f8, so the join moved
+    // one row along while every `invest` assertion below it stayed exactly as gh#59
+    // left it. The name in this expectation is the whole of what says which slide
+    // `shape` now ends on: a tail append is invisible to every other line here.
     //
     // THE WHOLE RUN, IN ORDER, is what says gh#57, gh#58 AND gh#59 APPENDED rather
     // than inserted: `invest-chicken-egg` behind `invest-own-proof`,
@@ -439,7 +471,7 @@ describe("DECK_SET_COMPOSITION", () => {
     const { slides } = DECK_SET_COMPOSITION.leader;
     const at = slides.indexOf("invest-own-proof");
     expect(at).toBeGreaterThan(-1);
-    expect(slides[at - 1]).toBe("f8-your-agentic-os");
+    expect(slides[at - 1]).toBe("shape-middle-out");
     expect(slides.slice(at, at + 4)).toEqual([
       "invest-own-proof",
       "invest-chicken-egg",

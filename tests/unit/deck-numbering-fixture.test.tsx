@@ -416,8 +416,47 @@ interface ObservedDeck {
  *     pre-existing label (`THE CAPABILITY LADDER`), no label dropped, no letter
  *     touched. Read the diff, every time.
  *
+ * ON gh#68 NO FIGURE MOVED AT ALL, and it is the FIRST leader-only ticket in this
+ * list of which that is true. `shape-middle-out` reached the leader lists alone — the
+ * thirteenth slide ever to do so — taking both decks to **70** rows. Still FOURTEEN
+ * sections, still closing on **N.3**. It is a FOURTH shape, and the cheapest one
+ * there is: a TAIL APPEND, onto the end of the `shape` run gh#54 opened. It did not
+ * open a run, so no letter moved; and unlike gh#65's head insert and gh#66's and
+ * gh#67's mid-run ones it had no row BEHIND it inside its own run, so R3 had nothing
+ * to renumber and no number moved either:
+ *
+ *   · ONE row was added per leader deck, at index 9, behind `C.2 · YOUR AGENTIC OS`:
+ *     `C.3 · MIDDLE-OUT`. §4.3 numbers that slide C.4 and it composes as **C.3**,
+ *     because `shape-tam-kotter` (§4.3's C.3) is unbuilt and inserts AHEAD of it —
+ *     the same one-early arithmetic the four `invest` rows have lived with since
+ *     gh#56. Derived per deck (§3.5). NOTHING PINS EITHER VALUE: the slide will hold
+ *     C.4 the day the missing row lands, and that day is the whole reason no ticket
+ *     may write a `shape` figure into a source file.
+ *   · ZERO existing rows changed. Not one figure in any of the five decks. gh#65,
+ *     gh#66 and gh#67 each moved exactly one (`THE CAPABILITY LADDER`, three times);
+ *     this ticket moved none, which is what "append to a run's tail" means arithmetically
+ *     and is the reason this entry has no second bullet like theirs.
+ *   · NO LETTER MOVED ANYWHERE, in any of the five decks, and no row was removed. The
+ *     loop slide is still H.12 — twelve tickets into a life in which its file has
+ *     never been opened — f8 is still C.2, the ladder is still B.5, the four `invest`
+ *     rows are still D.1–D.4, and `berau`, `gems` and `general` are byte-identical
+ *     per key (5588 / 5575 / 5404 bytes, unchanged).
+ *   · THE RE-RECORD STILL NEEDED `ALLOW_MOVED_FIGURES=1` — ON A TICKET THAT MOVED NO
+ *     FIGURE. That is the sharpest demonstration this file has of why the report is
+ *     not the diff: the guard is INDEX-KEYED, so it read **122 figure number(s)
+ *     moved** where the honest answer is zero. The report is 122 lines — two
+ *     row-count lines (`69 slides recorded, 70 rendered`) and 60 per leader deck,
+ *     running `slide 9: recorded D.1, renders C.3` down to `slide 68: recorded N.3,
+ *     renders N.2`. It is SHORTER than gh#65's, gh#66's and gh#67's 126 lines only
+ *     because this insert sits at index 9 rather than index 2–5, and every one of its
+ *     122 lines is noise: read as pairs it is gh#57's one statement, that what index
+ *     *i* recorded is at index *i*+1. Matched BY LABEL the diff is two lines total:
+ *     one label added per leader deck (`MIDDLE-OUT`), no figure changed on any
+ *     pre-existing label, no label dropped, no letter touched. Read the diff, every
+ *     time — and on this ticket read it INSTEAD of the report, not after it.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
- * all eleven tickets — twelve leader-only slides now, since gh#67 brought two. That
+ * all twelve tickets — thirteen leader-only slides now, since gh#67 brought two. That
  * is the assertion worth reading twice: a leader-only
  * insert must not be able to touch a standard deck, and gh#54's relocation could
  * not either — f8 moved because a LEADER LIST moved it, and the standard list was
@@ -433,8 +472,8 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 69, closer: "N.3" },
-  "gems-leader": { slides: 69, closer: "N.3" },
+  "berau-leader": { slides: 70, closer: "N.3" },
+  "gems-leader": { slides: 70, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

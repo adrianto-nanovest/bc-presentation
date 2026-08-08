@@ -13,11 +13,15 @@
 // ORDER IS THE SECTION'S, NOT THE DECK'S. This array says what the section
 // contains, in the order §4.3 gives it; `src/deck/deck-sets.ts` says which decks
 // run it and where. §4.3 gives `shape` four slides — `shape-agentic-org`,
-// `f8-your-agentic-os`, `shape-tam-kotter`, `shape-middle-out` — and only the
-// first is a leader-shape file: F.8 is a RELOCATED standard-deck slide that joins
+// `f8-your-agentic-os`, `shape-tam-kotter`, `shape-middle-out` — and only TWO of
+// them are leader-shape files: F.8 is a RELOCATED standard-deck slide that joins
 // this run through `sectionOverrides` and is composed from its own directory, so
-// it does not belong in this array. C.3 and C.4 append here when they are built.
+// it does not belong in this array, and `shape-tam-kotter` (§4.3's C.3) has no
+// ticket yet — it is the one slot of the four still to be built, and it inserts
+// BETWEEN the two entries below, which is why the array order below is the
+// section's and not the order the files were written in.
 import type { SlideDef } from "@/deck/types";
 import { shapeAgenticOrgSlide } from "./shape-agentic-org";
+import { shapeMiddleOutSlide } from "./shape-middle-out";
 
-export const leaderShapeSlides: SlideDef[] = [shapeAgenticOrgSlide];
+export const leaderShapeSlides: SlideDef[] = [shapeAgenticOrgSlide, shapeMiddleOutSlide];

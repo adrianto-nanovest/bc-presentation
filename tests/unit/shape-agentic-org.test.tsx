@@ -2230,10 +2230,21 @@ describe("the composed leader deck", () => {
 
       // ONE `shape` RUN, not two: the whole reason the override value had to flip
       // in the same edit that moved the row.
+      //
+      // THIS SLIDE'S TEST ENUMERATES THE WHOLE RUN, WHICH MAKES IT A FILE EVERY
+      // `shape` TICKET HAS TO OPEN — gh#68 is the first to find that out. The four
+      // assertions above are about C.1 and C.2 and NONE of them moved when
+      // `shape-middle-out` appended at the tail: this slide is still C.1 and f8 still
+      // C.2, because a tail append renumbers nothing in front of it. Only this line
+      // moved. Kept as a whole-run comparison rather than narrowed back to the pair,
+      // because the failure worth catching is a third row arriving in the WRONG
+      // place — between C.1 and f8, where `shape-tam-kotter` is due — and a narrowed
+      // assertion would stay green through exactly that.
       const shapeRun = deck.slides.filter((s) => s.sectionKey === "shape");
       expect(shapeRun.map((s) => s.def.id), variant).toEqual([
         "shape-agentic-org",
         "f8-your-agentic-os",
+        "shape-middle-out",
       ]);
     }
   });

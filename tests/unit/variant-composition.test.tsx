@@ -182,7 +182,8 @@ describe("Practice Lab slides", () => {
 // leader-only runs in front of it — `gap` (gh#53), `shape` (gh#54) and `invest`
 // (gh#56) — a FOURTH behind it, `mandate` (gh#60, between `pitfalls` and `meta`),
 // and `f8-your-agentic-os` kept, standing as of gh#54 at §4.3's C.2, the second
-// slide of that `shape` run. That is every run §4.3 asks for.
+// slide of that `shape` run — and no longer its LAST, since gh#68 appended
+// `shape-middle-out` behind it. That is every run §4.3 asks for.
 //
 // IT SAT INSIDE THE RETAINED TOOLS RUN FROM gh#41 UNTIL THEN, which is what the
 // neighbour assertions below used to state. They were REWRITTEN rather than
@@ -278,6 +279,14 @@ describe("leader deck sets", () => {
       // around f8 is the RELOCATION, and the row before `b1-evolution-journey` is
       // the LENGTH of the run behind it.
       //
+      // gh#68 IS THE FIRST TICKET SINCE gh#56 TO CHANGE WHAT FOLLOWS F8, and it did
+      // not move f8: `shape-middle-out` appended at the TAIL of the `shape` run, so
+      // the slide BEHIND f8 is now the run's own third row rather than the first row
+      // of section D. The relocation is untouched — `shape-agentic-org` is still in
+      // front — which is why the line above this block did not move and every line
+      // below it slid by one. A tail append is the only insert shape that can do
+      // that: it lands between two runs without joining the second.
+      //
       // gh#65 IS THE ONE THAT PROVES THE OFFSETS ARE RELATIVE AND NOT ABSOLUTE. It
       // inserted `gap-hardest-part` two rows IN FRONT of f8, so f8's own index moved
       // and not one assertion below did: every offset is taken from `at`, which is
@@ -287,23 +296,25 @@ describe("leader deck sets", () => {
       // the middle of it, pushing f8 two further along for no edit here at all.
       const at = ids.indexOf("f8-your-agentic-os");
       expect(ids[at - 1], id).toBe("shape-agentic-org");
-      expect(ids[at + 1], id).toBe("invest-own-proof");
+      expect(ids[at + 1], id).toBe("shape-middle-out");
       // And the run gh#56 opened still hands straight to the curriculum, four
       // rows long since gh#59 — `invest-subscription` between `invest-security`
-      // and `b1-evolution-journey` — so f8 is the last slide before section D and
+      // and `b1-evolution-journey` — so `shape-middle-out` is the last slide before
+      // section D and
       // section D the last before the landscape — the whole insert, stated as the
       // joins it makes.
-      expect(ids[at + 2], id).toBe("invest-chicken-egg");
-      expect(ids[at + 3], id).toBe("invest-security");
-      expect(ids[at + 4], id).toBe("invest-subscription");
-      expect(ids[at + 5], id).toBe("b1-evolution-journey");
+      expect(ids[at + 2], id).toBe("invest-own-proof");
+      expect(ids[at + 3], id).toBe("invest-chicken-egg");
+      expect(ids[at + 4], id).toBe("invest-security");
+      expect(ids[at + 5], id).toBe("invest-subscription");
+      expect(ids[at + 6], id).toBe("b1-evolution-journey");
       // And the run it left has closed up behind it: `g10` now hands straight to
       // the bridge, with no hole where f8 stood.
       expect(ids[ids.indexOf("g10-beyond-big-three") + 1], id).toBe("g11-bridge-to-h");
     }
   });
 
-  test("give f8 the `shape` key, so the C run is C.1 + C.2 and nothing splits it", async () => {
+  test("give f8 the `shape` key, so the C run is one three-slide run and nothing splits it", async () => {
     // WHAT THE OVERRIDE BUYS, read off the COMPOSED DECK. `deck-slots.ts`'s test
     // owns the deck-set table — that the entry exists and says `shape`; this owns
     // the consequence, which is the only half the projector shows.
@@ -315,13 +326,23 @@ describe("leader deck sets", () => {
       const keys = await sectionKeysFor(id);
       expect(keys.get("shape-agentic-org"), id).toBe("shape");
       expect(keys.get("f8-your-agentic-os"), id).toBe("shape");
+      expect(keys.get("shape-middle-out"), id).toBe("shape");
       // THE WHOLE RUN, IN ORDER — which is the part that cannot be inferred from
-      // the two lookups above. A third `shape` row, or either of these two
+      // the three lookups above. A fourth `shape` row, or any of these three
       // carrying another key, splits C: non-adjacently it throws as R4 at module
       // load, adjacently it just prints the wrong letter from here to the closer.
       // (`deck-registry.test.ts` owns the run's SIZE; this is which slides fill it.)
+      //
+      // THE THIRD ROW IS gh#68'S AND IT AUTHORS `shape` ITSELF — no override, unlike
+      // the row in front of it. That is the asymmetry this list makes visible: two of
+      // these three ids reach the run from their own files and one reaches it from
+      // `deck-sets.ts`, and only a comparison of the WHOLE run can say so.
       const shapeRun = [...keys].filter(([, key]) => key === "shape").map(([slide]) => slide);
-      expect(shapeRun, id).toEqual(["shape-agentic-org", "f8-your-agentic-os"]);
+      expect(shapeRun, id).toEqual([
+        "shape-agentic-org",
+        "f8-your-agentic-os",
+        "shape-middle-out",
+      ]);
     }
   });
 
@@ -377,22 +398,28 @@ describe("leader deck sets", () => {
       expect(keys.get("f8-your-agentic-os"), id).toBe("techniques");
       // The OTHER direction of the same deck-set property, and the failure mode
       // every leader-only ticket since gh#53 has had to stay clear of: one of these
-      // TWELVE ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
-      // into a deck that has no leader in the room. Ten of them would do it in
+      // THIRTEEN ids written into `STANDARD_SLIDE_IDS` by accident would insert a run
+      // into a deck that has no leader in the room. Eleven of them would do it in
       // FRONT of the curriculum and renumber all 65 slides behind them; the two
       // `mandate` rows would do it between `pitfalls` and `meta` and renumber only
       // the last eleven — quieter, and therefore the ones most likely to reach a
       // projector.
       //
-      // TWELVE IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
-      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65, gh#66 and gh#67 inherit it
+      // THIRTEEN IDS AND FOUR KEYS, AND THE LEAK IS PER-ID RATHER THAN PER-KEY. That
+      // is gh#57's finding and gh#61, gh#58, gh#59, gh#65, gh#66, gh#67 and gh#68
+      // inherit it
       // whole:
-      // `invest-chicken-egg`, `mandate-phases-gates`, `invest-security` and
-      // `invest-subscription` each append to the END of a run that ALREADY EXISTS in
+      // `invest-chicken-egg`, `mandate-phases-gates`, `invest-security`,
+      // `invest-subscription` and `shape-middle-out` each append to the END of a run
+      // that ALREADY EXISTS in
       // the leader list, `gap-hardest-part` went in at the HEAD of one, and
       // `gap-no-sop`, `gap-three-failures` and `gap-the-pattern`
       // into the MIDDLE of one — a third and a fourth
-      // category, and the leak is identical for all of them. The standard list holds no
+      // category, and the leak is identical for all of them. WHAT AN INSERT COSTS THE
+      // LEADER DECK AND WHAT IT WOULD COST A STANDARD ONE ARE UNRELATED, which gh#68
+      // shows most sharply: it is the cheapest edit the leader list has taken — no
+      // letter, no number — and leaked into `STANDARD_SLIDE_IDS` it would be as
+      // expensive as any of the other twelve. The standard list holds no
       // `gap` row, no `invest` row and no `mandate`
       // row at all — so on a standard deck any one of them would arrive alone and
       // claim a letter exactly as the four run-openers would.
@@ -412,6 +439,7 @@ describe("leader deck sets", () => {
           "gap-the-pattern",
           "gap-capability-ladder",
           "shape-agentic-org",
+          "shape-middle-out",
           "invest-own-proof",
           "invest-chicken-egg",
           "invest-security",
@@ -426,7 +454,8 @@ describe("leader deck sets", () => {
 
   // NOT ASSERTED HERE: how long a leader deck is against a standard one. It was
   // eight slides shorter at the gh#41 floor, level after gh#59, a slide LONGER
-  // since gh#65, two longer after gh#66 and FOUR longer since gh#67 — which is exactly
+  // since gh#65, two longer after gh#66, four longer after gh#67 and FIVE longer
+  // since gh#68 — which is exactly
   // why the number is not
   // restated in this file. That
   // is a
