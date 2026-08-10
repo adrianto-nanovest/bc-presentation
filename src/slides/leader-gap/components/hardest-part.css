@@ -1,0 +1,46 @@
+/* THE HARDEST PART (§6.1) — mount choreography for the two-speeds race.
+ *
+ * KEYFRAMES ONLY, `hp-` prefixed, imported by ./HardestPartBeats.tsx (the same
+ * shape as src/components/AnimatedGlyph/glyphs.css). These run ONCE, at slide
+ * mount — the race is entry choreography. Everything that changes BETWEEN poses
+ * is a CSS transition set inline by the component, so it runs both ways on the
+ * pose walk. The global `prefers-reduced-motion: reduce` rule in globals.css
+ * squashes both forms to 0.01ms; the one JS interval (the day counter) gates
+ * itself on the same query in the component.
+ *
+ * The two fills are separate names on identical frames so a browser timeline
+ * reads which lane is which — and so nobody "deduplicates" them into one name
+ * and then retunes the slow lane by editing the fast one.
+ */
+
+@keyframes hp-fill-fast {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes hp-fill-slow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes hp-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes hp-drop {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hp-pop {
+  from { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hp-pulse {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.25; }
+  100% { opacity: 1; }
+}

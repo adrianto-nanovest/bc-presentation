@@ -362,100 +362,110 @@ export function capabilityLadderFor(brand: Brand): LadderBrandBlock {
 // ═════════════════════════════════════════════════════════════════════════════
 //
 // §6.1 is one line: "The hardest part is not the tools (70%). Opens the gap between
-// tool access and organizational capability." The statistic behind it is REUSED
-// VERBATIM, on the research's own verdict (`docs/researches/internal-hr-group.md`
-// §1.1 and §3.1: "Reuse quote verbatim"), and its attribution is printed ON the
-// slide rather than footnoted — the same rule the ladder's `source` fields keep.
+// tool access and organizational capability."
 //
-// ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER. See the top of this
-// file: §4.4's seven slots do not list this slide, the statistic is BCG/McKinsey's
-// and not either organisation's, and a `Record<Brand, …>` here would be three
-// fillings of a slot with one honest occupant. The slide file imports no `VARIANT`
-// at all, which is what lets its test compare two variant epochs byte for byte.
+// REDESIGNED 2026-08-10 BY OWNER CALL, productionized from the B.1 prototype's
+// variant B ("TWO SPEEDS", `?dev=protob1`, deleted with this change). The first cut
+// printed the argument as five bands of prose and accumulated all of them onto one
+// screen by its last pose — a wall of text in front of top management. The redesign
+// makes the gap a difference in SPEED and lets motion carry it: one signature starts
+// two progress lanes, tool access finishes in under a second, organizational
+// capability crawls and is still running when the presenter moves on. Three poses,
+// one visual argument each, the presenter carrying the connective prose verbally:
 //
-// THE KEYWORD RULE, as stated at the top of this file and applied here without an
-// exception: `kw` on PROSE ONLY. The prose on this slide is the headline, the two
-// gap lines and the closer — four strings, four `*Kw` siblings. THE STATISTIC AND
-// ITS SOURCE ARE KEYWORD-FREE, and they are the sharpest case the rule has: a copper
-// italic inside a quoted figure emphasises a fragment of somebody else's sentence,
-// and inside an attribution it reads as the deck editing its own citation. The two
-// half labels and all eight list rows are labels and carry none either.
+//   0 — THE RACE. Two lanes off one signature. Access fills instantly and stamps
+//       DAY 1; capability crawls behind a live day counter. The race line lands
+//       last: only one of these arrives by signature.
+//   1 — THE ANATOMY. The access lane thins in place; the capability lane grows,
+//       and the unrun distance names the five structural things that fill it —
+//       one word on the lane, one clause under it.
+//   2 — THE SUMMARY. Both lanes park as a two-line scoreboard, and the evidence
+//       lands beneath: the verbatim statistic with its attribution, the split bar
+//       in the statistic's own ratio, and the closer.
 //
-// THE 70/30 COLLISION WITH THE LADDER, recorded once here and once in
-// `./hardest-part-geometry.ts`, because this file is where a future editor would
-// create it. §6.5's L3 rung is defined as "Decision contract · 70/30 split" — that
-// 70/30 is how much of a bounded agentic DECISION the machine may take. THIS 70/30
-// is the ADOPTION-FAILURE split: how many failures are people and process against
-// how many are technology. The numbers agree by coincidence. So: nothing below
-// prints the phrase "70/30" (it is the ladder's), nothing below says "decision
-// contract", and `peopleItems`' first row says "Decision RIGHTS" — who owns a call —
-// which is org design and not the ladder's rung definition. Do not merge them, do
-// not cross-reference them on either stage, and do not "reuse" one number for the
-// other.
+// THE STATISTIC IS REUSED VERBATIM AND CARRIES ITS SOURCE ON-SLIDE — the research
+// verdict behind it is explicit (`docs/researches/internal-hr-group.md` §1.1, §3.1,
+// and the slide-by-slide table: "Reuse quote verbatim"). It now lands at pose 2, the
+// canonical pose, so the PDF and PPTX exports print the number WITH its attribution
+// and the deck's own conclusion under it. `statisticSource` records what the
+// attribution may and may not claim: no read date and no study title, because we
+// hold neither.
 //
-// WHAT THIS SLIDE MAY NOT SAY, because three siblings own it (§6.2, §6.3, §6.4), and
-// the first of the three is a constraint the SPEC states rather than a judgement
-// this file makes:
+// ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER — unchanged from the
+// first cut and argued at its length there: §4.4's seven slots do not list this
+// slide, the statistic is a third party's and the gap between procurement and
+// capability is nobody's local fact. The slide file imports no `VARIANT` at all.
 //
-//   · SHADOW AI, SOPs, MISSING GUIDANCE, IMPROVISATION → §6.2 (`gap-no-sop`) owns
-//     the whole of it, and owns shadow AI as `condition`. §6.2 is explicit that the
-//     deck's three shadow-AI passes must share no image and no statistic, and the
-//     escalation "degenerates into repetition the moment two of the three passes
-//     share an image or a statistic". This slide therefore names none of it — not as
-//     tact, but because a first mention here would spend §6.2's `condition` beat
-//     before that slide gets to make it.
-//   · NANOVEST'S OWN FAILURES, first person → §6.3 (`gap-three-failures`). Nothing
-//     below is in the first person and nothing below is a story.
-//   · THE PATTERN ACROSS THOSE FAILURES → §6.4 (`gap-the-pattern`).
-//   · L1–L5, THE RUNGS, THE DECISION CONTRACT → §6.5, above in this file.
+// THE KEYWORD RULE: `kw` on PROSE ONLY. The prose on this slide is the headline,
+// the race line, the footnote, the anatomy line and the closer — five strings, five
+// `*Kw` siblings. THE STATISTIC AND ITS SOURCE ARE KEYWORD-FREE, the rule's
+// sharpest case: a copper italic inside a quoted figure emphasises a fragment of
+// somebody else's sentence. Lane names, tags, the in-bar items, the five segment
+// words and their notes are labels and carry none either.
 //
-// THE ONE DELIBERATE ECHO, so a reviewer sees it was chosen and not leaked: the
-// capability line below says capability is "earned", and the ladder's L5 is
-// "Declared only when earned". That rhyme is the section's thesis stated at both
-// ends of its run — B.1 opens the gap, B.5 puts a ladder in it — and it is one
-// ordinary English word rather than a borrowed label. Nothing else is shared.
+// THE 70/30 COLLISION WITH THE LADDER, kept from the first cut because this file is
+// where a future editor would create it: §6.5's L3 rung is "Decision contract ·
+// 70/30 split" — how much of a bounded agentic DECISION the machine may take. THIS
+// slide's 70/30 is the ADOPTION-FAILURE split. The numbers agree by coincidence;
+// nothing below prints the phrase "70/30", and the segment word "DECISION RIGHTS"
+// — who owns a call — is org design, not the ladder's rung definition.
+//
+// WHAT THIS SLIDE MAY NOT SAY, because three siblings own it (§6.2, §6.3, §6.4):
+// no shadow AI, SOPs, missing guidance or improvisation (§6.2's `condition` beat —
+// a first mention here would spend it); no first-person Nanovest failures (§6.3);
+// no pattern across them (§6.4); no L1–L5 and no ladder (§6.5, above in this file).
+// `tests/unit/gap-hardest-part.test.tsx` sweeps every authored string for all four.
+//
+// THE ONE DELIBERATE ECHO, unchanged: the capability tag says EARNED, and the
+// ladder's L5 is "Declared only when earned" — the section's thesis stated at both
+// ends of its run, one ordinary English word, nothing else shared.
 
-/** One row of either half of the split. A LABEL, keyword-free by the rule above. */
-export interface SplitItem {
+/** How far the capability lane gets while the room watches: a fraction of the lane,
+ *  not a measurement — the point is that it is small and still moving. The geometry
+ *  derives the segment slices from it. */
+export type LaneSegment = {
   id: string;
-  /** Cut for ONE line: 397px (people) or 353px (technology) of 15px sans, which is
-   *  ≈50 and ≈44 characters. A reword past that wraps into the row under it. */
-  label: string;
-}
+  /** Mono caps, ON the lane — one or two words, projector-read. Keyword-free. */
+  word: string;
+  /** What it costs, one clause, under the lane. Keyword-free. */
+  note: string;
+};
+
+/** Exactly five, held by the TYPE — the fixed-length tuple idiom this file already
+ *  uses for §6.2's lists: a sixth entry's error lands ON the sixth entry. */
+type Five<T> = readonly [T, T, T, T, T];
 
 /**
- * §6.1's five structural contents of the people-&-process half.
+ * §6.1's five structural contents of the people-&-process half, as lane segments.
  *
- * THE ORDER IS THE ARGUMENT and `./hardest-part-geometry.ts` lays it out
- * column-major, so it reads top-to-bottom then across: who decides, how the work is
- * shaped, who can do it, what they are rewarded for, and how anyone can tell. Each
- * row is a NOUN plus what it costs — the noun alone ("Skills") reads as a training
- * budget, which is the reading §6.1 exists to refuse.
+ * THE ORDER IS THE ARGUMENT and the lane draws it left to right: who decides, how
+ * the work is shaped, who can do it, what they are rewarded for, and how anyone can
+ * tell. Each is a WORD the back row reads off the lane plus the NOTE that stops the
+ * word reading as a training budget — "SKILLS / the habit, not the awareness".
  *
- * FIVE, and `./hardest-part-geometry.ts` pins the count: a sixth row deepens the
- * sub-columns by arithmetic and the stage's floor clearance is what reports it.
+ * FIVE, and `./hardest-part-geometry.ts` pins the count: a sixth would re-cut every
+ * slice and the weld there is what reports it.
  */
-const PEOPLE_ITEMS: readonly SplitItem[] = [
-  { id: "decision-rights", label: "Decision rights — who owns the call." },
-  { id: "workflow", label: "Workflow redesign — the process changes shape." },
-  { id: "skills", label: "Skills — the habit, not the awareness." },
-  { id: "incentives", label: "Incentives — what faster work is rewarded for." },
-  { id: "measurement", label: "Measurement — what now counts as done." },
+const SEGMENTS: Five<LaneSegment> = [
+  { id: "decision-rights", word: "DECISION RIGHTS", note: "who owns the call" },
+  { id: "workflow", word: "WORKFLOW", note: "the process changes shape" },
+  { id: "skills", word: "SKILLS", note: "the habit, not the awareness" },
+  { id: "incentives", word: "INCENTIVES", note: "what faster work is rewarded for" },
+  { id: "measurement", word: "MEASUREMENT", note: "what now counts as done" },
 ];
 
+/** Exactly three — the three things money already buys, as in-bar items. Named
+ *  `Trio` and not `Three` only because §6.2's block further down this file
+ *  already owns that identifier at module scope. */
+type Trio<T> = readonly [T, T, T];
+
 /**
- * The three things the 30% is, i.e. the three things money already buys.
- *
- * EACH ROW NAMES ITS OWN PROCUREMENT INSTRUMENT — a subscription, a purchase order,
- * an afternoon — because "Models · Licences · Tools" as three bare nouns is a list
- * the room reads as difficulty. The point of the 30% is that none of it is hard,
- * and the instrument is what says so in four words.
+ * What fills the ACCESS lane the moment it fills: three bare nouns, because the
+ * lane arriving complete in under a second IS the sentence the first cut spelled
+ * out as "a subscription away / a purchase order / an afternoon". The instrument
+ * is now carried by the motion; the nouns just name what arrived.
  */
-const TECHNOLOGY_ITEMS: readonly SplitItem[] = [
-  { id: "models", label: "Models — a subscription away." },
-  { id: "licences", label: "Licences — a purchase order." },
-  { id: "tools", label: "Tools — installed in an afternoon." },
-];
+const ACCESS_ITEMS: Trio<string> = ["MODELS", "LICENCES", "TOOLS"];
 
 export const gapHardestPartContent = {
   /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from
@@ -467,19 +477,82 @@ export const gapHardestPartContent = {
   headline: "The hardest part is not the tools.",
   headlineKw: ["not the tools"],
 
-  /** Mono LABEL over the quotation. Keyword-free. Says "reported" and "split" so the
-   *  room knows what kind of object it is about to read before it reads it. */
+  // ── pose 0 · the race ──────────────────────────────────────────────────────
+
+  /** Mono LABEL over the race. Keyword-free. "Two clocks" is the pose's whole
+   *  claim: the same signature starts both, and only one of them stops today. */
+  raceEyebrow: "ONE SIGNATURE STARTS TWO CLOCKS",
+
+  /** The two lane names. Labels — §6.1's own two terms, verbatim. */
+  accessLane: "Tool access",
+  capabilityLane: "Organizational capability",
+
+  /** The access lane's tag, and what it becomes once the lane thins: the fact the
+   *  scoreboard keeps. Labels. */
+  accessTag: "PROCURED",
+  accessTagDone: "PROCURED · DONE DAY 1",
+
+  accessItems: ACCESS_ITEMS,
+
+  /** The access lane's finish flag. A label; "everyone at once" is the half of the
+   *  first cut's access line that survives, because the fill arriving all at once
+   *  is the other half drawn. */
+  accessDone: "DAY 1 · DONE — EVERYONE AT ONCE",
+
+  /** The capability lane's tag, and the scoreboard form it takes at pose 2. The
+   *  EARNED echo is the section's chosen rhyme — see the header. */
+  capabilityTag: "EARNED",
+  capabilityTagRunning: "EARNED · STILL RUNNING",
+
+  /** The live counter's two halves: `DAY ${n} · STILL RUNNING`. Labels. The digits
+   *  are runtime state, not authored copy — no authored string here carries the
+   *  day number, so the no-invented-figures sweep stays clean. */
+  dayLabel: "DAY",
+  stillRunning: "STILL RUNNING",
+
+  /** Inside the capability lane's filled sliver from pose 1 on. A label. */
+  soFar: "SO FAR",
+
+  /**
+   * Under the capability lane, pose 0 ONLY (owner call 2026-08-10: it leaves the
+   * stage when the anatomy arrives). PROSE — the surviving clause of the first
+   * cut's capability line, and "never on an invoice" is still the argument: no
+   * amount of the 30% closes the gap.
+   */
+  footnote: "one changed habit at a time — and never on an invoice",
+  footnoteKw: ["never on an invoice"],
+
+  /** Pose 0's last arrival, full width. PROSE. The pose's verdict: the room just
+   *  watched one lane finish and one lane crawl, and this names why. */
+  raceLine: "Only one of these arrives by signature.",
+  raceLineKw: ["signature"],
+
+  // ── pose 1 · the anatomy ───────────────────────────────────────────────────
+
+  /** Mono LABEL over the anatomy. Keyword-free. */
+  anatomyEyebrow: "WHAT FILLS THE REST OF THE LANE",
+
+  segments: SEGMENTS,
+
+  /** Pose 1's verdict. PROSE. Five things just landed on the lane and this is the
+   *  one sentence about all of them. */
+  anatomyLine: "None of it can be procured.",
+  anatomyLineKw: ["procured"],
+
+  // ── pose 2 · the summary ───────────────────────────────────────────────────
+
+  /** Mono LABEL over the quotation. Keyword-free. Says "reported" and "split" so
+   *  the room knows what kind of object it is about to read. */
   statisticEyebrow: "THE REPORTED SPLIT",
 
   /**
    * THE STATISTIC, VERBATIM — the research's own verdict, quoted and not adapted
    * (`docs/researches/internal-hr-group.md` §3.1).
    *
-   * KEYWORD-FREE, and this is the string the rule exists for: it is somebody else's
-   * sentence, and a copper italic inside it would be the deck emphasising a fragment
-   * of a quotation. It is also the number `./hardest-part-geometry.ts` cuts the split
-   * bar from — `PEOPLE_SHARE` is 0.70 because this string says 70% — so a reword that
-   * changed the figure and left the bar alone is a lie the test catches.
+   * KEYWORD-FREE, and this is the string the rule exists for. It is also the number
+   * `./hardest-part-geometry.ts` cuts the summary bar from — `PEOPLE_SHARE` is 0.70
+   * because this string says 70% — so a reword that changed the figure and left the
+   * bar alone is a lie the test catches.
    *
    * "&" AND NOT "and", "people & process" AND NOT "people and process": verbatim
    * means verbatim, and the ampersand is in the source.
@@ -487,65 +560,25 @@ export const gapHardestPartContent = {
   statistic: "70% of AI adoption failures are people & process, not technology",
 
   /**
-   * The attribution, printed ON the slide (the ladder's rule, applied to a figure
-   * this deck did not measure). Mono, keyword-free.
-   *
-   * WHAT IT CLAIMS AND WHAT IT DOES NOT. The research records the figure as
-   * BCG/McKinsey's and cites it as an adoption benchmark; we hold no primary URL and
-   * no read date for it, so this string says "reported by" and says that the deck
-   * QUOTES rather than measures. It carries no date it cannot support and no study
-   * title it cannot name — an invented citation is worse than a plain one, and this
-   * slide is the one place in the section where a leader is most likely to ask.
+   * The attribution, printed ON the slide, in the same pose as the figure it
+   * attributes. Mono, keyword-free. It says "reported by" and says that the deck
+   * QUOTES rather than measures; it carries no date and no study title it cannot
+   * support — an invented citation is worse than a plain one.
    */
   statisticSource:
     "Reported by BCG / McKinsey — the adoption benchmark this deck quotes rather than measures.",
 
-  /** The 70% segment's label. Mono, keyword-free. It carries its own percentage so
-   *  the mass is never read against the wrong number, and NOT the phrase "70/30",
-   *  which is the ladder's (see the header). */
+  /** The summary bar's two labels. Mono, keyword-free. Each carries its own
+   *  percentage so a mass is never read against the wrong number — and NOT the
+   *  phrase "70/30", which is the ladder's (see the header). */
   peopleLabel: "70% · PEOPLE & PROCESS",
-
-  /** The 30% segment's label. Mono, keyword-free, same construction. */
   technologyLabel: "30% · TECHNOLOGY",
 
-  peopleItems: PEOPLE_ITEMS,
-  technologyItems: TECHNOLOGY_ITEMS,
-
-  /** Mono LABEL over band 4, and the one string that calls the thing a GAP — §6.1's
-   *  own word. Keyword-free. The two terms it abbreviates ("tool access",
-   *  "organizational capability") are spelled out in the two lines under it. */
-  gapEyebrow: "THE GAP · ACCESS AGAINST CAPABILITY",
-
   /**
-   * The bought half of the gap. PROSE, so it carries keywords.
-   *
-   * Two properties in one sentence — it is PROCURED and it is INSTANT — because
-   * either alone is a fact and the pair is the argument: what a signature buys
-   * arrives complete, all at once, for everybody.
-   */
-  accessLine:
-    "Tool access is procured. It arrives instantly, the day the invoice clears, for everyone at once.",
-  accessLineKw: ["procured", "instantly"],
-
-  /**
-   * The built half. PROSE, and the mirror of the line above it: EARNED against
-   * procured, SLOWLY against instantly. "Never on an invoice" is the sentence's
-   * job — it is what makes the gap a gap rather than a delay, because no amount of
-   * the 30% closes it.
-   */
-  capabilityLine:
-    "Organizational capability is earned. It arrives slowly, one changed habit at a time, and never on an invoice.",
-  capabilityLineKw: ["earned", "slowly"],
-
-  /**
-   * The closer, and the frame for everything behind this slide. PROSE.
-   *
-   * IT IS THE SLIDE'S LAST ARRIVAL, full width and alone in its band, because it is
-   * the only sentence here addressed to the rest of the deck rather than to the
-   * statistic. IT COUNTS NOTHING AND NAMES NO POSITION — "everything after this",
-   * never "the next four slides" and never a letter — because the run this slide
-   * opens is composed per deck set (§3.4) and a sentence that counted its own
-   * successors would go stale the first time one was inserted or cut.
+   * The closer, and the frame for everything behind this slide. PROSE, the slide's
+   * last arrival. IT COUNTS NOTHING AND NAMES NO POSITION — "everything after
+   * this", never "the next four slides" — because the run this slide opens is
+   * composed per deck set (§3.4).
    */
   closer: "The tools are the 30%. Everything after this is the 70%.",
   closerKw: ["the 70%"],

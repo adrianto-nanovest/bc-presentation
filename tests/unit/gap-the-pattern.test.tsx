@@ -595,10 +595,13 @@ const B2_SPEC_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
 ];
 
 /**
- * B.1's own tokens — its quoted figure, its two halves and its four verbs.
+ * B.1's own tokens — its quoted figure, its two halves and its verbs. REMEASURED
+ * 2026-08-10 against the two-speeds redesign: "instantly" left B.1's copy (the
+ * instant arrival is now the access lane's 850ms fill, not a word) and "signature"
+ * arrived (its eyebrow starts two clocks with one, and its race line ends on it).
  *
  * `capability` IS DELIBERATELY ABSENT FROM THIS LIST, and it is the one entry worth
- * arguing. B.1 labels its own band "THE GAP · ACCESS AGAINST CAPABILITY" and this slide's
+ * arguing. B.1 names its slow lane "Organizational capability" and this slide's
  * verdict names a capability on purpose — that is the ECHO §6.4 exists to make, B.1
  * asserting it about the world and B.4 proving it on the presenter's record. What
  * separates an echo from a re-spend is B.1's ACTUAL WORDS, which are all below.
@@ -611,7 +614,7 @@ const B1_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["procured", /\bprocure\w*\b/i],
   ["earned", /\bearn\w*\b/i],
   ["invoice", /\binvoice\b/i],
-  ["instantly", /\binstantl\w*\b/i],
+  ["signature", /\bsignature\b/i],
   ["tool access", /\btool access\b/i],
   ["BCG", /\bBCG\b/],
   ["McKinsey", /\bMcKinsey\b/i],

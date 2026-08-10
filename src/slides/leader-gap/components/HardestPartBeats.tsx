@@ -1,529 +1,624 @@
-// A quoted statistic, that statistic drawn as one split bar, what is inside each
-// half, and the gap the split names.
+// Two lanes off one signature: the access lane finishes in under a second, the
+// capability lane crawls behind a live day counter — and the gap §6.1 names is
+// the difference between those two speeds, carried by motion instead of prose.
 //
-// THE FIGURE IS THE STATISTIC, TWICE. Band 1 prints the quotation; band 2 draws the
-// same number as two masses; band 3 fills each mass with what it contains. That
-// repetition is the whole construction: a room that reads "70%" as a rhetorical
-// number stops doing so once the 70% is a rectangle with five named things inside it
-// and the 30% is a smaller rectangle with three things money buys. The ratio is not
-// typed here — `../hardest-part-geometry.ts` derives both segment widths from
-// `PEOPLE_SHARE`, which is 0.70 because the quoted string says 70%.
+// REWRITTEN 2026-08-10 (owner call, productionized from the B.1 prototype's
+// variant B "TWO SPEEDS"; the prototype directory is deleted in the same change).
+// The first cut was five static bands that accumulated onto one screen; this
+// figure is ONE PERSISTENT SCENE whose elements MORPH between three poses:
 //
-// IT READS NO VARIANT AND NO BRAND, and unlike this directory's other figure
-// (`./CapabilityLadder.tsx`) it takes no resolved brand block either: this slide has
-// no brand axis at all. `../content.ts` carries the argument; the short form is that
-// the statistic is a third party's and the gap is nobody's local fact, so §4.4's
-// seven slots do not list this slide. A reader arriving from the ladder will look
-// for a `…For(brand)` prop here and there is not one.
+//   0 — THE RACE. Both lanes at full height. The access lane fills to 100% in
+//       850ms and flags DAY 1 · DONE; the capability lane crawls to a sliver
+//       over six seconds and its day counter keeps ticking. The race line lands
+//       last, with the slide's first keyword: "signature".
+//   1 — THE ANATOMY. The access lane THINS IN PLACE (same top, 66→20px) — it is
+//       done arguing and becomes a fact. The capability lane rises and grows,
+//       and its unrun distance splits into the five structural segments, each a
+//       word on the lane and a note under it. The pose-0 footnote leaves the
+//       stage here (owner call). Verdict: "None of it can be procured."
+//   2 — THE SUMMARY. The capability lane parks under the access lane at the
+//       same thin height — a two-line scoreboard: PROCURED · DONE DAY 1 against
+//       EARNED · STILL RUNNING — and the evidence lands beneath: the verbatim
+//       statistic with its attribution, the split bar cut from PEOPLE_SHARE,
+//       and the closer.
 //
-// CSS VARS ONLY, NO HEX AND NO rgba() LITERALS — including the two bar segments,
-// whose colours are the two ends of the copper ramp and not a computed tint.
+// WHY PERSISTENT AND NOT REMOUNTING POSES: the morphs ARE the argument's
+// connective tissue (the same lane that raced is the lane that gets dissected,
+// and the same two lanes are what the scoreboard summarises), so the elements
+// must keep identity across poses. Every pose change is therefore a CSS
+// TRANSITION set inline (runs both ways on the pose walk); mount choreography —
+// the race itself — is keyframes from ./hardest-part.css and runs ONCE, at
+// slide entry. An element that needs BOTH wears a wrapper: the outer node owns
+// the pose gate, the inner owns the mount animation, because an animation's
+// fill-mode holds its properties hostage against any transition on the same node.
 //
-// RANK IS A COLOUR TIER BETWEEN ROLES — see {@link TIER} — and opacity means "not
-// revealed yet", i.e. TIME, never rank. The sharpest case on this stage is the bar:
-// the 30% segment is DARKER than the 70% one because it is a different role (what
-// money already buys, against what it cannot), and it is a full-strength colour at
-// full opacity, not a faded copy of its neighbour. A 30% mass drawn at 30% opacity
-// would say "less revealed" in a deck where that means "not argued yet".
+// THE POSE GATE IS INLINE OPACITY — {@link gate} always writes `opacity`, so the
+// unit test reads visibility off `el.style.opacity` the way the step-reveal
+// siblings read `.fade.on`. Opacity here means TIME (not argued yet / already
+// argued past), never rank — the deck's rule, unchanged.
 //
-// ZERO SMIL NODES, at every pose, under any motion preference — and closed BY
-// CONSTRUCTION exactly as `leader-invest/components/SubscriptionBeats.tsx` and
-// `leader-mandate/components/EnablementModel.tsx` close it: THIS FIGURE MOUNTS NO
-// `<svg>` AT ALL, so there is no `<animate>`, `<animateTransform>`, `<animateMotion>`
-// or `<set>` to gate at mount. The split bar is two plain boxes for exactly that
-// reason — an SVG `<rect>` pair would have bought nothing and would have re-opened a
-// question the deck has had to answer with a `matchMedia` gate three times elsewhere
-// (`E12LoopAnatomy`, `E12MindsetDiptych`, `E9DistractionMotion`), and `./CapabilityLadder.tsx`
-// next door pays that cost because its four encodings genuinely need vector marks.
-// The entire motion budget here is `.fade`'s transition pair plus `.copper-rule`'s
-// `scaleX`, and the global `prefers-reduced-motion: reduce` rule in
-// `src/styles/globals.css` squashes both to 0.01ms — so every pose rests on its
-// finished frame under either preference. NO NEW KEYFRAME, NO NEW CLASS, NO NEW FONT.
-import type { CSSProperties } from "react";
-// Section E's copy, which is the tree's de facto shared reveal primitive. The census
-// of its importers is kept by `leader-mandate/components/EnablementModel.tsx` and
-// `leader-invest/components/SubscriptionBeats.tsx`; this file moves that count again
-// and so does not re-quote it. A second copy under this directory would be the wrong
-// answer to three that already exist elsewhere. `CopperRule` comes from the same file
-// for the same reason.
-import { CopperRule, Reveal } from "@/slides/foundation-core-section-e/components/Reveal";
+// ZERO SMIL, ZERO `<svg>`, BY CONSTRUCTION — the property the first cut kept and
+// this one keeps the same way: nothing here mounts a vector element at all. The
+// one JS motion source is the day counter's interval, and it gates itself on
+// `prefers-reduced-motion` (the global CSS squash cannot reach an interval).
+//
+// CSS VARS ONLY, NO HEX AND NO rgba() LITERALS. Rank between the two lane fills
+// is a colour tier (copper gradient against `--copper-700`), never opacity.
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { highlight } from "@/components/highlight";
+import "./hardest-part.css";
 import {
-  BAR_HEIGHT,
-  BAR_TOP,
-  CLOSER_HEIGHT,
-  CLOSER_TOP,
+  ACCESS_LABEL_TOP,
+  ACCESS_TRACK_HEIGHT,
+  ACCESS_TRACK_HEIGHT_THIN,
+  ACCESS_TRACK_TOP,
+  CAPTION_TOP,
   CONTENT_WIDTH,
-  EYEBROW_HEIGHT,
-  GAP_EYEBROW_TOP,
-  GAP_LINE_HEIGHT,
-  GAP_LINE_TOP,
-  GAP_COL_WIDTH,
-  HALF_LABEL_TOP,
-  PEOPLE_LEFT,
-  PEOPLE_WIDTH,
-  ROW_HEIGHT,
-  RULE_TOP,
+  EARNED_PROGRESS,
+  EYEBROW_TOP,
+  FOOTNOTE_TOP,
   SIDE_MARGIN,
-  SOURCE_HEIGHT,
-  SOURCE_TOP,
-  STATISTIC_EYEBROW_TOP,
-  STATISTIC_HEIGHT,
-  STATISTIC_TOP,
-  SUB_COL_WIDTH,
-  TECHNOLOGY_LEFT,
-  TECHNOLOGY_WIDTH,
-  bandRowTop,
-  gapColLeft,
-  peopleItemLeft,
-  peopleItemTop,
+  SUMMARY_BAR_HEIGHT,
+  SUMMARY_BAR_LABEL_TOP,
+  SUMMARY_BAR_LEFT,
+  SUMMARY_BAR_TOP,
+  SUMMARY_CLOSER_TOP,
+  SUMMARY_PEOPLE_WIDTH,
+  SUMMARY_SOURCE_TOP,
+  SUMMARY_STATISTIC_TOP,
+  SUMMARY_TECHNOLOGY_LEFT,
+  SUMMARY_TECHNOLOGY_WIDTH,
+  TICK_COUNT,
+  VERDICT_TOP,
+  capabilityGeometry,
+  segmentSlice,
 } from "../hardest-part-geometry";
 import { gapHardestPartContent as C } from "../content";
 
-// ───────────────────── the tiers, in one table ─────────────────────
-
-/**
- * One tier per ROLE, and not one per box. Hand-derived WCAG relative luminances over
- * `src/styles/globals.css`'s hexes, brightest first, under the headline's
- * `--neutral-50` (0.9131):
- *
- *   role            token           luminance   register
- *   verdict         --neutral-100    0.7835     22px serif — the closer
- *   claim           --neutral-200    0.6584     17px serif — the two gap lines
- *   quotation       --copper-200     0.5917     28px serif — the statistic
- *   listRow         --neutral-300    0.3663     15px sans — all eight rows
- *   citation        --neutral-300    0.3663     10.5px mono — the attribution
- *   label           --copper-400     0.2967     11px mono caps — four label rows
- *   peopleMass      --copper-500     0.2168     the 70% bar segment
- *   technologyMass  --copper-900     0.0230     the 30% bar segment
- *
- * THE STATISTIC IS THE ONLY COPPER TEXT ON THIS STAGE, AND THAT IS THE EPISTEMICS
- * DRAWN IN COLOUR — the rule `leader-invest/components/SubscriptionBeats.tsx` records
- * and this file inherits: copper means A THING QUOTED FROM SOMEWHERE ELSE, and the
- * neutral tiers are the deck's own voice. The statistic is BCG/McKinsey's sentence,
- * so it is copper; the gap lines and the closer are this deck's claims, so they are
- * neutral. Nothing the slide asserts is copper and nothing it quotes is not.
- *
- * SO THE CENTREPIECE SITS THIRD ON THE LUMINANCE LADDER, AND ITS RANK IS CARRIED BY
- * SIZE. The statistic is 28px, the largest thing on the stage under the 40px
- * headline, and the two tiers above it are 22px and 17px — colour says WHOSE sentence
- * it is, size says which sentence matters most. That split is `./CapabilityLadder.tsx`'s
- * own shipped call ("rank is carried by size and colour tier, never by opacity"), and
- * the thing neither of them uses for rank is opacity, which on every step-reveal
- * slide in this deck means "not argued yet".
- *
- * THE ATTRIBUTION IS **NOT** COPPER, which looks like an exception and is not: it is
- * a CITATION, not a quotation — the deck's own note about where the sentence came
- * from — and it takes the quietest legal-text tier, `--neutral-300`, exactly as that
- * file's `citation` role does. It does not go below gh#50's floor: this string is
- * what keeps the figure above it honest.
- *
- * THE TWO BAR SEGMENTS ARE THE ONE PLACE ON THIS STAGE WHERE A TIER IS A MASS rather
- * than text, so neither is held to the text floor — a background is not read, it is
- * compared. `--copper-500` against `--copper-900` is a 3.7:1 contrast ratio, over
- * WCAG's 3:1 floor for a non-text graphic; `--copper-800` for the narrow mass would
- * have been 2.8:1, which is why the ramp's far end is used and not its middle.
- *
- * `--copper-400` UNDER `--neutral-300` FOR THE MONO LABELS is the shipped precedent
- * both sibling leader figures cite — exactly this token in exactly this register,
- * 11px mono caps — and it is precedent, not a documented exemption.
- */
-const TIER = {
-  /** The quoted statistic — 28px serif, the one copper sentence on the stage. */
-  quotation: "var(--copper-200)",
-  /** Its attribution. Quiet, and never below the floor. */
-  citation: "var(--neutral-300)",
-  /** All four mono caps rows: band 1's eyebrow, the two half labels, band 4's. */
-  label: "var(--copper-400)",
-  /** The 70% mass. The brand copper — the subject of the slide. */
-  peopleMass: "var(--copper-500)",
-  /** The 30% mass. Full strength, nearly the surface, and NOT a faded copy of the
-   *  segment beside it (see the header on opacity). */
-  technologyMass: "var(--copper-900)",
-  /** All eight list rows, in both halves. ONE TIER FOR BOTH: ranking a structural
-   *  item over a thing money buys would be a claim the copy already makes in words,
-   *  and ranking the eight against each other would be one nobody authored. */
-  listRow: "var(--neutral-300)",
-  /** The two gap lines — descriptions, one tier under the verdict. */
-  claim: "var(--neutral-200)",
-  /** The closer. The brightest text under the headline row. */
-  verdict: "var(--neutral-100)",
-} as const;
-
 // ───────────────────── type registers ─────────────────────
 
-/** The mono LABEL register. `upper` is the default because every mono label in this
- *  deck is uppercase; the ATTRIBUTION is the one exception — a sentence-length
- *  citation in caps is a wall nobody in the back row reads — and it keeps the
- *  register while dropping the transform, the same two-case helper both sibling
- *  leader figures ship. */
-function mono(size: number, color: string, ls: number, upper = true): CSSProperties {
+/** The mono LABEL register — lane names, tags, eyebrows, in-bar items. */
+function mono(size: number, color: string, ls = 0.16): CSSProperties {
   return {
     fontFamily: "var(--mono)",
     fontSize: size,
     letterSpacing: `${ls}em`,
-    ...(upper ? { textTransform: "uppercase" as const } : null),
+    textTransform: "uppercase",
     color,
   };
 }
 
-/** The sans register — every one of the eight rows, cut for one line each. */
-const listRowStyle: CSSProperties = {
-  fontFamily: "var(--sans)",
-  fontSize: 15,
-  lineHeight: 1.3,
-  color: TIER.listRow,
+/** The prose register — the verdict lines, the statistic, the closer. */
+function serif(size: number, color: string): CSSProperties {
+  return { fontFamily: "var(--serif)", fontSize: size, lineHeight: 1.3, color, margin: 0 };
+}
+
+/** Both lane tracks: full width, hairline copper border, near-surface bed. */
+const TRACK: CSSProperties = {
+  position: "absolute",
+  left: SIDE_MARGIN,
+  width: CONTENT_WIDTH,
+  border: "1px solid var(--copper-800)",
+  background: "var(--neutral-800)",
+  overflow: "hidden",
+  boxSizing: "border-box",
 };
 
-/** The prose register — the statistic, the two gap lines, the closer. Upright serif;
- *  the only italics on this stage are the keywords `highlight()` places, and the
- *  statistic and its source get none of those (`../content.ts`'s keyword rule). */
-function prose(size: number, color: string): CSSProperties {
+// ───────────────────── the two motions ─────────────────────
+
+/** The morph every persistent box rides between poses — top and height only,
+ *  so a mount keyframe on a CHILD node is never fighting it. */
+const MOVE = "top 650ms var(--ease), height 650ms var(--ease)";
+
+/**
+ * A pose gate: opacity written ALWAYS (the test's visibility hook), transitioned
+ * both ways, delayed only on the way IN — leaving must be immediate or a pose
+ * walk backwards drags ghosts through the morph.
+ */
+function gate(on: boolean, delayMs = 0, rise = false): CSSProperties {
   return {
-    fontFamily: "var(--serif)",
-    fontSize: size,
-    lineHeight: 1.3,
-    color,
-    margin: 0,
+    opacity: on ? 1 : 0,
+    ...(rise ? { transform: on ? "translateY(0)" : "translateY(8px)" } : null),
+    transition:
+      `opacity 450ms var(--ease) ${on ? delayMs : 0}ms` +
+      (rise ? `, transform 450ms var(--ease) ${on ? delayMs : 0}ms` : ""),
   };
 }
 
-// ───────────────────── the stagger ─────────────────────
+// ───────────────────── the moving parts ─────────────────────
 
 /**
- * 120ms of lead-in, 90ms between boxes.
- *
- * 120 IS THE DECK'S NUMBER — `leader-mandate/type-registers.ts` states it once and
- * both other leader figures use it: it keeps the first box off the same frame as the
- * click. 90 is the leader tree's box-to-box stagger. This section had NO stagger to
- * inherit — `./CapabilityLadder.tsx` passes `Reveal` no delay at all, because its
- * marks arrive in ones and twos — so these are the tree's numbers rather than this
- * directory's, and a third number on a fourth leader figure would be the one worth
- * arguing about.
+ * Days tick from slide entry and never stop — the clock the access lane already
+ * beat. Hidden after pose 0 but still running underneath, so a walk BACK to the
+ * race finds more days gone, which is the honest direction for this number.
+ * Gated on `prefers-reduced-motion` at mount: the global CSS squash cannot
+ * reach an interval, so the interval asks the same query itself.
  */
-const LEAD_MS = 120;
-const STAGGER_MS = 90;
+function DayCounter() {
+  const [day, setDay] = useState(1);
+  useEffect(() => {
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
+    if (reduced) return undefined;
+    const t = setInterval(() => setDay((d) => Math.min(d + 1, 999)), 650);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <>
+      {C.dayLabel} {day}
+    </>
+  );
+}
 
-/** How many steps into a pose a box arrives, as milliseconds of delay. */
-const delay = (step: number) => LEAD_MS + step * STAGGER_MS;
-
-/**
- * POSE 0's ARRIVAL ORDER — the eyebrow, the quotation, its source, then the same
- * number drawn: the wide segment, the narrow one, and both labels together.
- *
- * THE SOURCE ARRIVES SECOND, NOT LAST. It is bound to the statistic (8px under it in
- * the geometry) and a citation that lands three boxes after the figure it attributes
- * has already let the room read the figure unattributed. The BAR lands last because
- * it is the same claim in a second form — nothing rests on it that the statistic did
- * not already say.
- *
- * The two half labels share one step: they are a pair, and staggering them would
- * imply the 70% is named before the 30% exists.
- */
-const STATISTIC_STEP = {
-  eyebrow: 0,
-  statistic: 1,
-  source: 2,
-  peopleMass: 3,
-  technologyMass: 4,
-  halfLabels: 5,
-} as const;
-
-/**
- * POSE 2's ARRIVAL ORDER — the rule and the eyebrow together, then the bought half,
- * then the built half LAST.
- *
- * THE ORDER IS THE ARGUMENT: access first because it is what the room already has,
- * capability last because it is what the rest of the deck is for. A pose that ended
- * on "access is procured" would rest on the easy half.
- */
-const GAP_STEP = {
-  rule: 0,
-  eyebrow: 0,
-  access: 1,
-  capability: 2,
-} as const;
+/** One eyebrow slot, three texts, crossfaded in place. */
+function Eyebrow({ on, testid, children }: { on: boolean; testid: string; children: ReactNode }) {
+  return (
+    <div
+      data-testid={testid}
+      style={{
+        position: "absolute",
+        left: SIDE_MARGIN,
+        top: EYEBROW_TOP,
+        ...mono(11, "var(--copper-400)", 0.22),
+        ...gate(on),
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 // ───────────────────── the figure ─────────────────────
 
 export interface HardestPartBeatsProps {
-  /** 0…3. See `../gap-hardest-part.tsx` for what each pose argues. */
+  /** 0…2. See `../gap-hardest-part.tsx` for what each pose argues. */
   pose: number;
 }
 
 export function HardestPartBeats({ pose }: HardestPartBeatsProps) {
-  // Band 1 and band 2 need no gate: they stand from pose 0 and never leave. The
-  // three below are `>=` and not `===` for the reason every step-reveal slide in the
-  // deck is — a pose is everything argued so far.
-  const showContents = pose >= 1;
-  const showGap = pose >= 2;
-  const showCloser = pose >= 3;
+  const cap = capabilityGeometry(Math.min(pose, 2));
 
   return (
     <>
-      {/* ───── BAND 1 · THE QUOTED STATISTIC ─────
-          `on` is hardcoded true: `pose >= 0` is a check that cannot fail, and this
-          tree deletes those on sight. */}
-      <Reveal
-        on
-        delay={delay(STATISTIC_STEP.eyebrow)}
-        data-testid="hardest-part-statistic-eyebrow"
+      <Eyebrow on={pose === 0} testid="hardest-part-eyebrow-race">
+        {C.raceEyebrow}
+      </Eyebrow>
+      <Eyebrow on={pose === 1} testid="hardest-part-eyebrow-anatomy">
+        {C.anatomyEyebrow}
+      </Eyebrow>
+      <Eyebrow on={pose >= 2} testid="hardest-part-eyebrow-summary">
+        {C.statisticEyebrow}
+      </Eyebrow>
+
+      {/* ═══ THE ACCESS LANE — one position, two heights ═══ */}
+      <div
         style={{
           position: "absolute",
           left: SIDE_MARGIN,
-          top: STATISTIC_EYEBROW_TOP,
+          top: ACCESS_LABEL_TOP,
           width: CONTENT_WIDTH,
-          height: EYEBROW_HEIGHT,
-          ...mono(11, TIER.label, 0.22),
-          lineHeight: 1.3,
-          whiteSpace: "nowrap",
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
-        {C.statisticEyebrow}
-      </Reveal>
+        <span data-testid="hardest-part-access-lane" style={mono(13, "var(--neutral-100)", 0.18)}>
+          {C.accessLane}
+        </span>
+        {/* the tag and its scoreboard form crossfade in one right-aligned slot */}
+        <span style={{ position: "relative" }}>
+          <span
+            data-testid="hardest-part-access-tag"
+            style={{ ...mono(11, "var(--copper-300)", 0.18), ...gate(pose === 0) }}
+          >
+            {C.accessTag}
+          </span>
+          <span
+            data-testid="hardest-part-access-tag-done"
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              whiteSpace: "nowrap",
+              ...mono(11, "var(--copper-300)", 0.18),
+              ...gate(pose >= 1, 400),
+            }}
+          >
+            {C.accessTagDone}
+          </span>
+        </span>
+      </div>
+      <div
+        data-testid="hardest-part-access-track"
+        style={{
+          ...TRACK,
+          top: ACCESS_TRACK_TOP,
+          height: pose >= 1 ? ACCESS_TRACK_HEIGHT_THIN : ACCESS_TRACK_HEIGHT,
+          transition: MOVE,
+        }}
+      >
+        <div
+          data-testid="hardest-part-access-fill"
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(90deg, var(--copper-700), var(--copper-500))",
+            transformOrigin: "left",
+            animation: "hp-fill-fast 850ms 400ms var(--ease) both",
+          }}
+        />
+        {/* full-height dressing — gated out when the lane thins */}
+        <div data-testid="hardest-part-access-items" style={gate(pose === 0)}>
+          {C.accessItems.map((item, i) => (
+            <span
+              key={item}
+              style={{
+                position: "absolute",
+                left: 40 + i * 190,
+                top: 24,
+                ...mono(11, "var(--copper-50)", 0.2),
+                animation: "hp-pop 350ms 1300ms var(--ease) both",
+              }}
+            >
+              {item}
+            </span>
+          ))}
+          <span
+            data-testid="hardest-part-access-done"
+            style={{
+              position: "absolute",
+              right: 20,
+              top: 24,
+              ...mono(11, "var(--copper-100)", 0.18),
+              fontWeight: 700,
+              animation: "hp-pop 400ms 1500ms cubic-bezier(0.2, 1.3, 0.3, 1) both",
+            }}
+          >
+            {C.accessDone}
+          </span>
+        </div>
+      </div>
 
-      {/* THE QUOTATION, RENDERED WHOLE AND UNHIGHLIGHTED. No `highlight()` call
-          here, deliberately: it is somebody else's sentence (`../content.ts`'s
-          keyword rule), and this file never splits, recomposes or emphasises a
-          fragment of it. */}
-      <Reveal
-        on
-        as="p"
-        delay={delay(STATISTIC_STEP.statistic)}
+      {/* ═══ THE CAPABILITY LANE — the shape-shifter ═══ */}
+      <div
+        style={{
+          position: "absolute",
+          left: SIDE_MARGIN,
+          top: cap.labelTop,
+          width: CONTENT_WIDTH,
+          display: "flex",
+          justifyContent: "space-between",
+          transition: MOVE,
+        }}
+      >
+        <span
+          data-testid="hardest-part-capability-lane"
+          style={mono(13, "var(--neutral-100)", 0.18)}
+        >
+          {C.capabilityLane}
+        </span>
+        <span style={{ position: "relative" }}>
+          <span
+            data-testid="hardest-part-capability-tag"
+            style={{ ...mono(11, "var(--copper-300)", 0.18), ...gate(pose < 2) }}
+          >
+            {C.capabilityTag}
+          </span>
+          <span
+            data-testid="hardest-part-capability-tag-running"
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              whiteSpace: "nowrap",
+              ...mono(11, "var(--copper-300)", 0.18),
+              ...gate(pose >= 2, 400),
+            }}
+          >
+            {C.capabilityTagRunning}
+          </span>
+        </span>
+      </div>
+      <div
+        data-testid="hardest-part-capability-track"
+        style={{
+          ...TRACK,
+          top: cap.trackTop,
+          height: cap.trackHeight,
+          transition: MOVE,
+        }}
+      >
+        {/* milestone ticks — pose 0's texture only */}
+        <div data-testid="hardest-part-capability-ticks" style={gate(pose === 0)}>
+          {Array.from({ length: TICK_COUNT }, (_, i) => (
+            <span
+              key={i}
+              style={{
+                position: "absolute",
+                left: `${((i + 1) / (TICK_COUNT + 1)) * 100}%`,
+                top: 0,
+                bottom: 0,
+                borderLeft: "1px solid var(--copper-900)",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* the sliver a signature bought — crawls in at mount, then persists */}
+        <div
+          data-testid="hardest-part-capability-fill"
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            width: `${EARNED_PROGRESS * 100}%`,
+            background: "var(--copper-700)",
+            transformOrigin: "left",
+            animation: "hp-fill-slow 6000ms 400ms linear both",
+          }}
+        >
+          <span
+            data-testid="hardest-part-capability-sofar"
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: "50%",
+              marginTop: -8,
+              textAlign: "center",
+              ...mono(10, "var(--copper-200)", 0.14),
+              ...gate(pose === 1, 300),
+            }}
+          >
+            {C.soFar}
+          </span>
+        </div>
+
+        {/* the leading edge, still working — pose 0 only */}
+        <div data-testid="hardest-part-capability-live" style={gate(pose === 0)}>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: `${EARNED_PROGRESS * 100}%`,
+              width: 4,
+              background: "var(--copper-300)",
+              animation:
+                "hp-fade 400ms 6400ms var(--ease) both, hp-pulse 1.6s 6400ms ease-in-out infinite",
+            }}
+          />
+          <span
+            style={{
+              position: "absolute",
+              left: `calc(${EARNED_PROGRESS * 100}% + 18px)`,
+              top: 24,
+              ...mono(12, "var(--copper-300)", 0.2),
+              animation: "hp-fade 400ms 1200ms var(--ease) both",
+            }}
+          >
+            <DayCounter /> · {C.stillRunning}
+          </span>
+        </div>
+
+        {/* the five segments — pose 1's anatomy, staggered in, gone otherwise */}
+        {C.segments.map((seg, i) => {
+          const slice = segmentSlice(i);
+          return (
+            <div
+              key={seg.id}
+              data-testid={`hardest-part-segment-${seg.id}`}
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: `${slice.left * 100}%`,
+                width: `${slice.width * 100}%`,
+                borderLeft: "1px solid var(--copper-800)",
+                background: "var(--copper-950)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: pose === 1 ? 1 : 0,
+                transform: pose === 1 ? "translateY(0)" : "translateY(-8px)",
+                transition:
+                  `opacity 450ms var(--ease) ${pose === 1 ? 400 + i * 260 : 0}ms, ` +
+                  `transform 450ms var(--ease) ${pose === 1 ? 400 + i * 260 : 0}ms`,
+              }}
+            >
+              <span style={mono(12.5, "var(--copper-200)", 0.16)}>{seg.word}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* the five notes under the anatomy — `--neutral-200`, the owner's
+          brightness call: `--neutral-400` died at the back of the room */}
+      {C.segments.map((seg, i) => {
+        const slice = segmentSlice(i);
+        return (
+          <span
+            key={seg.id}
+            data-testid={`hardest-part-caption-${seg.id}`}
+            style={{
+              position: "absolute",
+              left: SIDE_MARGIN + (slice.left + slice.width / 2) * CONTENT_WIDTH,
+              top: CAPTION_TOP,
+              transform: "translateX(-50%)",
+              whiteSpace: "nowrap",
+              fontFamily: "var(--sans)",
+              fontSize: 13,
+              color: "var(--neutral-200)",
+              ...gate(pose === 1, 600 + i * 260),
+            }}
+          >
+            {seg.note}
+          </span>
+        );
+      })}
+
+      {/* the footnote — pose 0 ONLY (owner call: it leaves when the anatomy
+          arrives). Outer node gates, inner node owns the mount fade. */}
+      <div
+        data-testid="hardest-part-footnote"
+        style={{
+          position: "absolute",
+          left: SIDE_MARGIN,
+          top: FOOTNOTE_TOP,
+          ...serif(15, "var(--neutral-300)"),
+          ...gate(pose === 0),
+        }}
+      >
+        <div style={{ animation: "hp-fade 500ms 3000ms var(--ease) both" }}>
+          {highlight(C.footnote, C.footnoteKw)}
+        </div>
+      </div>
+
+      {/* one verdict slot, two lines, crossfaded — poses 0 and 1 argue here;
+          pose 2's sentence is the closer, on the summary shelf */}
+      <div
+        style={{
+          position: "absolute",
+          left: SIDE_MARGIN,
+          right: SIDE_MARGIN,
+          top: VERDICT_TOP,
+          textAlign: "center",
+        }}
+      >
+        <div data-testid="hardest-part-race-line" style={gate(pose === 0)}>
+          <p
+            style={{
+              ...serif(22, "var(--neutral-100)"),
+              animation: "hp-drop 500ms 4200ms var(--ease) both",
+            }}
+          >
+            {highlight(C.raceLine, C.raceLineKw)}
+          </p>
+        </div>
+        <p
+          data-testid="hardest-part-anatomy-line"
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            ...serif(22, "var(--neutral-100)"),
+            ...gate(pose === 1, 2100, true),
+          }}
+        >
+          {highlight(C.anatomyLine, C.anatomyLineKw)}
+        </p>
+      </div>
+
+      {/* ═══ POSE 2 · THE SUMMARY — the evidence under the scoreboard ═══ */}
+
+      {/* THE QUOTATION, RENDERED WHOLE AND UNHIGHLIGHTED: somebody else's
+          sentence, never split, recomposed or emphasised (the keyword rule's
+          sharpest case, unchanged from the first cut). */}
+      <p
         data-testid="hardest-part-statistic"
         style={{
           position: "absolute",
-          left: SIDE_MARGIN,
-          top: STATISTIC_TOP,
-          width: CONTENT_WIDTH,
-          height: STATISTIC_HEIGHT,
-          ...prose(28, TIER.quotation),
+          left: 140,
+          right: 140,
+          top: SUMMARY_STATISTIC_TOP,
+          textAlign: "center",
+          ...serif(28, "var(--copper-200)"),
+          ...gate(pose >= 2, 300, true),
         }}
       >
         {C.statistic}
-      </Reveal>
-
-      <Reveal
-        on
-        delay={delay(STATISTIC_STEP.source)}
+      </p>
+      <div
         data-testid="hardest-part-source"
         style={{
           position: "absolute",
-          left: SIDE_MARGIN,
-          top: SOURCE_TOP,
-          width: CONTENT_WIDTH,
-          height: SOURCE_HEIGHT,
-          ...mono(10.5, TIER.citation, 0.02, false),
-          lineHeight: 1.3,
+          left: 140,
+          right: 140,
+          top: SUMMARY_SOURCE_TOP,
+          textAlign: "center",
+          fontFamily: "var(--mono)",
+          fontSize: 10.5,
+          letterSpacing: "0.02em",
+          color: "var(--neutral-300)",
+          ...gate(pose >= 2, 700),
         }}
       >
         {C.statisticSource}
-      </Reveal>
+      </div>
 
-      {/* ───── BAND 2 · THE SAME NUMBER, DRAWN ─────
-          Two plain boxes, not an `<svg>` and not one box with a gradient: the
-          geometry derives both widths from the statistic's own fraction, and two
-          elements are what let the wide mass arrive before the narrow one. */}
-      <Reveal
-        on
-        delay={delay(STATISTIC_STEP.peopleMass)}
+      {/* the statistic drawn — two masses in the statistic's own ratio, the
+          derivation living in the geometry module, not here */}
+      <div
         data-testid="hardest-part-bar-people"
         style={{
           position: "absolute",
-          left: PEOPLE_LEFT,
-          top: BAR_TOP,
-          width: PEOPLE_WIDTH,
-          height: BAR_HEIGHT,
-          background: TIER.peopleMass,
+          left: SUMMARY_BAR_LEFT,
+          top: SUMMARY_BAR_TOP,
+          width: SUMMARY_PEOPLE_WIDTH,
+          height: SUMMARY_BAR_HEIGHT,
+          background: "var(--copper-500)",
+          transformOrigin: "left",
+          transform: pose >= 2 ? "scaleX(1)" : "scaleX(0)",
+          transition: `transform 650ms var(--ease) ${pose >= 2 ? 1000 : 0}ms`,
         }}
       />
-
-      <Reveal
-        on
-        delay={delay(STATISTIC_STEP.technologyMass)}
+      <div
         data-testid="hardest-part-bar-technology"
         style={{
           position: "absolute",
-          left: TECHNOLOGY_LEFT,
-          top: BAR_TOP,
-          width: TECHNOLOGY_WIDTH,
-          height: BAR_HEIGHT,
-          background: TIER.technologyMass,
+          left: SUMMARY_TECHNOLOGY_LEFT,
+          top: SUMMARY_BAR_TOP,
+          width: SUMMARY_TECHNOLOGY_WIDTH,
+          height: SUMMARY_BAR_HEIGHT,
+          background: "var(--copper-900)",
+          transformOrigin: "left",
+          transform: pose >= 2 ? "scaleX(1)" : "scaleX(0)",
+          transition: `transform 500ms var(--ease) ${pose >= 2 ? 1250 : 0}ms`,
         }}
       />
-
-      {/* THE TWO HALF LABELS — pose 0's last arrival, one step, both at once. Each
-          sits 8px under the segment it names, so a label cannot be read against the
-          wrong mass. They double as band 3's headings, which is why band 3 has no
-          eyebrows of its own: the rows below arrive UNDER the label that already
-          names them. */}
-      <Reveal
-        on
-        delay={delay(STATISTIC_STEP.halfLabels)}
+      <div
         data-testid="hardest-part-people-label"
         style={{
           position: "absolute",
-          left: PEOPLE_LEFT,
-          top: HALF_LABEL_TOP,
-          width: PEOPLE_WIDTH,
-          height: EYEBROW_HEIGHT,
-          ...mono(11, TIER.label, 0.22),
-          lineHeight: 1.3,
-          whiteSpace: "nowrap",
+          left: SUMMARY_BAR_LEFT,
+          top: SUMMARY_BAR_LABEL_TOP,
+          ...mono(10, "var(--copper-400)", 0.18),
+          ...gate(pose >= 2, 1500),
         }}
       >
         {C.peopleLabel}
-      </Reveal>
-
-      <Reveal
-        on
-        delay={delay(STATISTIC_STEP.halfLabels)}
+      </div>
+      <div
         data-testid="hardest-part-technology-label"
         style={{
           position: "absolute",
-          left: TECHNOLOGY_LEFT,
-          top: HALF_LABEL_TOP,
-          width: TECHNOLOGY_WIDTH,
-          height: EYEBROW_HEIGHT,
-          ...mono(11, TIER.label, 0.22),
-          lineHeight: 1.3,
+          left: SUMMARY_TECHNOLOGY_LEFT + SUMMARY_TECHNOLOGY_WIDTH,
+          top: SUMMARY_BAR_LABEL_TOP,
+          transform: "translateX(-100%)",
           whiteSpace: "nowrap",
+          ...mono(10, "var(--copper-400)", 0.18),
+          ...gate(pose >= 2, 1500),
         }}
       >
         {C.technologyLabel}
-      </Reveal>
-
-      {/* ───── BAND 3 · WHAT IS INSIDE EACH HALF ─────
-          THE TWO LISTS FILL IN PARALLEL, both indexed by the same step, so the two
-          halves are read as one comparison rather than as two lists in sequence.
-          The consequence is deliberate: the 30% column FINISHES FIRST, at step 2,
-          while the 70% column keeps arriving to step 4 — the wide mass takes longer
-          to fill, which is the slide's claim happening in the reveal itself. */}
-      {C.peopleItems.map((item, i) => (
-        <Reveal
-          key={item.id}
-          on={showContents}
-          delay={delay(i)}
-          data-testid={`hardest-part-people-${item.id}`}
-          style={{
-            position: "absolute",
-            left: peopleItemLeft(i),
-            top: peopleItemTop(i),
-            width: SUB_COL_WIDTH,
-            height: ROW_HEIGHT,
-            ...listRowStyle,
-          }}
-        >
-          {item.label}
-        </Reveal>
-      ))}
-
-      {C.technologyItems.map((item, i) => (
-        <Reveal
-          key={item.id}
-          on={showContents}
-          delay={delay(i)}
-          data-testid={`hardest-part-technology-${item.id}`}
-          style={{
-            position: "absolute",
-            left: TECHNOLOGY_LEFT,
-            top: bandRowTop(i),
-            width: TECHNOLOGY_WIDTH,
-            height: ROW_HEIGHT,
-            ...listRowStyle,
-          }}
-        >
-          {item.label}
-        </Reveal>
-      ))}
-
-      {/* THE RULE THAT CLOSES THE SPLIT — full width, because it divides the SLIDE:
-          above it what the split is, below it the gap the split names. A `div` with
-          the deck's own `.copper-rule` `scaleX`; a `<line>` would be the first
-          `<svg>` on the slide. The testid sits on a positioned WRAPPER because
-          `CopperRule` spreads no `data-*` props. */}
-      <div
-        data-testid="hardest-part-rule"
-        style={{ position: "absolute", left: SIDE_MARGIN, top: RULE_TOP, width: CONTENT_WIDTH }}
-      >
-        <CopperRule on={showGap} delay={delay(GAP_STEP.rule)} width="100%" />
       </div>
 
-      {/* ───── BAND 4 · THE GAP ─────
-          The eyebrow is the one string on the slide that calls it a gap; the two
-          columns spell out the terms it abbreviates. Equal columns, unequal speeds
-          — see `../hardest-part-geometry.ts` on why this band is NOT cut 70/30. */}
-      <Reveal
-        on={showGap}
-        delay={delay(GAP_STEP.eyebrow)}
-        data-testid="hardest-part-gap-eyebrow"
-        style={{
-          position: "absolute",
-          left: SIDE_MARGIN,
-          top: GAP_EYEBROW_TOP,
-          width: CONTENT_WIDTH,
-          height: EYEBROW_HEIGHT,
-          ...mono(11, TIER.label, 0.22),
-          lineHeight: 1.3,
-          whiteSpace: "nowrap",
-        }}
-      >
-        {C.gapEyebrow}
-      </Reveal>
-
-      <Reveal
-        on={showGap}
-        as="p"
-        delay={delay(GAP_STEP.access)}
-        data-testid="hardest-part-access"
-        style={{
-          position: "absolute",
-          left: gapColLeft(0),
-          top: GAP_LINE_TOP,
-          width: GAP_COL_WIDTH,
-          height: GAP_LINE_HEIGHT,
-          ...prose(17, TIER.claim),
-        }}
-      >
-        {highlight(C.accessLine, C.accessLineKw)}
-      </Reveal>
-
-      <Reveal
-        on={showGap}
-        as="p"
-        delay={delay(GAP_STEP.capability)}
-        data-testid="hardest-part-capability"
-        style={{
-          position: "absolute",
-          left: gapColLeft(1),
-          top: GAP_LINE_TOP,
-          width: GAP_COL_WIDTH,
-          height: GAP_LINE_HEIGHT,
-          ...prose(17, TIER.claim),
-        }}
-      >
-        {highlight(C.capabilityLine, C.capabilityLineKw)}
-      </Reveal>
-
-      {/* ───── BAND 5 · THE CLOSER — THE SLIDE'S LAST ARRIVAL ─────
-          Full width, alone in its band: the frame on everything above it, and the
-          only sentence here addressed to the rest of the deck. */}
-      <Reveal
-        on={showCloser}
-        as="p"
-        delay={delay(0)}
+      <p
         data-testid="hardest-part-closer"
         style={{
           position: "absolute",
-          left: SIDE_MARGIN,
-          top: CLOSER_TOP,
-          width: CONTENT_WIDTH,
-          height: CLOSER_HEIGHT,
-          ...prose(22, TIER.verdict),
+          left: 140,
+          right: 140,
+          top: SUMMARY_CLOSER_TOP,
+          textAlign: "center",
+          ...serif(24, "var(--neutral-100)"),
+          ...gate(pose >= 2, 1900, true),
         }}
       >
         {highlight(C.closer, C.closerKw)}
-      </Reveal>
+      </p>
     </>
   );
 }

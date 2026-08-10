@@ -634,7 +634,10 @@ const B2_SPEC_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["no guidance", /\bno guidance\b/i],
 ];
 
-/** B.1's own tokens — its quoted figure, its two halves and its four verbs. */
+/** B.1's own tokens — its quoted figure, its two halves and its verbs. REMEASURED
+ *  2026-08-10 against the two-speeds redesign: "instantly" left B.1's copy (the
+ *  instant arrival became the access lane's fill) and "signature" arrived with its
+ *  race — the word B.1's eyebrow and race line now own. */
 const B1_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["70%", /\b70\s*%/],
   ["30%", /\b30\s*%/],
@@ -642,7 +645,7 @@ const B1_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["not technology", /\bnot technology\b/i],
   ["technology", /\btechnolog\w*\b/i],
   ["procured", /\bprocure\w*\b/i],
-  ["instantly", /\binstant\w*\b/i],
+  ["signature", /\bsignature\b/i],
   ["earned", /\bearn\w*\b/i],
   ["invoice", /\binvoice\b/i],
   ["tool access", /\btool access\b/i],
@@ -727,8 +730,14 @@ describe("the two slides in front of it keep their vocabulary, and D.3 keeps its
     // were proud" are different sentences the moment the fourth word lands.
     const mine = phrases(authoredStrings(), 3);
     expect(mine.size, "positive control: this slide has phrases to share").toBeGreaterThan(50);
+    // B.1's TWO ENTRIES DATE FROM ITS 2026-08-10 TWO-SPEEDS REDESIGN and are the same
+    // shape as D.3's: connective English, not a borrowed image. "one of these" is B.1's
+    // "Only one of these arrives by signature" against this slide's closer "Every one
+    // of these calls was mine"; "none of it" is B.1's "None of it can be procured"
+    // against this slide's "none of it was reusable". The four-word intersection
+    // below is what proves both stop there — the fourth word forks every time.
     const SHARED_3: Readonly<Record<string, readonly string[]>> = {
-      "B.1": [],
+      "B.1": ["none of it", "one of these"],
       "B.2": [],
       "D.3": ["and we were"],
     };
@@ -769,12 +778,13 @@ describe("the two slides in front of it keep their vocabulary, and D.3 keeps its
     const mine = longWords(authoredStrings());
     expect(mine.size, "a rule over an empty vocabulary proves nothing").toBeGreaterThan(60);
 
-    // B.1: "order" (a purchase order against a record kept in order) and "tools" (its
+    // B.1: "these" (both slides point at their own list with it) and "tools" (its
     // headline's noun, and the plainest English word for the thing this slide's first
     // failure bought). Neither carries B.1's argument, which is a statistic about where
-    // adoption fails.
+    // adoption fails. REMEASURED 2026-08-10: "order" left with B.1's purchase-order row
+    // when the redesign turned the bought half into a lane that fills.
     expect([...mine].filter((word) => longWords(b1Strings()).has(word)).sort()).toEqual([
-      "order",
+      "these",
       "tools",
     ]);
     // B.2: six ordinary words, not one of which is an image. B.2's picture is a diptych of

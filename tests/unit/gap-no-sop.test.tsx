@@ -647,8 +647,11 @@ describe("the slide in front of it keeps its statistic and its vocabulary", () =
       .filter((word) => longWords(b1).has(word))
       .sort();
     // Three words, all three ordinary: the two slides run back to back and read as one
-    // run without sharing an argument.
-    expect(shared).toEqual(["afternoon", "everyone", "never"]);
+    // run without sharing an argument. REMEASURED 2026-08-10 after B.1's two-speeds
+    // redesign: "afternoon" left with B.1's purchase-instrument rows; "still" arrived
+    // with its STILL RUNNING counter, against this slide's "still gets answered" —
+    // a shared adverb, not a shared image.
+    expect(shared).toEqual(["everyone", "never", "still"]);
   });
 });
 
