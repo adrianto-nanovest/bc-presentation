@@ -1,45 +1,35 @@
-// The rule nobody wrote, as numbers — stage coordinates for a 1280×720 stage.
+// The rule nobody wrote, as numbers — figure coordinates for the one persistent scene
+// the 2026-08-11 redesign made of B.2 (owner call, productionized from the B.2
+// prototype's variant D "BOXES × FRAY"; the prototype directory left the tree in the
+// same change).
 //
-// FOUR BANDS, AND THE FIRST ONE IS A DIPTYCH THAT IS DELIBERATELY LOPSIDED. Band 1
-// is two columns side by side: on the left, what the organisation HANDED OUT — three
-// short rows, each with a small filled mark beside it; on the right, what it NEVER
-// WROTE DOWN — four questions, each followed by a full-width EMPTY RULE where the
-// answer would have been written. One copper rule closes the diptych; band 2 states
-// the condition the empty column produces, in two lines; band 3 is the closer, full
-// width, alone.
+// ONE SCENE, TWO STATES, AND EVERY BOX KEEPS ONE PAIR OF EDGES. The first cut was a
+// static diptych; this stage is a STEP DIAGRAM under two rows of boxes. The three
+// issued boxes and the four question boxes are HERO-sized while they are being argued
+// (poses 0–1) and compact into chip rows when the fray arrives (poses 2–3) — and the
+// compaction is a height/width collapse inside ONE left edge and ONE right edge
+// ({@link BAND_LEFT}, {@link BAND_RIGHT}), hero and chip alike, so nothing drifts
+// sideways while it shrinks. Below the boxes runs the SPINE: a rollout line that draws
+// to a first labelled dot (what was handed out), extends to a second (where the writing
+// stopped), and at the fray pose RISES into the freed space and fans out into two dozen
+// swaying private hairlines. The stopped-and-frayed line plus the question boxes'
+// EMPTY answer rules are §6.2's image for this pass — `./content.ts` records the
+// comparison against D.3's and D.4's.
 //
-// THE EMPTY ANSWER RULES ARE WHY THIS FILE EXISTS AND NOT A SIXTH COPY OF A COLUMN
-// GRID. Every other geometry module in the leader tree lays out boxes that contain
-// something. This one's right column budgets space for FOUR THINGS THAT ARE NOT THERE:
-// {@link ANSWER_RULE_HEIGHT} is a 1px line under each question, with
-// {@link QUESTION_TO_ANSWER} binding it to the question it belongs to and
-// {@link ANSWER_TO_NEXT} — a much bigger number — holding the blank open underneath
-// it. That asymmetric pair of gaps IS the image: the blank has to read as a space
-// somebody was supposed to write in, and a rule sitting equidistant between two
-// questions reads as a divider instead.
+// FIGURE COORDINATES, NOT STAGE COORDINATES — the one convention change the redesign
+// makes, and the reason is the SVG: the spine, the fan and the marching closer line
+// live in one `<svg>` whose viewBox must agree with the boxes layered over it, so
+// everything below is authored in the space of a single figure wrapper the component
+// mounts at stage ({@link FIGURE_LEFT}, {@link FIGURE_TOP}) — `.slide-content`'s own
+// shelf. Add those two numbers to any coordinate below to get stage space; the floor
+// arithmetic at the bottom of this file does exactly that, because the NavBar band is
+// a STAGE fact.
 //
-// THE TWO COLUMNS ARE UNEQUAL, AND NOT BY THEIR ITEM COUNTS. 456 against 696, which
-// is not `1184/2` and not a ratio derived from three rows against four. The right
-// column is the slide's argument and its rows are QUESTIONS — full sentences that must
-// each hold one line — while the left column's rows are short inventory labels. The
-// widths are cut for those two measures. Nothing on this stage encodes a statistic as
-// a length: `./hardest-part-geometry.ts` next door does exactly that (its bar IS its
-// slide's quoted figure), and this slide carries no figure to encode — see
-// `./content.ts` on why it deliberately carries none at all.
-//
-// THE COLUMNS ALSO END AT DIFFERENT HEIGHTS, ON PURPOSE. The left column bottoms out
-// at y=268 and the right at y=381, so {@link DIPTYCH_BOTTOM} is derived as the MAX of
-// the two rather than from either — the band that decides the floor is whichever one
-// is deeper today, and a fourth issued row or a fifth question must move the whole
-// lower stage by arithmetic rather than by an edit somebody forgot.
-//
-// NOTHING IS PINNED TO `./geometry.ts` OR TO `./hardest-part-geometry.ts`. The ladder's
-// module exports treads and slots and no stage constants at all, and the two
-// section-`gap` figure modules that do restate the stage restate it from
-// `src/styles/globals.css` rather than from each other — a cross-import between two
-// slides' geometry welds two stages that only happen to agree. So the stage facts below
-// are RESTATED from that stylesheet (the authority for all four) and carry the
-// arithmetic that would fail if one of them moved.
+// NOTHING IS PINNED TO `./geometry.ts` OR TO `./hardest-part-geometry.ts` — the rule
+// this module kept through the redesign: the stage facts are RESTATED from
+// `src/styles/globals.css` (the authority for all four gap modules) rather than
+// imported from a sibling, because a cross-import between two slides' geometry welds
+// two stages that only happen to agree.
 //
 // Proved importable from bare Node, not assumed — the property every geometry module
 // in this tree keeps, so a coordinate can be checked without a bundler:
@@ -48,42 +38,26 @@
 //       'import("./src/slides/leader-gap/no-sop-geometry.ts")
 //          .then(m => console.log(Object.keys(m).length, "exports"))'
 //
-// THE VERTICAL BUDGET, top to bottom, and it is arithmetic rather than measurement.
-// `.fig-label` at y=36, `.slide-headline-row` at y=80; a one-line
-// `.slide-headline.small` (40px on 1.05) ends the headline row at y=122; band 1 starts
-// on {@link CONTENT_TOP} = 156, `.slide-content`'s own `top` — the call every recent
-// leader slide makes.
+// THE VERTICAL BUDGET, top to bottom, in FIGURE coordinates (add 156 for stage):
 //
-//   ─── BAND 1 · THE DIPTYCH ── left column 456 · gutter 32 · right column 696 ───
-//   156  both eyebrows · 11px mono caps                                    → 172
-//        LEFT — what was handed out                RIGHT — what was not written
-//   184  issued row 0                    → 204     question 0              → 204
-//                                                  its empty rule at 212   → 213
-//   216  issued row 1                    → 236     question 1 at 240       → 260
-//                                                  its empty rule at 268   → 269
-//   248  issued row 2                    → 268     question 2 at 296       → 316
-//                                                  its empty rule at 324   → 325
-//                                                  question 3 at 352       → 372
-//                                                  its empty rule at 380   → 381
+//   0    band 1's title · 11px mono caps            (stage 156, CONTENT_TOP itself)
+//   26   issued row — HERO 120 tall → 146           CHIP 36 tall → 62
+//   176  band 2's title (hero pose)                 76 at the chip pose
+//   202  question grid — HERO 2×2, 88 tall,         CHIP row at 104, 36 tall → 140
+//        rows at 202/298 → 386
+//   180  band 3's title, the fray's                 (chip pose only)
+//   280  the RISEN spine and the fan's origin       (poses 2–3)
+//   400  the verdict · TWO lines of 24px serif, 70 tall → 470   (pose 3)
+//   448  the LOW spine (poses 0–1); dot captions at 460, ≈13 tall → 473
+//   ──────────────────────────────────────────────────────────────────────────
+//   floor: NavBar band at stage y=632 = figure y=476. Lowest RESTING paint is the
+//   dot captions' 473 (3px clear); the lowest TRANSIENT is the waiting ping's 474
+//   (2px clear), a ring that spends its life fading out. Poses 2–3 end at the
+//   verdict's 470 (6px clear).
 //
-//   409  copper rule ···· spans the full width                             → 410
-//
-//   ─────────────── BAND 2 · THE CONDITION (full width) ─────────────────────────
-//   438  eyebrow · 11px mono caps                                          → 454
-//   466  condition line · 17px serif, ONE line                             → 490
-//   502  consequence line · 17px serif, ONE line                           → 526
-//
-//   ─────────────── BAND 3 · THE CLOSER ────────────────────────────────────────
-//   566  closer · 22px serif, full width, ONE line                         → 598
-//   ─────────────────────────────────────────────────────────────────────────────
-//   floor y=632 · lowest painted box 598 · {@link NAV_ZONE_CLEARANCE} = 34
-//
-// THE FLOOR IS THE HOVER BAND AND NOT `.slide-content`'s BOTTOM, the same rule the
-// leader tree's other five geometry modules keep: `.nav-zone` is `bottom: 0; height:
-// 88px`, so nothing on this stage may cross y=632.
-//
-// Pure data and pure functions. No React, no DOM, and no work at module scope beyond
-// the arithmetic below.
+// Pure data and pure functions. No React, no DOM, no colour tokens — the fray's tints
+// are the component's to assign; this file hands it a TINT INDEX so the palette stays
+// where every other colour decision in the figure lives.
 
 // ───────────────────── the stage, restated ─────────────────────
 
@@ -102,331 +76,343 @@ export const STAGE = { width: 1280, height: 720 } as const;
  *  all sit at `left: 48px` in `src/styles/globals.css`. */
 export const SIDE_MARGIN = 48;
 
-/** The width every full-bleed box on this stage gets: 1184. */
-export const CONTENT_WIDTH = STAGE.width - 2 * SIDE_MARGIN;
-
-/** `.nav-zone` is `bottom: 0; height: 88px`, so its top edge is y=632 — the floor
- *  nothing on this stage may cross. */
+/** `.nav-zone` is `bottom: 0; height: 88px`, so its top edge is y=632 — the STAGE
+ *  floor nothing painted may cross. */
 export const NAV_ZONE_TOP = STAGE.height - 88;
 
-/** The one shelf band 1 starts on: 156 — `.slide-content`'s own `top`, clearing the
- *  40px headline row that ends at y=122. */
-export const CONTENT_TOP = 156;
+/** The figure wrapper's stage position: `.slide-content`'s own shelf, clearing the
+ *  40px headline row that ends at y=122 — the call every recent leader slide makes. */
+export const FIGURE_TOP = 156;
 
-// ───────────────────── the registers, as box heights ─────────────────────
+/** The wrapper's left edge: the stage's own margin. */
+export const FIGURE_LEFT = SIDE_MARGIN;
 
-/** A mono eyebrow's box: 16. 11px on 1.3 is a 14.30 line box; the box carries 1.70
- *  more. ONE CONSTANT FOR ALL THREE mono caps rows on this stage — the diptych's two
- *  headings and band 2's. */
-export const EYEBROW_HEIGHT = 16;
-
-/** The air between a label and the body it labels: 12 — the leader tree's binding gap.
- *  Not exported. */
-const LABEL_TO_BODY = 12;
-
-/** A beat change: 28. Two bands start on one of these. Not exported. */
-const BAND_GAP = 28;
-
-/** A 15px sans row's box: 20 — one 19.50 line box with 0.50 spare, cut for ONE line.
- *  ONE HEIGHT FOR BOTH COLUMNS: an issued row and a question are the same register in
- *  two different measures, and giving the questions a taller box would rank them by
- *  size for a difference the copy already carries. */
-export const ROW_HEIGHT = 20;
-
-// ───────────────────── band 1 · the two columns ─────────────────────
-
-/** The gutter between the two columns: 32 — one beat wider than a row gap, because the
- *  two columns are two different claims rather than two halves of one list. Not
- *  exported. */
-const COL_GAP = 32;
+/** The figure's width: 1184 — the full content measure between the two margins. */
+export const FIGURE_WIDTH = STAGE.width - 2 * SIDE_MARGIN;
 
 /**
- * The left column: 456 — what was handed out.
- *
- * CUT FOR ITS CONTENTS AND NOT FOR ITS SHARE OF THE STAGE. Its rows are short
- * inventory labels indented past a mark ({@link ISSUED_TEXT_LEFT}), so the measure
- * that matters is 420, which is ≈56 characters of 15px sans — comfortably more than
- * the longest row `./content.ts` holds.
+ * The figure's height — and the SVG viewBox's. 484 is the CANVAS, not the paint: the
+ * wrapper draws nothing of its own, and the floor is held by the painted marks (the
+ * arithmetic at {@link NAV_ZONE_CLEARANCE}), not by this box's bottom edge.
  */
-export const ISSUED_WIDTH = 456;
+export const FIGURE_HEIGHT = 484;
 
-/** The right column: 696 — derived as the REMAINDER, so the two columns and the gutter
- *  tile {@link CONTENT_WIDTH} exactly whatever the left one is set to. ≈94 characters
- *  of 15px sans, which is what makes every question a one-liner. */
-export const UNWRITTEN_WIDTH = CONTENT_WIDTH - ISSUED_WIDTH - COL_GAP;
+// ───────────────────── the shared band edges ─────────────────────
 
-/** The left column's left edge: 48 — the stage's own margin. */
-export const ISSUED_LEFT = SIDE_MARGIN;
+/** EVERY band spans {@link BAND_LEFT}..{@link BAND_RIGHT} at EVERY pose (owner call):
+ *  the three issued boxes and the four question boxes share one left edge and one
+ *  right edge, hero and chip alike, so the compaction reads as the SAME items
+ *  shrinking rather than as new furniture arriving. */
+export const BAND_LEFT = 8;
 
-/** The right column's left edge: 536. `536 + 696 = 1232 = 1280 − 48`, so the diptych
- *  ends on the right margin. */
-export const UNWRITTEN_LEFT = ISSUED_LEFT + ISSUED_WIDTH + COL_GAP;
+/** The right edge: 1148. Derived from the issued row's own tiling below, and shared by
+ *  the question grid, the chip rows and the marching closer line. */
+export const BAND_RIGHT = 1148;
 
-/** Both eyebrows sit on one shelf: 156. They are a PAIR — the diptych is only an
- *  argument if the room reads the two headings against each other — so neither may be
- *  given its own shelf. */
-export const EYEBROW_TOP = CONTENT_TOP;
+/** The width every band tiles: 1140. Not exported — the per-box widths below carry it. */
+const BAND_WIDTH = BAND_RIGHT - BAND_LEFT;
 
-/** Where both columns' bodies start: 184. */
-export const BODY_TOP = EYEBROW_TOP + EYEBROW_HEIGHT + LABEL_TO_BODY;
-
-// ───────────────────── band 1, left · what was handed out ─────────────────────
+// ───────────────────── the issued band ─────────────────────
 
 /**
  * How many things the organisation handed out: 3, PINNED to `./content.ts`'s tuple.
  *
- * Three is the copy's own reading — a login, a demonstration, an encouragement — and a
- * fourth would deepen this column past the right one's four questions and take
- * {@link DIPTYCH_BOTTOM} with it.
+ * Three is the copy's own reading — a login, a demonstration, an encouragement — and
+ * the number the issued row's tiling divides by: a fourth box re-cuts every width.
  */
 export const ISSUED_COUNT: NoSopCopy["issued"]["length"] = 3;
 
-/** The air between two issued rows: 12. Not exported. */
-const ISSUED_ROW_GAP = 12;
+/** The air between two issued boxes: 18 (owner call, round 4) — wide enough that every
+ *  issued hero sentence holds ONE line at the width the tiling leaves. Not exported. */
+const ISSUED_GUTTER = 18;
 
-/** How far apart two issued rows sit: 32. Derived. Not exported. */
-const ISSUED_ROW_PITCH = ROW_HEIGHT + ISSUED_ROW_GAP;
+/** An issued box's width, hero and chip alike: 368.
+ *  `3 × 368 + 2 × 18 = 1140`, so the row tiles the band exactly. */
+export const ISSUED_BOX_WIDTH = (BAND_WIDTH - (ISSUED_COUNT - 1) * ISSUED_GUTTER) / ISSUED_COUNT;
 
-/**
- * The small filled mark beside each issued row: 20 × 2, at the column's own left edge.
- *
- * IT IS THE OTHER HALF OF THE IMAGE. The right column's answer rules are long and
- * EMPTY; these are short and FILLED, in a brighter tier, and they sit where a reader's
- * eye lands first on each row. Without them the left column is three sentences and the
- * right column's blanks read as a list style rather than as an absence.
- */
-export const MARK_WIDTH = 20;
+/** The three issued boxes' left edges: 8, 394, 780 — hero and chip alike, so the
+ *  compaction is a HEIGHT collapse only and the row's edges cannot drift. */
+export const issuedBoxLeft = (index: number): number => {
+  assertIssued("issuedBoxLeft", index);
+  return BAND_LEFT + index * (ISSUED_BOX_WIDTH + ISSUED_GUTTER);
+};
 
-/** The mark's thickness: 2 — twice `.copper-rule`'s 1px, because it is a MARK and not
- *  a divider, and 1px at the back of a room is the first thing a projector loses. */
-export const MARK_HEIGHT = 2;
+/** The issued row's one shelf, both states: 26 — 12px of air under band 1's title,
+ *  which ends at ≈14 (11px mono caps at the figure's own top). */
+export const ISSUED_TOP = 26;
 
-/** The air between the mark and the text it marks: 16. Not exported. */
-const MARK_TO_TEXT = 16;
+/** The issued hero's height: 120 — an icon over a one-line 14.5px sentence, with the
+ *  air a hero box carries. Cut down to match single-line content (owner call, round 4). */
+export const ISSUED_HERO_HEIGHT = 120;
 
-/** Where an issued row's text starts: 84. */
-export const ISSUED_TEXT_LEFT = ISSUED_LEFT + MARK_WIDTH + MARK_TO_TEXT;
+/** The chip height, issued and question alike: 36 — one mono caps line with an icon
+ *  beside it, and nothing else. ONE height for both rows: two chip registers would
+ *  rank receipts. */
+export const CHIP_HEIGHT = 36;
 
-/** The measure an issued row's text gets: 420. */
-export const ISSUED_TEXT_WIDTH = ISSUED_WIDTH - MARK_WIDTH - MARK_TO_TEXT;
-
-/** The guard both left-column placement functions share, so an index one of them
- *  accepts is always an index the other places. Not exported. */
+/** The guard the issued placements share. Not exported. */
 function assertIssued(fn: string, index: number): void {
   if (!Number.isInteger(index) || index < 0 || index >= ISSUED_COUNT) {
     throw new Error(
-      `${fn}: no issued row ${index} — the left column holds ${ISSUED_COUNT} ` +
+      `${fn}: no issued box ${index} — the row holds ${ISSUED_COUNT} ` +
         `(0…${ISSUED_COUNT - 1}). The tuple in ./content.ts refuses the extra entry ` +
-        `first, and a fourth row would deepen this column past the ` +
-        `${QUESTION_COUNT} questions beside it and move DIPTYCH_BOTTOM.`,
+        `first, and a fourth box would re-cut ISSUED_BOX_WIDTH's tiling.`,
     );
   }
 }
 
-/**
- * Issued row `index`'s top edge, in stage coordinates: 184, 216, 248.
- *
- * @throws on a fourth row — see {@link assertIssued}.
- */
-export function issuedRowTop(index: number): number {
-  assertIssued("issuedRowTop", index);
-  return BODY_TOP + index * ISSUED_ROW_PITCH;
-}
-
-/**
- * The top edge of issued row `index`'s mark: 193, 225, 257 — centred on the row's box.
- *
- * DERIVED FROM THE ROW AND NOT TYPED, so the mark cannot drift off the line it marks
- * when the row register changes.
- *
- * @throws on a fourth row — see {@link assertIssued}.
- */
-export function issuedMarkTop(index: number): number {
-  assertIssued("issuedMarkTop", index);
-  return issuedRowTop(index) + (ROW_HEIGHT - MARK_HEIGHT) / 2;
-}
-
-/** Where the left column ends: 268. Not exported — {@link DIPTYCH_BOTTOM} carries it
- *  forward. */
-const ISSUED_BOTTOM = BODY_TOP + (ISSUED_COUNT - 1) * ISSUED_ROW_PITCH + ROW_HEIGHT;
-
-// ───────────────────── band 1, right · what was never written ─────────────────────
+// ───────────────────── the question grid ─────────────────────
 
 /**
  * How many questions were never answered: 4, PINNED to `./content.ts`'s tuple.
  *
- * Four is the copy's own escalation — permission, prohibition, arbitration, disclosure
- * — and it is the count this column's depth, and therefore the whole lower stage, is
- * derived from.
+ * Four is the copy's own escalation — permission, prohibition, arbitration,
+ * disclosure — and both of this band's tilings divide by it: 2×2 at the hero pose,
+ * one four-chip row after.
  */
 export const QUESTION_COUNT: NoSopCopy["questions"]["length"] = 4;
 
-/**
- * The air between a question and the empty rule under it: 8.
- *
- * THE TIGHTEST GAP ON THE STAGE, and the adjacency the image cannot lose: the blank
- * belongs to the question above it, exactly as a citation belongs to the claim above
- * it. Not exported.
- */
-const QUESTION_TO_ANSWER = 8;
+/** The hero grid's columns: 2 — four questions read as two pairs, and a 1×4 row of
+ *  521px-measure sentences would not hold one line each. Not exported. */
+const Q_HERO_COLS = 2;
 
-/** The empty answer rule's thickness: 1 — `.copper-rule`'s own height, restated,
- *  because these rules are plain boxes rather than that class (see the component on
- *  why) and jsdom computes no stylesheet. */
-export const ANSWER_RULE_HEIGHT = 1;
+/** The air inside the hero grid, both axes' seams: 18 across (the issued row's own
+ *  gutter, so the two bands read as one system) — but 8 down: the two grid rows are
+ *  one list, not two beats. Not exported. */
+const Q_HERO_GUTTER_X = 18;
+const Q_HERO_GUTTER_Y = 8;
 
-/**
- * The air under an empty rule before the next question: 27.
- *
- * MORE THAN THREE TIMES {@link QUESTION_TO_ANSWER}, and that asymmetry is the whole
- * device. A rule sitting halfway between two questions is a divider; a rule sitting
- * directly under one question with a held-open space beneath it is a line somebody was
- * supposed to write on. Not exported.
- */
-const ANSWER_TO_NEXT = 27;
+/** A question hero's width: 561. `2 × 561 + 18 = 1140` — the grid tiles the band. */
+export const QUESTION_HERO_WIDTH = (BAND_WIDTH - Q_HERO_GUTTER_X) / Q_HERO_COLS;
 
-/** How far apart two question-and-blank pairs sit: 56. Derived. Not exported. */
-const QUESTION_PITCH =
-  ROW_HEIGHT + QUESTION_TO_ANSWER + ANSWER_RULE_HEIGHT + ANSWER_TO_NEXT;
+/** A question hero's height: 88 — a one-line 13.5px question beside an icon, over the
+ *  EMPTY answer rule that belongs to it. */
+export const QUESTION_HERO_HEIGHT = 88;
 
-/** The guard both right-column placement functions share. Not exported. */
+/** The hero grid's shelf: 202 — directly below the issued heroes (which end at 146),
+ *  past band 2's title at 176 and the 12px of air every band title gets. */
+export const QUESTION_HERO_TOP = 202;
+
+/** Question hero `index`'s left edge: 8, 587, 8, 587. */
+export const questionHeroLeft = (index: number): number => {
+  assertQuestion("questionHeroLeft", index);
+  return BAND_LEFT + (index % Q_HERO_COLS) * (QUESTION_HERO_WIDTH + Q_HERO_GUTTER_X);
+};
+
+/** Question hero `index`'s top edge: 202, 202, 298, 298. */
+export const questionHeroTop = (index: number): number => {
+  assertQuestion("questionHeroTop", index);
+  return QUESTION_HERO_TOP + Math.floor(index / Q_HERO_COLS) * (QUESTION_HERO_HEIGHT + Q_HERO_GUTTER_Y);
+};
+
+/** The chip row's gutter: 16 — one step tighter than the hero gutter, because chips
+ *  are receipts and the air between them is not carrying an argument. Not exported. */
+const Q_CHIP_GUTTER = 16;
+
+/** A question chip's width: 273. `4 × 273 + 3 × 16 = 1140` — the row tiles the band. */
+export const QUESTION_CHIP_WIDTH = (BAND_WIDTH - (QUESTION_COUNT - 1) * Q_CHIP_GUTTER) / QUESTION_COUNT;
+
+/** The question chips' one shelf: 104 — 12px of air under band 2's compact title,
+ *  which sits at 76 and ends at ≈89. */
+export const QUESTION_CHIP_TOP = 104;
+
+/** Question chip `index`'s left edge: 8, 297, 586, 875. */
+export const questionChipLeft = (index: number): number => {
+  assertQuestion("questionChipLeft", index);
+  return BAND_LEFT + index * (QUESTION_CHIP_WIDTH + Q_CHIP_GUTTER);
+};
+
+/** The guard the question placements share. Not exported. */
 function assertQuestion(fn: string, index: number): void {
   if (!Number.isInteger(index) || index < 0 || index >= QUESTION_COUNT) {
     throw new Error(
-      `${fn}: no question ${index} — the right column holds ${QUESTION_COUNT} ` +
-        `(0…${QUESTION_COUNT - 1}), each with one empty rule under it. A fifth ` +
-        `would push RULE_TOP and the whole lower stage down ${QUESTION_PITCH}px, ` +
-        `and the closer already ends ${NAV_ZONE_CLEARANCE}px above the NavBar band ` +
-        `at y=${NAV_ZONE_TOP}. The tuple in ./content.ts refuses it first.`,
+      `${fn}: no question box ${index} — the band holds ${QUESTION_COUNT} ` +
+        `(0…${QUESTION_COUNT - 1}). The tuple in ./content.ts refuses a fifth first, ` +
+        `and both of this band's tilings divide by the count.`,
     );
   }
 }
 
-/**
- * Question `index`'s top edge, in stage coordinates: 184, 240, 296, 352.
- *
- * @throws on a fifth question — see {@link assertQuestion}.
- */
-export function questionTop(index: number): number {
-  assertQuestion("questionTop", index);
-  return BODY_TOP + index * QUESTION_PITCH;
+// ───────────────────── the band titles ─────────────────────
+
+/** Band 2's title rides with its band: 176 over the hero grid, 76 over the chip row —
+ *  12px above each, past the issued row's two heights (146 hero, 62 chip). */
+export const UNWRITTEN_TITLE_TOP_HERO = 176;
+export const UNWRITTEN_TITLE_TOP_CHIP = 76;
+
+/** Band 3's title — the fray's: 180, on the compacted stage only, over the space the
+ *  risen spine fans into. */
+export const CONDITION_TITLE_TOP = 180;
+
+// ───────────────────── the step diagram ─────────────────────
+
+/** The spine's authored (LOW) baseline: 448 — under both hero bands, in the strip the
+ *  compaction later frees. Poses 0–1. */
+export const SPINE_Y = 448;
+
+/** How far the whole spine group rides UP when the stage compacts: 168. The risen
+ *  baseline — 280 — is where the fan is authored, so the strands never move relative
+ *  to their own origin. */
+export const SPINE_RISE = 168;
+
+/** The risen baseline, derived: 280. */
+export const SPINE_Y_RISEN = SPINE_Y - SPINE_RISE;
+
+/** Where the rollout line enters: the band's own left edge. */
+export const SPINE_X0 = BAND_LEFT;
+
+/** The first labelled dot — HANDED OUT: 170. Under the first issued box, a stop the
+ *  rollout actually reached. */
+export const DOT_ISSUED_X = 170;
+
+/** The second labelled dot — NEVER WRITTEN: 470. Where guidance stops; the fan's
+ *  origin and the marching closer line's start. */
+export const DOT_UNWRITTEN_X = 470;
+
+/** The fan's origin: the second dot, at the RISEN baseline — authored where it
+ *  appears, because the fan exists only after the spine has risen. */
+export const FAN_ORIGIN = { x: DOT_UNWRITTEN_X, y: SPINE_Y_RISEN } as const;
+
+/** A dot caption's box: 200 wide, centred on its dot, 12px under the baseline. The
+ *  10px mono caption on 1.3 ends ≈13 later — the lowest resting paint on the stage
+ *  (see the floor arithmetic below). */
+export const DOT_LABEL_WIDTH = 200;
+export const DOT_LABEL_OFFSET_Y = 12;
+
+/** The waiting ping's radius: 26 — the largest transient mark on the spine, and the
+ *  bound the floor arithmetic uses for it. */
+export const PING_RADIUS = 26;
+
+// ───────────────────── the fray ─────────────────────
+
+/** How many private rules the fan draws: 24 — enough to read as "everybody" from the
+ *  back of the room, few enough that single hairlines survive a projector. */
+export const FRAY_STRAND_COUNT = 24;
+
+/** How many tints the component spreads the strands over. The palette itself is the
+ *  component's (this module carries no colour tokens); what is fixed here is that a
+ *  strand's tint is part of the deterministic build. */
+export const FRAY_TINT_COUNT = 4;
+
+/** One private rule: a cubic from {@link FAN_ORIGIN}, its end tick, and the timing
+ *  texture that keeps two dozen strands from moving as one object. */
+export interface FrayStrand {
+  /** The SVG path, authored at the RISEN baseline. */
+  d: string;
+  /** 0…{@link FRAY_TINT_COUNT}-1 — which of the component's tints this strand takes. */
+  tint: number;
+  /** 0.5…0.9. TEXTURE WITHIN ONE ROLE, not rank: all 24 strands are the same claim
+   *  ("a private rule"), and the spread is what stops the fan reading as a solid
+   *  wedge. Rank between ROLES stays a colour tier, the deck's rule. */
+  opacity: number;
+  /** Draw-in delay, ms — the rules appear one desk at a time, not as a fan snapping
+   *  open. */
+  delay: number;
+  /** The sway's period (s) and negative phase offset (s). */
+  swayDur: number;
+  swayDelay: number;
+  /** The short bar across the strand's end — a rule that STOPS somewhere private. */
+  tick: { x: number; y: number; rot: number };
 }
 
 /**
- * The top edge of question `index`'s EMPTY answer rule: 212, 268, 324, 380.
- *
- * @throws on a fifth question — see {@link assertQuestion}.
+ * Mulberry32 — the deterministic PRNG the fan is built with, so every mount of this
+ * slide shows the SAME two dozen private rules. A fan that reshuffled between the
+ * pose walk and the export would read as new evidence arriving; this one is a fixed
+ * drawing that happens to be generated.
  */
-export function answerRuleTop(index: number): number {
-  assertQuestion("answerRuleTop", index);
-  return questionTop(index) + ROW_HEIGHT + QUESTION_TO_ANSWER;
+export function mulberry32(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
-/** Where the right column ends: 381. Not exported — {@link DIPTYCH_BOTTOM} carries it
- *  forward. */
-const UNWRITTEN_BOTTOM =
-  BODY_TOP +
-  (QUESTION_COUNT - 1) * QUESTION_PITCH +
-  ROW_HEIGHT +
-  QUESTION_TO_ANSWER +
-  ANSWER_RULE_HEIGHT;
+/** The seed. An arbitrary constant, fixed so the drawing is fixed; changing it redraws
+ *  the fan and nothing else. */
+const FRAY_SEED = 6622;
 
 /**
- * Where band 1 ends: 381 — the DEEPER of the two columns.
+ * The fan, built once at module scope — pure arithmetic, importable from bare Node.
  *
- * Derived over both, because either column can be the one that decides the floor: three
- * issued rows against four questions-with-blanks today, and the moment either grows the
- * whole lower stage moves and {@link NAV_ZONE_CLEARANCE} is what reports it.
+ * THE ENVELOPE IS THE ARGUMENT'S GEOMETRY: endpoints land in a 428-wide, ≈240-tall
+ * band right of centre (x from 720, y from 168) — clear of the chip rows above, the
+ * verdict shelf below, and fanned wide enough that no two strands read as one. The
+ * cubics' control points pull every strand through the same first ≈100px so the fan
+ * visibly leaves ONE point: the dot where the writing stopped.
  */
-export const DIPTYCH_BOTTOM = Math.max(ISSUED_BOTTOM, UNWRITTEN_BOTTOM);
-
-// ───────────────────── the rule that closes the diptych ─────────────────────
-
-/** The copper rule's shelf: 409. It spans the FULL width, not one column: above it is
- *  what was handed out and what was not, below it is the condition the pair produces. */
-export const RULE_TOP = DIPTYCH_BOTTOM + BAND_GAP;
-
-/** `.copper-rule` is `height: 1px` in `src/styles/globals.css` — restated, because
- *  jsdom computes no stylesheet and a test that read this box's height off the DOM
- *  would read `NaN`. */
-export const RULE_HEIGHT = 1;
-
-// ───────────────────── band 2 · the condition ─────────────────────
-
-/** Band 2's eyebrow: 438 — 28px under the rule, matching the air above it. */
-export const CONDITION_EYEBROW_TOP = RULE_TOP + RULE_HEIGHT + BAND_GAP;
-
-/** Band 2's first line: 466. */
-export const CONDITION_LINE_TOP = CONDITION_EYEBROW_TOP + EYEBROW_HEIGHT + LABEL_TO_BODY;
-
-/**
- * A band 2 line's box: 24, cut for ONE line of 17px serif.
- *
- * 17px on 1.3 is a 22.10 line box painting 23.19 (Source Serif 4's content area), so
- * the box carries 0.81 spare. ONE LINE IS THE CLAIM: 124 characters of 17px serif
- * measure ≈1050px in a 1184px box, and the failure mode of a reword past that is a wrap
- * into the line under it — which a browser check sees and jsdom cannot, so it is stated
- * here rather than asserted.
- */
-export const CONDITION_LINE_HEIGHT = 24;
-
-/** The air between band 2's two lines: 12. Not exported. */
-const CONDITION_LINE_GAP = 12;
-
-/** How far apart band 2's two lines sit: 36. Derived. Not exported. */
-const CONDITION_LINE_PITCH = CONDITION_LINE_HEIGHT + CONDITION_LINE_GAP;
-
-/** How many lines band 2 holds: 2 — a literal `const`, so the weld at
- *  {@link conditionLineTop} is compile-visible. The two are the condition and what it
- *  leaves behind; a third would be a second argument in a band cut for one. */
-export const CONDITION_LINE_COUNT = 2;
-
-/**
- * Band 2 line `index`'s top edge, in stage coordinates: 466, 502.
- *
- * FULL WIDTH AND STACKED, not two columns. `./hardest-part-geometry.ts` cuts its own
- * closing band into two equal columns because its two lines are a PAIR — one thing
- * bought against one thing built, read across. These two are SEQUENTIAL — what happens,
- * then what it leaves behind — and a reader who takes them side by side takes the
- * consequence as an alternative rather than as a result.
- *
- * @throws on a third line — see {@link CONDITION_LINE_COUNT}.
- */
-export function conditionLineTop(index: number): number {
-  if (!Number.isInteger(index) || index < 0 || index >= CONDITION_LINE_COUNT) {
-    throw new Error(
-      `conditionLineTop: no line ${index} — band 2 holds ` +
-        `${CONDITION_LINE_COUNT} (0…${CONDITION_LINE_COUNT - 1}): the condition, ` +
-        `and what it leaves behind.`,
-    );
+export const FRAY_STRANDS: readonly FrayStrand[] = (() => {
+  const rand = mulberry32(FRAY_SEED);
+  const strands: FrayStrand[] = [];
+  for (let i = 0; i < FRAY_STRAND_COUNT; i++) {
+    const ex = 720 + rand() * 428;
+    const ey = 168 + (i / (FRAY_STRAND_COUNT - 1)) * 240 + (rand() - 0.5) * 26;
+    const c1x = 560 + rand() * 60;
+    const c1y = FAN_ORIGIN.y + (ey - FAN_ORIGIN.y) * (0.05 + rand() * 0.2);
+    const c2x = 640 + rand() * 90;
+    const c2y = FAN_ORIGIN.y + (ey - FAN_ORIGIN.y) * (0.55 + rand() * 0.3);
+    strands.push({
+      d: `M ${FAN_ORIGIN.x} ${FAN_ORIGIN.y} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${ex} ${ey}`,
+      tint: Math.floor(rand() * FRAY_TINT_COUNT),
+      opacity: 0.5 + rand() * 0.4,
+      delay: rand() * 1300,
+      swayDur: 3.4 + rand() * 3,
+      swayDelay: -(rand() * 5),
+      tick: { x: ex, y: ey, rot: -40 + rand() * 80 },
+    });
   }
-  return CONDITION_LINE_TOP + index * CONDITION_LINE_PITCH;
-}
+  return strands;
+})();
 
-/** Where band 2 ends: 526. Not exported — {@link CLOSER_TOP} carries it forward. */
-const CONDITION_BOTTOM =
-  CONDITION_LINE_TOP + (CONDITION_LINE_COUNT - 1) * CONDITION_LINE_PITCH + CONDITION_LINE_HEIGHT;
+// ───────────────────── the verdict ─────────────────────
 
-// ───────────────────── band 3 · the closer ─────────────────────
+/** The closer's measure: 900, centred — `(1184 − 900) / 2 = 142`. One sentence,
+ *  addressed to the room, under the marching line — set narrow ON PURPOSE, so the
+ *  24px serif breaks into TWO centred lines and reads as a verdict rather than as a
+ *  caption. Two lines of 24px on 1.45 measure 70px, and that height is what the
+ *  floor arithmetic below carries. */
+export const VERDICT_WIDTH = 900;
+export const VERDICT_LEFT = (FIGURE_WIDTH - VERDICT_WIDTH) / 2;
 
-/** The air between band 2 and the closer: 40 — the biggest gap on the stage, and the
- *  one place this slide spends its slack. The closer is the only sentence here that is
- *  not about the condition, so it is set apart from it. Not exported. */
-const CONDITION_TO_CLOSER = 40;
+/** The two centred lines' measured box: 70 — `2 × 24 × 1.45`, verified in Chromium at
+ *  1280×720. Not exported; {@link VERDICT_CLEARANCE} carries it. */
+const VERDICT_HEIGHT = 70;
 
-/** The closer's shelf: 566. Full width — the one sentence addressed to every band above
- *  it. */
-export const CLOSER_TOP = CONDITION_BOTTOM + CONDITION_TO_CLOSER;
+/** The closer's shelf: 400 — under the fan's envelope, over the strip the low spine
+ *  vacated when it rose. 400 and not the prototype's 420: two lines from 420 end at
+ *  stage y=646, through the NavBar band — the one place the owner-approved geometry
+ *  had to move to keep the tree's floor rule, and it spends air the marching line
+ *  (at 280) has plenty of. */
+export const VERDICT_TOP = 400;
 
-/** The closer's box: 32, cut for ONE line of 22px serif — a 28.60 line box painting
- *  30.01, 1.99 spare. The same box every 22px verdict in the leader tree takes. */
-export const CLOSER_HEIGHT = 32;
+// ───────────────────── the floor ─────────────────────
 
-/** Where the stage's lowest box ends: 598. Not exported — the clearance below carries
- *  its whole content. */
-const CLOSER_BOTTOM = CLOSER_TOP + CLOSER_HEIGHT;
+/** The lowest RESTING paint, in figure coordinates: the two dot captions at the LOW
+ *  baseline — 448 + 12 + ≈13 of 10px mono on 1.3. Poses 0–1; from pose 2 the whole
+ *  spine group rides 168 higher. */
+const DOT_LABEL_BOTTOM = SPINE_Y + DOT_LABEL_OFFSET_Y + 13;
 
-/** What is left between the closer and the NavBar's hover band: 34px. Derived from both
- *  ends, so an edit anywhere above moves it and a test fails on it before the stage
- *  crosses the band. */
-export const NAV_ZONE_CLEARANCE = NAV_ZONE_TOP - CLOSER_BOTTOM;
+/**
+ * What is left between that caption and the NavBar's hover band: 3px, in STAGE space —
+ * `632 − (156 + 473)`. THE TIGHTEST FLOOR IN THE LEADER TREE, and it is the
+ * owner-approved prototype's own geometry rendered on the real stage: the low spine is
+ * deliberately deep so the hero bands above it get the height that keeps every
+ * sentence on one line. Derived from both ends so an edit anywhere above moves it and
+ * a test fails on it before the stage crosses the band. (The waiting ping's transient
+ * ring reaches 1px lower still — {@link SPINE_Y} + {@link PING_RADIUS} — and spends
+ * its whole life fading out.)
+ */
+export const NAV_ZONE_CLEARANCE = NAV_ZONE_TOP - (FIGURE_TOP + DOT_LABEL_BOTTOM);
+
+/**
+ * The same margin under the closer's SECOND line: 6px, in stage space —
+ * `632 − (156 + 400 + 70)`. Derived and exported separately because it is the floor
+ * this stage actually broke once: the prototype's 420 shelf put the wrapped line at
+ * 646, through the band, and a one-line assumption is exactly the mistake a derived
+ * number refuses to survive.
+ */
+export const VERDICT_CLEARANCE = NAV_ZONE_TOP - (FIGURE_TOP + VERDICT_TOP + VERDICT_HEIGHT);

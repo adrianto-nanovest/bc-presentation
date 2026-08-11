@@ -2063,7 +2063,6 @@ const SIBLING_TOKENS: ReadonlyArray<readonly [string, RegExp, string]> = [
   ["L1–L5", /\bL[1-5]\b/, "B.5"],
   ["rungs", /\brungs?\b/i, "B.5"],
   ["ladder", /\bladder\b/i, "B.5"],
-  ["improvise", /\bimprovis\w*\b/i, "B.2 · §6.2"],
   ["the pattern", /\bpattern\b/i, "B.4"],
   ["shadow", /\bshadow\b/i, "§6.2 · D.4"],
   ["SOP", /\bSOPs?\b/, "§6.2 · D.4"],
@@ -2094,18 +2093,21 @@ const SIBLING_CORPORA: Readonly<Record<string, () => string[]>> = {
 };
 
 /**
- * §6.2's spelling that NO sibling renders, kept anyway and said out loud rather than quietly
+ * §6.2's spellings that NO sibling renders, kept anyway and said out loud rather than quietly
  * padded into the list above.
  *
  * "no guidance" is the SPEC's phrasing for B.2's argument; `gap-no-sop` renders its own image
- * instead and never prints it. `gap-three-failures.test.tsx` records the same split for the
- * same token. It is refused here because a later author is as likely to lift the spec's
- * sentence as the neighbour's copy, and it is controlled against the spec sentence — which is
- * where it is still the only source.
+ * instead and never prints it. `improvise` joined this group on 2026-08-11, when B.2's fray
+ * redesign cut the sentence that spelled the verb — the fan draws it now, and §6.2's own
+ * sentence is again the only source this file can honestly fire the pattern against.
+ * `gap-three-failures.test.tsx` records the same split for the same tokens. They are refused
+ * here because a later author is as likely to lift the spec's sentence as the neighbour's
+ * copy, and each is controlled against the spec sentence below.
  */
 const SPEC_ONLY_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["no guidance", /\bno guidance\b/i],
   ["no SOP", /\bno[-\s]SOP\b/i],
+  ["improvise", /\bimprovis\w*\b/i],
 ];
 
 const SPEC_SENTENCES: readonly string[] = [

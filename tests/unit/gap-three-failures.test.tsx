@@ -608,30 +608,35 @@ const D3_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
 
 /** B.2's RENDERED image, and §6.2's own three phrasings — the two lists
  *  `invest-chicken-egg.test.tsx` keeps, pointed at the slide that runs directly after B.2
- *  instead of the one four sections later. */
+ *  instead of the one four sections later. REMEASURED 2026-08-11 with B.2's fray
+ *  redesign: `still gets answered` and the spelled `improvise` left B.2's stage with its
+ *  two condition sentences (`improvise` moved to the SPEC list below), and `never
+ *  written` arrived with the spine's second dot caption. */
 const B2_IMAGE_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["the rule nobody wrote", /\brule nobody wrote\b/i],
   ["wrote their own", /\bwrote their own\b/i],
   ["never wrote down", /\bnever wrote down\b/i],
+  ["never written", /\bnever written\b/i],
   ["handed out", /\bhanded out\b/i],
   ["a login", /\blogin\w*\b/i],
   ["a demonstration", /\bdemonstrat\w*\b/i],
   ["encouragement", /\bencourag\w*\b/i],
   ["which work may", /\bwhich work may\b/i],
   ["the silence", /\bsilence\b/i],
-  ["still gets answered", /\bstill gets answered\b/i],
   ["no rule to break", /\bno rule to break\b/i],
   ["the leader's job", /\bleader['’]s job\b/i],
-  ["improvise", /\bimprovis\w*\b/i],
 ];
 
-/** §6.2's two spellings B.2 chose NOT to print, kept for the reason
+/** §6.2's three spellings B.2 does NOT print, kept for the reason
  *  `invest-chicken-egg.test.tsx` keeps them: they guard against a later author lifting the
  *  SPEC's phrasing rather than the neighbour's rendered copy. Controlled against §6.2's own
- *  sentence and the slide id it names, which is where they are still the only source. */
+ *  sentence and the slide id it names, which is where they are the only source —
+ *  `improvise` included, since B.2's 2026-08-11 redesign cut the sentence that spelled it
+ *  (the fray draws the verb; the presenter says it). */
 const B2_SPEC_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["no SOP", /\bno[-\s]SOP\b/i],
   ["no guidance", /\bno guidance\b/i],
+  ["improvise", /\bimprovis\w*\b/i],
 ];
 
 /** B.1's own tokens — its quoted figure, its two halves and its verbs. REMEASURED
@@ -787,14 +792,15 @@ describe("the two slides in front of it keep their vocabulary, and D.3 keeps its
       "these",
       "tools",
     ]);
-    // B.2: six ordinary words, not one of which is an image. B.2's picture is a diptych of
-    // things handed out against questions never written down; nothing below is any of it.
+    // B.2: five ordinary words, not one of which is an image. B.2's picture is boxes of
+    // things handed out against questions never written down, over a rollout line that
+    // stops and frays; nothing below is any of it. REMEASURED 2026-08-11 after B.2's
+    // fray redesign: "whoever" left with B.2's condition sentence.
     expect([...mine].filter((word) => longWords(b2Strings()).has(word)).sort()).toEqual([
       "already",
       "asked",
       "first",
       "nobody",
-      "whoever",
       "written",
     ]);
   });

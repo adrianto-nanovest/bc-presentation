@@ -615,9 +615,11 @@ export const gapHardestPartContent = {
 //   · NO SHARED IMAGE. D.3 draws a two-clause deadlock, a first-person past-tense
 //     confession, an itemised bill and a bordered pilot card. D.4 draws a three-column
 //     map of destinations, a price band and four governance chips. THIS SLIDE DRAWS
-//     NEITHER: it is a lopsided diptych — three things that were handed out, against
-//     four questions each followed by an EMPTY RULE where the answer was never written.
-//     The blank line is this pass's image and it appears on no other slide in the deck.
+//     NEITHER: one rollout spine that stops dead at the dot where the rule should have
+//     been written and FRAYS into two dozen swaying private hairlines — over three
+//     issued boxes and four question boxes whose answer rules stay EMPTY at every pose.
+//     The stopped-and-frayed line and the unfilled blanks are this pass's image and
+//     appear on no other slide in the deck.
 //   · NO SHARED TOKEN. None of D.3's — `deadlock`, `no budget without proof`,
 //     `shared accounts`, `banned repeatedly`, `WHAT IT COST`, `30-day`, `proof pilot`,
 //     `kill criterion`, `spend cap` — appears in any string below. None of D.4's —
@@ -649,14 +651,18 @@ export const gapHardestPartContent = {
 //     statistic; keeping the NAME for the pass that acts on it is this file's own call,
 //     and it costs nothing — the copy below describes the condition completely.
 //
-// THE ONE WORD THIS SLIDE IS SUPPOSED TO ECHO, so a reviewer sees it was chosen. C.1's
-// governance decision (`leader-shape/content.ts`) says the leader writes it down
-// "before someone improvises", and `leader-mandate/content.ts` says "enough to stop
-// improvising" — both of those are indexes pointing AT this slide, recorded in their own
-// files as such. So {@link gapNoSopContent.consequenceLine} says "improvises", once,
-// which is the anchor being paid off rather than a borrowed phrase. §6.2's own sentence
-// is "there is no guidance, so people improvise"; the word is B.2's, and the two slides
-// that pre-spent it did so pointing here.
+// THE ONE WORD THIS SLIDE WAS SUPPOSED TO ECHO, AND NO LONGER PRINTS. C.1's governance
+// decision (`leader-shape/content.ts`) says the leader writes it down "before someone
+// improvises", and `leader-mandate/content.ts` says "enough to stop improvising" — both
+// of those are indexes pointing AT this slide, recorded in their own files as such.
+// Until the 2026-08-11 redesign the anchor was paid off in words ("Everyone improvises
+// a rule that works for them"); the redesign cut that band — the presenter says the
+// sentence, and the FRAY is the improvisation, one swaying hairline per private rule.
+// So the two pointers now index the CONDITION rather than a rendered string, §6.2's own
+// sentence ("there is no guidance, so people improvise") stays the only spelled source
+// of the verb, and the sibling tests that once controlled `improvise` against this
+// block's rendered copy control it against that spec sentence — the same split they
+// already ran for `no guidance` and `no SOP`.
 //
 // WHAT THIS SLIDE MAY NOT SAY, beyond the three-pass constraint above:
 //
@@ -676,11 +682,14 @@ export const gapHardestPartContent = {
 //
 // THE KEYWORD RULE, applied without an exception: `kw` on PROSE ONLY.
 //
-//   · PROSE, each with a `*Kw` sibling — FOUR strings: `headline`, `conditionLine`,
-//     `consequenceLine`, `closer`.
-//   · LABELS, carrying no `*Kw` and forbidden from gaining one — ELEVEN strings:
-//     `figLabel`, `issuedEyebrow`, `unwrittenEyebrow`, `conditionEyebrow`, the three
-//     `issued` labels and the four `questions` labels.
+//   · PROSE, each with a `*Kw` sibling — TWO strings: `headline` and `closer`. The
+//     2026-08-11 redesign cut the two condition lines (the presenter carries those
+//     sentences; the fray carries the argument), so the stage's only prose is the
+//     first sentence on it and the last.
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — TWENTY strings:
+//     `figLabel`, `issuedEyebrow`, `unwrittenEyebrow`, `conditionEyebrow`, the two
+//     spine dot captions, the three `issued` labels with their three chip `short`s,
+//     and the four `questions` labels with their four chip `short`s.
 //     THE FOUR QUESTIONS ARE THE SHARPEST CASE, because they are sentence-shaped and
 //     the Capability Ladder's own `question` field at the top of this file DOES carry a
 //     `questionKw`. The difference is arity: that ladder asks ONE question and the
@@ -693,16 +702,28 @@ export const gapHardestPartContent = {
 // as the SECOND of the `gap` run, which is B.2 in today's leader decks and is derived
 // per deck by the composer; `FigLabel` takes a LABEL only. Do not write either down.
 
-/** One row of either column of the diptych. A LABEL, keyword-free by the rule above. */
+/**
+ * One issued box or one question box. TWO FACES PER ITEM, and both are LABELS —
+ * keyword-free by the rule above: `label` is the box's hero face, `short` the same item
+ * compressed to a chip once the stage compacts at the fray pose. The chip is not a
+ * summary of the argument — it is the receipt that the argument was already made.
+ */
 export interface NoSopItem {
   id: string;
   /**
-   * Cut for ONE line: 420px (what was handed out) or 696px (a question) of 15px sans,
-   * which is ≈56 and ≈94 characters. A reword past that wraps into the row under it —
-   * and in the right column it wraps onto the empty rule that belongs to it, which is
+   * The hero face, cut for ONE line of its box's sans register: ≈328px inside an
+   * issued box, ≈521px inside a question box. A reword past that wraps inside the box
+   * — and in a question box it wraps onto the empty rule that belongs to it, which is
    * the one failure on this stage a reader would misread as a design.
    */
   label: string;
+  /**
+   * The chip face — mono caps, a handful of characters, cut for a 36px chip. The hero
+   * face's own words compressed, carrying NO new image and NO new argument: a chip
+   * that said something its hero face had not would be new copy arriving at the pose
+   * that exists to say the copy has already been argued.
+   */
+  short: string;
 }
 
 /** Exactly three, held by the TYPE — the fixed-length tuple idiom
@@ -729,9 +750,17 @@ type Four<T> = readonly [T, T, T, T];
  * not.
  */
 const ISSUED: Three<NoSopItem> = [
-  { id: "login", label: "A login, the first day someone asked for one." },
-  { id: "demonstration", label: "A demonstration, and a room told to try it." },
-  { id: "encouragement", label: "Encouragement from the top, in writing." },
+  { id: "login", label: "A login, the first day someone asked for one.", short: "A LOGIN" },
+  {
+    id: "demonstration",
+    label: "A demonstration, and a room told to try it.",
+    short: "A DEMONSTRATION",
+  },
+  {
+    id: "encouragement",
+    label: "Encouragement from the top, in writing.",
+    short: "ENCOURAGEMENT",
+  },
 ];
 
 /**
@@ -755,10 +784,10 @@ const ISSUED: Three<NoSopItem> = [
  * reports it.
  */
 const QUESTIONS: Four<NoSopItem> = [
-  { id: "may-go-in", label: "Which work may I put into it?" },
-  { id: "may-never", label: "Which work may never go near it?" },
-  { id: "who-decides", label: "Who decides when a case is not obvious?" },
-  { id: "who-hears", label: "Who do I tell when I have already used it?" },
+  { id: "may-go-in", label: "Which work may I put into it?", short: "MAY GO IN?" },
+  { id: "may-never", label: "Which work may never go near it?", short: "MAY NEVER?" },
+  { id: "who-decides", label: "Who decides when a case is not obvious?", short: "WHO DECIDES?" },
+  { id: "who-hears", label: "Who do I tell when I have already used it?", short: "WHO TO TELL?" },
 ];
 
 export const gapNoSopContent = {
@@ -795,41 +824,24 @@ export const gapNoSopContent = {
   issued: ISSUED,
   questions: QUESTIONS,
 
-  /** Band 2's heading. Mono, keyword-free. NAMES NO ACTOR — it is the condition that
-   *  follows, not somebody's decision — and it is the string that would have read "THE
-   *  CONDITION IT PRODUCES" if `produce` were not D.4 beat 2's word (see the header). */
+  /**
+   * The step diagram's two captions — one under each labelled dot on the spine. Mono,
+   * keyword-free, and each is its band's eyebrow compressed to the diagram's own
+   * grammar: the first dot is where the rollout delivered, the second is where it
+   * stopped. NO VERB PHRASE AND NO SENTENCE — a dot caption that argued anything would
+   * be a fourth band on a stage that holds three.
+   */
+  issuedDotLabel: "HANDED OUT",
+  unwrittenDotLabel: "NEVER WRITTEN",
+
+  /** Band 3's heading — the fray's. Mono, keyword-free. NAMES NO ACTOR — it is the
+   *  condition that follows, not somebody's decision — and it is the string that would
+   *  have read "THE CONDITION IT PRODUCES" if `produce` were not D.4 beat 2's word (see
+   *  the header). WHAT the silence leaves behind is DRAWN rather than said: the
+   *  2026-08-11 redesign cut the two sentences that used to sit under this heading, and
+   *  the fan of private hairlines is now the whole band — the presenter says the
+   *  sentences, the stage shows the condition. */
   conditionEyebrow: "WHAT THE SILENCE LEAVES BEHIND",
-
-  /**
-   * The condition itself. PROSE.
-   *
-   * "still gets answered" IS THE KEYWORD AND THE WHOLE ARGUMENT: an unanswered question
-   * does not stay unanswered, it gets answered somewhere nobody can see. The three
-   * qualifiers after the dash are what make it a condition rather than a fault —
-   * privately, at one desk, under time pressure, by someone doing their job.
-   *
-   * "that afternoon" AND NOT A DURATION. No digit appears anywhere in this block (see
-   * the header); the pressure is carried by the ordinary word for it.
-   */
-  conditionLine:
-    "A question nobody answers still gets answered — privately, at one desk, by whoever " +
-    "needed to finish something that afternoon.",
-  conditionLineKw: ["still gets answered"],
-
-  /**
-   * What the condition leaves behind. PROSE.
-   *
-   * "improvises" IS THE ONE DELIBERATE ECHO in this block — §6.2's own verb, and the
-   * word C.1 and K.1 both point here with (see the header). It appears exactly once.
-   *
-   * THE SECOND HALF IS THE COST AND IT IS NOT AN ACCUSATION: the rules are not wrong,
-   * they are unreadable. That distinction is what keeps this slide a condition and
-   * leaves the consequences to the two passes behind it.
-   */
-  consequenceLine:
-    "Everyone improvises a rule that works for them, and not one of those rules is written " +
-    "where anybody else can read it.",
-  consequenceLineKw: ["improvises a rule", "written where anybody else can read it"],
 
   /**
    * The closer, and the slide's last arrival. PROSE.
@@ -924,9 +936,11 @@ export const gapNoSopContent = {
 //   · D.3's — `deadlock`, `no budget without proof`, `shared accounts`, `banned`,
 //     `what it cost`, `30-day`, `proof pilot`, `kill criterion`, `spend cap`.
 //   · B.2's, one slide up in this same run — `the rule nobody wrote`, `wrote their own`,
-//     `never wrote down`, `handed out`, `login`, `demonstration`, `encouragement`,
-//     `which work may`, `silence`, `still gets answered`, `no rule to break`, `the
-//     leader's job`, and §6.2's own `no guidance` / `improvise` / `no-SOP`.
+//     `never wrote down`, `never written`, `handed out`, `login`, `demonstration`,
+//     `encouragement`, `which work may`, `silence`, `no rule to break`, `the leader's
+//     job`, and §6.2's own `no guidance` / `improvise` / `no-SOP`. (`still gets
+//     answered` and the spelled `improvises` left B.2's stage with its 2026-08-11
+//     fray redesign; both stay off THIS stage too — they are still §6.2's beat.)
 //   · B.1's, two slides up — `procured`, `instantly`, `invoice`, `tool access`, `70%`,
 //     `30%`, `70/30`, `people & process`, `earned`, `capability`, `technology`.
 //   · L.3's summary of these same three failures (`reveal-and-closing/content.ts`,

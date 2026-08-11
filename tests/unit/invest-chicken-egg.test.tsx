@@ -1077,15 +1077,16 @@ describe("no vendor-leniency or enforcement-weakness claim, anywhere", () => {
  * spelled everywhere it appears. So the pattern matches both spellings and D.3 may print
  * neither.
  *
- * THIS LIST SURVIVES B.2 SHIPPING, and its positive controls now split in two. gh#66
- * rendered `gap-no-sop`, and the shipped copy spends §6.2's verb (`improvises a rule`,
- * once) while spelling the other two ideas in its own words — it prints neither `no
- * guidance` nor `no SOP` anywhere. So `improvise` is controlled against B.2's RENDERED
- * copy below, and the other two stay controlled against §6.2's spec sentence and slide
- * id, which is where they are still the only source. Deleting them would drop the guard
- * against a later author lifting the SPEC's phrasing into this slide, which costs
- * nothing to keep and is a different failure from lifting B.2's rendered copy — that
- * second failure is what {@link B2_IMAGE_TOKENS} and the phrase rule below hold.
+ * THIS LIST SURVIVES B.2 SHIPPING — AND ITS 2026-08-11 REDESIGN, after which all three
+ * tokens are controlled the same way. gh#66's first cut spent §6.2's verb in a rendered
+ * sentence ("Everyone improvises a rule …"); the fray redesign cut that sentence (the
+ * fan of private hairlines is the improvisation now, and the presenter says the verb),
+ * so `improvise` re-joined `no guidance` and `no SOP` in having NO rendered source —
+ * every control fires against §6.2's own sentence and slide id, which is again the only
+ * place any of the three is spelled. Deleting them would drop the guard against a later
+ * author lifting the SPEC's phrasing into this slide, which costs nothing to keep and
+ * is a different failure from lifting B.2's rendered copy — that second failure is what
+ * {@link B2_IMAGE_TOKENS} and the phrase rule below hold.
  */
 const B2_SPEC_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["no SOP", /\bno[-\s]SOP\b/i],
@@ -1096,11 +1097,14 @@ const B2_SPEC_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
 /**
  * B.2's RENDERED image, read off `gapNoSopContent` (gh#66) rather than off §6.2.
  *
- * WHAT AN "IMAGE TOKEN" IS HERE: the words that carry the picture B.2 draws — a
- * lopsided diptych of three things that were handed out against four questions nobody
- * wrote an answer to, and the silence behind them. Every pattern below is fired against
- * B.2's own strings in the control test, so a list that drifted out of date fails loudly
- * instead of passing vacuously.
+ * WHAT AN "IMAGE TOKEN" IS HERE: the words that carry the picture B.2 draws — three
+ * issued boxes against four question boxes with empty answer rules, over a rollout
+ * line that stops at NEVER WRITTEN and frays into private hairlines, and the silence
+ * behind them. Every pattern below is fired against B.2's own strings in the control
+ * test, so a list that drifted out of date fails loudly instead of passing vacuously.
+ * REMEASURED 2026-08-11 with B.2's fray redesign: `still gets answered` left B.2's
+ * stage with its two condition sentences, and `never written` arrived with the spine's
+ * second dot caption.
  *
  * WHAT IS DELIBERATELY NOT IN IT. B.2 and this slide share four words of four letters or
  * more — `what`, `work`, `have`, `case` (measured, not assumed; see the phrase rule's
@@ -1117,7 +1121,7 @@ const B2_IMAGE_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["encouragement", /\bencourag\w*\b/i],
   ["which work may", /\bwhich work may\b/i],
   ["the silence", /\bsilence\b/i],
-  ["still gets answered", /\bstill gets answered\b/i],
+  ["never written", /\bnever written\b/i],
   ["no rule to break", /\bno rule to break\b/i],
   ["the leader's job", /\bleader['’]s job\b/i],
 ];
@@ -1312,17 +1316,17 @@ describe("§6.2 · shadow AI is RATIONAL BEHAVIOUR here, and nothing else's pass
       ).toBe(true);
     }
 
-    // §6.2's OWN SENTENCE IS STILL QUOTED VERBATIM, for the two SPEC tokens B.2 chose not
-    // to print. Spec line 773 reads "There is no guidance, so people improvise." — `no
+    // §6.2's OWN SENTENCE IS STILL QUOTED VERBATIM, for the three SPEC tokens B.2 does
+    // not print. Spec line 773 reads "There is no guidance, so people improvise." — `no
     // guidance` and `improvise` come from there; `no SOP` comes from the SLIDE ID §6.2
-    // gives that pass, `gap-no-sop`. The rendered copy is listed FIRST, so `improvise`
-    // is controlled against what B.2 actually prints ("Everyone improvises a rule …")
-    // and only the two tokens with no rendered source fall back to the spec. A control
-    // that edits the spec's words to make itself fire is a control that proves the edit
-    // and not the regex. (This line read "There is no guidance and no SOP, so people
-    // improvise." until 2026-08-05, which was exactly that.)
+    // gives that pass, `gap-no-sop`. Since B.2's 2026-08-11 fray redesign none of the
+    // three has a rendered source (the header above records why), so every control
+    // falls back to the spec. A control that edits the spec's words to make itself fire
+    // is a control that proves the edit and not the regex. (This line read "There is no
+    // guidance and no SOP, so people improvise." until 2026-08-05, which was exactly
+    // that.)
     const b2Sources = [
-      ...b2, // B.2's rendered copy, where `improvises` is spelled
+      ...b2, // B.2's rendered copy — none of the three is spelled here today
       "There is no guidance, so people improvise.", // §6.2, spec line 773
       "gap-no-sop", // §6.2's slide id, where `no SOP` is spelled
     ];
@@ -1332,9 +1336,9 @@ describe("§6.2 · shadow AI is RATIONAL BEHAVIOUR here, and nothing else's pass
         name,
       ).toBe(true);
     }
-    // AND THE HALF OF THAT WHICH IS NOW A FACT ABOUT RENDERED COPY: B.2 spends §6.2's
-    // verb and neither of its other two phrasings, so the split above is not a guess.
-    expect(b2.some((line) => /\bimprovis\w*\b/i.test(line))).toBe(true);
+    // AND THE HALF OF THAT WHICH IS A FACT ABOUT RENDERED COPY: B.2 spells none of
+    // §6.2's three phrasings since the redesign, so the fallback above is not a guess.
+    expect(b2.some((line) => /\bimprovis\w*\b/i.test(line))).toBe(false);
     expect(b2.some((line) => /\bno guidance\b/i.test(line))).toBe(false);
     expect(b2.some((line) => /\bno[-\s]SOP\b/i.test(line))).toBe(false);
     const d4Lines = [

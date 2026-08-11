@@ -1507,6 +1507,11 @@ const RESERVED: ReadonlyArray<readonly [string, RegExp, "C.1" | "B.1" | "B.2"]> 
   ["the pilot", /\bpilots?\b/i, "C.1"],
   ["culture", /\bculture\b/i, "C.1"],
   ["an agent", /\bagents?\b/i, "C.1"],
+  // OWNED BY C.1 SINCE 2026-08-11: B.2's fray redesign cut the sentence that spelled the
+  // verb (its fan of hairlines draws it now), so C.1's governance decision — "before
+  // someone improvises" — is the deck's only rendered spelling, and the only corpus this
+  // pattern can honestly be fired against.
+  ["improvises", /\bimprovis\w*\b/i, "C.1"],
   // B.1 — the 70/30 and the sentence it opens on.
   ["not the tools", /\btools?\b/i, "B.1"],
   ["technology", /\btechnolog\w*\b/i, "B.1"],
@@ -1514,9 +1519,9 @@ const RESERVED: ReadonlyArray<readonly [string, RegExp, "C.1" | "B.1" | "B.2"]> 
   ["procured", /\bprocure\w*\b/i, "B.1"],
   ["capability", /\bcapabilit\w*\b/i, "B.1"],
   ["BCG / McKinsey", /\b(BCG|McKinsey)\b/i, "B.1"],
-  // B.2 — the unwritten rule and the improvisation it produced.
+  // B.2 — the unwritten rule. (The spelled `improvises` moved up to C.1's group when
+  // B.2's 2026-08-11 redesign stopped rendering it.)
   ["no rule to break", /\brules?\b/i, "B.2"],
-  ["improvises", /\bimprovis\w*\b/i, "B.2"],
   // "wrote" AND NOT "SOP". B.2 never prints the letters S-O-P — the absence of written
   // guidance is its whole subject and it names the artefact nowhere — so a pattern for it
   // could not be fired against B.2's own strings, which is the bar every entry in this

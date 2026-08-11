@@ -536,15 +536,17 @@ export function ownProofFor(brand: Brand): OwnProofBlock {
 //      and — the statistic half — B.2 prints no digit in any rendered string, asserted
 //      rather than quoted, against this block's single quantity.
 //      WHAT B.2 ACTUALLY PRINTS, so the three tokens above can be read for what they
-//      now are: it spends §6.2's verb ONCE ("Everyone improvises a rule that works for
-//      them"), and it prints NEITHER `no guidance` NOR `no SOP` anywhere. So `improvise`
-//      is a live reservation against rendered copy and the other two are reservations
-//      against the SPEC's phrasing only — kept, because a later author lifting §6.2's
-//      sentence into this slide is a different failure from lifting B.2's copy, and both
-//      are cheap to forbid. B.2's own image is a lopsided diptych — three things the
-//      organisation handed out against four questions each followed by an EMPTY RULE —
-//      and this slide draws none of it: no login, no demonstration, no encouragement, no
-//      silence, no unanswered question.
+//      now are — REMEASURED 2026-08-11, when B.2's fray redesign cut the sentence that
+//      spelled §6.2's verb ("Everyone improvises a rule that works for them" left the
+//      stage; the fan of private hairlines draws it now, and the presenter says it). So
+//      ALL THREE are reservations against the SPEC's phrasing only — `improvise`
+//      included, again — kept, because a later author lifting §6.2's sentence into this
+//      slide is a different failure from lifting B.2's copy, and both are cheap to
+//      forbid. B.2's own image since the redesign: three issued boxes against four
+//      question boxes with EMPTY answer rules, over a rollout spine that stops at a dot
+//      captioned NEVER WRITTEN and frays into two dozen private hairlines — and this
+//      slide draws none of it: no login, no demonstration, no encouragement, no
+//      silence, no unanswered question, no stopped or frayed line.
 //      The one place B.2's vocabulary was already on a stage before it shipped is
 //      `leader-shape/content.ts`'s governance decision ("where the data may go … before
 //      someone improvises"), which is C.1 indexing it on purpose — B.2's own header
@@ -949,15 +951,17 @@ export const investChickenEggContent = {
 //     2026-08-08 it read "AGAINST B.2, WHICH IS UNBUILT … so this half of the check runs
 //     against §6.2's SPEC TEXT and not against rendered copy", which was true and is the
 //     limit gh#57's commit recorded. gh#66 rendered `gap-no-sop` into
-//     `src/slides/leader-gap/content.ts` (`gapNoSopContent`, fifteen rendered strings),
-//     so this half is now a claim about rendered copy and it is checked in BOTH
-//     directions by `tests/unit/invest-security.test.tsx`, which imports that module:
-//     none of B.2's image tokens (`handed out`, `login`, `demonstration`,
-//     `encouragement`, `silence`, `still gets answered`, `no rule to break`, `the
-//     leader's job`, `wrote their own`, `never wrote down`, `which work may`, `the rule
-//     nobody wrote`) in this block, none of beat 2's (`shadow AI`, `administers`,
-//     `vendor`, `exposure`, `audit`, `revoke`, `produce`, `you cannot`) in B.2's
-//     strings, and no three-word phrase shared either way. What was already settled
+//     `src/slides/leader-gap/content.ts` (`gapNoSopContent` — twenty-two rendered
+//     strings since its 2026-08-11 fray redesign, which cut the two condition sentences
+//     and added the chip and dot-caption labels), so this half is a claim about
+//     rendered copy and it is checked in BOTH directions by
+//     `tests/unit/invest-security.test.tsx`, which imports that module: none of B.2's
+//     image tokens (`handed out`, `login`, `demonstration`, `encouragement`, `silence`,
+//     `never written`, `no rule to break`, `the leader's job`, `wrote their own`,
+//     `never wrote down`, `which work may`, `the rule nobody wrote`) in this block,
+//     none of beat 2's (`shadow AI`, `administers`, `vendor`, `exposure`, `audit`,
+//     `revoke`, `produce`, `you cannot`) in B.2's strings, and no three-word phrase
+//     shared either way. What was already settled
 //     stands: none of `no SOP`, `no guidance` or `improvise` appears below, and beat 3
 //     says where the SOP STARTS rather than that there is none — the absence of guidance
 //     is B.2's image and this slide does not draw it. B.2 prints no digit at all, which
@@ -977,6 +981,10 @@ export const investChickenEggContent = {
 //     writing, against four questions nobody wrote an answer to, then "Nobody broke a
 //     rule. There was no rule to break." Third person, impersonal, no actor blamed, no
 //     digit, and the phenomenon is never named. It describes an ABSENCE and stops.
+//     (RE-READ 2026-08-11 after B.2's fray redesign: the two condition sentences left
+//     its stage and the condition is DRAWN instead — a rollout line stops where the
+//     writing stopped and frays into private hairlines. Still impersonal, still
+//     unnamed, still digit-free; the escalation reads exactly as before.)
 //   · D.3 (this file's second block) — RATIONAL BEHAVIOUR. First person, past tense:
 //     the budget deadlock, "So we did it on shared accounts, and we were banned
 //     repeatedly", a closed four-line bill, then the pilot that would have avoided it.

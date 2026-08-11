@@ -1,0 +1,72 @@
+/* THE RULE NOBODY WROTE (§6.2) — mount choreography for the boxes-and-fray scene.
+ *
+ * KEYFRAMES `no-sop-` PREFIXED, imported by ./NoSopBeats.tsx — every slide family
+ * owns its own keyframes (the globals.css rule beside `gap-ladder-draw`), so
+ * retiming one entry can never retime another slide's. These run ONCE, when their
+ * element mounts; everything that changes BETWEEN poses is a CSS transition set
+ * inline by the component, so it runs both ways on the pose walk. The global
+ * `prefers-reduced-motion: reduce` rule in globals.css squashes both forms to
+ * 0.01ms — a draw parks on its finished frame, the two infinite decorations (the
+ * waiting ping, the marching dashes) run their single squashed iteration and park —
+ * so every pose rests complete under either preference, with no matchMedia gate to
+ * write and ZERO SMIL to gate at mount.
+ */
+
+/* Line draw-in — the spine's two segments and every fray strand. Elements set
+   pathLength=1, dasharray 1, dashoffset 1; CSS and not SMIL for the reason the
+   ladder's `gap-ladder-draw` records: SMIL is invisible to the reduced-motion
+   squash and would have to be gated at mount. */
+@keyframes no-sop-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* The second dot waiting for an answer that never comes. Ends at opacity 0 — under
+   reduced motion the single squashed iteration parks it invisible, which is the
+   correct resting frame for a decoration whose life is the fading. */
+@keyframes no-sop-ping {
+  from { transform: scale(0.12); opacity: 0.75; }
+  to   { transform: scale(1);    opacity: 0; }
+}
+
+/* A whole hairline swaying about its origin — a private rule still moving. */
+@keyframes no-sop-wobble {
+  from { transform: rotate(-0.9deg); }
+  to   { transform: rotate(0.9deg); }
+}
+
+/* The leader's unwritten line, marching in place. dasharray is 12 9, so −42 is two
+   whole periods and the loop is seamless. */
+@keyframes no-sop-march {
+  to { stroke-dashoffset: -42; }
+}
+
+/* A hero box landing as the rollout line reaches it. On an INNER node, so the
+   geometry wrapper's pose transitions never fight the fill-mode. */
+@keyframes no-sop-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Every content box, hero or chip. Border and fill live HERE and not in the inline
+   style so :hover can win — E.4's hover grammar (B4CategoryCard): border brightens
+   to copper-200 and a copper wash lays over the fill. The wash is --copper-500 at
+   8% rather than an rgba() literal, the no-hex rule's nearest expressible form. */
+.no-sop-box {
+  border: 1px solid var(--copper-800);
+  background: var(--neutral-800);
+}
+.no-sop-box:hover {
+  border-color: var(--copper-200);
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--copper-500) 8%, transparent),
+      color-mix(in srgb, var(--copper-500) 8%, transparent)
+    ),
+    var(--neutral-800);
+}
+
+/* Pose-gate dimming for the argued-past fan: a scene that has been argued steps
+   back but stays alive. Opacity here means TIME (already argued), never rank. */
+.no-sop-dimmable {
+  transition: opacity 0.8s var(--ease);
+}

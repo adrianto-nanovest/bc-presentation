@@ -195,6 +195,12 @@ const PILLARS: readonly Pillar[] = [
     // rational behaviour) and §6.2 puts that escalation in the spec rather than in
     // the implementer's judgement, so this line spends no statistic and no image
     // that a later pass needs.
+    //
+    // AND SINCE B.2'S 2026-08-11 FRAY REDESIGN, THIS IS THE DECK'S ONLY RENDERED
+    // SPELLING OF THE VERB: B.2 draws the improvisation (a stopped rollout line
+    // fraying into private hairlines) rather than spelling it, so the sibling tests
+    // that reserve `improvis` to a rendered corpus fire the pattern against THIS
+    // line now — `shape-middle-out.test.tsx` records the move.
     decision: "You decide where the data may go — and you write it down before someone improvises.",
     decisionKw: ["where the data may go"],
   },
@@ -613,11 +619,12 @@ export function hubBrandLineFor(brand: Brand): string | null {
 //     whole point.
 //   · "The hardest part is not the tools." AND THE 70/30 → `gap-hardest-part`'s. The
 //     word `tools` appears nowhere below, and no percentage does either.
-//   · "Nobody wrote the rule. So everybody wrote their own." AND `improvises` →
-//     `gap-no-sop`'s. Nothing below uses either. Note also that its
-//     `issuedEyebrow` is "WHAT THE ORGANISATION HANDED OUT", which is why the headline
-//     below does NOT read "Adoption is not handed down" — a good line, cut for that
-//     collision alone.
+//   · "Nobody wrote the rule. So everybody wrote their own." → `gap-no-sop`'s, and
+//     `improvises` → §6.2's beat, rendered only by C.1's governance decision at the
+//     top of this file since B.2's 2026-08-11 fray redesign. Nothing below uses
+//     either. Note also that B.2's `issuedEyebrow` is "WHAT THE ORGANISATION HANDED
+//     OUT", which is why the headline below does NOT read "Adoption is not handed
+//     down" — a good line, cut for that collision alone.
 //   · "on the Tuesday after the room empties" → `leader-mandate/content.ts`'s, and
 //     THIS IS AN OVERLAP THAT SHIPS RATHER THAN AN OVERSIGHT. The band below says
 //     "on a Tuesday" and the two translations say "on Monday" twice. The ordinary

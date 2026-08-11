@@ -1,5 +1,8 @@
 // THE RULE NOBODY WROTE · slide tests. All four poses, and the rules gh#66's AC states
 // — held over EVERY authored string and over the RENDERED stage rather than spot-checked.
+// REWRITTEN 2026-08-11 with the slide's boxes-and-fray redesign (owner call,
+// productionized from the B.2 prototype's variant D; the two condition prose lines left
+// the stage with it, and the chip and dot-caption labels arrived through content).
 //
 // WHAT THIS FILE CAN AND CANNOT PROVE — its siblings' preamble, inherited. jsdom has no
 // layout and no media queries, so nothing here measures a pixel and `prefers-reduced-
@@ -8,14 +11,11 @@
 //
 //   1. THE THIRD PASS SOUNDING LIKE THE OTHER TWO. §6.2 puts the escalation constraint
 //      in the SPEC's voice — the deck's three shadow-AI passes may share no image and no
-//      statistic — and B.2 is the last of the three to ship, so for the first time both
-//      of the others exist as CODE. That makes the rule a cross-module sweep over
-//      `leader-invest/content.ts`'s real strings (D.3 `invest-chicken-egg` as rational
-//      behaviour, D.4 `invest-security` beat 2 as exposure) instead of a transcription of
-//      spec text, which is what D.3's and D.4's own files had to settle for while this
-//      slide was unbuilt. Held two ways below: a RESERVED-TOKEN list whose every pattern
-//      is fired against the string it was read off, and a programmatic word sweep that
-//      needs no list at all.
+//      statistic — and both other passes exist as CODE, so the rule is a cross-module
+//      sweep over `leader-invest/content.ts`'s real strings (D.3 `invest-chicken-egg` as
+//      rational behaviour, D.4 `invest-security` beat 2 as exposure). Held two ways
+//      below: a RESERVED-TOKEN list whose every pattern is fired against the string it
+//      was read off, and a programmatic word sweep that needs no list at all.
 //   2. THE STATISTIC HALF, WHICH IS AN ABSENCE. This stage prints no digit anywhere, at
 //      any pose, which is the only form of "shares no statistic" a test can hold as a
 //      fact rather than as a list of forbidden values. Both other passes DO carry
@@ -28,11 +28,11 @@
 //      on a quoted 70/30 figure. Nothing here may re-spend it or its vocabulary, and
 //      that list is drawn from B.1's own strings rather than typed from memory.
 //
-// WHAT IS LEFT TO THE BROWSER WALK: the reduce-mode half of the zero-SMIL AC (held here
-// at every pose under both preferences, plus the structural fact that makes it true by
-// construction — the figure mounts no `<svg>` at all); real wrap of the eight one-line
-// body rows, the two condition lines and the closer; and the painted colour ladder,
-// including the two graphic tiers of the marks and the empty answer rules.
+// WHAT IS LEFT TO THE BROWSER WALK: the squashed-duration half of the reduce-mode AC
+// (every reached mark resting on its FINISHED frame — the markup half, that nothing
+// under this slide reads `matchMedia` and zero SMIL mounts under either preference, is
+// held here); real wrap of the hero faces and the closer; the painted colour ladder;
+// and the fray actually reading as a fray rather than as a wedge.
 //
 // DECK COMPOSITION IS NOT ASSERTED HERE. Where this slide sits in the two leader decks —
 // the `gap` run, behind B.1 — belongs to `deck-registry.test.ts` and the numbering
@@ -56,13 +56,11 @@ import {
   onPremCallbackFor,
 } from "@/slides/leader-invest/content";
 import {
-  ANSWER_RULE_HEIGHT,
+  FRAY_STRAND_COUNT,
   ISSUED_COUNT,
+  NAV_ZONE_CLEARANCE,
   QUESTION_COUNT,
-  UNWRITTEN_LEFT,
-  UNWRITTEN_WIDTH,
-  answerRuleTop,
-  questionTop,
+  VERDICT_CLEARANCE,
 } from "@/slides/leader-gap/no-sop-geometry";
 
 const C = gapNoSopContent;
@@ -107,81 +105,95 @@ function goToPose(pose: number) {
   act(() => screen.getByTestId(`goto-${pose}`).click());
 }
 
-// ── the boxes, by pose ───────────────────────────────────────────────────────
+// ── the stage's state model, by pose ─────────────────────────────────────────
 //
-// Derived from the content tuples wherever the renderer keys on a content `id`, so a
-// reorder of the copy moves these hooks with it.
+// THE REDESIGN CHANGES WHAT "REVEALED" MEANS, so this file holds a STATE MODEL rather
+// than the accumulating band list its first cut held. The scene is persistent: every
+// box exists from its beat on and never leaves, but the two hero bands CROSSFADE into
+// chip receipts when the fray arrives — so an element is one of three kinds:
+//
+//   gate    — always in the DOM, visibility written as inline opacity ("1"/"0") by the
+//             component's `gate` helper. Read the way `gap-hardest-part.test.tsx`
+//             reads its own morphing scene.
+//   mount   — in the DOM only from its beat on (the spine's second segment, the fray,
+//             the marching line, the verdict), so the entry choreography replays on a
+//             walk back and forth. Read as presence.
+//   static  — in the DOM from pose 0 and never gated (the first band's title, the
+//             seven boxes' shells, the first dot and its caption).
+//
+// `when` is a PREDICATE over the pose and not a band index, because the honest
+// invariant of a crossfade is not monotone: the hero faces are on through poses 0–1
+// and OFF after, while their chip faces are the reverse — the ITEM is on stage at
+// every pose past its beat, in one form or the other.
 
-const POSE_0_IDS = [
-  "no-sop-issued-eyebrow",
-  ...C.issued.map((item) => `no-sop-issued-mark-${item.id}`),
-  ...C.issued.map((item) => `no-sop-issued-${item.id}`),
-];
-const POSE_1_IDS = [
-  "no-sop-unwritten-eyebrow",
-  ...C.questions.map((item) => `no-sop-question-${item.id}`),
-  ...C.questions.map((item) => `no-sop-answer-blank-${item.id}`),
-];
-const POSE_2_IDS = [
-  "no-sop-rule",
-  "no-sop-condition-eyebrow",
-  "no-sop-condition-line",
-  "no-sop-consequence-line",
-];
-const POSE_3_IDS = ["no-sop-closer"];
-
-const REVEALED_AT: ReadonlyArray<readonly string[]> = [
-  POSE_0_IDS,
-  POSE_1_IDS,
-  POSE_2_IDS,
-  POSE_3_IDS,
-];
-
-const EVERY_BOX = REVEALED_AT.flat();
-
-/** The eight boxes with no text of their own — the copper rule's wrapper, the three
- *  issued marks and the four EMPTY answer rules. Named once, so the "the copy is there,
- *  not merely the box" checks below cannot be quietly widened, and asserted EMPTY in its
- *  own test: a filled blank is the one edit that would answer the question this slide
- *  exists to say nobody answered. */
-const TEXTLESS_IDS = new Set([
-  "no-sop-rule",
-  ...C.issued.map((item) => `no-sop-issued-mark-${item.id}`),
-  ...C.questions.map((item) => `no-sop-answer-blank-${item.id}`),
-]);
-
-/**
- * The element whose class carries a box's reveal — the sibling files' two-shape reader.
- * Every box but one IS a `Reveal`; `no-sop-rule`'s testid is on a positioned wrapper
- * around a `CopperRule`, because that primitive spreads no `data-*` props.
- */
-function fade(id: string): HTMLElement {
-  const el = screen.getByTestId(id);
-  if (el.classList.contains("fade")) return el;
-  const inner = el.querySelector<HTMLElement>(".copper-rule");
-  if (!inner) {
-    throw new Error(
-      `"${id}" is neither a .fade box nor a wrapper around a .copper-rule — the ` +
-        `renderer's hook or its primitive changed.`,
-    );
-  }
-  return inner;
+type Kind = "gate" | "mount" | "static";
+interface Expectation {
+  id: string;
+  kind: Kind;
+  when: (pose: number) => boolean;
 }
 
-const revealed = (id: string) => fade(id).classList.contains("on");
+const EXPECTED: readonly Expectation[] = [
+  { id: "no-sop-issued-eyebrow", kind: "static", when: () => true },
+  ...C.issued.map<Expectation>((item) => ({
+    id: `no-sop-issued-${item.id}`,
+    kind: "static",
+    when: () => true,
+  })),
+  ...C.issued.map<Expectation>((item) => ({
+    id: `no-sop-issued-hero-${item.id}`,
+    kind: "gate",
+    when: (p) => p < 2,
+  })),
+  ...C.issued.map<Expectation>((item) => ({
+    id: `no-sop-issued-chip-${item.id}`,
+    kind: "gate",
+    when: (p) => p >= 2,
+  })),
+  { id: "no-sop-dot-label-issued", kind: "static", when: () => true },
+  { id: "no-sop-unwritten-eyebrow", kind: "gate", when: (p) => p >= 1 },
+  ...C.questions.map<Expectation>((item) => ({
+    id: `no-sop-question-${item.id}`,
+    kind: "gate",
+    when: (p) => p >= 1,
+  })),
+  ...C.questions.map<Expectation>((item) => ({
+    id: `no-sop-question-hero-${item.id}`,
+    kind: "gate",
+    when: (p) => p < 2,
+  })),
+  ...C.questions.map<Expectation>((item) => ({
+    id: `no-sop-question-chip-${item.id}`,
+    kind: "gate",
+    when: (p) => p >= 2,
+  })),
+  { id: "no-sop-spine-unwritten", kind: "mount", when: (p) => p >= 1 },
+  { id: "no-sop-dot-unwritten", kind: "mount", when: (p) => p >= 1 },
+  { id: "no-sop-dot-label-unwritten", kind: "mount", when: (p) => p >= 1 },
+  { id: "no-sop-condition-eyebrow", kind: "gate", when: (p) => p >= 2 },
+  { id: "no-sop-fray", kind: "mount", when: (p) => p >= 2 },
+  { id: "no-sop-leader-line", kind: "mount", when: (p) => p >= 3 },
+  { id: "no-sop-closer", kind: "mount", when: (p) => p >= 3 },
+] as const;
 
-/** How many milliseconds into its pose a box arrives. Throws on an unrevealed box —
- *  `Reveal` zeroes `transitionDelay` while `on` is false, so there is no arrival. */
-function arrival(id: string): number {
-  const el = fade(id);
-  if (!el.classList.contains("on")) {
-    throw new Error(`"${id}" is not revealed at this pose, so it has no arrival`);
+/** A gate's state, read off the inline opacity the component always writes. */
+function gateOpen(id: string): boolean {
+  const opacity = screen.getByTestId(id).style.opacity;
+  if (opacity !== "1" && opacity !== "0") {
+    throw new Error(`"${id}" carries no inline gate opacity — the renderer's hook changed`);
   }
-  const ms = parseFloat(el.style.transitionDelay);
-  if (!Number.isFinite(ms)) {
-    throw new Error(`"${id}" carries no readable transitionDelay`);
-  }
-  return ms;
+  return opacity === "1";
+}
+
+const mounted = (id: string) => screen.queryByTestId(id) !== null;
+
+/** How many milliseconds into its pose a GATE opens — parsed off the delayed opacity
+ *  entry in the element's own transition string (the component zeroes it while off). */
+function gateDelay(id: string): number {
+  const el = screen.getByTestId(id);
+  const match = /opacity 450ms var\(--ease\) (\d+)ms/.exec(el.style.transition);
+  if (!match) throw new Error(`"${id}" carries no delayed opacity transition`);
+  return Number(match[1]);
 }
 
 // ── the copy, as one set of strings ──────────────────────────────────────────
@@ -228,24 +240,28 @@ const d4Strings = (): string[] => [
 /** B.1's corpus — the slide one figure in front of this one, in the same run. */
 const b1Strings = (): string[] => walkStrings(gapHardestPartContent);
 
-/** The four PROSE strings, each with the `*Kw` sibling the copy module pairs it with. */
+/** The TWO PROSE strings, each with the `*Kw` sibling the copy module pairs it with.
+ *  Two and not four: the 2026-08-11 redesign cut the two condition lines — the
+ *  presenter says those sentences, and the fray draws them. */
 const PROSE: ReadonlyArray<readonly [string, string, readonly string[]]> = [
   ["headline", C.headline, C.headlineKw],
-  ["conditionLine", C.conditionLine, C.conditionLineKw],
-  ["consequenceLine", C.consequenceLine, C.consequenceLineKw],
   ["closer", C.closer, C.closerKw],
 ];
 
-/** The ELEVEN LABEL strings, which carry no `*Kw` and may not gain one. Written out as a
- *  list on purpose: together with `PROSE` above it is checked against what the STAGE
- *  actually prints, so a fifteenth string has to pick a side before it can render. */
+/** The TWENTY LABEL strings, which carry no `*Kw` and may not gain one. Written out as
+ *  a list on purpose: together with `PROSE` above it is checked against what the STAGE
+ *  actually prints, so a twenty-third string has to pick a side before it can render. */
 const LABELS: readonly string[] = [
   C.figLabel,
   C.issuedEyebrow,
   C.unwrittenEyebrow,
   C.conditionEyebrow,
+  C.issuedDotLabel,
+  C.unwrittenDotLabel,
   ...C.issued.map((item) => item.label),
+  ...C.issued.map((item) => item.short),
   ...C.questions.map((item) => item.label),
+  ...C.questions.map((item) => item.short),
 ];
 
 /** Every string this slide PRINTS — the two sides of the keyword rule, together. */
@@ -267,14 +283,32 @@ function figLabelText(container: HTMLElement): string {
   return spans[spans.length - 1]?.textContent ?? "";
 }
 
-/** What the stage prints, read off the DOM: the headline, the fig label's own half, and
- *  every box that carries type. */
+/**
+ * What the stage prints, read off the DOM — one entry per type-carrying element. Every
+ * box holds BOTH its faces at every pose (the crossfade is opacity, not markup), so
+ * the census reads the faces rather than the boxes: a box's own textContent would be
+ * two strings concatenated.
+ */
 function stagePrintedStrings(container: HTMLElement): string[] {
   const heading = container.querySelector("h1")?.textContent ?? "";
-  const boxes = [...container.querySelectorAll<HTMLElement>("[data-testid^='no-sop-']")]
-    .map((el) => el.textContent ?? "")
-    .filter((text) => text !== "");
-  return [heading, figLabelText(container), ...boxes];
+  const faces = [
+    "no-sop-issued-eyebrow",
+    "no-sop-unwritten-eyebrow",
+    "no-sop-condition-eyebrow",
+    "no-sop-dot-label-issued",
+    "no-sop-dot-label-unwritten",
+    ...C.issued.flatMap((item) => [`no-sop-issued-hero-${item.id}`, `no-sop-issued-chip-${item.id}`]),
+    ...C.questions.flatMap((item) => [
+      `no-sop-question-hero-${item.id}`,
+      `no-sop-question-chip-${item.id}`,
+    ]),
+    "no-sop-closer",
+  ];
+  return [
+    heading,
+    figLabelText(container),
+    ...faces.map((id) => screen.getByTestId(id).textContent ?? ""),
+  ];
 }
 
 // ── the slide def ────────────────────────────────────────────────────────────
@@ -285,13 +319,23 @@ describe("the slide def", () => {
     expect(gapNoSopSlide.steps).toBe(4);
     // The exported PDF has no presenter attached, so the exported frame must be the one
     // that is safe to read alone. Anything lower would export a page of four unanswered
-    // questions with no sentence saying that nobody broke anything — a slide somebody
-    // else can re-caption as a list of findings against a team.
+    // questions and a frayed line with no sentence saying that nobody broke anything — a
+    // slide somebody else can re-caption as a list of findings against a team.
     expect(gapNoSopSlide.canonicalPose).toBe(3);
     expect(gapNoSopSlide.canonicalPose).toBe(gapNoSopSlide.steps - 1);
     expect(gapNoSopSlide.animationMode).toBe("step-reveal");
     expect(gapNoSopSlide.surface).toBe("dark");
     expect(gapNoSopSlide.sectionKey).toBe("gap");
+  });
+
+  test("the geometry still clears the NavBar band", () => {
+    // 3px under the dot captions — the tightest floor in the leader tree, the
+    // owner-approved prototype geometry on the real stage — and 6px under the closer's
+    // SECOND line, the number this stage actually broke once (the prototype's verdict
+    // shelf wrapped through the band). Both derived from both ends in the geometry
+    // module, so an edit anywhere above moves the number before the stage crosses.
+    expect(NAV_ZONE_CLEARANCE).toBeGreaterThan(0);
+    expect(VERDICT_CLEARANCE).toBeGreaterThan(0);
   });
 });
 
@@ -353,12 +397,12 @@ describe("shadow AI as a CONDITION, argued over the copy rather than named", () 
     unmount();
   });
 
-  test("the left column is three things done RIGHT, and the right column asks", () => {
-    // A COLUMN OF FAILURES WOULD MAKE THE SLIDE AN ACCUSATION. Every issued row is a
+  test("the issued band is three things done RIGHT, and the question band asks", () => {
+    // A BAND OF FAILURES WOULD MAKE THE SLIDE AN ACCUSATION. Every issued box is a
     // thing a competent rollout does — a login, a demonstration, encouragement in writing
     // — so nobody in the room has to defend anything to agree with the stage. Held as a
-    // shape rule over both columns rather than as a transcription of six labels: the
-    // issued rows state, the questions ask, and none of the issued rows is a negation.
+    // shape rule over both bands rather than as a transcription of fourteen labels: the
+    // issued faces state, the question faces ask, and no issued face is a negation.
     expect(C.issued.map((item) => item.id)).toEqual(["login", "demonstration", "encouragement"]);
     expect(C.questions.map((item) => item.id)).toEqual([
       "may-go-in",
@@ -367,18 +411,21 @@ describe("shadow AI as a CONDITION, argued over the copy rather than named", () 
       "who-hears",
     ]);
     for (const item of C.issued) {
-      expect(item.label, item.id).not.toMatch(/\?/);
-      expect(item.label, `${item.id} is a thing done, not a thing missing`).not.toMatch(
-        /\b(no|not|never|without|failed|missing)\b/i,
-      );
+      for (const face of [item.label, item.short]) {
+        expect(face, item.id).not.toMatch(/\?/);
+        expect(face, `${item.id} is a thing done, not a thing missing`).not.toMatch(
+          /\b(no|not|never|without|failed|missing)\b/i,
+        );
+      }
       expect(item.label.length, item.id).toBeGreaterThan(20);
     }
-    // EVERY QUESTION IS A QUESTION, asked in the first person singular by the person at
-    // the desk. That is the one place "I" is allowed on this stage — a condition is what
-    // it feels like to be that person with nobody to ask — and the sweep below proves it
-    // is the ONLY place, so the slide never slips into §6.3's first-person story.
+    // EVERY QUESTION ASKS ON BOTH FACES — the hero sentence in the first person singular
+    // of the person at the desk, the chip as the same question compressed. That is the
+    // one place "I" is allowed on this stage, and the sweep below proves it is the ONLY
+    // place, so the slide never slips into §6.3's first-person story.
     for (const item of C.questions) {
       expect(item.label, item.id).toMatch(/\?$/);
+      expect(item.short, `${item.id}'s chip still asks`).toMatch(/\?$/);
     }
     const questionLabels = new Set(C.questions.map((item) => item.label));
     for (const copy of authoredStrings()) {
@@ -387,8 +434,8 @@ describe("shadow AI as a CONDITION, argued over the copy rather than named", () 
         /\bI\b|\bmy\b|\bI'm\b|\bI've\b/,
       );
     }
-    // The escalation down the right column — permission, prohibition, arbitration,
-    // disclosure — is the ORDER, and it is the argument rather than a sort.
+    // The escalation down the grid — permission, prohibition, arbitration, disclosure —
+    // is the ORDER, and it is the argument rather than a sort.
     expect(C.questions[0].label).toMatch(/\bmay I\b/);
     expect(C.questions[1].label).toMatch(/\bmay never\b/);
     expect(C.questions[2].label).toMatch(/\bWho decides\b/);
@@ -399,8 +446,8 @@ describe("shadow AI as a CONDITION, argued over the copy rather than named", () 
     // THE TWO NEIGHBOURING PASSES, REFUSED BY SHAPE RATHER THAN BY TOKEN. D.3 is a
     // first-person story of what was done (the token list below holds its vocabulary);
     // D.4 is what nobody can do about it afterwards. This slide's verbs stay in the
-    // present, about the organisation: a question is asked, an answer is improvised, and
-    // nothing is audited, revoked, produced, leaked or breached.
+    // present, about the organisation: a question is asked, a line stops, and nothing
+    // is audited, revoked, produced, leaked or breached.
     const EXPOSURE =
       /\b(exposure|exposed|audit\w*|revoke\w*|breach\w*|leak\w*|incident|regulator\w*|liabilit\w*|penalt\w*)\b/i;
     const DID_IT = /\b(we tried|we built|we did|we learned|what went wrong|workaround)\b/i;
@@ -414,16 +461,30 @@ describe("shadow AI as a CONDITION, argued over the copy rather than named", () 
     // strings edited to make them fire: D.4's exposure line and D.3's confession.
     expect(EXPOSURE.test(investSecurityContent.exposures[0].label)).toBe(true);
     expect(DID_IT.test(investChickenEggContent.workaround)).toBe(true);
-    // AND THE CONDITION IS STILL STATED — the absence of the other two passes is not the
-    // absence of an argument. The condition line says an unanswered question gets
-    // answered anyway; the consequence line says where those answers end up.
-    expect(C.conditionLineKw).toEqual(["still gets answered"]);
-    expect(C.conditionLine).toContain("still gets answered");
-    expect(C.consequenceLine).toContain("improvises a rule");
-    expect(C.consequenceLine).toContain("not one of those rules is written");
-    expect(stage).toContain(C.conditionLine);
-    expect(stage).toContain(C.consequenceLine);
     unmount();
+
+    // AND THE CONDITION IS STILL STATED — DRAWN, SINCE THE REDESIGN, RATHER THAN SAID.
+    // The two condition sentences left the stage with the 2026-08-11 rewrite (the
+    // presenter carries them); what carries the beat on the stage is the fray under its
+    // own heading. So the rendered claim is held over the marks: the heading is there,
+    // and the fan it labels is two dozen strands leaving one stopped point.
+    expect(C.conditionEyebrow).toBe("WHAT THE SILENCE LEAVES BEHIND");
+    const second = renderSlide(2);
+    expect(gateOpen("no-sop-condition-eyebrow")).toBe(true);
+    expect(
+      second.container.querySelectorAll('[data-testid="no-sop-fray"] > g').length,
+    ).toBe(FRAY_STRAND_COUNT);
+    // AND THE VERB STAYS UNSPELLED. `improvise` is §6.2's word; since the redesign no
+    // rendered string spells any form of it — the fray is the improvisation. The
+    // sibling files control the token against the spec sentence now (the same split
+    // they run for `no guidance` and `no SOP`), and this is the other half: it cannot
+    // quietly come back here without this line failing.
+    for (const copy of authoredStrings()) {
+      expect(copy, `a spelled improvisation in ${JSON.stringify(copy)}`).not.toMatch(
+        /\bimprovis\w*\b/i,
+      );
+    }
+    second.unmount();
   });
 });
 
@@ -488,16 +549,18 @@ const RESERVED: ReadonlyArray<readonly [string, RegExp, "D.3" | "D.4"]> = [
  * real strings and requires the result to be EXACTLY this list — so a padded entry fails
  * as loudly as a borrowed one, and a new B.2 string that reaches for one of the other
  * passes' words has to be argued here before it can render.
+ *
+ * REMEASURED 2026-08-11 with the fray redesign: `answers` and `where` left with the two
+ * condition lines, and none of the new chip or dot-caption labels brought a shared word
+ * in — the chips are the hero faces' own vocabulary compressed.
  */
 const ORDINARY_SHARED: readonly string[] = [
   "already",
-  "answers",
   "asked",
   "leaves",
   "nobody",
   "organisation",
   "there",
-  "where",
 ];
 
 /** Every word of five letters or more in a corpus, lower-cased. Five, because below it
@@ -520,6 +583,9 @@ describe("§6.2 · the third pass shares no image and no statistic with the othe
     // test can hold the rule as a fact instead of as a list of forbidden values. Held
     // over the authored copy AND over the rendered stage, with the composer's own
     // `B.2` stripped — that digit is derived per deck (§3.5) and is not this slide's.
+    // The step diagram's SVG paths carry coordinates, not text: `textContent` is blind
+    // to attributes, which is exactly the boundary the rule wants — a NUMBER READ BY
+    // THE ROOM is what a shared statistic is.
     for (const copy of authoredStrings()) {
       expect(copy, `a digit in ${JSON.stringify(copy)}`).not.toMatch(/\d/);
     }
@@ -579,8 +645,10 @@ describe("§6.2 · the third pass shares no image and no statistic with the othe
     expect(shared).toEqual([...ORDINARY_SHARED].sort());
 
     // NON-VACUITY, both ends: the two vocabularies are real and the intersection is a
-    // small tail of them rather than an artefact of an empty set.
-    expect(mine.size).toBeGreaterThan(40);
+    // small tail of them rather than an artefact of an empty set. The floor is 25 and
+    // not the first cut's 40 — the redesign moved two sentences from the stage to the
+    // presenter, and the honest response is a smaller corpus, not padded copy.
+    expect(mine.size).toBeGreaterThan(25);
     expect(theirs.size).toBeGreaterThan(100);
     expect(shared.length).toBeLessThan(mine.size / 4);
     // AND THE SWEEP CATCHES A BORROWED IMAGE — fired with D.4's own exposure line, which
@@ -646,19 +714,19 @@ describe("the slide in front of it keeps its statistic and its vocabulary", () =
     const shared = [...longWords(authoredStrings())]
       .filter((word) => longWords(b1).has(word))
       .sort();
-    // Three words, all three ordinary: the two slides run back to back and read as one
-    // run without sharing an argument. REMEASURED 2026-08-10 after B.1's two-speeds
-    // redesign: "afternoon" left with B.1's purchase-instrument rows; "still" arrived
-    // with its STILL RUNNING counter, against this slide's "still gets answered" —
-    // a shared adverb, not a shared image.
-    expect(shared).toEqual(["everyone", "never", "still"]);
+    // One word, and it is ordinary: the two slides run back to back and read as one
+    // run without sharing an argument. REMEASURED 2026-08-11 after this slide's fray
+    // redesign: "everyone" and "still" left with the two condition lines, and "never"
+    // — B.1's "never on an invoice" against this slide's "never wrote down" — is a
+    // shared adverb, not a shared image.
+    expect(shared).toEqual(["never"]);
   });
 });
 
 // ── AC · every string reaches the stage, and every pose is complete ──────────
 
 describe("the stage prints exactly what the copy block authors", () => {
-  test("all fifteen strings are in the DOM at the canonical pose", () => {
+  test("all twenty-two strings are in the DOM at the canonical pose", () => {
     const { container, unmount } = renderSlide(gapNoSopSlide.canonicalPose);
 
     // THE HEADLINE AND THE FIG LABEL, which are the slide file's rather than the
@@ -667,86 +735,108 @@ describe("the stage prints exactly what the copy block authors", () => {
     expect(figLabelText(container)).toBe(C.figLabel);
     expect(C.figLabel).toBe("THE RULE NOBODY WROTE");
 
-    // …then every box that carries type, compared against the string it was given.
+    // …then every face that carries type, compared against the string it was given.
+    // Both faces of every box are in the DOM at every pose — the crossfade is opacity,
+    // not markup — so the hero sentences are checked at the CHIP pose deliberately.
     for (const item of C.issued) {
-      expect(screen.getByTestId(`no-sop-issued-${item.id}`).textContent, item.id).toBe(item.label);
+      expect(screen.getByTestId(`no-sop-issued-hero-${item.id}`).textContent, item.id).toBe(
+        item.label,
+      );
+      expect(screen.getByTestId(`no-sop-issued-chip-${item.id}`).textContent, item.id).toBe(
+        item.short,
+      );
     }
     for (const item of C.questions) {
-      expect(screen.getByTestId(`no-sop-question-${item.id}`).textContent, item.id).toBe(
+      expect(screen.getByTestId(`no-sop-question-hero-${item.id}`).textContent, item.id).toBe(
         item.label,
+      );
+      expect(screen.getByTestId(`no-sop-question-chip-${item.id}`).textContent, item.id).toBe(
+        item.short,
       );
     }
     for (const [id, copy] of [
       ["no-sop-issued-eyebrow", C.issuedEyebrow],
       ["no-sop-unwritten-eyebrow", C.unwrittenEyebrow],
       ["no-sop-condition-eyebrow", C.conditionEyebrow],
-      ["no-sop-condition-line", C.conditionLine],
-      ["no-sop-consequence-line", C.consequenceLine],
+      ["no-sop-dot-label-issued", C.issuedDotLabel],
+      ["no-sop-dot-label-unwritten", C.unwrittenDotLabel],
       ["no-sop-closer", C.closer],
     ] as const) {
       expect(screen.getByTestId(id).textContent, id).toBe(copy);
     }
 
-    // AND THE CENSUS IS EXACT IN BOTH DIRECTIONS: what the stage prints IS the fifteen
-    // strings the keyword rule below partitions, no more and no fewer. A sixteenth
-    // string cannot render without landing in `PROSE` or in `LABELS` first.
+    // AND THE CENSUS IS EXACT IN BOTH DIRECTIONS: what the stage prints IS the
+    // twenty-two strings the keyword rule below partitions, no more and no fewer. A
+    // twenty-third string cannot render without landing in `PROSE` or in `LABELS` first.
     expect(stagePrintedStrings(container).sort()).toEqual(printedStrings().sort());
     expect(printedStrings()).toHaveLength(PROSE.length + LABELS.length);
-    expect(LABELS).toHaveLength(11);
-    // The boxes, counted: nothing on the stage is missing and nothing is drawn twice.
-    const ids = [...container.querySelectorAll<HTMLElement>("[data-testid^='no-sop-']")].map(
-      (el) => el.dataset.testid,
-    );
-    expect(ids.sort()).toEqual([...EVERY_BOX].sort());
+    expect(LABELS).toHaveLength(20);
     expect(ISSUED_COUNT).toBe(C.issued.length);
     expect(QUESTION_COUNT).toBe(C.questions.length);
     unmount();
   });
 
   test("the four answer rules are EMPTY at every pose — the image, never filled", () => {
-    // THE FIGURE IS AN UNFILLED FORM. A blank that gained content at any pose would be
-    // the stage answering the question the slide exists to say nobody answered — and it
-    // is also the image §6.2 reserves to this pass, so it is checked at every stop and
-    // not only at the fullest one.
+    // THE SURVIVING HALF OF THE FIRST CUT'S IMAGE. A blank that gained content at any
+    // pose would be the stage answering the question the slide exists to say nobody
+    // answered — and it is part of the image §6.2 reserves to this pass, so it is
+    // checked at every stop and not only at the fullest one. THE PAIR IS ONE FACE now,
+    // by construction: the blank is a child of its question's hero face, so a question
+    // cannot arrive without its blank — what the first cut asserted as equal delays is
+    // an ancestry fact here.
     const { unmount } = renderSlide();
     for (const pose of POSES) {
       goToPose(pose);
-      C.questions.forEach((item, i) => {
+      for (const item of C.questions) {
         const blank = screen.getByTestId(`no-sop-answer-blank-${item.id}`);
         expect(blank.textContent, `${item.id} at pose ${pose}`).toBe("");
         expect(blank.children.length, `${item.id} at pose ${pose}`).toBe(0);
-        // It belongs to the question above it: same left edge, same measure, directly
-        // under it, and one hairline thick.
-        expect(parseFloat(blank.style.left)).toBe(UNWRITTEN_LEFT);
-        expect(parseFloat(blank.style.width)).toBe(UNWRITTEN_WIDTH);
-        expect(parseFloat(blank.style.height)).toBe(ANSWER_RULE_HEIGHT);
-        expect(parseFloat(blank.style.top)).toBe(answerRuleTop(i));
-        expect(answerRuleTop(i)).toBeGreaterThan(questionTop(i));
-      });
+        expect(
+          screen.getByTestId(`no-sop-question-hero-${item.id}`).contains(blank),
+          `${item.id}'s blank belongs to its own question face`,
+        ).toBe(true);
+        // One emphatic hairline in the blank tier, never anything brighter: the empty
+        // rule must stay the dimmest mark inside the box that holds it.
+        expect(blank.style.background).toBe("var(--copper-700)");
+      }
     }
     unmount();
   });
 });
 
 describe("the pose walk", () => {
-  test("every pose is complete at every stop, in both directions", () => {
+  test("every pose matches the state model, in both directions", () => {
     const { container, unmount } = renderSlide();
     const walk = [...POSES, ...[...POSES].reverse()];
     for (const pose of walk) {
       goToPose(pose);
-      for (let band = 0; band < REVEALED_AT.length; band++) {
-        for (const id of REVEALED_AT[band]) {
-          // A pose is everything argued so far: revealed iff its band's pose has been
-          // reached, at every stop in BOTH directions — `on` is derived from the pose and
-          // not accumulated, so walking back to 0 must un-reveal 1–3.
-          expect(revealed(id), `${id} at pose ${pose}`).toBe(band <= pose);
-          // AND THE COPY IS THERE, not merely the box: a path that dropped children would
-          // still pass a class check. The rule, the three marks and the four blanks are
-          // the eight boxes with no text of their own.
-          if (band <= pose && !TEXTLESS_IDS.has(id)) {
-            expect(screen.getByTestId(id).textContent, `${id} at pose ${pose}`).not.toBe("");
+      for (const { id, kind, when } of EXPECTED) {
+        const wanted = when(pose);
+        if (kind === "mount") {
+          expect(mounted(id), `${id} mounted at pose ${pose}`).toBe(wanted);
+        } else if (kind === "gate") {
+          expect(gateOpen(id), `${id} at pose ${pose}`).toBe(wanted);
+        } else {
+          expect(mounted(id), `${id} (static) at pose ${pose}`).toBe(true);
+        }
+        // AND THE COPY IS THERE, not merely the box: a path that dropped children would
+        // still pass a visibility check. Held for every type-carrying element the model
+        // expects on stage.
+        if (wanted && kind !== "mount" && !/blank|spine|dot-issued$|fray|leader-line/.test(id)) {
+          const el = screen.getByTestId(id);
+          if (!(el instanceof SVGElement) && !/no-sop-(issued|question)-[a-z-]+$/.test(id)) {
+            expect(el.textContent, `${id} at pose ${pose}`).not.toBe("");
           }
         }
+      }
+      // THE FRAY DIMS AT THE CLOSER AND ONLY THERE — argued past, still true. Opacity
+      // as TIME, the deck's rule.
+      if (pose >= 2) {
+        expect(screen.getByTestId("no-sop-fray").style.opacity).toBe(pose >= 3 ? "0.16" : "1");
+        expect(
+          container.querySelectorAll('[data-testid="no-sop-fray"] > g').length,
+          `strands at pose ${pose}`,
+        ).toBe(FRAY_STRAND_COUNT);
       }
       // ZERO SMIL NODES AT EVERY STOP — the AC's jsdom half, under the default motion
       // preference. The `reduce` half is below and in the browser walk.
@@ -763,62 +853,76 @@ describe("the pose walk", () => {
     // THE PROPERTY THE POSE MAP IS CHECKED AGAINST, rather than the pose count.
     const { unmount } = renderSlide();
 
-    // POSE 0 — a COMPLETE inventory under a heading that says what it is, not a fragment
-    // of one. The heading arrives first; the three rows follow, each with its mark on the
-    // SAME step, because a mark is how a row is drawn and not a beat of its own.
+    // POSE 0 — a COMPLETE inventory: the heading, all three boxes with their hero faces
+    // open, the spine's first segment and its labelled dot. Nothing of pose 1 is open.
     goToPose(0);
-    expect(arrival("no-sop-issued-eyebrow")).toBeLessThan(
-      arrival(`no-sop-issued-${C.issued[0].id}`),
-    );
-    for (const item of C.issued) {
-      expect(arrival(`no-sop-issued-mark-${item.id}`), item.id).toBe(
-        arrival(`no-sop-issued-${item.id}`),
-      );
-    }
-    const lastIssued = arrival(`no-sop-issued-${C.issued[ISSUED_COUNT - 1].id}`);
-    for (const id of POSE_0_IDS) expect(arrival(id), id).toBeLessThanOrEqual(lastIssued);
+    expect(mounted("no-sop-issued-eyebrow")).toBe(true);
+    for (const item of C.issued) expect(gateOpen(`no-sop-issued-hero-${item.id}`)).toBe(true);
+    expect(mounted("no-sop-dot-label-issued")).toBe(true);
+    expect(mounted("no-sop-spine-unwritten")).toBe(false);
 
-    // POSE 1 — THE PAIR IS THE BEAT: every question and its empty rule arrive on one
-    // step, so no pose rests on a question whose blank has not landed, and the pose's
-    // last arrival is the fourth pair.
+    // POSE 1 — THE HEADING LEADS AND THE QUESTIONS FOLLOW IN THEIR ESCALATION ORDER:
+    // the gate delays are strictly increasing down the grid, so the pose's last arrival
+    // is the fourth question — disclosure, the escalation's own end — WITH its blank
+    // (ancestry, held above). The spine's second segment mounts with the beat: the line
+    // visibly STOPS where the writing stopped, evidence and verdict in one mark.
     goToPose(1);
-    for (const item of C.questions) {
-      expect(arrival(`no-sop-answer-blank-${item.id}`), item.id).toBe(
-        arrival(`no-sop-question-${item.id}`),
-      );
+    expect(gateDelay("no-sop-unwritten-eyebrow")).toBeLessThan(
+      gateDelay(`no-sop-question-${C.questions[0].id}`),
+    );
+    for (let i = 1; i < QUESTION_COUNT; i++) {
+      expect(
+        gateDelay(`no-sop-question-${C.questions[i].id}`),
+        `question ${i} arrives after question ${i - 1}`,
+      ).toBeGreaterThan(gateDelay(`no-sop-question-${C.questions[i - 1].id}`));
     }
-    const lastQuestion = arrival(`no-sop-question-${C.questions[QUESTION_COUNT - 1].id}`);
-    for (const id of POSE_1_IDS) expect(arrival(id), id).toBeLessThanOrEqual(lastQuestion);
+    expect(mounted("no-sop-spine-unwritten")).toBe(true);
+    expect(mounted("no-sop-dot-label-unwritten")).toBe(true);
 
-    // POSE 2 — ENDS ON THE CONSEQUENCE, never on the condition. A pose resting on "the
-    // question still gets answered" rests on the half a room hears as resourcefulness;
-    // the cost — that none of those answers is readable by anybody else — is what makes
-    // it a condition worth acting on.
+    // POSE 2 — THE FAN IS THE POSE: the only new mount, two dozen strands off the
+    // stopped dot, under its own heading. The boxes compact to receipts on the same
+    // beat (both bands' chip faces open), so the pose never rests on a stage where the
+    // evidence has left before the receipt has landed.
     goToPose(2);
-    const consequence = arrival("no-sop-consequence-line");
-    for (const id of POSE_2_IDS.filter((x) => x !== "no-sop-consequence-line")) {
-      expect(arrival(id), `${id} must not outlast the consequence line`).toBeLessThan(consequence);
-    }
-    expect(arrival("no-sop-condition-line")).toBeLessThan(consequence);
-    expect(arrival("no-sop-rule")).toBeLessThan(arrival("no-sop-condition-line"));
+    expect(mounted("no-sop-fray")).toBe(true);
+    expect(gateOpen("no-sop-condition-eyebrow")).toBe(true);
+    for (const item of C.issued) expect(gateOpen(`no-sop-issued-chip-${item.id}`)).toBe(true);
+    for (const item of C.questions) expect(gateOpen(`no-sop-question-chip-${item.id}`)).toBe(true);
+    expect(mounted("no-sop-leader-line")).toBe(false);
 
-    // POSE 3 — THE CLOSER, ALONE IN ITS BAND. That is what "last arrival" means on a
-    // step-reveal slide: arrivals are delays WITHIN a pose, so the only way to prove
-    // nothing outlasts the closer is to prove nothing else arrives with it.
-    expect(POSE_3_IDS).toEqual(["no-sop-closer"]);
+    // POSE 3 — THE CLOSER IS THE LAST ARRIVAL: the marching line lands at 250ms, the
+    // verdict at 650ms, and nothing else is new. That order is the argument — the room
+    // sees the one line only the leader can write before being told whose job it is.
     goToPose(3);
-    expect(revealed("no-sop-closer")).toBe(true);
+    const line = screen.getByTestId("no-sop-leader-line");
+    expect(line.style.animation).toContain("250ms");
+    const closer = screen.getByTestId("no-sop-closer");
+    expect(closer.classList.contains("on")).toBe(true);
+    expect(parseFloat(closer.style.transitionDelay)).toBe(650);
     unmount();
   });
 
-  test("mounts no <svg> at all — zero SMIL by construction, not by discipline", () => {
-    // The figure's own doc comment stakes the claim: the marks and the empty answer rules
-    // are plain boxes, the copper rule is a `div`, and a SMIL node cannot appear without
-    // an author adding a whole element class. This structural fact is what makes the
-    // reduce-mode zero a construction rather than a promise.
+  test("mounts SVG for the diagram — and still zero SMIL, by construction", () => {
+    // THE REDESIGN'S ONE STRUCTURAL TRADE: the first cut mounted no `<svg>` at all;
+    // this stage draws a step diagram and a fray, so it mounts one diagram svg plus one
+    // pictogram per box face — and closes the SMIL census the way the Capability Ladder
+    // next door closes it: every vector motion is a CSS animation (`no-sop-draw` is
+    // `gap-ladder-draw`'s idiom), which the global reduced-motion rule can squash, so
+    // there is no `<animate>` to gate at mount and nothing here reads matchMedia.
     for (const pose of POSES) {
       const { container, unmount } = renderSlide(pose);
-      expect(container.querySelectorAll("svg").length, `pose ${pose}`).toBe(0);
+      const svgs = container.querySelectorAll("svg");
+      // 1 diagram + 2 faces × (3 issued + 4 questions) — every face keeps its icon at
+      // every pose, because the crossfade is opacity and not markup.
+      expect(svgs.length, `pose ${pose}`).toBe(1 + 2 * (ISSUED_COUNT + QUESTION_COUNT));
+      for (const svg of svgs) {
+        expect(svg.getAttribute("aria-hidden"), "decorative, never read aloud").toBe("true");
+        expect(
+          svg.querySelectorAll("animate, animateTransform, animateMotion, set, animateColor")
+            .length,
+          `SMIL inside an svg at pose ${pose}`,
+        ).toBe(0);
+      }
       unmount();
     }
   });
@@ -851,9 +955,9 @@ describe("prefers-reduced-motion: reduce", () => {
     // durations only — so a SMIL node would have to be gated at mount. This slide has
     // nothing to gate, and that is the claim: the census is identical under either
     // preference because NOTHING under this slide reads `matchMedia` at all. The mock
-    // proves the markup is preference-independent, which is the half a DOM test owns; the
-    // squashed-duration half (every reached reveal resting on its FINISHED frame) is the
-    // browser walk's.
+    // proves the markup is preference-independent, which is the half a DOM test owns;
+    // the squashed-duration half (every draw parked on its FINISHED frame, the two
+    // infinite decorations run once) is the browser walk's.
     const { container, unmount } = renderSlide();
     for (const pose of POSES) {
       goToPose(pose);
@@ -862,23 +966,18 @@ describe("prefers-reduced-motion: reduce", () => {
           .length,
         `reduce · pose ${pose}`,
       ).toBe(0);
-      expect(container.querySelectorAll("svg").length, `reduce · pose ${pose}`).toBe(0);
-      for (let band = 0; band <= pose; band++) {
-        for (const id of REVEALED_AT[band]) {
-          expect(revealed(id), `reduce · pose ${pose} · ${id}`).toBe(true);
-          if (!TEXTLESS_IDS.has(id)) {
-            expect(
-              screen.getByTestId(id).textContent,
-              `reduce · pose ${pose} · ${id} is empty`,
-            ).not.toBe("");
-          }
-        }
-      }
-      // Nothing the pose has not reached is revealed — completeness is a claim about THIS
-      // pose, not about the last one.
-      for (let band = pose + 1; band < REVEALED_AT.length; band++) {
-        for (const id of REVEALED_AT[band]) {
-          expect(revealed(id), `reduce · pose ${pose} · ${id} is not reached yet`).toBe(false);
+      expect(container.querySelectorAll("svg").length, `reduce · pose ${pose}`).toBe(
+        1 + 2 * (ISSUED_COUNT + QUESTION_COUNT),
+      );
+      // The state model holds unchanged: everything the pose has reached is there, in
+      // the form the pose gives it, and nothing it has not reached is.
+      for (const { id, kind, when } of EXPECTED) {
+        if (kind === "mount") {
+          expect(mounted(id), `reduce · pose ${pose} · ${id}`).toBe(when(pose));
+        } else if (kind === "gate") {
+          expect(gateOpen(id), `reduce · pose ${pose} · ${id}`).toBe(when(pose));
+        } else {
+          expect(mounted(id), `reduce · pose ${pose} · ${id}`).toBe(true);
         }
       }
     }
@@ -889,20 +988,15 @@ describe("prefers-reduced-motion: reduce", () => {
 // ── AC · the keyword rule: kw on prose only ──────────────────────────────────
 
 describe("the keyword rule", () => {
-  test("exactly the four prose strings carry a *Kw sibling, every keyword real", () => {
+  test("exactly the two prose strings carry a *Kw sibling, every keyword real", () => {
     // The directory's rule, stated at the top of `../../src/slides/leader-gap/content.ts`
-    // and applied here without an exception. PROSE is the headline, the two condition
-    // lines and the closer; everything else is a LABEL. The four QUESTIONS are the
-    // sharpest case — they are sentence-shaped and would take emphasis happily — and they
-    // are labels, because four copper italics down one column would rank four things the
-    // slide ranks by order alone.
+    // and applied here without an exception. PROSE is the headline and the closer —
+    // the redesign moved the two condition sentences to the presenter — and everything
+    // else is a LABEL. The four QUESTIONS are still the sharpest case (sentence-shaped,
+    // they would take emphasis happily) and they are labels, because four copper
+    // italics down one grid would rank four things the slide ranks by order alone.
     const kwKeys = Object.keys(C).filter((k) => k.endsWith("Kw"));
-    expect(kwKeys.sort()).toEqual([
-      "closerKw",
-      "conditionLineKw",
-      "consequenceLineKw",
-      "headlineKw",
-    ]);
+    expect(kwKeys.sort()).toEqual(["closerKw", "headlineKw"]);
     expect(kwKeys.sort()).toEqual(PROSE.map(([name]) => `${name}Kw`).sort());
     for (const [name, copy, kws] of PROSE) {
       expect(Array.isArray(kws), name).toBe(true);
@@ -911,16 +1005,20 @@ describe("the keyword rule", () => {
         expect(copy, `${name}Kw: "${kw}" is not in its prose`).toContain(kw);
       }
     }
-    // THE ELEVEN LABELS CARRY NO SIBLING AT ALL, and the rule is held over the block's
-    // own keys rather than over a list of four names: any `*Kw` key whose prose sibling is
-    // not one of the four above fails the census at the top of this test.
+    // THE TWENTY LABELS CARRY NO SIBLING AT ALL, and the rule is held over the block's
+    // own keys rather than over a list of names: any `*Kw` key whose prose sibling is
+    // not one of the two above fails the census at the top of this test.
     for (const forbidden of [
       "figLabelKw",
       "issuedEyebrowKw",
       "unwrittenEyebrowKw",
       "conditionEyebrowKw",
+      "issuedDotLabelKw",
+      "unwrittenDotLabelKw",
       "issuedKw",
       "questionsKw",
+      "conditionLineKw",
+      "consequenceLineKw",
     ]) {
       expect(Object.keys(C), forbidden).not.toContain(forbidden);
     }
@@ -935,8 +1033,16 @@ describe("the keyword rule", () => {
       "no-sop-issued-eyebrow",
       "no-sop-unwritten-eyebrow",
       "no-sop-condition-eyebrow",
-      ...C.issued.map((item) => `no-sop-issued-${item.id}`),
-      ...C.questions.map((item) => `no-sop-question-${item.id}`),
+      "no-sop-dot-label-issued",
+      "no-sop-dot-label-unwritten",
+      ...C.issued.flatMap((item) => [
+        `no-sop-issued-hero-${item.id}`,
+        `no-sop-issued-chip-${item.id}`,
+      ]),
+      ...C.questions.flatMap((item) => [
+        `no-sop-question-hero-${item.id}`,
+        `no-sop-question-chip-${item.id}`,
+      ]),
     ];
     for (const id of labelIds) {
       expect(screen.getByTestId(id).querySelectorAll("em").length, `<em> inside label ${id}`).toBe(
@@ -949,15 +1055,11 @@ describe("the keyword rule", () => {
 
     // …while the prose boxes DO carry theirs, one `<em>` per keyword, so the absence above
     // cannot pass because emphasis stopped rendering everywhere.
-    for (const [id, kws] of [
-      ["no-sop-condition-line", C.conditionLineKw],
-      ["no-sop-consequence-line", C.consequenceLineKw],
-      ["no-sop-closer", C.closerKw],
-    ] as const) {
-      const ems = [...screen.getByTestId(id).querySelectorAll("em")].map((em) => em.textContent);
-      expect(ems, id).toHaveLength(kws.length);
-      for (const kw of kws) expect(ems, `${id} · ${kw}`).toContain(kw);
-    }
+    const closerEms = [...screen.getByTestId("no-sop-closer").querySelectorAll("em")].map(
+      (em) => em.textContent,
+    );
+    expect(closerEms).toHaveLength(C.closerKw.length);
+    for (const kw of C.closerKw) expect(closerEms, `closer · ${kw}`).toContain(kw);
     const heading = container.querySelector("h1");
     expect([...(heading?.querySelectorAll("em") ?? [])].map((em) => em.textContent)).toEqual([
       ...C.headlineKw,
@@ -1015,7 +1117,7 @@ describe("no brand variance", () => {
   test("the content block is plain data — no resolver hiding in it", () => {
     // A `Record<Brand, …>` reachable from this block would be a brand axis nobody
     // declared. Every value is a string, a readonly array of strings, or a tuple of
-    // `{ id, label }` — and no value is a function.
+    // `{ id, label, short }` — and no value is a function.
     const walk = (value: unknown, path: string): void => {
       if (typeof value === "function") throw new Error(`a function at ${path}`);
       if (Array.isArray(value)) value.forEach((v, i) => walk(v, `${path}[${i}]`));
@@ -1093,13 +1195,16 @@ describe("both leader decks print the same stage", () => {
     const berau = await stageFor(LEADER_VARIANTS[0]);
     const gems = await stageFor(LEADER_VARIANTS[1]);
     // MARKUP AND TEXT BOTH: a brand axis could move a colour token or a delay without
-    // changing a word, and `textContent` alone would not see it.
+    // changing a word, and `textContent` alone would not see it. Markup equality also
+    // covers the FRAY: the strands are deterministic (a seeded PRNG in the geometry
+    // module), so both rooms see the same twenty-four private rules.
     expect(berau.html).toBe(gems.html);
     expect(berau.text).toBe(gems.text);
     // Not vacuously: a stage that rendered nothing would also be equal.
     expect(berau.text).toContain(C.headline);
     expect(berau.text).toContain(C.issued[0].label);
     expect(berau.text).toContain(C.questions[QUESTION_COUNT - 1].label);
+    expect(berau.text).toContain(C.unwrittenDotLabel);
     expect(berau.text).toContain(C.closer);
   });
 });

@@ -496,11 +496,12 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
     //
     // THE B.2 HALF IS NO LONGER A CLAIM ABOUT SPEC TEXT. gh#66 shipped `gap-no-sop` on
     // 2026-08-08, so B.2's copy module is imported at the top of this file and the
-    // IMAGE tokens below are read off its rendered strings. The three SPEC tokens stay:
-    // B.2 spends §6.2's verb (`improvises a rule`, once) and prints neither `no
-    // guidance` nor `no SOP`, so those two still have no rendered source and their
-    // controls still fire against §6.2's own sentence and slide id — which is the only
-    // place they exist, stated rather than implied.
+    // IMAGE tokens below are read off its rendered strings. The three SPEC tokens stay,
+    // and since B.2's 2026-08-11 fray redesign ALL THREE have no rendered source: the
+    // redesign cut the sentence that spelled `improvises` (the fray draws the verb, the
+    // presenter says it), so `improvise` joined `no guidance` and `no SOP` in being
+    // controlled against §6.2's own sentence and slide id — which is now the only
+    // place any of them exists, stated rather than implied.
     //
     // `audit` is deliberately NOT forbidden: §6.7 prescribes "no audit trail" as one of
     // D.3's costs AND "cannot audit" as this beat's first row. The words touch, the
@@ -522,21 +523,24 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
       ["no guidance", /\bno guidance\b/i],
       ["improvise", /\bimprovis\w*\b/i],
     ];
-    // B.2's RENDERED image, read off `gapNoSopContent`: a lopsided diptych of three
-    // things the organisation handed out against four questions it never wrote an
-    // answer to, and the silence behind them. Each pattern is fired against B.2's own
-    // strings below, so a list that drifted fails loudly instead of passing vacuously.
+    // B.2's RENDERED image, read off `gapNoSopContent`: three issued boxes against four
+    // question boxes with empty answer rules, over a rollout line that stops at NEVER
+    // WRITTEN and frays — and the silence behind them. Each pattern is fired against
+    // B.2's own strings below, so a list that drifted fails loudly instead of passing
+    // vacuously. REMEASURED 2026-08-11 with that redesign: `still gets answered` left
+    // B.2's stage with its condition sentences, and the spine's `never written` caption
+    // arrived.
     const B2_IMAGE_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
       ["the rule nobody wrote", /\brule nobody wrote\b/i],
       ["wrote their own", /\bwrote their own\b/i],
       ["never wrote down", /\bnever wrote down\b/i],
+      ["never written", /\bnever written\b/i],
       ["handed out", /\bhanded out\b/i],
       ["a login", /\blogin\w*\b/i],
       ["a demonstration", /\bdemonstrat\w*\b/i],
       ["encouragement", /\bencourag\w*\b/i],
       ["which work may", /\bwhich work may\b/i],
       ["the silence", /\bsilence\b/i],
-      ["still gets answered", /\bstill gets answered\b/i],
       ["no rule to break", /\bno rule to break\b/i],
       ["the leader's job", /\bleader['’]s job\b/i],
     ];
@@ -575,8 +579,8 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
         `${name} no longer fires on B.2's own copy`,
       ).toBe(true);
     }
-    // The rendered copy is listed FIRST, so `improvise` is controlled against what B.2
-    // prints and only the two tokens with no rendered source fall back to the spec.
+    // All three SPEC tokens fall back to §6.2's sentence and slide id — B.2 renders
+    // none of them since its 2026-08-11 fray redesign (the header above records why).
     const b2Sources = [...b2, "There is no guidance, so people improvise.", "gap-no-sop"];
     for (const [name, pattern] of B2_SPEC_TOKENS) {
       expect(
@@ -584,7 +588,7 @@ describe("beat 2 · shadow AI as EXPOSURE", () => {
         name,
       ).toBe(true);
     }
-    expect(b2.some((line) => /\bimprovis\w*\b/i.test(line))).toBe(true);
+    expect(b2.some((line) => /\bimprovis\w*\b/i.test(line))).toBe(false);
     expect(b2.some((line) => /\bno guidance\b/i.test(line))).toBe(false);
     expect(b2.some((line) => /\bno[-\s]SOP\b/i.test(line))).toBe(false);
   });

@@ -2,11 +2,19 @@
 // three passes at shadow AI.
 //
 // Spec §6.2 (content, and the escalation constraint it puts in the spec rather than in
-// the implementer's judgement) · §4.3's leader deck table · §11's Phase 7 row. No #16
-// prototype covers it, so nothing is productionized from one; the visual contract is
-// settled here the way `gap-hardest-part` settled its own one slide earlier — one
-// figure component (`./components/NoSopBeats.tsx`), one geometry module
-// (`./no-sop-geometry.ts`), all copy in `./content.ts`.
+// the implementer's judgement) · §4.3's leader deck table · §11's Phase 7 row. The
+// visual contract: one figure component (`./components/NoSopBeats.tsx`, with its mount
+// keyframes in `./components/no-sop.css`), one geometry module (`./no-sop-geometry.ts`),
+// all copy in `./content.ts`.
+//
+// REDESIGNED 2026-08-11 BY OWNER CALL, productionized from the B.2 prototype's
+// variant D ("BOXES × FRAY"; the prototype directory left the tree in the same
+// change). The first cut printed §6.2 as a static diptych and ACCUMULATED three text
+// bands into one dense final screen — a wall of text in front of top management. The
+// redesign is B.1's grammar one slide later: ONE PERSISTENT SCENE, the figure carrying
+// the argument while the presenter carries the connective prose (the two condition
+// sentences left the stage with it), and every beat drawn rather than said — a step
+// diagram that stops where the writing stopped, and a fray where the rules went.
 //
 // SHADOW AI AS A CONDITION, WHICH IS A CLAIM ABOUT THE ORGANISATION AND NOT ABOUT THE
 // PEOPLE IN THE ROOM. §6.2 assigns this slide `condition`, D.3 (`invest-chicken-egg`)
@@ -40,44 +48,50 @@
 // component is that there is no `…For(brand)` resolver to look for, and that both
 // leader rooms read identical bytes.
 //
-// WHY THE SLIDE IS SHAPED THIS WAY. The stage is a LOPSIDED DIPTYCH: on the left, three
-// things the organisation handed out, each with a small filled mark; on the right, four
-// questions it never answered, each followed by an EMPTY RULE where the answer would
-// have been written. The left column is deliberately a list of things done RIGHT — a
-// login, a demonstration, encouragement in writing — because a column of failures would
-// make the slide an accusation, and §6.2's beat is a condition. The blanks are the
-// figure, they are never filled at any pose, and they are an image no other slide in
-// this deck draws.
+// WHY THE SLIDE IS SHAPED THIS WAY. The stage is a STEP DIAGRAM UNDER TWO BANDS OF
+// BOXES: three issued boxes (things done RIGHT — a login, a demonstration,
+// encouragement in writing, because a row of failures would make the slide an
+// accusation and §6.2's beat is a condition), four question boxes each holding the
+// EMPTY RULE where its answer was never written, and below them a rollout spine that
+// draws to a dot where delivery happened, stops dead at a second dot where the writing
+// should have happened, and FRAYS into two dozen swaying private hairlines when the
+// stage compacts. The stopped-and-frayed line plus the unfilled blanks are the figure,
+// and an image no other slide in this deck draws.
 //
-// 4 POSES, one argument each:
-//   0 — WHAT WAS HANDED OUT. The heading and the three issued rows with their marks.
-//       A complete inventory under its own heading: what a competent rollout issues.
-//   1 — AND WHAT WAS NEVER WRITTEN DOWN. The second heading and the four questions,
-//       each arriving WITH its empty rule on the same step — asked, and nothing
-//       written. The escalation down the column is permission → prohibition →
-//       arbitration → disclosure.
-//   2 — THE CONDITION. One copper rule closes the diptych, and two lines say what an
-//       unanswered question becomes: it still gets answered, privately, one desk at a
-//       time — and none of those private rules is written where anybody else can read
-//       it.
-//   3 — THE FRAME. The closer, full width, last: nobody broke a rule, there was no rule
-//       to break, and writing one is the leader's job.
+// 4 POSES, one argument each — elements KEEP IDENTITY and morph between them:
+//   0 — WHAT WAS HANDED OUT. Three hero boxes across the top; the spine draws its
+//       first segment and lands one labelled dot: HANDED OUT. A complete inventory
+//       under its own heading — what a competent rollout issues.
+//   1 — AND WHAT WAS NEVER WRITTEN DOWN. The issued row holds; the four questions land
+//       directly below it, each arriving WITH its empty rule (asked, and nothing
+//       written — the pair is one face). The spine extends to a second labelled dot —
+//       NEVER WRITTEN — and pings there: guidance stops here. The escalation down the
+//       grid is permission → prohibition → arbitration → disclosure.
+//   2 — WHAT THE SILENCE LEAVES BEHIND. Both bands compact into chip receipts, the
+//       spine rises into the freed space, and the stopped line fans out — one swaying
+//       hairline per improvised private rule, each ending somewhere nobody else can
+//       read. Drawn, not said: the presenter speaks the condition sentences.
+//   3 — THE FRAME. The fan dims to an afterimage; one dashed line marches on from the
+//       second dot — the rule only the leader can write — and the closer lands under
+//       it: nobody broke a rule, there was no rule to break, and writing one is the
+//       leader's job.
 //
 // NO POSE RESTS ON EVIDENCE WITH ITS CONCLUSION MISSING — the property the pose map is
 // checked against rather than the pose count. Pose 0 rests on a full inventory under a
-// heading that says what it is, not on a fragment of one. Pose 1's last arrival is the
-// fourth question WITH its blank, so the pose never rests on a question whose empty
-// answer has not landed — the pair is one beat, and a question without its blank is the
-// slide's own image half-drawn. Pose 2's last arrival is the CONSEQUENCE line and not
-// the condition line: a pose ending on "the question still gets answered" would rest on
-// the half a room hears as resourcefulness. Pose 3's last arrival is the closer, which
-// frames every band above it.
+// heading that says what it is and a dot that says the delivery happened. Pose 1's
+// last arrival is the fourth question WITH its blank (a question without its blank is
+// the slide's own image half-drawn), and the pose ends on a line that has visibly
+// STOPPED — evidence and verdict in one mark. Pose 2's fan is condition and
+// consequence in one image: the question still gets answered (every strand ends
+// somewhere) and none of it is readable (the ends agree on nothing). Pose 3's last
+// arrival is the closer, which frames every mark above it.
 //
 // `canonicalPose: 3` — the fullest pose, and the only one the PDF and PPTX exports
-// print. Anything lower would export a page showing four unanswered questions with no
-// sentence saying that nobody broke anything, which for this slide in particular is the
-// one way it could travel badly: an exported page of unanswered questions with no
-// verdict is a slide somebody can re-caption as a list of findings against a team.
+// print. Anything lower would export a page showing four unanswered questions and a
+// frayed line with no sentence saying that nobody broke anything, which for this slide
+// in particular is the one way it could travel badly: an exported page of unanswered
+// questions with no verdict is a slide somebody can re-caption as a list of findings
+// against a team.
 //
 // THE LETTER IS NOT AUTHORED HERE. This slide composes as the SECOND of the `gap` run —
 // B.2 in today's leader decks — and every figure behind it in the run steps by one the

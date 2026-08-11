@@ -569,18 +569,20 @@ const D3_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
 ];
 
 /** B.2's RENDERED image, the list `invest-chicken-egg.test.tsx` reads off
- *  `gapNoSopContent`. Fired against B.2's own strings below. */
+ *  `gapNoSopContent`. Fired against B.2's own strings below. REMEASURED 2026-08-11 with
+ *  B.2's fray redesign: `still gets answered` left B.2's stage with its condition
+ *  sentences, and the spine's `never written` caption arrived. */
 const B2_IMAGE_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["the rule nobody wrote", /\brule nobody wrote\b/i],
   ["wrote their own", /\bwrote their own\b/i],
   ["never wrote down", /\bnever wrote down\b/i],
+  ["never written", /\bnever written\b/i],
   ["handed out", /\bhanded out\b/i],
   ["a login", /\blogin\w*\b/i],
   ["a demonstration", /\bdemonstrat\w*\b/i],
   ["encouragement", /\bencourag\w*\b/i],
   ["which work may", /\bwhich work may\b/i],
   ["the silence", /\bsilence\b/i],
-  ["still gets answered", /\bstill gets answered\b/i],
   ["no rule to break", /\bno rule to break\b/i],
   ["the leader's job", /\bleader['’]s job\b/i],
 ];
@@ -751,15 +753,16 @@ describe("the run in front of it keeps its sentences", () => {
    * The three-word phrases this slide shares with each neighbour — MEASURED, NOT CHOSEN,
    * and asserted as an EQUALITY so a padded entry fails as loudly as a borrowed one.
    *
-   * Both survivors are pure function words. `not one of` is the English for a negated
-   * partitive and `in front of` is a preposition; a rule that forbade either would be a
-   * rule about English rather than about two slides, and a rule that is off catches
-   * nothing. What matters is what is NOT here: no shared phrase carries an image, and no
-   * FOUR-word phrase is shared with anything (asserted below).
+   * The one survivor is a pure function word run: `in front of` is a preposition; a
+   * rule that forbade it would be a rule about English rather than about two slides,
+   * and a rule that is off catches nothing. What matters is what is NOT here: no shared
+   * phrase carries an image, and no FOUR-word phrase is shared with anything (asserted
+   * below). REMEASURED 2026-08-11: `not one of` left with B.2's consequence sentence
+   * when its fray redesign cut the two condition lines.
    */
   const SHARED_3: Record<string, readonly string[]> = {
     "B.1": [],
-    "B.2": ["not one of"],
+    "B.2": [],
     "B.3": ["in front of"],
     "B.5": [],
   };
