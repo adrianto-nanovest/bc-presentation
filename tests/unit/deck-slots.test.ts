@@ -261,12 +261,17 @@ describe("DECK_SET_COMPOSITION", () => {
     }
   });
 
-  test("gives the leader deck its own 73 slots — the F cut, F.8 kept, plus its own", () => {
+  test("gives the leader deck its own 72 slots — the F cut, F.8 kept, plus its own", () => {
     // Its own LIST, not the standard one: the two were the same constant until
     // gh#41. The cut is eight slides (`f1`–`f7`, `f9`) because
     // `f8-your-agentic-os` survives, relocated.
+    //
+    // 73 → 74 → 72: `gap-failures-pattern` composed behind its two parents for the merge
+    // review (74), then replaced them when the triptych won (72). §6.4 has no content of
+    // its own — it is the SHAPE of §6.3 — so the `gap` run carries §4.3's five sections
+    // in four rows.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(73);
+    expect(leader.slides).toHaveLength(72);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
@@ -319,8 +324,10 @@ describe("DECK_SET_COMPOSITION", () => {
     expect(leader.slides.filter((id) => !standardIds.has(id))).toEqual([
       "gap-hardest-part",
       "gap-no-sop",
-      "gap-three-failures",
-      "gap-the-pattern",
+      // §6.3 + §6.4 on ONE stage (gh#67) — leader-only like the rest of `gap`. It
+      // replaced `gap-three-failures` and `gap-the-pattern` when the merge won its
+      // review, which is why this run is four rows for five spec sections.
+      "gap-failures-pattern",
       "gap-capability-ladder",
       "shape-agentic-org",
       // gh#71, and NOT adjacent to the row above it in the leader LIST: f8 stands
@@ -417,8 +424,9 @@ describe("DECK_SET_COMPOSITION", () => {
     expect(run).toEqual([
       "gap-hardest-part",
       "gap-no-sop",
-      "gap-three-failures",
-      "gap-the-pattern",
+      // §6.3 + §6.4 on ONE stage — it replaced `gap-three-failures` and
+      // `gap-the-pattern`, so the run is FOUR rows carrying §4.3's five sections.
+      "gap-failures-pattern",
       "gap-capability-ladder",
     ]);
     expect(run.at(-1)).toBe("gap-capability-ladder");

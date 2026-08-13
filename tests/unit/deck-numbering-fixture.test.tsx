@@ -652,8 +652,16 @@ const OBSERVED: Record<string, ObservedDeck> = {
   berau: { slides: 65, closer: "K.3" },
   gems: { slides: 65, closer: "K.3" },
   general: { slides: 63, closer: "K.1" },
-  "berau-leader": { slides: 73, closer: "N.3" },
-  "gems-leader": { slides: 73, closer: "N.3" },
+  // 73 → 74 → 72: `gap-failures-pattern` composed behind its two parents for the merge
+  // review (74, ladder B.5 → B.6), then REPLACED both when the triptych won (72, ladder
+  // B.6 → B.4). §6.4 has no content of its own — it is the SHAPE of §6.3 — so `gap` now
+  // carries §4.3's five sections in four rows. ONE figure moved per leader deck on each
+  // of those two re-records, so both took `ALLOW_MOVED_FIGURES=1`; the standard rows did
+  // not move, as ever, and the CLOSER did not move either — a `gap` edit renumbers inside
+  // `gap` and nothing else (§3.5 R3), which is the whole reason this file is the artifact
+  // that proves it.
+  "berau-leader": { slides: 72, closer: "N.3" },
+  "gems-leader": { slides: 72, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

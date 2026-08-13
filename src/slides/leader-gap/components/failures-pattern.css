@@ -1,0 +1,229 @@
+/* PROTOTYPE A of the B.3 + B.4 merge — "THE VIGNETTE TRIPTYCH", mount choreography.
+ *
+ * KEYFRAMES `gfp-` PREFIXED, imported by ./FailuresPatternTriptych.tsx — every slide family
+ * owns its own keyframes (the globals.css rule beside `gap-ladder-draw`, restated by
+ * ./no-sop.css next door), so retiming one vignette can never retime another slide's.
+ *
+ * TWO KINDS OF MOTION LIVE HERE AND THEY ARE NOT THE SAME KIND.
+ *   ARRIVALS run ONCE, when their element mounts: the eight strikes crossing eight dead
+ *   connectors, the seventeen departments piling up behind the gate. They end on the
+ *   frame the picture is supposed to rest on, and `both` holds them there.
+ *   AMBIENT LOOPS run forever and are DECORATION: five tools drifting, two survivors
+ *   pulsing, one change escaping the queue, the orbit dashes marching under the pointer.
+ *   Every one of them is authored so its 0% and 100% frames are the SAME frame — the
+ *   glyph at its scattered coordinate, the dot at rest — so the loop has no seam and the
+ *   still frame is the composed one.
+ *
+ * WHY THAT MATTERS TWICE OVER. The global `prefers-reduced-motion: reduce` rule in
+ * `src/styles/globals.css` squashes every animation to 0.01ms with one iteration: an
+ * arrival parks on its finished frame (eight struck, two lit; the queue full), and an
+ * ambient loop parks on its 100% frame, which is its rest. The one documented exception
+ * is `gfp-escape`, whose whole life is the crossing — it parks invisible, the correct
+ * resting frame for a decoration that is a departure (./no-sop.css's ping makes the same
+ * call). And POSE 1 freezes the plates with `animation-play-state: paused` rather than
+ * unmounting them, so a pose walk back to the record finds the same picture running on.
+ *
+ * ZERO SMIL, at every pose, under any motion preference — the section's standing rule:
+ * SMIL is invisible to the reduced-motion squash and would have to be gated at mount,
+ * and there is nothing on these three plates that CSS cannot draw.
+ */
+
+/* ───────────────────── shared idioms ───────────────────── */
+
+/* A line drawing itself in, over the pathLength=1 idiom: elements set pathLength={1},
+   stroke-dasharray 1, stroke-dashoffset 1. Used by the funnel's two walls, the exit
+   line, the band's connector and all eight strikes. */
+@keyframes gfp-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Dashes marching along an orbit — mounted by the `is-active` class, so it starts from
+   a clean phase every time the pointer arrives and never jumps mid-flight. The orbits
+   are dashed 3 5, so -32 is four whole periods and the loop is seamless. */
+@keyframes gfp-march {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+/* ───────────────────── vignette 1 · TOOLS, AND NO METHOD ───────────────────── */
+
+/* Three drift paths, so five glyphs never share one. Each returns to translate(0,0) at
+   100%: the scatter in `TOOL_GLYPHS` is the truth, the drift is the decoration over it,
+   and a squashed iteration parks every glyph back on its own coordinate.
+
+   AMPLITUDES ARE ±5px AND NOT ±11. The plate is 64px tall, not 105, and `TOOL_GLYPHS`
+   is cut so every glyph box clears the plate's edges by at least 3px AT REST. A drift
+   wider than that clearance is the same bug as an orbit that does not fit — it just
+   arrives two seconds later. */
+@keyframes gfp-drift-a {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(4px, -3px);
+  }
+  50% {
+    transform: translate(5px, 2px);
+  }
+  75% {
+    transform: translate(2px, 3px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@keyframes gfp-drift-b {
+  0% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(-4px, 3px);
+  }
+  60% {
+    transform: translate(-2px, -3px);
+  }
+  85% {
+    transform: translate(3px, -1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@keyframes gfp-drift-c {
+  0% {
+    transform: translate(0, 0);
+  }
+  35% {
+    transform: translate(4px, 3px);
+  }
+  70% {
+    transform: translate(-4px, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* ───────────────────── vignette 2 · TEN CONNECTORS, TWO LEFT ───────────────── */
+
+/* A connector going out: it holds its copper while the strike crosses it, then drops to
+   the neutral tier and stays there. Timed against `STRIKE_STEP_MS` so the colour leaves
+   as the line lands, never before. Ends dim — that IS the resting frame. */
+@keyframes gfp-dim {
+  0%,
+  38% {
+    stroke: var(--copper-600);
+    opacity: 1;
+  }
+  100% {
+    stroke: var(--neutral-500);
+    opacity: 0.72;
+  }
+}
+
+/* The two that held, still alive: a ring breathing out of each. Pure decoration — it
+   ends invisible, and the survivor's own filled square is what carries the fact. */
+@keyframes gfp-glow {
+  0% {
+    transform: scale(0.62);
+    opacity: 0.55;
+  }
+  70% {
+    opacity: 0.14;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+/* ───────────────────── vignette 3 · ONE GATE, AND A QUEUE ──────────────────── */
+
+/* A department arriving and stopping. Runs once per dot on a `QUEUE_STEP_MS` stagger
+   ordered FRONT FIRST, so the pile is watched backing up rather than found already
+   piled. Ends at the dot's own coordinate. */
+@keyframes gfp-queue-in {
+  from {
+    transform: translateX(calc(-1 * var(--gfp-approach)));
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* The pile pressing on the gate — one and a half pixels of nowhere to go. Alternating
+   halves of one keyframe rather than `alternate`, so the 100% frame is the rest frame
+   under the reduced-motion squash. */
+@keyframes gfp-jostle {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(1.6px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* The one change that got through, on a loop long enough that the room feels the wait.
+   Parks invisible under reduced motion — see the header: its whole life is the leaving. */
+@keyframes gfp-escape {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(var(--gfp-escape-x));
+    opacity: 0;
+  }
+}
+
+/* ───────────────────── the pointer, and the pose ───────────────────── */
+
+/* Every plate transitions its whole group, so `is-active` reads as one gesture rather
+   than as five independent colour changes. E.4's 200ms hover pace, a shade slower
+   because a picture leaning in should feel heavier than a border brightening. */
+.gfp-vig {
+  transform-origin: 50% 50%;
+  transition: transform 260ms var(--ease);
+}
+.gfp-vig.is-active {
+  transform: scale(1.03);
+}
+
+/* The orbits under the five tools: dim while the plate rests, marching while the pointer
+   is on it. The march mounts WITH the class, so there is no mid-flight retiming. */
+.gfp-vig.is-active .gfp-orbit {
+  animation: gfp-march 3s linear infinite;
+}
+
+/* POSE 1 — the plates freeze where they stand. Paused and not unmounted: the record is
+   still on the stage, still legible, and a walk back to pose 0 finds the same five tools
+   at the same coordinates rather than a scene that restarted.
+
+   ONLY THE LOOPS ARE PAUSED, AND THAT IS A BUG FIX AND NOT A REFINEMENT. The first cut
+   paused `.gfp-still *` — everything on a frozen plate — which also stopped the
+   ARRIVALS: the funnel drawing itself, the six strikes, the eighteen departments filing
+   in. Those start on an INVISIBLE frame (dashoffset 1, opacity 0) and only reach their
+   resting frame at the end, so a presenter who advanced inside the first two seconds
+   froze the third plate on an empty box. Arrivals now always finish — they end on the
+   frame the picture is supposed to rest on, which is exactly what pose 1 wants — and
+   the pause is scoped to the decorations that would otherwise run forever. */
+.gfp-still .gfp-loop {
+  animation-play-state: paused !important;
+}

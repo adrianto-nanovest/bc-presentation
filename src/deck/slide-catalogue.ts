@@ -33,14 +33,16 @@ export const slideCatalogue: readonly SlideDef[] = [
   ...openingSectionASlides,
   // Leader-only (§4.3). In the POOL like everything else — "which decks run it"
   // is `./deck-sets.ts`'s answer, and only the two leader lists name it. It holds ALL
-  // FIVE of its slides as of gh#67 — the first of the four leader-only runs to be
-  // complete: gh#65's `gap-hardest-part` (§6.1, the run's first), gh#66's
-  // `gap-no-sop` (§6.2, its second), gh#67's `gap-three-failures` (§6.3) and
-  // `gap-the-pattern` (§6.4), and gh#53's `gap-capability-ladder` (§6.5, the run's
-  // last). NOTHING IN THIS FILE CHANGED FOR gh#65, gh#66 OR gh#67 — the spread reads
-  // the section's own array, exactly as the `leaderInvestSlides` line below records
+  // FIVE of §4.3's slides as of gh#67 — the first of the four leader-only runs to be
+  // complete — in FOUR defs, because one of them carries two: gh#65's
+  // `gap-hardest-part` (§6.1, the run's first), gh#66's `gap-no-sop` (§6.2, its
+  // second), gh#67's `gap-failures-pattern` (§6.3 + §6.4 on one stage), and gh#53's
+  // `gap-capability-ladder` (§6.5, the run's last). NOTHING IN THIS FILE CHANGED FOR
+  // gh#65, gh#66 OR gh#67, INCLUDING WHEN gh#67'S TWO ROWS MERGED INTO ONE — the spread
+  // reads the section's own array, exactly as the `leaderInvestSlides` line below records
   // for gh#57/#58/#59, and that holds whether the new row joins its section at the
-  // end, at the FRONT, or in the MIDDLE, and whether it arrives alone or in a pair.
+  // end, at the FRONT, or in the MIDDLE, whether it arrives alone or in a pair, and
+  // whether the section's array grows or shrinks.
   ...leaderGapSlides,
   // Leader-only too (§4.3), and it holds THREE defs as of gh#71 — gh#54's
   // `shape-agentic-org`, section C's centrepiece and the reason

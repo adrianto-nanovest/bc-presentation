@@ -55,8 +55,13 @@ import { findSlideDefs } from "../harvest/slide-defs";
  *  Only the file count reaches it. What each of those figures moved to is derived (§3.5)
  *  and
  *  recorded in `tests/fixtures/deck-numbering.json`, which is the artifact that
- *  distinguishes the four; nothing here does or should. */
-const EXPECTED_DEFS = 85;
+ *  distinguishes the four; nothing here does or should.
+ *
+ *  85 → 86 → 84: `gap-failures-pattern`, §6.3 + §6.4 on one stage, was ONE def carrying
+ *  three visual candidates behind `?proto=a|b|c` — so the candidates cost one file here
+ *  and not three (86). The triptych won, `gap-three-failures` and `gap-the-pattern`
+ *  retired, and the count landed one BELOW where it started (84). */
+const EXPECTED_DEFS = 84;
 
 /** `hexLadderDevSlide` is declared in `registry.tsx` beside `deckSlides`, so it
  *  has no file of its own to be named after. It is the ONLY def whose id is not

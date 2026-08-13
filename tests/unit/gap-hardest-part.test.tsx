@@ -780,8 +780,9 @@ describe("the composed decks", () => {
       ).toEqual([
         "gap-hardest-part",
         "gap-no-sop",
-        "gap-three-failures",
-        "gap-the-pattern",
+        // §6.3 + §6.4 on ONE stage (gh#67) — it replaced `gap-three-failures` and
+        // `gap-the-pattern`, so this run is FOUR rows for §4.3's five sections.
+        "gap-failures-pattern",
         "gap-capability-ladder",
       ]);
       expect(sectionFirstIndex.get(row.letter), brand).toBe(at);

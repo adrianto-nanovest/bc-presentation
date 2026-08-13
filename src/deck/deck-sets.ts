@@ -157,8 +157,8 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 73 slides across FOURTEEN sections, and §4.3's FINISHED one. The
- * COUNT is gh#71's and the
+ * The leader deck — 72 slides across FOURTEEN sections, and §4.3's FINISHED one. The
+ * COUNT is gh#67's MERGE (73 → 72: two rows retired into one) over gh#71's total, and the
  * SECTION COUNT is gh#60's, and the gap between those two tickets is the thing to read
  * before verifying anything here. The Phase 4 floor was 56 and held no slide the
  * standard deck did not; gh#48's `e12-loop-engineering` was the first addition and
@@ -168,13 +168,14 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * `mandate-enablement` is the fifth, gh#61's `mandate-phases-gates` is the sixth,
  * gh#58's `invest-security` is the seventh, gh#59's `invest-subscription` is the
  * eighth, gh#65's `gap-hardest-part` is the ninth, gh#66's `gap-no-sop` is the
- * tenth, gh#67's `gap-three-failures` and `gap-the-pattern` are the eleventh and
- * twelfth — the first ticket to reach this list with TWO rows at once — gh#68's
- * `shape-middle-out` is the thirteenth, gh#69's `mandate-levers` is the fourteenth,
- * gh#70's `invest-base-rates` is the fifteenth and gh#71's `shape-tam-kotter` is the
- * SIXTEENTH — and the LAST, because it closes the fourth and final leader-only run.
+ * tenth, gh#67's `gap-failures-pattern` is the eleventh — the only ticket to reach this
+ * list with TWO rows at once and then RETIRE BOTH into one, which is why the eleventh
+ * slot is one row and not two — gh#68's
+ * `shape-middle-out` is the twelfth, gh#69's `mandate-levers` is the thirteenth,
+ * gh#70's `invest-base-rates` is the fourteenth and gh#71's `shape-tam-kotter` is the
+ * FIFTEENTH — and the LAST, because it closes the fourth and final leader-only run.
  *
- * A NEW SLIDE IS NOT A NEW RUN, and SIXTEEN LEADER-ONLY SLIDES HAVE COST ONLY FOUR
+ * A NEW SLIDE IS NOT A NEW RUN, and FIFTEEN LEADER-ONLY SLIDES HAVE COST ONLY FOUR
  * PUSHES.
  * gh#57 was the first slide here to show the difference: it appends at the END of the
  * `invest` run gh#56 opened, so it claims no letter, forms no run and renumbers
@@ -194,17 +195,20 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * they
  * are the newest shape this list takes: gh#65 inserted `gap-hardest-part` at the HEAD of
  * the `gap` run gh#53 opened, gh#66 inserted `gap-no-sop` in the MIDDLE of it, behind
- * gh#65's row, gh#67 inserted `gap-three-failures` and `gap-the-pattern` MID-RUN
- * behind gh#66's — TWO rows in one ticket, which no other entry in this list has done —
+ * gh#65's row, gh#67 inserted `gap-failures-pattern` MID-RUN
+ * behind gh#66's — as TWO rows first, then as ONE when the merge replaced them, which no
+ * other entry in this list has done —
  * gh#70 inserted `invest-base-rates` at the HEAD of the `invest` run gh#56 opened,
- * the SECOND head insert of the sixteen and the first one outside `gap`, and gh#71
+ * the SECOND head insert of the fifteen and the first one outside `gap`, and gh#71
  * inserted `shape-tam-kotter` in the MIDDLE of the `shape` run gh#54 opened, between f8
  * and the row gh#68 appended.
  * Neither a head nor a mid-run insert claims a letter, because the run already
  * holds one, so nothing behind any of them moved — but each renumbers INSIDE its own
  * run (R3), and that is the whole of the cost of all five:
  * `gap-capability-ladder` went from B.1 to B.2 on gh#65, from B.2 to B.3 on gh#66 and
- * from B.3 to B.5 on gh#67, gh#70 stepped all FOUR `invest` rows one number each
+ * from B.3 to B.4 on gh#67 (B.5 while gh#67's two rows both stood, and B.6 for the
+ * duration of the merge review's third row — B.4 is where the merge left it),
+ * gh#70 stepped all FOUR `invest` rows one number each
  * (D.1 → D.2, D.2 → D.3, D.3 → D.4, D.4 → D.5), and gh#71 stepped the one row gh#68 had
  * added, `shape-middle-out`, from C.3 to C.4 — its file never opened.
  * IT IS ALSO THE LAST EDIT OF THIS KIND THIS LIST WILL TAKE: all four leader-only runs
@@ -312,11 +316,12 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "title",
   "a1-what-youve-seen", // canonical slot: `a1-general` / `a1-gems` resolve behind it
   // gap — the first leader-only run (gh#53), and the FIRST of the four to be
-  // COMPLETE. §4.3 gives it five slides and all five are here, in §4.3's order:
-  // `gap-hardest-part` (§6.1, gh#65) is the run's FIRST, `gap-no-sop` (§6.2, gh#66)
-  // its SECOND, `gap-three-failures` (§6.3, gh#67) its THIRD, `gap-the-pattern`
-  // (§6.4, gh#67) its FOURTH and `gap-capability-ladder` (§6.5, gh#53) its LAST.
-  // NOTHING MORE INSERTS HERE — a sixth `gap` row would be a slide §4.3 does not ask
+  // COMPLETE. §4.3 gives it five slides and all five are here in FOUR ROWS, in §4.3's
+  // order: `gap-hardest-part` (§6.1, gh#65) is the run's FIRST, `gap-no-sop` (§6.2,
+  // gh#66) its SECOND, `gap-failures-pattern` (§6.3 + §6.4, gh#67 — ONE stage for both,
+  // because §6.4 is the SHAPE of §6.3 and has no content of its own) its THIRD, and
+  // `gap-capability-ladder` (§6.5, gh#53) its LAST.
+  // NOTHING MORE INSERTS HERE — a fifth `gap` row would be a slide §4.3 does not ask
   // for. The run itself sits here, in front of `landscape`, and that is what pushed
   // every later letter in this deck by one (§3.4 R2).
   //
@@ -351,16 +356,20 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // renumbering inside the run that changed. Derived per deck (§3.5); pinned neither
   // here nor in any slide.
   "gap-no-sop",
-  // gh#67, and it is gh#66's shape at TWO rows rather than one: a MID-RUN insert of
-  // an adjacent PAIR, in §4.3's order, which CLOSES this run at its §4.3 length. The
-  // answer to "what moved?" does not change with the row count — NO LETTER MOVED,
-  // because `gap` has held B since gh#53 and neither row opens or closes the run, and
-  // exactly ONE NUMBER moved, `gap-capability-ladder` from B.3 to B.5, R3 renumbering
-  // inside the run that changed. TWO rows added, ONE figure changed: the ladder is
-  // the only row behind them inside this run. Derived per deck (§3.5); pinned neither
-  // here nor in any slide.
-  "gap-three-failures",
-  "gap-the-pattern",
+  // gh#67, and it is gh#66's shape a second time: ONE MID-RUN row, which CLOSES this
+  // run at its §4.3 content. NO LETTER MOVED — `gap` has held B since gh#53 and this
+  // row neither opens nor closes the run — and exactly ONE NUMBER moved,
+  // `gap-capability-ladder` from B.3 to B.4, R3 renumbering inside the run that
+  // changed. Derived per deck (§3.5); pinned neither here nor in any slide.
+  //
+  // IT CARRIES §6.3 AND §6.4 ON ONE STAGE, and the history is worth one sentence
+  // because the run's LENGTH (4) no longer equals §4.3's section COUNT (5): gh#67 first
+  // landed the pair as `gap-three-failures` + `gap-the-pattern`, the merge was reviewed
+  // as a temporary third row carrying three visual candidates, the triptych won, and
+  // all three of those rows retired into this one. `gap-capability-ladder` went B.3 →
+  // B.5 → B.6 → B.4 across those three edits, and no other figure in either leader deck
+  // moved on any of them.
+  "gap-failures-pattern",
   "gap-capability-ladder",
   // shape — the second leader-only run (gh#54), and the second push. §4.3 gives
   // this run four slides and ALL FOUR ARE NOW HERE, in §4.3's order: C.1

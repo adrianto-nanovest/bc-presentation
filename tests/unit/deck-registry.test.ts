@@ -194,10 +194,15 @@ function standardRuns(brand: Brand): readonly SectionRun[] {
 const LEADER_SPINE: readonly SectionRun[] = [
   ["opening", 2], // cover + A.1
   // `gap-hardest-part` (gh#65, §4.3's B.1) + `gap-no-sop` (gh#66, §4.3's B.2) +
-  // `gap-three-failures` (gh#67, §4.3's B.3) + `gap-the-pattern` (gh#67, §4.3's B.4) +
-  // `gap-capability-ladder` (gh#53, §4.3's B.5, and composing B.5 at last) — all five
-  // leader-only, and §4.3's full run: this number is FINAL.
-  ["gap", 5],
+  // `gap-failures-pattern` (gh#67, §4.3's §6.3 AND §6.4 on ONE stage, composing B.3) +
+  // `gap-capability-ladder` (gh#53, §4.3's §6.5, composing B.4) — all four leader-only.
+  //
+  // FOUR ROWS FOR §4.3's FIVE SECTIONS, and the number is FINAL. gh#67 landed §6.3 and
+  // §6.4 as two rows, the merge was reviewed behind a temporary third, and all three
+  // retired into one when the triptych won — §6.4 has no content of its own, so the pair
+  // spent two stages saying one thing. This count is the RUN's length and not §4.3's
+  // section count; `src/slides/leader-gap/index.ts` records the same fact.
+  ["gap", 4],
   // `shape-agentic-org` (gh#54, leader-only) + the relocated f8 at C.2 +
   // `shape-tam-kotter` (gh#71, leader-only, §4.3's C.3) + `shape-middle-out` (gh#68,
   // leader-only, §4.3's C.4) — §4.3's full run, and the LAST of the four to be: this
@@ -302,8 +307,13 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
  *  states both halves separately, which is what kept each of those sixteen tickets to
  *  one number rather than a sentence. (Nothing moves it further: gh#67, gh#69, gh#70 and
  *  gh#71 closed all four leader-only runs at their spec'd lengths, and NO ROW IS
- *  OWED.) */
-const LEADER_TOTAL_WITH_LAB = 73;
+ *  OWED.)
+ *
+ *  73 → 74 → 72: `gap-failures-pattern` composed behind its two parents for the
+ *  side-by-side review of three merge candidates (74), then REPLACED them when the
+ *  triptych won (72). The only DECREASE this constant has ever taken, and the last edit
+ *  it will take: all four leader-only runs stand at their spec'd content. */
+const LEADER_TOTAL_WITH_LAB = 72;
 
 /** The eight cut F slides — `f1`–`f7` and `f9`, with `f8-your-agentic-os` kept
  *  and relocated. Held apart from the total above so a leader-only ADDITION can
@@ -360,8 +370,11 @@ const LEADER_CUT_F_SLIDES = 8;
  * and cancels out of it), and {@link RELOCATED_INTO_LEADER_ONLY_RUNS} is what
  * reconciles that with the run TABLE, where a relocated slide is indistinguishable
  * from a new one.
+ *
+ * 16 → 17 → 15: `gap-failures-pattern` joined its two leader-only parents for the merge
+ * review (17), then replaced them (15). Leader-only like everything in `gap`.
  */
-const LEADER_ONLY_SLIDES = 16;
+const LEADER_ONLY_SLIDES = 15;
 
 /** Standard-deck slides the leader list relocates INTO one of those leader-only
  *  runs: `f8-your-agentic-os` alone, moved to `shape` by the deck set's single

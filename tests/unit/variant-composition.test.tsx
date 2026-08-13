@@ -471,7 +471,7 @@ describe("leader deck sets", () => {
       // the END of a run that ALREADY EXISTS in
       // the leader list, `gap-hardest-part` and `invest-base-rates` went in at the HEAD
       // of one, and
-      // `gap-no-sop`, `gap-three-failures`, `gap-the-pattern` and `shape-tam-kotter`
+      // `gap-no-sop`, `gap-failures-pattern` and `shape-tam-kotter`
       // into the MIDDLE of one — a third and a fourth
       // category, and the leak is identical for all of them. WHAT AN INSERT COSTS THE
       // LEADER DECK AND WHAT IT WOULD COST A STANDARD ONE ARE UNRELATED, which gh#68
@@ -495,8 +495,10 @@ describe("leader deck sets", () => {
         [
           "gap-hardest-part",
           "gap-no-sop",
-          "gap-three-failures",
-          "gap-the-pattern",
+          // §6.3 + §6.4 on one stage (gh#67). It replaced `gap-three-failures` and
+          // `gap-the-pattern`, and the leak it would cost a standard deck is the same
+          // one either of those would have cost: one row, one letter claimed.
+          "gap-failures-pattern",
           "gap-capability-ladder",
           "shape-agentic-org",
           "shape-tam-kotter",

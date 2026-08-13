@@ -76,14 +76,15 @@ import { investBaseRatesContent } from "@/slides/leader-invest/content";
 // sentences copied into this file. Every boundary pattern below is fired against the real
 // strings of the slide that owns it, so a list that drifted out of date fails loudly
 // instead of passing vacuously — the rule `gap-three-failures.test.tsx` establishes and
-// this file inherits wholesale. `NOT_AUDITED`, `ownProofFor` and `priceAnchorFor` are
+// this file inherits wholesale (from `gap-failures-pattern.test.tsx` now — the rule
+// outlived the file that established it). `NOT_AUDITED`, `ownProofFor` and `priceAnchorFor` are
 // imported for the same reason on the other side: they are the SHIPPED strings that the
 // invented-provenance patterns are anchored to, where a shipped string exists to anchor to.
 import {
   gapHardestPartContent,
   gapLadderContent,
   gapNoSopContent,
-  gapThePatternContent,
+  gapFailuresPatternContent,
 } from "@/slides/leader-gap/content";
 import {
   NOT_AUDITED,
@@ -913,7 +914,7 @@ describe("the attribution invents no provenance", () => {
       ...walkStrings(gapHardestPartContent),
       ...walkStrings(gapNoSopContent),
       ...walkStrings(gapLadderContent),
-      ...walkStrings(gapThePatternContent),
+      ...walkStrings(gapFailuresPatternContent),
       ...walkStrings(investChickenEggContent),
       ...walkStrings(investSubscriptionContent),
       ...authoredStrings(),
@@ -2058,12 +2059,11 @@ const SIBLING_TOKENS: ReadonlyArray<readonly [string, RegExp, string]> = [
   ["30%", /\b30\s*%/, "B.1"],
   ["people & process", /people\s*&\s*process/i, "B.1"],
   ["tool access", /\btool access\b/i, "B.1"],
-  ["capability", /\bcapabilit\w*\b/i, "B.1 · B.4 · B.5"],
+  ["capability", /\bcapabilit\w*\b/i, "B.1 · B.5"],
   ["70/30", /\b70\s*\/\s*30\b/, "B.5"],
   ["L1–L5", /\bL[1-5]\b/, "B.5"],
   ["rungs", /\brungs?\b/i, "B.5"],
   ["ladder", /\bladder\b/i, "B.5"],
-  ["the pattern", /\bpattern\b/i, "B.4"],
   ["shadow", /\bshadow\b/i, "§6.2 · D.4"],
   ["SOP", /\bSOPs?\b/, "§6.2 · D.4"],
   ["deadlock", /\bdeadlock\w*\b/i, "D.3"],
@@ -2077,7 +2077,10 @@ const SIBLING_TOKENS: ReadonlyArray<readonly [string, RegExp, string]> = [
 const SIBLING_CORPORA: Readonly<Record<string, () => string[]>> = {
   "B.1": () => walkStrings(gapHardestPartContent),
   "B.2": () => walkStrings(gapNoSopContent),
-  "B.4": () => walkStrings(gapThePatternContent),
+  // B.3 now, not B.4: §6.3 and §6.4 merged into `gap-failures-pattern` and the `gap`
+  // run lost a row. The LABEL below is only what a failure message prints; the corpus is
+  // the module, which is the point of naming modules rather than transcribing strings.
+  "B.3 (§6.3 + §6.4)": () => walkStrings(gapFailuresPatternContent),
   "B.5": () => walkStrings(gapLadderContent),
   "D.3": () => walkStrings(investChickenEggContent),
   "D.4": () => [
@@ -2093,26 +2096,34 @@ const SIBLING_CORPORA: Readonly<Record<string, () => string[]>> = {
 };
 
 /**
- * §6.2's spellings that NO sibling renders, kept anyway and said out loud rather than quietly
+ * SPEC spellings that NO sibling renders, kept anyway and said out loud rather than quietly
  * padded into the list above.
  *
- * "no guidance" is the SPEC's phrasing for B.2's argument; `gap-no-sop` renders its own image
+ * "no guidance" is §6.2's phrasing for B.2's argument; `gap-no-sop` renders its own image
  * instead and never prints it. `improvise` joined this group on 2026-08-11, when B.2's fray
  * redesign cut the sentence that spelled the verb — the fan draws it now, and §6.2's own
  * sentence is again the only source this file can honestly fire the pattern against.
- * `gap-three-failures.test.tsx` records the same split for the same tokens. They are refused
- * here because a later author is as likely to lift the spec's sentence as the neighbour's
- * copy, and each is controlled against the spec sentence below.
+ *
+ * "the pattern" JOINED THEM ON 2026-08-13, and for the third variety of the same reason.
+ * It was B.4's, fired against `gapThePatternContent`; §6.3 and §6.4 then merged into
+ * `gap-failures-pattern`, whose pose 1 makes the claim as three lessons and a shift and
+ * never prints the noun. So the token has an owning SPEC SECTION and no owning STRING,
+ * which is exactly the shape of the two above it.
+ *
+ * They are refused here because a later author is as likely to lift the spec's sentence as
+ * the neighbour's copy, and each is controlled against the spec sentence below.
  */
 const SPEC_ONLY_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
   ["no guidance", /\bno guidance\b/i],
   ["no SOP", /\bno[-\s]SOP\b/i],
   ["improvise", /\bimprovis\w*\b/i],
+  ["the pattern", /\bpattern\b/i],
 ];
 
 const SPEC_SENTENCES: readonly string[] = [
   "There is no guidance, so people improvise.",
   "gap-no-sop",
+  "The pattern across the three failures.",
 ];
 
 describe("the sibling boundaries", () => {
@@ -2124,7 +2135,7 @@ describe("the sibling boundaries", () => {
 
     for (const [name, pattern, owner] of [
       ...SIBLING_TOKENS,
-      ...SPEC_ONLY_TOKENS.map(([n, p]) => [n, p, "§6.2"] as const),
+      ...SPEC_ONLY_TOKENS.map(([n, p]) => [n, p, "a spec section, no slide"] as const),
     ]) {
       for (const copy of authored) {
         expect(pattern.test(copy), `${owner}'s "${name}" in ${JSON.stringify(copy)}`).toBe(false);
@@ -2159,10 +2170,16 @@ describe("the sibling boundaries", () => {
     // control honest rather than assumed.
     for (const [name, pattern] of SPEC_ONLY_TOKENS) {
       expect(SPEC_SENTENCES.some((line) => pattern.test(line)), name).toBe(true);
-      expect(
-        SIBLING_CORPORA["B.2"]().some((line) => pattern.test(line)),
-        `${name} is rendered by B.2 after all — move it into SIBLING_TOKENS`,
-      ).toBe(false);
+      // FIRED AGAINST EVERY CORPUS AND NOT B.2's ALONE, since 2026-08-13: three of these
+      // four are §6.2's and one is §6.4's, so a control scoped to one sibling would stop
+      // being a control the moment the list grew past that sibling. If any of them turns
+      // out to be RENDERED somewhere, it belongs in SIBLING_TOKENS with that owner.
+      for (const [key, corpus] of Object.entries(SIBLING_CORPORA)) {
+        expect(
+          corpus().some((line) => pattern.test(line)),
+          `${name} is rendered by ${key} after all — move it into SIBLING_TOKENS`,
+        ).toBe(false);
+      }
     }
     // And each corpus is a real one, so "fires on nothing" cannot be hiding behind an empty
     // list of strings.

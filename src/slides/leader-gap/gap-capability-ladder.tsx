@@ -30,13 +30,14 @@
 // closer nobody outside the room ever reads.
 //
 // THE LETTER IS NOT AUTHORED HERE, and this slide is the reason that rule earns
-// its keep — it has now printed FOUR different numbers without this file being opened
+// its keep — it has now printed SIX different numbers without this file being opened
 // for any of them. It is the LAST slide of the `gap` run (§4.3, §6.5), and it was that
 // run's only slide until gh#65 put `gap-hardest-part` (§6.1) in front of it: it printed
-// B.1 then, B.2 after gh#65, B.3 after gh#66's `gap-no-sop` (§6.2), and B.5 now that
-// gh#67 has landed `gap-three-failures` (§6.3) and `gap-the-pattern` (§6.4) between
-// gh#66's row and this one. B.5 is §6.5's own number and the LAST this slide will hold:
-// the `gap` run is COMPLETE at §4.3's five, so nothing more inserts in front of it.
+// B.1 then, B.2 after gh#65, B.3 after gh#66's `gap-no-sop` (§6.2), B.5 once gh#67
+// landed §6.3 and §6.4 as two rows between gh#66's and this one, B.6 for the duration of
+// the merge review's third row, and B.4 now that all three of those retired into gh#67's
+// one `gap-failures-pattern`. B.4 is the LAST number this slide will hold: the `gap` run
+// is COMPLETE at §4.3's five sections, so nothing more inserts in front of it.
 // (An earlier revision of this comment
 // credited "#55–#58" with those inserts. Those issue numbers were never right:
 // #55 is C.1's focus walk and #56–#58 are D.2–D.4; the four second-tier `gap`
