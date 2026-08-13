@@ -22,20 +22,29 @@
 // THE THREE PLATES, AND WHY EACH IS THE SHAPE IT IS:
 //   1 · TOOLS, AND NO METHOD — five glyphs drifting on five orbits that never share a
 //       centre. Five is `../content.ts`'s own number ("5+ AI coding tools explored").
-//       Frozen, the dashed orbits still say it: five paths, no order.
-//   2 · TEN CONNECTORS, FOUR LEFT — ten nodes; six struck through one at a time and
-//       dropped to the neutral tier, four lit and pulsing. The arithmetic is REAL DATA
-//       ("6 of 10 AI connectors — scrapped"; "4 connectors" among what held), derived in
-//       the geometry module from a single list of survivors so the picture cannot
-//       disagree with the sentence.
+//       Still, the dashed orbits still say it: five paths, no order.
+//   2 · TEN CONNECTORS, TWO LEFT — ten squares riding ONE closed ellipse and going round
+//       it forever, ALL TEN FILLED when the ring starts; eight lose the fill one at a
+//       time, take a struck diagonal, and keep going round as empty boxes. The
+//       arithmetic is the copy's own ("8 of 10 AI connectors — scrapped"; "2 connectors"
+//       among what held), derived in the geometry module from a single list of survivors
+//       so the picture cannot disagree with the sentence. The circle is the argument as
+//       much as the count is: nine months of building, being overtaken, and building
+//       again is a phase that went ROUND.
 //   3 · ONE GATE, AND A QUEUE — eighteen departments funnel into a slot one item wide
 //       and pile up behind it, while ONE change gets out the far side on a slow loop.
 //
 // TWO POSES:
 //   0 — THE RECORD. Three plates running, three phases printed in full.
 //   1 — THE LESSONS, AND THE SHIFT. Each card contracts to `PHASE n / X OVER Y / the
-//       quote`; the plates freeze; the CopperRule draws under them; and the shift — two
-//       columns and the closing question — arrives in the 236px each card gave up.
+//       quote`; THE PLATES KEEP RUNNING; the CopperRule draws under them; and the shift —
+//       two boxes and the closing question — arrives in the 236px each card gave up.
+//
+// THE PLATES DO NOT FREEZE AT POSE 1, and that is a deliberate reversal of the first cut
+// (owner call, 2026-08-13). Pausing three loops mid-sentence read as the stage going
+// dead under a presenter who was still talking; the three pictures are ambient
+// decoration over a record that is already legible, so they run for as long as the slide
+// is up. `./failures-pattern.css` no longer carries a pause rule at all.
 //
 // `pose >= n` everywhere and never `===` — a pose is everything argued so far, and the
 // walk backwards has to work.
@@ -82,6 +91,7 @@ import {
   MINDSET_TOP,
   MONO_ROW_HEIGHT,
   NODE_COUNT,
+  NODE_RING_INSET,
   NODE_SIZE,
   PERIOD_Y,
   PHASE_Y,
@@ -95,17 +105,26 @@ import {
   QUEUE_STEP_MS,
   QUOTE_HEIGHT,
   QUOTE_Y,
+  RING_CX,
+  RING_CY,
+  RING_PATH,
+  RING_RX,
+  RING_RY,
+  RING_TURN_S,
+  SHIFT_BOX_BORDER,
+  SHIFT_BOX_HEIGHT,
+  SHIFT_BOX_PAD_X,
   SHIFT_BULLET_HEIGHT,
+  SHIFT_BULLET_INDENT,
+  SHIFT_BULLET_INSET,
+  SHIFT_BULLET_MARKER,
   SHIFT_BULLET_STEP,
-  SHIFT_BULLET_Y0,
   SHIFT_COL_MEASURE,
-  SHIFT_COL_TITLE_HEIGHT,
   SHIFT_COL_TOP,
   SHIFT_COL_WIDTH,
   SHIFT_EYEBROW_TOP,
-  SHIFT_RAIL_GAP,
-  SHIFT_RAIL_WIDTH,
   SHIFT_RULE_Y,
+  SHIFT_TITLE_INSET,
   SIDE_MARGIN,
   SMALL_MONO_ROW_HEIGHT,
   STAGE,
@@ -119,7 +138,7 @@ import {
   TOOL_GLYPHS,
   cardLeft,
   happeningY,
-  nodeAt,
+  ringStart,
   shiftColLeft,
 } from "../gap-failures-pattern-geometry";
 import { gapFailuresPatternContent as C } from "../content";
@@ -270,127 +289,154 @@ export function FailuresPatternTriptych({ pose }: { pose: number }) {
         ))}
       </div>
 
-      {/* ───── the shift · everything the contraction paid for ───── */}
-      <div style={{ position: "absolute", left: SIDE_MARGIN, top: SHIFT_RULE_Y, width: CONTENT_WIDTH }}>
-        <CopperRule on={isShape} delay={CONTRACT_MS - 160} />
-      </div>
+      {/* ───── the shift · everything the contraction paid for ─────
 
-      <Reveal
-        on={isShape}
-        delay={CONTRACT_MS - 80}
-        as="p"
-        style={{
-          ...monoLabel,
-          position: "absolute",
-          left: SIDE_MARGIN,
-          top: SHIFT_EYEBROW_TOP,
-          margin: 0,
-          color: TIER.eyebrow,
-        }}
-      >
-        {C.shiftEyebrow}
-      </Reveal>
+          THE WHOLE BLOCK IS INERT, AT BOTH POSES, AND THAT IS A BUG FIX. It renders
+          AFTER the triptych, so it is on top of it — and at pose 0 it is invisible but
+          still hit-testable, which meant the boxes, their bullets and the closing
+          sentence were eating every pointer that crossed the LOWER HALF of the three
+          cards. Hovering a card lit it near the top and did nothing near the bottom.
+          Nothing in here is interactive at either pose, so the fix is the file's own
+          idiom one level up: `pointer-events: none` on one wrapper, inherited by
+          everything inside it, exactly as `CardFace` and `EyebrowFace` already do for
+          their hidden layers. The stage's click-to-advance is unaffected — it listens
+          on an ancestor. */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+        <div style={{ position: "absolute", left: SIDE_MARGIN, top: SHIFT_RULE_Y, width: CONTENT_WIDTH }}>
+          <CopperRule on={isShape} delay={CONTRACT_MS - 160} />
+        </div>
 
-      {C.shiftColumns.map((col, i) => (
         <Reveal
-          key={col.title}
           on={isShape}
-          delay={CONTRACT_MS + i * 90}
-          data-testid={`gfp-shift-col-${i}`}
+          delay={CONTRACT_MS - 80}
+          as="p"
           style={{
+            ...monoLabel,
             position: "absolute",
-            left: shiftColLeft(i),
-            top: SHIFT_COL_TOP,
-            width: SHIFT_COL_WIDTH,
+            left: SIDE_MARGIN,
+            top: SHIFT_EYEBROW_TOP,
+            margin: 0,
+            color: TIER.eyebrow,
           }}
         >
-          {/* the rail — one copper line per half of the move */}
-          <div
-            aria-hidden
+          {C.shiftEyebrow}
+        </Reveal>
+
+        {/* ───── the shift, in two boxes · the same move seen from two ends ───── */}
+        {C.shiftColumns.map((col, i) => (
+          <Reveal
+            key={col.title}
+            on={isShape}
+            delay={CONTRACT_MS + i * 90}
+            data-testid={`gfp-shift-col-${i}`}
             style={{
               position: "absolute",
-              left: 0,
-              top: 2,
-              width: SHIFT_RAIL_WIDTH,
-              height:
-                SHIFT_COL_TITLE_HEIGHT +
-                9 +
-                (col.bullets.length - 1) * SHIFT_BULLET_STEP +
-                SHIFT_BULLET_HEIGHT -
-                4,
-              background: TIER.rail,
-            }}
-          />
-          <p
-            style={{
-              position: "absolute",
-              left: SHIFT_RAIL_WIDTH + SHIFT_RAIL_GAP,
-              top: 0,
-              margin: 0,
-              width: SHIFT_COL_MEASURE,
-              fontFamily: "var(--serif)",
-              fontSize: 15,
-              fontWeight: 600,
-              lineHeight: 1.3,
-              color: TIER.shiftTitle,
+              left: shiftColLeft(i),
+              top: SHIFT_COL_TOP,
+              width: SHIFT_COL_WIDTH,
+              // BOTH BOXES ARE THE SAME HEIGHT, even though the second half holds three
+              // bullets and the first four: two boxes side by side that bottom out at
+              // different heights read as one of them being unfinished.
+              height: SHIFT_BOX_HEIGHT,
+              boxSizing: "border-box",
+              border: `${SHIFT_BOX_BORDER}px solid var(--copper-700)`,
+              background: "rgba(10,10,10,0.6)",
             }}
           >
-            {col.title}
-          </p>
-          {col.bullets.map((b, j) => (
             <p
-              key={b}
               style={{
                 position: "absolute",
-                left: SHIFT_RAIL_WIDTH + SHIFT_RAIL_GAP,
-                top: SHIFT_BULLET_Y0 - SHIFT_COL_TOP + j * SHIFT_BULLET_STEP,
+                left: SHIFT_BOX_PAD_X,
+                top: SHIFT_TITLE_INSET,
                 margin: 0,
                 width: SHIFT_COL_MEASURE,
-                height: SHIFT_BULLET_HEIGHT,
-                overflow: "hidden",
                 fontFamily: "var(--serif)",
-                fontSize: 12.5,
-                lineHeight: 1.4,
-                color: TIER.shiftBullet,
-                whiteSpace: "nowrap",
+                fontSize: 15,
+                fontWeight: 600,
+                lineHeight: 1.3,
+                color: TIER.shiftTitle,
               }}
             >
-              {highlight(b, col.bulletsKw)}
+              {col.title}
             </p>
-          ))}
-        </Reveal>
-      ))}
+            {col.bullets.map((b, j) => (
+              <div
+                key={b}
+                style={{
+                  position: "absolute",
+                  left: SHIFT_BOX_PAD_X,
+                  top: SHIFT_BULLET_INSET + j * SHIFT_BULLET_STEP,
+                  width: SHIFT_BULLET_INDENT + SHIFT_COL_MEASURE,
+                  height: SHIFT_BULLET_HEIGHT,
+                }}
+              >
+                {/* the record's own marker — the two lists on this stage are marked the
+                    same way or they are not the same kind of list */}
+                <span
+                  aria-hidden
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 7,
+                    width: SHIFT_BULLET_MARKER,
+                    height: SHIFT_BULLET_MARKER,
+                    background: TIER.rail,
+                  }}
+                />
+                <p
+                  style={{
+                    position: "absolute",
+                    left: SHIFT_BULLET_INDENT,
+                    top: 0,
+                    margin: 0,
+                    width: SHIFT_COL_MEASURE,
+                    height: SHIFT_BULLET_HEIGHT,
+                    overflow: "hidden",
+                    fontFamily: "var(--serif)",
+                    fontSize: 12.5,
+                    lineHeight: 1.4,
+                    color: TIER.shiftBullet,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {highlight(b, col.bulletsKw)}
+                </p>
+              </div>
+            ))}
+          </Reveal>
+        ))}
 
-      {/* the closing question, on one row with its own label */}
-      <Reveal
-        on={isShape}
-        delay={CONTRACT_MS + 260}
-        data-testid="gfp-mindset"
-        style={{
-          position: "absolute",
-          left: SIDE_MARGIN,
-          top: MINDSET_TOP,
-          width: CONTENT_WIDTH,
-          height: MINDSET_HEIGHT,
-          display: "flex",
-          alignItems: "baseline",
-        }}
-      >
-        <span style={{ ...monoLabel, fontSize: 10, width: MINDSET_LABEL_WIDTH, color: TIER.eyebrow }}>
-          {C.mindsetLabel}
-        </span>
-        <span
+        {/* the closing question, on one row with its own label */}
+        <Reveal
+          on={isShape}
+          delay={CONTRACT_MS + 260}
+          data-testid="gfp-mindset"
           style={{
-            fontFamily: "var(--serif)",
-            fontSize: 17,
-            lineHeight: 1.45,
-            color: TIER.mindset,
-            whiteSpace: "nowrap",
+            position: "absolute",
+            left: SIDE_MARGIN,
+            top: MINDSET_TOP,
+            width: CONTENT_WIDTH,
+            height: MINDSET_HEIGHT,
+            display: "flex",
+            alignItems: "baseline",
           }}
         >
-          {highlight(C.mindset, C.mindsetKw)}
-        </span>
-      </Reveal>
+          <span style={{ ...monoLabel, fontSize: 10, width: MINDSET_LABEL_WIDTH, color: TIER.eyebrow }}>
+            {C.mindsetLabel}
+          </span>
+          <span
+            style={{
+              fontFamily: "var(--serif)",
+              fontSize: 17,
+              lineHeight: 1.45,
+              color: TIER.mindset,
+              whiteSpace: "nowrap",
+            }}
+          >
+            {highlight(C.mindset, C.mindsetKw)}
+          </span>
+        </Reveal>
+      </div>
     </div>
   );
 }
@@ -436,7 +482,7 @@ interface PhaseCardProps {
   index: number;
   /** Pointer is on this card — lights the chrome and leans the plate in. */
   lit: boolean;
-  /** Pose 1: the card contracts to its lesson and the plate holds its frame. */
+  /** Pose 1: the card contracts to its lesson. The plate keeps running. */
   isShape: boolean;
   onHover: (id: string | null) => void;
 }
@@ -463,13 +509,12 @@ function PhaseCard({ card, lesson, index, lit, isShape, onHover }: PhaseCardProp
     <div
       data-testid={`gfp-card-${card.id}`}
       data-shape={isShape ? "1" : "0"}
-      className={isShape ? "gfp-still" : undefined}
       onMouseEnter={() => onHover(card.id)}
       onMouseLeave={() => onHover(null)}
       style={shell}
     >
-      {/* the plate — shared by both faces, and the reason the contraction reads as the
-          same card losing its lower half */}
+      {/* the plate — shared by both faces, running at both poses, and the reason the
+          contraction reads as the same card losing its lower half */}
       <div style={{ position: "absolute", left: CARD_PAD_X, top: PLATE_Y }}>
         <Plate id={card.id} index={index} active={lit} />
       </div>
@@ -772,14 +817,37 @@ function ToolsPlate({ active }: { active: boolean }) {
   );
 }
 
-/** PLATE 2 · TEN CONNECTORS, FOUR LEFT. Six struck through one at a time and dropped to
- *  the neutral tier; four lit, filled, and still breathing. The arithmetic is real data
- *  and it is derived — see `SURVIVOR_INDICES` in the geometry module. */
+/**
+ * PLATE 2 · TEN CONNECTORS, TWO LEFT — and the ring is the argument as much as the count
+ * is. Ten squares ride one closed ellipse and go round it forever; all ten start FILLED,
+ * and eight lose the fill one at a time, take a struck diagonal, and keep going round as
+ * empty boxes. Nothing is removed: ten were built, and the phase kept carrying all ten.
+ *
+ * THE NODES ARE HTML AND NOT SVG, which is the one place this figure leaves the idiom
+ * next door. CSS motion path (`offset-path`/`offset-distance`) is what turns a closed
+ * ellipse into circular motion without a frame loop and without SMIL, and it is
+ * dependable on HTML elements in every browser this deck runs in; on SVG children it is
+ * not. The dashed TRACK underneath is still SVG — it is a drawing, not a traveller.
+ *
+ * EACH NODE CARRIES ITS OWN START AND NO ANIMATION-DELAY. `--gfp-ring-start` is the
+ * node's tenth of the path and its keyframe runs from there to there + 100%, so the loop
+ * has no seam AND the reduced-motion squash parks each node on its own place in the ring
+ * rather than stacking all ten on the path's origin — which is exactly what a negative
+ * `animation-delay` would have done.
+ */
 function ConnectorsPlate({ active }: { active: boolean }) {
   const live = active ? "var(--copper-300)" : "var(--copper-500)";
+  const track = active ? "var(--copper-600)" : "var(--copper-800)";
+  const shell = plateShell(active);
 
   return (
-    <div {...plateShell(active)} data-testid="gfp-plate-connectors">
+    <div
+      {...shell}
+      data-testid="gfp-plate-connectors"
+      // One variable for the live tier, so a node's own fill and its breathing ring can
+      // never disagree, and the hover ramp is one transition per node rather than two.
+      style={{ ...shell.style, ["--gfp-live" as string]: live }}
+    >
       <svg
         viewBox={`0 0 ${PLATE_WIDTH} ${PLATE_HEIGHT}`}
         width={PLATE_WIDTH}
@@ -787,76 +855,98 @@ function ConnectorsPlate({ active }: { active: boolean }) {
         style={plateSvg}
         aria-hidden="true"
       >
-        {Array.from({ length: NODE_COUNT }, (_, i) => i).map((i) => {
-          const { x, y } = nodeAt(i);
-          const survived = SURVIVOR_INDICES.includes(i);
-          if (survived) {
-            const cx = x + NODE_SIZE / 2;
-            const cy = y + NODE_SIZE / 2;
-            return (
-              <g key={i} data-testid={`gfp-node-${i}`} data-state="live">
-                <rect
-                  className="gfp-loop"
-                  x={x - 3}
-                  y={y - 3}
-                  width={NODE_SIZE + 6}
-                  height={NODE_SIZE + 6}
-                  fill="none"
-                  stroke={live}
-                  strokeWidth={1}
-                  style={{
-                    transformBox: "view-box",
-                    transformOrigin: `${cx}px ${cy}px`,
-                    animation: `gfp-glow 3.1s ease-out ${1400 + i * 260}ms infinite`,
-                    transition: "stroke 220ms var(--ease)",
-                  }}
-                />
-                <rect
-                  x={x}
-                  y={y}
-                  width={NODE_SIZE}
-                  height={NODE_SIZE}
-                  fill={live}
-                  style={{ transition: "fill 220ms var(--ease)" }}
-                />
-              </g>
-            );
-          }
-          const order = CONNECTOR_STRUCK.indexOf(i);
-          const delay = STRIKE_START_MS + order * STRIKE_STEP_MS;
-          return (
-            <g
-              key={i}
-              data-testid={`gfp-node-${i}`}
-              data-state="struck"
-              style={{
-                opacity: active ? 0.92 : 0.72,
-                transition: "opacity 220ms var(--ease)",
-              }}
-            >
-              <rect
-                x={x}
-                y={y}
-                width={NODE_SIZE}
-                height={NODE_SIZE}
-                fill="none"
-                strokeWidth={1.2}
-                style={{ animation: `gfp-dim 620ms var(--ease) ${delay}ms both` }}
-              />
-              <path
-                d={`M ${x - 3} ${y + NODE_SIZE + 3} L ${x + NODE_SIZE + 3} ${y - 3}`}
-                pathLength={1}
-                fill="none"
-                stroke="var(--neutral-500)"
-                strokeWidth={1.2}
-                strokeDasharray={1}
-                strokeDashoffset={1}
-                style={{ animation: `gfp-draw 380ms var(--ease) ${delay}ms both` }}
-              />
-            </g>
-          );
-        })}
+        {/* the track — the line the ten are travelling, dashed like the tools' orbits and
+            marching under the pointer for the same reason */}
+        <ellipse
+          className="gfp-orbit"
+          cx={RING_CX}
+          cy={RING_CY}
+          rx={RING_RX}
+          ry={RING_RY}
+          fill="none"
+          stroke={track}
+          strokeWidth={1}
+          strokeDasharray="3 5"
+          style={{ transition: "stroke 220ms var(--ease)" }}
+        />
       </svg>
+
+      {Array.from({ length: NODE_COUNT }, (_, i) => i).map((i) => {
+        const survived = SURVIVOR_INDICES.includes(i);
+        const order = CONNECTOR_STRUCK.indexOf(i);
+        const delay = STRIKE_START_MS + order * STRIKE_STEP_MS;
+        const strike = NODE_SIZE + 6;
+
+        return (
+          <span
+            key={i}
+            data-testid={`gfp-node-${i}`}
+            data-state={survived ? "live" : "struck"}
+            className="gfp-node gfp-loop"
+            style={{
+              left: 0,
+              top: 0,
+              width: NODE_SIZE,
+              height: NODE_SIZE,
+              ["--gfp-ring-start" as string]: `${ringStart(i)}%`,
+              offsetPath: `path("${RING_PATH}")`,
+              // THE BASE VALUE IS THE TRUTH AND THE TURN IS DECORATION OVER IT — the
+              // tools plate's rule, and here it is load-bearing rather than tidy.
+              // `gfp-ring` takes no fill mode (a loop that never ends needs none), so
+              // under the reduced-motion squash the animation finishes in 0.01ms and the
+              // property REVERTS to this base. Without it that base is `0%` for all ten
+              // and the ring collapses to a stack of ten squares on the path's origin.
+              offsetDistance: `${ringStart(i)}%`,
+              background: survived ? "var(--gfp-live)" : undefined,
+              transition: "background-color 220ms var(--ease)",
+              animation: survived
+                ? // ONE ANIMATION: it went round, and it is still going round.
+                  `gfp-ring ${RING_TURN_S}s linear infinite`
+                : // TWO: the same turn, plus the one-shot that takes its fill away. The
+                  // scrap ends on the frame the picture rests on, so `both` is the whole
+                  // of its state — a struck node is never repainted by the hover ramp.
+                  `gfp-ring ${RING_TURN_S}s linear infinite, ` +
+                  `gfp-scrap 620ms var(--ease) ${delay}ms both`,
+            }}
+          >
+            {survived ? (
+              // the two that held, still breathing — decoration over a fill that already
+              // carries the fact
+              <span
+                aria-hidden
+                className="gfp-loop"
+                style={{
+                  position: "absolute",
+                  inset: -NODE_RING_INSET,
+                  border: "1px solid var(--gfp-live)",
+                  animation: `gfp-glow 3.1s ease-out ${1400 + i * 260}ms infinite`,
+                }}
+              />
+            ) : (
+              // the strike, drawn corner to corner and a shade past both — the same
+              // pathLength=1 idiom every other line on these three plates uses
+              <svg
+                aria-hidden
+                width={strike}
+                height={strike}
+                viewBox={`0 0 ${strike} ${strike}`}
+                style={{ position: "absolute", left: -3, top: -3 }}
+              >
+                <path
+                  d={`M 1 ${strike - 1} L ${strike - 1} 1`}
+                  pathLength={1}
+                  fill="none"
+                  stroke="var(--neutral-500)"
+                  strokeWidth={1.2}
+                  strokeDasharray={1}
+                  strokeDashoffset={1}
+                  style={{ animation: `gfp-draw 380ms var(--ease) ${delay}ms both` }}
+                />
+              </svg>
+            )}
+          </span>
+        );
+      })}
     </div>
   );
 }

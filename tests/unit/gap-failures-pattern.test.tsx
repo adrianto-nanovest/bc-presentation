@@ -50,17 +50,24 @@ import {
   NAV_ZONE_CLEARANCE_SHIFT,
   NAV_ZONE_TOP,
   NODE_COUNT,
+  NODE_RING_INSET,
+  NODE_SIZE,
   PLATE_HEIGHT,
   PLATE_WIDTH,
   QUEUE_DOTS,
   QUEUE_DOT_RADIUS,
+  RING_CX,
+  RING_CY,
+  RING_RX,
+  RING_RY,
+  SHIFT_BOX_HEIGHT,
   SHIFT_COL_COUNT,
   SURVIVOR_INDICES,
   TOOL_GLYPHS,
   cardLeft,
   funnelSpanAt,
   happeningY,
-  nodeAt,
+  ringStart,
   shiftColLeft,
 } from "@/slides/leader-gap/gap-failures-pattern-geometry";
 
@@ -222,17 +229,36 @@ describe("pose 0 · the record", () => {
     for (const id of ["gfp-plate-tools", "gfp-plate-connectors", "gfp-plate-queue"]) {
       expect(container.querySelector(`[data-testid="${id}"]`), id).not.toBeNull();
     }
-    // TEN NODES, FOUR LIT — "6 of 10 AI connectors — scrapped" and "4 connectors" among
+    // TEN NODES, TWO LIT — "8 of 10 AI connectors — scrapped" and "2 connectors" among
     // what held. The picture cannot disagree with the sentence, so it is read off the DOM
     // rather than off the constant.
     const nodes = container.querySelectorAll('[data-testid^="gfp-node-"]');
     expect(nodes).toHaveLength(NODE_COUNT);
     const live = [...nodes].filter((n) => n.getAttribute("data-state") === "live");
     expect(live).toHaveLength(SURVIVOR_INDICES.length);
-    expect(live).toHaveLength(4);
-    expect(NODE_COUNT - live.length).toBe(6);
-    const scrapped = C.cards[1].happenings.find((h) => h.label.startsWith("6 of 10"));
-    expect(scrapped, "the copy still says six of ten").not.toBeUndefined();
+    expect(live).toHaveLength(2);
+    expect(NODE_COUNT - live.length).toBe(8);
+    const scrapped = C.cards[1].happenings.find((h) => h.label.startsWith("8 of 10"));
+    expect(scrapped, "the copy still says eight of ten").not.toBeUndefined();
+    const held = C.cards[1].happenings.find((h) => h.rest.startsWith("2 connectors"));
+    expect(held, "the copy still says two held").not.toBeUndefined();
+    // AND ALL TEN RIDE THE RING — every node carries its own start on the path, evenly
+    // spaced, which is what makes the loop seamless AND what keeps the reduced-motion
+    // squash from stacking all ten on the path's origin.
+    const starts = [...nodes].map((n) => (n as HTMLElement).style.getPropertyValue("--gfp-ring-start"));
+    expect(new Set(starts).size).toBe(NODE_COUNT);
+    expect(starts).toEqual([...Array(NODE_COUNT).keys()].map((i) => `${ringStart(i)}%`));
+    // AND THE SAME PLACE IS ALSO THE NODE'S BASE `offset-distance`, which is what the
+    // reduced-motion squash falls back to: `gfp-ring` takes no fill mode, so without a
+    // base the whole ring collapses onto the path's origin the moment the animation is
+    // squashed to 0.01ms. Read off the style ATTRIBUTE — jsdom parses no motion-path
+    // longhand, so `style.offsetDistance` is empty in this environment and would pass
+    // vacuously.
+    for (const [i, node] of [...nodes].entries()) {
+      expect(node.getAttribute("style"), `node ${i}`).toContain(
+        `offset-distance: ${ringStart(i)}%`,
+      );
+    }
     unmount();
   });
 
@@ -243,6 +269,27 @@ describe("pose 0 · the record", () => {
     }
     expect(revealOn(container, "gfp-mindset")).toBe(false);
     unmount();
+  });
+
+  test("the shift takes no pointer off a card — it is on top of the lower half of all three", () => {
+    // THE BUG THIS HOLDS SHUT. The shift block renders AFTER the triptych, so it paints
+    // over the bottom ~160px of every card; invisible at pose 0 it was still
+    // hit-testable, and hovering a card lit it near the top and did nothing near the
+    // bottom. jsdom does no hit-testing, so what is checkable here is the FIX: every
+    // piece of the shift sits under one wrapper that is inert, at both poses.
+    for (const pose of POSES) {
+      const { container, unmount } = renderSlide(pose);
+      const pieces = [
+        ...[...Array(SHIFT_COL_COUNT).keys()].map((i) => `gfp-shift-col-${i}`),
+        "gfp-mindset",
+      ];
+      for (const testId of pieces) {
+        const el = container.querySelector(`[data-testid="${testId}"]`) as HTMLElement;
+        const inert = el.closest('[style*="pointer-events: none"]');
+        expect(inert, `${testId} at pose ${pose} can eat a card's pointer`).not.toBeNull();
+      }
+      unmount();
+    }
   });
 });
 
@@ -274,6 +321,24 @@ describe("pose 1 · the lessons and the shift", () => {
     unmount();
   });
 
+  test("the three plates keep running — nothing on this stage freezes", () => {
+    // THE OWNER CALL OF 2026-08-13. The cards used to take `.gfp-still` when they
+    // contracted, and `failures-pattern.css` paused every `.gfp-loop` under it; three
+    // loops stopping mid-sentence read as the stage going dead under a presenter who was
+    // still talking. jsdom computes no stylesheet, so what is checkable here is the HOOK:
+    // the class is not written at either pose, and every plate is still mounted.
+    for (const pose of POSES) {
+      const { container, unmount } = renderSlide(pose);
+      expect(container.querySelectorAll(".gfp-still"), `pose ${pose}`).toHaveLength(0);
+      for (const id of ["gfp-plate-tools", "gfp-plate-connectors", "gfp-plate-queue"]) {
+        expect(container.querySelector(`[data-testid="${id}"]`), `${id} at pose ${pose}`).not.toBeNull();
+      }
+      // …and the ambient loops are still NAMED, so a future pose rule has one selector.
+      expect(container.querySelectorAll(".gfp-loop").length, `pose ${pose}`).toBeGreaterThan(0);
+      unmount();
+    }
+  });
+
   test("the shift arrives in the space the contraction paid for, and closes the slide", () => {
     const { container, unmount } = renderSlide(1);
     const stage = stageTextWithoutFigLabel(container);
@@ -284,6 +349,12 @@ describe("pose 1 · the lessons and the shift", () => {
       expect(revealOn(container, `gfp-shift-col-${i}`), col.title).toBe(true);
       expect(stage).toContain(col.title);
       for (const bullet of col.bullets) expect(stage, col.title).toContain(bullet);
+      // TWO BOXES, AND THE SAME BOX TWICE — the second half holds three bullets and the
+      // first four, and a pair that bottomed out at different heights would read as one
+      // of them being unfinished.
+      const box = container.querySelector(`[data-testid="gfp-shift-col-${i}"]`) as HTMLElement;
+      expect(box.style.height, col.title).toBe(`${SHIFT_BOX_HEIGHT}px`);
+      expect(box.style.border, col.title).toContain("solid");
     }
     // THE LAST ARRIVAL, and the only line addressed past the record.
     expect(revealOn(container, "gfp-mindset")).toBe(true);
@@ -602,7 +673,7 @@ describe("the geometry", () => {
     expect(() => cardLeft(-1)).toThrow(/no card -1/);
     expect(() => happeningY(HAPPENING_COUNT)).toThrow(/no happening 4/);
     expect(() => shiftColLeft(SHIFT_COL_COUNT)).toThrow(/no column 2/);
-    expect(() => nodeAt(NODE_COUNT)).toThrow(/no connector 10/);
+    expect(() => ringStart(NODE_COUNT)).toThrow(/no connector 10/);
   });
 
   test("the three columns tile the content width, in order", () => {
@@ -633,10 +704,25 @@ describe("the geometry", () => {
     expect(new Set(TOOL_GLYPHS.map((g) => g.x)).size).toBe(TOOL_GLYPHS.length);
     expect(new Set(TOOL_GLYPHS.map((g) => g.y)).size).toBe(TOOL_GLYPHS.length);
 
-    // NO COLUMN OF THE 5×2 GRID HOLDS TWO SURVIVORS: two full columns lit reads as a
-    // designed result rather than as four that happened to hold.
-    const cols = new Set(SURVIVOR_INDICES.map((i) => nodeAt(i).x));
-    expect(cols.size).toBe(SURVIVOR_INDICES.length);
+    // THE RING AND EVERYTHING RIDING IT IS INSIDE THE PLATE. Every point of the ellipse
+    // is on its bounding box or inside it, so the deepest mark is the centre plus the
+    // radius plus a node's half box plus the survivor's breathing ring.
+    const reach = NODE_SIZE / 2 + NODE_RING_INSET;
+    expect(RING_CX - RING_RX - reach).toBeGreaterThanOrEqual(0);
+    expect(RING_CX + RING_RX + reach).toBeLessThanOrEqual(PLATE_WIDTH);
+    expect(RING_CY - RING_RY - reach).toBeGreaterThanOrEqual(0);
+    expect(RING_CY + RING_RY + reach).toBeLessThanOrEqual(PLATE_HEIGHT);
+
+    // THE TEN ARE EVENLY SPACED, and the two survivors are NEITHER ADJACENT NOR
+    // OPPOSITE: neighbours read as one surviving corner of the set, and a diametric pair
+    // reads as a designed result rather than as two that happened to hold.
+    expect([...Array(NODE_COUNT).keys()].map(ringStart)).toEqual(
+      [...Array(NODE_COUNT).keys()].map((i) => (i * 100) / NODE_COUNT),
+    );
+    const [a, b] = [...SURVIVOR_INDICES].sort((x, y) => x - y);
+    const apart = Math.min(b - a, NODE_COUNT - (b - a));
+    expect(apart).toBeGreaterThan(1);
+    expect(apart).toBeLessThan(NODE_COUNT / 2);
 
     // EVERY QUEUED DEPARTMENT IS INSIDE THE FUNNEL THAT IS SUPPOSED TO BE HOLDING IT.
     for (const dot of QUEUE_DOTS) {

@@ -5,14 +5,16 @@
  * ./no-sop.css next door), so retiming one vignette can never retime another slide's.
  *
  * TWO KINDS OF MOTION LIVE HERE AND THEY ARE NOT THE SAME KIND.
- *   ARRIVALS run ONCE, when their element mounts: the eight strikes crossing eight dead
- *   connectors, the seventeen departments piling up behind the gate. They end on the
- *   frame the picture is supposed to rest on, and `both` holds them there.
- *   AMBIENT LOOPS run forever and are DECORATION: five tools drifting, two survivors
- *   pulsing, one change escaping the queue, the orbit dashes marching under the pointer.
- *   Every one of them is authored so its 0% and 100% frames are the SAME frame — the
- *   glyph at its scattered coordinate, the dot at rest — so the loop has no seam and the
- *   still frame is the composed one.
+ *   ARRIVALS run ONCE, when their element mounts: the eight strikes crossing eight
+ *   scrapped connectors and the fill leaving them, the eighteen departments piling up
+ *   behind the gate. They end on the frame the picture is supposed to rest on, and
+ *   `both` holds them there.
+ *   AMBIENT LOOPS run forever and are DECORATION: five tools drifting, ten connectors
+ *   going round their ring, two survivors pulsing, one change escaping the queue, the
+ *   dashes marching under the pointer. Every one of them is authored so its 0% and 100%
+ *   frames are the SAME frame — the glyph at its scattered coordinate, the node back at
+ *   its own tenth of the ring, the dot at rest — so the loop has no seam and the still
+ *   frame is the composed one.
  *
  * WHY THAT MATTERS TWICE OVER. The global `prefers-reduced-motion: reduce` rule in
  * `src/styles/globals.css` squashes every animation to 0.01ms with one iteration: an
@@ -20,8 +22,14 @@
  * ambient loop parks on its 100% frame, which is its rest. The one documented exception
  * is `gfp-escape`, whose whole life is the crossing — it parks invisible, the correct
  * resting frame for a decoration that is a departure (./no-sop.css's ping makes the same
- * call). And POSE 1 freezes the plates with `animation-play-state: paused` rather than
- * unmounting them, so a pose walk back to the record finds the same picture running on.
+ * call).
+ *
+ * NOTHING FREEZES AT POSE 1, and that is a reversal of the first cut (owner call,
+ * 2026-08-13). The three plates used to take `animation-play-state: paused` when the
+ * cards contracted; three loops stopping mid-sentence read as the stage going dead under
+ * a presenter who was still talking. The plates are ambient decoration over a record
+ * that is already legible in type, so they run for as long as the slide is up — at
+ * either pose, and through a walk in either direction.
  *
  * ZERO SMIL, at every pose, under any motion preference — the section's standing rule:
  * SMIL is invisible to the reduced-motion squash and would have to be gated at mount,
@@ -109,19 +117,51 @@
 
 /* ───────────────────── vignette 2 · TEN CONNECTORS, TWO LEFT ───────────────── */
 
-/* A connector going out: it holds its copper while the strike crosses it, then drops to
-   the neutral tier and stays there. Timed against `STRIKE_STEP_MS` so the colour leaves
-   as the line lands, never before. Ends dim — that IS the resting frame. */
-@keyframes gfp-dim {
+/* One connector, riding the ring. `--gfp-ring-start` is the node's own tenth of the path
+   and is written by the component off `ringStart(i)`; the turn runs from there to there
+   + 100%, which on a CLOSED path is the same point — no seam, and the squashed frame is
+   the node's own place in the ring rather than the path's origin (which is what a
+   negative animation-delay would have parked all ten on).
+
+   `offset-path` is set inline, from `RING_PATH` in the geometry module, so the dashed
+   ellipse the plate paints and the line the nodes travel can only ever be one shape. */
+@keyframes gfp-ring {
+  from {
+    offset-distance: var(--gfp-ring-start);
+  }
+  to {
+    offset-distance: calc(var(--gfp-ring-start) + 100%);
+  }
+}
+
+/* A connector going out: it holds its fill while the strike crosses it, then gives the
+   fill up for a neutral outline and keeps riding the ring as an empty box. Timed against
+   `STRIKE_STEP_MS` so the colour leaves as the line lands, never before. Ends struck —
+   that IS the resting frame, and `both` makes it the node's whole state, which is why a
+   scrapped connector is never repainted by the hover ramp. */
+@keyframes gfp-scrap {
   0%,
   38% {
-    stroke: var(--copper-600);
+    background-color: var(--gfp-live);
+    border-color: transparent;
     opacity: 1;
   }
   100% {
-    stroke: var(--neutral-500);
-    opacity: 0.72;
+    background-color: transparent;
+    border-color: var(--neutral-500);
+    opacity: 0.78;
   }
+}
+
+/* One connector's box. Square, 0px radius, the deck's own corner — and `border-box`, so
+   the neutral border `gfp-scrap` fades in costs the node no size. `offset-rotate: 0deg`
+   keeps it UPRIGHT all the way round: the default (`auto`) turns the square to face its
+   direction of travel, which on this ellipse reads as a tumbling diamond. */
+.gfp-node {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  offset-rotate: 0deg;
 }
 
 /* The two that held, still alive: a ring breathing out of each. Pure decoration — it
@@ -206,24 +246,15 @@
   transform: scale(1.03);
 }
 
-/* The orbits under the five tools: dim while the plate rests, marching while the pointer
-   is on it. The march mounts WITH the class, so there is no mid-flight retiming. */
+/* The dashed lines under the marks — the five tools' orbits and the ten connectors'
+   track: dim while the plate rests, marching while the pointer is on it. The march
+   mounts WITH the class, so there is no mid-flight retiming. */
 .gfp-vig.is-active .gfp-orbit {
   animation: gfp-march 3s linear infinite;
 }
 
-/* POSE 1 — the plates freeze where they stand. Paused and not unmounted: the record is
-   still on the stage, still legible, and a walk back to pose 0 finds the same five tools
-   at the same coordinates rather than a scene that restarted.
-
-   ONLY THE LOOPS ARE PAUSED, AND THAT IS A BUG FIX AND NOT A REFINEMENT. The first cut
-   paused `.gfp-still *` — everything on a frozen plate — which also stopped the
-   ARRIVALS: the funnel drawing itself, the six strikes, the eighteen departments filing
-   in. Those start on an INVISIBLE frame (dashoffset 1, opacity 0) and only reach their
-   resting frame at the end, so a presenter who advanced inside the first two seconds
-   froze the third plate on an empty box. Arrivals now always finish — they end on the
-   frame the picture is supposed to rest on, which is exactly what pose 1 wants — and
-   the pause is scoped to the decorations that would otherwise run forever. */
-.gfp-still .gfp-loop {
-  animation-play-state: paused !important;
-}
+/* NO POSE RULE LIVES HERE ANY MORE. `.gfp-still .gfp-loop { animation-play-state:
+   paused }` froze the three plates at pose 1 and was dropped with the owner call of
+   2026-08-13 — see the header. `.gfp-loop` is kept on every ambient element as the NAME
+   of that class of motion (the header's second kind), so a future pose rule has one
+   selector to reach for instead of a new pass over three plates. */

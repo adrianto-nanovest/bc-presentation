@@ -58,20 +58,22 @@
 //
 //   ─────────────── POSE 1 · THE LESSONS + THE SHIFT ───────────────────────────
 //   192  card top ─────────────────────────────────────────────────────┐
-//   206      the plate · frozen where pose 0 left it                   │ 182
+//   206      the plate · STILL RUNNING, the same loop pose 0 started   │ 182
 //   282      the card's own hairline                                   │
 //   293      phase     · 11px mono caps, copper-500                    │
 //   312      lesson    · 14px mono caps, copper-100                    │
 //   339      quote     · 14px serif italic, neutral-100                │
 //   374  card bottom ──────────────────────────────────────────────────┘
-//   398  the CopperRule draws · full width
-//   415  THE SHIFT · 11px mono caps
-//   447  two columns, x = 48 / 656, each 576 wide
-//        447  column title  · 15px serif 600
-//        476  bullets       · 12.5px serif, one line each, step 24 → 566
-//   583  the mindset row · LABEL + the closing sentence, 17px serif → 608
+//   392  the CopperRule draws · full width
+//   405  THE SHIFT · 11px mono caps
+//   433  two BOXES, x = 48 / 656, each 576 × 136 ─────────────────────┐
+//        445  column title  · 15px serif 600                          │ 136
+//        473  bullets       · 12.5px serif on a copper marker,        │
+//             one line each, step 22 → 557                            │
+//   569  box bottom ───────────────────────────────────────────────────┘
+//   585  the mindset row · LABEL + the closing sentence, 17px serif → 610
 //   ─────────────────────────────────────────────────────────────────────────────
-//   floor y=632 · lowest painted box 610 (pose 0) / 608 (pose 1)
+//   floor y=632 · lowest painted box 610 (pose 0) / 610 (pose 1)
 //
 // THE FLOOR IS THE NAVBAR'S HOVER BAND AND NOT `.slide-content`'s BOTTOM, the rule every
 // geometry module in this directory keeps: `.nav-zone` is `bottom: 0; height: 88px`, so
@@ -377,10 +379,17 @@ export function cardLeft(index: number): number {
 
 // ───────────────────── pose 1 · the shift ─────────────────────
 
-/** The air between the contracted cards and the rule under them: 24. Not exported. */
-const CARDS_TO_SHIFT_RULE = 24;
+/**
+ * The air between the contracted cards and the rule under them: 18.
+ *
+ * TIGHTENED FROM 24 WHEN THE COLUMNS BECAME BOXES. A box costs its own border and two
+ * paddings — 26px the two rails never charged — and every pixel of it was found in the
+ * three gaps between the cards and the columns rather than taken off the closing line's
+ * clearance. Not exported.
+ */
+const CARDS_TO_SHIFT_RULE = 18;
 
-/** The rule's own line: 398. The `CopperRule` DRAWS here when the conclusion lands —
+/** The rule's own line: 392. The `CopperRule` DRAWS here when the conclusion lands —
  *  there is no resting hairline under it, because at pose 0 the cards reach to y=610
  *  and this shelf is inside them. */
 export const SHIFT_RULE_Y = CARD_BOTTOM_LESSON + CARDS_TO_SHIFT_RULE;
@@ -389,16 +398,16 @@ export const SHIFT_RULE_Y = CARD_BOTTOM_LESSON + CARDS_TO_SHIFT_RULE;
  *  jsdom computes no stylesheet. */
 export const SHIFT_RULE_HEIGHT = 1;
 
-/** The air between the rule and `THE SHIFT`: 16. Not exported. */
-const RULE_TO_SHIFT_EYEBROW = 16;
+/** The air between the rule and `THE SHIFT`: 12. Not exported. */
+const RULE_TO_SHIFT_EYEBROW = 12;
 
-/** `THE SHIFT`'s shelf: 415. */
+/** `THE SHIFT`'s shelf: 405. */
 export const SHIFT_EYEBROW_TOP = SHIFT_RULE_Y + SHIFT_RULE_HEIGHT + RULE_TO_SHIFT_EYEBROW;
 
-/** The air between that heading and the two columns: 16. Not exported. */
-const SHIFT_EYEBROW_TO_COLUMNS = 16;
+/** The air between that heading and the two boxes: 12. Not exported. */
+const SHIFT_EYEBROW_TO_COLUMNS = 12;
 
-/** The columns' shelf: 447. */
+/** The boxes' shelf: 433. */
 export const SHIFT_COL_TOP = SHIFT_EYEBROW_TOP + MONO_ROW_HEIGHT + SHIFT_EYEBROW_TO_COLUMNS;
 
 /** How many columns the shift is written in: 2 — the same move from two ends. */
@@ -421,47 +430,86 @@ export function shiftColLeft(index: number): number {
   return SIDE_MARGIN + index * (SHIFT_COL_WIDTH + SHIFT_COL_GAP);
 }
 
-/** The copper rail a column hangs off: 2px, with 14 of air after it. */
-export const SHIFT_RAIL_WIDTH = 2;
-export const SHIFT_RAIL_GAP = 14;
+/**
+ * A shift column is a BOX and no longer a rail: 1px border, 18 of inner padding across
+ * and 12 down, the phase cards' own chrome one tier quieter.
+ *
+ * WHY A BOX. The two halves of the shift are the SAME move seen from two ends, and a
+ * 2px rail down the left of each was drawing that as two lists that happen to be next
+ * to each other. A border closes each half into a thing with an inside, which is what
+ * makes the pair read as two objects being compared rather than as one column of prose
+ * that wrapped. It costs 26px of height — see {@link CARDS_TO_SHIFT_RULE} for where
+ * those pixels came from.
+ */
+export const SHIFT_BOX_PAD_X = 18;
+export const SHIFT_BOX_PAD_Y = 12;
 
-/** The measure a column's prose gets: 560. The longest bullet in `./content.ts` is 60
- *  characters — ≈373px of 12.5px serif, 67% of it — so every bullet is one line. */
-export const SHIFT_COL_MEASURE = SHIFT_COL_WIDTH - SHIFT_RAIL_WIDTH - SHIFT_RAIL_GAP;
+/** The box's own border: 1px, the card's weight. */
+export const SHIFT_BOX_BORDER = 1;
+
+/** The marker's own column, left of a bullet's text: 18 — a 4px copper square and the
+ *  14 of air after it, the record's own {@link HAPPENING_INDENT}. The two lists on this
+ *  stage are marked the same way or they are not the same kind of list. */
+export const SHIFT_BULLET_INDENT = HAPPENING_INDENT;
+
+/** The copper square that marks one bullet: 4 — the record's own. */
+export const SHIFT_BULLET_MARKER = HAPPENING_MARKER;
+
+/** The measure a column's prose gets inside the box: 522 — the box less its two
+ *  paddings and the marker column. The longest bullet in `./content.ts` is 60
+ *  characters — ≈373px of 12.5px serif, 71% of it — so every bullet is one line. */
+export const SHIFT_COL_MEASURE = SHIFT_COL_WIDTH - 2 * SHIFT_BOX_PAD_X - SHIFT_BULLET_INDENT;
 
 /** A column title's box: 20. 15px Source Serif 4 at weight 600 on 1.3 is 19.50. */
 export const SHIFT_COL_TITLE_HEIGHT = 20;
 
-/** The air between a column's title and its first bullet: 9. Not exported. */
-const SHIFT_TITLE_TO_BULLETS = 9;
+/** The air between a column's title and its first bullet: 8. Not exported. */
+const SHIFT_TITLE_TO_BULLETS = 8;
 
-/** The first bullet's shelf: 476. */
-export const SHIFT_BULLET_Y0 =
-  SHIFT_COL_TOP + SHIFT_COL_TITLE_HEIGHT + SHIFT_TITLE_TO_BULLETS;
+/** The title's own shelf inside the box: 12 — the box's top padding. */
+export const SHIFT_TITLE_INSET = SHIFT_BOX_PAD_Y;
+
+/** The first bullet's shelf, inside the box: 40. */
+export const SHIFT_BULLET_INSET =
+  SHIFT_TITLE_INSET + SHIFT_COL_TITLE_HEIGHT + SHIFT_TITLE_TO_BULLETS;
+
+/** The first bullet's shelf on the stage: 473. */
+export const SHIFT_BULLET_Y0 = SHIFT_COL_TOP + SHIFT_BULLET_INSET;
 
 /** A ONE-line 12.5px serif row's box: 18. 12.5px on 1.4 is a 17.50 line box. */
 export const SHIFT_BULLET_HEIGHT = 18;
 
-/** The air between two bullets: 6. Not exported. */
-const SHIFT_BULLET_GAP = 6;
+/** The air between two bullets: 4 — 2 tighter than the rail cut, and the last of the
+ *  26px the border and the paddings cost. Not exported. */
+const SHIFT_BULLET_GAP = 4;
 
-/** One bullet to the next: 24. */
+/** One bullet to the next: 22. */
 export const SHIFT_BULLET_STEP = SHIFT_BULLET_HEIGHT + SHIFT_BULLET_GAP;
 
-/** The longest column: 4 bullets — the first one's. The second has three and simply
- *  ends higher; two columns of prose do not need to bottom out together. */
+/** The longest column: 4 bullets — the first one's. The second has three, and its BOX is
+ *  the same height regardless: two boxes side by side that bottom out at different
+ *  heights read as one of them being unfinished. */
 export const SHIFT_BULLET_MAX = 4;
 
-/** Where the deepest column ends: 566. Not exported. */
-const SHIFT_COLUMNS_BOTTOM =
-  SHIFT_BULLET_Y0 + (SHIFT_BULLET_MAX - 1) * SHIFT_BULLET_STEP + SHIFT_BULLET_HEIGHT;
+/**
+ * One shift box's height: 136 — cut for {@link SHIFT_BULLET_MAX} and used by BOTH
+ * columns, so the pair is one shelf top and bottom.
+ */
+export const SHIFT_BOX_HEIGHT =
+  SHIFT_BULLET_INSET +
+  (SHIFT_BULLET_MAX - 1) * SHIFT_BULLET_STEP +
+  SHIFT_BULLET_HEIGHT +
+  SHIFT_BOX_PAD_Y;
 
-/** The air between the columns and the sentence that closes the slide: 17. Not
+/** Where the two boxes end: 569. Not exported. */
+const SHIFT_COLUMNS_BOTTOM = SHIFT_COL_TOP + SHIFT_BOX_HEIGHT;
+
+/** The air between the boxes and the sentence that closes the slide: 16. Not
  *  exported. */
-const COLUMNS_TO_MINDSET = 17;
+const COLUMNS_TO_MINDSET = 16;
 
-/** The mindset row's shelf: 583 — the slide's last arrival, and one row rather than two
- *  because the clearance below it is {@link NAV_ZONE_CLEARANCE_SHIFT} = 24 and a
+/** The mindset row's shelf: 585 — the slide's last arrival, and one row rather than two
+ *  because the clearance below it is {@link NAV_ZONE_CLEARANCE_SHIFT} = 22 and a
  *  separate heading would eat all of it. */
 export const MINDSET_TOP = SHIFT_COLUMNS_BOTTOM + COLUMNS_TO_MINDSET;
 
@@ -474,10 +522,10 @@ export const MINDSET_LABEL_WIDTH = 152;
  *  84-character sentence is ≈711px in the 1032 the label leaves it. */
 export const MINDSET_HEIGHT = 25;
 
-/** Where the shift pose's lowest box ends: 608. Not exported. */
+/** Where the shift pose's lowest box ends: 610. Not exported. */
 const MINDSET_BOTTOM = MINDSET_TOP + MINDSET_HEIGHT;
 
-/** What is left between the closing sentence and the NavBar's hover band: 24px. */
+/** What is left between the closing sentence and the NavBar's hover band: 22px. */
 export const NAV_ZONE_CLEARANCE_SHIFT = NAV_ZONE_TOP - MINDSET_BOTTOM;
 
 // ═════════════════════ plate 1 · TOOLS, AND NO METHOD ════════════════════════
@@ -533,79 +581,121 @@ export const TOOL_GLYPHS: readonly ToolGlyph[] = [
 
 // ═════════════════════ plate 2 · TEN CONNECTORS, TWO LEFT ════════════════════
 //
-// THE ARITHMETIC IS THE PICTURE AND IT IS REAL DATA. `./content.ts`: "6 of 10 AI
-// connectors — scrapped, official versions replaced them in months", and "4 connectors"
-// among what held. The count moved once already (the 2026-08 recount); it is written in
-// ONE place here — {@link SURVIVOR_INDICES} — and {@link CONNECTOR_STRUCK} derives from
-// it, because a picture that disagreed with its own sentence would be the one fault on
-// this stage a room would take for a lie rather than for a design.
+// THE ARITHMETIC IS THE PICTURE AND IT IS THE COPY'S OWN. `./content.ts`: "8 of 10 AI
+// connectors — scrapped, official versions replaced them in months", and "2 connectors"
+// among what held. The count has moved twice now (the 2026-08 recount cut it to six of
+// ten; the owner's 2026-08-13 recount to eight); it is written in ONE place here —
+// {@link SURVIVOR_INDICES} — and {@link CONNECTOR_STRUCK} derives from it, because a
+// picture that disagreed with its own sentence would be the one fault on this stage a
+// room would take for a lie rather than for a design.
 //
-// TWO ROWS OF FIVE AND NOT ONE ROW OF TEN. The plate is 340 × 64 and a single row of ten
-// reads as a timeline, which is what the parent ledger already is. A 5 × 2 grid reads as
-// a SET, which is what ten connectors are.
+// A TURNING RING AND NO LONGER A 5 × 2 GRID. Ten connectors ride one closed ellipse and
+// go round it forever, and the whole plate is that one motion. Three reasons, in order:
+//
+//   · IT IS WHAT THE PHASE WAS. "BUILDING WITHOUT STRATEGY" is nine months of going
+//     round — build, get overtaken, build again — and a ring is that sentence drawn. A
+//     static grid says a set was owned; a ring says the set kept coming back round.
+//   · THE PLATE IS 340 × 64. A true circle inside 64px of height is a 48px figure in a
+//     340px box, so the "circular motion" this plate is cut for is an ELLIPSE — 150 × 18
+//     — which uses the whole plate and still reads as one closed orbit.
+//   · IT SURVIVES THE POSE WALK. The plates no longer freeze at pose 1 (see
+//     ./components/failures-pattern.css), so this figure is running whenever the slide
+//     is on the stage, and its 0% and 100% frames are the same frame.
+//
+// EIGHT LEAVE WHILE THE RING TURNS. Every node starts FILLED — ten orange squares going
+// round — and one at a time eight of them lose the fill, take a neutral border and a
+// struck diagonal, and keep riding the ring as empty boxes. The two that held stay
+// filled and keep breathing. Nothing is removed: ten were built, and the ring still
+// carries all ten.
 
-/** One connector node's box: 20 — square, 0px radius, the deck's own corner. Down from
- *  26 with the plate. */
-export const NODE_SIZE = 20;
+/** One connector node's box: 14 — square, 0px radius, the deck's own corner. Down from
+ *  20 with the move onto the ring, which spends the plate's height on the orbit. */
+export const NODE_SIZE = 14;
 
-/** Nodes across: 5. */
-export const NODE_COLS = 5;
+/** How many connectors were written: 10 — the number `./content.ts`'s own copy states
+ *  out loud ("8 of 10 AI connectors"). */
+export const NODE_COUNT = 10;
 
-/** Nodes down: 2. */
-export const NODE_ROWS = 2;
+/** The ring's centre: the plate's own, 170 × 32. */
+export const RING_CX = PLATE_WIDTH / 2;
+export const RING_CY = PLATE_HEIGHT / 2;
 
-/** How many connectors were written: 10 — derived, and the number `./content.ts`'s own
- *  copy states out loud ("6 of 10 AI connectors"). */
-export const NODE_COUNT = NODE_COLS * NODE_ROWS;
+/**
+ * The ring's radii: 150 × 18.
+ *
+ * BOTH ARE CUT AGAINST THE PLATE AND THE NODE THAT RIDES THEM. A node's half box is 7
+ * and the survivor's breathing ring adds 2 more, so the deepest mark on this plate sits
+ * at 32 + 18 + 9 = 59 of 64 and the widest at 170 + 150 + 9 = 329 of 340. Both clear,
+ * and `tests/unit/gap-failures-pattern.test.tsx` holds the arithmetic from the far end.
+ */
+export const RING_RX = 150;
+export const RING_RY = 18;
 
-/** The air between two nodes across: 55. Not exported. */
-const NODE_GAP_X = 55;
+/** The survivor's breathing ring, drawn outside the node's box: 2 a side. */
+export const NODE_RING_INSET = 2;
 
-/** The air between the two rows: 12 — even, so the 52px grid centres on the 64px plate
- *  at an integer coordinate (6) and no 1.2px stroke lands on a half pixel. */
-const NODE_GAP_Y = 12;
+/**
+ * The track, as a CSS `path()` argument — TWO half-arcs and a close, because `path()`
+ * has no ellipse primitive. Derived from the four constants above, so the dashed ellipse
+ * the plate paints under the nodes and the line the nodes actually travel can never
+ * disagree: `M 20 32 A 150 18 0 1 1 320 32 A 150 18 0 1 1 20 32 Z`.
+ *
+ * `offset-path: path(…)` resolves against the element's containing block — the plate's
+ * own 340 × 64 box — which is why every number here is in plate coordinates.
+ */
+export const RING_PATH =
+  `M ${RING_CX - RING_RX} ${RING_CY} ` +
+  `A ${RING_RX} ${RING_RY} 0 1 1 ${RING_CX + RING_RX} ${RING_CY} ` +
+  `A ${RING_RX} ${RING_RY} 0 1 1 ${RING_CX - RING_RX} ${RING_CY} Z`;
 
-/** The grid's left edge on the plate: 10 — centred, derived. */
-const NODE_X0 =
-  (PLATE_WIDTH - (NODE_COLS * NODE_SIZE + (NODE_COLS - 1) * NODE_GAP_X)) / 2;
+/** One turn of the ring: 24s. The ellipse is ≈612px round, so a node moves ≈25px a
+ *  second — slow enough to be ambient under a spoken sentence, fast enough that a room
+ *  sees it move without watching for it. */
+export const RING_TURN_S = 24;
 
-/** The grid's top edge on the plate: 6 — centred, derived. */
-const NODE_Y0 =
-  (PLATE_HEIGHT - (NODE_ROWS * NODE_SIZE + (NODE_ROWS - 1) * NODE_GAP_Y)) / 2;
-
-/** Node `index`'s top-left corner on the plate, reading left to right, top row first. */
-export function nodeAt(index: number): { x: number; y: number } {
+/**
+ * Node `index`'s resting place on the ring, as a percentage of the path: 0, 10, … 90.
+ *
+ * EVENLY SPACED BY DISTANCE ALONG THE PATH and not by angle — `offset-distance` measures
+ * arc length, so ten equal steps are ten equal gaps whatever the ellipse does at its
+ * ends. It is also the animation's start frame: each node runs its own turn from here to
+ * here + 100%, which on a closed path is the same point, so the loop has no seam.
+ *
+ * @throws on an eleventh — see the guard's own message.
+ */
+export function ringStart(index: number): number {
   if (!Number.isInteger(index) || index < 0 || index >= NODE_COUNT) {
     throw new Error(
-      `nodeAt: no connector ${index} — the plate draws ${NODE_COUNT}, which is the ` +
-        `count ./content.ts states ("6 of 10 AI connectors").`,
+      `ringStart: no connector ${index} — the plate draws ${NODE_COUNT}, which is the ` +
+        `count ./content.ts states ("8 of 10 AI connectors").`,
     );
   }
-  const col = index % NODE_COLS;
-  const row = Math.floor(index / NODE_COLS);
-  return { x: NODE_X0 + col * (NODE_SIZE + NODE_GAP_X), y: NODE_Y0 + row * (NODE_SIZE + NODE_GAP_Y) };
+  return (index * 100) / NODE_COUNT;
 }
 
 /**
- * The four that survived, by index: 1, 4, 5 and 8 — two per row, and NO COLUMN HOLDS
- * TWO, so the four read as four that happened to hold rather than as a pattern in the
- * grid. (1 and 3 with 6 and 8 was the first cut and it fails exactly that test: the two
- * pairs stack, and a 5×2 grid with two full columns lit reads as a designed result.)
+ * The two that survived, by index: 2 and 6.
+ *
+ * NEITHER ADJACENT NOR OPPOSITE. Two neighbours on the ring read as one surviving pair —
+ * a corner of the set that happened to be built well — and 0 with 5, or any other pair
+ * four steps apart, sits diametrically opposite and reads as a designed result. Two and
+ * six are three steps apart one way and seven the other: two that happened to hold.
  */
-export const SURVIVOR_INDICES: readonly number[] = [1, 4, 5, 8];
+export const SURVIVOR_INDICES: readonly number[] = [2, 6];
 
-/** The six that are gone, in strike order — derived from {@link SURVIVOR_INDICES}, so
- *  the picture's arithmetic can only ever be 10 − 4. */
+/** The eight that are gone, in strike order — derived from {@link SURVIVOR_INDICES}, so
+ *  the picture's arithmetic can only ever be 10 − 2. */
 export const CONNECTOR_STRUCK: readonly number[] = Array.from(
   { length: NODE_COUNT },
   (_, i) => i,
 ).filter((i) => !SURVIVOR_INDICES.includes(i));
 
 /** How long the plate waits before the first strike lands: 900ms — past the card's own
- *  arrival, so the room sees ten connectors standing before any of them is crossed out. */
+ *  arrival, so the room sees TEN FILLED connectors going round before any of them is
+ *  crossed out. That first second is the whole reason the picture works. */
 export const STRIKE_START_MS = 900;
 
-/** The gap between two strikes: 105ms. Six of them run in 525ms. */
+/** The gap between two strikes: 105ms. Eight of them run in 735ms. */
 export const STRIKE_STEP_MS = 105;
 
 // ═════════════════════ plate 3 · ONE GATE, AND A QUEUE ═══════════════════════

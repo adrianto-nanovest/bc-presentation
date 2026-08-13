@@ -897,9 +897,19 @@ export const gapNoSopContent = {
 //     "the presentation admits failure, which makes Nanovest credible as a guide, not a
 //     sales pitch."
 //
-// Every quantity below — five-plus tools, three quarters, six of ten connectors, the
-// four company-specific survivors — comes from those two documents and from nowhere
-// else. Nothing here is rounded up and nothing here is a number this deck measured.
+// Every quantity below — five-plus tools, three quarters, ten connectors — comes from
+// those two documents and from nowhere else. Nothing here is rounded up and nothing here
+// is a number this deck measured.
+//
+// ONE QUANTITY IS THE OWNER'S AND NOT THE RESEARCH'S, and it is the only one: THE
+// CONNECTOR SPLIT IS 8 SCRAPPED AND 2 HELD. Both research documents say six of ten were
+// scrapped and four company-specific ones survived; the owner's recount of 2026-08-13
+// cut the survivors to two, and the owner is the primary source for their own record —
+// the research is a transcription of it. It is written here in ONE place, and the
+// picture on `gap-failures-pattern`'s second plate derives its arithmetic from a single
+// list of survivors in `./gap-failures-pattern-geometry.ts`, so the ring and the sentence
+// can only ever agree. ANYONE RECONCILING THIS DECK AGAINST THE RESEARCH FILES WILL FIND
+// THE OLDER SPLIT THERE: this note is the reconciliation.
 //
 // THE TITLES, SUBTITLES, LESSONS AND SHIFT ARE THE RESEARCH'S OWN HEADINGS, and that is
 // a 2026-08-13 decision that reversed an earlier one. The retired §6.3 block re-cut the
@@ -1144,14 +1154,14 @@ const FAILURE_CARDS: Three<FailureCard> = [
         restKw: ["better solutions shipped later"],
       },
       {
-        label: "6 of 10 AI connectors",
+        label: "8 of 10 AI connectors",
         rest: "scrapped — official versions replaced them in months",
         restKw: ["official versions replaced them"],
       },
       {
         label: "Only the company-specific held",
-        rest: "4 connectors, the business workflows, our AI strategy",
-        restKw: ["4 connectors"],
+        rest: "2 connectors, the business workflows, our AI strategy",
+        restKw: ["2 connectors"],
       },
     ],
     learned: "Research first. Build only what is uniquely ours.",
@@ -1257,12 +1267,19 @@ export const gapFailuresPatternContent = {
   shiftEyebrow: "THE SHIFT",
 
   /**
-   * What actually changed, in two columns. LABEL headings, PROSE bullets.
+   * What actually changed, in two boxes. LABEL headings, PROSE bullets.
    *
    * TWO COLUMNS AND NOT ONE LIST, because the two are the SAME move seen from two
    * ends — what we made changed, and so did what we were for. Stacked, the second
    * heading reads as the next thing that happened; side by side it reads as the other
    * half of the first.
+   *
+   * AND THEY ARE DRAWN AS TWO BOXES (owner call, 2026-08-13). A rail down the left of
+   * each half drew the pair as two lists that happen to be adjacent; a border closes
+   * each half into a thing with an inside, which is what makes them read as two objects
+   * being COMPARED. The bullets take the record's own copper marker for the same reason
+   * — two lists on one stage are marked the same way or they are not the same kind of
+   * list. `../gap-failures-pattern-geometry.ts` pays for the box in the gaps above it.
    *
    * NO SECOND PERSON, and none of §6.5's vocabulary: the shift is still a report on
    * what we did, and the ladder that follows has to arrive un-pre-spent.
@@ -1293,10 +1310,19 @@ export const gapFailuresPatternContent = {
    *  the band below the columns has 27px of clearance and no second shelf in it. */
   mindsetLabel: "THE MINDSET SHIFT",
 
-  /** The slide's last arrival: one question traded for another. PROSE. */
+  /**
+   * The slide's last arrival: one question traded for another. PROSE.
+   *
+   * BOTH QUESTIONS ARE KEYWORDS, and that is a 2026-08-13 owner call reversing a
+   * one-keyword cut. The sentence is a TRADE — this one for that one — and lighting only
+   * the second half made it read as a single claim with a run-up, so the room heard the
+   * new question without hearing what it replaced. Two keywords is inside the deck's
+   * 1–3 rule (`feedback_keyword_highlighting.md`), and the words between them —
+   * "stopped asking" and "started asking" — are what still separates them.
+   */
   mindset:
     "We stopped asking “how do we build this?” and started asking “how do we enable this?”",
-  mindsetKw: ["“how do we enable this?”"],
+  mindsetKw: ["“how do we build this?”", "“how do we enable this?”"],
 
 } as const;
 
