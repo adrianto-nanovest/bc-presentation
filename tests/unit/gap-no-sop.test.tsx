@@ -43,17 +43,21 @@ import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from "vit
 import { useDeck } from "@/deck/DeckContext";
 import { SlideHarness } from "../support/slide-harness";
 import { restoreLocation } from "../harvest/deck-numbering";
-import { BRANDS, type Brand, type VariantId } from "@/deck-variants";
+// `BRANDS` and `Brand` left with D.4's brand walk at the `invest` merge — see `d4Strings`.
+import { type VariantId } from "@/deck-variants";
 import { GapNoSop, gapNoSopSlide } from "@/slides/leader-gap/gap-no-sop";
 import { gapHardestPartContent, gapNoSopContent } from "@/slides/leader-gap/content";
 // THE OTHER TWO PASSES, AS MODULES. D.3 is `investChickenEggContent`; D.4 is
-// `investSecurityContent` plus the brand-resolved callback its beat 1 prints. Imported
-// so §6.2's disjointness is checked against what those slides ACTUALLY say today rather
-// than against a copy of it kept here.
+// `investGovernanceContent`. Imported so §6.2's disjointness is checked against what those
+// slides ACTUALLY say today rather than against a copy of it kept here.
+//
+// D.4 WAS TWO IMPORTS AND IS ONE. It used to be `investSecurityContent` plus the brand-resolved
+// on-prem callback its beat 1 printed; the `invest` merge folded that slide and the one behind it
+// into `invest-governance` and dropped both brand axes with them, so there is no resolver left to
+// walk and no arm this file has to reach for.
 import {
   investChickenEggContent,
-  investSecurityContent,
-  onPremCallbackFor,
+  investGovernanceContent,
 } from "@/slides/leader-invest/content";
 import {
   FRAY_STRAND_COUNT,
@@ -140,15 +144,18 @@ const EXPECTED: readonly Expectation[] = [
     kind: "static",
     when: () => true,
   })),
+  // THE ISSUED ROW COMPACTS ONE BEAT BEFORE THE QUESTION ROW — the 2026-08-14 re-cut's
+  // one structural change, and the thing that pays for 130px question cards. The card
+  // face is pose 0's alone; from pose 1 the row is three receipts.
   ...C.issued.map<Expectation>((item) => ({
     id: `no-sop-issued-hero-${item.id}`,
     kind: "gate",
-    when: (p) => p < 2,
+    when: (p) => p < 1,
   })),
   ...C.issued.map<Expectation>((item) => ({
     id: `no-sop-issued-chip-${item.id}`,
     kind: "gate",
-    when: (p) => p >= 2,
+    when: (p) => p >= 1,
   })),
   { id: "no-sop-dot-label-issued", kind: "static", when: () => true },
   { id: "no-sop-unwritten-eyebrow", kind: "gate", when: (p) => p >= 1 },
@@ -225,32 +232,39 @@ const authoredStrings = (): string[] => walkStrings(C);
 const d3Strings = (): string[] => walkStrings(investChickenEggContent);
 
 /**
- * D.4's corpus — shadow AI as EXPOSURE (§6.7 beat 2, gh#58), including every brand's
- * on-prem callback.
+ * D.4's corpus — the account nobody owns, as EXPOSURE (§6.7 beat 2).
  *
- * WALKED OVER `BRANDS` AND NOT OVER A LIST OF TWO. The callback table is deliberately not
- * exported, so the only honest way to reach all three arms is to resolve each registered
- * brand — which is also what makes this "every string D.4 can print in any room".
+ * ONE MODULE AND NO BRAND WALK, which is what the merge bought. This used to resolve the
+ * on-prem callback for every registered brand, because the callback table was deliberately not
+ * exported and resolving each arm was the only honest way to reach "every string D.4 can print
+ * in any room". `invest-governance` has no brand axis at all — it names no organisation and no
+ * date — so its module IS every string it can print, in every room.
  */
-const d4Strings = (): string[] => [
-  ...walkStrings(investSecurityContent),
-  ...(Object.keys(BRANDS) as Brand[]).flatMap((brand) => walkStrings(onPremCallbackFor(brand))),
-];
+const d4Strings = (): string[] => walkStrings(investGovernanceContent);
 
 /** B.1's corpus — the slide one figure in front of this one, in the same run. */
 const b1Strings = (): string[] => walkStrings(gapHardestPartContent);
 
-/** The TWO PROSE strings, each with the `*Kw` sibling the copy module pairs it with.
- *  Two and not four: the 2026-08-11 redesign cut the two condition lines — the
- *  presenter says those sentences, and the fray draws them. */
+/**
+ * The FIVE PROSE strings, each with the `*Kw` sibling the copy module pairs it with.
+ *
+ * FIVE AND NOT TWO since the 2026-08-14 re-cut: the three issued cards each carry one
+ * line under their own mono title, which is `gap-failures-pattern`'s card grammar. The
+ * rule that lets them in is the one that kept the old condition band out — prose is
+ * allowed UNDER a title inside a card, and refused as a band of sentences across the
+ * stage. The presenter still says every connective sentence.
+ */
 const PROSE: ReadonlyArray<readonly [string, string, readonly string[]]> = [
   ["headline", C.headline, C.headlineKw],
   ["closer", C.closer, C.closerKw],
+  ...C.issued.map(
+    (item) => [`issued.${item.id}.line`, item.line, item.lineKw] as readonly [string, string, readonly string[]],
+  ),
 ];
 
-/** The TWENTY LABEL strings, which carry no `*Kw` and may not gain one. Written out as
- *  a list on purpose: together with `PROSE` above it is checked against what the STAGE
- *  actually prints, so a twenty-third string has to pick a side before it can render. */
+/** The TWENTY-TWO LABEL strings, which carry no `*Kw` and may not gain one. Written out
+ *  as a list on purpose: together with `PROSE` above it is checked against what the STAGE
+ *  actually prints, so a twenty-eighth string has to pick a side before it can render. */
 const LABELS: readonly string[] = [
   C.figLabel,
   C.issuedEyebrow,
@@ -258,9 +272,10 @@ const LABELS: readonly string[] = [
   C.conditionEyebrow,
   C.issuedDotLabel,
   C.unwrittenDotLabel,
-  ...C.issued.map((item) => item.label),
-  ...C.issued.map((item) => item.short),
-  ...C.questions.map((item) => item.label),
+  C.blankNote,
+  ...C.issued.map((item) => item.title),
+  ...C.questions.map((item) => item.domain),
+  ...C.questions.map((item) => item.ask),
   ...C.questions.map((item) => item.short),
 ];
 
@@ -284,30 +299,47 @@ function figLabelText(container: HTMLElement): string {
 }
 
 /**
- * What the stage prints, read off the DOM — one entry per type-carrying element. Every
- * box holds BOTH its faces at every pose (the crossfade is opacity, not markup), so
- * the census reads the faces rather than the boxes: a box's own textContent would be
- * two strings concatenated.
+ * What the stage prints, read off the DOM — ONE ENTRY PER TYPE-CARRYING ELEMENT, and
+ * since the 2026-08-14 re-cut that means one entry per ROW inside a card rather than one
+ * per card face: a card face's own `textContent` is now three strings concatenated.
+ *
+ * Every box holds BOTH its faces at every pose (the crossfade is opacity, not markup),
+ * so both faces of everything are read at whatever pose the caller mounted.
+ *
+ * IT RETURNS DUPLICATES ON PURPOSE, and the census below compares SETS for that reason.
+ * Two strings are deliberately printed in more than one place: an issued card's `title`
+ * is also its chip (the receipt may not reword the card), and `blankNote` is the same
+ * note in all four empty fields (the sameness is the argument). Neither is a copy
+ * defect, and both are asserted as identities of their own further down.
  */
-function stagePrintedStrings(container: HTMLElement): string[] {
-  const heading = container.querySelector("h1")?.textContent ?? "";
-  const faces = [
+function stageRowIds(): string[] {
+  return [
     "no-sop-issued-eyebrow",
     "no-sop-unwritten-eyebrow",
     "no-sop-condition-eyebrow",
     "no-sop-dot-label-issued",
     "no-sop-dot-label-unwritten",
-    ...C.issued.flatMap((item) => [`no-sop-issued-hero-${item.id}`, `no-sop-issued-chip-${item.id}`]),
+    ...C.issued.flatMap((item) => [
+      `no-sop-issued-title-${item.id}`,
+      `no-sop-issued-line-${item.id}`,
+      `no-sop-issued-chip-${item.id}`,
+    ]),
     ...C.questions.flatMap((item) => [
-      `no-sop-question-hero-${item.id}`,
+      `no-sop-question-domain-${item.id}`,
+      `no-sop-question-ask-${item.id}`,
+      `no-sop-blank-note-${item.id}`,
       `no-sop-question-chip-${item.id}`,
     ]),
     "no-sop-closer",
   ];
+}
+
+function stagePrintedStrings(container: HTMLElement): string[] {
+  const heading = container.querySelector("h1")?.textContent ?? "";
   return [
     heading,
     figLabelText(container),
-    ...faces.map((id) => screen.getByTestId(id).textContent ?? ""),
+    ...stageRowIds().map((id) => screen.getByTestId(id).textContent ?? ""),
   ];
 }
 
@@ -411,35 +443,56 @@ describe("shadow AI as a CONDITION, argued over the copy rather than named", () 
       "who-hears",
     ]);
     for (const item of C.issued) {
-      for (const face of [item.label, item.short]) {
+      for (const face of [item.title, item.line]) {
         expect(face, item.id).not.toMatch(/\?/);
         expect(face, `${item.id} is a thing done, not a thing missing`).not.toMatch(
           /\b(no|not|never|without|failed|missing)\b/i,
         );
       }
-      expect(item.label.length, item.id).toBeGreaterThan(20);
+      // The card's title is a NAME (mono caps) and its line is the fact under it.
+      expect(item.title, item.id).toBe(item.title.toUpperCase());
+      expect(item.line.length, item.id).toBeGreaterThan(20);
+      // ASD-STE100's own limit on a simple sentence, applied to every line on the stage:
+      // twenty words is the standard's ceiling and none of these needs half of it.
+      expect(item.line.split(/\s+/).length, `${item.id} runs long`).toBeLessThan(12);
     }
-    // EVERY QUESTION ASKS ON BOTH FACES — the hero sentence in the first person singular
+    // EVERY QUESTION ASKS ON BOTH FACES — the card sentence in the first person singular
     // of the person at the desk, the chip as the same question compressed. That is the
     // one place "I" is allowed on this stage, and the sweep below proves it is the ONLY
     // place, so the slide never slips into §6.3's first-person story.
     for (const item of C.questions) {
-      expect(item.label, item.id).toMatch(/\?$/);
+      expect(item.ask, item.id).toMatch(/\?$/);
       expect(item.short, `${item.id}'s chip still asks`).toMatch(/\?$/);
+      expect(item.domain, `${item.id}'s domain is a mono label`).toMatch(/^[A-Z]+$/);
+      expect(item.ask.split(/\s+/).length, `${item.id} runs long`).toBeLessThan(10);
     }
-    const questionLabels = new Set(C.questions.map((item) => item.label));
+    const asks = new Set(C.questions.map((item) => item.ask));
     for (const copy of authoredStrings()) {
-      if (questionLabels.has(copy)) continue;
+      if (asks.has(copy)) continue;
       expect(copy, `first person outside a question: ${JSON.stringify(copy)}`).not.toMatch(
         /\bI\b|\bmy\b|\bI'm\b|\bI've\b/,
       );
     }
-    // The escalation down the grid — permission, prohibition, arbitration, disclosure —
-    // is the ORDER, and it is the argument rather than a sort.
-    expect(C.questions[0].label).toMatch(/\bmay I\b/);
-    expect(C.questions[1].label).toMatch(/\bmay never\b/);
-    expect(C.questions[2].label).toMatch(/\bWho decides\b/);
-    expect(C.questions[3].label).toMatch(/\bWho do I tell\b/);
+    // THE ESCALATION IS PRINTED SINCE THE 2026-08-14 RE-CUT, and it is the argument
+    // rather than a sort: permission → prohibition → arbitration → disclosure, one mono
+    // label per card, in the order the cards are read.
+    expect(C.questions.map((item) => item.domain)).toEqual([
+      "PERMISSION",
+      "PROHIBITION",
+      "ARBITRATION",
+      "DISCLOSURE",
+    ]);
+    expect(C.questions[0].ask).toMatch(/\bcan I\b/);
+    expect(C.questions[1].ask).toMatch(/\bmust stay out\b/);
+    expect(C.questions[2].ask).toMatch(/\bWho decides\b/);
+    expect(C.questions[3].ask).toMatch(/\bWho do I tell\b/);
+    // AND THE SUBJECT IS SPELLED EXACTLY ONCE, ON THE FIRST ASK. The first cut said "it"
+    // four times and never said what "it" was, which is the single biggest reason the
+    // band read as a riddle; naming it once and pronouncing it afterwards is what keeps
+    // the other three short. A fifth question that re-spelled it would fail here.
+    expect(authoredStrings().filter((copy) => /\bthe AI\b/.test(copy))).toEqual([
+      C.questions[0].ask,
+    ]);
   });
 
   test("makes no claim about what anybody DID with the tools, and none about exposure", () => {
@@ -459,7 +512,7 @@ describe("shadow AI as a CONDITION, argued over the copy rather than named", () 
     }
     // POSITIVE CONTROLS, fired against the two passes' own sentences rather than against
     // strings edited to make them fire: D.4's exposure line and D.3's confession.
-    expect(EXPOSURE.test(investSecurityContent.exposures[0].label)).toBe(true);
+    expect(EXPOSURE.test(investGovernanceContent.exposures[0].label)).toBe(true);
     expect(DID_IT.test(investChickenEggContent.workaround)).toBe(true);
     unmount();
 
@@ -522,23 +575,68 @@ const RESERVED: ReadonlyArray<readonly [string, RegExp, "D.3" | "D.4"]> = [
   ["use case", /\buse cases?\b/i, "D.3"],
   ["kill criterion", /\bkill criterion\b/i, "D.3"],
   ["spend cap", /\bspend cap\b/i, "D.3"],
-  // D.4 — the three destinations, the exposure, and the SOP the section recommends.
+  // D.4 — the three destinations, the exposure, and what closes it. FIVE AND NOT SIXTEEN:
+  // ten left at the `invest` merge and `retrofit` left on 2026-08-14 with D.4's thesis
+  // rewrite, and all eleven are in `RETIRED_D4_IMAGES` below, with the reason and their own
+  // control — because a token with no rendered owner cannot be held here without turning
+  // this list vacuous.
   ["the contract", /\bcontracts?\b/i, "D.4"],
-  ["consumer account", /\bconsumer accounts?\b/i, "D.4"],
   ["workspace", /\bworkspace\b/i, "D.4"],
-  ["self-hosted", /\bself-host\w*\b/i, "D.4"],
-  ["on-prem", /\bon-prem\w*\b/i, "D.4"],
-  ["the frontier", /\bfrontier\b/i, "D.4"],
   ["hardware", /\bhardware\b/i, "D.4"],
   ["the vendor", /\bvendors?\b/i, "D.4"],
-  ["shadow AI", /\bshadow\b/i, "D.4"],
-  ["administers", /\badminister\w*\b/i, "D.4"],
   ["cannot produce", /\bproduce\b/i, "D.4"],
-  ["the SOP", /\bSOPs?\b/i, "D.4"],
-  ["governance", /\bgovernance\b/i, "D.4"],
-  ["retrofit", /\bretrofit\b/i, "D.4"],
-  ["Culture, Risk, Governance, Ethics", /\bethics\b/i, "D.4"],
-  ["Sinar Mas", /\bSinar Mas\b/i, "D.4"],
+];
+
+/**
+ * D.4's images that NOTHING IN THE DECK RENDERS ANY MORE — refused here anyway, and said
+ * out loud rather than quietly deleted from the list above.
+ *
+ * THE `invest` MERGE IS WHY. §6.7's D.4 and D.5 were one argument told from two desks and
+ * are one slide now, `invest-governance`, on a stage that DRAWS the condition instead of
+ * naming it: the leaking account is a door with something coming out of it, the three
+ * destinations are three objects, and the four governance domains left with the provenance
+ * line they could not honestly ship without. Ten spellings went with that redraw.
+ *
+ * AND `retrofit` IS THE ELEVENTH, retired later and for a different reason. It was D.4's
+ * own token until 2026-08-14 — the closer read "Write the rules now. A retrofit is the same
+ * work, on somebody else's deadline." — and the owner cut the line for comprehension: the
+ * word reads as re-work rather than as a summons, and the sentence never named who owned the
+ * deadline. The thesis now says "not an investigation", which names it. So `retrofit` moved
+ * from `RESERVED` to here rather than being deleted: B.2 still may not reach for it, and the
+ * one word it used to guard is now unowned by any slide.
+ *
+ * SO THE OWNER IS A SPEC SECTION AND NOT A STRING, which is the shape
+ * `tests/unit/invest-base-rates.test.tsx` already keeps for exactly this case. Each token is
+ * controlled against `RETIRED_D4_SENTENCES` — the copy the two parent slides really shipped,
+ * plus the one thesis D.4 itself retired, transcribed here because there is nowhere else left
+ * to read any of it from — and each is asserted NOT to be rendered by either surviving pass,
+ * which is what keeps the control honest instead of assumed. The refusal matters more than it
+ * did: a later author is now MORE likely to reach for "shadow AI" or "the SOP", not less,
+ * because §6.2 still uses both words and no slide prints either.
+ */
+const RETIRED_D4_IMAGES: ReadonlyArray<readonly [string, RegExp]> = [
+  ["consumer account", /\bconsumer accounts?\b/i],
+  ["self-hosted", /\bself-host\w*\b/i],
+  ["on-prem", /\bon-prem\w*\b/i],
+  ["the frontier", /\bfrontier\b/i],
+  ["shadow AI", /\bshadow\b/i],
+  ["administers", /\badminister\w*\b/i],
+  ["the SOP", /\bSOPs?\b/i],
+  ["governance", /\bgovernance\b/i],
+  ["Culture, Risk, Governance, Ethics", /\bethics\b/i],
+  ["Sinar Mas", /\bSinar Mas\b/i],
+  ["retrofit", /\bretrofit\b/i],
+];
+
+/** The retired copy the patterns above are fired against — the two parent slides' own
+ *  sentences, plus D.4's own thesis of 2026-08-05 to 2026-08-14 (the last line), transcribed
+ *  because the modules and the revisions that held them are gone. */
+const RETIRED_D4_SENTENCES: readonly string[] = [
+  "PERSONAL CONSUMER ACCOUNT · SELF-HOSTED / ON-PREM — your own hardware, and not the frontier.",
+  "It is not the vendor. It is shadow AI, and nobody administers it.",
+  "WHERE THE SOP STARTS — Culture · Risk · Governance · Ethics.",
+  "The four domains we proposed to Sinar Mas Group HR — not a Group requirement.",
+  "Write the rules now. A retrofit is the same work, on somebody else's deadline.",
 ];
 
 /**
@@ -553,14 +651,20 @@ const RESERVED: ReadonlyArray<readonly [string, RegExp, "D.3" | "D.4"]> = [
  * REMEASURED 2026-08-11 with the fray redesign: `answers` and `where` left with the two
  * condition lines, and none of the new chip or dot-caption labels brought a shared word
  * in — the chips are the hero faces' own vocabulary compressed.
+ *
+ * REMEASURED AGAIN AT THE `invest` MERGE, and it went DOWN from six to four, which is the
+ * direction worth noting. `already`, `organisation` and `there` left because the two parent
+ * slides' provenance lines left with them — "already runs", "this deck names no
+ * organisation", "the anchor this room does not have" were all attribution copy, and
+ * `invest-governance` carries no attribution at all. `someone` joined, from D.4's second
+ * exposure ("Revoke access when someone leaves"), which is the same ordinary word its parent
+ * spent as "when the person leaves".
  */
 const ORDINARY_SHARED: readonly string[] = [
-  "already",
   "asked",
   "leaves",
   "nobody",
-  "organisation",
-  "there",
+  "someone",
 ];
 
 /** Every word of five letters or more in a corpus, lower-cased. Five, because below it
@@ -599,11 +703,18 @@ describe("§6.2 · the third pass shares no image and no statistic with the othe
     expect(stage).not.toMatch(/\d/);
     unmount();
 
-    // POSITIVE CONTROL, AND IT IS THE POINT OF THE RULE: both other passes DO carry
-    // numbers — D.3's 30-day window, D.4's two index gaps and its dated sources — so
-    // "no digit here" is a real disjointness rather than a property every slide has.
+    // POSITIVE CONTROL, AND IT IS THE POINT OF THE RULE: the pass in front of this one DOES
+    // carry a number — D.3's 30-day pilot window — so "no digit here" is a real
+    // disjointness rather than a property every slide has.
     expect(d3Strings().some((copy) => /\d/.test(copy))).toBe(true);
-    expect(d4Strings().some((copy) => /\d/.test(copy))).toBe(true);
+    // AND D.4 CARRIES NONE EITHER, WHICH IS NEW AND IS ASSERTED RATHER THAN LEFT BLANK. Until
+    // the `invest` merge it printed two index gaps and four dated sources, and this line was a
+    // second positive control. `invest-governance` is a standalone deliverable: it names no
+    // date, no price and no benchmark, so the merge dropped every digit it had. Held as an
+    // equality rather than deleted, because a number reappearing on that stage is exactly the
+    // change §6.2's escalation wants a test to notice — it would mean the slide had gained a
+    // source, and a source is what this run's epistemics are about.
+    expect(d4Strings().some((copy) => /\d/.test(copy))).toBe(false);
   });
 
   test("uses none of D.3's or D.4's reserved images — and every pattern fires", () => {
@@ -612,7 +723,10 @@ describe("§6.2 · the third pass shares no image and no statistic with the othe
 
     const { container, unmount } = renderSlide(3);
     const stage = stageTextWithoutFigLabel(container);
-    for (const [name, pattern, owner] of RESERVED) {
+    for (const [name, pattern, owner] of [
+      ...RESERVED,
+      ...RETIRED_D4_IMAGES.map(([n, p]) => [n, p, "D.4 (retired)"] as const),
+    ]) {
       for (const copy of authored) {
         expect(pattern.test(copy), `${owner}'s "${name}" in ${JSON.stringify(copy)}`).toBe(false);
       }
@@ -620,7 +734,7 @@ describe("§6.2 · the third pass shares no image and no statistic with the othe
     }
     unmount();
 
-    // EVERY PATTERN FIRED AGAINST THE SLIDE IT WAS READ OFF. Thirty-one regexes that
+    // EVERY PATTERN FIRED AGAINST THE SLIDE IT WAS READ OFF. Twenty-one regexes that
     // matched nothing would make the rule above pass on copy lifted verbatim from either
     // pass — so each one is checked against that pass's REAL strings, not against a
     // sentence written here to make it fire.
@@ -632,6 +746,25 @@ describe("§6.2 · the third pass shares no image and no statistic with the othe
         corpus.some((copy) => pattern.test(copy)),
         `"${name}" is supposed to be ${owner}'s, but ${owner} does not print it`,
       ).toBe(true);
+    }
+    // THE RETIRED TEN, controlled against the copy the two parent slides shipped — and
+    // asserted NOT rendered by either surviving pass, which is the split that keeps the
+    // control honest rather than assumed. A token that came back on D.3's or D.4's stage
+    // belongs in `RESERVED` and fails here by name.
+    for (const [name, pattern] of RETIRED_D4_IMAGES) {
+      expect(
+        RETIRED_D4_SENTENCES.some((line) => pattern.test(line)),
+        `"${name}" fires on nothing at all — it cannot be guarding anything`,
+      ).toBe(true);
+      for (const [key, corpus] of [
+        ["D.3", d3],
+        ["D.4", d4],
+      ] as const) {
+        expect(
+          corpus.some((copy) => pattern.test(copy)),
+          `"${name}" is rendered by ${key} after all — move it into RESERVED`,
+        ).toBe(false);
+      }
     }
   });
 
@@ -653,7 +786,7 @@ describe("§6.2 · the third pass shares no image and no statistic with the othe
     expect(shared.length).toBeLessThan(mine.size / 4);
     // AND THE SWEEP CATCHES A BORROWED IMAGE — fired with D.4's own exposure line, which
     // is the sentence this slide is closest to and furthest from.
-    const poached = longWords([investSecurityContent.exposureLine]);
+    const poached = longWords([investGovernanceContent.exposureLine]);
     expect([...poached].filter((word) => theirs.has(word)).length).toBeGreaterThan(0);
     expect([...poached].some((word) => !ORDINARY_SHARED.includes(word))).toBe(true);
   });
@@ -726,7 +859,7 @@ describe("the slide in front of it keeps its statistic and its vocabulary", () =
 // ── AC · every string reaches the stage, and every pose is complete ──────────
 
 describe("the stage prints exactly what the copy block authors", () => {
-  test("all twenty-two strings are in the DOM at the canonical pose", () => {
+  test("all twenty-seven strings are in the DOM at the canonical pose", () => {
     const { container, unmount } = renderSlide(gapNoSopSlide.canonicalPose);
 
     // THE HEADLINE AND THE FIG LABEL, which are the slide file's rather than the
@@ -735,23 +868,37 @@ describe("the stage prints exactly what the copy block authors", () => {
     expect(figLabelText(container)).toBe(C.figLabel);
     expect(C.figLabel).toBe("THE RULE NOBODY WROTE");
 
-    // …then every face that carries type, compared against the string it was given.
+    // …then every ROW that carries type, compared against the string it was given.
     // Both faces of every box are in the DOM at every pose — the crossfade is opacity,
-    // not markup — so the hero sentences are checked at the CHIP pose deliberately.
+    // not markup — so the card rows are checked at the CHIP pose deliberately.
     for (const item of C.issued) {
-      expect(screen.getByTestId(`no-sop-issued-hero-${item.id}`).textContent, item.id).toBe(
-        item.label,
+      expect(screen.getByTestId(`no-sop-issued-title-${item.id}`).textContent, item.id).toBe(
+        item.title,
       );
+      expect(screen.getByTestId(`no-sop-issued-line-${item.id}`).textContent, item.id).toBe(
+        item.line,
+      );
+      // THE RECEIPT IS THE CARD'S OWN NAME AND NOT A REWORDING OF IT — a chip that said
+      // something its card had not would be new copy arriving at the beat that exists to
+      // say the copy is already argued.
       expect(screen.getByTestId(`no-sop-issued-chip-${item.id}`).textContent, item.id).toBe(
-        item.short,
+        item.title,
       );
     }
     for (const item of C.questions) {
-      expect(screen.getByTestId(`no-sop-question-hero-${item.id}`).textContent, item.id).toBe(
-        item.label,
+      expect(screen.getByTestId(`no-sop-question-domain-${item.id}`).textContent, item.id).toBe(
+        item.domain,
+      );
+      expect(screen.getByTestId(`no-sop-question-ask-${item.id}`).textContent, item.id).toBe(
+        item.ask,
       );
       expect(screen.getByTestId(`no-sop-question-chip-${item.id}`).textContent, item.id).toBe(
         item.short,
+      );
+      // ONE NOTE, IN ALL FOUR FIELDS. The repetition is the argument: four cards, four
+      // fields, the same line in every one of them.
+      expect(screen.getByTestId(`no-sop-blank-note-${item.id}`).textContent, item.id).toBe(
+        C.blankNote,
       );
     }
     for (const [id, copy] of [
@@ -766,38 +913,54 @@ describe("the stage prints exactly what the copy block authors", () => {
     }
 
     // AND THE CENSUS IS EXACT IN BOTH DIRECTIONS: what the stage prints IS the
-    // twenty-two strings the keyword rule below partitions, no more and no fewer. A
-    // twenty-third string cannot render without landing in `PROSE` or in `LABELS` first.
-    expect(stagePrintedStrings(container).sort()).toEqual(printedStrings().sort());
+    // twenty-seven strings the keyword rule below partitions, no more and no fewer. A
+    // twenty-eighth string cannot render without landing in `PROSE` or in `LABELS`
+    // first. SETS, because two strings are printed in more than one place by design —
+    // `stagePrintedStrings` names both, and both are asserted as identities above.
+    expect(new Set(stagePrintedStrings(container))).toEqual(new Set(printedStrings()));
     expect(printedStrings()).toHaveLength(PROSE.length + LABELS.length);
-    expect(LABELS).toHaveLength(20);
+    expect(new Set(printedStrings()).size, "a label and a prose string may not collide").toBe(27);
+    expect(LABELS).toHaveLength(22);
     expect(ISSUED_COUNT).toBe(C.issued.length);
     expect(QUESTION_COUNT).toBe(C.questions.length);
     unmount();
   });
 
-  test("the four answer rules are EMPTY at every pose — the image, never filled", () => {
-    // THE SURVIVING HALF OF THE FIRST CUT'S IMAGE. A blank that gained content at any
-    // pose would be the stage answering the question the slide exists to say nobody
-    // answered — and it is part of the image §6.2 reserves to this pass, so it is
-    // checked at every stop and not only at the fullest one. THE PAIR IS ONE FACE now,
-    // by construction: the blank is a child of its question's hero face, so a question
-    // cannot arrive without its blank — what the first cut asserted as equal delays is
-    // an ancestry fact here.
+  test("the four answer fields are EMPTY at every pose — and each one says so", () => {
+    // THE SURVIVING HALF OF THE FIRST CUT'S IMAGE, WITH THE 2026-08-14 RE-CUT'S FIX ON
+    // TOP OF IT. A blank that gained content at any pose would be the stage answering the
+    // question the slide exists to say nobody answered — and it is part of the image §6.2
+    // reserves to this pass, so it is checked at every stop and not only at the fullest
+    // one. What the re-cut added is the two marks that say what the blank IS: a caret
+    // parked at its head and one dim mono note. The rule itself stays empty.
+    //
+    // THE FIELD IS ONE FACE WITH ITS QUESTION, by construction: rule, caret and note are
+    // all children of the question's own card face, so a question cannot arrive without
+    // the field that belongs to it.
     const { unmount } = renderSlide();
     for (const pose of POSES) {
       goToPose(pose);
       for (const item of C.questions) {
+        const face = screen.getByTestId(`no-sop-question-hero-${item.id}`);
         const blank = screen.getByTestId(`no-sop-answer-blank-${item.id}`);
         expect(blank.textContent, `${item.id} at pose ${pose}`).toBe("");
         expect(blank.children.length, `${item.id} at pose ${pose}`).toBe(0);
         expect(
-          screen.getByTestId(`no-sop-question-hero-${item.id}`).contains(blank),
+          face.contains(blank),
           `${item.id}'s blank belongs to its own question face`,
         ).toBe(true);
-        // One emphatic hairline in the blank tier, never anything brighter: the empty
-        // rule must stay the dimmest mark inside the box that holds it.
-        expect(blank.style.background).toBe("var(--copper-700)");
+        // DASHED AND NOT SOLID, in the blank tier and never anything brighter: a solid
+        // rule reads as a border, a dashed one reads as a line somebody was supposed to
+        // write on, and either way it must stay the dimmest mark in the card.
+        expect(blank.style.borderTop, item.id).toContain("dashed");
+        expect(blank.style.borderTop, item.id).toContain("var(--copper-700)");
+        // …and the two marks that name it, both inside the same face.
+        const caret = screen.getByTestId(`no-sop-caret-${item.id}`);
+        const note = screen.getByTestId(`no-sop-blank-note-${item.id}`);
+        expect(face.contains(caret) && face.contains(note), item.id).toBe(true);
+        expect(caret.textContent, "the caret is a mark, not a character").toBe("");
+        expect(caret.style.animation, `${item.id}'s caret still blinks`).toContain("no-sop-caret");
+        expect(note.textContent, item.id).toBe(C.blankNote);
       }
     }
     unmount();
@@ -867,6 +1030,13 @@ describe("the pose walk", () => {
     // (ancestry, held above). The spine's second segment mounts with the beat: the line
     // visibly STOPS where the writing stopped, evidence and verdict in one mark.
     goToPose(1);
+    // AND THE ISSUED ROW IS ALREADY A ROW OF RECEIPTS on this beat, which is the
+    // 2026-08-14 re-cut: what was handed out has been argued, the three cards have given
+    // their height to the questions, and no pose ever holds two hero bands at once.
+    for (const item of C.issued) {
+      expect(gateOpen(`no-sop-issued-chip-${item.id}`), item.id).toBe(true);
+      expect(gateOpen(`no-sop-issued-hero-${item.id}`), item.id).toBe(false);
+    }
     expect(gateDelay("no-sop-unwritten-eyebrow")).toBeLessThan(
       gateDelay(`no-sop-question-${C.questions[0].id}`),
     );
@@ -904,16 +1074,18 @@ describe("the pose walk", () => {
 
   test("mounts SVG for the diagram — and still zero SMIL, by construction", () => {
     // THE REDESIGN'S ONE STRUCTURAL TRADE: the first cut mounted no `<svg>` at all;
-    // this stage draws a step diagram and a fray, so it mounts one diagram svg plus one
-    // pictogram per box face — and closes the SMIL census the way the Capability Ladder
-    // next door closes it: every vector motion is a CSS animation (`no-sop-draw` is
-    // `gap-ladder-draw`'s idiom), which the global reduced-motion rule can squash, so
-    // there is no `<animate>` to gate at mount and nothing here reads matchMedia.
+    // this stage draws a step diagram, three live plates and a fray, so it mounts one
+    // diagram svg plus one drawing per box face — and closes the SMIL census the way the
+    // Capability Ladder next door closes it: every vector motion is a CSS animation
+    // (`no-sop-draw` is `gap-ladder-draw`'s idiom), which the global reduced-motion rule
+    // can squash, so there is no `<animate>` to gate at mount and nothing here reads
+    // matchMedia.
     for (const pose of POSES) {
       const { container, unmount } = renderSlide(pose);
       const svgs = container.querySelectorAll("svg");
-      // 1 diagram + 2 faces × (3 issued + 4 questions) — every face keeps its icon at
-      // every pose, because the crossfade is opacity and not markup.
+      // 1 diagram + 2 per box: an issued card carries its PLATE and its chip's icon, a
+      // question card its own icon and its chip's. Every face keeps its drawing at every
+      // pose, because the crossfade is opacity and not markup.
       expect(svgs.length, `pose ${pose}`).toBe(1 + 2 * (ISSUED_COUNT + QUESTION_COUNT));
       for (const svg of svgs) {
         expect(svg.getAttribute("aria-hidden"), "decorative, never read aloud").toBe("true");
@@ -988,16 +1160,26 @@ describe("prefers-reduced-motion: reduce", () => {
 // ── AC · the keyword rule: kw on prose only ──────────────────────────────────
 
 describe("the keyword rule", () => {
-  test("exactly the two prose strings carry a *Kw sibling, every keyword real", () => {
+  test("exactly the five prose strings carry a *Kw sibling, every keyword real", () => {
     // The directory's rule, stated at the top of `../../src/slides/leader-gap/content.ts`
-    // and applied here without an exception. PROSE is the headline and the closer —
-    // the redesign moved the two condition sentences to the presenter — and everything
-    // else is a LABEL. The four QUESTIONS are still the sharpest case (sentence-shaped,
-    // they would take emphasis happily) and they are labels, because four copper
-    // italics down one grid would rank four things the slide ranks by order alone.
+    // and applied here without an exception. PROSE is the headline, the closer and the
+    // three issued cards' lines; everything else is a LABEL. The four ASKS are still the
+    // sharpest case (sentence-shaped, they would take emphasis happily) and they are
+    // labels, because four copper italics down one grid would rank four things the slide
+    // ranks by order alone.
+    //
+    // TWO LEVELS, TWO ASSERTIONS. The top-level keys are still exactly two — the three
+    // card lines carry their keyword INSIDE the tuple, which is where the line lives —
+    // so the census is held at both levels or a `questionsKw` could hide one level down.
     const kwKeys = Object.keys(C).filter((k) => k.endsWith("Kw"));
     expect(kwKeys.sort()).toEqual(["closerKw", "headlineKw"]);
-    expect(kwKeys.sort()).toEqual(PROSE.map(([name]) => `${name}Kw`).sort());
+    for (const item of C.issued) {
+      expect(Object.keys(item).sort(), item.id).toEqual(["id", "line", "lineKw", "title"]);
+    }
+    // …and no question carries one at all.
+    for (const item of C.questions) {
+      expect(Object.keys(item).sort(), item.id).toEqual(["ask", "domain", "id", "short"]);
+    }
     for (const [name, copy, kws] of PROSE) {
       expect(Array.isArray(kws), name).toBe(true);
       expect(kws.length, `${name} carries no keyword`).toBeGreaterThan(0);
@@ -1005,9 +1187,9 @@ describe("the keyword rule", () => {
         expect(copy, `${name}Kw: "${kw}" is not in its prose`).toContain(kw);
       }
     }
-    // THE TWENTY LABELS CARRY NO SIBLING AT ALL, and the rule is held over the block's
-    // own keys rather than over a list of names: any `*Kw` key whose prose sibling is
-    // not one of the two above fails the census at the top of this test.
+    // THE TWENTY-TWO LABELS CARRY NO SIBLING AT ALL, and the rule is held over the
+    // block's own keys rather than over a list of names: any `*Kw` key whose prose sibling
+    // is not one of the two above fails the census at the top of this test.
     for (const forbidden of [
       "figLabelKw",
       "issuedEyebrowKw",
@@ -1015,6 +1197,7 @@ describe("the keyword rule", () => {
       "conditionEyebrowKw",
       "issuedDotLabelKw",
       "unwrittenDotLabelKw",
+      "blankNoteKw",
       "issuedKw",
       "questionsKw",
       "conditionLineKw",
@@ -1036,18 +1219,26 @@ describe("the keyword rule", () => {
       "no-sop-dot-label-issued",
       "no-sop-dot-label-unwritten",
       ...C.issued.flatMap((item) => [
-        `no-sop-issued-hero-${item.id}`,
+        `no-sop-issued-title-${item.id}`,
         `no-sop-issued-chip-${item.id}`,
       ]),
       ...C.questions.flatMap((item) => [
-        `no-sop-question-hero-${item.id}`,
+        `no-sop-question-domain-${item.id}`,
+        `no-sop-question-ask-${item.id}`,
         `no-sop-question-chip-${item.id}`,
+        `no-sop-blank-note-${item.id}`,
       ]),
     ];
     for (const id of labelIds) {
       expect(screen.getByTestId(id).querySelectorAll("em").length, `<em> inside label ${id}`).toBe(
         0,
       );
+    }
+    // …and the three card LINES do carry theirs, one `<em>` per keyword — the half of the
+    // partition that would otherwise pass because emphasis stopped rendering anywhere.
+    for (const item of C.issued) {
+      const ems = [...screen.getByTestId(`no-sop-issued-line-${item.id}`).querySelectorAll("em")];
+      expect(ems.map((em) => em.textContent), item.id).toEqual([...item.lineKw]);
     }
     // The fig label is a label too, and the only copper text on the stage that is not a
     // mono heading — it takes no emphasis either.
@@ -1202,8 +1393,8 @@ describe("both leader decks print the same stage", () => {
     expect(berau.text).toBe(gems.text);
     // Not vacuously: a stage that rendered nothing would also be equal.
     expect(berau.text).toContain(C.headline);
-    expect(berau.text).toContain(C.issued[0].label);
-    expect(berau.text).toContain(C.questions[QUESTION_COUNT - 1].label);
+    expect(berau.text).toContain(C.issued[0].line);
+    expect(berau.text).toContain(C.questions[QUESTION_COUNT - 1].ask);
     expect(berau.text).toContain(C.unwrittenDotLabel);
     expect(berau.text).toContain(C.closer);
   });

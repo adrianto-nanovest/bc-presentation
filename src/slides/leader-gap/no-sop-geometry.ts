@@ -3,30 +3,49 @@
 // prototype's variant D "BOXES × FRAY"; the prototype directory left the tree in the
 // same change).
 //
-// ONE SCENE, TWO STATES, AND EVERY BOX KEEPS ONE PAIR OF EDGES. The first cut was a
-// static diptych; this stage is a STEP DIAGRAM under two rows of boxes. The three
-// issued boxes and the four question boxes are HERO-sized while they are being argued
-// (poses 0–1) and compact into chip rows when the fray arrives (poses 2–3) — and the
-// compaction is a height/width collapse inside ONE left edge and ONE right edge
-// ({@link BAND_LEFT}, {@link BAND_RIGHT}), hero and chip alike, so nothing drifts
-// sideways while it shrinks. Below the boxes runs the SPINE: a rollout line that draws
-// to a first labelled dot (what was handed out), extends to a second (where the writing
-// stopped), and at the fray pose RISES into the freed space and fans out into two dozen
-// swaying private hairlines. The stopped-and-frayed line plus the question boxes'
-// EMPTY answer rules are §6.2's image for this pass — `./content.ts` records the
-// comparison against D.3's and D.4's.
+// RE-CUT 2026-08-14, OWNER CALL, AND THE THREE COMPLAINTS ARE WORTH RECORDING BECAUSE
+// EVERY NUMBER BELOW ANSWERS ONE OF THEM: the boxes did not look like `gap-failures-
+// pattern`'s or the Capability Ladder's next door (a grey `--neutral-800` panel against
+// their translucent black, and a box whose whole content was one sentence); POSE 0 WAS
+// MORE THAN HALF EMPTY STAGE (three 120px boxes over 300px of nothing); and the four
+// questions read as riddles with a hairline under them that said nothing about itself.
+// So the issued row is now a TRIPTYCH OF PLATE CARDS at pose 0 — a live picture over a
+// hairline over a mono title over one line of prose, which is `gap-failures-pattern`'s
+// card grammar exactly — and it CONTRACTS TO RECEIPTS one beat earlier than it used to,
+// at pose 1, which is what buys the question cards the height they need to carry a
+// domain label, a plain question, and an ANSWER FIELD that says what it is.
 //
-// FIGURE COORDINATES, NOT STAGE COORDINATES — the one convention change the redesign
-// makes, and the reason is the SVG: the spine, the fan and the marching closer line
-// live in one `<svg>` whose viewBox must agree with the boxes layered over it, so
-// everything below is authored in the space of a single figure wrapper the component
-// mounts at stage ({@link FIGURE_LEFT}, {@link FIGURE_TOP}) — `.slide-content`'s own
-// shelf. Add those two numbers to any coordinate below to get stage space; the floor
-// arithmetic at the bottom of this file does exactly that, because the NavBar band is
-// a STAGE fact.
+// ONE SCENE, TWO STATES PER BAND, AND EVERY BOX KEEPS ONE PAIR OF EDGES. Each of the
+// three issued boxes and the four question boxes is HERO-sized while it is being argued
+// and compacts into a chip when the argument moves on — and the compaction is a
+// height/width collapse inside ONE left edge and ONE right edge ({@link BAND_LEFT},
+// {@link BAND_RIGHT}), hero and chip alike, so nothing drifts sideways while it shrinks.
+// Below the boxes runs the SPINE: a rollout line that draws to a first labelled dot
+// (what was handed out), extends to a second (where the writing stopped), and at the
+// fray pose RISES into the freed space and fans out into two dozen swaying private
+// hairlines. The stopped-and-frayed line plus the question cards' EMPTY answer fields
+// are §6.2's image for this pass — `./content.ts` records the comparison against D.3's
+// and D.4's.
+//
+// THE TWO BANDS NO LONGER COMPACT ON THE SAME BEAT, which is the one structural change
+// in this re-cut and the reason the vertical budget below has three columns instead of
+// two:
+//
+//   pose 0 — issued cards HERO (a plate each). No question band yet.
+//   pose 1 — issued cards CHIP; the four question cards arrive HERO under them.
+//   pose 2 — question cards CHIP too; the spine rises and frays into the freed space.
+//   pose 3 — the marching line and the verdict, over the dimmed fan.
+//
+// FIGURE COORDINATES, NOT STAGE COORDINATES — the convention the redesign set, and the
+// reason is the SVG: the spine, the fan and the marching closer line live in one `<svg>`
+// whose viewBox must agree with the boxes layered over it, so everything below is
+// authored in the space of a single figure wrapper the component mounts at stage
+// ({@link FIGURE_LEFT}, {@link FIGURE_TOP}) — `.slide-content`'s own shelf. Add those two
+// numbers to any coordinate below to get stage space; the floor arithmetic at the bottom
+// of this file does exactly that, because the NavBar band is a STAGE fact.
 //
 // NOTHING IS PINNED TO `./geometry.ts` OR TO `./hardest-part-geometry.ts` — the rule
-// this module kept through the redesign: the stage facts are RESTATED from
+// this module kept through both redesigns: the stage facts are RESTATED from
 // `src/styles/globals.css` (the authority for all four gap modules) rather than
 // imported from a sibling, because a cross-import between two slides' geometry welds
 // two stages that only happen to agree.
@@ -41,19 +60,25 @@
 // THE VERTICAL BUDGET, top to bottom, in FIGURE coordinates (add 156 for stage):
 //
 //   0    band 1's title · 11px mono caps            (stage 156, CONTENT_TOP itself)
-//   26   issued row — HERO 120 tall → 146           CHIP 36 tall → 62
-//   176  band 2's title (hero pose)                 76 at the chip pose
-//   202  question grid — HERO 2×2, 88 tall,         CHIP row at 104, 36 tall → 140
-//        rows at 202/298 → 386
-//   180  band 3's title, the fray's                 (chip pose only)
+//   26   issued row — HERO 330 tall → 356           CHIP 36 tall → 62 (poses 1–3)
+//        · plate      18 → 218                      · icon + title, one 36px row
+//        · hairline   236
+//        · title      250 → 264
+//        · line       274 → 315 (two lines of 14px serif)
+//   76   band 2's title                             (poses 1–3, one shelf, never moves)
+//   102  question grid — HERO 2×2, 130 tall,        CHIP row at 102, 36 tall → 138
+//        rows at 102/240 → 370
+//        · domain     18 → 33
+//        · ask        42 → 64
+//        · field note 88 → 100  · the rule at 106
+//   180  band 3's title, the fray's                 (poses 2–3)
 //   280  the RISEN spine and the fan's origin       (poses 2–3)
 //   400  the verdict · TWO lines of 24px serif, 70 tall → 470   (pose 3)
-//   448  the LOW spine (poses 0–1); dot captions at 460, ≈13 tall → 473
+//   420  the LOW spine (poses 0–1); dot captions at 432, ≈13 tall → 445
 //   ──────────────────────────────────────────────────────────────────────────
-//   floor: NavBar band at stage y=632 = figure y=476. Lowest RESTING paint is the
-//   dot captions' 473 (3px clear); the lowest TRANSIENT is the waiting ping's 474
-//   (2px clear), a ring that spends its life fading out. Poses 2–3 end at the
-//   verdict's 470 (6px clear).
+//   floor: NavBar band at stage y=632 = figure y=476. Poses 0–1 end at the dot
+//   captions' 445 (31px clear); poses 2–3 at the verdict's 470 (6px clear), which is
+//   the tighter of the two and the one this stage actually broke once.
 //
 // Pure data and pure functions. No React, no DOM, no colour tokens — the fray's tints
 // are the component's to assign; this file hands it a TINT INDEX so the palette stays
@@ -123,7 +148,7 @@ const BAND_WIDTH = BAND_RIGHT - BAND_LEFT;
 export const ISSUED_COUNT: NoSopCopy["issued"]["length"] = 3;
 
 /** The air between two issued boxes: 18 (owner call, round 4) — wide enough that every
- *  issued hero sentence holds ONE line at the width the tiling leaves. Not exported. */
+ *  issued title holds ONE line at the width the tiling leaves. Not exported. */
 const ISSUED_GUTTER = 18;
 
 /** An issued box's width, hero and chip alike: 368.
@@ -141,14 +166,52 @@ export const issuedBoxLeft = (index: number): number => {
  *  which ends at ≈14 (11px mono caps at the figure's own top). */
 export const ISSUED_TOP = 26;
 
-/** The issued hero's height: 120 — an icon over a one-line 14.5px sentence, with the
- *  air a hero box carries. Cut down to match single-line content (owner call, round 4). */
-export const ISSUED_HERO_HEIGHT = 120;
+/**
+ * The issued hero's height: 330 — and it is a POSE-0-ONLY height, which is the re-cut's
+ * whole answer to "pose 0 feels empty".
+ *
+ * The card is `gap-failures-pattern`'s: a live plate, a hairline, a mono title, one line
+ * of prose. Three of them fill the stage from the band title down to 356, and the
+ * rollout line runs 64px under them — where the first cut left three 120px boxes over
+ * 300px of black.
+ */
+export const ISSUED_HERO_HEIGHT = 330;
 
 /** The chip height, issued and question alike: 36 — one mono caps line with an icon
  *  beside it, and nothing else. ONE height for both rows: two chip registers would
  *  rank receipts. */
 export const CHIP_HEIGHT = 36;
+
+/** Every card's own left/right padding: 20 — the inner measure is the box width less
+ *  twice this. Shared by the plate, the hairline, the title and the line, so one rail
+ *  runs down the whole card (`gap-failures-pattern`'s `CARD_PAD_X`). */
+export const CARD_PAD_X = 20;
+
+/** An issued card's inner measure: 328 — the plate's width, the hairline's, and the
+ *  measure both type rows wrap inside. */
+export const CARD_INNER_WIDTH = ISSUED_BOX_WIDTH - 2 * CARD_PAD_X;
+
+/** The plate — the live picture at the top of every issued card. 328×200, the largest
+ *  drawing surface on the stage, and the one the room looks at while the presenter says
+ *  what a competent rollout issues. */
+export const PLATE_WIDTH = CARD_INNER_WIDTH;
+export const PLATE_HEIGHT = 200;
+export const PLATE_TOP = 18;
+
+/** The plate's own rule — picture above, words below (`gap-failures-pattern`'s
+ *  `CARD_HAIRLINE_Y`, same idiom, same 1px). 236: 18px of air under the plate. */
+export const CARD_HAIRLINE_Y = PLATE_TOP + PLATE_HEIGHT + 18;
+export const CARD_HAIRLINE_HEIGHT = 1;
+
+/** The mono title's shelf: 250 — 13px under the hairline. One 11px caps row, ≈14 tall. */
+export const ISSUED_TITLE_Y = 250;
+
+/** The prose line's shelf: 274 — TWO lines of 14px serif on 1.45 measure 41, ending at
+ *  315, which leaves 15px of floor inside the 330 card. Two and not one: the widest of
+ *  the three lines wraps at this measure, and a row of cards whose text blocks start at
+ *  different heights reads as three different cards. */
+export const ISSUED_LINE_Y = 274;
+export const ISSUED_LINE_HEIGHT = 41;
 
 /** The guard the issued placements share. Not exported. */
 function assertIssued(fn: string, index: number): void {
@@ -185,13 +248,45 @@ const Q_HERO_GUTTER_Y = 8;
 /** A question hero's width: 561. `2 × 561 + 18 = 1140` — the grid tiles the band. */
 export const QUESTION_HERO_WIDTH = (BAND_WIDTH - Q_HERO_GUTTER_X) / Q_HERO_COLS;
 
-/** A question hero's height: 88 — a one-line 13.5px question beside an icon, over the
- *  EMPTY answer rule that belongs to it. */
-export const QUESTION_HERO_HEIGHT = 88;
+/**
+ * A question hero's height: 130 — 42 more than the first cut's 88, and every one of
+ * them is spent on making the card say what it is.
+ *
+ * The card holds THREE rows: the domain this rule would have belonged to, the question
+ * as the person at the desk asks it, and the ANSWER FIELD — a dashed rule with a
+ * blinking caret parked on it and one dim mono note beside the caret. The first cut had
+ * a bare hairline under each question and nothing that said what the hairline was.
+ */
+export const QUESTION_HERO_HEIGHT = 130;
 
-/** The hero grid's shelf: 202 — directly below the issued heroes (which end at 146),
- *  past band 2's title at 176 and the 12px of air every band title gets. */
-export const QUESTION_HERO_TOP = 202;
+/** A question card's own padding: 22 — one step wider than the issued card's, because
+ *  the measure is 561 and not 368 and the type inside is bigger. */
+export const QUESTION_PAD_X = 22;
+
+/** A question card's inner measure: 517. */
+export const QUESTION_INNER_WIDTH = QUESTION_HERO_WIDTH - 2 * QUESTION_PAD_X;
+
+/** Row 1 — the domain label's shelf: 18. Icon and 11px mono caps, ≈15 tall. */
+export const QUESTION_DOMAIN_Y = 18;
+
+/** Row 2 — the question's shelf: 42. One line of 17px serif on 1.3, ≈22 tall. */
+export const QUESTION_ASK_Y = 42;
+
+/** Row 3 — THE ANSWER FIELD, and it is two marks and a note rather than one hairline:
+ *  the note and the caret sit on 88, the dashed rule they rest on at 106. 24px of floor
+ *  under the rule, so the field reads as a line somebody was supposed to write on. */
+export const QUESTION_FIELD_NOTE_Y = 88;
+export const QUESTION_FIELD_RULE_Y = 106;
+export const QUESTION_FIELD_RULE_HEIGHT = 1.5;
+
+/** The caret parked at the head of the empty field: 2×15, its foot on the rule. */
+export const QUESTION_CARET_WIDTH = 2;
+export const QUESTION_CARET_HEIGHT = 15;
+
+/** The hero grid's shelf: 102 — under band 2's title at 76, which itself clears the
+ *  issued CHIP row (26 → 62) by 14. The issued row is already compact when this band
+ *  arrives, which is what pays for the 130px cards. */
+export const QUESTION_HERO_TOP = 102;
 
 /** Question hero `index`'s left edge: 8, 587, 8, 587. */
 export const questionHeroLeft = (index: number): number => {
@@ -199,10 +294,12 @@ export const questionHeroLeft = (index: number): number => {
   return BAND_LEFT + (index % Q_HERO_COLS) * (QUESTION_HERO_WIDTH + Q_HERO_GUTTER_X);
 };
 
-/** Question hero `index`'s top edge: 202, 202, 298, 298. */
+/** Question hero `index`'s top edge: 102, 102, 240, 240. */
 export const questionHeroTop = (index: number): number => {
   assertQuestion("questionHeroTop", index);
-  return QUESTION_HERO_TOP + Math.floor(index / Q_HERO_COLS) * (QUESTION_HERO_HEIGHT + Q_HERO_GUTTER_Y);
+  return (
+    QUESTION_HERO_TOP + Math.floor(index / Q_HERO_COLS) * (QUESTION_HERO_HEIGHT + Q_HERO_GUTTER_Y)
+  );
 };
 
 /** The chip row's gutter: 16 — one step tighter than the hero gutter, because chips
@@ -212,9 +309,10 @@ const Q_CHIP_GUTTER = 16;
 /** A question chip's width: 273. `4 × 273 + 3 × 16 = 1140` — the row tiles the band. */
 export const QUESTION_CHIP_WIDTH = (BAND_WIDTH - (QUESTION_COUNT - 1) * Q_CHIP_GUTTER) / QUESTION_COUNT;
 
-/** The question chips' one shelf: 104 — 12px of air under band 2's compact title,
- *  which sits at 76 and ends at ≈89. */
-export const QUESTION_CHIP_TOP = 104;
+/** The question chips' one shelf: 102 — THE HERO GRID'S FIRST ROW, exactly. The two
+ *  cards on that row contract in place and the two below fly up into them, which is the
+ *  clearest available reading of "the same four items, now receipts". */
+export const QUESTION_CHIP_TOP = QUESTION_HERO_TOP;
 
 /** Question chip `index`'s left edge: 8, 297, 586, 875. */
 export const questionChipLeft = (index: number): number => {
@@ -235,10 +333,15 @@ function assertQuestion(fn: string, index: number): void {
 
 // ───────────────────── the band titles ─────────────────────
 
-/** Band 2's title rides with its band: 176 over the hero grid, 76 over the chip row —
- *  12px above each, past the issued row's two heights (146 hero, 62 chip). */
-export const UNWRITTEN_TITLE_TOP_HERO = 176;
-export const UNWRITTEN_TITLE_TOP_CHIP = 76;
+/**
+ * Band 2's title: 76, at every pose it exists on, and it NO LONGER MOVES.
+ *
+ * The first cut rode it down to 176 while the issued heroes were tall and back up to 76
+ * when they compacted. The issued row is now compact from pose 1 — the beat this title
+ * arrives on — so there is only ever one shelf for it, and a heading that never moves is
+ * one less thing crossing the stage while four questions are landing.
+ */
+export const UNWRITTEN_TITLE_TOP = 76;
 
 /** Band 3's title — the fray's: 180, on the compacted stage only, over the space the
  *  risen spine fans into. */
@@ -246,14 +349,14 @@ export const CONDITION_TITLE_TOP = 180;
 
 // ───────────────────── the step diagram ─────────────────────
 
-/** The spine's authored (LOW) baseline: 448 — under both hero bands, in the strip the
- *  compaction later frees. Poses 0–1. */
-export const SPINE_Y = 448;
+/** The spine's authored (LOW) baseline: 420 — under the issued triptych at pose 0 (which
+ *  ends at 356) and under the question grid at pose 1 (which ends at 370). Poses 0–1. */
+export const SPINE_Y = 420;
 
-/** How far the whole spine group rides UP when the stage compacts: 168. The risen
+/** How far the whole spine group rides UP when the stage compacts: 140. The risen
  *  baseline — 280 — is where the fan is authored, so the strands never move relative
  *  to their own origin. */
-export const SPINE_RISE = 168;
+export const SPINE_RISE = 140;
 
 /** The risen baseline, derived: 280. */
 export const SPINE_Y_RISEN = SPINE_Y - SPINE_RISE;
@@ -274,8 +377,7 @@ export const DOT_UNWRITTEN_X = 470;
 export const FAN_ORIGIN = { x: DOT_UNWRITTEN_X, y: SPINE_Y_RISEN } as const;
 
 /** A dot caption's box: 200 wide, centred on its dot, 12px under the baseline. The
- *  10px mono caption on 1.3 ends ≈13 later — the lowest resting paint on the stage
- *  (see the floor arithmetic below). */
+ *  10px mono caption on 1.3 ends ≈13 later. */
 export const DOT_LABEL_WIDTH = 200;
 export const DOT_LABEL_OFFSET_Y = 12;
 
@@ -340,7 +442,7 @@ const FRAY_SEED = 6622;
  * The fan, built once at module scope — pure arithmetic, importable from bare Node.
  *
  * THE ENVELOPE IS THE ARGUMENT'S GEOMETRY: endpoints land in a 428-wide, ≈240-tall
- * band right of centre (x from 720, y from 168) — clear of the chip rows above, the
+ * band right of centre (x from 720, y from 168) — clear of the chip row above, the
  * verdict shelf below, and fanned wide enough that no two strands read as one. The
  * cubics' control points pull every strand through the same first ≈100px so the fan
  * visibly leaves ONE point: the dot where the writing stopped.
@@ -391,20 +493,21 @@ export const VERDICT_TOP = 400;
 
 // ───────────────────── the floor ─────────────────────
 
-/** The lowest RESTING paint, in figure coordinates: the two dot captions at the LOW
- *  baseline — 448 + 12 + ≈13 of 10px mono on 1.3. Poses 0–1; from pose 2 the whole
- *  spine group rides 168 higher. */
+/** The lowest RESTING paint at poses 0–1, in figure coordinates: the two dot captions
+ *  at the LOW baseline — 420 + 12 + ≈13 of 10px mono on 1.3. From pose 2 the whole
+ *  spine group rides 140 higher. */
 const DOT_LABEL_BOTTOM = SPINE_Y + DOT_LABEL_OFFSET_Y + 13;
 
 /**
- * What is left between that caption and the NavBar's hover band: 3px, in STAGE space —
- * `632 − (156 + 473)`. THE TIGHTEST FLOOR IN THE LEADER TREE, and it is the
- * owner-approved prototype's own geometry rendered on the real stage: the low spine is
- * deliberately deep so the hero bands above it get the height that keeps every
- * sentence on one line. Derived from both ends so an edit anywhere above moves it and
- * a test fails on it before the stage crosses the band. (The waiting ping's transient
- * ring reaches 1px lower still — {@link SPINE_Y} + {@link PING_RADIUS} — and spends
- * its whole life fading out.)
+ * What is left between that caption and the NavBar's hover band: 31px, in STAGE space —
+ * `632 − (156 + 445)`. Derived from both ends so an edit anywhere above moves it and a
+ * test fails on it before the stage crosses the band.
+ *
+ * IT WAS 3px UNTIL 2026-08-14 and the re-cut spent none of that clearance on type: the
+ * spine came up 28px because the issued row now compacts at pose 1, so the question
+ * grid starts 100px higher than the first cut's did and the low baseline no longer has
+ * to clear two hero bands at once. (The waiting ping's transient ring reaches 1px lower
+ * still — {@link SPINE_Y} + {@link PING_RADIUS} — and spends its whole life fading out.)
  */
 export const NAV_ZONE_CLEARANCE = NAV_ZONE_TOP - (FIGURE_TOP + DOT_LABEL_BOTTOM);
 
@@ -413,6 +516,6 @@ export const NAV_ZONE_CLEARANCE = NAV_ZONE_TOP - (FIGURE_TOP + DOT_LABEL_BOTTOM)
  * `632 − (156 + 400 + 70)`. Derived and exported separately because it is the floor
  * this stage actually broke once: the prototype's 420 shelf put the wrapped line at
  * 646, through the band, and a one-line assumption is exactly the mistake a derived
- * number refuses to survive.
+ * number refuses to survive. It is now the TIGHTEST of the two floors on this stage.
  */
 export const VERDICT_CLEARANCE = NAV_ZONE_TOP - (FIGURE_TOP + VERDICT_TOP + VERDICT_HEIGHT);

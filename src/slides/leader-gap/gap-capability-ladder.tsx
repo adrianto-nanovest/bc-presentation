@@ -14,20 +14,31 @@
 // question with its evidence. §6.5: no AI-adoption assessment data exists for
 // either brand (confirmed on #8), and this slide implies none.
 //
-// 5 poses (§7.2), one argument each:
-//   0 — THE LADDER. Five rungs and the provenance line. Nothing is placed yet,
-//       which is the pose the room reads the vocabulary in.
-//   1 — THE TECH FUNCTION. GEMS asserts DigiTech at ≈L3 with its source; Berau
-//       states, in the same slot, that MineTech has nothing comparable. One slot,
-//       two fills, never blank (#16 finding 4).
-//   2 — THE OPEN QUESTION. The organisation, asked rather than placed.
-//   3 — US. A small Nanovest mark at L1–L2, so the ladder is not a scoreboard.
-//   4 — THE CLOSER, which names what is actually on the ladder — and therefore
-//       differs per brand, because Berau's ladder carries no claim to contrast.
+// 3 poses, one argument each — the owner's step plan of 2026-08-13, which cut five
+// to three by putting everything the deck can EVIDENCE on one pose:
+//   0 — THE LADDER, AND WHAT WE CAN NAME ON IT. Five rungs; the tech function
+//       (GEMS asserts DigiTech at ≈L3 on Google Cloud's citation, Berau asserts
+//       MineTech at ≥L2 on its own — one slot, and never blank whatever fills it,
+//       #16 finding 4); and our own mark at L3–L4. The two marks share a
+//       pose because they share a property: each arrives with its own evidence
+//       attached, one cited outside and one self-reported. The pose SEQUENCES
+//       itself over about 1.8s (`BEAT` in the figure) so five things do not land
+//       at once, but it is one keypress.
+//   1 — THE OPEN QUESTION. The rest of the organisation, asked rather than placed.
+//   2 — THE GAP. The stretch of staircase between the question and the claim
+//       lights up, and the closer names what that distance is. Per brand, because
+//       a ladder carrying no claim has no distance to measure and would be
+//       inventing one.
 //
-// `canonicalPose: 4` — the fullest pose, and the only one the PDF and PPTX
-// exports print. A canonical pose that stopped at 3 would export a ladder whose
-// closer nobody outside the room ever reads.
+// WHY THE MARKS ARE NO LONGER ONE PER POSE. The retired shape spent poses 1, 2 and
+// 3 on three marks and pose 4 on the closer, which read as a scoreboard filling in
+// — three placements, then a sentence. The argument is not three placements; it is
+// ONE distance, and a distance needs both of its ends on the stage before the room
+// can be asked about the middle.
+//
+// `canonicalPose: 2` — the fullest pose, and the only one the PDF and PPTX exports
+// print. A canonical pose short of the last one would export a ladder whose gap
+// nobody outside the room ever sees.
 //
 // THE LETTER IS NOT AUTHORED HERE, and this slide is the reason that rule earns
 // its keep — it has now printed SIX different numbers without this file being opened
@@ -92,8 +103,8 @@ const BRAND_CONTENT = capabilityLadderFor(VARIANT.brand);
 
 export const gapCapabilityLadderSlide: SlideDef = {
   id: "gap-capability-ladder",
-  steps: 5,
-  canonicalPose: 4,
+  steps: 3,
+  canonicalPose: 2,
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "gap",

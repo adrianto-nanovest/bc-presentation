@@ -361,10 +361,21 @@ const BOTTLENECK = {
   statement: "Adoption is concentrated in one function.",
   statementKw: ["concentrated in one function"],
 
-  /** The citation, on the slide rather than in a footnote. Keyword-free. */
+  /**
+   * The citation, on the slide rather than in a footnote. Keyword-free.
+   *
+   * TRIMMED WITH THE LADDER'S, 2026-08-13. `gap-capability-ladder` prints the same
+   * brief to license its open question and lost the trailing clause — "— even some
+   * DigiTech members still falling behind" — when that slide's copy was cut back;
+   * `mandate-enablement.test.tsx` holds the two quotations identical, because a
+   * room that hears one source worded two ways stops trusting the source. The
+   * dropped clause was the stronger half, so no claim here grew by losing it — and
+   * this band's own statement is that adoption is concentrated in ONE function,
+   * which that clause slightly argued against.
+   */
   source:
     "DigiTech's own brief: “outside DigiTech, AI adoption is not really adopted " +
-    `well — even some DigiTech members still falling behind.” ${STATED_NOT_MEASURED}`,
+    `well.” ${STATED_NOT_MEASURED}`,
 } as const;
 
 // ───────────────────── the slide ─────────────────────
@@ -593,9 +604,12 @@ const PHASES: readonly Phase[] = [
     // The phase both organisations are actually IN or have just left, and the
     // gate is the one number either of them will already have: a post-assessment
     // exists in both programmes. "Attendance sheet" is the failure
-    // `gap-capability-ladder`'s Berau question already put to the room — "did it
-    // stop at the certificate?" — and this is the same doubt written as a condition
-    // instead of a question.
+    // `gap-capability-ladder`'s Berau question already put to the room — did the
+    // training reach the desk, or did it stay in the room? — and this is the same
+    // doubt written as a condition instead of a question. (That question used to
+    // ask whether it "stopped at the certificate"; it was reworded on 2026-08-14
+    // because the programme it asks about has not finished. The doubt is the same
+    // one, which is why this gate did not move.)
     gate: "The post-assessment moves, not just the attendance sheet.",
     gateKw: ["The post-assessment moves"],
   },

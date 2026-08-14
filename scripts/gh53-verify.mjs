@@ -1,4 +1,12 @@
-// gh#53's browser evidence — THE CAPABILITY LADDER, both leader decks, five poses.
+// gh#53's browser evidence — THE CAPABILITY LADDER, both leader decks, three poses.
+//
+// RE-CUT FOR THE THREE-POSE BUILD (2026-08-13). The slide used to spend one pose per
+// mark; it now places both marks that carry their own evidence on pose 0, asks the
+// room on pose 1, and lights the distance between them on pose 2. So the tables
+// below are three rows, the provenance line is gone from ALWAYS because the slide no
+// longer prints one, and two ids are new: `gap-ladder-path-unearned` (L5's dashed
+// step) and `gap-ladder-path-gap` + `gap-tag` (the lit stretch, asserted only where
+// a brand HAS an asserted mark to measure to).
 //
 // The unit tests own everything jsdom can see. This owns the three things it
 // cannot, and they are the three the slide is actually at risk of (spec §10.2):
@@ -88,7 +96,7 @@ function relativeLuminance(r, g, b) {
 /** Every box the ladder always draws, whichever brand is in front of it. */
 const ALWAYS = [
   "gap-ladder-path",
-  "gap-ladder-provenance",
+  "gap-ladder-path-unearned",
   "gap-tech-slot",
   "gap-marker-open",
   "gap-aside",
@@ -101,23 +109,24 @@ const ALWAYS = [
  *
  * REQUIRED AND FORBIDDEN, both named. A gate that only measures the boxes it finds
  * passes when a box goes missing — it just measures fewer of them — which is the
- * failure a five-pose build is most likely to ship.
+ * failure a staged build is most likely to ship.
+ *
+ * POSE 0 IS NOT EMPTY ANY MORE. The two marks that arrive with their own evidence —
+ * the cited tech function and our own — are both on it, sequenced by delay rather
+ * than by keypress, so their boxes are revealed from the first frame the pose
+ * settles on.
  */
 const REVEALED_BY_POSE = [
-  [],
-  ["gap-tech-slot"],
-  ["gap-tech-slot", "gap-marker-open"],
-  ["gap-tech-slot", "gap-marker-open", "gap-aside"],
-  ["gap-tech-slot", "gap-marker-open", "gap-aside", "gap-closer"],
+  ["gap-tech-slot", "gap-aside"],
+  ["gap-tech-slot", "gap-aside", "gap-marker-open"],
+  ["gap-tech-slot", "gap-aside", "gap-marker-open", "gap-closer"],
 ];
 /** The SVG marks each pose must have mounted. The asserted mark is brand-dependent
  *  and is folded in at run time. */
 const MARKS_BY_POSE = [
-  [],
-  ["gap-mark-asserted"],
-  ["gap-mark-asserted", "gap-mark-open"],
-  ["gap-mark-asserted", "gap-mark-open", "gap-dot-aside"],
-  ["gap-mark-asserted", "gap-mark-open", "gap-dot-aside"],
+  ["gap-mark-asserted", "gap-mark-aside"],
+  ["gap-mark-asserted", "gap-mark-aside", "gap-mark-open"],
+  ["gap-mark-asserted", "gap-mark-aside", "gap-mark-open"],
 ];
 
 let failures = 0;
@@ -201,14 +210,20 @@ const shot = (name) => stage.screenshot({ path: `${OUT}/${name}.png` });
 const smil = () => page.$$eval("animate, animateMotion, animateTransform, set", (e) => e.length);
 
 /** Walk to a pose from a fresh mount of the slide, so no pose inherits another's
- *  state. `settle` is generous on pose 0: the staircase draws for 1400ms. */
+ *  state. `settle` is generous on pose 0: that pose now SEQUENCES itself — the
+ *  staircase draws, the rung labels follow the drawing line, the dashed top step
+ *  arrives, and the two evidenced marks land last, about 1.9s in total. */
 async function atPose(pose) {
   await page.goto(url({ slide: index }), { waitUntil: "networkidle" });
   await stage.waitFor();
-  await page.waitForTimeout(REDUCED ? 200 : 1700);
+  await page.waitForTimeout(REDUCED ? 200 : 2100);
   for (let i = 0; i < pose; i++) {
     await page.keyboard.press("Space");
-    await page.waitForTimeout(REDUCED ? 120 : 650);
+    // 1500 AND NOT 650: poses 1 and 2 delay their own arrivals — the closer waits
+    // 720ms behind the lit stretch and then fades for 500 — so a shorter settle
+    // measures a box mid-transition and reports it as unrevealed. Ask the figure's
+    // `BEAT` table before shortening this.
+    await page.waitForTimeout(REDUCED ? 200 : 1500);
   }
 }
 
@@ -225,9 +240,9 @@ await shot("pose0-the-ladder");
 
 // ───────────────── every pose, walked and audited ─────────────────
 //
-// ONE LOOP, five poses, and every per-pose claim asserted inside it. Checking the
-// last pose only is how a build ships four broken ones: the closer is on the stage
-// at pose 4 whatever poses 0–3 did.
+// ONE LOOP, three poses, and every per-pose claim asserted inside it. Checking the
+// last pose only is how a build ships two broken ones: the closer is on the stage at
+// pose 2 whatever poses 0 and 1 did.
 
 /** Whether this brand renders an asserted marker — decided by the deck, not here. */
 const hasAsserted = (await page.locator('[data-testid="gap-marker-asserted"]').count()) > 0;
@@ -242,7 +257,7 @@ const floorViolations = [];
  *  asserted non-zero: an audit that walks nothing passes everything. */
 const auditedByPose = [];
 
-for (const pose of [0, 1, 2, 3, 4]) {
+for (const pose of [0, 1, 2]) {
   await atPose(pose);
   await shot(`pose${pose}`);
 
@@ -357,11 +372,11 @@ for (const pose of [0, 1, 2, 3, 4]) {
 // staircase's CSS path draw and the chips' `.fade` reveals, both of which the
 // global reduced-motion rule already handles. A SMIL node appearing here is a
 // regression whether or not motion is reduced, because it would need gating.
-check("zero SMIL nodes at every pose", smilByPose, [0, 0, 0, 0, 0]);
+check("zero SMIL nodes at every pose", smilByPose, [0, 0, 0]);
 check("every pose mounts every box it should, none missing", missingByPose, []);
 check("every reached box is fully revealed, at every pose", unrevealedByPose, []);
 check("no box arrives before its pose", leakedByPose, []);
-check("the staircase rests fully drawn at every pose", dashByPose, [0, 0, 0, 0, 0]);
+check("the staircase rests fully drawn at every pose", dashByPose, [0, 0, 0]);
 check(
   `no text run below ${MONO_FLOOR}px mono / ${PROSE_FLOOR}px prose, or dimmer than --neutral-300`,
   floorViolations,
@@ -423,14 +438,28 @@ check("the open question is serif italic and ends in “?”", [marks.type.openS
 
 // ───────────────── layout, at the fullest pose ─────────────────
 
-await atPose(4);
+await atPose(2);
 
-/** Every box that must be measurable at pose 4, this brand's tech fill included.
- *  REQUIRED, not discovered: a gate that measures what it finds passes a missing
- *  box by measuring one fewer. */
+/** Every box that must be measurable at the last pose, this brand's tech fill
+ *  included. REQUIRED, not discovered: a gate that measures what it finds passes a
+ *  missing box by measuring one fewer.
+ *
+ *  THE THREE PATHS ARE EXCLUDED, not forgotten: an SVG path's bounding box is the
+ *  whole staircase, which overlaps every rung label by construction — measuring it
+ *  in the collision pass would fail on the layout the figure IS. `gap-tech-slot` is
+ *  excluded for the older version of the same reason: it is the wrapper its fill
+ *  sits inside, so it overlaps that fill.
+ *
+ *  `gap-tag` joins the list where a brand HAS an asserted mark, because that is the
+ *  only case in which a stretch is lit and named — and its pocket (the crook above
+ *  L2's tread) is the tightest new box on the stage.
+ */
 const REQUIRED = [
-  ...ALWAYS.filter((id) => id !== "gap-ladder-path" && id !== "gap-tech-slot"),
+  ...ALWAYS.filter(
+    (id) => !id.startsWith("gap-ladder-path") && id !== "gap-tech-slot",
+  ),
   hasAsserted ? "gap-marker-asserted" : "gap-tech-absence",
+  ...(hasAsserted ? ["gap-tag"] : []),
 ];
 
 const rects = {};
@@ -478,7 +507,7 @@ for (let i = 0; i < ids.length; i++) {
 }
 check("no two boxes overlap", collisions, []);
 
-console.log(`\n      boxes measured at pose 4 — ${ids.length}`);
+console.log(`\n      boxes measured at the last pose — ${ids.length}`);
 for (const [id, r] of Object.entries(rects)) {
   console.log(
     `      ${id.padEnd(24)} x ${String(Math.round(r.x)).padStart(4)}…${String(

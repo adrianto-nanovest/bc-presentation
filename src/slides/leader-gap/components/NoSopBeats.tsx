@@ -3,34 +3,63 @@
 // persistent scene instead of accumulated prose.
 //
 // REWRITTEN 2026-08-11 (owner call, productionized from the B.2 prototype's variant D
-// "BOXES × FRAY"; the prototype directory is deleted in the same change). The first
-// cut was a static diptych that accumulated three text bands into one dense final
-// screen; this figure is ONE PERSISTENT SCENE whose elements morph between four poses:
+// "BOXES × FRAY"). RE-CUT 2026-08-14 (owner call) against the two neighbours it ships
+// beside, and the three complaints are the map of this file:
 //
-//   0 — WHAT WAS HANDED OUT. Three icon boxes across the top, hero-sized. The spine
-//       draws its first segment low across the stage and lands one labelled dot:
-//       HANDED OUT. The organisation did the visible things right.
-//   1 — AND WHAT WAS NEVER WRITTEN DOWN. The issued row holds its ground; the four
-//       question boxes land directly below it, each with the EMPTY answer rule that
-//       belongs to it. The spine extends to a second labelled dot — NEVER WRITTEN —
+//   1. THE BOXES DID NOT LOOK LIKE THE SECTION'S. `gap-failures-pattern` next door draws
+//      a card as PICTURE / HAIRLINE / MONO TITLE / PROSE inside a `--copper-700` border
+//      over a translucent black fill; this file drew a grey `--neutral-800` panel with a
+//      single sentence in it. The issued boxes are now cards in that same grammar, down
+//      to the hairline that brightens with the border under the pointer, and the chrome
+//      lives in ./no-sop.css where the hover ramp can win.
+//   2. POSE 0 WAS HALF EMPTY STAGE. The three cards are 330 tall instead of 120 and each
+//      one is crowned by a LIVE PLATE — a login form that fills itself, a demonstration
+//      that plays to a room, a memo that writes and seals itself. They are the reason
+//      pose 0 has something to look at while the presenter says what a competent rollout
+//      issues, and they contract away at pose 1 (see below) rather than staying to crowd
+//      the questions.
+//   3. THE FOUR QUESTIONS READ AS RIDDLES AND THE HAIRLINE UNDER THEM SAID NOTHING.
+//      Each question card now carries its DOMAIN in mono caps, the question with its
+//      subject spelled (`the AI`, once, on the first card — `../content.ts` argues it),
+//      and an ANSWER FIELD: a dashed rule with a CARET BLINKING on it and one dim mono
+//      note beside the caret. The blank is still never filled at any pose; what changed
+//      is that it now says what it is.
+//
+// FOUR POSES, one argument each:
+//
+//   0 — WHAT WAS HANDED OUT. Three plate cards across the stage. The spine draws its
+//       first segment low and lands one labelled dot: HANDED OUT.
+//   1 — AND WHAT IT NEVER WROTE DOWN. THE ISSUED ROW CONTRACTS TO RECEIPTS on this beat
+//       — one beat earlier than the first cut, which is what pays for 130px question
+//       cards — and the four questions land under it, each with the empty answer field
+//       that belongs to it. The spine extends to a second labelled dot, NEVER WRITTEN,
 //       and pings there: guidance stops here.
-//   2 — WHAT THE SILENCE LEAVES BEHIND. Both bands compact into two tidy chip rows;
-//       the freed space is where the whole spine RISES, and the stopped line fans out
-//       into two dozen swaying private hairlines — one per improvised rule, each
-//       ending in a tick somewhere nobody else can read.
+//   2 — WHAT THE SILENCE LEAVES BEHIND. The question cards compact too; the freed space
+//       is where the whole spine RISES, and the stopped line fans out into two dozen
+//       swaying private hairlines — one per improvised rule, each ending in a tick
+//       somewhere nobody else can read.
 //   3 — THE FRAME. The fan dims to an afterimage, one dashed line marches on from the
 //       second dot — the rule only the leader can write — and the closer lands under
 //       it: nobody broke a rule; writing one is the leader's job.
 //
 // WHY PERSISTENT AND NOT REMOUNTING POSES — B.1's reason, inherited: the morphs ARE
-// the argument's connective tissue (the boxes that compact into receipts are the same
-// boxes that were argued, and the line that frays is the line the room watched stop),
+// the argument's connective tissue (the cards that compact into receipts are the same
+// cards that were argued, and the line that frays is the line the room watched stop),
 // so elements keep identity and every pose change is a two-way CSS TRANSITION set
-// inline. Mount choreography — draws, pops, the fan opening — is keyframes from
-// ./no-sop.css on nodes that mount WITH their beat, so a walk backwards and forwards
-// replays the entry. An element that needs both wears a wrapper: the outer node owns
-// the pose transition, the inner owns the mount animation, because an animation's
+// inline. Mount choreography — draws, pops, the plates, the fan opening — is keyframes
+// from ./no-sop.css on nodes that mount WITH their beat, so a walk backwards and
+// forwards replays the entry. An element that needs both wears a wrapper: the outer node
+// owns the pose transition, the inner owns the mount animation, because an animation's
 // fill-mode holds its properties hostage against any transition on the same node.
+//
+// THE PLATES MOUNT ONCE AND REST ON THEIR FINISHED FRAME, which is the one place this
+// figure differs from `gap-failures-pattern`'s three: those loop forever because they are
+// the card's whole subject at both of that slide's poses, while these are pose 0's
+// subject and become invisible receipts at pose 1. So each plate is an ARRIVAL that ends
+// on the picture it is supposed to rest on — the form filled, the bar full, the memo
+// signed and sealed — with two ambient decorations left running (the caret's blink and
+// the two glow rings) because a stage that goes completely still under a presenter who is
+// still talking reads as broken.
 //
 // THE POSE GATE IS INLINE OPACITY — {@link gate} always writes `opacity`, so the unit
 // test reads visibility off `el.style.opacity` the way `./HardestPartBeats.tsx`'s
@@ -41,17 +70,18 @@
 // never opacity — the deck's rule, unchanged.
 //
 // THIS FIGURE MOUNTS `<svg>` AND STILL MOUNTS ZERO SMIL NODES, at every pose, under
-// any motion preference — the first `<svg>` on this slide, and it closes the
-// reduced-motion AC the way the Capability Ladder next door closes it rather than the
-// way the old diptych did: every vector motion here is a CSS animation or transition
+// any motion preference. Every vector motion here is a CSS animation or transition
 // (`no-sop-draw` is `gap-ladder-draw`'s idiom — pathLength 1, dasharray 1, dashoffset
 // animated by keyframe), so the global `prefers-reduced-motion: reduce` squash in
-// `src/styles/globals.css` parks every draw on its finished frame and runs the two
-// infinite decorations once. No `<animate>`, no `<animateTransform>`, no `<set>`, no
+// `src/styles/globals.css` parks every draw and every fill on its finished frame and runs
+// the ambient decorations once. No `<animate>`, no `<animateTransform>`, no `<set>`, no
 // matchMedia gate, no JS motion source at all.
 //
 // CSS VARS ONLY, NO HEX AND NO rgba() LITERALS — including the box chrome
-// (./no-sop.css) and every stroke below.
+// (./no-sop.css) and every stroke below. Where `gap-failures-pattern` writes
+// `rgba(10,10,10,0.6)` inline, this file writes the same colour as
+// `color-mix(in srgb, var(--neutral-900) 60%, transparent)`: the same paint, kept
+// expressible in tokens.
 import { type CSSProperties, type ReactNode } from "react";
 // Section E's copy, the tree's de facto shared reveal primitive — the census of its
 // importers is kept by `leader-mandate/components/EnablementModel.tsx`; this file
@@ -61,6 +91,10 @@ import { highlight } from "@/components/highlight";
 import "./no-sop.css";
 import {
   BAND_RIGHT,
+  CARD_HAIRLINE_HEIGHT,
+  CARD_HAIRLINE_Y,
+  CARD_INNER_WIDTH,
+  CARD_PAD_X,
   CHIP_HEIGHT,
   CONDITION_TITLE_TOP,
   DOT_ISSUED_X,
@@ -75,17 +109,31 @@ import {
   FRAY_STRANDS,
   ISSUED_BOX_WIDTH,
   ISSUED_HERO_HEIGHT,
+  ISSUED_LINE_HEIGHT,
+  ISSUED_LINE_Y,
+  ISSUED_TITLE_Y,
   ISSUED_TOP,
   PING_RADIUS,
+  PLATE_HEIGHT,
+  PLATE_TOP,
+  PLATE_WIDTH,
+  QUESTION_ASK_Y,
+  QUESTION_CARET_HEIGHT,
+  QUESTION_CARET_WIDTH,
   QUESTION_CHIP_TOP,
   QUESTION_CHIP_WIDTH,
+  QUESTION_DOMAIN_Y,
+  QUESTION_FIELD_NOTE_Y,
+  QUESTION_FIELD_RULE_HEIGHT,
+  QUESTION_FIELD_RULE_Y,
   QUESTION_HERO_HEIGHT,
   QUESTION_HERO_WIDTH,
+  QUESTION_INNER_WIDTH,
+  QUESTION_PAD_X,
   SPINE_RISE,
   SPINE_X0,
   SPINE_Y,
-  UNWRITTEN_TITLE_TOP_CHIP,
-  UNWRITTEN_TITLE_TOP_HERO,
+  UNWRITTEN_TITLE_TOP,
   VERDICT_LEFT,
   VERDICT_TOP,
   VERDICT_WIDTH,
@@ -104,18 +152,24 @@ import { gapNoSopContent as C } from "../content";
  *
  *   role        token           register
  *   verdict     --neutral-100   24px serif — the closer
- *   hero row    --neutral-200   14.5/13.5px sans — every hero face's sentence
- *   chip text   --neutral-300   10px mono caps — the receipts
+ *   ask         --neutral-100   17px serif — the question at the desk
+ *   cardTitle   --copper-100    14px mono caps — an issued card's own name
+ *   line        --neutral-300   14px serif — the fact under the title
+ *   chipText    --neutral-300   10px mono caps — the receipts
  *   label       --copper-400    11px mono caps — the three band titles; 10px — the
  *                               two dot captions
+ *   domain      --copper-500    11px mono caps — the clause a question belongs to
+ *   note        --copper-600    9.5px mono caps — the empty field's own note
  *   icon/spine  --copper-300/400/500 — the small illustrations and the step diagram,
  *                               brighter than the strands they argue against
- *   blank       --copper-700    the empty rule inside each question hero
+ *   blank       --copper-700    the dashed rule nobody wrote on
+ *   caret       --copper-400    the cursor parked on it
  *
- * NO COPPER TEXT ON THIS STAGE beyond the mono labels — the rule
- * `leader-invest/components/SubscriptionBeats.tsx` records: copper text means a thing
- * quoted from somewhere else, and THIS SLIDE QUOTES NOTHING (no statistic, no source —
- * `../content.ts` on why it deliberately carries none).
+ * COPPER TEXT IS MONO ONLY, which is the rule `gap-failures-pattern` states as "no
+ * copper prose": the card titles, the domains, the band headings and the field notes are
+ * copper because they are LABELS, and every sentence on the stage is a neutral tier with
+ * the `highlight()` keyword as its only copper. THIS SLIDE STILL QUOTES NOTHING — no
+ * statistic, no source (`../content.ts` on why it deliberately carries none).
  *
  * THE FRAY'S FOUR TINTS — copper-500/600/700 and ONE neutral-500 — are the one place a
  * neutral enters the graphics: the strands are two dozen instances of a single role
@@ -126,16 +180,32 @@ import { gapNoSopContent as C } from "../content";
  */
 const TIER = {
   label: "var(--copper-400)",
+  domain: "var(--copper-500)",
+  note: "var(--copper-600)",
+  cardTitle: "var(--copper-100)",
   icon: "var(--copper-300)",
   spine: "var(--copper-400)",
   dotIssued: "var(--copper-500)",
   dotUnwritten: "var(--copper-300)",
   ping: "var(--copper-500)",
-  heroRow: "var(--neutral-200)",
+  ask: "var(--neutral-100)",
+  line: "var(--neutral-300)",
   chipText: "var(--neutral-300)",
   blank: "var(--copper-700)",
+  caret: "var(--copper-400)",
   leaderLine: "var(--copper-200)",
   verdict: "var(--neutral-100)",
+} as const;
+
+/** The plates' own three tiers — dimmest chrome, the marks a plate draws, and the one
+ *  bright thing each plate ends on. Kept apart from {@link TIER} because a plate is a
+ *  picture and not a type row: nothing in here is ever read. */
+const PLATE = {
+  chrome: "var(--copper-800)",
+  frame: "var(--copper-700)",
+  mark: "var(--copper-500)",
+  live: "var(--copper-400)",
+  hot: "var(--copper-300)",
 } as const;
 
 /** The fray's four tints, indexed by each strand's deterministic `tint` — the palette
@@ -181,6 +251,22 @@ const drawStyle = (delay: number, dur = 0.9): CSSProperties => ({
   strokeDasharray: 1,
   strokeDashoffset: 1,
   animation: `no-sop-draw ${dur}s var(--ease) ${delay}ms forwards`,
+});
+
+/**
+ * A bar filling itself in, left to right — `no-sop-type`, the plates' second idiom and
+ * the one that carries the whole rhyme this slide is built on: on plate 1 and plate 3
+ * these bars are WORDS BEING WRITTEN, and the four question cards' fields are the same
+ * rules with nothing ever written on them.
+ *
+ * `scaleX` and not `width`, so it composites on the GPU and so the rest frame is the
+ * element's own authored width — which is what makes the reduced-motion squash park it
+ * full rather than empty.
+ */
+const typeStyle = (x: number, y: number, delay: number, dur = 0.8): CSSProperties => ({
+  transformBox: "view-box",
+  transformOrigin: `${x}px ${y}px`,
+  animation: `no-sop-type ${dur}s var(--ease) ${delay}ms both`,
 });
 
 // ───────────────────── the small illustrations ─────────────────────
@@ -261,6 +347,261 @@ const ICONS: Record<string, ReactNode> = {
   ),
 };
 
+// ───────────────────── the three plates ─────────────────────
+
+/**
+ * One plate per issued card — the picture pose 0 is built around, keyed by the content
+ * tuple's own id so a reordered tuple keeps its drawing (`gap-failures-pattern`'s
+ * idiom). An id with no plate draws an empty box rather than throwing: a review URL must
+ * never render a blank stage.
+ *
+ * ALL THREE ARE ONE `<svg>` EACH, 328×200, and every mark inside them is authored at the
+ * coordinate it rests on — the animations move it away from there and back, never to it.
+ * That is what makes the reduced-motion frame the composed frame.
+ */
+function Plate({ id }: { id: string }) {
+  if (id === "login") return <LoginPlate />;
+  if (id === "demonstration") return <DemoPlate />;
+  if (id === "encouragement") return <MemoPlate />;
+  return <div style={{ width: PLATE_WIDTH, height: PLATE_HEIGHT }} />;
+}
+
+function PlateSvg({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <svg
+      data-testid={`no-sop-plate-${id}`}
+      viewBox={`0 0 ${PLATE_WIDTH} ${PLATE_HEIGHT}`}
+      width={PLATE_WIDTH}
+      height={PLATE_HEIGHT}
+      fill="none"
+      aria-hidden="true"
+      style={{ display: "block", overflow: "visible" }}
+    >
+      {children}
+    </svg>
+  );
+}
+
+/**
+ * PLATE 1 · A LOGIN — a sign-in panel that fills itself in, and a lock that opens.
+ *
+ * THE RHYME IS THE POINT, and it is the one drawing on this stage that argues with
+ * another: the panel's two fields are DASHED RULES, exactly like the four answer fields
+ * in the band below, and here they get written on. Same mark, same tier, opposite fate.
+ */
+function LoginPlate() {
+  return (
+    <PlateSvg id="login">
+      {/* the panel */}
+      <rect x={18} y={26} width={216} height={148} rx={2} stroke={PLATE.frame} strokeWidth={1} />
+      <rect x={38} y={48} width={58} height={3.5} fill={PLATE.mark} />
+
+      {/* field 1 — a name typed in */}
+      <rect x={38} y={76} width={30} height={2} fill={PLATE.chrome} />
+      <line x1={38} y1={96} x2={214} y2={96} stroke={PLATE.frame} strokeWidth={1} strokeDasharray="3 4" />
+      <rect x={38} y={88} width={124} height={5} fill={PLATE.live} style={typeStyle(38, 88, 500)} />
+
+      {/* field 2 — and a secret, one character at a time */}
+      <rect x={38} y={116} width={38} height={2} fill={PLATE.chrome} />
+      <line x1={38} y1={136} x2={214} y2={136} stroke={PLATE.frame} strokeWidth={1} strokeDasharray="3 4" />
+      {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+        <circle
+          key={i}
+          cx={42 + i * 13}
+          cy={129}
+          r={2.6}
+          fill={PLATE.live}
+          className="fade on"
+          style={{ animationDelay: `${1150 + i * 70}ms` }}
+        />
+      ))}
+
+      {/* the lock, open — drawn last, because it is what the two filled fields bought.
+          Its own centre sits on the panel's, so the two objects read as one sentence. */}
+      <rect x={258} y={92} width={48} height={40} rx={3} stroke={PLATE.mark} strokeWidth={1.4} />
+      <circle cx={282} cy={106} r={3.4} fill={PLATE.mark} />
+      <rect x={281} y={108} width={2} height={9} fill={PLATE.mark} />
+      <path
+        d="M 270 92 V 80 A 11 11 0 0 1 291 76"
+        pathLength={1}
+        stroke={PLATE.hot}
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        style={drawStyle(1750, 0.7)}
+      />
+      {/* still live — the one ambient mark on this plate */}
+      <circle
+        cx={282}
+        cy={112}
+        r={30}
+        stroke={PLATE.mark}
+        strokeWidth={1}
+        style={{
+          transformBox: "view-box",
+          transformOrigin: "282px 112px",
+          opacity: 0,
+          animation: "no-sop-glow 3.4s ease-out 2300ms infinite",
+        }}
+      />
+    </PlateSvg>
+  );
+}
+
+/**
+ * PLATE 2 · A DEMONSTRATION — a screen playing to a room.
+ *
+ * The progress bar fills ONCE and stays full: the session happened, it finished, and
+ * that is the whole of what the organisation did here. The six figures arrive one at a
+ * time and then never do anything, which is the honest picture of a room told to try
+ * something.
+ */
+function DemoPlate() {
+  const seats = [
+    { x: 246, y: 74 },
+    { x: 278, y: 74 },
+    { x: 310, y: 74 },
+    { x: 246, y: 128 },
+    { x: 278, y: 128 },
+    { x: 310, y: 128 },
+  ];
+
+  return (
+    <PlateSvg id="demonstration">
+      {/* the screen, on its stand */}
+      <rect x={14} y={46} width={150} height={104} rx={2} stroke={PLATE.mark} strokeWidth={1.4} />
+      <path d="M 89 150 v 16 M 70 166 h 38" stroke={PLATE.mark} strokeWidth={1.4} strokeLinecap="round" />
+
+      {/* playing */}
+      <path
+        d="M 76 78 l 32 20 l -32 20 z"
+        fill={PLATE.hot}
+        style={{
+          transformBox: "view-box",
+          transformOrigin: "92px 98px",
+          animation: "no-sop-beat 2.8s ease-in-out 900ms infinite",
+        }}
+      />
+
+      {/* and it ran to the end */}
+      <rect x={28} y={132} width={122} height={3} fill={PLATE.chrome} />
+      <rect x={28} y={132} width={122} height={3} fill={PLATE.live} style={typeStyle(28, 132, 700, 1.8)} />
+
+      {/* out into the room */}
+      {[
+        { d: "M 176 78 A 26 26 0 0 1 176 122", delay: 0 },
+        { d: "M 176 66 A 38 38 0 0 1 176 134", delay: 700 },
+        { d: "M 176 54 A 50 50 0 0 1 176 146", delay: 1400 },
+      ].map((arc) => (
+        <path
+          key={arc.delay}
+          d={arc.d}
+          stroke={PLATE.frame}
+          strokeWidth={1.2}
+          strokeLinecap="round"
+          style={{ opacity: 0, animation: `no-sop-wave 2.9s ease-out ${1000 + arc.delay}ms infinite` }}
+        />
+      ))}
+
+      {/* the room — six of them, arriving one at a time */}
+      {seats.map((seat, i) => (
+        <g key={i} className="fade on" style={{ animationDelay: `${900 + i * 130}ms` }}>
+          <g
+            style={{
+              transformBox: "view-box",
+              transformOrigin: `${seat.x}px ${seat.y}px`,
+              animation: `no-sop-nudge ${2.6 + (i % 3) * 0.4}s ease-in-out ${1800 + i * 200}ms infinite`,
+            }}
+          >
+            <circle cx={seat.x} cy={seat.y} r={6.5} stroke={PLATE.mark} strokeWidth={1.3} />
+            <path
+              d={`M ${seat.x - 10.5} ${seat.y + 20} a 10.5 10.5 0 0 1 21 0`}
+              stroke={PLATE.mark}
+              strokeWidth={1.3}
+            />
+          </g>
+        </g>
+      ))}
+    </PlateSvg>
+  );
+}
+
+/**
+ * PLATE 3 · ENCOURAGEMENT — the memo, writing itself, signed and sealed.
+ *
+ * THE CARD THIS PLATE BELONGS TO IS THE PIVOT OF THE WHOLE SLIDE (`../content.ts`): the
+ * encouragement is the one thing anybody sat down and wrote. So this is the only plate
+ * whose subject is WRITING, it uses the same `no-sop-type` bars the login form does, and
+ * it ends on a signature and a seal — the two marks the four fields below it never get.
+ */
+function MemoPlate() {
+  const lines = [
+    { y: 62, w: 170 },
+    { y: 78, w: 162 },
+    { y: 94, w: 170 },
+    { y: 110, w: 146 },
+    { y: 126, w: 166 },
+  ];
+
+  return (
+    <PlateSvg id="encouragement">
+      {/* the sheet — on the card's own left rail, like the panel and the screen on the
+          two plates beside it, with the outcome standing to its right */}
+      <rect x={18} y={14} width={214} height={172} rx={2} stroke={PLATE.frame} strokeWidth={1} />
+      <rect x={40} y={38} width={76} height={4.5} fill={PLATE.mark} />
+
+      {/* the words, one line at a time — in the MARK tier and not the chrome tier: this
+          is the one thing on the stage that somebody wrote, so it may not be dimmer than
+          the login form's two typed values next door */}
+      {lines.map((line, i) => (
+        <rect
+          key={line.y}
+          x={40}
+          y={line.y}
+          width={line.w}
+          height={2.5}
+          fill={PLATE.mark}
+          style={typeStyle(40, line.y, 350 + i * 170, 0.7)}
+        />
+      ))}
+
+      {/* signed */}
+      <path
+        d="M 42 162 c 9 -14 18 6 27 -4 s 13 12 24 -2 s 15 10 26 -6"
+        pathLength={1}
+        stroke={PLATE.hot}
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        style={drawStyle(1300, 1.1)}
+      />
+
+      {/* and sealed — outside the sheet, where the lock stands on plate 1 */}
+      <g className="fade on" style={{ animationDelay: "2350ms" }}>
+        <circle cx={282} cy={100} r={15} stroke={PLATE.mark} strokeWidth={1.3} />
+        <path
+          d="M 274.5 100 l 5.5 5.5 l 9.5 -11.5"
+          stroke={PLATE.mark}
+          strokeWidth={1.4}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle
+          cx={282}
+          cy={100}
+          r={26}
+          stroke={PLATE.mark}
+          strokeWidth={1}
+          style={{
+            transformBox: "view-box",
+            transformOrigin: "282px 100px",
+            opacity: 0,
+            animation: "no-sop-glow 3.4s ease-out 2900ms infinite",
+          }}
+        />
+      </g>
+    </PlateSvg>
+  );
+}
+
 // ───────────────────── type registers ─────────────────────
 
 const monoLabel: CSSProperties = {
@@ -285,6 +626,18 @@ const dotLabel: CSSProperties = {
   whiteSpace: "nowrap",
 };
 
+/** An issued card's own name — `gap-failures-pattern`'s `cardTitle`, same size, same
+ *  tracking, same tier, so the two slides' cards are read as one kind of object. */
+const cardTitle: CSSProperties = {
+  fontFamily: "var(--mono)",
+  fontSize: 14,
+  letterSpacing: "0.1em",
+  lineHeight: 1.3,
+  textTransform: "uppercase",
+  color: TIER.cardTitle,
+  whiteSpace: "nowrap",
+};
+
 const chipText: CSSProperties = {
   fontFamily: "var(--mono)",
   fontSize: 10,
@@ -304,13 +657,11 @@ const boxShell: CSSProperties = {
 
 const layer: CSSProperties = { position: "absolute", inset: 0 };
 
-/** THE EMPTY ANSWER RULE inside each question hero — the surviving half of the first
- *  cut's image, still never filled at any pose. Inset past the box's padding, one
- *  emphatic hairline in the blank tier, 14px off the box floor so it reads as a line
- *  somebody was supposed to write on rather than as the box's own border. */
-const BLANK_INSET_X = 20;
-const BLANK_BOTTOM = 14;
-const BLANK_HEIGHT = 1.5;
+/** Every row inside a card sits on one left rail and one measure — the pattern
+ *  `gap-failures-pattern`'s `cardRow` keeps. */
+function cardRow(top: number, padX: number, width: number): CSSProperties {
+  return { position: "absolute", left: padX, top, width };
+}
 
 // ───────────────────── the figure ─────────────────────
 
@@ -322,11 +673,12 @@ export interface NoSopBeatsProps {
 export function NoSopBeats({ pose }: NoSopBeatsProps) {
   // `>=` and not `===`, the step-reveal rule: a pose is everything argued so far.
   const showQuestions = pose >= 1;
-  const compact = pose >= 2; // both bands to chips, the spine rises, the fan is hero
+  const issuedCompact = pose >= 1; // the receipts land as the questions arrive
+  const questionsCompact = pose >= 2; // and the second band follows one beat later
   const showFray = pose >= 2;
   const showCloser = pose >= 3;
 
-  const spineTop = compact ? SPINE_Y - SPINE_RISE : SPINE_Y;
+  const spineTop = questionsCompact ? SPINE_Y - SPINE_RISE : SPINE_Y;
 
   return (
     <div
@@ -339,11 +691,18 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
       }}
     >
       {/* ───── the three band titles — each arrives with its beat and STAYS (owner
-          call: titles never replace each other). Title 2 rides with its band when the
-          stage compacts; title 3 arrives over the space the fan takes. ───── */}
+          call: titles never replace each other). Band 2's shelf is FIXED since the
+          2026-08-14 re-cut: the issued row is already compact when this heading lands,
+          so there is only one place for it to be.
+
+          ALL THREE ARE INERT, AT EVERY POSE, and that is a bug fix rather than tidiness:
+          heading 2 sits at y=76 and heading 3 at y=180, both INSIDE the first issued
+          card's 26→356 footprint, and a gated element is invisible but still
+          hit-testable. Before this, hovering the first card over either heading's own
+          box did nothing. Nothing in this row is ever interactive. ───── */}
       <div
         data-testid="no-sop-issued-eyebrow"
-        style={{ position: "absolute", left: 0, top: 0, ...monoLabel }}
+        style={{ position: "absolute", left: 0, top: 0, ...monoLabel, pointerEvents: "none" }}
       >
         {C.issuedEyebrow}
       </div>
@@ -352,12 +711,10 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
         style={{
           position: "absolute",
           left: 0,
-          top: compact ? UNWRITTEN_TITLE_TOP_CHIP : UNWRITTEN_TITLE_TOP_HERO,
+          top: UNWRITTEN_TITLE_TOP,
           ...monoLabel,
+          pointerEvents: "none",
           ...gate(showQuestions, 100),
-          transition:
-            `top 650ms var(--ease), ` +
-            `opacity 450ms var(--ease) ${showQuestions ? 100 : 0}ms`,
         }}
       >
         {C.unwrittenEyebrow}
@@ -369,6 +726,7 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
           left: 0,
           top: CONDITION_TITLE_TOP,
           ...monoLabel,
+          pointerEvents: "none",
           ...gate(showFray, 300),
         }}
       >
@@ -385,12 +743,12 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
         style={{ position: "absolute", inset: 0, overflow: "visible", pointerEvents: "none" }}
         aria-hidden="true"
       >
-        {/* the spine — authored LOW, riding up as one group when the stage compacts,
+        {/* the spine — authored LOW, riding up as one group when the questions compact,
             so everything on it moves as one object */}
         <g
           data-testid="no-sop-spine"
           style={{
-            transform: compact ? `translateY(-${SPINE_RISE}px)` : "translateY(0)",
+            transform: questionsCompact ? `translateY(-${SPINE_RISE}px)` : "translateY(0)",
             transition: "transform 650ms var(--ease)",
           }}
         >
@@ -554,7 +912,7 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
         </div>
       )}
 
-      {/* ───── the issued band — hero through poses 0–1, receipts after. The box is
+      {/* ───── the issued band — a plate card at pose 0, a receipt after. The box is
           the persistent node (MOVE); the pop is on an inner layer; the two faces
           crossfade inside it. ───── */}
       {C.issued.map((item, i) => (
@@ -567,38 +925,53 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
             left: issuedBoxLeft(i),
             top: ISSUED_TOP,
             width: ISSUED_BOX_WIDTH,
-            height: compact ? CHIP_HEIGHT : ISSUED_HERO_HEIGHT,
+            height: issuedCompact ? CHIP_HEIGHT : ISSUED_HERO_HEIGHT,
             transition: MOVE,
           }}
         >
           <div style={{ ...layer, animation: `no-sop-pop 0.55s var(--ease) ${350 + i * 220}ms both` }}>
-            {/* hero face */}
+            {/* the card face — plate, hairline, name, fact */}
             <div
               data-testid={`no-sop-issued-hero-${item.id}`}
-              style={{
-                ...layer,
-                padding: "0 20px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 14,
-                ...gate(!compact),
-              }}
+              style={{ ...layer, ...gate(!issuedCompact) }}
             >
-              <Icon size={26}>{ICONS[item.id]}</Icon>
-              <span
+              <div style={{ position: "absolute", left: CARD_PAD_X, top: PLATE_TOP }}>
+                <Plate id={item.id} />
+              </div>
+              <div
+                aria-hidden
+                className="no-sop-hairline"
                 style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: 14.5,
+                  position: "absolute",
+                  left: CARD_PAD_X,
+                  top: CARD_HAIRLINE_Y,
+                  width: CARD_INNER_WIDTH,
+                  height: CARD_HAIRLINE_HEIGHT,
+                }}
+              />
+              <div
+                data-testid={`no-sop-issued-title-${item.id}`}
+                style={{ ...cardRow(ISSUED_TITLE_Y, CARD_PAD_X, CARD_INNER_WIDTH), ...cardTitle }}
+              >
+                {item.title}
+              </div>
+              <p
+                data-testid={`no-sop-issued-line-${item.id}`}
+                style={{
+                  ...cardRow(ISSUED_LINE_Y, CARD_PAD_X, CARD_INNER_WIDTH),
+                  margin: 0,
+                  height: ISSUED_LINE_HEIGHT,
+                  overflow: "hidden",
+                  fontFamily: "var(--serif)",
+                  fontSize: 14,
                   lineHeight: 1.45,
-                  color: TIER.heroRow,
-                  whiteSpace: "nowrap",
+                  color: TIER.line,
                 }}
               >
-                {item.label}
-              </span>
+                {highlight(item.line, item.lineKw)}
+              </p>
             </div>
-            {/* chip face */}
+            {/* chip face — the card's own name, and nothing it did not already say */}
             <div
               data-testid={`no-sop-issued-chip-${item.id}`}
               style={{
@@ -607,19 +980,20 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
                 display: "flex",
                 alignItems: "center",
                 gap: 10,
-                ...gate(compact, 250),
+                ...gate(issuedCompact, 250),
               }}
             >
               <Icon size={14}>{ICONS[item.id]}</Icon>
-              <span style={chipText}>{item.short}</span>
+              <span style={chipText}>{item.title}</span>
             </div>
           </div>
         </div>
       ))}
 
-      {/* ───── the question band — a 2×2 hero grid directly below the issued row,
-          a four-chip row after. THE QUESTION AND ITS EMPTY RULE ARE ONE FACE: the
-          blank arrives with its question and is never filled at any pose. ───── */}
+      {/* ───── the question band — a 2×2 grid of cards under the receipts, a four-chip
+          row after. THREE ROWS PER CARD AND THE THIRD IS THE FIELD: the domain the
+          missing clause belongs to, the question as the desk asks it, and a dashed rule
+          with a caret parked on it that is never written on at any pose. ───── */}
       {C.questions.map((q, i) => (
         <div
           key={q.id}
@@ -627,41 +1001,101 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
           className="no-sop-box"
           style={{
             ...boxShell,
-            left: compact ? questionChipLeft(i) : questionHeroLeft(i),
-            top: compact ? QUESTION_CHIP_TOP : questionHeroTop(i),
-            width: compact ? QUESTION_CHIP_WIDTH : QUESTION_HERO_WIDTH,
-            height: compact ? CHIP_HEIGHT : QUESTION_HERO_HEIGHT,
+            left: questionsCompact ? questionChipLeft(i) : questionHeroLeft(i),
+            top: questionsCompact ? QUESTION_CHIP_TOP : questionHeroTop(i),
+            width: questionsCompact ? QUESTION_CHIP_WIDTH : QUESTION_HERO_WIDTH,
+            height: questionsCompact ? CHIP_HEIGHT : QUESTION_HERO_HEIGHT,
+            // INERT UNTIL IT IS ARGUED, which is the bug fix `gap-failures-pattern` had
+            // to make for the same reason one slide later. At pose 0 these four boxes are
+            // invisible and standing over the three issued cards' 26→356 footprint — a
+            // gated element still takes a pointer — so hovering an issued card lit it
+            // only in the strips no question box covered. The hole opens exactly when the
+            // boxes are painted.
+            pointerEvents: showQuestions ? "auto" : "none",
             ...gate(showQuestions, 200 + i * 170),
             transition: `${MOVE}, opacity 450ms var(--ease) ${showQuestions ? 200 + i * 170 : 0}ms`,
           }}
         >
-          {/* hero face — icon, the question, its empty answer rule */}
+          {/* card face */}
           <div
             data-testid={`no-sop-question-hero-${q.id}`}
-            style={{ ...layer, padding: "16px 20px", ...gate(!compact) }}
+            style={{ ...layer, ...gate(!questionsCompact) }}
           >
-            <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
-              <Icon size={22}>{ICONS[q.id]}</Icon>
-              <span
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: 13.5,
-                  lineHeight: 1.35,
-                  color: TIER.heroRow,
-                }}
-              >
-                {q.label}
+            <div
+              style={{
+                ...cardRow(QUESTION_DOMAIN_Y, QUESTION_PAD_X, QUESTION_INNER_WIDTH),
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <Icon size={16}>{ICONS[q.id]}</Icon>
+              <span data-testid={`no-sop-question-domain-${q.id}`} style={{ ...monoLabel, color: TIER.domain }}>
+                {q.domain}
               </span>
             </div>
+            <p
+              data-testid={`no-sop-question-ask-${q.id}`}
+              style={{
+                ...cardRow(QUESTION_ASK_Y, QUESTION_PAD_X, QUESTION_INNER_WIDTH),
+                margin: 0,
+                fontFamily: "var(--serif)",
+                fontSize: 17,
+                lineHeight: 1.3,
+                color: TIER.ask,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {q.ask}
+            </p>
+
+            {/* the answer field. THE CARET IS THE ONLY THING ON THIS STAGE THAT MOVES
+                FOREVER AND MEANS SOMETHING: a cursor sitting at the head of a line
+                nobody typed on. */}
+            <div
+              style={{
+                ...cardRow(QUESTION_FIELD_NOTE_Y, QUESTION_PAD_X, QUESTION_INNER_WIDTH),
+                display: "flex",
+                alignItems: "center",
+                gap: 9,
+              }}
+            >
+              <span
+                aria-hidden
+                data-testid={`no-sop-caret-${q.id}`}
+                style={{
+                  width: QUESTION_CARET_WIDTH,
+                  height: QUESTION_CARET_HEIGHT,
+                  background: TIER.caret,
+                  animation: "no-sop-caret 1.5s var(--ease) infinite",
+                }}
+              />
+              <span
+                data-testid={`no-sop-blank-note-${q.id}`}
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 9.5,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: TIER.note,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {C.blankNote}
+              </span>
+            </div>
+            {/* …and the rule itself: dashed, because a solid one reads as a border and a
+                dashed one reads as a line somebody was supposed to write on. EMPTY AT
+                EVERY POSE — the test holds it as an ancestry fact and a content fact. */}
             <div
               data-testid={`no-sop-answer-blank-${q.id}`}
               style={{
                 position: "absolute",
-                left: BLANK_INSET_X,
-                right: BLANK_INSET_X,
-                bottom: BLANK_BOTTOM,
-                height: BLANK_HEIGHT,
-                background: TIER.blank,
+                left: QUESTION_PAD_X,
+                right: QUESTION_PAD_X,
+                top: QUESTION_FIELD_RULE_Y,
+                height: QUESTION_FIELD_RULE_HEIGHT,
+                borderTop: `${QUESTION_FIELD_RULE_HEIGHT}px dashed ${TIER.blank}`,
               }}
             />
           </div>
@@ -674,7 +1108,7 @@ export function NoSopBeats({ pose }: NoSopBeatsProps) {
               display: "flex",
               alignItems: "center",
               gap: 8,
-              ...gate(compact, 250),
+              ...gate(questionsCompact, 250),
             }}
           >
             <Icon size={12}>{ICONS[q.id]}</Icon>

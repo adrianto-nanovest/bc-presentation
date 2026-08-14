@@ -6,18 +6,79 @@
  * element mounts; everything that changes BETWEEN poses is a CSS transition set
  * inline by the component, so it runs both ways on the pose walk. The global
  * `prefers-reduced-motion: reduce` rule in globals.css squashes both forms to
- * 0.01ms — a draw parks on its finished frame, the two infinite decorations (the
- * waiting ping, the marching dashes) run their single squashed iteration and park —
- * so every pose rests complete under either preference, with no matchMedia gate to
- * write and ZERO SMIL to gate at mount.
+ * 0.01ms — a draw parks on its finished frame, an ambient loop parks on its 100%
+ * frame — so every pose rests complete under either preference, with no matchMedia
+ * gate to write and ZERO SMIL to gate at mount.
+ *
+ * TWO KINDS OF MOTION LIVE HERE AND THEY ARE NOT THE SAME KIND — the distinction
+ * ./failures-pattern.css states next door, and this file now needs it too:
+ *   ARRIVALS run once and END ON THE FRAME THE PICTURE RESTS ON: every draw, every
+ *   `no-sop-type` bar filling, the pop under a landing card. `both`/`forwards` holds
+ *   them there, which is also what the reduced-motion squash lands on.
+ *   AMBIENT LOOPS run forever and are DECORATION: the caret's blink, the play
+ *   triangle's beat, the audience's nudge, the marching dashes, the wobbling fray.
+ *   Every one of those is authored so its 0% and 100% frames are the SAME frame, so
+ *   the loop has no seam and the squashed frame is the composed one. THE THREE
+ *   EXCEPTIONS ARE DOCUMENTED WHERE THEY ARE DEFINED (`no-sop-ping`, `no-sop-wave`,
+ *   `no-sop-glow`): each one's whole life is a fade-out, and parking invisible is the
+ *   correct resting frame for a decoration that is a departure.
  */
 
-/* Line draw-in — the spine's two segments and every fray strand. Elements set
-   pathLength=1, dasharray 1, dashoffset 1; CSS and not SMIL for the reason the
-   ladder's `gap-ladder-draw` records: SMIL is invisible to the reduced-motion
-   squash and would have to be gated at mount. */
+/* Line draw-in — the spine's two segments, every fray strand, the open shackle and the
+   memo's signature. Elements set pathLength=1, dasharray 1, dashoffset 1; CSS and not
+   SMIL for the reason the ladder's `gap-ladder-draw` records: SMIL is invisible to the
+   reduced-motion squash and would have to be gated at mount. */
 @keyframes no-sop-draw {
   to { stroke-dashoffset: 0; }
+}
+
+/* A bar written left to right — the login form's two values and the memo's five lines.
+   `scaleX` from 0 to the element's OWN width, so the rest frame is the authored mark and
+   a squashed iteration parks it full. THE ONE IDIOM THIS SLIDE ARGUES WITH ITSELF: these
+   are the marks that got written; the four answer fields never take it. */
+@keyframes no-sop-type {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* The cursor parked at the head of every empty answer field. 0% and 100% are both fully
+   on, so the field rests WITH its caret under reduced motion — an invisible caret would
+   turn the one mark that says "still waiting" into a gap in a dashed line. */
+@keyframes no-sop-caret {
+  0%        { opacity: 1; }
+  44%       { opacity: 1; }
+  56%, 92%  { opacity: 0.1; }
+  100%      { opacity: 1; }
+}
+
+/* The demonstration still playing. Symmetric about its own rest frame. */
+@keyframes no-sop-beat {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+
+/* Six people in a room, not quite still. ±1.5px, and back. */
+@keyframes no-sop-nudge {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(0, -1.5px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* The demonstration reaching the room — three arcs leaving the screen. Parks invisible:
+   its whole life is the crossing, and the screen carries the fact. */
+@keyframes no-sop-wave {
+  0%   { opacity: 0; transform: translateX(-6px); }
+  35%  { opacity: 0.85; }
+  100% { opacity: 0; transform: translateX(12px); }
+}
+
+/* Something on a plate that is still live — the open lock, the seal. Pure decoration,
+   ends invisible; the mark it breathes around carries the fact. */
+@keyframes no-sop-glow {
+  0%   { transform: scale(0.6); opacity: 0.5; }
+  70%  { opacity: 0.12; }
+  100% { transform: scale(1.35); opacity: 0; }
 }
 
 /* The second dot waiting for an answer that never comes. Ends at opacity 0 — under
@@ -40,29 +101,46 @@
   to { stroke-dashoffset: -42; }
 }
 
-/* A hero box landing as the rollout line reaches it. On an INNER node, so the
-   geometry wrapper's pose transitions never fight the fill-mode. */
+/* A card landing as the rollout line reaches it. On an INNER node, so the geometry
+   wrapper's pose transitions never fight the fill-mode. */
 @keyframes no-sop-pop {
   from { opacity: 0; transform: translateY(12px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Every content box, hero or chip. Border and fill live HERE and not in the inline
-   style so :hover can win — E.4's hover grammar (B4CategoryCard): border brightens
-   to copper-200 and a copper wash lays over the fill. The wash is --copper-500 at
-   8% rather than an rgba() literal, the no-hex rule's nearest expressible form. */
+/* Every content box, card or chip — AND IT IS `gap-failures-pattern`'s CHROME, not this
+   slide's own any more (owner call, 2026-08-14). That slide's cards are a `--copper-700`
+   border over a translucent near-black; this file used to paint a `--copper-800` border
+   over a SOLID `--neutral-800`, which read as a grey panel beside them. The fill is
+   written as a `color-mix` rather than as the neighbour's `rgba(10,10,10,0.6)` literal
+   because this figure's no-hex rule still holds: `--neutral-900` IS #0a0a0a, so the two
+   slides paint the same colour from the same token.
+   Border and fill live HERE and not in the inline style so :hover can win — E.4's hover
+   grammar (B4CategoryCard): the border brightens to copper-200 and a copper wash lays
+   over the fill. */
 .no-sop-box {
-  border: 1px solid var(--copper-800);
-  background: var(--neutral-800);
+  border: 1px solid var(--copper-700);
+  background: color-mix(in srgb, var(--neutral-900) 60%, transparent);
 }
 .no-sop-box:hover {
   border-color: var(--copper-200);
   background:
     linear-gradient(
-      color-mix(in srgb, var(--copper-500) 8%, transparent),
-      color-mix(in srgb, var(--copper-500) 8%, transparent)
+      color-mix(in srgb, var(--copper-500) 6%, transparent),
+      color-mix(in srgb, var(--copper-500) 6%, transparent)
     ),
-    var(--neutral-800);
+    color-mix(in srgb, var(--neutral-900) 60%, transparent);
+}
+
+/* The plate's own rule — picture above, words below. It brightens WITH the border, so a
+   card leaning in reads as one gesture rather than as a border doing something on its
+   own (`gap-failures-pattern`'s `CARD_HAIRLINE_Y` behaves the same way). */
+.no-sop-hairline {
+  background: var(--copper-800);
+  transition: background 200ms var(--ease);
+}
+.no-sop-box:hover .no-sop-hairline {
+  background: var(--copper-600);
 }
 
 /* Pose-gate dimming for the argued-past fan: a scene that has been argued steps

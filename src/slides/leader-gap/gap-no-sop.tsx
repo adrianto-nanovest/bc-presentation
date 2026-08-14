@@ -49,28 +49,41 @@
 // leader rooms read identical bytes.
 //
 // WHY THE SLIDE IS SHAPED THIS WAY. The stage is a STEP DIAGRAM UNDER TWO BANDS OF
-// BOXES: three issued boxes (things done RIGHT — a login, a demonstration,
+// CARDS: three issued cards (things done RIGHT — a login, a demonstration,
 // encouragement in writing, because a row of failures would make the slide an
-// accusation and §6.2's beat is a condition), four question boxes each holding the
-// EMPTY RULE where its answer was never written, and below them a rollout spine that
+// accusation and §6.2's beat is a condition), four question cards each holding the
+// EMPTY FIELD where its answer was never written, and below them a rollout spine that
 // draws to a dot where delivery happened, stops dead at a second dot where the writing
 // should have happened, and FRAYS into two dozen swaying private hairlines when the
-// stage compacts. The stopped-and-frayed line plus the unfilled blanks are the figure,
+// stage compacts. The stopped-and-frayed line plus the unfilled fields are the figure,
 // and an image no other slide in this deck draws.
 //
+// RE-CUT 2026-08-14 (owner call) AGAINST THE TWO SLIDES IT SHIPS BESIDE, and the three
+// complaints are recorded in `./components/NoSopBeats.tsx` and `./content.ts` in full:
+// the boxes did not look like `gap-failures-pattern`'s cards or the Capability Ladder's,
+// POSE 0 WAS HALF EMPTY STAGE, and the four questions read as riddles with an unexplained
+// hairline under each one. The answer was to make every box a CARD in the section's own
+// grammar — a live plate over a hairline over a mono title over one line of prose — and
+// to give each question its domain, a question with its subject spelled, and an answer
+// field that says what it is.
+//
 // 4 POSES, one argument each — elements KEEP IDENTITY and morph between them:
-//   0 — WHAT WAS HANDED OUT. Three hero boxes across the top; the spine draws its
+//   0 — WHAT WAS HANDED OUT. Three plate cards fill the stage; the spine draws its
 //       first segment and lands one labelled dot: HANDED OUT. A complete inventory
-//       under its own heading — what a competent rollout issues.
-//   1 — AND WHAT WAS NEVER WRITTEN DOWN. The issued row holds; the four questions land
-//       directly below it, each arriving WITH its empty rule (asked, and nothing
-//       written — the pair is one face). The spine extends to a second labelled dot —
-//       NEVER WRITTEN — and pings there: guidance stops here. The escalation down the
-//       grid is permission → prohibition → arbitration → disclosure.
-//   2 — WHAT THE SILENCE LEAVES BEHIND. Both bands compact into chip receipts, the
-//       spine rises into the freed space, and the stopped line fans out — one swaying
-//       hairline per improvised private rule, each ending somewhere nobody else can
-//       read. Drawn, not said: the presenter speaks the condition sentences.
+//       under its own heading — what a competent rollout issues. Each plate draws its
+//       own item: a login form filling itself and a lock opening, a demonstration
+//       playing to a room, a memo writing itself and taking a seal.
+//   1 — AND WHAT IT NEVER WROTE DOWN. THE ISSUED ROW CONTRACTS TO THREE RECEIPTS on this
+//       beat — one beat earlier than the first cut, which is what buys the question cards
+//       the height they need — and the four questions land under it, each arriving WITH
+//       its empty answer field (asked, and nothing written — the pair is one face). The
+//       spine extends to a second labelled dot, NEVER WRITTEN, and pings there: guidance
+//       stops here. The escalation down the grid is printed rather than implied:
+//       PERMISSION → PROHIBITION → ARBITRATION → DISCLOSURE.
+//   2 — WHAT THE SILENCE LEAVES BEHIND. The question cards compact too, the spine rises
+//       into the freed space, and the stopped line fans out — one swaying hairline per
+//       improvised private rule, each ending somewhere nobody else can read. Drawn, not
+//       said: the presenter speaks the condition sentences.
 //   3 — THE FRAME. The fan dims to an afterimage; one dashed line marches on from the
 //       second dot — the rule only the leader can write — and the closer lands under
 //       it: nobody broke a rule, there was no rule to break, and writing one is the
@@ -79,7 +92,7 @@
 // NO POSE RESTS ON EVIDENCE WITH ITS CONCLUSION MISSING — the property the pose map is
 // checked against rather than the pose count. Pose 0 rests on a full inventory under a
 // heading that says what it is and a dot that says the delivery happened. Pose 1's
-// last arrival is the fourth question WITH its blank (a question without its blank is
+// last arrival is the fourth question WITH its field (a question without its blank is
 // the slide's own image half-drawn), and the pose ends on a line that has visibly
 // STOPPED — evidence and verdict in one mark. Pose 2's fan is condition and
 // consequence in one image: the question still gets answered (every strand ends
@@ -91,7 +104,9 @@
 // frayed line with no sentence saying that nobody broke anything, which for this slide
 // in particular is the one way it could travel badly: an exported page of unanswered
 // questions with no verdict is a slide somebody can re-caption as a list of findings
-// against a team.
+// against a team. THE COST OF THAT CHOICE IS NOW HIGHER AND IS ACCEPTED: the three
+// plates only exist at pose 0, so nothing exported to PDF ever shows them. They are for
+// the room, and the room is where this slide is argued.
 //
 // THE LETTER IS NOT AUTHORED HERE. This slide composes as the SECOND of the `gap` run —
 // B.2 in today's leader decks — and every figure behind it in the run steps by one the
