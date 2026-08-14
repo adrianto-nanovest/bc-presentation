@@ -1,3 +1,20 @@
+// ⚠ SUPERSEDED, 2026-08-13, AND KEPT AS THE RECORD OF WHAT gh#55 SHIPPED.
+//
+// The nine-pose focus walk this file checks no longer exists. C.1 was reworked to two
+// poses: the six decision beats became hover and pin (`resolveFocus` in
+// `src/slides/leader-shape/walk.ts`), the closer became a recap that lights all six
+// pillars at once, and `steps` went from 9 to 2. This harness WILL FAIL against the
+// current slide — that is the harness being out of date, not the slide being broken.
+//
+// The live harness is `scripts/c1-figure-verify.mjs`, which carries #55's two
+// load-bearing claims forward in their stronger form: the no-dim comparison now runs
+// against a pointer rather than a pose, and the focused-floor measurement is taken at
+// the recap, where all six pillars grow at once and which is `canonicalPose` — so the
+// grown figure is what the PDF prints rather than only what a live walk reaches.
+//
+// Nothing below has been edited: the point of leaving it is that #55's acceptance
+// criteria and the numbers they were met with stay readable.
+//
 // gh#55's browser evidence — THE FOCUS WALK, both leader decks, all nine poses.
 //
 // `tests/unit/shape-agentic-org.test.tsx` owns everything jsdom can see, and
@@ -292,8 +309,10 @@ const BRAND_LINE = { berau: "MineTech", gems: "DigiTech" };
 /** The figure this slide composes as today. */
 const FIG_C1 = "— FIG. C.1·THE AGENTIC ORGANIZATION";
 /** And the figure one step past its closer — F.8, which #54 moved to `shape`'s
- *  second slot. Asserted for the reason given at the handover check below. */
-const FIG_C2 = "— FIG. C.2·YOUR AGENTIC OS";
+ *  second slot. Asserted for the reason given at the handover check below. The LABEL
+ *  is the leader deck's own as of 2026-08-14 (owner call, `f8HeaderFor`); the standard
+ *  decks still print `YOUR AGENTIC OS` there. */
+const FIG_C2 = "— FIG. C.2·SIX PILLARS, ONE DESK";
 
 /** The deck's own keys (`src/deck/useKeyboardNav.ts`): Space advances a step,
  *  Backspace retreats one. The AC's `8 → 0` is a claim about what a presenter's

@@ -611,11 +611,80 @@ export function f8CloserFor(deckSet: DeckSetId): F8Closer {
   return F8_CLOSER_BY_DECK_SET[deckSet];
 }
 
+/** The two lines at the top of the stage: the mono figure label and the headline
+ *  over the figure, with the headline's keyword substrings. The letter and number
+ *  in front of `figLabel` are NOT here — §3.5 derives those from the composed
+ *  position, so this is the label only. */
+export interface F8Header {
+  figLabel: string;
+  headline: string;
+  headlineKw: readonly string[];
+}
+
+/**
+ * F.8's header — deck-set-scoped for the SAME reason the closer above is, and by
+ * the same mechanism. Owner call, 2026-08-14.
+ *
+ * THE STANDARD PAIR IS THE SPEC'S, unchanged byte for byte: there this slide is
+ * F.8, it closes the TOOLS run, and the room will BUILD this. "YOUR AGENTIC OS"
+ * over "The command center you carry." is what F.2–F.7 just earned, and the
+ * 2026-05-14 spec names both strings.
+ *
+ * THE LEADER PAIR IS DIFFERENT, because gh#54 made this a different slide there —
+ * C.2, directly behind C.1 · `shape-agentic-org`, in front of someone who will
+ * SPONSOR this rather than build it. Three things were wrong with printing the
+ * standard pair at C.2:
+ *
+ *   1 — AUDIENCE. "YOUR" and "you carry" are second-person builder copy, and §4.5
+ *       already settled that argument for this deck: a leader deck must not promise
+ *       individual capability. It is the same objection that gave the closer above
+ *       its own leader line.
+ *   2 — IT SPENT THE CLOSER EARLY. The leader closer IS the one-person/one-division
+ *       contrast, and a headline that says "you carry" states half of it first, so
+ *       the contrast lands twice and lands weaker the second time.
+ *   3 — NO BATON FROM C.1. C.1 is "THE AGENTIC ORGANIZATION · Six pillars move
+ *       together, or none of them move", and nothing in the standard pair reaches
+ *       back to it, so THE SHAPE opened on two figures with no visible join.
+ *
+ * SO THE LEADER LABEL TAKES C.1'S NOUN AND ADDS THE FIGURE'S OWN SCALE, and the
+ * headline says what the drawing is — the place those pillars arrive. `desk` is
+ * also the unit D.4 · "FROM INDIVIDUAL SEATS TO A LINE ITEM" later converts, so the
+ * word is planted here and spent there.
+ *
+ * "LAND" AND NOT "MAP TO", DELIBERATELY. The six pillars are organisational —
+ * Governance & Policies, Tools & Platform, People & Mindset, Strategy & Leadership,
+ * Process & Methodology, AI Companions — and the monitor's nav rail holds EIGHT
+ * tabs. Any wording that claims a one-to-one correspondence between the two figures
+ * would be false on a count a room can do from its seat.
+ *
+ * ONE KEYWORD, AND IT IS THE REPEATED NOUN. The copper on "six pillars" is what
+ * makes the baton visible from the back of the room; highlighting the verb would
+ * emphasise the part C.1 did not say.
+ */
+const F8_HEADER_BY_DECK_SET: Record<DeckSetId, F8Header> = {
+  standard: {
+    figLabel: "YOUR AGENTIC OS",
+    headline: "The command center you carry.",
+    headlineKw: ["command center", "carry"],
+  },
+  leader: {
+    figLabel: "SIX PILLARS, ONE DESK",
+    headline: "This is where the six pillars land.",
+    headlineKw: ["six pillars"],
+  },
+};
+
+/** The header this deck set prints. Pass `VARIANT.deckSet`. Not exported as a
+ *  table, for `f8CloserFor`'s reason. */
+export function f8HeaderFor(deckSet: DeckSetId): F8Header {
+  return F8_HEADER_BY_DECK_SET[deckSet];
+}
+
 export const f8Content = {
-  headline: "The command center you carry.",
-  headlineKw: ["command center", "carry"],
-  // The closer is NOT a field here: it depends on the deck set, so `f8CloserFor`
-  // resolves it and this object holds only what every deck prints alike.
+  // NEITHER THE HEADER NOR THE CLOSER IS A FIELD HERE: both depend on the deck set,
+  // so `f8HeaderFor` and `f8CloserFor` resolve them and this object holds only what
+  // every deck prints alike — the monitor's own contents, which are the same
+  // product fiction whoever is in the room.
 
   // ── Top status bar inside the monitor bezel (spec §3.1) ──
   topBar: {

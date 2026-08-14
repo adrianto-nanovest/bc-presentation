@@ -11,54 +11,72 @@
 // WHY THE SLIDE IS SHAPED THIS WAY. §6.6 calls this the centrepiece, and what it
 // has to establish is that an agentic organisation is a SHAPE and not a purchase:
 // one enabling function at the centre, six pillars that only work together. A ring
-// says that; a list of six bullets says the leader may fund three of them. The hub
-// arrives first and alone, so the room reads "who" before "what", and the six
-// arrive as a sweep rather than a flash, so they read as six of one thing.
+// says that; a list of six bullets says the leader may fund three of them.
 //
-// NINE POSES, one argument each. `./walk.ts` owns WHEN each one lands and names the
-// three that are not counted; this is what each one SAYS:
-//   0 — THE ENABLER. The hub, its brand line, and the standing kicker that says an
-//       operating model is not a department and not a committee.
-//   1 — THE SIX PILLARS, with their spokes and labels. ALL SIX AT FULL STRENGTH:
-//       nothing is dimmed and nothing is waiting to be undimmed (§7.1 — attention
-//       is bought with added light, never subtracted).
-//   2 — GOVERNANCE & POLICIES. Where the data may go, written down before someone
-//       improvises. The walk opens here because section D opens here.
-//   3 — TOOLS & PLATFORM. Who gets a company-managed seat, and that the company
-//       pays for it.
-//   4 — PEOPLE & MINDSET. Whether the culture rewards the person who tries it or
-//       the person who waits.
-//   5 — STRATEGY & LEADERSHIP. Which problem gets the pilot, and that leading the
-//       culture is part of the job.
-//   6 — PROCESS & METHODOLOGY. Where a human still signs, and everywhere they no
-//       longer do.
-//   7 — AI COMPANIONS. When a tool is allowed to become an agent.
-//   8 — THE CLOSER. The ring back at rest — nothing lit, nothing dimmed — and the
-//       claim the six beats were evidence for: none of them is a tool purchase.
+// ────────────────────────────────────────────────────────────────────────────
+// TWO POSES, AND THE SIX DECISIONS ARE REACHED WITH THE POINTER. This replaces the
+// nine-pose focus walk #55 shipped (hub · ring · six beats · closer), owner call,
+// 2026-08-13. The argument, because #55 spent one getting the budget UP to nine:
 //
-// SIX BEATS AND NO GROUPING, which is where the step budget went. #16 budgeted ~4
-// steps; §7.1 spends nine. Pairing the pillars (governance+tools /
-// people+strategy / process+companions) would fit the old budget and would cost the
-// one-decision-per-pillar clarity that is the only reason this slide can be an
-// INDEX for the section behind it — a leader who hears two decisions in one breath
-// remembers neither pillar. The count is not typed here either: `STEP_COUNT` is
-// derived from the number of pillars that have a decision (see `./walk.ts`), so a
-// seventh pillar grows the budget instead of silently losing a beat.
+//   1. THE FIGURE IS ONE THING, SO IT ARRIVES AS ONE THING. Poses 0 and 1 used to
+//      split it — a disc alone on a black stage, then the six pillars — and the
+//      first of those is a frame the room can do nothing with. They are joined
+//      here into a single staged BUILD that runs on mount: the disc settles, six
+//      spokes grow out of it, six boxes land at their ends, the beads start, the
+//      panel opens. Same choreography, no click. `./components/agentic-org.css`
+//      owns it and `BUILD` in `./components/PillarOrbit.tsx` owns the timetable.
+//   2. SIX BEATS PUT THE ORDER IN THE DECK'S HANDS, and §6.6 asks this slide to be
+//      an INDEX for section D. An index is something you look things up in. A Div
+//      Head who asks about the seats during the governance beat had to be walked
+//      through three decisions they did not ask for; now the pointer answers, in
+//      whatever order the room asks. Hover opens a pillar; click PINS it, and a pin
+//      HOLDS THE PANEL — hovering another box still lights that box, but the words on
+//      the right stay on the pinned decision until a second click releases it.
+//      `resolveFocus`, `isLit` and `togglePin` in `./walk.ts` own those three rules.
+//   3. THE DECISIONS GOT DEEPER, WHICH IS WHERE THE FREED BUDGET WENT. Each pillar
+//      now carries HR p4's own sub-bullets under its decision (`Pillar.points`),
+//      which is the answer to the question a decision always provokes — *what does
+//      that actually cover?* — and which there was no room for in a beat that had
+//      to be read in one breath.
+//   4. THE LAST POSE IS A RECAP, NOT A THESIS. It used to be the closer standing
+//      alone in an empty column, with its evidence already off the stage. It now
+//      prints all six decisions compressed to their objects under one shared stem,
+//      with the closer under a hairline beneath them, while the ring behind it
+//      lights ALL SIX pillars at once — the panel and the figure making the
+//      headline's claim in two registers at the same moment.
 //
-// `canonicalPose: 1` — AND IT IS NO LONGER `steps - 1`, so it needs its argument
-// written down. The exports print `canonicalPose` and nothing else, and pose 1 is
-// the fullest pose in which no ONE of six pillars is singled out. A canonical pose
-// INSIDE the walk would print a PDF whose centrepiece emphasises whichever pillar
-// the export happened to stop on — six pillars that "move together, or none of them
-// move", with one of them lit for a reason the page cannot explain. A canonical
-// pose of 0 would export a hub with no organisation around it.
+// WHAT THE OLD SHAPE COST, stated plainly so this is reversible: the walk
+// guaranteed the room heard all six decisions, and the pointer does not. That is
+// the trade. The recap is what pays for it — every decision is stated there,
+// unconditionally, whether or not anyone touched the figure — and the panel's idle
+// block means a presenter who never touches the slide still delivers the argument.
+// ────────────────────────────────────────────────────────────────────────────
 //
-// POSE 8 IS THE ONE REAL ALTERNATIVE and was considered: the ring is back at rest
-// there, so it singles out nothing, and it adds the closer — arguably the strongest
-// single frame this slide has. It is not shipped because #55's acceptance criteria
-// pin `canonicalPose` at 1 "unless a different pose is argued for in a comment on
-// this issue first", and that argument has not been made on the issue. So 1 ships,
-// and the six decisions are SPOKEN rather than printed.
+// TWO POSES, one argument each:
+//   0 — THE FIGURE. The enabler, its brand line, six spokes, six pillars, and the
+//       panel beside them. Every one of the six decisions is reachable from here
+//       without leaving the pose. NOTHING IS DIMMED and nothing is waiting to be
+//       undimmed (§7.1 — attention is bought with added light, never subtracted);
+//       the pillar under the pointer GAINS fill, a thickened spoke, a halo and a
+//       reversed bead flow, and the other five are unchanged byte for byte.
+//   1 — THE RECAP. All six pillars lit at once, the six decisions as six
+//       fragments under one stem, and the claim they are evidence for: none of
+//       them is a tool purchase.
+//
+// THERE IS NO SUBTITLE. A standing mono kicker — "AN OPERATING MODEL — NOT A
+// DEPARTMENT, NOT A COMMITTEE" — printed under the headline at every pose; it is cut
+// (owner call, 2026-08-13) along with `KICKER_TOP` in `./geometry.ts` and the
+// `kicker` field in `./content.ts`, which both record the deletion where they used to
+// live. The headline stands alone over the figure.
+//
+// `canonicalPose: 1` — unchanged from #55, and it now needs a different argument
+// than the one #55 gave it. The exports print `canonicalPose` and nothing else, and
+// pose 1 is the pose in which no ONE of six pillars is singled out AND every
+// decision is on the page: six recap fragments, the closer, and a ring with all six
+// lit equally. #55's acceptance criterion pins this at 1 "unless a different pose is
+// argued for in a comment on this issue first" — the number does not move, and what
+// it prints is strictly more than it printed before. Pose 0 would export a figure
+// whose panel is showing an idle prompt, because a PDF has no pointer.
 //
 // THE LETTER IS NOT AUTHORED HERE. This slide composes as C.1 today, and the
 // `shape` run keeps C as the rest of Phase 6 lands — §4.3 gives the run four
@@ -85,6 +103,9 @@ export function ShapeAgenticOrg({ brandLine }: { brandLine: string | null }) {
     <>
       <FigLabel label={C.figLabel} />
 
+      {/* TWO ELEMENTS IN THE HEADER AND NOT THREE. The `.slide-headline-row` used to
+          be followed by a mono kicker in the band beneath it; that line is cut, and
+          nothing replaced it — the space is the point. */}
       <div className="slide-headline-row">
         <h1 className="slide-headline small">{highlight(C.headline, C.headlineKw)}</h1>
       </div>
@@ -106,15 +127,15 @@ const BRAND_LINE = hubBrandLineFor(VARIANT.brand);
 
 export const shapeAgenticOrgSlide: SlideDef = {
   id: "shape-agentic-org",
-  // NINE, IMPORTED AND NOT TYPED. `STEP_COUNT` is `hub + ring + one beat per pillar
-  // + closer`, counted off `shapeOrgContent.pillars` — so a seventh pillar makes
-  // this ten on its own. A literal `9` here is how the seventh pillar's decision
-  // becomes a pose the deck can never reach (`DeckContext` clamps at `steps - 1`):
-  // no error, no blank slide, no failing test, just one pillar whose decision is
-  // never spoken and a closer that arrives while a pillar is still lit.
+  // TWO, IMPORTED AND NOT TYPED — and the import now buys something different than
+  // it used to. Under nine poses `STEP_COUNT` was derived from the pillar count, so
+  // a seventh pillar grew the budget instead of losing a beat. There are no beats
+  // left to lose: a seventh pillar costs zero steps, because the pointer reaches it
+  // for free. What the import still buys is ONE place where the figure's pose budget
+  // is written down, next to the `POSE` names the component branches on.
   steps: STEP_COUNT,
-  // Deliberately NOT `STEP_COUNT - 1`, and no longer equal to it — see the argument
-  // for pose 1 in the header comment.
+  // The recap, and see the argument in the header comment. Deliberately equal to
+  // `STEP_COUNT - 1` here, where it used to be deliberately not.
   canonicalPose: 1,
   animationMode: "step-reveal",
   surface: "dark",

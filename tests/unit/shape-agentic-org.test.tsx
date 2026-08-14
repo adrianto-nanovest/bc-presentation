@@ -1,42 +1,65 @@
-// THE AGENTIC ORGANIZATION · slide tests. All NINE poses, all three brands.
+// THE AGENTIC ORGANIZATION · slide tests. BOTH poses, all three brands, and the
+// pointer that replaced the other seven.
 //
-// WHAT THIS FILE CAN AND CANNOT PROVE. jsdom has no layout, so nothing here
-// measures a pixel a browser would place — every geometric claim is asserted as
-// the ONE NUMBER both sides read (`../../src/slides/leader-shape/geometry.ts`),
-// and the rendered composition is walked at 1280×720 in a real engine separately
-// (`scripts/gh55-verify.mjs`). What jsdom is good for is the four things this
-// slide is actually at risk of, and the issue's AC names the middle two out loud:
+// ────────────────────────────────────────────────────────────────────────────
+// WHAT CHANGED UNDER THIS FILE, because half of it is a rewrite rather than an
+// edit. The slide used to be NINE poses — hub · ring · six decision beats · closer
+// — and `focusedPillarIndex(pose)` was the whole interaction model, so every test
+// here could ask one pure function what the stage should look like and then read the
+// DOM back. That walk is retired (owner call, 2026-08-13). There are TWO poses now,
+// the figure arrives complete inside the first of them, and WHICH DECISION IS OPEN is
+// answered by the POINTER: `resolveFocus(pinned, hovered, focused)`.
 //
-//   1. THE FLOOR. §7.1 recorded one open risk against variant A — the lowest
-//      pillar sits close to the NavBar's hover band and GROWS on focus. The
-//      prototype's numbers put it 26px inside the band, and 32.66px inside it at
-//      the focused pose. That is arithmetic, and arithmetic is checkable here.
-//   2. THE PILLAR → DECISION MAPPING. Nine poses, six of them beats, one pillar
-//      and one decision block per beat. "Which box is lit" is published as
-//      `data-active` and "which decision is open" as an inline opacity, so the
-//      whole map is readable in the DOM — and it is read against
-//      `focusedPillarIndex` rather than instead of it, because a test that only
-//      reads the DOM proves the renderer agrees with itself.
+// So the shape of the testing changes with it, in exactly one way that matters: the
+// interesting states are no longer reachable by stepping, they are reachable by
+// hovering, clicking and tabbing. `@testing-library/user-event` is therefore a
+// first-class dependency of this file and not a convenience — a `fireEvent.mouseOver`
+// would not produce the enter/leave PAIR that the fall-back-to-the-pin rule is made
+// of, and it would not fire the focus/blur that the caret channel exists to keep
+// separate from the pointer one.
+// ────────────────────────────────────────────────────────────────────────────
+//
+// WHAT THIS FILE CAN AND CANNOT PROVE. jsdom has no layout, so nothing here measures
+// a pixel a browser would place — every geometric claim is asserted as the ONE NUMBER
+// both sides read (`../../src/slides/leader-shape/geometry.ts`), and the rendered
+// composition is walked at 1280×720 in a real engine separately
+// (`scripts/gh55-verify.mjs`). What jsdom is good for is the five things this slide
+// is actually at risk of:
+//
+//   1. THE FLOOR. §7.1 recorded one open risk against variant A — the lowest pillar
+//      sits close to the NavBar's hover band and GROWS when it is lit. The prototype's
+//      numbers put it 26px inside the band, and 32.66px inside it once focused. That
+//      is arithmetic, and arithmetic is checkable here. It is now a claim about ALL
+//      SIX AT ONCE, because the recap lights all six.
+//   2. THE PILLAR → DECISION MAPPING. Six boxes, six decision blocks, and a pointer
+//      that must open exactly one of them and exactly the right one. "Which box is
+//      lit" is published as `data-active`, "which is pinned" as `data-pinned`, and
+//      "which block is open" as `data-open`, so the whole map is readable in the DOM.
 //   3. THE NO-DIM RULE (§7.1 — attention is bought with added light, never
-//      subtracted). At every beat the five pillars the beat is NOT about must be
-//      byte-identical to their resting selves. Six style objects captured once and
-//      compared field by field is exactly what jsdom can read, and the cheapest way
-//      to break it is to port the prototype's three-tier walked/unvisited ranking.
-//   4. PRE-DIMMING AT REST. The same rule at the pose that has no walk at all: six
-//      identical borders, six identical label tiers, six identical spokes.
+//      subtracted). At every hover the five pillars the hover is NOT about must be
+//      byte-identical to their resting selves. Eleven style fields captured once and
+//      compared field by field is exactly what jsdom can read, and the cheapest way to
+//      break it is to port the prototype's three-tier walked/unvisited ranking.
+//   4. PRE-DIMMING AT REST. The same rule with nothing hovered at all: six identical
+//      borders, six identical label tiers, six identical spokes, six identical flows.
+//   5. THE STATE MACHINE ITSELF. Hover beats pin, pin survives the pointer leaving,
+//      a second click releases, a different click moves it, and the recap ignores all
+//      of it. Those are pure functions in `walk.ts` and they are asserted there AND
+//      through the rendered tree, because the failure worth catching is the seam.
 //
-// WHAT IT CANNOT: a transition. jsdom runs none, so "the release of a beat
-// animates" and "no delay lands on a focus property" are not claims this file can
-// make — they are declarations in the renderer and measurements in the browser
-// harness. Nor can it place the focused halo: a `box-shadow` spread is outside
-// every layout measurement anyway (see `FOCUS_HALO_WIDTH`), which is why the
-// focused pose is asserted here as numbers and in the browser as a screenshot.
+// WHAT IT CANNOT: a transition, and now also a keyframe. jsdom runs neither, so "the
+// figure builds itself out from the hub over 1.42s" and "no delay lands on a focus
+// property" are not claims this file can make — they are declarations in the renderer
+// and measurements in the browser harness. What IS checkable here is that every
+// build-carrying element is in the tree from the first frame with its stagger on it,
+// which is the half a missing element would break.
 //
 // ALL THREE BRANDS IN ONE EPOCH. The component reads no `VARIANT` — the slide file
 // resolves the hub's brand line once at module scope and hands it down as a prop
 // (§4.4 slot 5) — so three hubs mount side by side in this one module registry. A
 // test that had to re-point `window.location` per brand could not compare them.
 import { act, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { useDeck } from "@/deck/DeckContext";
 import { SlideHarness } from "../support/slide-harness";
@@ -49,9 +72,10 @@ import {
   hubBrandLineFor,
   shapeOrgContent,
 } from "@/slides/leader-shape/content";
-// Imported for ONE describe — the figure takes its pose as a prop, so it can be
-// asked about a pose the slide's own step count cannot reach. Everything else here
-// goes through the slide, because that is what the deck renders.
+// Imported for TWO describes — the figure takes its pose as a prop, so it can be
+// asked about a pose the slide's own step count cannot reach, and it can be compared
+// byte for byte without the harness's own chrome in the container. Everything else
+// here goes through the slide, because that is what the deck renders.
 import { PillarOrbit } from "@/slides/leader-shape/components/PillarOrbit";
 import {
   FIGURE_CEILING,
@@ -66,7 +90,6 @@ import {
   FOCUS_HALO_WIDTH,
   FOCUS_SCALE,
   HUB,
-  KICKER_TOP,
   LOWEST_PILLAR_BOTTOM,
   LOWEST_PILLAR_INDEX,
   NAV_ZONE_CLEARANCE,
@@ -85,15 +108,16 @@ import {
   spokeSegment,
 } from "@/slides/leader-shape/geometry";
 import {
-  CLOSER_POSE,
-  DECISION_BEATS,
   NO_FOCUS,
   POSE,
+  PILLAR_COUNT as WALK_PILLAR_COUNT,
   STEP_COUNT,
-  focusedPillarIndex,
-  showsCloser,
-  showsPillars,
-  showsWalkColumn,
+  acceptsPointer,
+  isLit,
+  isPillarIndex,
+  resolveFocus,
+  showsRecap,
+  togglePin,
 } from "@/slides/leader-shape/walk";
 import { BRANDS, type Brand } from "@/deck-variants";
 // The design system's own two ladders. Imported for their KEYS, never their hexes —
@@ -103,19 +127,14 @@ import { copper, neutral } from "@/design-system/colors";
 const C = shapeOrgContent;
 
 /**
- * All nine, DERIVED — `[0 … STEP_COUNT - 1]`.
+ * Both, DERIVED — `[0 … STEP_COUNT - 1]`.
  *
- * NOT A LITERAL `[0,1,2,3,4,5,6,7,8]`. A seventh pillar grows `STEP_COUNT` to ten
- * (see `walk.ts`), and a hand-written list would then leave the last pose — the
- * closer's — unwalked by every "at every pose" test in this file, which is
- * precisely the set of tests the issue's AC asks for at EVERY pose.
+ * NOT A LITERAL `[0, 1]`, even at two. The derivation is what keeps every "at every
+ * pose" test in this file walking the whole budget if the budget ever moves again;
+ * a hand-written list is how a pose gets added and silently never checked. It is
+ * also two lines shorter than the argument for it.
  */
 const POSES: readonly number[] = Array.from({ length: STEP_COUNT }, (_u, i) => i);
-
-/** The six beat poses, 2…7 — one per pillar, in ring order. */
-const BEAT_POSES: readonly number[] = C.pillars.map(
-  (_p, i) => POSE.FIRST_DECISION + i,
-);
 
 /** `0…5` — pillar INDEXES, which are not poses and are kept in their own list so a
  *  geometry loop cannot borrow the pose list and read right by accident. */
@@ -125,13 +144,19 @@ const PILLAR_INDEXES: readonly number[] = Array.from(
 );
 
 /**
- * The three poses that focus NOTHING: 0, 1 and the closer's.
+ * The eight things the panel holds, in tree order — the idle block, six decisions,
+ * the recap.
  *
- * The issue's "no beat leaves a pillar stuck in its focused state" is a claim about
- * exactly this list — pose 8 is the one that could plausibly inherit the sixth
- * beat's lit pillar, and poses 0/1 are the ones a backwards walk lands on.
+ * ALL EIGHT ARE MOUNTED AT ALL TIMES and exactly one of them carries
+ * `data-open="true"`. That pair of facts is the panel's whole contract, and it is
+ * stated as ONE list here so a test can assert both halves in one comparison: the
+ * list proves nothing is missing, `openBlockIds()` proves nothing is doubled.
  */
-const UNFOCUSED_POSES: readonly number[] = [POSE.HUB, POSE.RING, CLOSER_POSE];
+const PANEL_BLOCKS: readonly string[] = [
+  "shape-idle",
+  ...C.pillars.map((p) => `shape-decision-${p.id}`),
+  "shape-recap",
+];
 
 /**
  * The position the slide holds in the deck it actually composes into.
@@ -144,7 +169,16 @@ const UNFOCUSED_POSES: readonly number[] = [POSE.HUB, POSE.RING, CLOSER_POSE];
  */
 const AT = { letter: "C", num: 1, sectionKey: "shape" } as const;
 
-/** One button per pose, so a test can WALK the slide inside one mounted tree. */
+/**
+ * One button per pose, so a test can STEP the slide inside one mounted tree.
+ *
+ * KEPT AT TWO POSES, and it is worth saying why it is kept at all now that the
+ * interesting states are reached with the pointer instead. Everything this file
+ * asserts about the pin surviving a step, and about the recap not inheriting a lit
+ * pillar, is a claim about a tree that has ALREADY BEEN somewhere else — a per-pose
+ * re-mount would prove only that each pose renders from cold, which the deck never
+ * does and which is not where the bug lives.
+ */
 function Nav() {
   const { goTo } = useDeck();
   return (
@@ -167,6 +201,10 @@ function renderOrg(brandLine: string | null, pose = 0) {
   return out;
 }
 
+/** A pose change as the DECK makes one. A plain `.click()` and not `user.click()`,
+ *  deliberately: the deck's own step buttons must not move the caret or the pointer,
+ *  because half the assertions below are about what the pointer was doing before the
+ *  step and must still be doing after it. */
 function goToPose(pose: number) {
   act(() => screen.getByTestId(`goto-${pose}`).click());
 }
@@ -193,8 +231,8 @@ const FULL_LABEL_TIERS = [
 ];
 
 /** Copper tiers dark enough to read as "not yet" on a near-black stage. A resting
- *  pillar may not use one: at rest there is no walk to have skipped it, and at a
- *  beat the five pillars the beat is not about are still at rest. */
+ *  pillar may not use one: at rest there is no history to have skipped it, and while
+ *  one pillar is open the other five are still at rest. */
 const DIM_COPPER_TIERS = ["copper-700", "copper-800", "copper-900", "copper-950"];
 
 // ── the two ramps, so "brighter" is an ordering and not a vibe ────────────────
@@ -255,10 +293,10 @@ function tokenIn(declaration: string, what: string): string {
 /** A token's ladder and its rung, so two tiers can be compared as numbers.
  *  @throws on a token that is on neither ladder. */
 function brightnessOf(token: string, what: string): { family: string; rung: number } {
-  const copper = COPPER_RAMP.indexOf(token);
-  if (copper >= 0) return { family: "copper", rung: copper };
-  const neutral = NEUTRAL_RAMP.indexOf(token);
-  if (neutral >= 0) return { family: "neutral", rung: neutral };
+  const copperRung = COPPER_RAMP.indexOf(token);
+  if (copperRung >= 0) return { family: "copper", rung: copperRung };
+  const neutralRung = NEUTRAL_RAMP.indexOf(token);
+  if (neutralRung >= 0) return { family: "neutral", rung: neutralRung };
   throw new Error(
     `${what}: "--${token}" is on neither the copper nor the neutral ladder, so ` +
       `nothing here can say whether it is brighter or darker than the resting tier.`,
@@ -268,197 +306,205 @@ function brightnessOf(token: string, what: string): { family: string; rung: numb
 // ── a pillar's whole resting signature, as one comparable object ──────────────
 
 /**
- * Everything about one pillar that a beat could possibly change — the object the
- * no-dim rule is asserted over.
+ * Everything about one pillar that opening ANOTHER pillar could possibly change —
+ * the object the no-dim rule is asserted over.
  *
- * NINE FIELDS AND NOT "the border", because §7.1's rule is not about borders: it
- * says the five pillars a beat is not about lose NOTHING, and there are nine ways
+ * ELEVEN FIELDS AND NOT "the border", because §7.1's rule is not about borders: it
+ * says the five pillars a hover is not about lose NOTHING, and there are eleven ways
  * to lose something here. `border`, `background` and `boxShadow` are the box's three
- * paints; `opacity` and `transform` are the two channels the arrival sweep owns, and
- * they are in this list precisely because they are the two a "subtle de-emphasis"
- * reaches for first (drop the neighbours to 0.7, or scale them to 0.98); `labelColor`
- * and `iconColor` are the two type tiers inside the box; `spokeStroke` and
- * `spokeWidth` are the tether, which lives in a different DOM layer (SVG) and is
- * therefore the half a box-only check would miss.
+ * paints; `transform` is the scale channel, in this list precisely because it is what
+ * a "subtle de-emphasis" reaches for first (scale the neighbours to 0.98);
+ * `labelColor` and `iconColor` are the two type tiers inside the box; and the last
+ * FIVE are the tether, which lives in a different DOM layer (SVG) and is therefore
+ * the half a box-only check would miss.
+ *
+ * THE TETHER IS FIVE FIELDS AND NOT TWO, which is the extension this rewrite forced.
+ * A spoke is now TWO elements — a drawn hairline that is the structure and a dashed
+ * overlay that is the motion — so a de-emphasis could be spent on either, and the
+ * cheapest one of all is not a colour at all: dropping `is-active` from five flows
+ * while adding it to one reads on a projector as five spokes stopping. So the
+ * overlay's CLASS is a signature field beside its two paints.
+ *
+ * `opacity` IS NOT IN THIS LIST ANY MORE, and its absence is the one deletion worth
+ * stating. Under nine poses the boxes were revealed by an inline `opacity` the pose
+ * wrote, so a rank hidden in that channel was a real risk and the field was the guard
+ * against it. The build is a KEYFRAME now (`agentic-org.css`) and no inline opacity
+ * is written at all, so the field would capture `""` on all six pillars for ever and
+ * compare empty strings — a check that cannot fail is worse than no check, because it
+ * reads as coverage. What replaced it is the assertion that the boxes carry no inline
+ * opacity at all, in the resting describe, where a reader can see why.
  */
 interface PillarSignature {
   readonly border: string;
   readonly background: string;
   readonly boxShadow: string;
-  readonly opacity: string;
   readonly transform: string;
   readonly labelColor: string;
   readonly iconColor: string;
   readonly spokeStroke: string;
   readonly spokeWidth: string;
+  readonly flowStroke: string;
+  readonly flowWidth: string;
+  readonly flowClass: string;
 }
 
-/** Named so a failure says WHICH field moved, on WHICH pillar, at WHICH pose — a
- *  bare object diff on six pillars × six beats is unreadable. */
+/** Named so a failure says WHICH field moved, on WHICH pillar, in WHICH state — a
+ *  bare object diff over six pillars × six hovers is unreadable. */
 const SIGNATURE_FIELDS: readonly (keyof PillarSignature)[] = [
   "border",
   "background",
   "boxShadow",
-  "opacity",
   "transform",
   "labelColor",
   "iconColor",
   "spokeStroke",
   "spokeWidth",
+  "flowStroke",
+  "flowWidth",
+  "flowClass",
 ];
 
+function pillarBoxEl(id: string): HTMLElement {
+  return screen.getByTestId(`shape-pillar-${id}`);
+}
+
+/**
+ * The `div` that PLACES pillar `id` — two levels above the box, and the one element
+ * on this slide whose identity a test has to go looking for.
+ *
+ * THREE ELEMENTS, ONE TRANSFORM EACH. The nine-pose version put the centring
+ * translate, the arrival scale and the focus scale on the SAME element and had to,
+ * because the arrival was a pose and the focus was a click and the two could not
+ * overlap. They overlap constantly now — the build runs on mount and a presenter's
+ * pointer is already on the stage — so they are three elements: this one places (and
+ * carries the z-index), the middle one arrives, the button highlights. Which means
+ * `translate(-50%, -50%)` is NO LONGER on the element that carries the testid, and
+ * every assertion that used to parse it off there had to move up two parents.
+ */
+function placementOf(id: string): HTMLElement {
+  const arrival = pillarBoxEl(id).parentElement;
+  const placement = arrival?.parentElement;
+  if (!arrival || !placement) {
+    throw new Error(
+      `placementOf(${id}): expected box → arrival wrapper → placement div, and the ` +
+        `chain is shorter than that. The three-layer transform split in ` +
+        `PillarOrbit.tsx has been collapsed.`,
+    );
+  }
+  return placement;
+}
+
 function pillarSignature(id: string): PillarSignature {
-  const box = screen.getByTestId(`shape-pillar-${id}`);
+  const box = pillarBoxEl(id);
+  const spoke = screen.getByTestId(`shape-spoke-${id}`);
+  const flow = screen.getByTestId(`shape-flow-${id}`);
   return {
     border: box.style.border,
     background: box.style.background,
     boxShadow: box.style.boxShadow,
-    opacity: box.style.opacity,
     transform: box.style.transform,
     labelColor: screen.getByTestId(`shape-pillar-${id}-label`).style.color,
     iconColor: screen.getByTestId(`shape-pillar-${id}-icon`).style.color,
-    spokeStroke: screen.getByTestId(`shape-spoke-${id}`).style.stroke,
-    spokeWidth: screen.getByTestId(`shape-spoke-${id}`).style.strokeWidth,
+    spokeStroke: spoke.style.stroke,
+    spokeWidth: spoke.style.strokeWidth,
+    flowStroke: flow.style.stroke,
+    flowWidth: flow.style.strokeWidth,
+    // `getAttribute` AND NOT `.className`: on an SVG element `className` is an
+    // `SVGAnimatedString`, which stringifies to `[object SVGAnimatedString]` and
+    // would compare equal on every pillar in every state.
+    flowClass: flow.getAttribute("class") ?? "",
   };
 }
 
-/** All six pillars' signatures at the currently rendered pose. */
+/** All six pillars' signatures in the currently rendered state. */
 function allSignatures(): Map<string, PillarSignature> {
   return new Map(C.pillars.map((p) => [p.id, pillarSignature(p.id)]));
 }
 
-/** Which pillar ids the DOM says the walk is on — read off `data-active`, which is
- *  the fact the renderer publishes, rather than out of a parsed border colour. */
+/** Which pillar ids the DOM says are lit — read off `data-active`, which is the fact
+ *  the renderer publishes, rather than out of a parsed border colour. */
 function activePillarIds(): string[] {
-  return C.pillars
-    .filter((p) => screen.getByTestId(`shape-pillar-${p.id}`).dataset.active === "true")
-    .map((p) => p.id);
+  return C.pillars.filter((p) => pillarBoxEl(p.id).dataset.active === "true").map((p) => p.id);
 }
 
-/** Which decision blocks are open — exactly one during a beat, none otherwise. */
-function openDecisionIds(): string[] {
-  return C.pillars
-    .filter((p) => screen.getByTestId(`shape-decision-${p.id}`).style.opacity === "1")
-    .map((p) => p.id);
+/** Which pillar the DOM says is pinned. A list rather than a value, so "two pinned
+ *  at once" fails as a length rather than passing as whichever was found first. */
+function pinnedPillarIds(): string[] {
+  return C.pillars.filter((p) => pillarBoxEl(p.id).dataset.pinned === "true").map((p) => p.id);
+}
+
+/** Which of the panel's eight blocks are open. */
+function openBlockIds(): string[] {
+  return PANEL_BLOCKS.filter((id) => screen.getByTestId(id).dataset.open === "true");
 }
 
 /**
- * EVERY INVARIANT THE WALK HAS, AT ONE POSE — the helper the `0 → 8 → 0` test and
- * the mapping test both hold the figure to.
+ * THE PANEL'S WHOLE CONTRACT, IN ONE CALL: all eight blocks mounted, exactly one of
+ * them open, and it is the one named.
  *
- * IT ASKS `walk.ts` AND THE DOM SEPARATELY AND THEN HOLDS THEM EQUAL. Reading only
- * the DOM would prove the renderer agrees with itself; recomputing the expectation
- * from `focusedPillarIndex` alone would prove `walk.ts` agrees with itself. The
- * failure worth catching is the seam between them — a spoke thickened at a pose its
- * box is not lit at, a counter one beat ahead of the box.
- *
- * @param resting the pose-1 capture, when there is one. Passed in rather than
- *        recaptured, because the no-dim rule is a claim about a FIXED reference
- *        figure: a signature re-read at the current pose would compare each beat
- *        against itself and pass on a walk that dimmed everything by 1% per click.
+ * IT IS NEVER EMPTY, which is the difference from the nine-pose version and the
+ * reason the idle block exists at all. That version opened the column at the first
+ * beat and showed nothing beside the ring before it; a figure reached by hovering has
+ * no first beat, so a column that waited for one would be a blank third of the stage
+ * for as long as nobody touched anything.
  */
-function assertPose(pose: number, resting?: ReadonlyMap<string, PillarSignature>) {
-  const focus = focusedPillarIndex(pose);
-  const expected = focus === NO_FOCUS ? [] : [C.pillars[focus].id];
-
-  // ONE LIT BOX, OR NONE — and it is the one `walk.ts` names.
-  expect(activePillarIds(), `pose ${pose} · active pillars`).toEqual(expected);
-  // ONE OPEN DECISION, OR NONE — the same pillar, so the column and the ring can
-  // never speak for two different pillars.
-  expect(openDecisionIds(), `pose ${pose} · open decisions`).toEqual(expected);
-
-  // ALL SIX BLOCKS MOUNTED AT EVERY POSE, cross-fading. Six blocks and not one
-  // panel whose text swaps: a single panel has to render SOMETHING at the closer's
-  // pose, and every available answer (nothing, `pillars[0]`, the last-focused
-  // pillar held in state) is wrong in front of a room — see the comment on the
-  // column in `PillarOrbit.tsx`.
-  C.pillars.forEach((p) => {
-    expect(
-      screen.getByTestId(`shape-decision-${p.id}`),
-      `pose ${pose} · ${p.id} block mounted`,
-    ).toBeInTheDocument();
-  });
-
-  // The column, the closer and the ring's own reveal, each against the function
-  // that decides it.
-  expect(
-    screen.getByTestId("shape-walk-column").style.opacity,
-    `pose ${pose} · walk column`,
-  ).toBe(showsWalkColumn(pose) ? "1" : "0");
-  expect(screen.getByTestId("shape-closer").style.opacity, `pose ${pose} · closer`).toBe(
-    showsCloser(pose) ? "1" : "0",
+function expectOnlyOpen(expected: string, where: string) {
+  PANEL_BLOCKS.forEach((id) =>
+    expect(screen.getByTestId(id), `${where} · ${id} mounted`).toBeInTheDocument(),
   );
-  C.pillars.forEach((p) => {
-    expect(
-      screen.getByTestId(`shape-pillar-${p.id}`).style.opacity,
-      `pose ${pose} · ${p.id} revealed`,
-    ).toBe(showsPillars(pose) ? "1" : "0");
-    expect(
-      screen.getByTestId(`shape-spoke-${p.id}`).style.opacity,
-      `pose ${pose} · ${p.id} spoke revealed`,
-    ).toBe(showsPillars(pose) ? "1" : "0");
-  });
-
-  // THE NO-DIM RULE, at every pose the ring is up: the pillars this pose is not
-  // about are byte-identical to the resting figure.
-  if (resting && showsPillars(pose)) {
-    C.pillars.forEach((p, j) => {
-      if (j === focus) return;
-      expect(pillarSignature(p.id), `pose ${pose} · ${p.id} unchanged`).toEqual(
-        resting.get(p.id),
-      );
-    });
-  }
+  expect(openBlockIds(), `${where} · open blocks`).toEqual([expected]);
 }
 
 // ── the def ──────────────────────────────────────────────────────────────────
 
 describe("the slide def", () => {
-  test("is the file's basename, NINE steps, canonical on the fullest resting pose", () => {
+  test("is the file's basename, TWO steps, canonical on the recap", () => {
     // The id is the basename (`deck-slide-ids.test.ts` owns the rule; this pins
     // the value).
     expect(shapeAgenticOrgSlide.id).toBe("shape-agentic-org");
 
-    // NINE — §7.1's budget, pinned as a VALUE and as its DERIVATION, because the
-    // two catch different edits. The value catches a walk that quietly grew or lost
-    // a beat; the derivation catches the literal `9` the slide file must not
-    // contain, because a literal is how a seventh pillar's decision becomes a pose
-    // the deck can never reach (`DeckContext` clamps at `steps - 1`) with no error,
-    // no blank slide and no failing test.
-    expect(shapeAgenticOrgSlide.steps).toBe(9);
+    // TWO — pinned as a VALUE and as its RELATION, because the two catch different
+    // edits. The value catches a pose quietly added or lost; the relation catches the
+    // literal `2` the slide file must not contain, because a literal is how the recap
+    // becomes a pose the deck can never reach (`DeckContext` clamps at `steps - 1`)
+    // with no error, no blank slide and no failing test.
+    //
+    // AND IT IS NO LONGER DERIVED FROM THE PILLAR COUNT, which is the reversal this
+    // ticket makes. Under nine poses a seventh pillar had to GROW the budget or
+    // silently lose a beat. A seventh pillar now costs zero steps — the pointer
+    // reaches it for free — so the budget is the figure plus the recap and it is two
+    // whatever the ring holds.
+    expect(shapeAgenticOrgSlide.steps).toBe(2);
     expect(shapeAgenticOrgSlide.steps).toBe(STEP_COUNT);
-    expect(shapeAgenticOrgSlide.steps).toBe(POSE.FIRST_DECISION + DECISION_BEATS + 1);
-    // hub + ring + six beats + closer, read as the sum it is.
-    expect(DECISION_BEATS).toBe(C.pillars.length);
-    expect(CLOSER_POSE).toBe(POSE.FIRST_DECISION + DECISION_BEATS);
-    expect(STEP_COUNT).toBe(CLOSER_POSE + 1);
+    expect(STEP_COUNT).toBe(POSE.RECAP + 1);
+    expect(POSE.FIGURE).toBe(0);
+    expect(POSE.RECAP).toBe(1);
 
-    // `canonicalPose === 1`, AND IT IS NO LONGER `steps - 1`. This assertion
-    // REPLACES that one, which was true only while the slide had two poses, and it
-    // has to carry the argument the equality used to carry for free:
+    // `canonicalPose === 1`, AND IT IS NOW ALSO `steps - 1`, where under the nine-pose
+    // walk it deliberately was not. The argument the number carries has changed even
+    // though the number has not:
     //
     //   · The exports print `canonicalPose` and NOTHING ELSE (one frame per slide),
     //     so this is the pose the PDF and the PPTX are.
-    //   · Pose 1 is the fullest pose that singles out NONE of the six pillars —
-    //     asserted below rather than asserted in prose. A canonical pose inside the
-    //     walk would print a centrepiece emphasising whichever pillar the export
-    //     stopped on: "six pillars move together, or none of them move", with one
-    //     lit for a reason the page cannot explain.
-    //   · Pose 0 is the real alternative on the low side and exports a hub with no
-    //     organisation around it; pose 8 is the real alternative on the high side
-    //     (the ring is back at rest AND the closer is up), and #55's AC pins 1
-    //     "unless a different pose is argued for in a comment on this issue first".
-    //     No such comment exists, so 1 ships and this test is where that pin lives.
+    //   · Pose 1 is the pose in which NO ONE of six pillars is singled out AND every
+    //     decision is on the page: six recap fragments, the closer, and a ring with
+    //     all six lit equally.
+    //   · Pose 0 is the real alternative and it exports a figure whose panel is
+    //     showing an idle prompt — because a PDF has no pointer, and every one of the
+    //     six decisions on that pose is behind a hover.
+    //   · #55's AC pins this at 1 "unless a different pose is argued for in a comment
+    //     on this issue first". The number does not move, and what it prints is
+    //     strictly more than it printed before.
     expect(shapeAgenticOrgSlide.canonicalPose).toBe(1);
-    expect(shapeAgenticOrgSlide.canonicalPose).toBe(POSE.RING);
-    // Still inside the budget — the one half of `=== steps - 1` that survives, and
-    // the half that was actually load-bearing: a canonical pose the deck cannot
-    // reach exports a clamped frame that is not the frame anybody chose.
-    expect(shapeAgenticOrgSlide.canonicalPose).toBeLessThan(shapeAgenticOrgSlide.steps);
-    // FULLEST, AND SINGLING OUT NOTHING — the two properties the argument rests on,
-    // as arithmetic over `walk.ts`.
-    expect(showsPillars(shapeAgenticOrgSlide.canonicalPose!)).toBe(true);
-    expect(focusedPillarIndex(shapeAgenticOrgSlide.canonicalPose!)).toBe(NO_FOCUS);
+    expect(shapeAgenticOrgSlide.canonicalPose).toBe(POSE.RECAP);
+    // Still inside the budget — the half of `=== steps - 1` that was always
+    // load-bearing: a canonical pose the deck cannot reach exports a clamped frame
+    // that is not the frame anybody chose.
+    expect(shapeAgenticOrgSlide.canonicalPose!).toBeLessThan(shapeAgenticOrgSlide.steps);
+    // AND IT IS THE POSE THAT SINGLES OUT NOTHING, as arithmetic over `walk.ts`
+    // rather than as prose: the recap is up, and the pointer is not consulted.
+    expect(showsRecap(shapeAgenticOrgSlide.canonicalPose!)).toBe(true);
+    expect(acceptsPointer(shapeAgenticOrgSlide.canonicalPose!)).toBe(false);
 
     expect(shapeAgenticOrgSlide.sectionKey).toBe("shape");
     expect(shapeAgenticOrgSlide.animationMode).toBe("step-reveal");
@@ -510,7 +556,7 @@ describe("the hub", () => {
     // alone.
     expect(hubBrandLineFor("general")).toBeNull();
 
-    renderOrg(hubBrandLineFor("general"), POSE.RING);
+    renderOrg(hubBrandLineFor("general"), POSE.RECAP);
     expect(screen.queryByTestId("shape-hub-brand-line")).toBeNull();
     expect(screen.getByTestId("shape-hub-label").textContent).toBe("The Enabler");
     // And nothing invented one under another name: the disc holds exactly the
@@ -518,24 +564,27 @@ describe("the hub", () => {
     expect(screen.getByTestId("shape-hub").textContent).toBe("The Enabler");
   });
 
-  test("is present from pose 0, because pose 0 IS the hub — and at all nine", () => {
-    renderOrg(berau, POSE.HUB);
-    // THE KICKER STANDS AT EVERY ONE OF THE NINE, which is a claim the renderer
-    // makes explicitly against the prototype's cross-fading one
-    // (`opacity: stepIndex === 0 ? 1 : 0`). "An operating model is not a
-    // department" is true at pose 8 too, so it spends no pose — and a kicker that
-    // faded at the first beat would be a string the room stops being able to check
-    // the figure against exactly when the figure starts making claims.
+  test("stands at both poses, and carries the build's first frame", () => {
+    // THE HUB IS WHAT EVERYTHING ELSE IS MEASURED FROM, so it is on the stage at
+    // pose 0 and unchanged at pose 1 — there is no hub-alone pose any more, and no
+    // pose it fades for. It also carries `shape-hub-in`, which is the first entry in
+    // the build timetable: the disc settles, then six spokes leave it. jsdom runs no
+    // keyframe, but a MISSING class is a missing arrival and that is checkable.
+    renderOrg(berau, POSE.FIGURE);
     for (const pose of POSES) {
       goToPose(pose);
-      expect(screen.getByTestId("shape-hub"), `pose ${pose}`).toBeInTheDocument();
+      const hub = screen.getByTestId("shape-hub");
+      expect(hub, `pose ${pose}`).toBeInTheDocument();
+      expect(hub.className, `pose ${pose} · arrival`).toContain("shape-hub-in");
       expect(
         screen.getByTestId("shape-hub-brand-line").textContent,
         `pose ${pose}`,
       ).toBe("MineTech");
-      expect(screen.getByTestId("shape-kicker").textContent, `pose ${pose}`).toBe(
-        C.kicker,
-      );
+      // NO FOCUS TIER ON THE HUB, at either pose. The hub is what the six pillars
+      // are pillars OF, so a highlight that also lit the centre would be a figure
+      // with seven subjects — and pose 1 lights all six, which is exactly where a
+      // "light everything" edit would reach for it.
+      expect(hub.dataset.active, `pose ${pose}`).toBeUndefined();
     }
   });
 
@@ -557,8 +606,8 @@ describe("the hub", () => {
 // ── the six pillars ──────────────────────────────────────────────────────────
 
 describe("the six pillars", () => {
-  test("are HR p4's six, verbatim, in the walk's teaching order", () => {
-    renderOrg(gems, POSE.RING);
+  test("are HR p4's six, verbatim, in the ring's reading order", () => {
+    renderOrg(gems);
 
     // SIX, from the geometry's own count rather than a literal here: the labels
     // and the ring centres are the same six, and a seventh pillar would have no
@@ -567,10 +616,15 @@ describe("the six pillars", () => {
     expect(C.pillars).toHaveLength(PILLAR_COUNT);
     expect(new Set(C.pillars.map((p) => p.id)).size).toBe(PILLAR_COUNT);
 
-    // THE ORDER IS THE WALK'S, NOT HR p4's PRINTED ORDER, and it is asserted so
+    // THE ORDER IS THE RING'S, NOT HR p4's PRINTED ORDER, and it is asserted so
     // that "the owner approved variant A including this order" survives a
-    // reviewer who checks the labels against the HR deck and re-sorts them. The
-    // six focus beats index this array, so re-sorting it re-orders the walk.
+    // reviewer who checks the labels against the HR deck and re-sorts them.
+    //
+    // IT NO LONGER DECIDES WHAT IS SAID FIRST — the pointer does that, and a room
+    // that asks about seats gets seats. It still decides what is READ first (index 0
+    // is twelve o'clock and a ring is scanned clockwise from the top by everyone) and
+    // it decides the RECAP's order, which is the one place on this slide where all
+    // six are stated in sequence.
     expect(C.pillars.map((p) => p.label)).toEqual([
       "Governance & Policies",
       "Tools & Platform",
@@ -580,7 +634,7 @@ describe("the six pillars", () => {
       "AI Companions",
     ]);
 
-    // Read back out of the DOM: all six labels on the stage at pose 1, each in
+    // Read back out of the DOM: all six labels on the stage at pose 0, each in
     // its own box.
     C.pillars.forEach((pillar) => {
       expect(
@@ -591,7 +645,7 @@ describe("the six pillars", () => {
   });
 
   test("each renders an icon the shim actually has", () => {
-    renderOrg(gems, POSE.RING);
+    renderOrg(gems);
 
     // THE HALF THE `PillarIcon` UNION CANNOT PROVE. A name can be spelled right,
     // pass the type, and still be missing from the shim's map — which renders
@@ -603,34 +657,88 @@ describe("the six pillars", () => {
     });
   });
 
-  test("sit on their own ring point, box centred on it", () => {
-    renderOrg(gems, POSE.RING);
+  test("sit on their own ring point — placed by the PARENT, scaled by the button", () => {
+    renderOrg(gems);
 
-    // Structural, because jsdom places nothing: each box reads its own centre,
-    // so a box and its spoke cannot disagree about where the pillar is.
+    // THE THREE-LAYER SPLIT, ASSERTED AS THREE LAYERS. This is the assertion that
+    // changed shape in the rewrite: the box used to carry
+    // `translate(-50%, -50%) scale(…)` on one element, and it now carries the scale
+    // alone while the placement — and the z-index the halo needs — lives two parents
+    // up. A refactor that collapsed them back would light a hovered box from two
+    // directions at once, because the arrival keyframe owns `transform` on the middle
+    // element for the first 1.1s of the slide.
     C.pillars.forEach((pillar, i) => {
-      const box = screen.getByTestId(`shape-pillar-${pillar.id}`);
-      expect(box.style.left, pillar.id).toBe(`${pillarCentre(i).x}px`);
-      expect(box.style.top, pillar.id).toBe(`${pillarCentre(i).y}px`);
+      const box = pillarBoxEl(pillar.id);
+      const placement = placementOf(pillar.id);
+      const arrival = box.parentElement!;
+
+      expect(placement.style.position, pillar.id).toBe("absolute");
+      expect(placement.style.left, pillar.id).toBe(`${pillarCentre(i).x}px`);
+      expect(placement.style.top, pillar.id).toBe(`${pillarCentre(i).y}px`);
+      // The centring translate is what makes `left`/`top` a CENTRE, and it is the
+      // ONLY transform on this element.
+      expect(placement.style.transform, pillar.id).toBe("translate(-50%, -50%)");
+      // Under its neighbours at rest, over them when lit — see the halo note in the
+      // renderer. Pillars 1/2 and 4/5 are close enough that a flat z-index lets the
+      // later box clip the earlier one's 4px ring.
+      expect(placement.style.zIndex, pillar.id).toBe("2");
+
+      // The middle element ARRIVES, and carries this pillar's place in the sweep.
+      expect(arrival.className, pillar.id).toBe("shape-pillar-in");
+      expect(arrival.style.animationDelay, pillar.id).toMatch(/^\d+ms$/);
+
+      // And the button HIGHLIGHTS — one transform, the scale, at rest 1.
       expect(box.style.width, pillar.id).toBe(`${PILLAR_BOX.w}px`);
       expect(box.style.height, pillar.id).toBe(`${PILLAR_BOX.h}px`);
-      // The centring translate is what makes `left`/`top` a CENTRE, and the
-      // focus scale rides on the same transform.
-      expect(box.style.transform, pillar.id).toContain("translate(-50%, -50%)");
+      expect(box.style.transform, pillar.id).toBe("scale(1)");
+      expect(box.style.transform, pillar.id).not.toContain("translate");
+    });
+
+    // THE SWEEP IS A SWEEP: six arrivals, strictly increasing in ring order, so the
+    // six land clockwise from twelve o'clock rather than all at once. Six
+    // simultaneous arrivals is one event; six staggered ones are a shape being drawn.
+    const delays = C.pillars.map((p) =>
+      Number.parseFloat(pillarBoxEl(p.id).parentElement!.style.animationDelay),
+    );
+    delays.forEach((d, i) => {
+      if (i === 0) return;
+      expect(d, `${C.pillars[i].id} lands after ${C.pillars[i - 1].id}`).toBeGreaterThan(
+        delays[i - 1],
+      );
+    });
+  });
+
+  test("are BUTTONS, with the pin published as an ARIA state", () => {
+    renderOrg(gems);
+
+    // A `<button>` AND NOT A `<div onMouseEnter>`. The six decisions are behind a
+    // pointer gesture, so without a real control they are behind a gesture a keyboard
+    // cannot make — and the pin is a toggle, which is a thing ARIA already has a word
+    // for. A screen reader hears "Governance & Policies, toggle button, not pressed",
+    // which is the whole interaction without seeing the ring.
+    C.pillars.forEach((pillar) => {
+      const box = pillarBoxEl(pillar.id);
+      expect(box.tagName, pillar.id).toBe("BUTTON");
+      expect(box.getAttribute("type"), pillar.id).toBe("button");
+      expect(box.getAttribute("aria-pressed"), pillar.id).toBe("false");
+      expect(box.tabIndex, pillar.id).toBe(0);
+      // And the pin's own mark is ABSENT rather than transparent, so nothing is on
+      // the box until something is pinned.
+      expect(screen.queryByTestId(`shape-pillar-${pillar.id}-pin`), pillar.id).toBeNull();
     });
   });
 });
 
 // ── nothing is pre-dimmed (§7.1) ─────────────────────────────────────────────
 
-describe("at rest, all six pillars carry full light", () => {
-  // "Attention is bought with added light, never subtracted." At the resting pose
-  // there is no walk, so there is nothing for a dim tier to mean — and the
-  // cheapest way to break this is to port the prototype's three-tier ranking.
-  beforeEach(() => renderOrg(berau, POSE.RING));
+describe("with nothing open, all six pillars carry full light", () => {
+  // "Attention is bought with added light, never subtracted." With nothing hovered
+  // there is nothing for a dim tier to mean — and the cheapest way to break this is
+  // to port the prototype's three-tier walked/unvisited ranking.
+  beforeEach(() => renderOrg(berau));
 
-  test("with the same border, at the same opacity — no ranking of any kind", () => {
-    const boxes = C.pillars.map((p) => screen.getByTestId(`shape-pillar-${p.id}`));
+  test("with the same border, and no rank hidden in the opacity channel", () => {
+    const boxes = C.pillars.map((p) => pillarBoxEl(p.id));
 
     const borders = new Set(boxes.map((b) => b.style.border));
     expect(borders.size, `borders: ${[...borders].join(" | ")}`).toBe(1);
@@ -639,17 +747,19 @@ describe("at rest, all six pillars carry full light", () => {
     expect(border).toContain("solid");
     expect(border).toContain("var(--copper-");
     // NOT one of the dark tiers. A `--copper-800` border is the prototype's
-    // "not visited yet", and at this pose nothing has been visited.
+    // "not visited yet", and nothing here has been visited.
     DIM_COPPER_TIERS.forEach((tier) => expect(border, tier).not.toContain(tier));
 
-    // FULLY OPAQUE, all six. Opacity on this slide means "not revealed yet",
-    // which is time — so a pillar left at 0.6 would be a pillar ranked by the
-    // one channel that must never carry rank.
-    boxes.forEach((box, i) => expect(box.style.opacity, C.pillars[i].id).toBe("1"));
+    // NO INLINE OPACITY AT ALL, on any of the six — and this is the assertion that
+    // replaced the `opacity` signature field when the build became a keyframe. On
+    // this slide opacity means "not revealed yet", i.e. TIME; the arrival owns it
+    // (`shape-pillar-in`, on the wrapper) and no rank may ever be spent in the same
+    // channel. An inline value here would be a pillar the renderer is holding back.
+    boxes.forEach((box, i) => expect(box.style.opacity, C.pillars[i].id).toBe(""));
 
-    // AND NOT ONE OF THEM IS FLAGGED ACTIVE. Pose 1 is the ring, not a beat, and
-    // `data-active="true"` here would be a lit pillar in the export frame.
+    // AND NOT ONE OF THEM IS FLAGGED ACTIVE OR PINNED. A fresh mount opens nothing.
     expect(activePillarIds()).toEqual([]);
+    expect(pinnedPillarIds()).toEqual([]);
   });
 
   test("with the same label tier, and a full-strength one", () => {
@@ -661,21 +771,88 @@ describe("at rest, all six pillars carry full light", () => {
     expect(FULL_LABEL_TIERS, `label tier ${color}`).toContain(color);
   });
 
-  test("and the same spoke — one stroke, one width, no thickened one", () => {
+  test("and the same tether — one stroke, one width, one flow, none of them surging", () => {
     const spokes = C.pillars.map((p) => screen.getByTestId(`shape-spoke-${p.id}`));
+    const flows = C.pillars.map((p) => screen.getByTestId(`shape-flow-${p.id}`));
+
     expect(new Set(spokes.map((s) => s.style.stroke)).size).toBe(1);
     expect(new Set(spokes.map((s) => s.style.strokeWidth)).size).toBe(1);
-    expect(new Set(spokes.map((s) => s.style.opacity))).toEqual(new Set(["1"]));
+    expect(new Set(flows.map((f) => f.style.stroke)).size).toBe(1);
+    expect(new Set(flows.map((f) => f.style.strokeWidth)).size).toBe(1);
+    // NOT ONE FLOW IS SURGING. `.is-active` reverses the bead travel and lengthens
+    // the dash, so a stray one is a spoke firing outward beside a box nobody opened.
+    expect(new Set(flows.map((f) => f.getAttribute("class")))).toEqual(
+      new Set(["shape-spoke-flow"]),
+    );
 
     // THROUGH `style`, NOT THROUGH THE PRESENTATION ATTRIBUTE. `var()` only
     // resolves in CSS properties, so `stroke="var(--copper-600)"` as an attribute
     // is a black line on a black stage — the prototype's one hard-won line, and a
-    // refactor that "tidies" it back into attributes loses all six spokes
-    // silently. Now load-bearing twice, because the focus tier is a `var()` too.
-    spokes.forEach((spoke, i) => {
-      expect(spoke.style.stroke, C.pillars[i].id).toContain("var(--copper-");
-      expect(spoke.hasAttribute("stroke"), C.pillars[i].id).toBe(false);
-      expect(spoke.hasAttribute("stroke-width"), C.pillars[i].id).toBe(false);
+    // refactor that "tidies" it back into attributes loses all twelve lines
+    // silently.
+    [...spokes, ...flows].forEach((line) => {
+      expect(line.style.stroke, line.getAttribute("data-testid") ?? "").toContain(
+        "var(--copper-",
+      );
+      expect(line.hasAttribute("stroke")).toBe(false);
+      expect(line.hasAttribute("stroke-width")).toBe(false);
+    });
+
+    // THE DRAWN LINE IS NORMALISED AND THE OVERLAY IS NOT, which is the one place
+    // the two lines of a spoke are DELIBERATELY different. `pathLength={1}` makes six
+    // spokes of six different lengths draw in the same 520ms; the beads are `2 10` in
+    // USER UNITS so every spoke carries the same-sized beads at the same pitch. Both
+    // normalised, the short spokes would get tight beads; neither normalised, the six
+    // would finish drawing at six different times.
+    spokes.forEach((s) => expect(s.getAttribute("pathLength")).toBe("1"));
+    flows.forEach((f) => expect(f.hasAttribute("pathLength")).toBe(false));
+  });
+
+  test("and a bead is BRIGHTER than the line it runs on, or it is a gap in it", () => {
+    // THE ONE RELATION BETWEEN THE TWO LINES OF A SPOKE, and the only rule on this
+    // slide that is about a pair of resting tiers rather than about the rest→lit
+    // delta. Every other check here compares a pillar to its own resting self or to
+    // its lit self, so both of them pass with the whole overlay moved DOWN the ramp
+    // together — and a `--copper-700` bead on a `--copper-600` hairline is not a
+    // quieter decoration, it is a dark mark laid over a lighter line: the beads stop
+    // reading as beads travelling along the spoke and start reading as GAPS eaten out
+    // of it. Six spokes that look broken, with no test failing.
+    //
+    // ONE TIER, NOT MORE, is the other half of `REST.flowStroke`'s argument, and it
+    // is left to the eye rather than pinned here: the ceiling is real (at
+    // `--copper-200` the resting ring reads as six animated arrows aimed at a disc,
+    // which is a diagram of traffic rather than of an organisation) but "how much
+    // brighter is too bright" is a projector judgement, and the hard floor below is
+    // the part a test can hold. The lit tiers are held from the other side by the
+    // gains-light describe, which requires the bead to out-rank its resting self.
+    //
+    // FIRED PER PILLAR rather than once, so a per-spoke override — the shape a later
+    // "just this one" edit takes — cannot hide behind five correct siblings.
+    C.pillars.forEach((p) => {
+      const spoke = screen.getByTestId(`shape-spoke-${p.id}`);
+      const flow = screen.getByTestId(`shape-flow-${p.id}`);
+      const line = brightnessOf(
+        tokenIn(spoke.style.stroke, `${p.id} · spoke`),
+        `${p.id} · spoke`,
+      );
+      const bead = brightnessOf(
+        tokenIn(flow.style.stroke, `${p.id} · bead`),
+        `${p.id} · bead`,
+      );
+      expect(bead.family, `${p.id} · bead family`).toBe(line.family);
+      expect(
+        bead.rung,
+        `${p.id} · bead ${flow.style.stroke} on spoke ${spoke.style.stroke}`,
+      ).toBeGreaterThan(line.rung);
+      // AND THE MARK HAS TO BE WIDER THAN THE HAIRLINE, for the same reason stated
+      // in width rather than in colour: a 2px dash at the line's own weight is a
+      // brighter section OF the line, not a bead ON it. `REST.flowWidth` is 2.4
+      // against a 1.6 spoke, which with `stroke-linecap: round` draws a ~4.4px
+      // lozenge — the smallest mark that survives a projector.
+      expect(
+        Number(flow.style.strokeWidth),
+        `${p.id} · bead width against spoke width`,
+      ).toBeGreaterThan(Number(spoke.style.strokeWidth));
     });
   });
 
@@ -694,46 +871,202 @@ describe("at rest, all six pillars carry full light", () => {
         ["labelColor", sig.labelColor],
         ["iconColor", sig.iconColor],
         ["spokeStroke", sig.spokeStroke],
+        ["flowStroke", sig.flowStroke],
       ] as const) {
         brightnessOf(tokenIn(value, `${p.id} · ${field}`), `${p.id} · ${field}`);
       }
       // The resting box has NO halo, written out as `none` rather than left off
       // the tier table — see `REST.boxHalo`. An absent key would make the two
       // tables different shapes, which is how a focus property ends up with no
-      // release and the halo stays on the box the walk has left.
+      // release and the halo stays on the box the pointer has left.
       expect(sig.boxShadow, `${p.id} · halo at rest`).toBe("none");
     });
   });
 });
 
-// ── THE PILLAR → DECISION MAPPING (the issue's AC, named) ─────────────────────
+// ── pose 0: the whole figure, and nothing waiting for a click ────────────────
 
-describe("the pillar → decision mapping", () => {
-  test("each of the six beats lights one pillar and opens that pillar's decision", () => {
-    // ONE MOUNTED TREE, WALKED. A per-pose re-mount would prove only that each
-    // pose renders from cold; the deck never does that, and the bug class this
-    // slide is at risk of — a pillar left lit, a counter one beat behind — only
-    // exists in a tree that has already been at another pose.
-    renderOrg(berau, POSE.HUB);
-    goToPose(POSE.RING);
-    const resting = allSignatures();
+describe("pose 0 is the WHOLE figure", () => {
+  test("hub, six spokes, six flows, six boxes and the panel — none of them waiting", () => {
+    // THE CHANGE THIS REWRITE IS BUILT AROUND, asserted as an inventory. The old
+    // pose 0 was a disc alone on a black stage and the room read a circle with no
+    // organisation around it and waited; pose 1 brought the ring; the column arrived
+    // at pose 2. Three arrivals, two of them presenter clicks. The figure is ONE
+    // thing, so it arrives as one thing — the build is a keyframe timetable on mount
+    // (`agentic-org.css`) and every element of it is in the tree from the first
+    // frame.
+    renderOrg(gems, POSE.FIGURE);
 
-    const walked: string[] = [];
-    C.pillars.forEach((pillar, i) => {
-      const pose = POSE.FIRST_DECISION + i;
-      goToPose(pose);
+    expect(screen.getByTestId("shape-hub")).toBeInTheDocument();
+    C.pillars.forEach((pillar) => {
+      expect(pillarBoxEl(pillar.id), pillar.id).toBeInTheDocument();
+      expect(screen.getByTestId(`shape-spoke-${pillar.id}`), pillar.id).toBeInTheDocument();
+      expect(screen.getByTestId(`shape-flow-${pillar.id}`), pillar.id).toBeInTheDocument();
+      expect(
+        screen.getByTestId(`shape-pillar-${pillar.id}-label`).textContent,
+        pillar.id,
+      ).toBe(pillar.label);
+    });
 
-      // `walk.ts` FIRST, ON ITS OWN TERMS: beat `i` is pose `2 + i` and focuses
-      // pillar `i`. Then the DOM, then the two held equal by `assertPose`.
-      expect(focusedPillarIndex(pose), `pose ${pose} → pillar ${i}`).toBe(i);
-      expect(BEAT_POSES[i], `beat ${i}`).toBe(pose);
-      assertPose(pose, resting);
+    // THE PANEL IS UP TOO, and it is up with COPY in it. Its hairline is the
+    // column's own and is declared once on the column, so it cannot blink.
+    const column = screen.getByTestId("shape-walk-column");
+    expect(column).toBeInTheDocument();
+    expect(column.className).toContain("shape-panel-in");
+    expect(column.style.borderLeft).toContain("solid");
+    expect(column.style.borderLeft).toContain("var(--copper-");
+  });
 
-      // EXACTLY ONE LIT BOX, and it is THIS pillar. `assertPose` already holds the
-      // list; this names the pillar in the failure message, which is the half a
-      // reviewer reads.
-      expect(activePillarIds(), `pose ${pose}`).toEqual([pillar.id]);
-      walked.push(activePillarIds()[0]);
+  test("the panel shows the idle block, and nothing else, with the hint on it", () => {
+    renderOrg(gems, POSE.FIGURE);
+
+    // THE IDLE BLOCK IS NOT A PLACEHOLDER. `idleEyebrow` names the figure and
+    // `idleLead` states the mechanism under the headline, so a presenter who talks
+    // straight through this slide without touching it still delivers the argument —
+    // the six decisions are the DEPTH, not the content. That is the test an idle
+    // state on an interactive slide has to pass.
+    expectOnlyOpen("shape-idle", "pose 0");
+    expect(screen.getByTestId("shape-idle-eyebrow").textContent).toBe(C.idleEyebrow);
+    expect(screen.getByTestId("shape-idle-lead").textContent).toBe(C.idleLead);
+
+    // AND THE ONE LINE THAT EXPLAINS THE POINTER. Under nine poses the six decisions
+    // arrived whether or not anyone touched the slide; under two they are reached by
+    // hovering a box, and a figure that hides its content behind an ungestured
+    // interaction is a figure that shows a room six labels and nothing else.
+    expect(screen.getByTestId("shape-hint").textContent).toBe(C.hint);
+    expect(C.hint, "both halves are named").toMatch(/HOVER/);
+    expect(C.hint, "pin is the half nobody guesses").toMatch(/PIN/);
+  });
+
+  test("all six pillars are unlit, and nothing is pinned", () => {
+    renderOrg(gems, POSE.FIGURE);
+    expect(activePillarIds()).toEqual([]);
+    expect(pinnedPillarIds()).toEqual([]);
+    // The pointer is live here — that is what the pose IS — so the six boxes are in
+    // the tab order.
+    expect(acceptsPointer(POSE.FIGURE)).toBe(true);
+    C.pillars.forEach((p) => expect(pillarBoxEl(p.id).tabIndex, p.id).toBe(0));
+  });
+});
+
+// ── pose 1: the recap ────────────────────────────────────────────────────────
+
+describe("pose 1 lights all six at once and hands the panel to the recap", () => {
+  test("ALL SIX are active simultaneously — no one of six is singled out", () => {
+    renderOrg(berau, POSE.RECAP);
+
+    // THE RING AND THE PANEL SAY THE SAME THING IN TWO REGISTERS, at the same
+    // moment. Six lit boxes is not "the walk ended on all six"; it is a different
+    // claim from any single-pillar pose, and it is the claim the headline makes.
+    expect(activePillarIds()).toEqual(C.pillars.map((p) => p.id));
+    expect(showsRecap(POSE.RECAP)).toBe(true);
+
+    // EVERY LIT PILLAR IS FULLY LIT, not "flagged". The z-index, the scale, the halo
+    // and the surging flow are the four things that were only ever true of one box at
+    // a time before this pose existed.
+    C.pillars.forEach((pillar) => {
+      expect(pillarBoxEl(pillar.id).style.transform, pillar.id).toBe(
+        `scale(${FOCUS_SCALE})`,
+      );
+      expect(pillarBoxEl(pillar.id).style.boxShadow, pillar.id).toContain(
+        `${FOCUS_HALO_WIDTH}px`,
+      );
+      expect(placementOf(pillar.id).style.zIndex, pillar.id).toBe("4");
+      expect(
+        screen.getByTestId(`shape-flow-${pillar.id}`).getAttribute("class"),
+        pillar.id,
+      ).toContain("is-active");
+    });
+  });
+
+  test("the recap is the only open block, and it prints six fragments and the closer", () => {
+    renderOrg(berau, POSE.RECAP);
+
+    expectOnlyOpen("shape-recap", "pose 1");
+    expect(screen.getByTestId("shape-recap-eyebrow").textContent).toBe(C.recapEyebrow);
+
+    // THE STEM IS SAID ONCE. Every decision opens "You decide"; six full sentences
+    // here would be a paragraph, and a room reads a paragraph by skimming it. So the
+    // eyebrow carries the stem and the six fragments complete it.
+    expect(C.recapEyebrow).toContain("YOU DECIDE");
+    C.pillars.forEach((pillar) => {
+      expect(pillar.decision, `${pillar.id} · the stem`).toMatch(/^You decide /);
+      expect(
+        screen.getByTestId(`shape-recap-${pillar.id}-label`).textContent,
+        pillar.id,
+      ).toBe(pillar.label);
+      expect(
+        screen.getByTestId(`shape-recap-${pillar.id}-text`).textContent,
+        pillar.id,
+      ).toBe(pillar.recap);
+      // A FRAGMENT AND NOT A SENTENCE: it completes the stem, so it starts lower
+      // case and ends without a stop. A recap line that reads as a sentence of its
+      // own would leave the eyebrow above it dangling.
+      expect(pillar.recap[0], `${pillar.id} · lower case`).toBe(
+        pillar.recap[0].toLowerCase(),
+      );
+      expect(pillar.recap, `${pillar.id} · no full stop`).not.toMatch(/[.]$/);
+    });
+
+    // AND THE CLAIM THE SIX ARE EVIDENCE FOR, under the hairline. It is no longer a
+    // pose of its own — the nine-pose version gave the closer an EMPTY column with
+    // its evidence already off the stage.
+    const closer = screen.getByTestId("shape-closer");
+    expect(closer.textContent).toBe(C.closer);
+    expect(C.closer).toContain("None of them is a tool purchase.");
+    expect(screen.getByTestId("shape-recap").contains(closer)).toBe(true);
+    expect(screen.getByTestId("shape-recap-rows")).toBeInTheDocument();
+  });
+
+  test("the pointer is INERT there — hovering a pillar changes nothing", async () => {
+    // A CORRECTNESS RULE RATHER THAN A TIDY-UP. The recap lights all six and gives
+    // the panel to a six-row summary; a hover that could still open ONE pillar would
+    // have to either overwrite the summary the room is reading or un-light the other
+    // five — and un-lighting five pillars to emphasise a sixth is precisely the
+    // subtraction §7.1 forbids.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.RECAP);
+    expect(acceptsPointer(POSE.RECAP)).toBe(false);
+
+    const before = allSignatures();
+    await user.hover(pillarBoxEl("people"));
+
+    expect(activePillarIds()).toEqual(C.pillars.map((p) => p.id));
+    expectOnlyOpen("shape-recap", "pose 1 · after hover");
+    C.pillars.forEach((p) =>
+      expect(pillarSignature(p.id), `${p.id} · unmoved by the pointer`).toEqual(
+        before.get(p.id),
+      ),
+    );
+
+    // AND THE SIX BOXES LEAVE THE TAB ORDER. Six controls that cannot change
+    // anything are six stops that answer nothing, and the panel already holds every
+    // word they would have opened.
+    C.pillars.forEach((p) => expect(pillarBoxEl(p.id).tabIndex, p.id).toBe(-1));
+  });
+});
+
+// ── hover, and the caret that does the same thing ────────────────────────────
+
+describe("hover opens exactly one decision", () => {
+  test("each pillar in turn: its box lights, its block opens, and only that one", async () => {
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    // ONE MOUNTED TREE, SWEPT. A per-pillar re-mount would prove only that each
+    // pillar opens from cold; the bug class this figure is at risk of — a box left
+    // lit behind a pointer that has moved on, a panel one pillar behind the ring —
+    // only exists in a tree that has already had something else open.
+    for (const [i, pillar] of C.pillars.entries()) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
+
+      // `walk.ts` FIRST, ON ITS OWN TERMS, then the DOM. Reading only the DOM would
+      // prove the renderer agrees with itself; recomputing from `resolveFocus` alone
+      // would prove `walk.ts` agrees with itself. The seam is where the bug is.
+      expect(resolveFocus(NO_FOCUS, i, NO_FOCUS), `${pillar.id} · walk.ts`).toBe(i);
+      expect(activePillarIds(), pillar.id).toEqual([pillar.id]);
+      expectOnlyOpen(`shape-decision-${pillar.id}`, pillar.id);
 
       // THE COLUMN SPEAKS FOR THE SAME PILLAR — its name in the display serif, its
       // decision in the serif body. Both read off the SAME content entry the ring's
@@ -741,76 +1074,265 @@ describe("the pillar → decision mapping", () => {
       // fails here rather than looking like a copy edit.
       expect(
         screen.getByTestId(`shape-decision-${pillar.id}-label`).textContent,
-        `pose ${pose} · label`,
+        `${pillar.id} · label`,
       ).toBe(pillar.label);
       expect(
         screen.getByTestId(`shape-pillar-${pillar.id}-label`).textContent,
-        `pose ${pose} · the ring says the same`,
+        `${pillar.id} · the ring says the same`,
       ).toBe(pillar.label);
       expect(
         screen.getByTestId(`shape-decision-${pillar.id}-text`).textContent,
-        `pose ${pose} · decision`,
+        `${pillar.id} · decision`,
       ).toBe(pillar.decision);
 
-      // THE COUNTER IS 1-BASED FOR THE ROOM AND 0-BASED IN THE CODE. Asserted
-      // through `decisionCounter(i)` — the one function that does the `+ 1` — AND
-      // as the literal string the room reads, because the two can disagree in
-      // exactly one way that matters: a renderer that passed the POSE instead of
-      // the pillar index would print "03 / 06" on the first beat and still agree
-      // with a test that only compared it to `decisionCounter(pose)`.
+      // THE COUNTER IS 1-BASED FOR THE ROOM AND 0-BASED IN THE CODE, and it
+      // survived the walk it was written for. Under nine poses "03 / 06" told the
+      // presenter where they were in a fixed sequence; there is no sequence now, and
+      // it tells the room something better — that what they are reading is one of
+      // exactly six, so a pillar opened out of order still arrives with its
+      // denominator.
       const eyebrow = screen.getByTestId(`shape-decision-${pillar.id}-eyebrow`);
-      expect(eyebrow.textContent, `pose ${pose} · counter`).toBe(decisionCounter(i));
-      expect(eyebrow.textContent, `pose ${pose} · 1-based`).toBe(
-        `${C.decisionEyebrow} · 0${i + 1} / 0${DECISION_BEATS}`,
+      expect(eyebrow.textContent, `${pillar.id} · counter`).toBe(decisionCounter(i));
+      expect(eyebrow.textContent, `${pillar.id} · 1-based`).toBe(
+        `${C.decisionEyebrow} · 0${i + 1} / 0${PILLAR_COUNT}`,
       );
-    });
 
-    // NO PILLAR SHARES A BEAT WITH ANOTHER (the AC, literally): six beats, six
-    // distinct ids, in ring order. §7.1 refuses the pairing that would make this
-    // three beats, so a walk that lit two pillars on one click — or the same pillar
-    // twice — fails here.
-    expect(walked).toEqual(C.pillars.map((p) => p.id));
-    expect(new Set(walked).size).toBe(DECISION_BEATS);
-    expect(walked).toHaveLength(BEAT_POSES.length);
+      await user.unhover(box);
+      // AND IT CLOSES. Leaving the box hands `NO_FOCUS` back in, and there is no
+      // history for the next call to contradict — which is what makes "no
+      // interaction leaves a pillar stuck open" arithmetic rather than cleanup.
+      expect(activePillarIds(), `${pillar.id} · released`).toEqual([]);
+      expectOnlyOpen("shape-idle", `${pillar.id} · released`);
+    }
 
-    // The eyebrow counts UP TO the total and stops: "06 / 06" is the last thing
-    // printed, and there is no "07 / 06" for the closer.
-    expect(decisionCounter(DECISION_BEATS - 1)).toContain(
-      `0${DECISION_BEATS} / 0${DECISION_BEATS}`,
+    // THE COUNTER STOPS AT THE TOTAL: "06 / 06" is the last thing printed, and there
+    // is no "07 / 06" for anything.
+    expect(decisionCounter(PILLAR_COUNT - 1)).toContain(
+      `0${PILLAR_COUNT} / 0${PILLAR_COUNT}`,
     );
   });
 
-  test("`focusedPillarIndex` and the DOM never disagree, at any of the nine", () => {
-    // THE SAME SEAM, WALKED OVER EVERY POSE INCLUDING THE THREE THAT FOCUS
-    // NOTHING. The beats above are where the map is interesting; poses 0, 1 and 8
-    // are where it is at risk, because they are the poses a renderer reaches by
-    // falling through rather than by deciding.
-    renderOrg(gems, POSE.HUB);
-    for (const pose of POSES) {
-      goToPose(pose);
-      const focus = focusedPillarIndex(pose);
-      expect(activePillarIds(), `pose ${pose}`).toEqual(
-        focus === NO_FOCUS ? [] : [C.pillars[focus].id],
-      );
-      expect(openDecisionIds(), `pose ${pose}`).toEqual(
-        focus === NO_FOCUS ? [] : [C.pillars[focus].id],
-      );
-    }
+  test("the hint leaves the tree the first time a pillar is touched, and never returns", async () => {
+    // DROPPED RATHER THAN FADED. An element that is still there is still a stop for
+    // a screen reader and still a row in the panel's measure — and the pulse it
+    // carries would go on breathing behind an opacity of 0. It is a ONE-WAY LATCH:
+    // an instruction that reappeared when the pointer left would be an instruction
+    // the reader has already followed, arriving again.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+    expect(screen.getByTestId("shape-hint").className).toContain("shape-hint");
+
+    const box = pillarBoxEl("strategy");
+    await user.hover(box);
+    expect(screen.queryByTestId("shape-hint")).toBeNull();
+
+    await user.unhover(box);
+    expectOnlyOpen("shape-idle", "back to idle");
+    // The idle block is back and its two lines are back with it — the hint is not.
+    expect(screen.getByTestId("shape-idle-eyebrow").textContent).toBe(C.idleEyebrow);
+    expect(screen.queryByTestId("shape-hint")).toBeNull();
+  });
+
+  test("the CARET opens a pillar exactly as the pointer does", async () => {
+    // WITHOUT THIS, `Tab` MOVES A FOCUS RING AROUND SIX BOXES THAT NEVER OPEN. The
+    // caret is its own channel and not a second writer of `hovered` — see the blur in
+    // the click handler for why the two cannot share a lifetime.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    // TABBED INTO FROM THE POSE BUTTONS, because `<Nav>` renders one control per
+    // pose AHEAD of the slide and a bare `user.tab()` from a cold document would land
+    // on `goto-0`. Starting the caret on the last of them and stepping once is the
+    // honest version of "the next stop after the deck's own chrome is the ring", and
+    // it is the claim worth making: the six boxes are the first controls in the
+    // FIGURE's own DOM order, so Tab reaches the ring in ring order.
+    act(() => screen.getByTestId(`goto-${STEP_COUNT - 1}`).focus());
+    await user.tab();
+    const first = C.pillars[0];
+    expect(document.activeElement).toBe(pillarBoxEl(first.id));
+    expect(activePillarIds()).toEqual([first.id]);
+    expectOnlyOpen(`shape-decision-${first.id}`, "tabbed to the first pillar");
+
+    // And a direct `.focus()` on any of them does the same, which is the half that
+    // has to work for a deck driven from a screen reader rather than from Tab.
+    act(() => pillarBoxEl("process").focus());
+    expect(activePillarIds()).toEqual(["process"]);
+    expectOnlyOpen("shape-decision-process", "focused by the caret");
+
+    act(() => pillarBoxEl("process").blur());
+    expect(activePillarIds()).toEqual([]);
+    expectOnlyOpen("shape-idle", "caret left");
+  });
+
+  test("the pointer beats the caret where they disagree", async () => {
+    // HOVER OVER FOCUS, in the one case they can disagree: the pointer moved last.
+    // Tabbing to a pillar and then sweeping the mouse elsewhere should follow the
+    // mouse; the caret has not moved and will still be there when the pointer leaves.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    act(() => pillarBoxEl("governance").focus());
+    expect(activePillarIds()).toEqual(["governance"]);
+
+    const tools = pillarBoxEl("tools");
+    await user.hover(tools);
+    expect(resolveFocus(NO_FOCUS, 1, 0), "walk.ts").toBe(1);
+    expect(activePillarIds()).toEqual(["tools"]);
+    expectOnlyOpen("shape-decision-tools", "pointer wins");
+
+    // The caret is still where it was, so the pointer leaving falls back to it.
+    expect(document.activeElement).toBe(pillarBoxEl("governance"));
+    await user.unhover(tools);
+    expect(activePillarIds()).toEqual(["governance"]);
+    expectOnlyOpen("shape-decision-governance", "back to the caret");
   });
 });
 
-// ── THE NO-DIM RULE (the issue's AC, named) ──────────────────────────────────
+// ── the pin ──────────────────────────────────────────────────────────────────
 
-describe("no inactive pillar loses anything, at any beat", () => {
+describe("a click pins, a second click releases, and a third pillar moves it", () => {
+  test("the pin survives the pointer leaving — which is the whole point of it", async () => {
+    // A HOME RATHER THAN A LOCK. What a presenter wants from a pin on a slide they
+    // are talking over is somewhere to RETURN to: sweep across the ring and each
+    // pillar answers in turn, take the pointer off the figure — to the panel, to the
+    // clicker, off the screen entirely — and it settles back on the one they chose to
+    // stand on.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    const box = pillarBoxEl("people");
+    await user.click(box);
+
+    // NOTE ON `user.click`: it dispatches a pointer-originated click, so
+    // `e.detail > 0` and the handler BLURS the button. That is intended and is the
+    // one line that keeps a mouse click from painting a keyboard focus ring the next
+    // time the presenter presses Space to advance. So the caret channel is empty
+    // here, and what holds the pillar open is the pin alone.
+    expect(document.activeElement).not.toBe(box);
+    expect(pinnedPillarIds()).toEqual(["people"]);
+    expect(box.getAttribute("aria-pressed")).toBe("true");
+    // THE DOT ON THE BOX, and the word in the panel. Six pillars can be hovered and
+    // only one can be pinned, so the two states have to be separable without moving
+    // the pointer.
+    expect(screen.getByTestId("shape-pillar-people-pin")).toBeInTheDocument();
+    expect(screen.getByTestId("shape-decision-people-pin").textContent).toBe("· pinned");
+
+    await user.unhover(box);
+    expect(resolveFocus(2, NO_FOCUS, NO_FOCUS), "walk.ts").toBe(2);
+    expect(activePillarIds(), "still lit with the pointer gone").toEqual(["people"]);
+    expectOnlyOpen("shape-decision-people", "pinned, pointer away");
+  });
+
+  test("a second click on the same pillar releases it, and the panel returns to idle", async () => {
+    // NOT A CLOSE BUTTON, NOT Esc, AND NOT A CLICK ON THE BACKGROUND: the background
+    // is the deck's own click-to-advance target, so a "click away to unpin" rule
+    // would unpin and step the slide with one press. The pillar that took the pin is
+    // the only element that can give it back without arguing with the deck.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    const box = pillarBoxEl("companions");
+    await user.click(box);
+    expect(pinnedPillarIds()).toEqual(["companions"]);
+
+    await user.click(box);
+    expect(togglePin(5, 5), "walk.ts").toBe(NO_FOCUS);
+    expect(pinnedPillarIds()).toEqual([]);
+    expect(box.getAttribute("aria-pressed")).toBe("false");
+    expect(screen.queryByTestId("shape-pillar-companions-pin")).toBeNull();
+    expect(screen.queryByTestId("shape-decision-companions-pin")).toBeNull();
+
+    // The pointer is still on the box, so the decision is still open — released is
+    // not the same as closed. Take the pointer off and the panel goes idle.
+    expectOnlyOpen("shape-decision-companions", "released but still hovered");
+    await user.unhover(box);
+    expectOnlyOpen("shape-idle", "released and left");
+    expect(activePillarIds()).toEqual([]);
+  });
+
+  test("clicking a DIFFERENT pillar moves the pin rather than clearing it", async () => {
+    // A rule that required an unpin first would make moving the pin cost two clicks
+    // and would be the "pin is a mode" failure `resolveFocus` exists to avoid.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    await user.click(pillarBoxEl("governance"));
+    expect(pinnedPillarIds()).toEqual(["governance"]);
+
+    const strategy = pillarBoxEl("strategy");
+    await user.click(strategy);
+    expect(togglePin(0, 3), "walk.ts").toBe(3);
+    // ONE PIN, and it is a list precisely so "two pinned at once" fails as a length.
+    expect(pinnedPillarIds()).toEqual(["strategy"]);
+    expect(screen.queryByTestId("shape-pillar-governance-pin")).toBeNull();
+    expect(screen.getByTestId("shape-pillar-strategy-pin")).toBeInTheDocument();
+
+    await user.unhover(strategy);
+    expectOnlyOpen("shape-decision-strategy", "the pin moved");
+  });
+
+  test("the pin HOLDS THE COLUMN, and a hover elsewhere lights a box without moving the words", async () => {
+    // THE ONE RULE THIS SLIDE'S PIN IS FOR (owner call, 2026-08-14). A presenter pins
+    // Governance to talk over it; under the old hover-wins order their hand could not
+    // then cross the figure — reaching for the clicker over Tools swapped the panel
+    // out from under the sentence they were saying. A pin that only holds while
+    // nothing else is touched is not a pin.
+    //
+    // AND THE RING IS NOT DEAD, which is the objection pin-wins invites and the reason
+    // `isLit` exists: the hovered box still lights. Two boxes, one column.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    const governance = pillarBoxEl("governance");
+    await user.click(governance);
+    await user.unhover(governance);
+    expect(activePillarIds()).toEqual(["governance"]);
+
+    const tools = pillarBoxEl("tools");
+    await user.hover(tools);
+    expect(resolveFocus(0, 1, NO_FOCUS), "walk.ts · the column").toBe(0);
+    expect(isLit(1, 0, 1, NO_FOCUS), "walk.ts · the ring").toBe(true);
+    // BOTH LIT — the pinned pillar and the one under the hand — in ring order.
+    expect(activePillarIds(), "the ring answers the hand").toEqual(["governance", "tools"]);
+    // AND THE COLUMN HAS NOT MOVED. This is the assertion the change is for.
+    expectOnlyOpen("shape-decision-governance", "the pin holds the column");
+    // The pin is still where it was, and it is still the only one.
+    expect(pinnedPillarIds()).toEqual(["governance"]);
+    // WHICH OF THE TWO LIT BOXES OWNS THE COLUMN IS NOT LEFT TO THE EYE: the pin mark
+    // is on one of them, and the panel says the word.
+    expect(screen.getByTestId("shape-pillar-governance-pin")).toBeInTheDocument();
+    expect(screen.queryByTestId("shape-pillar-tools-pin")).toBeNull();
+    expect(screen.getByTestId("shape-decision-governance-pin").textContent).toBe("· pinned");
+
+    // The hand leaves and the figure is back to the pin alone — nothing to reset.
+    await user.unhover(tools);
+    expect(activePillarIds(), "the pin alone").toEqual(["governance"]);
+    expectOnlyOpen("shape-decision-governance", "the pin alone");
+
+    // AND RELEASING IT HANDS THE COLUMN BACK TO THE POINTER. A pin that could not be
+    // given back would be the "pin is a mode" failure, which is the real cost of this
+    // order and is paid by the second click.
+    await user.click(governance);
+    expect(pinnedPillarIds()).toEqual([]);
+    await user.hover(tools);
+    expect(activePillarIds(), "released").toEqual(["tools"]);
+    expectOnlyOpen("shape-decision-tools", "released, the pointer has the column back");
+  });
+});
+
+// ── THE NO-DIM RULE (§7.1) ───────────────────────────────────────────────────
+
+describe("no inactive pillar loses anything, at any hover", () => {
   // §7.1: "Inactive pillars keep full border and label; the active one *gains*
   // copper fill, a thickened spoke and a halo. Attention is bought with added
-  // light, never subtracted." The issue's AC says it as a negative — "**no**
-  // inactive pillar loses border, label or luminance at any beat" — and a negative
-  // over nine ways of losing something is only checkable as an identity: capture
-  // the resting figure once, then demand it back, field by field, at all six beats.
+  // light, never subtracted." Said as a negative — no inactive pillar loses border,
+  // label or luminance — over eleven ways of losing something, it is only checkable
+  // as an identity: capture the resting figure once, then demand it back, field by
+  // field, at all six hovers.
 
-  test("the five pillars a beat is not about are byte-identical to their resting selves", () => {
-    renderOrg(berau, POSE.RING);
+  test("the five pillars a hover is not about are byte-identical to their resting selves", async () => {
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
     const resting = allSignatures();
 
     // POSITIVE CONTROL. If the capture were empty — six pillars that render no
@@ -823,90 +1345,112 @@ describe("no inactive pillar loses anything, at any beat", () => {
       );
     });
 
-    for (const pose of BEAT_POSES) {
-      goToPose(pose);
-      const focus = focusedPillarIndex(pose);
-      expect(focus, `pose ${pose} focuses somebody`).not.toBe(NO_FOCUS);
+    for (const [i, pillar] of C.pillars.entries()) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
 
-      C.pillars.forEach((pillar, j) => {
-        if (j === focus) return;
-        const now = pillarSignature(pillar.id);
-        const was = resting.get(pillar.id)!;
+      C.pillars.forEach((other, j) => {
+        if (j === i) return;
+        const now = pillarSignature(other.id);
+        const was = resting.get(other.id)!;
         // FIELD BY FIELD FIRST, so the failure names the property and the pillar.
-        // A whole-object diff over 5 pillars × 9 fields × 6 beats is unreadable,
-        // and the message is what tells the next author whether a border moved or
-        // a spoke did.
+        // A whole-object diff over 5 pillars × 11 fields × 6 hovers is unreadable,
+        // and the message is what tells the next author whether a border moved or a
+        // flow stopped surging.
         for (const field of SIGNATURE_FIELDS) {
-          expect(now[field], `pose ${pose} · ${pillar.id} · ${field}`).toBe(was[field]);
+          expect(now[field], `${pillar.id} open · ${other.id} · ${field}`).toBe(
+            was[field],
+          );
         }
         // THEN THE WHOLE OBJECT, which is not redundant: it is what catches a
-        // TENTH field added to `PillarSignature` and forgotten in
+        // TWELFTH field added to `PillarSignature` and forgotten in
         // `SIGNATURE_FIELDS`.
-        expect(now, `pose ${pose} · ${pillar.id}`).toEqual(was);
+        expect(now, `${pillar.id} open · ${other.id}`).toEqual(was);
       });
 
       // THE VACUITY GUARD, and it belongs in this test rather than beside it. Every
       // assertion above is an EQUALITY, so a signature that read the wrong element,
-      // or a renderer that stopped distinguishing the poses at all, would satisfy
-      // all thirty of them. So: the ONE pillar the beat IS about must NOT match its
+      // or a renderer that stopped distinguishing the states at all, would satisfy
+      // all of them. So: the ONE pillar the hover IS about must NOT match its
       // resting self. That is what says the capture discriminates, and it is the
-      // same fact §7.1 states from the other side — the difference between the two
-      // tiers is the whole emphasis.
+      // same fact §7.1 states from the other side.
       expect(
-        pillarSignature(C.pillars[focus].id),
-        `pose ${pose} · ${C.pillars[focus].id} is the one that changed`,
-      ).not.toEqual(resting.get(C.pillars[focus].id));
+        pillarSignature(pillar.id),
+        `${pillar.id} is the one that changed`,
+      ).not.toEqual(resting.get(pillar.id));
+
+      await user.unhover(box);
+      // AND THE RELEASE RESTORES ALL SIX, which is the claim that makes the sweep
+      // repeatable: the next hover's reference figure is the same figure.
+      C.pillars.forEach((p) =>
+        expect(pillarSignature(p.id), `${pillar.id} released · ${p.id}`).toEqual(
+          resting.get(p.id),
+        ),
+      );
     }
   });
 
-  test("and no inactive pillar's border or spoke ever reaches a dim copper tier", () => {
+  test("and no inactive pillar's border or spoke ever reaches a dim copper tier", async () => {
     // THE POSITIVE FORM OF THE SAME RULE, and the one that catches the specific
     // regression: the prototype ranks its inactive pillars TWICE MORE —
     // `--copper-800` for "not visited yet" and `--copper-600` for "already walked"
-    // — so the arrival of beat 4 also re-colours pillars 1–3 and five boxes change
-    // on a beat that is about the sixth. That ranking is deleted in the renderer,
-    // not ported, and this is the assertion that says so out loud.
+    // — so opening the fourth pillar also re-colours the three before it and five
+    // boxes change on a gesture that is about the sixth. That ranking is deleted in
+    // the renderer, not ported, and this is the assertion that says so out loud.
     //
-    // IT IS NOT THE SAME TEST AS THE IDENTITY ABOVE. Identity would also hold if
-    // all six pillars rested at `--copper-800` together; this says the resting tier
-    // itself is not a "not yet" tier, at every beat, so the walk has room to add
-    // light without taking any.
-    renderOrg(berau, POSE.RING);
-    for (const pose of BEAT_POSES) {
-      goToPose(pose);
-      const focus = focusedPillarIndex(pose);
-      C.pillars.forEach((pillar, j) => {
-        if (j === focus) return;
-        const sig = pillarSignature(pillar.id);
+    // IT IS NOT THE SAME TEST AS THE IDENTITY ABOVE. Identity would also hold if all
+    // six pillars rested at `--copper-800` together; this says the resting tier
+    // itself is not a "not yet" tier, at every hover, so the highlight has room to
+    // add light without taking any.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    for (const [i, pillar] of C.pillars.entries()) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
+      C.pillars.forEach((other, j) => {
+        if (j === i) return;
+        const sig = pillarSignature(other.id);
         // POSITIVE CONTROL, per pillar: there IS a copper token to be wrong.
-        expect(sig.border, `pose ${pose} · ${pillar.id}`).toContain("var(--copper-");
-        expect(sig.spokeStroke, `pose ${pose} · ${pillar.id}`).toContain("var(--copper-");
+        expect(sig.border, `${pillar.id} open · ${other.id}`).toContain("var(--copper-");
+        expect(sig.spokeStroke, `${pillar.id} open · ${other.id}`).toContain(
+          "var(--copper-",
+        );
         for (const tier of DIM_COPPER_TIERS) {
-          expect(sig.border, `pose ${pose} · ${pillar.id} · border ${tier}`).not.toContain(
-            tier,
-          );
+          expect(
+            sig.border,
+            `${pillar.id} open · ${other.id} · border ${tier}`,
+          ).not.toContain(tier);
           expect(
             sig.spokeStroke,
-            `pose ${pose} · ${pillar.id} · spoke ${tier}`,
+            `${pillar.id} open · ${other.id} · spoke ${tier}`,
           ).not.toContain(tier);
         }
-        // And the label stays full strength — the other half of §7.1's "keep full
+        // The label stays full strength — the other half of §7.1's "keep full
         // border and label".
-        expect(FULL_LABEL_TIERS, `pose ${pose} · ${pillar.id} · label`).toContain(
+        expect(FULL_LABEL_TIERS, `${pillar.id} open · ${other.id} · label`).toContain(
           sig.labelColor,
         );
         // And rank is never carried in the opacity channel, which on this slide
         // means "not revealed yet".
-        expect(sig.opacity, `pose ${pose} · ${pillar.id} · opacity`).toBe("1");
+        expect(
+          pillarBoxEl(other.id).style.opacity,
+          `${pillar.id} open · ${other.id} · opacity`,
+        ).toBe("");
+        // And its bead flow is still drifting inward, not surging out.
+        expect(sig.flowClass, `${pillar.id} open · ${other.id} · flow`).not.toContain(
+          "is-active",
+        );
       });
+      await user.unhover(box);
     }
   });
 });
 
 // ── what the ACTIVE pillar gains ─────────────────────────────────────────────
 
-describe("the active pillar gains light and nothing else", () => {
-  /** The four colour properties whose focus tier must sit at or ABOVE its resting
+describe("the open pillar gains light and nothing else", () => {
+  /** The five colour properties whose focus tier must sit at or ABOVE its resting
    *  one on the same ladder. Not the box fill — that one crosses ladders on
    *  purpose (neutral → copper) and is asserted separately below. */
   const RAMPED: readonly (keyof PillarSignature)[] = [
@@ -914,20 +1458,22 @@ describe("the active pillar gains light and nothing else", () => {
     "iconColor",
     "labelColor",
     "spokeStroke",
+    "flowStroke",
   ];
 
-  test("a brighter tier on the border, icon, label and spoke — never a darker one", () => {
-    renderOrg(berau, POSE.RING);
+  test("a brighter tier on the border, icon, label, spoke and beads — never a darker one", async () => {
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
     const resting = allSignatures();
 
-    for (const pose of BEAT_POSES) {
-      goToPose(pose);
-      const pillar = C.pillars[focusedPillarIndex(pose)];
+    for (const pillar of C.pillars) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
       const now = pillarSignature(pillar.id);
       const was = resting.get(pillar.id)!;
 
       for (const field of RAMPED) {
-        const where = `pose ${pose} · ${pillar.id} · ${field}`;
+        const where = `${pillar.id} · ${field}`;
         const before = brightnessOf(tokenIn(was[field], where), where);
         const after = brightnessOf(tokenIn(now[field], where), where);
         // SAME LADDER. A copper border that became a neutral one would be a hue
@@ -936,27 +1482,39 @@ describe("the active pillar gains light and nothing else", () => {
         expect(after.family, `${where} · ladder`).toBe(before.family);
         // AT OR BRIGHTER — the whole claim, as an ordering. `!==` would pass on a
         // DARKER tier, which is the failure §7.1 exists to forbid.
-        expect(after.rung, `${where} · ${was[field]} → ${now[field]}`).toBeGreaterThanOrEqual(
-          before.rung,
-        );
+        expect(
+          after.rung,
+          `${where} · ${was[field]} → ${now[field]}`,
+        ).toBeGreaterThanOrEqual(before.rung);
       }
 
-      // THE SPOKE IS THICKENED, not merely re-coloured (§7.1 names it): 2.6 over
-      // 1.6, and the comparison is numeric so "2.6" vs "10" cannot pass as string
-      // order.
-      expect(Number(now.spokeWidth), `pose ${pose} · spoke width`).toBeGreaterThan(
+      // BOTH LINES THICKEN, not merely re-colour (§7.1 names the spoke): 2.6 over
+      // 1.6 on the drawn hairline and 3 over 2.4 on the bead, and the comparisons
+      // are numeric so "2.6" vs "10" cannot pass as string order.
+      expect(Number(now.spokeWidth), `${pillar.id} · spoke width`).toBeGreaterThan(
         Number(was.spokeWidth),
       );
+      expect(Number(now.flowWidth), `${pillar.id} · bead width`).toBeGreaterThan(
+        Number(was.flowWidth),
+      );
+      // AND THE FLOW REVERSES. This is the half of the highlight that is legible
+      // from the back of a room where a 2px bead is not: the enabler answering the
+      // pillar you asked about, one long stroke fired back out.
+      expect(was.flowClass, `${pillar.id} · resting flow`).toBe("shape-spoke-flow");
+      expect(now.flowClass, `${pillar.id} · surging flow`).toContain("is-active");
+
+      await user.unhover(box);
     }
   });
 
-  test("a copper fill where the resting box is the stage's own neutral", () => {
-    renderOrg(berau, POSE.RING);
+  test("a copper fill where the resting box is the stage's own neutral", async () => {
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
     const resting = allSignatures();
 
-    for (const pose of BEAT_POSES) {
-      goToPose(pose);
-      const pillar = C.pillars[focusedPillarIndex(pose)];
+    for (const pillar of C.pillars) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
       const now = pillarSignature(pillar.id);
       const was = resting.get(pillar.id)!;
 
@@ -966,321 +1524,211 @@ describe("the active pillar gains light and nothing else", () => {
       // copper (`--copper-900`, #3d2413 against #0a0a0a). Brightness across two
       // ladders is not an ordering anyone can assert, so the claim is stated as
       // what it is — the fill changes family, from the stage to the accent.
-      expect(was.background, `pose ${pose} · resting fill`).toContain("var(--neutral-");
-      expect(now.background, `pose ${pose} · focused fill`).toContain("var(--copper-");
-      expect(now.background, `pose ${pose} · fill moved`).not.toBe(was.background);
+      expect(was.background, `${pillar.id} · resting fill`).toContain("var(--neutral-");
+      expect(now.background, `${pillar.id} · open fill`).toContain("var(--copper-");
+      expect(now.background, `${pillar.id} · fill moved`).not.toBe(was.background);
+      await user.unhover(box);
     }
   });
 
-  test("a halo of exactly FOCUS_HALO_WIDTH, where the resting box has none", () => {
-    renderOrg(berau, POSE.RING);
+  test("a halo of exactly FOCUS_HALO_WIDTH, where the resting box has none", async () => {
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
     const resting = allSignatures();
 
-    for (const pose of BEAT_POSES) {
-      goToPose(pose);
-      const pillar = C.pillars[focusedPillarIndex(pose)];
-      const now = pillarSignature(pillar.id);
+    for (const pillar of C.pillars) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
 
       // `none` → a hard copper ring. A SPREAD AND NOT A BLUR, which is why the
       // width is asserted as a number: `0 0 0 4px` paints exactly 4px outside the
       // box's own edge on every side, and that 4 is the number
       // `FOCUS_GROWTH_SPENT` adds to the floor budget by hand — because a
       // `box-shadow` is outside every layout measurement a browser can make.
-      expect(resting.get(pillar.id)!.boxShadow, `pose ${pose} · resting halo`).toBe("none");
-      expect(now.boxShadow, `pose ${pose} · halo`).toContain(`${FOCUS_HALO_WIDTH}px`);
-      expect(now.boxShadow, `pose ${pose} · halo tier`).toContain("var(--copper-");
+      const now = pillarSignature(pillar.id);
+      expect(resting.get(pillar.id)!.boxShadow, `${pillar.id} · resting halo`).toBe(
+        "none",
+      );
+      expect(now.boxShadow, `${pillar.id} · halo`).toContain(`${FOCUS_HALO_WIDTH}px`);
+      expect(now.boxShadow, `${pillar.id} · halo tier`).toContain("var(--copper-");
       // No offset and no blur, so the three leading lengths are zeroes.
-      expect(now.boxShadow, `pose ${pose} · hard ring`).toMatch(/^0 0 0 /);
+      expect(now.boxShadow, `${pillar.id} · hard ring`).toMatch(/^0 0 0 /);
+      // AND IT IS PAINTED OVER ITS NEIGHBOURS. At a flat z-index the ring's own
+      // paint order decides, and pillars 1/2 and 4/5 are close enough that the later
+      // box clips the earlier one's ring — a halo with a bite out of one side.
+      expect(placementOf(pillar.id).style.zIndex, `${pillar.id} · over`).toBe("4");
+
+      await user.unhover(box);
+      expect(placementOf(pillar.id).style.zIndex, `${pillar.id} · back under`).toBe("2");
     }
   });
 
-  test("FOCUS_SCALE on the same transform that centres the box, and no opacity change", () => {
-    renderOrg(berau, POSE.RING);
-    const resting = allSignatures();
+  test("FOCUS_SCALE on the button alone, and no opacity anywhere in the gesture", async () => {
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
 
-    for (const pose of BEAT_POSES) {
-      goToPose(pose);
-      const pillar = C.pillars[focusedPillarIndex(pose)];
-      const now = pillarSignature(pillar.id);
+    for (const pillar of C.pillars) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
 
-      // ONE TRANSFORM CARRYING BOTH. The scale has to compose onto the
-      // `translate(-50%, -50%)` that makes `left`/`top` a CENTRE — a wrapper
-      // element per effect would give the arrival and the beat separate timelines,
-      // and a scale that REPLACED the translate would drop the box half its own
-      // size down and right at the moment the room is looking at it.
-      expect(now.transform, `pose ${pose} · centred`).toContain("translate(-50%, -50%)");
-      expect(now.transform, `pose ${pose} · grown`).toBe(
-        `translate(-50%, -50%) scale(${FOCUS_SCALE})`,
+      // ONE TRANSFORM PER ELEMENT. The scale lives on the BUTTON, the centring
+      // translate two parents up, and the arrival scale on the element between them
+      // — so a pointer that lands on a box mid-build composes three matrices instead
+      // of two keyframes fighting over one property.
+      expect(box.style.transform, `${pillar.id} · grown`).toBe(`scale(${FOCUS_SCALE})`);
+      expect(box.style.transform, `${pillar.id} · not re-placed`).not.toContain(
+        "translate",
       );
-      expect(resting.get(pillar.id)!.transform, `pose ${pose} · resting scale`).toBe(
-        "translate(-50%, -50%) scale(1)",
+      expect(placementOf(pillar.id).style.transform, `${pillar.id} · still centred`).toBe(
+        "translate(-50%, -50%)",
       );
 
       // AND NO OPACITY CHANGE, WHICH IS THE POINT. On this slide opacity means
-      // "not revealed yet" — it is the channel the arrival sweep uses — so a focus
+      // "not revealed yet" — it is the channel the build uses — so a highlight
       // expressed as an alpha (the prototype fills with `rgba(184,110,61,0.22)`)
-      // would be a RANK in the one channel that carries TIME. Rank is a colour
-      // tier here, always.
-      expect(now.opacity, `pose ${pose} · focused opacity`).toBe("1");
-      expect(now.opacity, `pose ${pose} · unchanged`).toBe(
-        resting.get(pillar.id)!.opacity,
-      );
+      // would be a RANK in the one channel that carries TIME. Rank is a colour tier
+      // here, always.
+      expect(box.style.opacity, `${pillar.id} · open opacity`).toBe("");
+      await user.unhover(box);
+      expect(box.style.transform, `${pillar.id} · released`).toBe("scale(1)");
     }
   });
 });
 
-// ── 8 → 0, in both directions, in one mounted tree (the AC) ──────────────────
+// ── the point lists ──────────────────────────────────────────────────────────
 
-describe("the walk re-renders cleanly in both directions", () => {
-  test("0 → 8 then 8 → 0, pose by pose, with the same invariants on the way down", () => {
-    // THE AC'S OWN WORDS: "`8 → 0` re-renders cleanly in both directions; no beat
-    // leaves a pillar stuck in its focused state." It is true BY CONSTRUCTION —
-    // every function in `walk.ts` is a function of the pose alone, so there is no
-    // history for a backwards step to contradict — and this is the test that says
-    // the renderer did not add one. A component that cached "the previously focused
-    // pillar" would pass the upward walk and fail here.
-    renderOrg(berau, POSE.HUB);
+describe("every decision carries HR p4's own scope under it", () => {
+  test("three or four points each, in order, rendered one per row", async () => {
+    // THE DECISION IS THE ARGUMENT; THE POINTS ARE THE EVIDENCE FOR IT. "You decide
+    // where the data may go" is a claim about the leader's desk, and a Div Head's
+    // next question is always the same one — *what does that actually cover?* Four
+    // nouns answer it in the time it takes to read them.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
 
-    let resting: Map<string, PillarSignature> | undefined;
-    for (const pose of POSES) {
-      goToPose(pose);
-      if (pose === POSE.RING) resting = allSignatures();
-      assertPose(pose, resting);
-    }
+    for (const pillar of C.pillars) {
+      const box = pillarBoxEl(pillar.id);
+      await user.hover(box);
 
-    // AND BACK DOWN, one pose at a time through the same tree. `[...POSES]` is
-    // reversed rather than counted down, so the two walks visit exactly the same
-    // set.
-    for (const pose of [...POSES].reverse()) {
-      goToPose(pose);
-      assertPose(pose, resting);
-    }
+      const list = screen.getByTestId(`shape-decision-${pillar.id}-points`);
+      expect(list.tagName, pillar.id).toBe("UL");
+      const rows = [...list.querySelectorAll("li")].map((li) => li.textContent);
+      // IN ORDER, and every one of them: a list that rendered a Set, or sliced to
+      // three "so the six lists match", would pass a length check and lose a scope
+      // nobody could see was missing.
+      expect(rows, pillar.id).toEqual([...pillar.points]);
 
-    // Ending where it started: pose 0 is the hub alone again.
-    expect(activePillarIds()).toEqual([]);
-    C.pillars.forEach((p) => {
-      expect(screen.getByTestId(`shape-pillar-${p.id}`).style.opacity, p.id).toBe("0");
-      expect(
-        screen.getByTestId(`shape-pillar-${p.id}`).style.transform,
-        `${p.id} · un-arrived`,
-      ).toBe("translate(-50%, -50%) scale(0.86)");
-    });
-  });
-
-  test("poses 0, 1 and 8 focus nothing and hold every decision shut", () => {
-    // THE THREE POSES THE WALK IS NOT ON. Pose 8 is the one that matters: the
-    // sixth beat is the pose immediately before it, so a renderer that kept the
-    // last-focused index — or clamped `NO_FOCUS` to 0, which is what
-    // `pillars.at(focus)` and the prototype's `Math.max(focus, 0)` both do — leaves
-    // AI Companions lit under the closer's own copy, or flashes GOVERNANCE up
-    // beneath it with a "01 / 06" counter for a beat that is not running.
-    renderOrg(gems, POSE.HUB);
-    for (const pose of UNFOCUSED_POSES) {
-      goToPose(pose);
-      expect(focusedPillarIndex(pose), `pose ${pose} · walk.ts`).toBe(NO_FOCUS);
-      expect(activePillarIds(), `pose ${pose} · lit boxes`).toEqual([]);
-      C.pillars.forEach((p) => {
-        expect(
-          screen.getByTestId(`shape-decision-${p.id}`).style.opacity,
-          `pose ${pose} · ${p.id}`,
-        ).toBe("0");
-      });
+      await user.unhover(box);
     }
   });
 
-  test("and at pose 8 the ring is exactly the resting figure, with only the closer added", () => {
-    // THE STRONGEST FORM OF "nothing stuck": not just "no pillar is flagged
-    // active" but "all six pillars are byte-identical to pose 1". Reached by
-    // WALKING there through all six beats, so the comparison is against a figure
-    // that has been lit and released six times.
-    renderOrg(berau, POSE.HUB);
-    goToPose(POSE.RING);
-    const resting = allSignatures();
-
-    for (const pose of POSES) goToPose(pose);
-    expect(focusedPillarIndex(CLOSER_POSE)).toBe(NO_FOCUS);
-
+  test("THREE OR FOUR, NEVER MORE — the panel is measured for four", () => {
+    // HR p4 gives Governance four and the other five three, and the asymmetry is
+    // KEPT rather than padded: a fourth line invented for Tools so the six lists
+    // match would be a scope nobody wrote. Four is the ceiling because the column is
+    // measured for four; a fifth would run the list into the figure's own floor.
     C.pillars.forEach((pillar) => {
-      expect(pillarSignature(pillar.id), `pose ${CLOSER_POSE} · ${pillar.id}`).toEqual(
-        resting.get(pillar.id),
+      expect(pillar.points.length, `${pillar.id} · at least three`).toBeGreaterThanOrEqual(
+        3,
+      );
+      expect(pillar.points.length, `${pillar.id} · at most four`).toBeLessThanOrEqual(4);
+      expect(new Set(pillar.points).size, `${pillar.id} · no repeat`).toBe(
+        pillar.points.length,
+      );
+      pillar.points.forEach((point) =>
+        expect(point.trim(), `${pillar.id} · "${point}"`).not.toBe(""),
       );
     });
+    // The asymmetry itself, pinned: exactly one pillar has four.
+    expect(C.pillars.filter((p) => p.points.length === 4).map((p) => p.id)).toEqual([
+      "governance",
+    ]);
+  });
 
-    // ONLY THE CLOSER ADDED — and the column it is in, which opened at the first
-    // beat and never closed.
-    expect(screen.getByTestId("shape-closer").style.opacity).toBe("1");
-    expect(screen.getByTestId("shape-walk-column").style.opacity).toBe("1");
+  test("and NO VENDOR IS NAMED in any of them", () => {
+    // A DEVIATION FROM HR p4 RATHER THAN A TRANSCRIPTION SLIP. HR p4's Tools list
+    // opens "Claude + Gemini ecosystem"; §6.7's security block refuses every vendor
+    // token by name for a Sinar Mas audience, and a centrepiece that printed two of
+    // them four slides ahead of that refusal would make the refusal look like an
+    // oversight. The scope survives without the brands.
+    const vendors = [
+      /\bclaude\b/i,
+      /\banthropic\b/i,
+      /\bgemini\b/i,
+      /\bgoogle\b/i,
+      /\bcopilot\b/i,
+      /\bmicrosoft\b/i,
+      /\bopenai\b/i,
+      /\bchatgpt\b/i,
+    ];
+    const everyPoint = C.pillars.flatMap((p) => p.points);
+    // POSITIVE CONTROL: the de-branded line is the one that carried them.
+    expect(everyPoint).toContain("One approved model ecosystem");
+    everyPoint.forEach((point) =>
+      vendors.forEach((v) => expect(point, `"${point}" · ${v}`).not.toMatch(v)),
+    );
   });
 });
 
-// ── the closer ───────────────────────────────────────────────────────────────
+// ── the panel, as one slot holding eight things ──────────────────────────────
 
-describe("the closer", () => {
-  test("is mounted at every pose and open at pose 8 alone", () => {
-    // MOUNTED THROUGHOUT, revealed once. It shares the column's slot with the six
-    // beats, so it cannot be conditionally rendered: an element that mounted at
-    // pose 8 would arrive with no frame to transition from, and the column's own
-    // hairline would have nothing to hold while the sixth decision faded out.
-    renderOrg(berau, POSE.HUB);
-    for (const pose of POSES) {
-      goToPose(pose);
-      const closer = screen.getByTestId("shape-closer");
-      expect(closer, `pose ${pose}`).toBeInTheDocument();
-      expect(closer.style.opacity, `pose ${pose}`).toBe(pose === CLOSER_POSE ? "1" : "0");
-      expect(showsCloser(pose), `pose ${pose} · walk.ts`).toBe(pose === CLOSER_POSE);
-    }
-  });
-
-  test("prints §6.6's refusal, with the claim highlighted and not the refusal", () => {
-    renderOrg(berau, CLOSER_POSE);
-    const closer = screen.getByTestId("shape-closer");
-    expect(closer.textContent).toBe(C.closer);
-    // TWO SENTENCES, AND THE SECOND IS THE LOAD-BEARING ONE — the refusal the
-    // whole figure exists to earn. Pinned as a substring so a copy edit that
-    // softened it fails here.
-    expect(C.closer).toContain("None of them is a tool purchase.");
-
-    // THE HIGHLIGHT IS ON THE CLAIM. Prose, so it carries `*Kw`; the italic is the
-    // last emphasis the room takes away, and emphasising the refusal would leave
-    // the closing image a purchase.
-    const ems = [...closer.querySelectorAll("em")].map((e) => e.textContent);
-    expect(ems.length).toBeGreaterThan(0);
-    expect(ems).toEqual([...C.closerKw]);
-    expect(C.closerKw).toContain("a decision on your desk");
-  });
-
-  test("renders INSIDE the walk column, which is the right column", () => {
-    // THE DOM HALF OF "the closer renders in the right column" (the AC). jsdom
-    // places nothing, so containment is the strongest structural claim available:
-    // the closer is a CHILD of the column, so it inherits the column's rectangle
-    // and cannot drift to a second left edge the way the prototype's separate
-    // closer block did.
-    renderOrg(berau, CLOSER_POSE);
-    const column = screen.getByTestId("shape-walk-column");
-    expect(column.contains(screen.getByTestId("shape-closer"))).toBe(true);
-    // And so are all six beats — one slot, seven things in turn.
-    C.pillars.forEach((p) => {
-      expect(
-        column.contains(screen.getByTestId(`shape-decision-${p.id}`)),
-        p.id,
-      ).toBe(true);
-    });
-
-    // THE COLUMN IS THE RIGHT COLUMN, by the numbers both sides read. `right` is a
-    // CSS OFFSET and not an x, so the column's type wraps against the deck's own
-    // side margin instead of overhanging it.
-    expect(column.style.left).toBe(`${WALK_COLUMN.left}px`);
-    expect(column.style.right).toBe(`${WALK_COLUMN.right}px`);
-    expect(WALK_COLUMN.left).toBe(WALK_COLUMN_LEFT);
-    expect(WALK_COLUMN.right).toBe(SIDE_MARGIN);
-    // Left of the column is the figure, right of it is the margin: the whole
-    // horizontal budget, read from both ends.
-    expect(WALK_COLUMN.left).toBeGreaterThan(FOCUSED_OUTERMOST_RIGHT);
-
-    // WHAT THIS CANNOT SAY. Whether the closer's own glyphs clear the focused
-    // sixth pillar's halo, and whether the lowest pillar clears the NavBar band at
-    // its grown size, are RENDERED clearances — jsdom lays nothing out and a
-    // `box-shadow` spread is outside `getBoundingClientRect` even in a real
-    // engine. `scripts/gh55-verify.mjs` measures them at 1280×720; the arithmetic
-    // they are measured against is in the geometry describes below.
-  });
-
-  test("is NOT in the bottom strip — there is no bottom strip left", () => {
-    // §7.1's ONE RECORDED LAYOUT RISK, as the reason for a layout decision rather
-    // than as prose. The lowest pillar's box already reaches 610 of a 632 floor and
-    // GROWS to 616.52 at the beat that focuses it, so a closer set under the figure
-    // would sit either inside the NavBar's hover band or under the sixth beat's own
-    // halo. The column the walk has just finished with is empty at exactly the pose
-    // the closer needs it.
-    expect(FOCUSED_LOWEST_PILLAR_BOTTOM).toBeGreaterThan(WALK_COLUMN.bottom);
-    expect(NAV_ZONE_TOP - FOCUSED_LOWEST_PILLAR_BOTTOM).toBeLessThan(24);
-
-    // And structurally: the closer's box is the column's, not a second one at the
-    // stage's foot.
-    renderOrg(berau, CLOSER_POSE);
-    const closer = screen.getByTestId("shape-closer");
-    expect(closer.style.left).toBe(`${WALK_COLUMN.rulePad}px`);
-    expect(closer.style.top).toBe("50%");
-    expect(closer.style.bottom).toBe("");
-  });
-});
-
-// ── the walk column ──────────────────────────────────────────────────────────
-
-describe("the walk column", () => {
-  test("opens at the first beat and never closes", () => {
-    // 0 at poses 0 and 1, then 1 from the first beat through the closer.
-    //
-    // IT NEVER OPENS AT POSE 1: the ring's own reveal is a six-box sweep, and a
-    // hairline arriving beside it would compete with the thing the room is
-    // watching.
-    renderOrg(gems, POSE.HUB);
-    for (const pose of POSES) {
-      goToPose(pose);
-      const expected = pose >= POSE.FIRST_DECISION ? "1" : "0";
-      expect(
-        screen.getByTestId("shape-walk-column").style.opacity,
-        `pose ${pose}`,
-      ).toBe(expected);
-      expect(showsWalkColumn(pose), `pose ${pose} · walk.ts`).toBe(expected === "1");
-    }
-  });
-
-  test("is ONE element, so the hairline cannot blink at the closer", () => {
-    // THE PROTOTYPE'S BUG, asserted away. It drew the beats in one bordered panel
-    // and the closer in a SECOND bordered block at the same left edge, each with
-    // its own `opacity: … ? 1 : 0` — so at pose 8 the left hairline faded out and
+describe("the panel", () => {
+  test("is ONE element, so the hairline cannot blink", () => {
+    // THE PROTOTYPE'S BUG, asserted away. It drew its beats in one bordered panel
+    // and its closer in a SECOND bordered block at the same left edge, each with its
+    // own `opacity: … ? 1 : 0` — so at the closer the left hairline faded out and
     // back in in the same place. Two elements pretending to be one column, and the
     // blink is what gives it away on a projector.
     //
     // ASSERTED THREE WAYS, because "one element" has three failure modes. One node
-    // in the tree (a second column would be a second node), the SAME node across
-    // the pose the blink would happen on (React remounting it is the same blink
-    // without the duplicate), and the border declared on the COLUMN rather than on
-    // the things inside it.
-    renderOrg(gems, POSE.FIRST_DECISION);
+    // in the tree, the SAME node across the pose the blink would happen on (React
+    // remounting it is the same blink without the duplicate), and the border declared
+    // on the COLUMN rather than on the things inside it.
+    renderOrg(gems, POSE.FIGURE);
     expect(document.querySelectorAll('[data-testid="shape-walk-column"]')).toHaveLength(1);
-    const atFirstBeat = screen.getByTestId("shape-walk-column");
-    expect(atFirstBeat.style.borderLeft).toContain("solid");
-    expect(atFirstBeat.style.borderLeft).toContain("var(--copper-");
+    const atFigure = screen.getByTestId("shape-walk-column");
+    expect(atFigure.style.borderLeft).toContain("solid");
+    expect(atFigure.style.borderLeft).toContain("var(--copper-");
 
-    goToPose(CLOSER_POSE);
-    // IDENTITY, not equality: the same DOM node, so nothing unmounted and
-    // remounted between the last beat and the closer.
-    expect(screen.getByTestId("shape-walk-column")).toBe(atFirstBeat);
+    goToPose(POSE.RECAP);
+    // IDENTITY, not equality: the same DOM node, so nothing unmounted and remounted
+    // between the figure and the recap.
+    expect(screen.getByTestId("shape-walk-column")).toBe(atFigure);
     expect(screen.getByTestId("shape-walk-column").style.borderLeft).toBe(
-      atFirstBeat.style.borderLeft,
+      atFigure.style.borderLeft,
     );
     // And no child of it carries a border of its own to blink instead.
-    C.pillars.forEach((p) => {
-      expect(
-        screen.getByTestId(`shape-decision-${p.id}`).style.borderLeft,
-        p.id,
-      ).toBe("");
-    });
-    expect(screen.getByTestId("shape-closer").style.borderLeft).toBe("");
+    PANEL_BLOCKS.forEach((id) =>
+      expect(screen.getByTestId(id).style.borderLeft, id).toBe(""),
+    );
   });
 
-  test("mounts all six decision blocks at every pose, exactly one open per beat", () => {
-    renderOrg(berau, POSE.HUB);
+  test("mounts all eight blocks in the same rectangle, at both poses", () => {
+    renderOrg(berau, POSE.FIGURE);
+    const column = screen.getByTestId("shape-walk-column");
+
     for (const pose of POSES) {
       goToPose(pose);
-      // SIX MOUNTED, ALWAYS — see `assertPose` for why a single swapping panel
-      // cannot be correct at the closer's pose.
-      C.pillars.forEach((p) => {
-        const block = screen.getByTestId(`shape-decision-${p.id}`);
-        expect(block, `pose ${pose} · ${p.id}`).toBeInTheDocument();
-        // THE SAME RECTANGLE for all six, which is what makes the cross-fade a
+      PANEL_BLOCKS.forEach((id) => {
+        const block = screen.getByTestId(id);
+        expect(block, `pose ${pose} · ${id}`).toBeInTheDocument();
+        expect(column.contains(block), `pose ${pose} · ${id} inside the column`).toBe(
+          true,
+        );
+        // THE SAME RECTANGLE for all eight, which is what makes the cross-fade a
         // cross-fade rather than a re-layout: the eyebrow does not move by the
         // difference between two label lengths.
-        expect(block.style.left, `pose ${pose} · ${p.id}`).toBe(
-          `${WALK_COLUMN.rulePad}px`,
-        );
-        expect(block.style.top, `pose ${pose} · ${p.id}`).toBe("50%");
+        expect(block.style.left, `pose ${pose} · ${id}`).toBe(`${WALK_COLUMN.rulePad}px`);
+        expect(block.style.top, `pose ${pose} · ${id}`).toBe("50%");
+        expect(block.style.transform, `pose ${pose} · ${id}`).toBe("translateY(-50%)");
       });
-      const open = openDecisionIds();
-      expect(open.length, `pose ${pose} · open blocks`).toBe(
-        BEAT_POSES.includes(pose) ? 1 : 0,
+      // NEVER EMPTY AND NEVER DOUBLED, at either pose.
+      expect(openBlockIds(), `pose ${pose}`).toHaveLength(1);
+      // And the seven that are shut cannot take a click from the one underneath.
+      PANEL_BLOCKS.filter((id) => !openBlockIds().includes(id)).forEach((id) =>
+        expect(screen.getByTestId(id).style.pointerEvents, `pose ${pose} · ${id}`).toBe(
+          "none",
+        ),
       );
     }
   });
@@ -1292,33 +1740,60 @@ describe("the walk column", () => {
     // no stated reason. These four are derived instead.
     expect(WALK_COLUMN.top).toBe(pillarBox(0).top);
     expect(WALK_COLUMN.bottom).toBe(LOWEST_PILLAR_BOTTOM);
+    expect(WALK_COLUMN.left).toBe(WALK_COLUMN_LEFT);
+    expect(WALK_COLUMN.right).toBe(SIDE_MARGIN);
     // And there is no `width`: one was carried here, read by nothing but this
     // assertion, and named for the column's outer edge rather than the measure the
     // type gets. `scripts/gh55-verify.mjs` measures the content box off the element.
     expect("width" in WALK_COLUMN).toBe(false);
-    // Symmetric about the hub's own eye level, which is why the seven blocks
-    // inside share one `top: 50%` instead of stacking from the top.
+    // Symmetric about the hub's own eye level, which is why the eight blocks inside
+    // share one `top: 50%` instead of stacking from the top: the panel is a REPLY to
+    // the hub, and a reply set 190px above it makes the room's eye travel up and back
+    // down on every hover.
     expect((WALK_COLUMN.top + WALK_COLUMN.bottom) / 2).toBe(HUB.y);
+    // Left of the column is the figure, right of it is the margin: the whole
+    // horizontal budget, read from both ends.
+    expect(WALK_COLUMN.left).toBeGreaterThan(FOCUSED_OUTERMOST_RIGHT);
 
     // `bottom` IS A CSS OFFSET AND `WALK_COLUMN.bottom` IS A STAGE Y, hence the
     // subtraction in the renderer.
-    renderOrg(gems, POSE.FIRST_DECISION);
+    renderOrg(gems);
     const column = screen.getByTestId("shape-walk-column");
+    expect(column.style.left).toBe(`${WALK_COLUMN.left}px`);
+    expect(column.style.right).toBe(`${WALK_COLUMN.right}px`);
     expect(column.style.top).toBe(`${WALK_COLUMN.top}px`);
     expect(column.style.bottom).toBe(`${720 - WALK_COLUMN.bottom}px`);
     expect(column.style.paddingLeft).toBe(`${WALK_COLUMN.rulePad}px`);
+  });
+
+  test("the closer is NOT in the bottom strip — there is no bottom strip left", () => {
+    // §7.1's ONE RECORDED LAYOUT RISK, as the reason for a layout decision rather
+    // than as prose. The lowest pillar's box already reaches 610 of a 632 floor and
+    // GROWS to 616.52 when it is lit — which, at the recap, is ALWAYS — so a closer
+    // set under the figure would sit either inside the NavBar's hover band or under a
+    // lit pillar's own halo.
+    expect(FOCUSED_LOWEST_PILLAR_BOTTOM).toBeGreaterThan(WALK_COLUMN.bottom);
+    expect(NAV_ZONE_TOP - FOCUSED_LOWEST_PILLAR_BOTTOM).toBeLessThan(24);
+
+    // And structurally: the closer's box is the recap block's, inside the column,
+    // not a second one at the stage's foot.
+    renderOrg(berau, POSE.RECAP);
+    const closer = screen.getByTestId("shape-closer");
+    expect(screen.getByTestId("shape-walk-column").contains(closer)).toBe(true);
+    expect(closer.style.position).toBe("");
+    expect(closer.style.bottom).toBe("");
   });
 });
 
 // ── section D's words — the index claim (§6.6) ────────────────────────────────
 
-describe("the walk indexes the section behind it", () => {
+describe("the decisions index the section behind them", () => {
   /**
-   * THE CONTRACT, AS A TABLE. §6.6: the walk turns the centrepiece into the index
-   * for section D — "security and no-SOP land on *Governance & Policies*,
-   * subscriptions on *Tools & Platform*, 'Leading AI Culture' on *People & Mindset*
-   * + *Strategy & Leadership*". The mechanism is the WORDS: a leader hears the same
-   * vocabulary again two sections later, with no pointer line announcing it.
+   * THE CONTRACT, AS A TABLE. §6.6: the centrepiece is the index for section D —
+   * "security and no-SOP land on *Governance & Policies*, subscriptions on *Tools &
+   * Platform*, 'Leading AI Culture' on *People & Mindset* + *Strategy & Leadership*".
+   * The mechanism is the WORDS: a leader hears the same vocabulary again two sections
+   * later, with no pointer line announcing it.
    *
    * WHAT THIS TEST CAN AND CANNOT PROVE, and it is the whole reason the table cites
    * a spec section per row. Section D's three slides that these words point at —
@@ -1372,72 +1847,215 @@ describe("the walk indexes the section behind it", () => {
     }
   });
 
+  /**
+   * THE RECAP CARRIES THE SAME ANCHORS, AND IT IS THE LAST PLACE THEY ARE SAID.
+   *
+   * ONE ANCHOR PER PILLAR, AND ALL SIX, where the table above only covers the four
+   * §6.6 names outright. The recap is where the index is HANDED OVER — it is the
+   * frame the room leaves with, and a fragment polished free of its anchor would
+   * leave the slide indexing nothing at exactly that moment.
+   *
+   * NOT DERIVED FROM `decisionKw`, though four of the six would survive the
+   * derivation. The keyword is chosen for what should go copper INSIDE a full
+   * sentence, and the fragment for what reads alone in a list. Two jobs, two fields,
+   * held to the same anchors rather than to each other — which is why this table
+   * checks BOTH strings against the same word.
+   */
+  const RECAP_ANCHORS: readonly { readonly id: string; readonly anchor: RegExp }[] = [
+    { id: "governance", anchor: /\bdata\b/i },
+    { id: "tools", anchor: /company-managed seat/i },
+    { id: "people", anchor: /\bculture\b/i },
+    { id: "strategy", anchor: /\bpilot\b/i },
+    { id: "process", anchor: /\bsigns\b/i },
+    { id: "companions", anchor: /\bagent\b/i },
+  ];
+
+  test("and every recap fragment carries its decision's anchor word", () => {
+    expect(RECAP_ANCHORS.map((r) => r.id), "all six, not four").toEqual(
+      C.pillars.map((p) => p.id),
+    );
+    for (const row of RECAP_ANCHORS) {
+      const pillar = C.pillars.find((p) => p.id === row.id)!;
+      expect(pillar.recap, `${row.id} · recap · ${row.anchor}`).toMatch(row.anchor);
+      // THE SAME WORD IN BOTH, which is the assertion that keeps the two fields
+      // from drifting apart one copy edit at a time.
+      expect(pillar.decision, `${row.id} · decision · ${row.anchor}`).toMatch(row.anchor);
+    }
+    // Six distinct fragments — a copy-paste that left two pillars sharing one would
+    // otherwise pass every mapping assertion in this file.
+    expect(new Set(C.pillars.map((p) => p.recap)).size).toBe(PILLAR_COUNT);
+  });
+
   test("and every decision is a leader's DECISION, not a description of a pillar", () => {
     // §6.6's actual failure mode. "Governance & Policies" is a box on an org chart
     // and every leader in the room already agrees with it; six descriptions make
     // this slide a taxonomy nobody argues with. All six open on the same stem, and
     // THE REPETITION IS THE ARGUMENT — one sentence answered six ways, so by the
-    // fourth beat the room hears the stem rather than reading a new sentence, and
-    // the stem is the claim the closer then states outright.
+    // fourth the room hears the stem rather than reading a new sentence, and the stem
+    // is the claim the closer then states outright.
     C.pillars.forEach((pillar) => {
       expect(pillar.decision, pillar.id).toMatch(/^You decide /);
       expect(pillar.decision, pillar.id).toMatch(/[.]$/);
       // And it is not the pillar's own name restated.
       expect(pillar.decision, pillar.id).not.toContain(pillar.label);
     });
-    // Six distinct decisions — a copy-paste that left two pillars sharing a line
-    // would otherwise pass every mapping assertion in this file.
     expect(new Set(C.pillars.map((p) => p.decision)).size).toBe(PILLAR_COUNT);
   });
 
-  test("and the pointer line #16 wrote is NOT ported", () => {
+  test("and the `→ ACT III ·` pointer line #16 wrote is NOT ported", async () => {
     // The prototype prints a mono `→ ACT III · …` pointer under each decision.
     // Refused, and stated in `content.ts` as a deviation rather than left to be
     // discovered by diffing: one of its six lines IS `Specify · Generate · Verify`
     // (the panel §6.6 drops), and the `ACT III` prefix names a movement THIS deck
-    // never tells the audience exists. §6.6's requirement is that the walk INDEXES
-    // section D, and the words above are the index — a sixth line of mono chrome
-    // would announce the cross-reference instead of making it, and would spend the
-    // one line of the column the closer needs.
-    renderOrg(berau, CLOSER_POSE);
+    // never tells the audience exists. §6.6's requirement is that the slide INDEXES
+    // section D, and the anchor words above are the index — a line of mono chrome
+    // would announce the cross-reference instead of making it.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+    // Every decision block is mounted at every state, so one open pillar is enough
+    // to have all six point lists in `document.body`.
+    await user.hover(pillarBoxEl("process"));
+
     const text = document.body.textContent ?? "";
-    expect(text, "positive control").toContain(C.closer);
+    expect(text, "positive control").toContain(C.pillars[4].decision);
     expect(text).not.toMatch(/\bact\s+(i{1,3}|1|2|3)\b/i);
-    expect(text).not.toContain("→");
+
+    // THE ARROW IS NOT REFUSED — ONE STRING IS ALLOWED TO HOLD IT, and saying which
+    // is more useful than a blanket ban that a later author would have to break.
+    // "Tool → Companion → Agent" is HR p4's own third sub-bullet on the companions
+    // pillar and it is B.5's ladder in three words: a THRESHOLD, printed as a
+    // sequence. The refused panel is Specify → Generate → Verify, which is a METHOD.
+    // The arrows are the same and nothing else is.
+    const ALLOWED_ARROWS = "Tool → Companion → Agent";
+    expect(text, "positive control").toContain(ALLOWED_ARROWS);
+    expect(
+      text.split(ALLOWED_ARROWS).join(""),
+      "no other arrow reaches the stage",
+    ).not.toContain("→");
   });
 });
 
 // ── the panel §6.6 refuses ───────────────────────────────────────────────────
 
 describe("Specify → Generate → Verify appears nowhere", () => {
-  test("at every one of the nine poses, under any brand", () => {
+  test("at both poses, under any brand, with every pillar open in turn", async () => {
     // §6.6 DROPS the HR original's panel — C.4 (leader F.4) already does it
-    // better — and the freed space is what the six decision beats are spent on. It
-    // is REFUSED, NOT PENDING, and this is the assertion that says so out loud so
-    // nobody re-adds it as "the bit that's missing".
+    // better — and the freed space is what the six decisions and their point lists
+    // are spent on. It is REFUSED, NOT PENDING, and this is the assertion that says
+    // so out loud so nobody re-adds it as "the bit that's missing".
     //
-    // NINE POSES NOW, NOT TWO. The six decisions and the closer are new copy in a
-    // new column, and the process pillar is exactly where a paraphrase would land:
-    // the prototype pointed that pillar at Specify · Generate · Verify. All six
-    // decisions are MOUNTED at every pose, so each pass reads all of them — but the
-    // walk is still stepped, because the check is over `document.body` and a pose
-    // that mounted a seventh block would only show up at the pose that mounts it.
+    // EXTENDED TO THE POINT LISTS, which is why this test now hovers. Eighteen new
+    // strings landed under the six decisions with this rewrite, and the PROCESS
+    // pillar is exactly where a paraphrase would go: the prototype pointed that
+    // pillar at Specify · Generate · Verify, and HR p4's own three sub-bullets
+    // ("Adoption framework", "Change management", "Structured pilots") are what say
+    // the process thing without them. All six blocks are mounted at all times, so one
+    // hover per pass would do — the sweep is kept because a block that only rendered
+    // its points when open would otherwise hide half the new copy from this check.
+    const user = userEvent.setup();
+    const FORBIDDEN = [/\bspecify\b/i, /\bgenerate\b/i, /\bverify\b/i];
+
     for (const brandLine of [gems, berau, hubBrandLineFor("general")]) {
       for (const pose of POSES) {
         const { unmount } = renderOrg(brandLine, pose);
-        const text = document.body.textContent ?? "";
-        // POSITIVE CONTROL FIRST. Every assertion below is a `not.toMatch` over
-        // this one string, so an empty stage would pass all of them.
-        expect(text, `pose ${pose}`).toContain(C.headline);
-        expect(text, `pose ${pose}`).toContain("The Enabler");
-        expect(text, `pose ${pose}`).toContain(C.pillars[0].decision);
 
-        for (const word of [/\bspecify\b/i, /\bgenerate\b/i, /\bverify\b/i]) {
-          expect(text, `pose ${pose} · ${word}`).not.toMatch(word);
+        for (const pillar of [null, ...C.pillars]) {
+          if (pillar && acceptsPointer(pose)) await user.hover(pillarBoxEl(pillar.id));
+          const text = document.body.textContent ?? "";
+          const where = `pose ${pose} · ${pillar?.id ?? "idle"}`;
+          // POSITIVE CONTROL FIRST. Every assertion below is a `not.toMatch` over
+          // this one string, so an empty stage would pass all of them.
+          expect(text, where).toContain(C.headline);
+          expect(text, where).toContain("The Enabler");
+          expect(text, where).toContain(C.pillars[0].decision);
+          expect(text, where).toContain(C.pillars[4].points[0]);
+
+          for (const word of FORBIDDEN) {
+            expect(text, `${where} · ${word}`).not.toMatch(word);
+          }
         }
         unmount();
       }
     }
+  });
+
+  test("and no authored string on this slide contains one of the three words", () => {
+    // THE AUTHORED HALF, so a string written into `content.ts` but not yet rendered
+    // anywhere still fails. The rendered check above cannot see copy that has no
+    // element yet; this one can.
+    const authored = [
+      C.figLabel,
+      C.headline,
+      C.hubLabel,
+      C.idleEyebrow,
+      C.idleLead,
+      C.hint,
+      C.decisionEyebrow,
+      C.recapEyebrow,
+      C.closer,
+      ...C.pillars.flatMap((p) => [p.label, p.decision, p.recap, ...p.points]),
+    ];
+    authored.forEach((copy) => {
+      for (const word of [/\bspecify\b/i, /\bgenerate\b/i, /\bverify\b/i]) {
+        expect(copy, `"${copy}" · ${word}`).not.toMatch(word);
+      }
+    });
+  });
+});
+
+// ── the subtitle that was cut ────────────────────────────────────────────────
+
+describe("the standing kicker is GONE", () => {
+  // A mono line — "AN OPERATING MODEL — NOT A DEPARTMENT, NOT A COMMITTEE" — used to
+  // print under the headline at every one of the nine poses, in the band at y = 134.
+  // It is cut, owner call (2026-08-13), and CUT RATHER THAN MOVED: the same words
+  // re-set in the panel would be the same slot spent in a quieter place, and the
+  // panel's idle lead already says what shape this is.
+  //
+  // ASSERTED AS AN ABSENCE FROM THE STAGE, not merely as an unrendered field. A
+  // field left in the content module "for later" is how deleted copy comes back — so
+  // this checks both the key and the glyphs.
+
+  const CUT_PHRASES = ["AN OPERATING MODEL", "NOT A DEPARTMENT", "NOT A COMMITTEE"];
+
+  test("`shapeOrgContent` has no `kicker` key", () => {
+    expect("kicker" in C).toBe(false);
+    // POSITIVE CONTROL on the same object, so a typo'd property name in the check
+    // above cannot make it pass by accident.
+    expect("headline" in C).toBe(true);
+    expect("idleLead" in C).toBe(true);
+  });
+
+  test("no `shape-kicker` element, and none of its words, at either pose under any brand", () => {
+    for (const brandLine of [gems, berau, hubBrandLineFor("general")]) {
+      for (const pose of POSES) {
+        const { unmount } = renderOrg(brandLine, pose);
+        expect(screen.queryByTestId("shape-kicker"), `pose ${pose}`).toBeNull();
+
+        const text = (document.body.textContent ?? "").toUpperCase();
+        // POSITIVE CONTROL: the headline that now stands alone over the figure IS
+        // there, so the absences below are absences from a populated stage.
+        expect(text, `pose ${pose}`).toContain(C.headline.toUpperCase());
+        CUT_PHRASES.forEach((phrase) =>
+          expect(text, `pose ${pose} · ${phrase}`).not.toContain(phrase),
+        );
+        unmount();
+      }
+    }
+  });
+
+  test("and the idle lead did not quietly become the kicker in another face", () => {
+    // THE MOVE THAT WAS REFUSED. `idleLead` sits where a reader would most expect
+    // the cut line to reappear, so it is held to the words: it describes the SHAPE
+    // ("one enabling function", "only work together") and it does not re-state the
+    // negation the kicker carried.
+    const lead = C.idleLead.toUpperCase();
+    CUT_PHRASES.forEach((phrase) => expect(lead, phrase).not.toContain(phrase));
+    expect(C.idleLead).toContain("One enabling function");
+    // AND IT DOES NOT SPEND THE CLOSER EITHER. "None of them is a tool purchase" is
+    // the recap's last line and the sentence the whole figure exists to earn; an
+    // idle lead that previewed it would make the recap a repeat.
+    expect(C.idleLead).not.toContain("tool purchase");
   });
 });
 
@@ -1460,8 +2078,8 @@ describe("the ring geometry", () => {
       expect(r, `pillar ${i} is on the ellipse`).toBeCloseTo(1, 10);
     });
 
-    // Index 0 is the top of the ring, which is what makes the walk step AROUND
-    // the ring rather than jump across it.
+    // Index 0 is the top of the ring, which is what makes the ring's array order a
+    // READING order — a ring is scanned clockwise from twelve o'clock by everyone.
     expect(PILLAR_CENTRES[0].x).toBe(HUB.x);
     expect(PILLAR_CENTRES[0].y).toBeLessThan(HUB.y);
 
@@ -1475,27 +2093,35 @@ describe("the ring geometry", () => {
     expect(PILLAR_CENTRES[2].y).toBeCloseTo(PILLAR_CENTRES[4].y, 10);
   });
 
-  test("every box clears the header and stays out of the walk's column", () => {
+  test("every box clears the header band and stays out of the panel's column", () => {
     // The horizontal budget and the ceiling half of the vertical one, held as
-    // numbers rather than prose. AT REST — the focused pose is measured in the
-    // describe below, and it does NOT clear the side margin, deliberately.
+    // numbers rather than prose. AT REST — the lit pose is measured in the describe
+    // below, and it does NOT clear the side margin, deliberately.
+    //
+    // THE CEILING NUMBER DID NOT MOVE WHEN THE KICKER WENT. `FIGURE_CEILING` was
+    // never the kicker's floor, it was the FIGURE's, and the figure's relationship to
+    // the headline is unchanged — the band between them is simply empty now. `KICKER_TOP`
+    // is deleted from `geometry.ts` rather than kept at 134 "in case", because a
+    // coordinate that nothing places anything at is a coordinate the next author will
+    // place something at, and there is no assertion here to replace the one that
+    // compared the two.
+    expect(FIGURE_CEILING).toBe(152);
     for (let i = 0; i < PILLAR_COUNT; i++) {
       const box = pillarBox(i);
       expect(box.left, `pillar ${i} left margin`).toBeGreaterThanOrEqual(SIDE_MARGIN);
-      // The figure has to fit between the margin and the column the walk writes
+      // The figure has to fit between the margin and the column the panel writes
       // into, and this is the assertion that stops a "let's widen the ring" edit
       // from taking the column's space.
-      expect(box.right, `pillar ${i} clears the walk column`).toBeLessThanOrEqual(
+      expect(box.right, `pillar ${i} clears the panel column`).toBeLessThanOrEqual(
         WALK_COLUMN_LEFT,
       );
-      expect(box.top, `pillar ${i} clears the kicker`).toBeGreaterThanOrEqual(
+      expect(box.top, `pillar ${i} clears the headline`).toBeGreaterThanOrEqual(
         FIGURE_CEILING,
       );
-      expect(FIGURE_CEILING).toBeGreaterThan(KICKER_TOP);
     }
   });
 
-  test("the lowest pillar clears the NavBar hover band, with the walk's growth paid for", () => {
+  test("the lowest pillar clears the NavBar hover band, with the growth paid for", () => {
     // §7.1's ONE RECORDED RISK, as arithmetic. The band's top edge is 632 —
     // `.nav-zone` is `bottom: 0; height: 88px` — and the prototype's numbers put
     // the lowest box bottom at 658, i.e. 26px inside it.
@@ -1516,8 +2142,8 @@ describe("the ring geometry", () => {
     expect(NAV_ZONE_CLEARANCE).toBe(NAV_ZONE_TOP - LOWEST_PILLAR_BOTTOM);
     expect(LOWEST_PILLAR_BOTTOM).toBeLessThan(NAV_ZONE_TOP);
 
-    // AND THE HEADROOM THE WALK WAS RESERVED, which is now spent — see the
-    // focused-pose describe for what it actually cost.
+    // AND THE HEADROOM THE HIGHLIGHT WAS RESERVED, which is spent — see the lit-pose
+    // describe for what it actually cost.
     expect(NAV_ZONE_CLEARANCE).toBeGreaterThan(FOCUS_GROWTH_RESERVE);
     expect(LOWEST_PILLAR_BOTTOM + FOCUS_GROWTH_RESERVE).toBeLessThanOrEqual(NAV_ZONE_TOP);
   });
@@ -1573,16 +2199,41 @@ describe("the ring geometry", () => {
       ).toBeGreaterThan(0);
     }
   });
+
+  test("and both of a spoke's lines are drawn on the SAME segment", () => {
+    // TWO ELEMENTS, ONE GEOMETRY. The drawn hairline and the bead overlay are
+    // separate facts — the structure has to survive `prefers-reduced-motion: reduce`,
+    // where the overlay is removed outright, and a single line cannot be both solid
+    // and travelling — but they are the same LINE, and a bead track that had drifted
+    // off its own spoke would read as a rendering fault nobody could name.
+    renderOrg(gems);
+    C.pillars.forEach((pillar, i) => {
+      const seg = spokeSegment(i);
+      const spoke = screen.getByTestId(`shape-spoke-${pillar.id}`);
+      const flow = screen.getByTestId(`shape-flow-${pillar.id}`);
+      for (const end of ["x1", "y1", "x2", "y2"] as const) {
+        expect(spoke.getAttribute(end), `${pillar.id} · ${end}`).toBe(String(seg[end]));
+        expect(flow.getAttribute(end), `${pillar.id} · flow ${end}`).toBe(
+          String(seg[end]),
+        );
+      }
+    });
+  });
 });
 
-// ── the FOCUSED pose, measured (§7.1's re-check) ──────────────────────────────
+// ── the LIT pose, measured (§7.1's re-check) ─────────────────────────────────
 
-describe("the focused pose's geometry", () => {
+describe("the lit pose's geometry", () => {
   // §7.1 asked ONE question about this figure — "the lowest satellite … grows on
-  // focus. Re-check clearance when rebuilt." — and it is answered at the FOCUSED
-  // pose rather than the resting one, because the focused pose is reached in front
-  // of a room: the walk visits all six pillars, one beat each, and the lowest one
-  // is pillar 3.
+  // focus. Re-check clearance when rebuilt." — and it is answered at the LIT pose
+  // rather than the resting one, because the lit pose is reached in front of a room.
+  //
+  // AND IT IS NOW REACHED BY ALL SIX AT ONCE. Under nine poses the lowest pillar
+  // grew for exactly one beat of nine; at the recap every pillar is grown
+  // simultaneously, which is the same arithmetic applied six times rather than a new
+  // risk — but it is worth asserting as the whole figure, because "the lowest one
+  // fits" and "all six fit" are different sentences and only the second one is true
+  // of this slide.
   //
   // FLOAT CAUTION, ALL THE WAY THROUGH. `1.07 - 1` is `0.07000000000000006`, so
   // `FOCUS_GROWTH_SPENT` is 6.520000000000002, `FOCUSED_NAV_ZONE_CLEARANCE` is
@@ -1591,15 +2242,17 @@ describe("the focused pose's geometry", () => {
   // to the bit is the RELATIONS, so the relations are what is asserted and
   // `toBeCloseTo` only pins the human-readable value beside them.
 
-  test("the focus spends less than gh#54 reserved for it", () => {
+  test("the highlight spends less than gh#54 reserved for it", () => {
     // `72 × 0.07 ÷ 2 + 4` — HALF the scale's growth, because the box scales about
     // its own centre and only the downward half travels toward the floor, plus the
     // WHOLE halo, because the ring is painted outside the scaled edge and is
     // invisible to every layout measurement.
-    expect(FOCUS_GROWTH_SPENT).toBe((PILLAR_BOX.h * (FOCUS_SCALE - 1)) / 2 + FOCUS_HALO_WIDTH);
+    expect(FOCUS_GROWTH_SPENT).toBe(
+      (PILLAR_BOX.h * (FOCUS_SCALE - 1)) / 2 + FOCUS_HALO_WIDTH,
+    );
     expect(FOCUS_GROWTH_SPENT).toBeCloseTo(6.52, 10);
-    // THE ESTIMATE WAS NOT EXCEEDED. gh#54 reserved 8 one ticket before the walk
-    // existed; this is the assertion that the walk fitted inside it, and the one
+    // THE ESTIMATE WAS NOT EXCEEDED. gh#54 reserved 8 one ticket before the
+    // highlight existed; this is the assertion that it fitted inside, and the one
     // that fails if a later edit reaches for a heavier halo or a 1.2 scale.
     expect(FOCUS_GROWTH_SPENT).toBeLessThanOrEqual(FOCUS_GROWTH_RESERVE);
     // 1.15 would cost 9.4 and not fit — pinned so the scale is not read as taste.
@@ -1608,7 +2261,7 @@ describe("the focused pose's geometry", () => {
     );
   });
 
-  test("the FOCUSED lowest pillar still clears the NavBar hover band", () => {
+  test("the LIT lowest pillar still clears the NavBar hover band", () => {
     // THE AC'S OWN CLAIM: "the focused bottom pillar — at its grown size — clears
     // the NavBar hover zone at 1280×720". The rendered half of that is measured by
     // `scripts/gh55-verify.mjs`; this is the arithmetic it is measured against, and
@@ -1620,9 +2273,33 @@ describe("the focused pose's geometry", () => {
     expect(FOCUSED_NAV_ZONE_CLEARANCE).toBeCloseTo(15.48, 10);
     // The prototype's equivalent is −26 at rest and −32.66 once its own 76px box is
     // focused, and nothing in the prototype said so.
-    expect(NAV_ZONE_TOP - (658 + (76 * (FOCUS_SCALE - 1)) / 2 + FOCUS_HALO_WIDTH)).toBeLessThan(
-      0,
-    );
+    expect(
+      NAV_ZONE_TOP - (658 + (76 * (FOCUS_SCALE - 1)) / 2 + FOCUS_HALO_WIDTH),
+    ).toBeLessThan(0);
+  });
+
+  test("and at the recap ALL SIX are grown at once, and the whole figure still fits", () => {
+    // THE BUDGET, RE-SPENT SIX TIMES SIMULTANEOUSLY. Every box is at
+    // `scale(FOCUS_SCALE)` under a 4px halo at pose 1, so the two edges the budget is
+    // about — the floor and the column — are under the whole ring at the same moment
+    // rather than under one pillar at a time.
+    renderOrg(berau, POSE.RECAP);
+    expect(activePillarIds(), "all six lit").toEqual(C.pillars.map((p) => p.id));
+
+    for (const i of PILLAR_INDEXES) {
+      const grown = focusedPillarBox(i);
+      expect(grown.bottom, `pillar ${i} clears the NavBar band`).toBeLessThan(
+        NAV_ZONE_TOP,
+      );
+      expect(grown.right, `pillar ${i} clears the panel column`).toBeLessThan(
+        WALK_COLUMN_LEFT,
+      );
+      expect(grown.left, `pillar ${i} is on the stage`).toBeGreaterThan(0);
+      expect(grown.top, `pillar ${i} clears the headline`).toBeGreaterThan(FIGURE_CEILING);
+    }
+    // And the two extremes, read off the scan rather than off a hand-picked index.
+    expect(FOCUSED_OUTERMOST_RIGHT).toBeLessThan(WALK_COLUMN_LEFT);
+    expect(FOCUSED_LOWEST_PILLAR_BOTTOM).toBeLessThan(NAV_ZONE_TOP);
   });
 
   test("`focusedPillarBox` and the constants agree, and it refuses a pillar the ring lacks", () => {
@@ -1631,7 +2308,9 @@ describe("the focused pose's geometry", () => {
     // about its centre. They must be the SAME number to the bit, because the
     // horizontal budget below is derived from the function while the vertical one
     // is derived from the constant.
-    expect(focusedPillarBox(LOWEST_PILLAR_INDEX).bottom).toBe(FOCUSED_LOWEST_PILLAR_BOTTOM);
+    expect(focusedPillarBox(LOWEST_PILLAR_INDEX).bottom).toBe(
+      FOCUSED_LOWEST_PILLAR_BOTTOM,
+    );
 
     for (let i = 0; i < PILLAR_COUNT; i++) {
       const rest = pillarBox(i);
@@ -1658,16 +2337,16 @@ describe("the focused pose's geometry", () => {
     expect(() => focusedPillarBox(-1)).toThrow(/no pillar/);
   });
 
-  test("the focused halo never touches the column the decision is printed in", () => {
+  test("the lit halo never touches the column the decision is printed in", () => {
     // THE CONSTRAINT THAT IS REAL, as opposed to the side margin below. The column
-    // holds the decision the focused pillar is being read against, and a halo that
+    // holds the decision the lit pillar is being read against, and a halo that
     // touched it would put the two things the room is comparing into one mark.
     expect(FOCUSED_WALK_COLUMN_GAP).toBeGreaterThan(0);
     expect(FOCUSED_WALK_COLUMN_GAP).toBe(WALK_COLUMN_LEFT - FOCUSED_OUTERMOST_RIGHT);
     expect(FOCUSED_WALK_COLUMN_GAP).toBeCloseTo(22.65, 2);
     expect(FOCUSED_OUTERMOST_RIGHT).toBeLessThan(WALK_COLUMN_LEFT);
-    // The resting gap is ≈33.5 and the focus spends ≈10.86 of it — the horizontal
-    // twin of the floor budget: same pose, same growth, other axis.
+    // The resting gap is ≈33.5 and the highlight spends ≈10.86 of it — the
+    // horizontal twin of the floor budget: same growth, other axis.
     //
     // TWO DECIMAL PLACES, NOT TEN, and that is a fact about the ring rather than
     // sloppiness: the outermost pillars sit at `cos(±π/6) × 280`, so their box edges
@@ -1680,17 +2359,17 @@ describe("the focused pose's geometry", () => {
     expect(FOCUSED_WALK_COLUMN_GAP).toBeLessThan(restingGap);
   });
 
-  test("the DELIBERATE DEVIATION: the focused outermost pillar DOES enter the side margin", () => {
+  test("the DELIBERATE DEVIATION: the lit outermost pillar DOES enter the side margin", () => {
     // THIS IS NOT A BUG AND IT IS NOT AN OVERSIGHT — it is a rule collision that
     // was resolved, and the resolution is asserted rather than tolerated.
     //
     // THE ARITHMETIC THAT MAKES IT FORCED. The resting box of the two outermost
     // pillars starts at 49.5, so the figure has 1.5px of margin slack. §7.1 settles
-    // that the focused pillar GAINS a halo, and the halo is 4px — so AT ANY SCALE
-    // ≥ 1, INCLUDING 1.0, the halo alone crosses that slack. §7.1's halo and the
-    // deck's 48px type margin therefore cannot both hold. §7.1 is the stronger
-    // rule — a walk that could not emphasise two of six pillars would not be an
-    // index — so THE MARGIN GIVES WAY AND NO GLYPH DOES.
+    // that the lit pillar GAINS a halo, and the halo is 4px — so AT ANY SCALE ≥ 1,
+    // INCLUDING 1.0, the halo alone crosses that slack. §7.1's halo and the deck's
+    // 48px type margin therefore cannot both hold. §7.1 is the stronger rule — a
+    // figure that could not emphasise two of six pillars would not be an index — so
+    // THE MARGIN GIVES WAY AND NO GLYPH DOES.
     const restingSlack =
       Math.min(...PILLAR_INDEXES.map((i) => pillarBox(i).left)) - SIDE_MARGIN;
     // ≈1.51: the outermost box edge is `390 − cos(π/6) × 280 − 98` = 49.513, which
@@ -1731,189 +2410,284 @@ describe("the focused pose's geometry", () => {
 // ── `walk.ts` as a unit ──────────────────────────────────────────────────────
 
 describe("the walk, as arithmetic", () => {
-  test("`focusedPillarIndex` maps 2…7 → 0…5 and everything else to NO_FOCUS", () => {
-    // TOTAL AND NON-THROWING, deliberately, and the opposite of `pillarCentre` and
-    // `decisionCounter`, which throw: an out-of-range PILLAR index is an authoring
-    // bug the author must be shown, while a pose is UI state, and a slide that
-    // crashes on a pose is worse in front of a room than a slide with nothing
-    // focused.
-    for (let pose = -2; pose <= 12; pose++) {
-      const expected =
-        pose >= POSE.FIRST_DECISION && pose < POSE.FIRST_DECISION + DECISION_BEATS
-          ? pose - POSE.FIRST_DECISION
-          : NO_FOCUS;
-      expect(focusedPillarIndex(pose), `pose ${pose}`).toBe(expected);
-    }
-    // The six beats, named: 2 → 0 … 7 → 5.
-    expect(BEAT_POSES.map((p) => focusedPillarIndex(p))).toEqual([0, 1, 2, 3, 4, 5]);
-    // And the three that focus nothing.
-    UNFOCUSED_POSES.forEach((p) =>
-      expect(focusedPillarIndex(p), `pose ${p}`).toBe(NO_FOCUS),
-    );
+  /** Every value the three channels can plausibly hold — six real indexes, the
+   *  idle sentinel, and the four kinds of nonsense an event handler can produce.
+   *  `2.5` is the sharp one: a bare range check passes it. */
+  const CHANNEL_VALUES: readonly number[] = [
+    NO_FOCUS,
+    0,
+    1,
+    5,
+    PILLAR_COUNT,
+    -2,
+    2.5,
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+  ];
 
-    // `Number.isInteger` IS LOAD-BEARING. Pose 2.5 would otherwise pass the range
-    // check as 0.5 and hand a caller `pillars[0.5]` — `undefined` — from a value
-    // that had already been checked against `NO_FOCUS`: a lit spoke beside an empty
-    // column. A caller mid-transition is exactly where a fractional pose comes
-    // from.
-    expect(focusedPillarIndex(2.5)).toBe(NO_FOCUS);
-    expect(focusedPillarIndex(Number.NaN)).toBe(NO_FOCUS);
-    expect(focusedPillarIndex(Number.POSITIVE_INFINITY)).toBe(NO_FOCUS);
+  test("`isPillarIndex` is the one guard both pointer channels go through", () => {
+    // `Number.isInteger` IS THE SHARP HALF. An index of 2.5 would otherwise pass a
+    // bare range check and hand a caller `pillars[2.5]` — `undefined` — from a value
+    // that had already been checked against `NO_FOCUS`, which renders as a surging
+    // spoke beside an empty panel rather than as an error.
+    for (const i of PILLAR_INDEXES) expect(isPillarIndex(i), `${i}`).toBe(true);
+    for (const bad of [NO_FOCUS, -2, PILLAR_COUNT, 2.5, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(isPillarIndex(bad), `${bad}`).toBe(false);
+    }
+    // COUNTED FROM THE COPY, not from the geometry — a decision is copy, so the
+    // array the copy lives in is the honest source. The two are held equal here so
+    // the ring and the panel cannot disagree about how many pillars there are.
+    expect(WALK_PILLAR_COUNT).toBe(C.pillars.length);
+    expect(WALK_PILLAR_COUNT).toBe(PILLAR_COUNT);
+  });
+
+  test("`resolveFocus` is pinned → hovered → focused, over every combination", () => {
+    // THREE CHANNELS, ONE ANSWER, AND THE ORDER IS THE ARGUMENT. THE PIN WINS (owner
+    // call, 2026-08-14): the column is what a pin holds, so hovering a second pillar
+    // does not move the words. Under the old hover-wins order the pointer had to be
+    // parked off the figure for as long as the presenter talked, because crossing any
+    // other box on the way to the clicker swapped the panel out mid-sentence. The
+    // caret sits LAST because a mouse click blurs the button it just pinned, and a
+    // blur that also cleared `hovered` would close the pillar the pointer is still
+    // sitting on.
+    //
+    // WHAT THE POINTER KEPT IS THE RING, not the column — see the `isLit` test below,
+    // which is the other half of this one and the reason a pinned figure does not read
+    // as dead.
+    //
+    // WALKED EXHAUSTIVELY — 9³ = 729 combinations — rather than sampled, because the
+    // interesting cases are the DISAGREEMENTS and there are only nine of those per
+    // pair. The expectation is spelled out independently of the implementation so
+    // this is a comparison and not an echo.
+    for (const pinned of CHANNEL_VALUES) {
+      for (const hovered of CHANNEL_VALUES) {
+        for (const focused of CHANNEL_VALUES) {
+          const expected = isPillarIndex(pinned)
+            ? pinned
+            : isPillarIndex(hovered)
+              ? hovered
+              : isPillarIndex(focused)
+                ? focused
+                : NO_FOCUS;
+          expect(
+            resolveFocus(pinned, hovered, focused),
+            `pinned ${pinned} · hovered ${hovered} · focused ${focused}`,
+          ).toBe(expected);
+        }
+      }
+    }
+
+    // The four precedences, named, so a failure above has a readable neighbour.
+    expect(resolveFocus(NO_FOCUS, NO_FOCUS, NO_FOCUS)).toBe(NO_FOCUS);
+    expect(resolveFocus(3, NO_FOCUS, NO_FOCUS), "pin alone").toBe(3);
+    expect(resolveFocus(NO_FOCUS, NO_FOCUS, 4), "caret with no pointer").toBe(4);
+    expect(resolveFocus(NO_FOCUS, 5, 4), "pointer beats caret").toBe(5);
+    expect(resolveFocus(3, 5, 4), "the pin beats both").toBe(3);
+    // AND IT DOES NOT THROW — the opposite of `pillarCentre` and `decisionCounter`.
+    // An out-of-range PILLAR index in the CONTENT is an authoring bug the author must
+    // be shown; an out-of-range index arriving HERE is a pointer event, and a slide
+    // that crashes on a stray pointer value is worse in front of a room than a slide
+    // with nothing open.
+    expect(resolveFocus(2.5, 2.5, 2.5)).toBe(NO_FOCUS);
+    expect(resolveFocus(Number.NaN, Number.NaN, Number.NaN)).toBe(NO_FOCUS);
+  });
+
+  test("`isLit` lights the pin AND the pointer, and never a third box", () => {
+    // THE OTHER HALF OF THE SPLIT. `resolveFocus` says what the COLUMN answers for;
+    // this says which BOXES are lit, and the pointer never lost that. With a pin down
+    // there are two — the pinned pillar and whatever the hand is on — which is what
+    // keeps the ring from reading as dead while the words stay put.
+    //
+    // AT MOST TWO, EVER. `hovered` and `focused` collapse first (the pointer moved
+    // last, exactly as in `resolveFocus`), because three lit boxes with a mark on only
+    // one of them would leave the other two indistinguishable.
+    for (const pinned of CHANNEL_VALUES) {
+      for (const hovered of CHANNEL_VALUES) {
+        for (const focused of CHANNEL_VALUES) {
+          const pointer = isPillarIndex(hovered) ? hovered : focused;
+          const tag = `pinned ${pinned} · hovered ${hovered} · focused ${focused}`;
+          const lit = PILLAR_INDEXES.filter((i) => isLit(i, pinned, hovered, focused));
+          const expected = PILLAR_INDEXES.filter((i) => i === pinned || i === pointer);
+          expect(lit, tag).toEqual(expected);
+          expect(lit.length, `${tag} · at most two`).toBeLessThanOrEqual(2);
+        }
+      }
+    }
+
+    // The cases, named.
+    expect(PILLAR_INDEXES.filter((i) => isLit(i, NO_FOCUS, NO_FOCUS, NO_FOCUS))).toEqual([]);
+    expect(PILLAR_INDEXES.filter((i) => isLit(i, 3, NO_FOCUS, NO_FOCUS)), "pin alone").toEqual([3]);
+    expect(PILLAR_INDEXES.filter((i) => isLit(i, 3, 5, NO_FOCUS)), "pin + hover").toEqual([3, 5]);
+    expect(PILLAR_INDEXES.filter((i) => isLit(i, 3, 3, NO_FOCUS)), "hovering the pin").toEqual([3]);
+    // The caret does NOT add a third: the pointer moved last.
+    expect(PILLAR_INDEXES.filter((i) => isLit(i, 3, 5, 4)), "pointer beats caret").toEqual([3, 5]);
+    expect(PILLAR_INDEXES.filter((i) => isLit(i, 3, NO_FOCUS, 4)), "pin + caret").toEqual([3, 4]);
+    // And a stray value lights nothing, for the same reason `resolveFocus` opens
+    // nothing on one: a pointer value is UI state, not an authoring bug.
+    expect(PILLAR_INDEXES.filter((i) => isLit(i, 2.5, 2.5, 2.5))).toEqual([]);
+    expect(isLit(2.5, 0, 0, 0), "a non-index is never lit").toBe(false);
+  });
+
+  test("`togglePin` toggles, moves, and clears on anything that is not a pillar", () => {
+    // A SECOND CLICK ON THE PINNED PILLAR RELEASES IT — not a close button, not Esc,
+    // and not a click on the background, because the background is the deck's own
+    // click-to-advance target and a "click away to unpin" rule would unpin and step
+    // the slide with one press.
+    for (const i of PILLAR_INDEXES) {
+      expect(togglePin(NO_FOCUS, i), `pin ${i}`).toBe(i);
+      expect(togglePin(i, i), `unpin ${i}`).toBe(NO_FOCUS);
+    }
+    // CLICKING A DIFFERENT PILLAR MOVES THE PIN rather than clearing it: the pointer
+    // is already there, and a rule that required an unpin first would make moving the
+    // pin cost two clicks.
+    expect(togglePin(0, 5)).toBe(5);
+    expect(togglePin(5, 0)).toBe(0);
+    // A NON-INDEX ARGUMENT CLEARS THE PIN, which is the only safe answer: it can only
+    // arrive from a handler bound to something that is not a pillar, and leaving the
+    // previous pin fixed would strand it with no element left to release it.
+    for (const bad of [NO_FOCUS, -2, PILLAR_COUNT, 2.5, Number.NaN]) {
+      expect(togglePin(3, bad), `${bad}`).toBe(NO_FOCUS);
+    }
+  });
+
+  test("`showsRecap` and `acceptsPointer` are exact complements, past the end too", () => {
+    // `>=` AND NOT `===` on the recap, even though `POSE.RECAP` is the last pose the
+    // deck can reach. A `===` would make the recap VANISH at any pose past the end,
+    // and the last pose of a slide should be the pose that survives an over-shoot.
+    // The over-shoot is not a production path today (`DeckProvider` clamps `goTo` at
+    // `steps - 1`); it is a direct call — the render below — plus whatever a later
+    // edit to `steps` strands in an export or a deep link.
+    expect(showsRecap(POSE.FIGURE)).toBe(false);
+    expect(showsRecap(POSE.RECAP)).toBe(true);
+    expect(showsRecap(POSE.RECAP + 1)).toBe(true);
+    expect(showsRecap(7)).toBe(true);
+    expect(showsRecap(-1)).toBe(false);
+
+    // AND THE POINTER IS LIVE EXACTLY WHERE THE RECAP IS NOT. Two predicates rather
+    // than one negation, because they answer different questions and could
+    // legitimately come apart later; held complementary here so that TODAY they
+    // cannot, and a pose that both lit all six and answered the pointer would fail
+    // as a contradiction rather than render as one.
+    for (let pose = -2; pose <= 12; pose++) {
+      expect(acceptsPointer(pose), `pose ${pose}`).toBe(!showsRecap(pose));
+    }
+  });
+
+  test("the budget is two, and the recap is the last of them", () => {
+    // NOT LITERALS IN THE SLIDE FILE. A `steps: 2` typed by hand is how a pose the
+    // deck can never reach gets added — `DeckContext` clamps at `steps - 1`, so there
+    // is no error, no blank slide and no failing test.
+    expect(STEP_COUNT).toBe(2);
+    expect(STEP_COUNT).toBe(POSE.RECAP + 1);
+    expect(POSES).toEqual([0, 1]);
+    // `Object.keys(POSE).length` WAS CONSIDERED AND REFUSED as the derivation: it is
+    // true today by coincidence rather than by rule, and it would break the moment a
+    // pose was named that is not a step. Asserted as a coincidence, so the next
+    // author reads it as one.
+    expect(Object.keys(POSE)).toEqual(["FIGURE", "RECAP"]);
   });
 
   test("NO_FOCUS is a value, and one no array on this slide can index", () => {
-    // −1 and not `null`: pillar 0 — Governance, the first beat — is falsy, so a
+    // −1 and not `null`: pillar 0 — Governance, at twelve o'clock — is falsy, so a
     // `number | null` would put a truthiness bug one keystroke away. And out of
     // range for every array here, which is the second half of the choice: a caller
-    // that forgets to check gets `undefined` and renders a visibly empty column,
+    // that forgets to check gets `undefined` and renders a visibly empty panel,
     // rather than the LAST pillar — which is what `pillars.at(-1)` hands back, and
-    // which would light AI Companions under the closer's own copy.
+    // which would open AI Companions under the idle copy for no reason anyone could
+    // see.
     expect(NO_FOCUS).toBe(-1);
     expect(C.pillars[NO_FOCUS]).toBeUndefined();
     expect(PILLAR_CENTRES[NO_FOCUS]).toBeUndefined();
     // And the counter refuses it rather than clamping to "01 / 06", which is what
-    // the prototype's `Math.max(focus, 0) + 1` prints at the closer's pose.
+    // the prototype's `Math.max(focus, 0) + 1` prints where nothing is open.
     expect(() => decisionCounter(NO_FOCUS)).toThrow(/no pillar/);
-    expect(() => decisionCounter(DECISION_BEATS)).toThrow(/no pillar/);
+    expect(() => decisionCounter(PILLAR_COUNT)).toThrow(/no pillar/);
   });
 
-  test("`showsPillars` is true from the ring onward and never false again", () => {
-    // A `pose === 1` here would be the bug this function exists to prevent, and it
-    // is the kind a reveal written per-pose invites: the pillars would vanish the
-    // moment the first decision arrived.
-    expect(showsPillars(POSE.HUB)).toBe(false);
-    expect(showsPillars(-1)).toBe(false);
-    for (let pose = POSE.RING; pose <= STEP_COUNT + 3; pose++) {
-      expect(showsPillars(pose), `pose ${pose}`).toBe(true);
-    }
-  });
+  test("and pose 7 renders BYTE-IDENTICALLY to pose 1", () => {
+    // THE `>=` MADE VISIBLE. Asserted by handing the figure a pose THE DECK CANNOT
+    // PRODUCE (`steps: 2` clamps at 1), which is why this render goes to the
+    // component directly instead of through the harness — the harness's `goTo` would
+    // clamp it back to 1 and prove nothing.
+    const recap = render(<PillarOrbit brandLine={gems} pose={POSE.RECAP} />);
+    const atRecap = recap.container.innerHTML;
+    recap.unmount();
 
-  test("`showsWalkColumn` opens at the first beat and stays open through the closer", () => {
-    // A SEPARATE QUESTION FROM `focusedPillarIndex(pose) !== NO_FOCUS`, and that is
-    // the whole point: the column is ONE object holding two things in turn — six
-    // decisions, then the closer — so it must be up at pose 8, where no pillar is
-    // focused. The prototype treated them as two and its left hairline blinked off
-    // and on in the same place.
-    expect(showsWalkColumn(POSE.HUB)).toBe(false);
-    expect(showsWalkColumn(POSE.RING)).toBe(false);
-    expect(showsWalkColumn(POSE.FIRST_DECISION)).toBe(true);
-    expect(showsWalkColumn(CLOSER_POSE)).toBe(true);
-    BEAT_POSES.forEach((p) => expect(showsWalkColumn(p), `pose ${p}`).toBe(true));
-  });
-
-  test("`showsCloser` is true AT the closer's pose and stays true past the end", () => {
-    // `>=` AND NOT `===`, even though `CLOSER_POSE` is the last pose this slide
-    // has. The poses past the end are reachable in exactly the places that matter:
-    // a test handing the figure pose 9 to prove nothing extra appears, and an
-    // export or a deep link asking for a step index a later edit to `steps` has
-    // invalidated. The last pose of a slide should be the pose that survives an
-    // over-shoot — so pose 9 is asserted true here, and the "no extra pose" test
-    // below is what that `>=` makes possible.
-    for (let pose = 0; pose < CLOSER_POSE; pose++) {
-      expect(showsCloser(pose), `pose ${pose}`).toBe(false);
-    }
-    expect(showsCloser(CLOSER_POSE)).toBe(true);
-    expect(showsCloser(CLOSER_POSE + 1)).toBe(true);
-    expect(showsCloser(STEP_COUNT)).toBe(true);
-    expect(showsCloser(12)).toBe(true);
-  });
-
-  test("the budget is DERIVED from the pillar count, so a seventh pillar grows it", () => {
-    // NOT LITERALS. A `steps: 9` typed by hand is how the seventh pillar's decision
-    // becomes a pose the deck can never reach — `DeckContext` clamps at
-    // `steps - 1`, so there is no error, no blank slide and no failing test, just
-    // one pillar whose decision is never spoken and a closer that arrives while a
-    // pillar is still lit.
-    expect(DECISION_BEATS).toBe(C.pillars.length);
-    // Taken from the COPY's array and not from the geometry's count — a beat prints
-    // a pillar's copy — and the two are held equal here so the ring and the walk
-    // cannot disagree about how many pillars there are.
-    expect(DECISION_BEATS).toBe(PILLAR_COUNT);
-    expect(CLOSER_POSE).toBe(POSE.FIRST_DECISION + DECISION_BEATS);
-    expect(STEP_COUNT).toBe(CLOSER_POSE + 1);
-    // The three named poses, pinned — everything else in `walk.ts` derives from
-    // `FIRST_DECISION`, so moving the walk one pose later is one edit there.
-    expect(POSE.HUB).toBe(0);
-    expect(POSE.RING).toBe(1);
-    expect(POSE.FIRST_DECISION).toBe(2);
-    // Six beats, no grouping (§7.1). Pairing the pillars would fit #16's old ~4
-    // step budget and cost the one-decision-per-pillar clarity that is the only
-    // reason this slide can be an index.
-    expect(BEAT_POSES).toEqual([2, 3, 4, 5, 6, 7]);
-    expect(CLOSER_POSE).toBe(8);
-    expect(STEP_COUNT).toBe(9);
-  });
-});
-
-// ── the nine poses ───────────────────────────────────────────────────────────
-
-describe("the nine poses build the argument once each", () => {
-  test("pose 0 is the hub alone — the six have not arrived", () => {
-    renderOrg(gems, POSE.HUB);
-
-    // Mounted but not revealed: the boxes and spokes hold the ring's geometry
-    // from the first frame so nothing reflows when they arrive, and opacity is
-    // what says "not yet".
-    C.pillars.forEach((pillar) => {
-      expect(
-        screen.getByTestId(`shape-pillar-${pillar.id}`).style.opacity,
-        pillar.id,
-      ).toBe("0");
-      expect(
-        screen.getByTestId(`shape-spoke-${pillar.id}`).style.opacity,
-        pillar.id,
-      ).toBe("0");
-    });
-    // And the column the walk writes into is not up yet either.
-    expect(screen.getByTestId("shape-walk-column").style.opacity).toBe("0");
-  });
-
-  test("pose 1 brings all six in, inside one mounted tree", () => {
-    renderOrg(gems, POSE.HUB);
-    goToPose(POSE.RING);
-
-    // Walked rather than re-mounted, so a pose that only works from a fresh
-    // mount fails here.
-    C.pillars.forEach((pillar) => {
-      expect(
-        screen.getByTestId(`shape-pillar-${pillar.id}`).style.opacity,
-        pillar.id,
-      ).toBe("1");
-      expect(
-        screen.getByTestId(`shape-spoke-${pillar.id}`).style.opacity,
-        pillar.id,
-      ).toBe("1");
-    });
-  });
-
-  test("and pose 9 and pose 12 render byte-identically to pose 8", () => {
-    // THIS TEST WAS REWRITTEN. It used to compare pose 1 against poses 2 and 9 to
-    // prove there was no third pose hiding in a two-step slide — and it is FALSE BY
-    // CONSTRUCTION now, because pose 2 IS the first beat. What survives is the
-    // question underneath it: does over-shooting the last pose add or remove
-    // anything?
-    //
-    // IT MUST NOT, and the poses past the end are reachable: an export or a deep
-    // link can ask for a step index a later edit to `steps` has invalidated, and
-    // `showsCloser` is `>=` rather than `===` precisely so the last pose is the one
-    // that survives an over-shoot. Asserted by handing the figure a pose THE DECK
-    // CANNOT PRODUCE (`steps: 9` clamps at 8), which is why this render goes to the
-    // component directly instead of through the harness.
-    const eight = render(<PillarOrbit brandLine={gems} pose={CLOSER_POSE} />);
-    const atCloser = eight.container.innerHTML;
-    eight.unmount();
-
-    for (const over of [CLOSER_POSE + 1, 12]) {
+    for (const over of [POSE.RECAP + 1, 7, 12]) {
       const beyond = render(<PillarOrbit brandLine={gems} pose={over} />);
-      expect(beyond.container.innerHTML, `pose ${over}`).toBe(atCloser);
+      expect(beyond.container.innerHTML, `pose ${over}`).toBe(atRecap);
       beyond.unmount();
     }
 
-    // POSITIVE CONTROL: the comparison is only worth anything because pose 8 is
-    // NOT identical to pose 7 — the sixth beat releases and the closer arrives.
-    const seven = render(<PillarOrbit brandLine={gems} pose={CLOSER_POSE - 1} />);
-    expect(seven.container.innerHTML).not.toBe(atCloser);
-    seven.unmount();
+    // POSITIVE CONTROL: the comparison is only worth anything because pose 1 is NOT
+    // identical to pose 0 — six pillars light and the panel turns over.
+    const figure = render(<PillarOrbit brandLine={gems} pose={POSE.FIGURE} />);
+    expect(figure.container.innerHTML).not.toBe(atRecap);
+    figure.unmount();
+  });
+});
+
+// ── 0 → 1 → 0, in one mounted tree ───────────────────────────────────────────
+
+describe("the two poses re-render cleanly in both directions", () => {
+  test("0 → 1 → 0 leaves no pillar stuck lit and the panel back on idle", () => {
+    // TRUE BY CONSTRUCTION — the recap reads no state at all, and pose 0 reads three
+    // numbers nothing in the pose change writes — and this is the test that says the
+    // renderer did not add a fourth. A component that cached "the pillars were all
+    // lit a moment ago" would pass the step up and fail here.
+    renderOrg(berau, POSE.FIGURE);
+    const resting = allSignatures();
+    expect(activePillarIds()).toEqual([]);
+
+    goToPose(POSE.RECAP);
+    expect(activePillarIds()).toEqual(C.pillars.map((p) => p.id));
+    expectOnlyOpen("shape-recap", "pose 1");
+
+    goToPose(POSE.FIGURE);
+    expect(activePillarIds(), "nothing stuck").toEqual([]);
+    expectOnlyOpen("shape-idle", "back at pose 0");
+    // BYTE-IDENTICAL TO THE FIGURE IT LEFT, all six, which is the strongest form of
+    // "nothing stuck": not just "no box is flagged" but "every paint, every stroke
+    // and every bead track is the one it started with".
+    C.pillars.forEach((p) =>
+      expect(pillarSignature(p.id), `${p.id} · back to rest`).toEqual(resting.get(p.id)),
+    );
+  });
+
+  test("but a PIN survives the round trip, deliberately", async () => {
+    // THE ONE PIECE OF STATE THAT IS NOT RESET, and it is documented in
+    // `acceptsPointer`: a pin is the presenter's place in the argument, and losing it
+    // on a step to the recap and back would be the one piece of history a backwards
+    // step could contradict. `resolveFocus` is not even consulted at pose 1 — the
+    // state simply sits there, unread — which is why nothing needs resetting for this
+    // to be true.
+    const user = userEvent.setup();
+    renderOrg(berau, POSE.FIGURE);
+
+    const box = pillarBoxEl("people");
+    await user.click(box);
+    await user.unhover(box);
+    expect(pinnedPillarIds()).toEqual(["people"]);
+
+    goToPose(POSE.RECAP);
+    // The pin is still recorded — and it is NOT what is lighting the ring, because
+    // all six are lit and the panel is the recap's.
+    expect(pinnedPillarIds()).toEqual(["people"]);
+    expect(activePillarIds()).toEqual(C.pillars.map((p) => p.id));
+    expectOnlyOpen("shape-recap", "pinned at the recap");
+
+    goToPose(POSE.FIGURE);
+    expect(pinnedPillarIds(), "the pin came back").toEqual(["people"]);
+    expect(activePillarIds(), "and it is what is lit").toEqual(["people"]);
+    expectOnlyOpen("shape-decision-people", "back at pose 0");
+    expect(screen.getByTestId("shape-decision-people-pin").textContent).toBe("· pinned");
+
+    // And it is still releasable from the same gesture after the round trip — a pin
+    // that survived a step but could no longer be undone would be a mode.
+    await user.click(box);
+    await user.unhover(box);
+    expect(pinnedPillarIds()).toEqual([]);
+    expectOnlyOpen("shape-idle", "released after the round trip");
   });
 });
 
@@ -1939,15 +2713,20 @@ describe("prefers-reduced-motion: reduce", () => {
     window.matchMedia = realMatchMedia;
   });
 
-  test("mounts zero SMIL nodes at every one of the nine poses, under every brand", () => {
+  test("mounts zero SMIL nodes at both poses, under every brand", () => {
     // ZERO BY CONSTRUCTION, and that is the decision this asserts rather than a
     // happy accident. SMIL is invisible to the global reduced-motion rule in
     // `globals.css` — it squashes CSS animations and transitions only — so a SMIL
-    // node has to be gated at mount, as E.12 gates its `<animateMotion>`. This
-    // slide's whole motion budget is CSS transitions on a pose change, which that
-    // rule already handles, so there is nothing to gate. Asserted at EVERY pose
-    // (the AC's word) and under every brand, because the cheapest way to break it
-    // is to reach for `<animate>` on one spoke at one beat.
+    // node has to be gated at mount, as E.12 gates its `<animateMotion>`.
+    //
+    // AND IT IS LOAD-BEARING IN A PLACE IT WAS NOT. The old motion budget was CSS
+    // transitions on a pose change, which that rule already handled; it is now
+    // transitions PLUS the keyframes in `agentic-org.css`, because the figure builds
+    // itself inside one pose (nothing to transition FROM) and its spokes carry motion
+    // at rest (a loop, not a change). Both are CSS animations, both are reachable by
+    // the squash and by this file's own media block, and neither is an `<animate>`
+    // element. A spoke draw written as SMIL would look identical in a browser and
+    // ignore the reader's preference entirely.
     for (const brandLine of [gems, berau, hubBrandLineFor("general")]) {
       for (const pose of POSES) {
         const { unmount } = renderOrg(brandLine, pose);
@@ -1962,58 +2741,58 @@ describe("prefers-reduced-motion: reduce", () => {
     }
   });
 
-  test("all nine poses render complete — every string the pose has reached is there", () => {
-    // WHAT THIS CAN AND CANNOT SAY. jsdom runs no transition, so "every pose rests
-    // on its finished frame" is not checkable here — a computed opacity mid
-    // transition is nothing jsdom computes. This test therefore claims only the DOM
-    // half: at each pose every element that pose has reached is mounted with its
-    // copy. The computed half is checked in a real engine.
-    renderOrg(berau, POSE.HUB);
+  test("both poses render complete — every string the pose holds is there", () => {
+    // WHAT THIS CAN AND CANNOT SAY. jsdom runs no keyframe and no transition, so
+    // "the build ends on its resting frame" is not checkable here. This test
+    // therefore claims only the DOM half: at each pose every element that pose shows
+    // is mounted with its copy. The computed half is checked in a real engine.
+    renderOrg(berau, POSE.FIGURE);
 
     for (const pose of POSES) {
       goToPose(pose);
-      // Standing at all nine.
-      expect(screen.getByTestId("shape-kicker").textContent, `pose ${pose}`).toBe(C.kicker);
+      // Standing at both.
       expect(screen.getByTestId("shape-hub-label").textContent, `pose ${pose}`).toBe(
         "The Enabler",
       );
       expect(screen.getByTestId("shape-hub-brand-line").textContent, `pose ${pose}`).toBe(
         "MineTech",
       );
-
-      // From the ring onward: six labels, with their copy.
-      if (showsPillars(pose)) {
-        C.pillars.forEach((pillar) => {
-          expect(
-            screen.getByTestId(`shape-pillar-${pillar.id}-label`).textContent,
-            `pose ${pose} · ${pillar.id}`,
-          ).toBe(pillar.label);
-        });
-      }
-
-      // At a beat: the counter, the pillar's name and its decision, all three.
-      const focus = focusedPillarIndex(pose);
-      if (focus !== NO_FOCUS) {
-        const pillar = C.pillars[focus];
+      C.pillars.forEach((pillar) => {
         expect(
-          screen.getByTestId(`shape-decision-${pillar.id}-eyebrow`).textContent,
-          `pose ${pose} · counter`,
-        ).toBe(decisionCounter(focus));
-        expect(
-          screen.getByTestId(`shape-decision-${pillar.id}-label`).textContent,
-          `pose ${pose} · label`,
+          screen.getByTestId(`shape-pillar-${pillar.id}-label`).textContent,
+          `pose ${pose} · ${pillar.id}`,
         ).toBe(pillar.label);
+        // The decision blocks are all mounted at both poses, with their copy, which
+        // is what makes the cross-fade possible at all.
         expect(
           screen.getByTestId(`shape-decision-${pillar.id}-text`).textContent,
-          `pose ${pose} · decision`,
+          `pose ${pose} · ${pillar.id} decision`,
         ).toBe(pillar.decision);
-      }
+        expect(
+          screen.getByTestId(`shape-decision-${pillar.id}-eyebrow`).textContent,
+          `pose ${pose} · ${pillar.id} counter`,
+        ).toBe(decisionCounter(C.pillars.indexOf(pillar)));
+      });
 
-      // At the closer's pose: the closer.
-      if (showsCloser(pose)) {
+      // Pose 0's idle copy and pose 1's recap, each in its own pose.
+      if (showsRecap(pose)) {
+        expect(screen.getByTestId("shape-recap-eyebrow").textContent, `pose ${pose}`).toBe(
+          C.recapEyebrow,
+        );
         expect(screen.getByTestId("shape-closer").textContent, `pose ${pose}`).toBe(
           C.closer,
         );
+        C.pillars.forEach((pillar) =>
+          expect(
+            screen.getByTestId(`shape-recap-${pillar.id}-text`).textContent,
+            `pose ${pose} · ${pillar.id}`,
+          ).toBe(pillar.recap),
+        );
+      } else {
+        expect(screen.getByTestId("shape-idle-lead").textContent, `pose ${pose}`).toBe(
+          C.idleLead,
+        );
+        expect(screen.getByTestId("shape-hint").textContent, `pose ${pose}`).toBe(C.hint);
       }
     }
   });
@@ -2022,75 +2801,123 @@ describe("prefers-reduced-motion: reduce", () => {
 // ── the copy rules, checked over the copy ────────────────────────────────────
 
 describe("keywords go on prose only", () => {
-  /** Labels, never sentences — now including the walk column's eyebrow and the
-   *  counter it composes. A copper italic inside any of these reads as a rendering
-   *  fault, and inside the counter it would be an emphasis on ARITHMETIC, so none
-   *  of them has a `*Kw` sibling to begin with — this holds that they never gain
-   *  one by carrying a highlight-shaped string. */
+  /**
+   * THE MONO LABEL REGISTER — every string on this slide that a `*Kw` may never
+   * touch, and it is where most of this rewrite's new copy landed.
+   *
+   * A copper italic inside any of these reads as a rendering fault. Inside the
+   * counter it would be an emphasis on ARITHMETIC, which is the sharpest case
+   * because the counter is GENERATED rather than authored. The six RECAP FRAGMENTS
+   * are the second-sharpest and the one worth stating: they are set in the reading
+   * face, not in mono, because a sentence fragment in mono reads as a filename — but
+   * they are label register all the same, because a fragment IS the emphasis and an
+   * italic inside one would be emphasis on emphasis.
+   */
   const LABELS: readonly string[] = [
     C.figLabel,
-    C.kicker,
     C.hubLabel,
+    C.idleEyebrow,
+    C.hint,
     C.decisionEyebrow,
+    C.recapEyebrow,
     ...C.pillars.map((p) => p.label),
+    ...C.pillars.map((p) => p.recap),
+    ...C.pillars.flatMap((p) => [...p.points]),
     ...C.pillars.map((_p, i) => decisionCounter(i)),
   ];
 
-  /** The three prose registers, which are the only strings a `*Kw` may touch: the
-   *  headline, the six decisions and the closer. */
+  /** The FOUR prose registers, which are the only strings a `*Kw` may touch: the
+   *  headline, the six decisions, the panel's idle lead and the closer. Three
+   *  before this rewrite; the idle lead is the one it added. */
   const PROSE: readonly { readonly text: string; readonly kw: readonly string[] }[] = [
     { text: C.headline, kw: C.headlineKw },
     ...C.pillars.map((p) => ({ text: p.decision, kw: p.decisionKw })),
+    { text: C.idleLead, kw: C.idleLeadKw },
     { text: C.closer, kw: C.closerKw },
   ];
 
-  test("no label, kicker, pillar name, eyebrow or counter is rendered through the highlighter", () => {
-    // Rendered check, not an authored one: `<em class="kw">` is what a highlight
-    // IS on the stage, so this reads the DOM for one inside any of those runs. At a
-    // BEAT pose, so the column's own label register is on the stage to be checked.
-    renderOrg(gems, POSE.FIRST_DECISION);
+  test("no label, eyebrow, point, recap fragment or counter is rendered through the highlighter", async () => {
+    // RENDERED CHECK, NOT AN AUTHORED ONE: `<em class="kw">` is what a highlight IS
+    // on the stage, so this reads the DOM for one inside any of those runs. Done with
+    // a pillar OPEN and then at the RECAP, so both halves of the label register — the
+    // point list and the six fragments — are on the stage to be checked.
+    const user = userEvent.setup();
+    renderOrg(gems, POSE.FIGURE);
+    await user.hover(pillarBoxEl("governance"));
+
     const labelBoxes = [
-      "shape-kicker",
       "shape-hub-label",
       "shape-hub-brand-line",
+      "shape-idle-eyebrow",
       ...C.pillars.map((p) => `shape-pillar-${p.id}-label`),
       // The eyebrow IS the counter — `decisionCounter(i)` is what it prints — so one
       // element answers for both.
       ...C.pillars.map((p) => `shape-decision-${p.id}-eyebrow`),
       // The pillar's name inside the decision block: the same words the ring's box
-      // carries, in 30px serif instead of 11px mono. Repetition is the point; an
+      // carries, in 29px serif instead of 11px mono. Repetition is the point; an
       // italic in it would be an emphasis on a fragment of a name.
       ...C.pillars.map((p) => `shape-decision-${p.id}-label`),
+      // HR p4's own sub-bullets — eighteen strings, all of them names of things
+      // rather than sentences about them.
+      ...C.pillars.map((p) => `shape-decision-${p.id}-points`),
     ];
     for (const id of labelBoxes) {
       expect(screen.getByTestId(id).querySelectorAll("em"), id).toHaveLength(0);
     }
+
+    goToPose(POSE.RECAP);
+    for (const id of [
+      "shape-recap-eyebrow",
+      ...C.pillars.map((p) => `shape-recap-${p.id}-label`),
+      ...C.pillars.map((p) => `shape-recap-${p.id}-text`),
+    ]) {
+      expect(screen.getByTestId(id).querySelectorAll("em"), id).toHaveLength(0);
+    }
+
     // And the labels carry no stray markup of their own.
     LABELS.forEach((label) => expect(label).not.toContain("<em"));
+    // POSITIVE CONTROL on the register split itself: nothing is in both lists.
+    const proseText = new Set(PROSE.map((p) => p.text));
+    LABELS.forEach((label) =>
+      expect(proseText.has(label), `"${label}" is in both registers`).toBe(false),
+    );
   });
 
   test("every keyword is a substring of the string it highlights", () => {
     // A keyword that does not occur is a highlight that silently does nothing —
     // the copy still reads, so nothing on the stage says the emphasis was lost.
-    // Held over ALL THREE registers: the headline, the six decisions, the closer.
+    // Held over ALL FOUR registers.
     PROSE.forEach(({ text, kw }) => {
       expect(kw.length, `"${text}" has a keyword`).toBeGreaterThan(0);
       kw.forEach((word) => expect(text, `"${word}"`).toContain(word));
     });
-    expect(PROSE).toHaveLength(2 + PILLAR_COUNT);
+    expect(PROSE).toHaveLength(3 + PILLAR_COUNT);
   });
 
-  test("and each of the three prose registers lands its highlight on the stage", () => {
-    renderOrg(gems, POSE.FIRST_DECISION);
-    // The headline — this slide's one line of prose at every pose.
+  test("and each of the four prose registers lands its highlight on the stage", async () => {
+    const user = userEvent.setup();
+    renderOrg(gems, POSE.FIGURE);
+
+    // 1. The headline — this slide's one line of prose at both poses.
     expect(document.querySelectorAll("h1 em").length).toBeGreaterThan(0);
-    // The six decisions: ONE PHRASE EACH, on the decision's object rather than on
-    // the "You decide" stem, which is the same in all six and would be a highlight
-    // on the boilerplate. All six blocks are mounted at every pose, so all six are
-    // checkable from one render.
+
+    // 2. The idle lead, which is up before anything is touched. ONE KEYWORD, on the
+    // dependency — the claim the ring makes and the only part of the sentence the
+    // diagram cannot draw on its own.
+    const leadEms = [...screen.getByTestId("shape-idle-lead").querySelectorAll("em")].map(
+      (e) => e.textContent,
+    );
+    expect(leadEms).toEqual([...C.idleLeadKw]);
+    expect(C.idleLeadKw).toContain("only work together");
+
+    // 3. The six decisions: ONE PHRASE EACH, on the decision's object rather than on
+    // the "You decide" stem, which is the same in all six and would be a highlight on
+    // the boilerplate. All six blocks are mounted at every state, so all six are
+    // checkable from one hover.
+    await user.hover(pillarBoxEl("tools"));
     C.pillars.forEach((pillar) => {
-      const ems = [...
-        screen.getByTestId(`shape-decision-${pillar.id}-text`).querySelectorAll("em")
+      const ems = [
+        ...screen.getByTestId(`shape-decision-${pillar.id}-text`).querySelectorAll("em"),
       ].map((e) => e.textContent);
       expect(ems.length, pillar.id).toBeGreaterThan(0);
       expect(ems, pillar.id).toEqual([...pillar.decisionKw]);
@@ -2099,27 +2926,33 @@ describe("keywords go on prose only", () => {
         "You decide",
       );
     });
-    // And the closer.
-    expect(
-      screen.getByTestId("shape-closer").querySelectorAll("em").length,
-    ).toBeGreaterThan(0);
+
+    // 4. And the closer, at the recap. THE HIGHLIGHT IS ON THE CLAIM AND NOT ON THE
+    // REFUSAL: the italic is the last emphasis the room takes away, and emphasising
+    // the refusal would leave the closing image a purchase.
+    goToPose(POSE.RECAP);
+    const closerEms = [
+      ...screen.getByTestId("shape-closer").querySelectorAll("em"),
+    ].map((e) => e.textContent);
+    expect(closerEms).toEqual([...C.closerKw]);
+    expect(C.closerKw).toContain("a decision on your desk");
   });
 
   test("no authored string names a section letter", () => {
     // §3.4 R2. This slide is C.1 today and the letter is DERIVED anyway — what the
-    // rest of Phase 6 renumbers is every run BEHIND this one, exactly as gh#56's
-    // `invest` run just did — so a literal "C.1" or "SECTION C" in this copy would be
-    // a letter authored in the one place that must never hold one, and would survive
-    // the day the composer disagrees with it. EXTENDED to everything this
-    // ticket authored: the six decisions, the closer, the eyebrow and the six
-    // generated counters — the counter is the sharpest case, because "01 / 06" is
-    // figure-shaped copy that nobody wrote by hand.
+    // rest of Phase 6 renumbers is every run BEHIND this one — so a literal "C.1" or
+    // "SECTION C" in this copy would be a letter authored in the one place that must
+    // never hold one, and would survive the day the composer disagrees with it.
+    // EXTENDED to everything this rewrite authored: the point lists, the recap
+    // fragments, the idle block and the hint.
     const authored = [
       ...LABELS,
       C.headline,
+      C.idleLead,
       C.closer,
       ...C.pillars.map((p) => p.decision),
       ...C.pillars.flatMap((p) => [...p.decisionKw]),
+      ...C.idleLeadKw,
       ...C.closerKw,
       ...C.headlineKw,
       ...REGISTERED_BRANDS.map((brand) => hubBrandLineFor(brand) ?? ""),
@@ -2132,38 +2965,42 @@ describe("keywords go on prose only", () => {
     });
   });
 
-  test("and no figure-shaped literal reaches the DOM except the derived one", () => {
+  test("and no figure-shaped literal reaches the DOM except the derived one", async () => {
     // THE RENDERED HALF of the same rule. `FigLabel` prints one figure reference
     // and it comes from the composed deck through `SlideNumberContext` — the
     // harness's `at` supplies it here. So: strip that one element and nothing of
     // that shape may be left, which is what catches a letter written into a
     // component rather than into the content module.
     //
-    // AT THREE POSES NOW, not just the ring: pose 1 has no column, a BEAT pose adds
-    // the counter — "THE DECISION · 01 / 06", which is the one string on this slide
-    // that could plausibly read as a figure reference — and pose 8 adds the closer.
-    // The counter is CHECKED rather than assumed innocent.
-    const { container } = renderOrg(gems, POSE.RING);
+    // AT THREE STATES: idle, one pillar open — which adds the counter, "THE DECISION
+    // · 01 / 06", the one string on this slide that could plausibly read as a figure
+    // reference — and the recap. The counter is CHECKED rather than assumed innocent.
+    const user = userEvent.setup();
+    const { container } = renderOrg(gems, POSE.FIGURE);
     expect(
       container.querySelector(".fig-label")?.textContent,
       "the derived reference is there to strip",
     ).toContain(`${AT.letter}.${AT.num}`);
 
-    for (const pose of [POSE.RING, POSE.FIRST_DECISION + 2, CLOSER_POSE]) {
-      goToPose(pose);
+    const states: readonly [string, () => Promise<void>][] = [
+      ["idle", async () => {}],
+      ["governance open", async () => user.hover(pillarBoxEl("governance"))],
+      ["recap", async () => goToPose(POSE.RECAP)],
+    ];
+    for (const [where, enter] of states) {
+      await enter();
       // Stripped from a CLONE, not from the live tree: React owns those nodes and
       // removing one behind its back throws on the next commit.
       const stripped = container.cloneNode(true) as HTMLElement;
       stripped.querySelector(".fig-label")?.remove();
-      expect(stripped.textContent ?? "", `pose ${pose}`).not.toMatch(/\b[A-N]\.\d+\b/);
-      expect(stripped.textContent ?? "", `pose ${pose}`).not.toMatch(
-        /\bSECTIONS?\s+[A-N]\b/i,
-      );
+      expect(stripped.textContent ?? "", where).not.toMatch(/\b[A-N]\.\d+\b/);
+      expect(stripped.textContent ?? "", where).not.toMatch(/\bSECTIONS?\s+[A-N]\b/i);
     }
 
-    // POSITIVE CONTROL on the counter specifically: it IS on the stage at a beat,
-    // and it does NOT read as a figure reference.
-    goToPose(POSE.FIRST_DECISION);
+    // POSITIVE CONTROL on the counter specifically: it IS on the stage while a
+    // pillar is open, and it does NOT read as a figure reference.
+    goToPose(POSE.FIGURE);
+    await user.hover(pillarBoxEl("governance"));
     expect(document.body.textContent).toContain("01 / 06");
     expect("01 / 06").not.toMatch(/\b[A-N]\.\d+\b/);
 

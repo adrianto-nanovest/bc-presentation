@@ -15,47 +15,49 @@
 // and cannot authorise a change to it, and the middle holds both plus the one thing
 // neither holds — people who copy what it does, because they watched it.
 //
-// WHY THE SLIDE IS SHAPED THIS WAY. THREE IDENTICAL STRIPS, AND THE MIDDLE ONE ENDS UP
-// BRIGHTEST. Every equality in the figure is deliberate — one height, one width, one
-// left edge, one placement function — so that the only difference between the three
-// rows is what each one says, and so that the ranking, when it lands, is unmistakably
-// the ARGUMENT rather than a decoration. An org chart whose brightest row is the top
-// row is the picture the room already has; this one inverts it, and the inversion is
-// the takeaway. `./components/MiddleOutBands.tsx` holds the tier table that draws it and
-// `./middle-out-geometry.ts` holds the equalities that stop it becoming a ladder — §6.6
-// refuses a third ladder beside L1–L5 and P0–P3 in as many words, and three stacked
-// bands are one careless number away from being one.
+// REWORKED 2026-08-14, AND THIS PARAGRAPH IS THE RECORD OF WHAT MOVED. The slide shipped
+// as three full-width text bands walked over FIVE poses, with the right third of each band
+// reserved for copy that arrived only on the last one. Four faults, all of them visible
+// from the back of a room: it read as prose in rectangles rather than as a figure; the
+// headline sat 12px above a mono kicker that repeated its job; the thesis was set at 22px,
+// which made the footer the loudest thing on the stage; and four of the five clicks were
+// spent revealing what the room had already inferred from the shape.
 //
-// FIVE POSES, one argument each. `./middle-out-walk.ts` owns WHEN each lands and names
-// the two that are not counted; this is what each one SAYS:
-//   0 — THE ORGANISATION. Three bands, their row names, and the standing kicker that
-//       says the middle is this room. Nothing is ranked and nothing is claimed yet; the
-//       room's only job is to find itself in one of the three rows.
-//   1 — THE TOP. What the board and the C-suite hold, and the one thing they cannot do.
-//   2 — THE BOTTOM. The same two rows for the teams — the symmetry is the point: two
-//       structural facts, neither of them anybody's fault.
-//   3 — THE MIDDLE, and the pose the figure changes colour on. Its two rows arrive AND
-//       it lights, because the light and the claim are one event: the band gets brighter
-//       BECAUSE of what has just been said about it.
-//   4 — THE TWO TRANSLATIONS AND THE CLOSER. One rule running down and one running up,
-//       simultaneous and offset in x so they can never read as one scale, the label they
-//       share at the origin, the two lines they carry, and the sentence the whole chart
-//       exists to earn.
+// WHY THE SLIDE IS SHAPED THIS WAY NOW. THREE COLUMNS, AND THE MIDDLE ROW IS THE HERO OF
+// ALL THREE.
+//   · THE PLATES (left) are the organisation: top management, middle management and its
+//     AI champions, the teams. One left edge, one width, one placement rule — so no plate
+//     can be ranked by position. The middle plate is warmer, brighter and one row taller,
+//     and that row is copy only it has: the four things a champion holds.
+//   · THE RAIL (centre) is the claim. Two arrows leave the middle plate's own centre line
+//     in opposite directions, the same length, offset in x, from one origin bar — and each
+//     carries the name of the act it draws and one line of what that act consists of.
+//     ARROWHEADS, which the shipped figure refused: two heads pointing away from one
+//     origin are how a still frame says "both directions, at once".
+//   · THE CARDS (right) are the verdict, one per plate, aligned to it edge for edge:
+//     TOP-DOWN generic and shallow, BOTTOM-UP deep and powerless, MIDDLE-OUT both. The
+//     ALIGNMENT is the argument — an approach is a consequence of where you sit — which is
+//     why the three are not a free-standing panel.
+// `./components/MiddleOutBands.tsx` holds the tier table that draws the ranking and
+// `./middle-out-geometry.ts` holds the equalities that stop the stack becoming a ladder —
+// §6.6 refuses a third ladder beside L1–L5 and P0–P3 in as many words, and three stacked
+// boxes are one careless number away from being one.
 //
-// NO POSE RESTS ON EVIDENCE WITH ITS CONCLUSION MISSING. Poses 1 and 2 each finish a
-// WHOLE band — what it holds and what it cannot do — rather than laying three `holds`
-// rows and then three limits, which would leave pose 1 resting on a stage that says only
-// that everybody has something. Pose 3 is the conclusion those two were evidence for.
-// Pose 4's last arrival is the closer, which frames every band above it.
+// TWO POSES, AND THE FIRST ONE IS THE WHOLE FIGURE. `./middle-out-walk.ts` owns WHEN:
+//   0 — THE FIGURE, complete, built over six staggered steps inside the one pose (the
+//       organisation, what each tier holds, the origin, the two directions, what they are,
+//       the verdict on each). A room reads a diagram in about two seconds and then
+//       listens; the build buys reading ORDER without asking anybody to wait for a claim.
+//   1 — THE THESIS, and nothing else new. It keeps a pose of its own because it is not
+//       part of the figure: it is what the room is asked to do about it, and a sentence
+//       that arrived with the picture would be read as the picture's caption.
 //
-// `canonicalPose: TRANSLATION_POSE` — the fullest pose, and the only one the PDF and
-// PPTX exports print. IMPORTED AND NOT TYPED, for the same reason `steps` is: it is "one
-// past the last band", so a fourth band moves it, and a literal 4 would silently pin the
-// export to a page where the last band's claims are still arriving. Any lower pose is a
-// half-made argument on a page that cannot explain itself — pose 3 exports a chart with
-// a brightly ranked middle row and no statement of what that row DOES, which is the one
-// way this slide could travel badly: a page that appears to rank a layer of management
-// above the board, with the translations that justify it missing.
+// `canonicalPose: THESIS_POSE` — the fullest pose, and the only one the PDF and PPTX
+// exports print. IMPORTED AND NOT TYPED, for the same reason `steps` is: a third pose
+// would move it, and a literal 1 would silently pin the export to a page whose last
+// sentence is missing. Pose 0 exports a figure that argues the middle is the lever and
+// never says what the room is supposed to do with that, which is the one way this slide
+// could travel badly.
 //
 // NO BRAND AXIS, AND ISSUE #68 SAYS SO IN AS MANY WORDS: identical copy under both
 // brands. So this file imports no `VARIANT` and there is no `…For(brand)` resolver to
@@ -78,7 +80,7 @@ import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { MiddleOutBands } from "./components/MiddleOutBands";
 import { shapeMiddleOutContent as C } from "./content";
-import { STEP_COUNT, TRANSLATION_POSE } from "./middle-out-walk";
+import { STEP_COUNT, THESIS_POSE } from "./middle-out-walk";
 
 // ───────────────────── slide ─────────────────────
 
@@ -89,15 +91,21 @@ export function ShapeMiddleOut() {
     <>
       <FigLabel label={C.figLabel} />
 
-      {/* `.slide-headline.small` — 40px and not the base 46, for the shelf reason every
-          recent leader slide records: the chart starts at y=156, `.slide-content`'s own
-          top, and 46px would end the headline row at 128.3 instead of 122, leaving the
-          kicker at `KICKER_TOP` = 134 with 6px of air instead of 12.
+      {/* `.slide-headline.small` — 40px and not the base 46, the call every recent leader
+          slide records: a one-line 40px headline ends the row at y=122, and 46 would end
+          it at 128.3.
+
+          THE HEADLINE NOW HAS ITS OWN AIR, AND THAT IS HALF OF THE 2026-08-14 FIX. The
+          shipped stage put a mono kicker at y=134 — 12px under the display face — and
+          started the figure at 156, so a headline, a second title and the first row's own
+          name arrived inside 50px of each other. The kicker is gone (its addressing is a
+          tag on the middle plate now) and `FIGURE_TOP` is 160, which leaves 38px between
+          the headline and anything else.
 
           THE HEADLINE REFUSES ONE MODEL AND NAMES THE OTHER, in that order, and it is
           measured to ONE line under BOTH faces — see `HEADLINE_BUDGET_CHARS` in
           `./middle-out-geometry.ts`, which exists because the drafted line wrapped on the
-          Georgia fallback and painted straight through the kicker's shelf. */}
+          Georgia fallback. */}
       <div className="slide-headline-row">
         <h1 className="slide-headline small">{highlight(C.headline, C.headlineKw)}</h1>
       </div>
@@ -116,16 +124,15 @@ export const shapeMiddleOutSlide: SlideDef = {
   // reference: this slide printed C.3 in the leader decks until `shape-tam-kotter`
   // landed on gh#71 and prints C.4 now, under an id that never changed.
   id: "shape-middle-out",
-  // FIVE, IMPORTED AND NOT TYPED. `STEP_COUNT` is `chart + one beat per band +
-  // translations`, counted off `shapeMiddleOutContent.bands` — so a fourth band makes
-  // this six on its own. A literal `5` is how that fourth band's claims become a pose
-  // the deck can never reach (`DeckContext` clamps at `steps - 1`): no error, no blank
-  // slide, no failing test, just one band whose claims are never made and a set of
-  // translations that arrive while a band is still unargued.
+  // TWO, IMPORTED AND NOT TYPED. `STEP_COUNT` is `THESIS_POSE + 1` — the figure, then
+  // the sentence — and it was FIVE until the 2026-08-14 rework, which is the reason it
+  // stays imported rather than being written out now that the number is small: a literal
+  // `2` is how a third pose becomes one the deck can never reach (`DeckContext` clamps at
+  // `steps - 1`), with no error, no blank slide and no failing test.
   steps: STEP_COUNT,
   // The last pose, and imported for the same reason — see the header on why the export
-  // may not pause anywhere earlier.
-  canonicalPose: TRANSLATION_POSE,
+  // may not pause on the figure alone.
+  canonicalPose: THESIS_POSE,
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "shape",

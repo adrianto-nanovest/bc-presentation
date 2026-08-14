@@ -1,3 +1,16 @@
+// ⚠ SUPERSEDED, 2026-08-13, AND KEPT AS THE RECORD OF WHAT gh#54 SHIPPED.
+//
+// C.1 was reworked to two poses with a pointer-driven walk: the hub-alone pose and the
+// ring pose were joined into one staged build, the six decision beats became hover and
+// pin, the closer became a recap, and the standing kicker was cut. This harness checks
+// the pose split it was written for and WILL FAIL against the current slide — that is
+// the harness being out of date, not the slide being broken.
+//
+// The live harness is `scripts/c1-figure-verify.mjs`. Run that one.
+//
+// Nothing below has been edited: the point of leaving it is that #54's acceptance
+// criteria and the numbers they were met with stay readable.
+//
 // gh#54's browser evidence — THE AGENTIC ORGANIZATION, both leader decks, two poses.
 //
 // `tests/unit/shape-agentic-org.test.tsx` owns everything jsdom can see, and
@@ -193,7 +206,11 @@ const F8_LEADER_CLOSER = "one person carries this — you decide whether a divis
  *  #54's AC names C.1 → C.2 as the deliverable, so a later run that moves `shape`
  *  off C should trip this and be made to say so. */
 const FIG_C1 = "— FIG. C.1·THE AGENTIC ORGANIZATION";
-const FIG_C2 = "— FIG. C.2·YOUR AGENTIC OS";
+/** The LEADER label, not the standard one: f8's figure label and headline became
+ *  deck-set-scoped copy on 2026-08-14 (owner call, `f8HeaderFor`) for the reason its
+ *  closer already was, so the standard decks still print `F.8 · YOUR AGENTIC OS` and
+ *  the leader decks print this. */
+const FIG_C2 = "— FIG. C.2·SIX PILLARS, ONE DESK";
 
 // ───────────────────── timing ─────────────────────
 

@@ -29,9 +29,13 @@
 //     the bottom box exactly on that floor; 406/178 would land it at 620 and spend
 //     the reserve.
 //   · THE CEILING. `.slide-headline-row` is at `top: 80px` and a `.slide-headline.small`
-//     is 40px on 1.05 line-height, so a one-line headline ends at y ≈ 122, and the
-//     kicker under it (one line of 11px mono) ends at y ≈ 147. The highest pillar's
-//     box top is 190, so the figure never reaches either.
+//     is 40px on 1.05 line-height, so a one-line headline ends at y ≈ 122. The highest
+//     pillar's box top is 190, so the figure never reaches it. THE BAND BETWEEN THEM
+//     IS NOW EMPTY AND STAYS EMPTY: a mono kicker used to sit at y = 134 and was cut
+//     (owner call, 2026-08-13 — see `./content.ts` where the field used to be), so the
+//     ceiling has 68px of slack where it had 43. That slack is NOT spent by raising
+//     the ring: `HUB.y` and `RING.ry` are set by the FLOOR below, which did not move,
+//     and lifting the figure into the freed band would drag the bottom box with it.
 //   · THE LABEL IS INSIDE ITS BOX — icon over label, both centred in the
 //     196×72 rectangle — so the box bottom governs the label bottom too and the
 //     floor above is ONE number rather than two that can disagree. That is a
@@ -45,6 +49,27 @@
 // same constraint from both ends — the figure has to fit BETWEEN the margin and
 // the column the walk writes into ({@link WALK_COLUMN}), and 280 is the widest
 // ellipse that does. Changing `HUB.x` alone breaks one end or the other.
+//
+// A NOTE ON THE WORD "WALK", WHICH APPEARS THROUGHOUT THIS FILE AND IN
+// {@link WALK_COLUMN}. It was written when the six decisions were six POSES the
+// presenter clicked through; they are now reached with the pointer, and the slide has
+// two poses (`./walk.ts`). The names are kept — the column is still the column the
+// decisions are written into, and renaming a constant that four modules, a test file
+// and a browser harness read would be a diff about vocabulary. What DID change is the
+// worst case every budget below is measured against, and it changed in the direction
+// that makes the numbers matter more, not less:
+//
+//   · ONE PILLAR GREW AT A TIME. Now the RECAP pose (`showsRecap` in `./walk.ts`)
+//     lights ALL SIX at once, so {@link FOCUS_GROWTH_SPENT} is spent on six boxes
+//     simultaneously rather than on whichever one the presenter had reached.
+//   · THAT POSE IS `canonicalPose`, so the grown figure is what the PDF and PPTX
+//     exports print — the focused clearances below are no longer only a live-walk
+//     risk, they are what ships in a file.
+//
+// Every constant here holds unchanged under that reading, because each one was
+// already derived per-pillar and then reduced over all six ({@link FOCUSED_BOXES}):
+// the lowest box is the lowest box whether it grew alone or in company. The rendered
+// measurement is in `scripts/c1-figure-verify.mjs`, taken at the recap.
 //
 // Pure data and pure functions. No React, no DOM, and the only work at module scope
 // is derivation: the ring's six centres, the same six grown to their focused size,
@@ -81,24 +106,26 @@ export const SIDE_MARGIN = 48;
  */
 export const NAV_ZONE_TOP = 632;
 
-/**
- * Where the standing kicker sits — the band between the headline and the figure.
- *
- * 134, the same line `src/slides/leader-gap/geometry.ts` hangs its provenance
- * from, and for the same arithmetic: `.slide-headline-row` is at `top: 80px` and a
- * one-line `.slide-headline.small` is 40px on 1.05 line-height, so the headline
- * ends at y ≈ 122 and 134 clears it by 12.
- */
-export const KICKER_TOP = 134;
+// THERE IS NO `KICKER_TOP` ANY MORE. It was 134 — the band between the headline and
+// the ring, where a standing mono line printed at every pose. The line is cut (owner
+// call, 2026-08-13; see `./content.ts` where the field used to be) and the constant
+// went with it rather than being kept "in case": a coordinate that nothing places
+// anything at is a coordinate the next author will place something at.
 
 /**
  * The highest y the figure may start at: 152.
  *
- * {@link KICKER_TOP} plus one line of 11px mono (≈14px at the deck's default
- * line-height) puts the kicker's last pixel at ≈148, rounded up to a clear line.
- * The ceiling half of the vertical budget, stated as a number so the test can
- * hold the ring to it — the top pillar's box top is 190, 38px under it, and an
- * ellipse raised to close that gap would have to lower its bottom.
+ * THE HEADLINE'S OWN FLOOR, PLUS A LINE. `.slide-headline-row` is at `top: 80px` and
+ * a one-line `.slide-headline.small` is 40px on 1.05 line-height, so the headline's
+ * last pixel is at y ≈ 122; 152 clears it by 30, which is one 11px mono line plus the
+ * gap either side of it. The number is unchanged from when a kicker occupied that
+ * band, and deliberately so — it was never the kicker's ceiling, it was the FIGURE's,
+ * and the figure's relationship to the headline did not change when the line between
+ * them went away.
+ *
+ * The ceiling half of the vertical budget, stated as a number so the test can hold the
+ * ring to it — the top pillar's box top is 190, 38px under it, and an ellipse raised
+ * to close that gap would have to lower its bottom into the floor budget below.
  */
 export const FIGURE_CEILING = 152;
 
@@ -386,9 +413,10 @@ export const FOCUS_GROWTH_SPENT: number =
  * The lowest pillar's bottom edge AT THE POSE THAT FOCUSES IT: 616.52.
  *
  * §7.1's re-check, done against the pose that is actually at risk. Pillar
- * {@link LOWEST_PILLAR_INDEX} is one of the six the walk focuses — the walk visits
- * all six, one beat each (`./walk.ts`) — so this pose is reached in front of a room
- * and is not a hypothetical worst case.
+ * {@link LOWEST_PILLAR_INDEX} is lit by a hover, by a pin, and by the RECAP pose that
+ * lights all six at once (`showsRecap` in `./walk.ts`) — and that last one is
+ * `canonicalPose`, so this is not a hypothetical worst case and not even only a live
+ * one: it is the frame the PDF and PPTX exports print.
  *
  * THE HALO IS INSIDE THIS NUMBER even though no rendered measurement can see it,
  * which is what makes this the honest bottom edge rather than the measurable one.
@@ -513,14 +541,14 @@ export const FOCUSED_WALK_COLUMN_GAP: number =
   WALK_COLUMN_LEFT - FOCUSED_OUTERMOST_RIGHT;
 
 /**
- * The slot the walk writes into: the decision column, and then the closer.
+ * The slot the panel writes into: the idle block, the six decisions, and the recap.
  *
  * ONE OBJECT, because five of these numbers are one rectangle and the sixth is the
  * gutter inside it. A renderer that assembled them from the loose constants would be
- * free to place the eyebrow, the decision and the closer in three slightly different
- * columns — and it would, because the closer is written at a different pose from the
- * beats. They are two poses of the SAME slot (see `showsWalkColumn` in `./walk.ts`
- * for why the column's own hairline outlives the beats).
+ * free to place the idle lead, a decision and the recap in three slightly different
+ * columns — and it would, because they are written at different moments. They are
+ * eight states of the SAME slot; `PanelBlock` in `./components/PillarOrbit.tsx` is
+ * what makes that literal, and the column's own hairline outlives all eight.
  *
  * `right` IS A CSS OFFSET, NOT AN x. The column is placed `left`/`right` so its
  * type wraps against the deck's own {@link SIDE_MARGIN} — a fixed width plus a left
@@ -538,12 +566,18 @@ export const FOCUSED_WALK_COLUMN_GAP: number =
  * (6px of misalignment nobody could see) and whose floor was at 658 while the panel
  * stopped at y = 604, 54px short of it for no stated reason.
  *
+ * 420px OF HEIGHT IS THE CEILING ON WHAT A DECISION MAY CARRY, and it is why
+ * `Pillar.points` in `./content.ts` is capped at four. The tallest block the column
+ * holds is a four-point decision — eyebrow, name, a two-line sentence, a rule and
+ * four rows — at roughly 290px, centred on y = 400. A fifth point would put the block
+ * within 60px of both ends of a slot the ring itself is measured against.
+ *
  * AND THERE IS NO `width`. One was carried here and removed: `left` + `right` place
  * the column, the renderer reads nothing else, and the 468 it held was the column's
  * OUTER width — not the measure the type gets, which is 468 less the 28px gutter and
  * the 1px rule. A constant that no renderer reads and whose name overstates what it
  * measures is worse than the arithmetic it saves; the harness measures the content
- * box off the element instead (`scripts/gh55-verify.mjs`).
+ * box off the element instead (`scripts/c1-figure-verify.mjs`).
  */
 export const WALK_COLUMN: {
   readonly left: number;

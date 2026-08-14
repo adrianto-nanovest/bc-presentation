@@ -1,0 +1,727 @@
+/* TAM AND KOTTER — every keyframe the two-engine figure runs.
+ *
+ * KEYFRAMES `tk-` PREFIXED AND IMPORTED BY ./TamKotterFrames.tsx, which is the convention
+ * `./agentic-org.css`, `../../leader-gap/components/no-sop.css` and
+ * `../../leader-gap/components/failures-pattern.css` set in this tree and the rule stated
+ * beside `gap-ladder-draw` in `src/styles/globals.css`: every slide family owns its own
+ * keyframes, so retiming one figure can never retime another's. Nothing here is global and
+ * nothing here is shared.
+ *
+ * WHY THIS FILE EXISTS AT ALL, when this figure shipped with the sentence "NO NEW KEYFRAME,
+ * NO NEW CLASS" at the top of its component. That sentence was true of a figure whose whole
+ * motion budget was one cross-fade per presenter click: a transition has a resting pair of
+ * values to move between, and a six-pose walk supplied them. This figure has neither. It
+ * arrives COMPLETE in a single pose — so its build has no "before" pose to transition from
+ * and must be a one-shot animation on mount — and its connectors CARRY MOTION AT REST,
+ * which is a loop and not a change. Both are the two shapes a transition cannot express, so
+ * both are keyframes.
+ *
+ * ═══ FOUR FAMILIES, AND THEY ANSWER FOUR DIFFERENT QUESTIONS:
+ *
+ *   · THE BUILD (`tk-draw`, `tk-fade-in`) — one shot, on mount, staggered. Runs when the
+ *     slide is REACHED rather than when a step is pressed, because `src/deck/Deck.tsx`
+ *     renders only the active slide and the component type changes on every slide move, so
+ *     mounting IS arriving. Every one of them ends on the resting frame. The stagger is set
+ *     INLINE per element by `BUILD` in ./TamKotterFrames.tsx, which owns the timetable.
+ *   · THE CURRENT (`tk-current`) — infinite, on the LEFT frame's five connector paths, and
+ *     the acceptance model's claim stated as motion: belief is PRODUCED downstream of
+ *     conditions somebody sets, continuously, for as long as those conditions hold. It is a
+ *     circuit and it has no beginning.
+ *   · THE RUNNER AND ITS STATIONS (`tk-runner`, `tk-station`) — infinite, on the RIGHT
+ *     frame's rail, and the change model's claim stated as motion: ONE pass, in one
+ *     direction, touching five stations in order. It has a beginning, it has an end, and it
+ *     cannot reach the fourth station without passing the third.
+ *   · THE MARKS (`tk-*` per glyph) — infinite, one per node, ten of them. Each is the node's
+ *     own verb drawn small.
+ *
+ * ═══ THE TWO LOOPS ARE THE FIGURE'S ARGUMENT AND NOT ITS DECORATION, which is the one
+ * thing worth reading this file for. The whole slide turns on the difference between a
+ * CAUSAL model and an ORDERED one, and every static channel available for saying so is
+ * already spent: shape (fan against rail), position, arrowheads, copy. Motion is the one
+ * channel a printed diagram does not have, and it is spent on the same distinction rather
+ * than on liveliness — a continuous many-dot current against a single ordered runner. Swap
+ * the two and the figure would be arguing the models backwards.
+ *
+ * ═══ AND NEITHER LOOP MAY RANK ANYTHING, which is the no-third-ladder guardrail (§6.6)
+ * applied to time. The current runs at ONE speed on all five left-hand paths with ONE dash
+ * pattern. The runner is ONE mark at ONE speed, and its five station flashes are one
+ * keyframe at one duration with delays that are `i × pitch` apart
+ * (`kotterStationOffset` in ../tam-kotter-geometry.ts) — so over a cycle every station gets
+ * a byte-identical flash. A runner that slowed at one station, or a flash that was brighter
+ * or longer at the first, would be a scale drawn in time, which is the same object §6.6
+ * refuses drawn in space.
+ *
+ * ═══ ZERO SMIL, at both poses, under either motion preference — and this figure now keeps
+ * that rule the way C.1 keeps it rather than the way it used to. It used to mount no
+ * `<svg>` at all, which closed the question by construction and cost the figure twelve
+ * `<div>` rules, eight CSS border-triangles and any possibility of a connector that could
+ * be drawn or carry a current. It now mounts one `<svg>` and no `<animate>`,
+ * `<animateTransform>`, `<animateMotion>`, `<set>` or `<animateColor>` element: SMIL is
+ * invisible to the reduced-motion squash in `globals.css` and would have to be gated behind
+ * a `matchMedia` at mount, and a CSS animation is not and does not. The media block at the
+ * bottom of this file finishes the job the squash cannot.
+ *
+ * NO HEX AND NO rgba() LITERAL. Every colour here is a `src/styles/globals.css` token.
+ */
+
+/* ───────────────────── the build ───────────────────── */
+
+/* A CONNECTOR BEING DRAWN — the figure's structural claim, drawn rather than faded. Eleven
+   paths run this: five on the left chain (two fork arms, two merge arms, one drop) and six
+   on the right (one rail and five ties).
+ *
+ * FROM THE START OF THE PATH, WHICH IS THE UPSTREAM END OF EVERY PATH IN THIS FIGURE.
+ * Elements set `pathLength={1}`, so `stroke-dasharray: 1` is one dash covering the whole
+ * path in path-normalised units whatever the path's real length — which matters here
+ * because the nine paths are five different lengths. A dashoffset of 1 pushes the ON segment
+ * entirely BEFORE the start of the path and leaves nothing painted; walking it to 0 slides
+ * the segment back over the path from its START. Every `d` string in
+ * ../tam-kotter-geometry.ts is authored cause-first — the fork leaves the source node, the
+ * merge leaves the beliefs, the rail starts at the first link — so "from the start" is "in
+ * the direction the model claims things happen". A `from { stroke-dashoffset: -1 }`, the
+ * sign `shape-spoke-draw` uses next door, would draw the identical nine lines backwards:
+ * beliefs reaching up to their causes, and a sequence assembling from its last step.
+ *
+ * `backwards` AND NOT `both`: the resting `to` frame is the element's own painted state, so
+ * the fill is only needed BEFORE the animation starts, and leaving the end unfilled hands
+ * the element back to the stylesheet. */
+@keyframes tk-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.tk-draw {
+  /* PAIR WITH pathLength={1} ON THE ELEMENT. */
+  stroke-dasharray: 1;
+  animation: tk-draw 560ms var(--ease) backwards;
+}
+
+/* PLAIN OPACITY, AND THE KEYFRAME THREE FAMILIES SHARE — the eight arrowheads, which cannot
+   be "drawn" because a triangle has no direction to be drawn in, and the two motion
+   overlays, which must not start before the line they ride on has finished drawing.
+ *
+ * THE OVERLAYS FADE ON A WRAPPER `<g>` AND NOT ON THE ANIMATED ELEMENT ITSELF. That is the
+ * one structural decision in this file that is not obvious from the rule it enforces: an
+ * element carrying both `tk-fade-in` and `tk-current` carries one `animation` shorthand, and
+ * any later class change on it would restart BOTH — so the current would blink every time
+ * anything about the element was touched. On a wrapper the fade runs once, at mount, and the
+ * loop underneath it is never retimed. `agentic-org.css` records the same trap. */
+@keyframes tk-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.tk-fade-in {
+  animation: tk-fade-in 420ms var(--ease) backwards;
+}
+
+/* ───────────────────── the current · the LEFT frame ───────────────────── */
+
+/* MANY DOTS, ALWAYS, IN ONE DIRECTION: DOWNSTREAM. Six external conditions and two beliefs
+   do not take turns — the acceptance model is a standing claim about what produces what, so
+   its motion is a standing current rather than an event.
+ *
+ * USER UNITS HERE, NOT pathLength, and the overlay therefore deliberately does NOT set
+ * `pathLength`. `3 15` is 3px of dot and 15px of gap on a 1280×720 viewBox, which is the
+ * same dot spacing on all five paths regardless of their length — what makes the five read
+ * as one system. Normalising would give the 14px drop a single vast dot and the 152px fork
+ * arms tight ones.
+ *
+ * −18 IS ONE WHOLE PERIOD (3 + 15), so the loop closes on itself and there is no seam.
+ * NEGATIVE, so the pattern travels in the +path direction, which every `d` string in this
+ * figure authors as cause → effect. Positive would run belief back up into the conditions
+ * that produced it. */
+@keyframes tk-current {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+.tk-current {
+  stroke-dasharray: 3 15;
+  animation: tk-current 1100ms linear infinite;
+}
+
+/* ───────────────────── the runner · the RIGHT frame ───────────────────── */
+
+/* ONE MARK, ONE PASS, TOP TO BOTTOM. The change model's claim is that five things happen in
+   an order, and this is the only element on the stage that says so in a way a room cannot
+   read as a list: a 34px bright segment sweeping the whole 290px rail, once per cycle,
+   forever.
+ *
+ * THE DASH PATTERN SUMS TO THE RAIL'S OWN LENGTH — 34 + 256 = 290 = `BODY_HEIGHT`, and the
+ * travel below is the same number. That is what makes the loop seamless: after one period
+ * the pattern has advanced exactly one whole repeat, so the segment leaves the bottom of the
+ * rail in the same frame the next one enters the top. Any other pair of numbers produces a
+ * visible jump or a second runner.
+ *
+ * 4200ms IS SLOW ON PURPOSE. The runner has to be readable as ONE thing travelling — at
+ * 1500ms it reads as a flicker, and the five station flashes stop being separable events. It
+ * is also the period every one of those flashes is timed against, so this number and
+ * `tk-station`'s must stay equal; ./TamKotterFrames.tsx derives the five delays from
+ * `RUNNER_MS` and the geometry's station offsets so they cannot drift apart. */
+@keyframes tk-runner {
+  to {
+    stroke-dashoffset: -290;
+  }
+}
+.tk-runner {
+  stroke-dasharray: 34 256;
+  stroke-linecap: round;
+  animation: tk-runner 4200ms linear infinite;
+}
+
+/* A STATION, FLASHING AS THE RUNNER REACHES IT. Five overlays on the five ties, one
+   keyframe, one duration, five delays — and the delays are the only thing that differs
+   between them.
+ *
+ * IT IS THE HALF OF THE MOTION THAT MAKES THE RUNNER MEAN SOMETHING. A segment sliding down
+ * a bare rail is an animation; a segment that lights each station as it arrives is a
+ * sequence being executed, and it is the one place this figure says "the order matters"
+ * without printing a numeral or raising a box.
+ *
+ * 0% AND 100% ARE THE SAME FRAME, which is the deck's rule for every infinite animation: the
+ * squashed single iteration a reduced-motion reader gets must land on a composed frame. Here
+ * that frame is `opacity: 0` — the flash is a decoration on a tie that is already painted
+ * underneath, so its resting state is absent rather than present, and the media block at the
+ * foot of this file removes it outright.
+ *
+ * THE FLASH IS 8% OF THE CYCLE — 336ms of a 4200ms period — which is roughly how long the
+ * 34px runner takes to pass a point on the rail (34/290 of the period is 8.1%). Longer and
+ * two stations would be lit at once, which would read as a range rather than as an arrival. */
+@keyframes tk-station {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0;
+  }
+}
+.tk-station {
+  opacity: 0;
+  stroke-linecap: round;
+  animation: tk-station 4200ms linear infinite;
+}
+
+/* ───────────────────── the card, under the pointer ───────────────────── */
+
+/* TEN CARDS THAT ANSWER THE POINTER (owner call, 2026-08-14). The figure is an INDEX — the
+ * room is expected to read it out of order, and a presenter talking over it needs somewhere
+ * to point. Hover is the cheapest possible way to give them that: no state, no re-render, no
+ * pose, and nothing that can get stuck open.
+ *
+ * ═══ IT IS ALL ADDED LIGHT AND NOT ONE THING IS SUBTRACTED, which is §7.1 and the reason
+ * this is five `:hover` declarations rather than a `.is-dimmed` class on the other nine. The
+ * card under the pointer GAINS a brighter border, a lifted ground, a copper halo, a brighter
+ * label, a brighter mark and a brighter ordinal; the nine beside it are byte for byte
+ * unchanged. `./PillarOrbit.tsx`'s browser harness checks exactly that property on C.1 by
+ * comparing eleven computed values per pillar, and the same check would pass here.
+ *
+ * ═══ NO POINTER STATE IN REACT, DELIBERATELY, AND THIS IS WHERE IT DIFFERS FROM C.1. That
+ * slide's pillars are `<button>`s with hover, focus and pin state, because opening one
+ * REPLACES the content of a panel 400px away — a change at a distance needs a model of which
+ * thing is open. Nothing here changes anywhere but on the card itself, so CSS is the whole
+ * mechanism: `:hover` cannot desynchronise from the DOM, survives the build animation, and
+ * costs the figure no render.
+ *
+ * ═══ THE TRANSITION RESTATES `.fade`'s TWO PROPERTIES. `src/styles/globals.css` puts
+ * `transition: opacity, transform` on `.fade`, and both classes are one class deep — so a
+ * bare `transition: border-color …` here would REPLACE that shorthand and the build's fade
+ * would become a jump. All five properties are listed for that reason, and the two that
+ * belong to the build keep the build's own 0.45s.
+ *
+ * NOT A `<button>` AND NO `cursor` RULE. `src/deck/Slide.tsx` already sets `cursor: pointer`
+ * on the whole stage because a click anywhere advances a step, so a card cannot say anything
+ * with the cursor; and a real control here would swallow that click without offering anything
+ * in exchange. The cards are read, not operated. */
+/* ═══ THE CARD'S OWN CHROME IS DECLARED HERE AND NOT INLINE, AND THAT IS THE WHOLE REASON
+ * THE HOVER WORKS. It was inline — `border`, `backgroundColor` and the label's `color` were
+ * written into the element's `style` by ./TamKotterFrames.tsx — and the first cut of this
+ * block therefore did nothing at all: an inline declaration outranks every stylesheet rule
+ * regardless of specificity, so `.tk-card:hover { border-color }` was silently ignored and
+ * only the `box-shadow`, which had no inline value to lose to, appeared. Measured in a
+ * browser, not reasoned about: the hovered card's computed border and background came back
+ * byte for byte identical to the other nine.
+ *
+ * SO THE FOUR PROPERTIES THAT CHANGE UNDER THE POINTER LIVE IN THIS FILE — the border, the
+ * ground, the label's colour and the ordinal's — and the `TIER` table in
+ * ./TamKotterFrames.tsx says so where those roles used to be. It is the same rule the ten
+ * glyph strokes have followed since they were drawn: a colour that has two states belongs
+ * where both states can be written. Everything that has ONE state stays in `TIER`, which is
+ * still the one place the figure's rank is decided. */
+.tk-card {
+  box-sizing: border-box;
+  border: 1px solid var(--copper-700);
+  background-color: var(--copper-950);
+  color: var(--copper-300);
+  /* THE TRANSITION RESTATES `.fade`'s TWO PROPERTIES — see the note above this rule. */
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease),
+    border-color 0.2s var(--ease), background-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease), color 0.2s var(--ease);
+}
+.tk-card:hover {
+  border-color: var(--copper-500);
+  background-color: var(--copper-900);
+  /* A HARD 1px RING PLUS ONE SOFT SPILL. The ring is what reads at projection distance and
+     the spill is what makes the card look lifted off the frame's own ground rather than
+     merely outlined twice. Both are `box-shadow`, so neither costs a pixel of layout — a
+     card that grew on hover would move the connector that points at it. */
+  box-shadow: 0 0 0 1px var(--copper-600), 0 0 20px -6px var(--copper-700);
+}
+/* THE LABEL INHERITS AND THE CAPTION DOES NOT, which is how one hover rule brightens exactly
+   the right string. The label takes the card's own `color`, so `.tk-card:hover` moves it; the
+   caption carries `--neutral-300` of its own from `TIER.support` and is untouched. */
+.tk-card-label {
+  color: inherit;
+}
+.tk-card:hover {
+  color: var(--copper-200);
+}
+.tk-card-index {
+  color: var(--copper-400);
+  transition: color 0.2s var(--ease);
+}
+.tk-card:hover .tk-card-index {
+  color: var(--copper-300);
+}
+.tk-card:hover .tk-glyph :is(path, line, circle, rect, polyline, polygon) {
+  stroke: var(--copper-200);
+}
+.tk-card:hover .tk-glyph .tk-solid {
+  fill: var(--copper-200);
+}
+/* THE CAPTION DOES NOT BRIGHTEN, and that is the one omission in this block. It is already at
+   `--neutral-300`, which is gh#50's floor for prose on a dark stage and the tier every
+   supporting string on this figure sits at; lifting it on hover would make the resting state
+   look like the dimmed one — the exact reading §7.1 forbids — because a reader who has seen a
+   caption brighten cannot un-see that the other nine are darker. Copper is the hover channel
+   here and prose is not in it. */
+
+/* ───────────────────── the ten marks ───────────────────── */
+
+/* THE BASE, AND EVERY GLYPH IS STROKED COPPER UNLESS IT ASKS TO BE FILLED. One stroke
+   width for all ten marks (1.6 in a 20-unit viewBox, so ≈1.6px painted), one cap, one join,
+   one tier — because a glyph drawn heavier than the nine beside it would rank its node, and
+   ranking a node is the one thing this stage may not do. `../tam-kotter-geometry.ts` holds
+   the same line in space by giving all ten marks one size. */
+.tk-glyph {
+  display: block;
+}
+.tk-glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.tk-glyph :is(path, line, circle, rect, polyline, polygon) {
+  fill: none;
+  stroke: var(--copper-300);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* THE ONE OPT-OUT. A filled mark inside a stroked one is what makes a knob a knob and a bar
+   a bar; it is the same tier, so it adds no rank. */
+.tk-glyph .tk-solid {
+  fill: var(--copper-300);
+  stroke: none;
+}
+/* Quieter chrome INSIDE a mark — a slider's track, a ramp's ground, a trophy's plinth, a
+   clock's bells. One tier down, so the moving part of every glyph is the part the eye lands
+   on.
+ *
+ * `--copper-400` AND NOT `--copper-500`, WHICH IS A MEASURED CORRECTION. At 1.3px in
+ * `--copper-500` (0.2168) the ramp under `ease-of-use` and the ground under `enable` did not
+ * resolve at all in a 2× screenshot of the stage, so two of the ten marks shipped as a bare
+ * diagonal and a bare angle — shapes that mean nothing without the surface they are drawn
+ * against. It is the same failure `RULE_THICKNESS` in `../tam-kotter-geometry.ts` records
+ * about 2px connectors, one order of magnitude smaller. One tier of separation from the
+ * mark's own `--copper-300` is enough to rank chrome below subject; two is enough to lose
+ * it. */
+.tk-glyph .tk-quiet {
+  stroke: var(--copper-400);
+  stroke-width: 1.3;
+}
+/* THE `transform-box` DECLARATION IS LOAD-BEARING AND IS SET ONCE, HERE. A CSS transform on
+   an SVG child resolves `transform-origin` against the element's own bounding box only if
+   `transform-box: fill-box` is declared; without it the origin is the nearest viewport's
+   origin and a `scaleY` on a 3px bar sends it across the glyph. Groups that rotate about a
+   named point in the glyph's own coordinates opt back out to `view-box` on their own rule. */
+.tk-glyph [class*="tk-anim"] {
+  transform-box: fill-box;
+}
+
+/* ── EXTERNAL FACTORS · three sliders being set ──────────────────────────────
+   The one mark on the stage that is a CONTROL, because the node it belongs to is the only
+   tier of the acceptance model a leader can reach. Three knobs, three phases, no two of
+   them in step: conditions are set, adjusted and set again. */
+.tk-glyph-external-factors .tk-anim-knob-a {
+  animation: tk-knob-a 4400ms var(--ease) infinite;
+}
+.tk-glyph-external-factors .tk-anim-knob-b {
+  animation: tk-knob-b 4400ms var(--ease) infinite;
+}
+.tk-glyph-external-factors .tk-anim-knob-c {
+  animation: tk-knob-c 4400ms var(--ease) infinite;
+}
+@keyframes tk-knob-a {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  45%,
+  70% {
+    transform: translateX(5px);
+  }
+}
+@keyframes tk-knob-b {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30%,
+  60% {
+    transform: translateX(-4px);
+  }
+}
+@keyframes tk-knob-c {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  55%,
+  85% {
+    transform: translateX(4.5px);
+  }
+}
+
+/* ── PERCEIVED USEFULNESS · three bars rising ────────────────────────────────
+   "Will this help me do my job better?" is a question about a measurable, so the mark is
+   the only chart on the stage. The three grow in order and hold, which is what a belief
+   about usefulness is: evidence accumulating. */
+.tk-glyph-usefulness .tk-anim-bar {
+  transform-origin: bottom;
+}
+.tk-glyph-usefulness .tk-anim-bar-1 {
+  animation: tk-bar 3600ms var(--ease) infinite;
+}
+.tk-glyph-usefulness .tk-anim-bar-2 {
+  animation: tk-bar 3600ms var(--ease) 180ms infinite;
+}
+.tk-glyph-usefulness .tk-anim-bar-3 {
+  animation: tk-bar 3600ms var(--ease) 360ms infinite;
+}
+/* 0% AND 100% ARE FULL HEIGHT AND THE DIP IS IN THE MIDDLE, which is the deck's rule for
+   every infinite animation and was got WRONG in this figure's first cut: the bars grew FROM
+   0.18 to 1, so the frame a reduced-motion reader was parked on — the 100% frame — was three
+   collapsed stubs in the corner of a node. Growing from nothing also cannot loop without
+   collapsing again, which reads as evidence being taken away. A chart that dips and recovers
+   is the same "evidence accumulating" idiom with a composed rest frame. */
+@keyframes tk-bar {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  32% {
+    transform: scaleY(0.38);
+  }
+  64% {
+    transform: scaleY(1);
+  }
+}
+
+/* ── PERCEIVED EASE OF USE · a dot running down a ramp ───────────────────────
+   The ramp is straight for a reason that is not aesthetic: the dot is moved by a linear
+   `translate`, so a curved ramp would leave it visibly off the line. `ease-in` on the way
+   down is the whole idiom — the thing gets easier as it goes, which is what "easy to learn"
+   means and what the caption's question is asking about. */
+.tk-glyph-ease-of-use .tk-anim-glider {
+  animation: tk-glide 3200ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+/* IT ENDS WHERE IT STARTED AND VISIBLE, for the reason `tk-bar` records: the 100% frame is
+   what a reduced-motion reader is parked on, and the first cut of this keyframe ended at
+   `opacity: 0` — an invisible dot on a bare ramp. The dot now fades out at the bottom, cuts
+   back to the top while invisible, and fades in there, so the loop has no visible return
+   journey and the rest frame is a dot at the top of a ramp. */
+@keyframes tk-glide {
+  0%,
+  8% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  60%,
+  70% {
+    transform: translate(13px, 10px);
+    opacity: 1;
+  }
+  80%,
+  84% {
+    transform: translate(13px, 10px);
+    opacity: 0;
+  }
+  85%,
+  92% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+/* ── BEHAVIORAL INTENTION · a check drawn inside a thought ───────────────────
+   The model's construct is a DECISION that has not happened yet, so the mark is a decision
+   being made over and over rather than a tick that is simply there. `pathLength={1}` on the
+   check, so the draw is the same speed however the path is re-cut. */
+.tk-glyph-intention .tk-anim-check {
+  stroke-dasharray: 1;
+  animation: tk-check 3400ms var(--ease) infinite;
+}
+/* IT PARKS DRAWN, WHICH MEANS IT ERASES IN THE MIDDLE RATHER THAN AT THE END. The first cut
+   ran 1 → 0 → 1 and left a reduced-motion reader looking at an empty thought bubble — the
+   node's whole point, missing. Running 0 → 1 → 0 puts the un-drawing where the room reads it
+   as reconsidering, and the 100% frame is a decision made. */
+@keyframes tk-check {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  18%,
+  24% {
+    stroke-dashoffset: 1;
+  }
+  56%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.tk-glyph-intention .tk-anim-tail-1 {
+  animation: tk-tail 3400ms var(--ease) infinite;
+}
+.tk-glyph-intention .tk-anim-tail-2 {
+  animation: tk-tail 3400ms var(--ease) 160ms infinite;
+}
+@keyframes tk-tail {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  45% {
+    opacity: 1;
+  }
+}
+
+/* ── ACTUAL USE · something running, with a ring around it ───────────────────
+   The end of the chain and the only construct in the model anybody can measure, so the mark
+   is the only one that shows a thing IN OPERATION rather than a thing being weighed. The
+   ring is a second copy of the frame, scaled out and faded — the visible sign that the box
+   is doing something rather than sitting there. */
+.tk-glyph-actual-use .tk-anim-pulse {
+  transform-origin: center;
+  animation: tk-pulse 2800ms var(--ease) infinite;
+}
+@keyframes tk-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+.tk-glyph-actual-use .tk-anim-play {
+  transform-origin: center;
+  animation: tk-play 2800ms var(--ease) infinite;
+}
+@keyframes tk-play {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+/* ── CREATE URGENCY · a clock, running ───────────────────────────────────────
+   The one glyph on the stage that never pauses and never reverses, which is the caption's
+   point: "Why must we change NOW?" is a question about a clock that is already running.
+   `view-box` and not `fill-box`, because the hand rotates about the FACE's centre — a point
+   in the glyph's own coordinates — and not about its own bounding box. */
+.tk-glyph-urgency .tk-anim-hand {
+  transform-box: view-box;
+  transform-origin: 10px 11px;
+  animation: tk-sweep 2600ms linear infinite;
+}
+@keyframes tk-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.tk-glyph-urgency .tk-anim-bell {
+  animation: tk-bell 2600ms var(--ease) infinite;
+}
+@keyframes tk-bell {
+  0%,
+  70%,
+  100% {
+    opacity: 0.4;
+  }
+  80%,
+  92% {
+    opacity: 1;
+  }
+}
+
+/* ── BUILD COALITION · three links drawing between three people ──────────────
+   Three dots that are always there and three links that are not: a coalition is not who is
+   in the room, it is what is joined. The three draw in sequence and hold, then reset —
+   `pathLength={1}` on each, so all three draw at one speed despite being different lengths. */
+.tk-glyph-coalition .tk-anim-link {
+  stroke-dasharray: 1;
+}
+.tk-glyph-coalition .tk-anim-link-1 {
+  animation: tk-link 4000ms var(--ease) infinite;
+}
+.tk-glyph-coalition .tk-anim-link-2 {
+  animation: tk-link 4000ms var(--ease) 260ms infinite;
+}
+.tk-glyph-coalition .tk-anim-link-3 {
+  animation: tk-link 4000ms var(--ease) 520ms infinite;
+}
+/* IT PARKS JOINED, for the reason `tk-check` records: the rest frame of a coalition mark has
+   to be a coalition. The three links come apart in the middle of the cycle and re-join, which
+   is what building one actually looks like. */
+@keyframes tk-link {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  16%,
+  22% {
+    stroke-dashoffset: 1;
+  }
+  52%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ── ENABLE ACTION · a barrier lifting ───────────────────────────────────────
+   "Remove the barriers" is an ACT, and the mark is the act rather than its result: the arm
+   goes up, stays up long enough to be read, and comes back down so it can go up again. A
+   permanently-raised barrier would be a state, and the caption is an imperative.
+   `view-box`, because the arm pivots on its hinge — a named point on the post. */
+.tk-glyph-enable .tk-anim-arm {
+  transform-box: view-box;
+  transform-origin: 5.6px 9.1px;
+  animation: tk-lift 3800ms var(--ease) infinite;
+}
+@keyframes tk-lift {
+  0%,
+  12% {
+    transform: rotate(0deg);
+  }
+  42%,
+  78% {
+    transform: rotate(-62deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* ── GENERATE WINS · a cup, catching light ───────────────────────────────────
+   "Show early, tangible results" — the mark is the most literal on the stage on purpose,
+   because the caption's requirement is that the organisation SEES something. Two sparks,
+   out of phase, so the glyph reads as catching light rather than blinking. */
+.tk-glyph-wins .tk-anim-spark {
+  transform-origin: center;
+}
+.tk-glyph-wins .tk-anim-spark-1 {
+  animation: tk-spark 3000ms var(--ease) infinite;
+}
+.tk-glyph-wins .tk-anim-spark-2 {
+  animation: tk-spark 3000ms var(--ease) 900ms infinite;
+}
+@keyframes tk-spark {
+  0%,
+  60%,
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  22% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── ANCHOR IN CULTURE · an anchor, holding ──────────────────────────────────
+   THE ONLY MARK ON THE STAGE THAT DOES NOT PERFORM ITS VERB, and that is the argument. Every
+   other glyph moves because its node is something somebody DOES; the last link of the change
+   model is the one that says the doing is over — "make it how we work, NOT a project". So
+   the anchor only breathes, by less than a pixel, and a room that has watched nine marks
+   work reads the tenth as at rest. */
+.tk-glyph-anchor .tk-anim-body {
+  animation: tk-hold 4600ms ease-in-out infinite;
+}
+@keyframes tk-hold {
+  0%,
+  100% {
+    transform: translateY(-0.5px);
+  }
+  50% {
+    transform: translateY(0.9px);
+  }
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* THE GLOBAL SQUASH IS NOT ENOUGH, TWICE OVER, and both gaps are the two `agentic-org.css`,
+ * the ladder and the fray already record.
+ *
+ *   1. AN INFINITE ANIMATION AT 0.01ms IS NOT A STOP — it is the same loop at 180,000×
+ *      speed, and `animation-iteration-count: 1` then parks it on its END frame. For the
+ *      current and the runner that end frame is a dash pattern frozen mid-travel, laid over
+ *      a solid line: a connector that looks broken. So both overlays are removed outright
+ *      and the drawn paths underneath are what the figure is left with — which is exactly
+ *      what it was before the motion existed, and is why `CANONICAL_POSE` in
+ *      ../tam-kotter-walk.ts can say the still figure carries the whole argument. The five
+ *      station flashes go with them: their end frame is `opacity: 0`, so they would simply
+ *      never appear, but removing the animation says so rather than relying on it.
+ *   2. THE GLOBAL RULE SQUASHES DURATIONS AND LEAVES DELAYS ALONE. This figure stages its
+ *      whole build INSIDE one pose with the stagger set INLINE per element, so a reader who
+ *      asked for no animation would otherwise watch a blank stage assemble itself silently
+ *      over 1.6 seconds. The delays are given up here.
+ *
+ * `!important` because those delays are inline and a stylesheet cannot outrank an inline
+ * style any other way — the same spend the global rule already makes.
+ *
+ * THE TEN MARKS ARE LEFT TO THE GLOBAL SQUASH, deliberately and unlike the two overlays.
+ * Every one of their keyframes has `0%` and `100%` on the same frame, so the squashed single
+ * iteration parks each glyph on its composed resting pose: bars at full height, the check
+ * drawn, the barrier down, the anchor level. That is the deck's standing rule for infinite
+ * animations and it is what makes this block three selectors long instead of thirteen. */
+@media (prefers-reduced-motion: reduce) {
+  .tk-current,
+  .tk-runner,
+  .tk-station {
+    animation: none !important;
+    opacity: 0;
+  }
+  .tk-draw,
+  .tk-fade-in {
+    animation-delay: 0s !important;
+  }
+}

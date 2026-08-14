@@ -9,9 +9,13 @@
 //   0 → bezel materializes; staggered reveal of left rail, main canvas, right rail
 //   1 → footer tagline reveals (canonical pose)
 //
-// The tagline that reveals at step 1 is the ONE piece of copy here that varies
-// with the deck set (#54) — see `f8CloserFor` in ./content for the decision and
-// why the leader decks close this slide on a different line.
+// THE COPY ON THIS SLIDE VARIES WITH THE DECK SET IN TWO PLACES, both resolved by
+// ./content and neither by a ternary here:
+//   · the tagline that reveals at step 1 (#54) — `f8CloserFor`
+//   · the figure label and the headline (owner call, 2026-08-14) — `f8HeaderFor`
+// Read the decisions there. Both exist for one reason: the standard decks run this
+// as F.8 in front of people who will build it, the leader decks run it at C.2 in
+// front of someone who will fund it.
 //
 // Click-to-advance is blocked inside the bezel via data-no-advance on
 // the monitor wrapper (see Slide.tsx click handler).
@@ -23,7 +27,9 @@ import { HintIcon } from "@/components/HintIcon";
 import { highlight } from "@/components/highlight";
 import { AgenticOSMonitor } from "./components/AgenticOSMonitor";
 import { Reveal } from "./components/Reveal";
-import { f8CloserFor, f8Content } from "./content";
+// `f8Content` is not imported here any more: the header was its last reader on this
+// slide, and the monitor's own copy goes straight to <AgenticOSMonitor />.
+import { f8CloserFor, f8HeaderFor } from "./content";
 
 export function F8YourAgenticOs() {
   const { stepIndex } = useDeck();
@@ -38,10 +44,14 @@ export function F8YourAgenticOs() {
   // bridge's beat 2 does, since the component is the only consumer; `VARIANT`
   // itself resolves at module scope, so one module epoch holds one deck set.
   const closer = f8CloserFor(VARIANT.deckSet);
+  // The header follows the same audience the closer does, and off the same field.
+  // The LETTER in front of the label is still not ours: `FigLabel` derives `C.2` /
+  // `F.8` from the composed position (§3.5), and only the label text is picked here.
+  const header = f8HeaderFor(VARIANT.deckSet);
 
   return (
     <>
-      <FigLabel label="YOUR AGENTIC OS" />
+      <FigLabel label={header.figLabel} />
 
       <div className="slide-headline-row">
         <h1
@@ -49,7 +59,7 @@ export function F8YourAgenticOs() {
           className="slide-headline small"
           style={{ textAlign: "left", margin: 0 }}
         >
-          {highlight(f8Content.headline, f8Content.headlineKw)}
+          {highlight(header.headline, header.headlineKw)}
         </h1>
       </div>
 

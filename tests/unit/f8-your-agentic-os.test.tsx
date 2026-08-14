@@ -30,7 +30,9 @@ import {
 import {
   f8CloserFor,
   f8Content,
+  f8HeaderFor,
   type F8Closer,
+  type F8Header,
 } from "@/slides/foundation-techniques-section-f/content";
 
 // ---------------------------------------------------------------------------
@@ -55,6 +57,34 @@ const CLOSER_AS_SIGNED_OFF: Record<DeckSetId, F8Closer> = {
     tagline: "one person carries this — you decide whether a division does.",
     /** In the order `highlight()` renders them — DOM order, i.e. copy order. */
     taglineKw: ["one person", "a division"],
+  },
+};
+
+// ---------------------------------------------------------------------------
+// The header, signed off deck set by deck set (owner call, 2026-08-14).
+//
+// The figure LABEL and the HEADLINE joined the closer as deck-set-scoped copy, for
+// the same reason and by the same mechanism: at C.2 this slide stands in front of a
+// sponsor, directly behind C.1 · THE AGENTIC ORGANIZATION, and "YOUR AGENTIC OS" over
+// "The command center you carry." is builder copy that also states half of the leader
+// closer's contrast before the closer gets to it. See `f8HeaderFor` for the decision.
+//
+// LITERALS AGAIN, not values read back off `f8HeaderFor` — a test that asks the
+// content module what it holds passes through any rewording of it. The standard pair
+// is the 2026-05-14 spec's (§3.1, §10.2) and must not move by one byte; the leader
+// pair is the variant the owner call decided on.
+// ---------------------------------------------------------------------------
+const HEADER_AS_SIGNED_OFF: Record<DeckSetId, F8Header> = {
+  standard: {
+    figLabel: "YOUR AGENTIC OS",
+    headline: "The command center you carry.",
+    headlineKw: ["command center", "carry"],
+  },
+  leader: {
+    figLabel: "SIX PILLARS, ONE DESK",
+    headline: "This is where the six pillars land.",
+    /** One keyword, and it is C.1's own noun — the copper IS the baton. */
+    headlineKw: ["six pillars"],
   },
 };
 
@@ -105,6 +135,10 @@ test("§10.1 smoke — canonical pose (step 1) renders without throwing", () => 
 
 // ---------------------------------------------------------------------------
 // §10.2 — Header: FigLabel + headline present.
+//
+// THE STANDARD PAIR, because this file mounts under the default variant
+// (`localhost` → `general` → deck set `standard`) — the same epoch rule the closer
+// cases below spell out. The leader pair is asserted in "the header, per deck set".
 // ---------------------------------------------------------------------------
 test("§10.2 header — FigLabel `F.8 · YOUR AGENTIC OS` + headline present", () => {
   renderAtStep(0);
@@ -113,7 +147,12 @@ test("§10.2 header — FigLabel `F.8 · YOUR AGENTIC OS` + headline present", (
   expect(fig?.textContent).toMatch(/FIG\.\s*F\.8.*YOUR\s*AGENTIC\s*OS/i);
 
   const headline = screen.getByTestId("f8-headline");
-  expect(headline.textContent).toMatch(/the command center you carry\./);
+  // AGAINST THE SIGNED-OFF LITERAL, not a regex. The assertion here was
+  // `/the command center you carry\./` — case-sensitive, against a headline that
+  // opens on a capital T — so it had been failing since it was written and could not
+  // have caught a rewording of the string it names. Found while making the header
+  // deck-set-scoped (2026-08-14); the copy it checks is unchanged.
+  expect(headline.textContent).toBe(HEADER_AS_SIGNED_OFF.standard.headline);
 });
 
 // ---------------------------------------------------------------------------
@@ -165,7 +204,13 @@ test("§10.8 tagline — exact text visible at step 1", () => {
 });
 
 // ---------------------------------------------------------------------------
-// The closer, per deck set (#54, spec §4.1 / §4.5).
+// The header and the closer, per deck set (#54 and the 2026-08-14 owner call,
+// spec §4.1 / §4.5).
+//
+// THREE STRINGS RIDE THIS HARNESS, not one: the figure label, the headline and the
+// closer. They are asserted together because they fail together — all three resolve
+// off `VARIANT.deckSet` inside one module epoch, so a mis-wired epoch is the single
+// fault that would silently print a builder's header to a sponsor.
 //
 // F.8 is relocated to C.2 in both leader decks, where the audience will sponsor
 // this rather than build it, so the closer is deck-set-scoped copy resolved by
@@ -203,7 +248,7 @@ for (const variant of Object.values(VARIANTS)) {
 
 const realLocation = window.location;
 
-interface RenderedCloser {
+interface RenderedF8 {
   /** Raw `textContent`: "byte-identical" has to mean it. */
   text: string;
   /** The keywords `highlight()` actually rendered, in DOM order — an empty array
@@ -212,9 +257,16 @@ interface RenderedCloser {
   highlights: string[];
   /** Whether the Reveal is lit — the closer only counts at its canonical pose. */
   revealed: boolean;
+  /** The whole `.fig-label` line, letter and number included — this epoch derived
+   *  those from the composed row, so the string proves the label AND the slot. */
+  figLabelLine: string;
+  /** The headline's `textContent`, tags stripped. */
+  headline: string;
+  /** The headline's rendered keywords, in DOM order, same rule as `highlights`. */
+  headlineHighlights: string[];
 }
 
-describe("the closer, per deck set", () => {
+describe("the header and the closer, per deck set", () => {
   beforeEach(() => vi.resetModules());
 
   afterEach(() => {
@@ -225,7 +277,7 @@ describe("the closer, per deck set", () => {
     });
   });
 
-  async function closerFor(id: VariantId): Promise<RenderedCloser> {
+  async function renderF8For(id: VariantId): Promise<RenderedF8> {
     Object.defineProperty(window, "location", {
       configurable: true,
       writable: true,
@@ -281,19 +333,28 @@ describe("the closer, per deck set", () => {
 
     const closer = container.querySelector('[data-testid="f8-tagline"]');
     expect(closer, `no closer rendered for ${id}`).not.toBeNull();
+    const figLabel = container.querySelector(".fig-label");
+    expect(figLabel, `no fig label rendered for ${id}`).not.toBeNull();
+    const headline = container.querySelector('[data-testid="f8-headline"]');
+    expect(headline, `no headline rendered for ${id}`).not.toBeNull();
     return {
       text: closer?.textContent ?? "",
       highlights: Array.from(closer?.querySelectorAll("em") ?? []).map(
         (el) => el.textContent ?? "",
       ),
       revealed: /\bon\b/.test(closer?.className ?? ""),
+      figLabelLine: figLabel?.textContent ?? "",
+      headline: headline?.textContent ?? "",
+      headlineHighlights: Array.from(headline?.querySelectorAll("em") ?? []).map(
+        (el) => el.textContent ?? "",
+      ),
     };
   }
 
   test("every variant prints the closer its own deck set owns", async () => {
     for (const deckSet of DECK_SET_IDS) {
       for (const id of VARIANT_IDS_BY_DECK_SET[deckSet]) {
-        const rendered = await closerFor(id);
+        const rendered = await renderF8For(id);
         expect(rendered.text, id).toBe(CLOSER_AS_SIGNED_OFF[deckSet].tagline);
         expect(rendered.revealed, `${id}: closer revealed at canonical pose`).toBe(
           true,
@@ -305,10 +366,10 @@ describe("the closer, per deck set", () => {
   test("neither deck set prints the other's closer", async () => {
     // The negative is not implied by the positives above: both would still pass
     // if the two table rows were ever aliased to one string.
-    expect((await closerFor("berau-leader")).text).not.toBe(
+    expect((await renderF8For("berau-leader")).text).not.toBe(
       CLOSER_AS_SIGNED_OFF.standard.tagline,
     );
-    expect((await closerFor("berau-middle-mgmt")).text).not.toBe(
+    expect((await renderF8For("berau-middle-mgmt")).text).not.toBe(
       CLOSER_AS_SIGNED_OFF.leader.tagline,
     );
   });
@@ -317,13 +378,78 @@ describe("the closer, per deck set", () => {
     // The contrast IS the line, and it is carried by the highlights: a keyword
     // that misses costs the copper on "one person" or "a division" and reports
     // nothing.
-    const { highlights } = await closerFor("gems-leader");
+    const { highlights } = await renderF8For("gems-leader");
     expect(highlights).toEqual([...CLOSER_AS_SIGNED_OFF.leader.taglineKw]);
   });
 
   test("the standard closer's two keywords both land, in copy order", async () => {
-    const { highlights } = await closerFor("general");
+    const { highlights } = await renderF8For("general");
     expect(highlights).toEqual([...CLOSER_AS_SIGNED_OFF.standard.taglineKw]);
+  });
+
+  test("every variant prints the figure label and headline its own deck set owns", async () => {
+    for (const deckSet of DECK_SET_IDS) {
+      for (const id of VARIANT_IDS_BY_DECK_SET[deckSet]) {
+        const rendered = await renderF8For(id);
+        // The label is read out of the LINE, letter and number included, so this
+        // also holds §3.5: the leader decks must reach this slide at C.2 and the
+        // standard decks at F.8, and neither number is written in the slide.
+        expect(rendered.figLabelLine, id).toContain(
+          HEADER_AS_SIGNED_OFF[deckSet].figLabel,
+        );
+        expect(rendered.headline, id).toBe(HEADER_AS_SIGNED_OFF[deckSet].headline);
+      }
+    }
+  });
+
+  test("the leader decks reach this slide at C.2, the standard decks at F.8", async () => {
+    // The pairing is the point: a leader deck printing `C.2 · SIX PILLARS, ONE DESK`
+    // is the deliverable, and the same label under `F.8` would mean the header pick
+    // fired off the composed letter instead of the deck set.
+    expect((await renderF8For("berau-leader")).figLabelLine).toBe(
+      "— FIG. C.2·SIX PILLARS, ONE DESK",
+    );
+    expect((await renderF8For("general")).figLabelLine).toBe(
+      "— FIG. F.8·YOUR AGENTIC OS",
+    );
+  });
+
+  test("neither deck set prints the other's header", async () => {
+    // Same reason as the closer's negative: two aliased rows would pass every
+    // positive above.
+    const leader = await renderF8For("berau-leader");
+    expect(leader.figLabelLine).not.toContain(HEADER_AS_SIGNED_OFF.standard.figLabel);
+    expect(leader.headline).not.toBe(HEADER_AS_SIGNED_OFF.standard.headline);
+
+    const standard = await renderF8For("berau-middle-mgmt");
+    expect(standard.figLabelLine).not.toContain(HEADER_AS_SIGNED_OFF.leader.figLabel);
+    expect(standard.headline).not.toBe(HEADER_AS_SIGNED_OFF.leader.headline);
+  });
+
+  test("no leader deck says `YOUR` or `you carry` in its header", async () => {
+    // The RULE behind the copy, not the copy itself (§4.5): the second-person
+    // builder register is what C.2 was changed to drop, and a future rewording that
+    // brings either back has re-broken the thing this owner call decided. Case
+    // -insensitive, and it covers the label and the headline together.
+    for (const id of VARIANT_IDS_BY_DECK_SET.leader) {
+      const { figLabelLine, headline } = await renderF8For(id);
+      const header = `${figLabelLine} ${headline}`;
+      expect(header, `${id}: header is not addressed to a builder`).not.toMatch(
+        /\byou(r)?\b/i,
+      );
+    }
+  });
+
+  test("the leader headline's keyword lands, in copy order", async () => {
+    // One keyword, and it is the baton from C.1 — if it misses, the copper is gone
+    // and `highlight()` reports nothing.
+    const { headlineHighlights } = await renderF8For("gems-leader");
+    expect(headlineHighlights).toEqual([...HEADER_AS_SIGNED_OFF.leader.headlineKw]);
+  });
+
+  test("the standard headline's two keywords both land, in copy order", async () => {
+    const { headlineHighlights } = await renderF8For("general");
+    expect(headlineHighlights).toEqual([...HEADER_AS_SIGNED_OFF.standard.headlineKw]);
   });
 });
 
@@ -373,6 +499,69 @@ describe("f8CloserFor", () => {
       // 1–3 keywords per chunk (feedback_keyword_highlighting.md).
       expect(closer.taglineKw.length, `${deckSet}: 1–3 keywords`).toBeLessThanOrEqual(3);
       expect(closer.taglineKw.length, `${deckSet}: at least one keyword`).toBeGreaterThan(0);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `f8HeaderFor` — the header pick itself, under `f8CloserFor`'s rules.
+// ---------------------------------------------------------------------------
+describe("f8HeaderFor", () => {
+  test("every registered deck set resolves to the copy it was signed off with", () => {
+    for (const deckSet of DECK_SET_IDS) {
+      const header = f8HeaderFor(deckSet);
+      expect(header.figLabel, deckSet).toBe(HEADER_AS_SIGNED_OFF[deckSet].figLabel);
+      expect(header.headline, deckSet).toBe(HEADER_AS_SIGNED_OFF[deckSet].headline);
+      expect(header.headlineKw, deckSet).toEqual([
+        ...HEADER_AS_SIGNED_OFF[deckSet].headlineKw,
+      ]);
+      expect(header.figLabel, `${deckSet}: label is not empty`).not.toBe("");
+      expect(header.headline, `${deckSet}: headline is not empty`).not.toBe("");
+    }
+  });
+
+  test("the standard header is byte-identical to the pair the spec names", () => {
+    // The literals, not the constants — the §3.1/§10.2 half of the owner call, which
+    // is that the standard decks do not change at all.
+    expect(f8HeaderFor("standard").figLabel).toBe("YOUR AGENTIC OS");
+    expect(f8HeaderFor("standard").headline).toBe("The command center you carry.");
+  });
+
+  test("the figure label carries no letter or number of its own", () => {
+    // §3.5: `FigLabel` derives `C.2` / `F.8` from the composed row, so a label that
+    // spelled either would print it twice and go stale on the next insert.
+    for (const deckSet of DECK_SET_IDS) {
+      expect(f8HeaderFor(deckSet).figLabel, deckSet).not.toMatch(/\b[A-N]\.\d/);
+      expect(f8HeaderFor(deckSet).figLabel, deckSet).not.toMatch(/FIG/i);
+    }
+  });
+
+  test("no two deck sets share a figure label or a headline", () => {
+    const labels = DECK_SET_IDS.map((deckSet) => f8HeaderFor(deckSet).figLabel);
+    expect(new Set(labels).size).toBe(DECK_SET_IDS.length);
+    const headlines = DECK_SET_IDS.map((deckSet) => f8HeaderFor(deckSet).headline);
+    expect(new Set(headlines).size).toBe(DECK_SET_IDS.length);
+  });
+
+  test("the leader header does not spend the leader closer's contrast", () => {
+    // WHY THE HEADER CHANGED AT ALL, held as a rule and not just as copy: the closer
+    // owns the one-person/one-division contrast, and the header that shipped before
+    // this owner call said "carry" first, so the contrast landed twice. The three
+    // words that carry it are the closer's alone.
+    const header = `${f8HeaderFor("leader").figLabel} ${f8HeaderFor("leader").headline}`;
+    for (const word of ["carry", "carries", "division"]) {
+      expect(header.toLowerCase(), `leader header spends "${word}"`).not.toContain(word);
+    }
+  });
+
+  test("every keyword is a substring of the headline it highlights", () => {
+    for (const deckSet of DECK_SET_IDS) {
+      const header = f8HeaderFor(deckSet);
+      for (const kw of header.headlineKw) {
+        expect(header.headline, `${deckSet}: headline kw`).toContain(kw);
+      }
+      expect(header.headlineKw.length, `${deckSet}: 1–3 keywords`).toBeLessThanOrEqual(3);
+      expect(header.headlineKw.length, `${deckSet}: at least one keyword`).toBeGreaterThan(0);
     }
   });
 });

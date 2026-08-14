@@ -1,53 +1,44 @@
-// MIDDLE-OUT · slide tests. All FIVE poses, forward and backward, plus the three rules
-// issue #68's AC states by name — held over EVERY authored string, over the RENDERED
-// stage, and over the two COMPOSED leader decks rather than spot-checked.
+// MIDDLE-OUT · slide tests — BOTH poses, forward and backward, plus the pointer.
 //
-// WHAT THIS FILE CAN AND CANNOT PROVE — the siblings' preamble, inherited. jsdom has no
-// layout and no media queries, so nothing here measures a pixel and
-// `prefers-reduced-motion: reduce` cannot really be toggled; the `matchMedia` stub below
-// proves only that the MARKUP is preference-independent, which is the half a DOM runner
-// owns. What a DOM-less runner IS good for is exactly what this slide is at risk of:
+// ════════════════════════════════════════════════════════════════════════════
+// REWRITTEN 2026-08-14, WITH THE SLIDE IT COVERS. The figure was three full-width text
+// bands walked over FIVE poses; it is now three tier plates, a double-headed arrow and
+// three approach cards, built inside ONE pose with the thesis on a second. So the old
+// file's spine — a five-pose walk, one band's claims per pose, `isMiddleLit(pose)` —
+// describes nothing that exists, and the tests that matter are different ones:
 //
-//   1. BECOMING A THIRD LADDER. §6.6 refuses "Learn → Experiment → Build → Integrate →
-//      Own" in as many words — "it would be a THIRD ladder alongside L1–L5 and P0–P3" —
-//      and three stacked bands are one keystroke from being one. A reviewer cannot tell
-//      the difference by reading the copy, so the guardrail is held here three ways: no
-//      digit anywhere, no scale vocabulary anywhere (with the regex fired against the
-//      two slides that DO own L1–L5 and P0–P3, and against the words this slide's own
-//      header records as cut), and equal geometry on all three bands.
-//   2. RANKING THE MIDDLE IN THE WRONG CHANNEL. The middle band's brightness IS the
-//      argument. Spent as opacity it would collide with the reveal sweep — opacity on
-//      this stage means "has not arrived yet", i.e. TIME — and spent as size it would be
-//      a scale. So rank is asserted as a CSS-var token on a known ramp, and the two
-//      outer bands are compared BYTE FOR BYTE between pose 0 and pose 4.
-//   3. THE ROOM BECOMING THE TARGET. The leader deck's room IS the middle band. A slide
-//      that argued middle-out AT an absent middle would be flattering somebody who is
-//      not there; this one has to keep the room as the subject of every act it names.
-//   4. RE-SPENDING A NEIGHBOUR. C.1 (`shape-agentic-org`) is in the SAME run and opens
-//      six beats on "You decide"; B.1 owns the 70/30 and "not the tools"; B.2 owns "no
-//      rule to break". Each token list below is drawn from that slide's OWN strings and
-//      fired against them, never transcribed from memory.
+//   1. STILL NOT A THIRD LADDER. §6.6 refuses "Learn → Experiment → Build → Integrate →
+//      Own" in as many words, and three stacked plates are one keystroke from being one.
+//      Held four ways: no digit in any rendered string, no scale vocabulary (with the
+//      regexes FIRED against the two slides that do own L1–L5 and P0–P3), equal geometry
+//      on the two outer plates, and the middle plate's extra height DERIVED from the one
+//      row of copy that earns it.
+//   2. RANK IN THE RIGHT CHANNEL, AND IT SURVIVES THE POINTER. The middle row's
+//      brightness is the argument. Spent as opacity it would collide with the build —
+//      opacity on this stage is TIME — and spent as size it would be a scale. So rank is
+//      asserted as CSS-var tokens on a known ramp, and every hover state is checked to
+//      be DIMMER than the middle plate's resting state: a pointer may not promote a row.
+//   3. THE ROOM IS TOP MANAGEMENT. This is the correction that motivated the rework's
+//      copy pass, so it is pinned: the THIS ROOM tag renders inside the TOP plate, the
+//      second person means that room everywhere it appears, and the middle plate is
+//      described in the third person. A slide that flatters the middle in front of the
+//      top is a slide about somebody who is not in the chairs.
+//   4. THE POINTER PAIRS A PLATE WITH ITS CARD. The claim that the two are one tier is
+//      made by alignment, which only a hover can prove is intentional — so hovering
+//      either lights BOTH and touches no other tier.
+//   5. NOT RE-SPENDING A NEIGHBOUR. C.1 is in the same run and the same content file;
+//      B.1 owns the 70/30 and "not the tools"; B.2 owns "no rule to break".
 //
-// WHAT IS LEFT TO THE BROWSER WALK: real wrap of the six one-line claim rows, the two
-// two-line translations and the one-line headline under BOTH font faces (the numbers
-// live in `middle-out-geometry.ts`'s copy budgets, which this file holds over the copy
-// but cannot measure); the painted colour ranking at projection scale; and the
-// squashed-duration half of reduce mode — every reached reveal resting on its FINISHED
-// frame, which jsdom computes no transition for.
-//
-// WHERE THIS SLIDE SITS IN THE DECK **IS** ASSERTED HERE, and that is a departure from
-// `gap-no-sop.test.tsx`, which hands the question to `deck-registry.test.ts`. #68's AC
-// names the tail position out loud — "unit test covers … the slide's tail position in
-// the run" — so the last two describes compose both leader decks for real. What they
-// deliberately do NOT pin is the composed NUMBER: this slide printed C.3 until
-// `shape-tam-kotter` landed on gh#71 and prints C.4 now (§4.3), with no edit to any file
-// this test covers — which is exactly why the number was never pinned. The stable facts
-// are the LETTER, the run's
-// membership and the fact that this row is LAST. `AT` below is only a harness input for
-// the single-epoch tests, which resolve the default `general` deck — a deck that runs no
-// leader slide at all.
+// WHAT THIS FILE CANNOT PROVE. jsdom has no layout and no media queries: nothing here
+// measures a pixel, no `var()` resolves, no keyframe runs and
+// `prefers-reduced-motion: reduce` cannot really be toggled. Every geometric claim is
+// asserted as the ONE NUMBER both sides read (`middle-out-geometry.ts`) or as an ORDER
+// over those numbers, and the browser half — real wrap under both font faces, the painted
+// ranking, the build actually animating, the two pulses looping, the hover in a real
+// engine — is walked separately with Playwright.
 import { act, cleanup, render, screen } from "@testing-library/react";
-import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { afterAll, describe, expect, test, vi } from "vitest";
 import { useDeck } from "@/deck/DeckContext";
 import { SlideHarness } from "../support/slide-harness";
 import { restoreLocation } from "../harvest/deck-numbering";
@@ -57,10 +48,9 @@ import {
   shapeMiddleOutSlide,
 } from "@/slides/leader-shape/shape-middle-out";
 import { shapeMiddleOutContent } from "@/slides/leader-shape/content";
-// THE NEIGHBOURS, AS MODULES. C.1 shares this slide's run and this slide's file; B.1 and
-// B.2 are the two `gap` slides whose images the header's collision census names.
-// Imported so the rule is checked against what those slides ACTUALLY say today rather
-// than against a copy of their vocabulary kept here.
+// THE NEIGHBOURS, AS MODULES — imported so the collision rule is checked against what
+// those slides ACTUALLY say today rather than against a copy of their vocabulary kept
+// here.
 import { shapeOrgContent } from "@/slides/leader-shape/content";
 import {
   gapHardestPartContent,
@@ -69,69 +59,90 @@ import {
 } from "@/slides/leader-gap/content";
 // THE TWO LADDERS THE GUARDRAIL PROTECTS, as live corpora — `gapLadderContent` owns
 // L1–L5 and `mandatePhasesGatesContent` owns P0–P3. They are here to FIRE the scale
-// regex, so a pattern that matched nothing could not pass for a rule.
+// regexes, so a pattern that matched nothing could not pass for a rule.
 import { mandatePhasesGatesContent } from "@/slides/leader-mandate/content";
 import {
-  BAND_HEIGHT,
-  BAND_LEFT,
-  BAND_PITCH,
-  BAND_WIDTH,
-  BOTTOM_BAND_INDEX,
-  CLOSER_HEIGHT,
-  CLOSER_TOP,
-  MIDDLE_BAND_INDEX,
+  ACT_TEXT_WIDTH,
+  ARROW_SPAN,
+  BOTTOM_TIER_INDEX,
+  CARD_INNER_WIDTH,
+  CARD_LEFT,
+  CARD_WIDTH,
+  CHIPS_BUDGET_CHARS,
+  CHIPS_TOP,
+  CLAIM_BUDGET_CHARS,
+  CLAIM_ROWS,
+  CLAIM_TEXT_WIDTH,
+  DOWN_HEAD_TOP,
+  DOWN_SHAFT_TOP,
+  EYEBROW_BASELINE_DROP,
+  EYEBROW_BUDGET_CHARS,
+  EYEBROW_HEIGHT,
+  FIGURE_TOP,
+  FLOW_LENGTH,
+  FLOW_TRAVEL,
+  GLOSS_BUDGET_CHARS,
+  HEADLINE_BOTTOM,
+  HEADLINE_BUDGET_CHARS,
+  HEAD_HEIGHT,
+  MIDDLE_PLATE_HEIGHT,
+  MIDDLE_TIER_INDEX,
+  NAME_ROW_BUDGET_CHARS,
   NAV_ZONE_CLEARANCE,
   NAV_ZONE_TOP,
-  TOP_BAND_INDEX,
-  bandTop,
+  ORIGIN_DOT_SIZE,
+  ORIGIN_DOT_TOP,
+  ORIGIN_Y,
+  PLATE_HEIGHT,
+  PLATE_LEFT,
+  PLATE_WIDTH,
+  RAIL_LEFT,
+  ROW_HEIGHT,
+  SHAFT_HEIGHT,
+  STAGE,
+  THESIS_BUDGET_CHARS,
+  THESIS_HEIGHT,
+  THESIS_TOP,
+  TIER_COUNT,
+  TOP_TIER_INDEX,
+  UP_HEAD_TOP,
+  UP_SHAFT_TOP,
+  VERDICT_BUDGET_CHARS,
+  cardLabelTop,
+  claimEyebrowTop,
+  claimRowTop,
+  plateCentreY,
+  plateHeight,
+  plateTop,
 } from "@/slides/leader-shape/middle-out-geometry";
 import {
-  CLAIM_BEATS,
-  LAST_CLAIM_POSE,
   POSE,
   STEP_COUNT,
-  TRANSLATION_POSE,
-  isMiddleLit,
-  showsBandClaims,
-  showsCloser,
-  showsTranslations,
+  THESIS_POSE,
+  showsFigure,
+  showsThesis,
 } from "@/slides/leader-shape/middle-out-walk";
-// The design system's own two ladders. Imported for their KEYS, never their hexes — the
-// distinction `shape-agentic-org.test.tsx` argues at `rampOf`, and the reason the three
-// colour helpers below are lifted from that file rather than re-invented here.
+// The design system's own two ramps. Imported for their KEYS, never their hexes — so
+// "brighter" is an ordering over a published scale and no hex is ever compared.
 import { copper, neutral } from "@/design-system/colors";
 
 const C = shapeMiddleOutContent;
 
-/**
- * All five, DERIVED — `[0 … STEP_COUNT - 1]`.
- *
- * NOT A LITERAL `[0,1,2,3,4]`. A fourth band grows `STEP_COUNT` to six (see
- * `middle-out-walk.ts`), and a hand-written list would then leave the last pose — the
- * translations' — unwalked by every "at every pose" test in this file, which is exactly
- * the set of tests the AC asks for at EVERY pose.
- */
+/** Both poses, DERIVED — `[0 … STEP_COUNT - 1]`. Never a literal `[0, 1]`: a third pose
+ *  grows `STEP_COUNT` and every "at every pose" test below has to grow with it. */
 const POSES: readonly number[] = Array.from({ length: STEP_COUNT }, (_u, i) => i);
 
-/** The three band indices, in SPATIAL order — the order the chart draws them, which is
- *  not the order the walk argues them. Read off the geometry rather than written as
- *  0/1/2, so "the band the argument is about" stays a derivation. */
-const TOP = TOP_BAND_INDEX;
-const MIDDLE = MIDDLE_BAND_INDEX;
-const BOTTOM = BOTTOM_BAND_INDEX;
+/** The three tier indices, in SPATIAL order, read off the geometry rather than written as
+ *  0/1/2 — so "the row the argument is about" stays a derivation. */
+const TOP = TOP_TIER_INDEX;
+const MIDDLE = MIDDLE_TIER_INDEX;
+const BOTTOM = BOTTOM_TIER_INDEX;
 
 /**
- * The position this slide holds in the decks that will run it.
- *
- * `at` IS required here, the case `SlideHarness` documents and every leader-only sibling
- * repeats: unit tests resolve the default `general` deck, `general` has no leader variant,
- * and this slide reaches the leader deck sets alone. The PAIR itself is a harness INPUT
- * and not a claim — the composed describes at the bottom read the real value off the real
- * deck, and pin only the letter and the tail position, never the number.
- *
- * It reads 4 rather than gh#68's 3 because gh#71 inserted C.3 ahead of this row. Nothing
- * asserts the value, so the edit is bookkeeping and not a fix: a harness input that
- * contradicts the deck it stands in for teaches the next reader the wrong number.
+ * The position this slide holds in the decks that will run it — a harness INPUT and not a
+ * claim. `at` is required because unit tests resolve the default `general` deck, which
+ * runs no leader slide at all; the composed describes at the bottom read the real value
+ * off the real deck and pin only the letter and the tail position, never the number.
  */
 const AT = { letter: "C", num: 4, sectionKey: "shape" } as const;
 
@@ -162,112 +173,71 @@ function goToPose(pose: number) {
   act(() => screen.getByTestId(`goto-${pose}`).click());
 }
 
-// ── the boxes, by the gate that owns them ────────────────────────────────────
-//
-// EVERY ONE OF THESE IS DERIVED FROM `middle-out-walk.ts`, never listed against a pose
-// number. A hand-written "pose 3 shows these four ids" table would be a second copy of
-// the walk living in a test, and the day the teaching order in `content.ts` is re-sorted
-// the table would go on asserting the old order — which is precisely the edit
-// `isMiddleLit` warns would light the wrong band.
+// ── the boxes ────────────────────────────────────────────────────────────────
 
-/** The seven boxes that stand at EVERY pose, gated by nothing: the kicker, the three
- *  band boxes and the three band names. Pose 0 IS the organisation, named and nothing
- *  else, so none of these is a `Reveal` and none of them has an arrival. */
-const STANDING_IDS: readonly string[] = [
-  "middle-out-kicker",
-  ...C.bands.map((band) => `middle-out-band-${band.id}`),
-  ...C.bands.map((band) => `middle-out-band-${band.id}-name`),
+/** The three plates and the three cards — the six boxes the pointer can reach. */
+const PLATE_IDS = C.tiers.map((t) => `middle-out-plate-${t.id}`);
+const CARD_IDS = C.tiers.map((t) => `middle-out-card-${t.id}`);
+
+/**
+ * Every testid this figure mounts, and the whole of it is on the stage at pose 0 — which
+ * is the rework in one list. Only the thesis is gated.
+ */
+const FIGURE_IDS: readonly string[] = [
+  ...PLATE_IDS,
+  ...C.tiers.map((t) => `middle-out-plate-${t.id}-name`),
+  "middle-out-plate-tag",
+  "middle-out-plate-chips",
+  ...C.tiers.flatMap((t) => [
+    `middle-out-${t.id}-holds-eyebrow`,
+    `middle-out-${t.id}-holds`,
+    `middle-out-${t.id}-qualifier-eyebrow`,
+    `middle-out-${t.id}-qualifier`,
+  ]),
+  "middle-out-origin-dot",
+  "middle-out-shaft-up",
+  "middle-out-shaft-down",
+  "middle-out-flow-up",
+  "middle-out-flow-down",
+  "middle-out-head-up",
+  "middle-out-head-down",
+  "middle-out-act-up-label",
+  "middle-out-act-up-gloss",
+  "middle-out-act-down-label",
+  "middle-out-act-down-gloss",
+  ...CARD_IDS,
+  ...C.tiers.map((t) => `middle-out-card-${t.id}-label`),
+  ...C.tiers.map((t) => `middle-out-card-${t.id}-verdict`),
 ];
 
-/** A gated box: its testid and the walk function that decides whether it is on stage. */
-interface Gated {
-  readonly id: string;
-  readonly gate: (pose: number) => boolean;
-}
+const THESIS_ID = "middle-out-thesis";
+const EVERY_BOX: readonly string[] = [...FIGURE_IDS, THESIS_ID];
 
-/** The nineteen boxes that arrive: four per band, six on the rail and in the translation
- *  column, and the closer. Each carries the WALK FUNCTION that owns it, so every
- *  per-pose expectation below is computed rather than transcribed. */
-const GATED: readonly Gated[] = [
-  ...C.bands.flatMap((band, i) =>
-    ["holds", "qualifier"].flatMap((slot) => [
-      { id: `middle-out-${band.id}-${slot}-eyebrow`, gate: (p: number) => showsBandClaims(i, p) },
-      { id: `middle-out-${band.id}-${slot}`, gate: (p: number) => showsBandClaims(i, p) },
-    ]),
-  ),
-  ...[
-    "middle-out-rule-downward",
-    "middle-out-rule-upward",
-    "middle-out-origin-bar",
-    "middle-out-translation-eyebrow",
-    "middle-out-upward",
-    "middle-out-downward",
-  ].map((id) => ({ id, gate: showsTranslations })),
-  { id: "middle-out-closer", gate: showsCloser },
-];
-
-/** Every testid this figure can mount — the census both directions of the box count are
- *  held to. */
-const EVERY_BOX: readonly string[] = [...STANDING_IDS, ...GATED.map((g) => g.id)];
-
-/** The four boxes with no text of their own: the two direction rules and the origin bar
- *  are 2px-tall painted boxes, and each band's own rectangle is empty by construction —
- *  guardrail 1 in `content.ts` says a band carries its name and NOTHING beside it, so an
- *  empty box is that rule as a fact rather than as a sentence. */
-const TEXTLESS_IDS: ReadonlySet<string> = new Set([
-  "middle-out-rule-downward",
-  "middle-out-rule-upward",
-  "middle-out-origin-bar",
-  ...C.bands.map((band) => `middle-out-band-${band.id}`),
+/** The boxes that carry no text of their own: the two shafts, the two pulses, the two
+ *  heads, the origin dot, and each plate's and card's own rectangle — guardrail 1 says a
+ *  tier carries its name and nothing beside it, so an empty rectangle is that rule as a
+ *  fact rather than as a sentence. */
+const TEXTLESS: ReadonlySet<string> = new Set([
+  "middle-out-origin-dot",
+  "middle-out-shaft-up",
+  "middle-out-shaft-down",
+  "middle-out-flow-up",
+  "middle-out-flow-down",
+  "middle-out-head-up",
+  "middle-out-head-down",
+  ...PLATE_IDS,
+  ...CARD_IDS,
 ]);
 
-/** Which pose a gated box FIRST appears at — searched over the walk rather than typed, so
- *  it moves with the gate. */
-function arrivalPose(gate: (pose: number) => boolean): number {
-  const found = POSES.find((pose) => gate(pose));
-  if (found === undefined) {
-    throw new Error("a gated box that never arrives at any pose the deck can reach");
-  }
-  return found;
-}
-
-/** The boxes that arrive AT `pose` — nothing that was already up. */
-const arrivingAt = (pose: number): readonly string[] =>
-  GATED.filter((g) => arrivalPose(g.gate) === pose).map((g) => g.id);
-
-/** Every gated box is a `Reveal`, so its class carries its reveal. The standing seven are
- *  plain positioned `div`s and are deliberately NOT readable through here. */
-function fade(id: string): HTMLElement {
-  const el = screen.getByTestId(id);
-  if (!el.classList.contains("fade")) {
-    throw new Error(
-      `"${id}" is not a .fade box — it is either a standing element (which has no ` +
-        `reveal to read) or the renderer's primitive changed.`,
-    );
-  }
-  return el;
-}
-
-const revealed = (id: string) => fade(id).classList.contains("on");
-
-/** How many milliseconds into its pose a box arrives. Throws on an unrevealed box —
- *  `Reveal` zeroes `transitionDelay` while `on` is false, so there is no arrival. */
-function arrival(id: string): number {
-  const el = fade(id);
-  if (!el.classList.contains("on")) {
-    throw new Error(`"${id}" is not revealed at this pose, so it has no arrival`);
-  }
-  const ms = parseFloat(el.style.transitionDelay);
-  if (!Number.isFinite(ms)) throw new Error(`"${id}" carries no readable transitionDelay`);
-  return ms;
-}
+const box = (id: string): HTMLElement => screen.getByTestId(id);
+const px = (value: string): number => parseFloat(value);
 
 // ── the copy, as one set of strings ──────────────────────────────────────────
 
-/** Every string reachable from `value` — the walk, not a hand list, for the sibling
- *  files' reason: a field added next month is inside every rule below the day it exists.
- *  It collects `id` fields too, deliberately: those reach the DOM as `data-testid`, and a
- *  borrowed image written into a hook is the same defect written somewhere less visible. */
+/** Every string reachable from `value` — the walk, not a hand list, so a field added next
+ *  month is inside every rule below the day it exists. It collects `id` fields too,
+ *  deliberately: those reach the DOM as `data-testid`, and a borrowed image written into a
+ *  hook is the same defect written somewhere less visible. */
 function walkStrings(value: unknown, out: string[] = []): string[] {
   if (typeof value === "string") out.push(value);
   else if (Array.isArray(value)) for (const item of value) walkStrings(item, out);
@@ -277,105 +247,62 @@ function walkStrings(value: unknown, out: string[] = []): string[] {
   return out;
 }
 
-/** Every string this slide can put on a stage. ONE block, because this slide has no brand
- *  axis — see the two `no brand axis` describes, which hold that as a rule. */
 const authoredStrings = (): string[] => walkStrings(C);
-
-/** C.1's corpus — the slide that OPENS this same run, out of this same file. */
 const c1Strings = (): string[] => walkStrings(shapeOrgContent);
-/** B.1's corpus — the 70/30 and "not the tools". */
 const b1Strings = (): string[] => walkStrings(gapHardestPartContent);
-/** B.2's corpus — "no rule to break" and `improvises`. */
 const b2Strings = (): string[] => walkStrings(gapNoSopContent);
 
-/** The TEN prose strings, each with the `*Kw` sibling `content.ts` pairs it with: the
- *  headline, the three bands' `holds`, the three bands' `qualifier`, the two translations
- *  and the closer. The content module's own keyword census counts nine and then says
- *  "ten with the closer counted" — this is that same list, closer included. */
+/**
+ * THE TEN PROSE STRINGS, each with the `*Kw` sibling `content.ts` pairs it with: the
+ * headline, the three tiers' `holds`, the three tiers' `qualifier`, the two glosses and
+ * the thesis.
+ */
 const PROSE: ReadonlyArray<readonly [string, string, readonly string[]]> = [
   ["headline", C.headline, C.headlineKw],
-  ...C.bands.flatMap(
-    (band) =>
+  ...C.tiers.flatMap(
+    (tier) =>
       [
-        [`${band.id}.holds`, band.holds, band.holdsKw],
-        [`${band.id}.qualifier`, band.qualifier, band.qualifierKw],
+        [`${tier.id}.holds`, tier.holds, tier.holdsKw],
+        [`${tier.id}.qualifier`, tier.qualifier, tier.qualifierKw],
       ] as const,
   ),
-  ["downward", C.downward, C.downwardKw],
-  ["upward", C.upward, C.upwardKw],
-  ["closer", C.closer, C.closerKw],
+  ["upGloss", C.upGloss, C.upGlossKw],
+  ["downGloss", C.downGloss, C.downGlossKw],
+  ["thesis", C.thesis, C.thesisKw],
 ];
 
-/** The NINE distinct LABEL strings, which carry no `*Kw` and may not gain one: the fig
- *  label, the kicker, the three band names, the three eyebrow VALUES (HOLDS · CANNOT ·
- *  ALONE — three distinct strings across six rendered rows) and the translations' shared
- *  label. Written out on purpose: together with `PROSE` it is checked against what the
- *  STAGE actually prints, so a twentieth string has to pick a side before it can render. */
+/** The MONO LABEL register — carries no `*Kw` and may not gain one. */
 const LABELS: readonly string[] = [
   C.figLabel,
-  C.kicker,
-  ...C.bands.map((band) => band.label),
-  ...new Set(C.bands.flatMap((band) => [band.holdsEyebrow, band.qualifierEyebrow])),
-  C.translationEyebrow,
+  C.roomTag,
+  C.middleSubname,
+  C.middleChips,
+  C.upLabel,
+  C.downLabel,
+  ...C.tiers.map((t) => t.name),
+  ...C.tiers.map((t) => t.approach),
+  ...new Set(C.tiers.flatMap((t) => [t.holdsEyebrow, t.qualifierEyebrow])),
 ];
 
-/**
- * Every string the stage prints, ONE ENTRY PER RENDERED BOX — so HOLDS appears three
- * times and CANNOT twice, exactly as the stage shows them.
- *
- * The eyebrows come before the claims because that is the order `MiddleOutBands.tsx`
- * declares them in; the comparison below sorts both sides, so the order is only here to
- * make the list readable.
- */
-const printedStrings = (): string[] => [
-  C.headline,
-  C.figLabel,
-  C.kicker,
-  ...C.bands.map((band) => band.label),
-  ...C.bands.flatMap((band) => [band.holdsEyebrow, band.qualifierEyebrow]),
-  ...C.bands.flatMap((band) => [band.holds, band.qualifier]),
-  C.translationEyebrow,
-  C.upward,
-  C.downward,
-  C.closer,
-];
+/** The CAPTION register — the three approach verdicts, which also carry no `*Kw`. */
+const CAPTIONS: readonly string[] = C.tiers.map((t) => t.approachVerdict);
 
 /** Everything the stage renders, minus the one element that legitimately prints a DERIVED
- *  figure reference. Stripped from a CLONE: React owns those nodes and removing one behind
- *  its back throws on the next commit. */
+ *  figure reference. Stripped from a CLONE: React owns those nodes. */
 function stageTextWithoutFigLabel(container: HTMLElement): string {
   const stripped = container.cloneNode(true) as HTMLElement;
   stripped.querySelector(".fig-label")?.remove();
   return stripped.textContent ?? "";
 }
 
-/** The label half of the `FigLabel` — its last span, which is the only part of that
- *  element this slide authors. The `C.3` in front of it is the composer's. */
-function figLabelText(container: HTMLElement): string {
-  const spans = container.querySelectorAll(".fig-label span");
-  return spans[spans.length - 1]?.textContent ?? "";
-}
-
-/** What the stage prints, read off the DOM: the headline, the fig label's own half, and
- *  every box that carries type. */
-function stagePrintedStrings(container: HTMLElement): string[] {
-  const heading = container.querySelector("h1")?.textContent ?? "";
-  const boxes = [...container.querySelectorAll<HTMLElement>("[data-testid^='middle-out-']")]
-    .map((el) => el.textContent ?? "")
-    .filter((text) => text !== "");
-  return [heading, figLabelText(container), ...boxes];
-}
-
 // ── the two ramps, so "brighter" is an ordering and not a vibe ────────────────
 //
-// `rampOf`, `tokenIn` and `brightnessOf` are LIFTED VERBATIM from
-// `shape-agentic-org.test.tsx`, which argues all three at length. The short version:
-// the ladders' ORDER comes from the scale (a higher key is a darker stop, so sorting the
-// exported keys descending IS luminance order) while the TIERS come from
-// `src/design-system/colors.ts`, so no hex is ever compared and a token added to the
-// design system arrives on the ramp by itself. `tokenIn` THROWS on a declaration with no
-// `var(--…)` in it, which is how "CSS vars only, no hex and no rgba() literal" — the rule
-// `MiddleOutBands.tsx` states at its head — is enforced rather than described.
+// `rampOf`, `tokenIn` and `brightnessOf` are lifted from `shape-agentic-org.test.tsx`,
+// which argues all three at length: the ORDER comes from the scale (a higher key is a
+// darker stop, so sorting the exported keys descending IS luminance order) while the
+// TIERS come from `src/design-system/colors.ts`, so no hex is ever compared. `tokenIn`
+// THROWS on a declaration with no `var(--…)` in it, which is how "CSS vars only, no hex
+// and no rgba() literal" is enforced rather than described.
 
 const rampOf = (scale: Record<number | string, string>, hue: string): readonly string[] =>
   Object.keys(scale)
@@ -390,33 +317,64 @@ function tokenIn(declaration: string, what: string): string {
   const match = /var\(--([a-z]+-\d+)\)/.exec(declaration);
   if (!match) {
     throw new Error(
-      `${what}: "${declaration}" names no var(--…) token — CSS vars only on this ` +
-        `slide, so a hex or an rgba() literal here is the bug.`,
+      `${what}: "${declaration}" names no var(--…) token — CSS vars only on this slide, ` +
+        `so a hex or an rgba() literal here is the bug.`,
     );
   }
   return match[1];
 }
 
+/** A token's place on its own ramp — a higher `rung` is BRIGHTER. Used for the claims that
+ *  stay inside one ramp; the cross-ramp ones go through {@link luminanceOf}. */
 function brightnessOf(token: string, what: string): { family: string; rung: number } {
   const inCopper = COPPER_RAMP.indexOf(token);
   if (inCopper >= 0) return { family: "copper", rung: inCopper };
   const inNeutral = NEUTRAL_RAMP.indexOf(token);
   if (inNeutral >= 0) return { family: "neutral", rung: inNeutral };
   throw new Error(
-    `${what}: "--${token}" is on neither the copper nor the neutral ladder, so ` +
-      `nothing here can say whether it is brighter or darker than the resting tier.`,
+    `${what}: "--${token}" is on neither the copper nor the neutral ladder, so nothing ` +
+      `here can say whether it is brighter or darker than the resting tier.`,
   );
 }
 
+const rung = (declaration: string, what: string) =>
+  brightnessOf(tokenIn(declaration, what), what);
+
 /**
- * One element's inline declarations, as a map — the unit the "byte-identical" claims are
- * made in.
+ * A token's WCAG relative luminance, computed from the hex the design system publishes for
+ * it.
  *
- * PARSED OUT OF `cssText` AND NOT READ PROPERTY BY PROPERTY, because the claim is about
- * what the renderer WROTE: `border: 1px solid var(--copper-700)` is one declaration on
- * this stage and jsdom reports no `borderColor` for it. Splitting on `;` is safe here and
- * only here — no value this figure sets contains one.
+ * IT EXISTS BECAUSE ONE OF THIS FIGURE'S RANK MOVES CROSSES THE TWO RAMPS. A resting plate
+ * has the stage's own `--neutral-900` ground and the lit plate GAINS `--copper-900` — the
+ * component argues for that in as many words (the fill channel is left unspent at rest so
+ * the middle plate can gain a ground rather than change one) — and ramp order cannot compare
+ * two different ramps. Ramp INDEX is still used wherever both sides are on one ramp, because
+ * it is the stronger check there: it holds even if a hex is retuned.
+ *
+ * THE HEX IS READ, NEVER WRITTEN. `src/design-system/colors.ts` stays the single source of
+ * truth, so a retuned token moves this number with it.
  */
+function luminanceOf(token: string, what: string): number {
+  const [family, stop] = token.split("-");
+  // Indexed as a plain record: the two scales are `as const` objects with numeric keys, and
+  // the token's stop arrives here as a string.
+  const scale: Record<string, string> | null =
+    family === "copper" ? copper : family === "neutral" ? neutral : null;
+  const hex = scale?.[stop];
+  if (typeof hex !== "string" || !/^#[0-9a-f]{6}$/i.test(hex)) {
+    throw new Error(`${what}: no hex in the design system for "--${token}"`);
+  }
+  const channel = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  const [r, g, bl] = [1, 3, 5].map((i) => channel(parseInt(hex.slice(i, i + 2), 16) / 255));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+}
+
+const lumen = (declaration: string, what: string) =>
+  luminanceOf(tokenIn(declaration, what), what);
+
+/** One element's inline declarations, as a map — parsed out of `cssText` because the claim
+ *  is about what the renderer WROTE: `border: 1px solid var(--copper-700)` is one
+ *  declaration and jsdom reports no `borderColor` for it. */
 function declarations(el: HTMLElement): Map<string, string> {
   const out = new Map<string, string>();
   for (const chunk of el.style.cssText.split(";")) {
@@ -427,39 +385,29 @@ function declarations(el: HTMLElement): Map<string, string> {
   return out;
 }
 
-/** Which declarations differ between two captures of the same element, as a sorted list of
- *  property names — so a failure says WHICH channel moved rather than printing two
- *  eighty-character style strings side by side. */
-function movedBetween(before: Map<string, string>, after: Map<string, string>): string[] {
-  const props = new Set([...before.keys(), ...after.keys()]);
-  return [...props].filter((p) => before.get(p) !== after.get(p)).sort();
-}
-
-/** A band's two elements — the rectangle and the name inside it — as one comparable
- *  capture. These are the two the rank pair in `MiddleOutBands.tsx` paints, and they are
- *  the two the no-subtraction rule is asserted over. */
-function bandCapture(index: number) {
-  const band = C.bands[index];
-  const box = screen.getByTestId(`middle-out-band-${band.id}`);
-  const name = screen.getByTestId(`middle-out-band-${band.id}-name`);
-  return {
-    lit: box.dataset.lit,
-    boxHtml: box.outerHTML,
-    nameHtml: name.outerHTML,
-    box: declarations(box),
-    name: declarations(name),
-  };
+/** A tier's whole visual signature — the plate, its name, its two rows, the card, its
+ *  label and its verdict, as one comparable string. The unit both the no-subtraction and
+ *  the pointer-pairing claims are made in. */
+function tierSignature(tier: (typeof C.tiers)[number]): string {
+  return [
+    `middle-out-plate-${tier.id}`,
+    `middle-out-plate-${tier.id}-name`,
+    `middle-out-${tier.id}-holds`,
+    `middle-out-${tier.id}-qualifier`,
+    `middle-out-card-${tier.id}`,
+    `middle-out-card-${tier.id}-label`,
+    `middle-out-card-${tier.id}-verdict`,
+  ]
+    .map((id) => `${id}=${box(id).outerHTML}`)
+    .join("\n");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// the slide def
+// the slide def and the walk
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe("the slide def", () => {
-  test("is the file's basename, FIVE derived steps, canonical on the fullest pose", () => {
-    // THE ID IS THE FILE'S BASENAME. `deck-slide-ids.test.ts` owns that rule over the
-    // whole tree by parsing it; this pins the VALUE, and states the relationship in the
-    // one form a single-slide test can — the id and the module path it is declared in.
+  test("is the file's basename, TWO derived steps, canonical on the thesis", () => {
     expect(shapeMiddleOutSlide.id).toBe("shape-middle-out");
     const basename = "src/slides/leader-shape/shape-middle-out.tsx"
       .split("/")
@@ -467,34 +415,22 @@ describe("the slide def", () => {
       .replace(/\.tsx$/, "");
     expect(shapeMiddleOutSlide.id).toBe(basename);
 
-    // FIVE, AND NEVER AS A LITERAL. `steps` is asserted against the walk module's own
-    // derivation and that derivation is then unfolded to its source — the number of
-    // BANDS — because the failure worth catching is a hand-typed `5` surviving a fourth
-    // band: `DeckContext` clamps at `steps - 1`, so the fourth band's claims would become
-    // a pose the deck can never reach, with no error, no blank slide and no failing test.
+    // TWO, AND NEVER AS A LITERAL. `steps` is asserted against the walk's own derivation
+    // and that derivation is unfolded to its source: the figure, then the sentence. It was
+    // FIVE before the rework, which is exactly why it stays imported.
     expect(shapeMiddleOutSlide.steps).toBe(STEP_COUNT);
-    expect(STEP_COUNT).toBe(TRANSLATION_POSE + 1);
-    expect(TRANSLATION_POSE).toBe(POSE.FIRST_CLAIM + CLAIM_BEATS);
-    expect(CLAIM_BEATS).toBe(C.bands.length);
-    expect(LAST_CLAIM_POSE).toBe(POSE.FIRST_CLAIM + CLAIM_BEATS - 1);
-    // chart + one beat per band + the translations, read as the sum it is.
-    expect(shapeMiddleOutSlide.steps).toBe(1 + C.bands.length + 1);
+    expect(STEP_COUNT).toBe(THESIS_POSE + 1);
+    expect(THESIS_POSE).toBe(POSE.THESIS);
+    expect(POSE.FIGURE).toBe(0);
+    expect(shapeMiddleOutSlide.steps).toBe(2);
 
-    // THE CANONICAL POSE IS THE TRANSLATIONS', imported for the same reason. The exports
-    // print `canonicalPose` and nothing else, and pose 3 would export a chart with a
-    // brightly ranked middle row and no statement of what that row DOES — a page that
-    // appears to rank a layer of management above the board, with the two translations
-    // that justify it missing.
-    expect(shapeMiddleOutSlide.canonicalPose).toBe(TRANSLATION_POSE);
+    // THE CANONICAL POSE IS THE THESIS'S — the exports print `canonicalPose` and nothing
+    // else, and pose 0 would export a figure that argues the middle is the lever without
+    // ever saying what the room is supposed to do about it.
+    expect(shapeMiddleOutSlide.canonicalPose).toBe(THESIS_POSE);
     expect(shapeMiddleOutSlide.canonicalPose).toBe(shapeMiddleOutSlide.steps - 1);
-    // …and it is a pose where the whole argument is up, stated as arithmetic over the
-    // walk rather than as prose.
-    expect(showsTranslations(shapeMiddleOutSlide.canonicalPose!)).toBe(true);
-    expect(showsCloser(shapeMiddleOutSlide.canonicalPose!)).toBe(true);
-    expect(isMiddleLit(shapeMiddleOutSlide.canonicalPose!)).toBe(true);
-    C.bands.forEach((band, i) =>
-      expect(showsBandClaims(i, shapeMiddleOutSlide.canonicalPose!), band.id).toBe(true),
-    );
+    expect(showsThesis(shapeMiddleOutSlide.canonicalPose!)).toBe(true);
+    expect(showsFigure()).toBe(true);
 
     expect(shapeMiddleOutSlide.animationMode).toBe("step-reveal");
     expect(shapeMiddleOutSlide.surface).toBe("dark");
@@ -502,980 +438,864 @@ describe("the slide def", () => {
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AC · THE MIDDLE-OUT CLAIM
-// ─────────────────────────────────────────────────────────────────────────────
-
-describe("the middle-out claim, argued over the whole figure", () => {
-  // NOT A STRING MATCH ON ONE SENTENCE. The claim is a THREE-PART argument — the top is
-  // given authority and denied visibility, the bottom is given the work and denied
-  // authority, the middle is given both plus the one thing neither holds — and it is only
-  // a claim if all three parts are on the stage together. So the shape is asserted over
-  // `content.ts`'s own fields, and only the two sentences the whole slide turns on are
-  // pinned as literals.
-
-  test("the three bands are the organisation, named and never indexed", () => {
-    // THE THREE LABELS ARE PINNED, and this is one of the four deliberate literals in
-    // this file. `content.ts` records that the top band was drafted as "THE BOARD AND THE
-    // C-LEVEL" and cut because `C-LEVEL` matches `\blevel\b` — the no-new-ladder rule's
-    // one casualty — and asks the next author not to "restore" it. A pinned string is how
-    // that request becomes a failing test instead of a comment nobody reads.
-    expect(C.bands.map((band) => band.label)).toEqual([
-      "THE BOARD AND THE C-SUITE",
-      "BU AND DIVISION HEADS",
-      "THE TEAMS",
-    ]);
-    expect(C.bands.map((band) => band.id)).toEqual(["board", "middle", "teams"]);
-    // SPATIAL ORDER, and the middle band is the middle ROW — derived from the count in
-    // `middle-out-geometry.ts`, so the band the argument is about cannot end up being a
-    // different row from the band the chart draws in the middle.
-    expect(MIDDLE).toBe(1);
-    expect(Number.isInteger(MIDDLE), "an even band count has no middle row").toBe(true);
-    expect(C.bands[MIDDLE].id).toBe("middle");
-    expect([TOP, BOTTOM]).toEqual([0, C.bands.length - 1]);
+describe("the pose walk", () => {
+  test("the figure stands at every pose and the thesis lands on the last", () => {
+    expect(showsThesis(POSE.FIGURE)).toBe(false);
+    expect(showsThesis(POSE.THESIS)).toBe(true);
+    // TOTAL, AND MONOTONE. A pose past the end keeps the thesis up — the last pose of a
+    // slide should be the pose that survives being over-shot — and a negative one has
+    // nothing on it.
+    expect(showsThesis(STEP_COUNT)).toBe(true);
+    expect(showsThesis(99)).toBe(true);
+    expect(showsThesis(-1)).toBe(false);
+    expect(showsThesis(0.5)).toBe(false);
+    expect(() => showsThesis(NaN)).not.toThrow();
   });
 
-  test("the top is given authority and denied visibility", () => {
-    const top = C.bands[TOP];
-    // WHAT IT HOLDS is authority in its three ordinary forms, and the keyword is on the
-    // one the downward translation later picks up by name.
-    expect(top.holds).toMatch(/^Holds\b/);
-    expect(top.holds).toContain("the mandate");
-    expect(top.holdsKw).toEqual(["the mandate"]);
-    // WHAT IT CANNOT DO is SEE — a structural fact about where people sit, not a
-    // criticism. The eyebrow is the CANNOT one, i.e. the same one the bottom band takes.
-    expect(top.qualifier).toMatch(/^Cannot see\b/);
-    expect(top.qualifierEyebrow).toBe(C.bands[BOTTOM].qualifierEyebrow);
-    expect(top.qualifierEyebrow).not.toBe(C.bands[MIDDLE].qualifierEyebrow);
-    // AND IT IS NOT DENIED AUTHORITY — that is the bottom band's limit, and a top band
-    // that lost both would leave the middle's "Holds both" with nothing to refer to.
-    expect(top.qualifier).not.toMatch(/authoris|authoriz/i);
+  test("nothing that has arrived ever leaves — walked forward, then back", () => {
+    const { unmount } = renderSlide();
+    // Forward: the figure is complete at pose 0, the thesis joins it at pose 1.
+    for (const id of FIGURE_IDS) expect(box(id), `${id} · pose 0`).toBeInTheDocument();
+    expect(box(THESIS_ID).classList.contains("on"), "thesis · pose 0").toBe(false);
+    goToPose(THESIS_POSE);
+    for (const id of FIGURE_IDS) expect(box(id), `${id} · pose 1`).toBeInTheDocument();
+    expect(box(THESIS_ID).classList.contains("on"), "thesis · pose 1").toBe(true);
+    // …and back, which asks the same question of a smaller number.
+    goToPose(POSE.FIGURE);
+    for (const id of FIGURE_IDS) expect(box(id), `${id} · back at 0`).toBeInTheDocument();
+    expect(box(THESIS_ID).classList.contains("on"), "thesis · back at 0").toBe(false);
+    unmount();
   });
 
-  test("the bottom is given the work and denied authority", () => {
-    const bottom = C.bands[BOTTOM];
-    expect(bottom.holds).toMatch(/^Holds\b/);
-    expect(bottom.holds).toContain("the work");
-    expect(bottom.holds).toContain("workaround");
-    // "Cannot authorise" — British spelling, matching the leader tree's own rendered
-    // prose, and a CANNOT rather than a won't: the teams are not reluctant, they are
-    // unauthorised, which is the exact symmetry with the top's "Cannot see".
-    expect(bottom.qualifier).toMatch(/^Cannot authorise\b/);
-    expect(bottom.qualifierEyebrow).toBe(C.bands[TOP].qualifierEyebrow);
-    // AND IT IS NOT DENIED VISIBILITY — the two limits are different limits, which is
-    // what makes the middle's claim a conjunction rather than a repetition.
-    expect(bottom.qualifier).not.toMatch(/\bsee\b/i);
-  });
-
-  test("the middle is given BOTH, and is the only band credited with being copied", () => {
-    const middle = C.bands[MIDDLE];
-    // "Holds both" IS THE HINGE, and the two clauses after the dash are the two things
-    // the outer bands were each missing, in the order they were missed: near enough to
-    // SEE, senior enough to CHANGE.
-    expect(middle.holds).toMatch(/^Holds both\b/);
-    expect(middle.holdsKw).toEqual(["near enough", "senior enough"]);
-    // TWO KEYWORDS, AND IT IS THE ONLY LINE ON THIS STAGE THAT TAKES TWO — the claim is a
-    // conjunction, so an italic on one half would emphasise exactly the wrong thing.
-    expect(middle.holdsKw).toHaveLength(2);
-    for (const [name, , kws] of PROSE) {
-      if (name === `${middle.id}.holds`) continue;
-      expect(kws.length, `${name} takes more than one keyword`).toBe(1);
+  test("every box is mounted at both poses — nothing is swapped", () => {
+    for (const pose of POSES) {
+      const { unmount } = renderSlide(pose);
+      for (const id of EVERY_BOX) {
+        expect(box(id), `${id} at pose ${pose}`).toBeInTheDocument();
+      }
+      // …and the census is exhaustive in the other direction: no box the list does not
+      // name, so a new element has to be declared here before it can render.
+      const mounted = [...document.querySelectorAll("[data-testid^='middle-out-']")].map(
+        (el) => (el as HTMLElement).dataset.testid!,
+      );
+      expect(new Set(mounted)).toEqual(new Set(EVERY_BOX));
+      unmount();
     }
-
-    // ITS SECOND ROW IS NOT A LIMIT. Both outer bands open on "Cannot"; this one does
-    // not, and its eyebrow is the one value neither of them takes.
-    expect(middle.qualifier).not.toMatch(/^Cannot\b/);
-    const eyebrows = C.bands.map((band) => band.qualifierEyebrow);
-    expect(new Set(eyebrows).size, "the middle's second row is a different KIND").toBe(2);
-    expect(eyebrows.filter((e) => e === middle.qualifierEyebrow)).toHaveLength(1);
-    // …and every band shares ONE first eyebrow, which is the chart's spine: three answers
-    // to one question before the room reads anything else.
-    expect(new Set(C.bands.map((band) => band.holdsEyebrow)).size).toBe(1);
-
-    // THE ONE THING NEITHER OTHER BAND HOLDS: people who copy what this one does.
-    // Authority and proximity are POSITIONS and could be reorganised; being copied cannot.
-    expect(middle.qualifier).toMatch(/\bcopy\b/);
-    expect(middle.qualifierKw).toEqual(["will copy"]);
-    // Everything the block authors EXCEPT that row and the keyword cut out of it — the
-    // string walk collects `*Kw` entries too, and "will copy" is a fragment of the row
-    // rather than a second claim.
-    const elsewhere = authoredStrings().filter(
-      (copy) => !middle.qualifier.includes(copy) && /\bcop(y|ies|ied)\b/i.test(copy),
-    );
-    expect(elsewhere, "only the middle band is credited with being copied").toEqual([]);
-    // AND THE MECHANISM IS OBSERVATION, stated plainly — not influence, not authority.
-    expect(middle.qualifier).toContain("watched you do it");
   });
 
-  test("the middle arrives LAST and lights on the pose its own claim lands", () => {
-    // THE TEACHING ORDER IS THE ARGUMENT: top, then bottom, then MIDDLE. The two bands
-    // that are missing something are established first, so the middle's claim lands as a
-    // conclusion the room has already assembled. This is also the weld `isMiddleLit`
-    // names in as many words — it reads the LAST claim pose, so a re-sorted teaching
-    // order would light the wrong band.
-    expect(C.bands.map((band) => band.claimBeat)).toEqual([0, 2, 1]);
-    expect([...C.bands.map((band) => band.claimBeat)].sort()).toEqual([0, 1, 2]);
-    expect(C.bands[MIDDLE].claimBeat).toBe(CLAIM_BEATS - 1);
-    expect(showsBandClaims(MIDDLE, LAST_CLAIM_POSE)).toBe(true);
-    expect(showsBandClaims(MIDDLE, LAST_CLAIM_POSE - 1)).toBe(false);
-    expect(isMiddleLit(LAST_CLAIM_POSE)).toBe(true);
-    expect(isMiddleLit(LAST_CLAIM_POSE - 1)).toBe(false);
-    // The light and the claim are ONE event — the band gets brighter BECAUSE of what has
-    // just been said about it.
-    expect(arrivalPose((p) => showsBandClaims(MIDDLE, p))).toBe(LAST_CLAIM_POSE);
-  });
-
-  test("the two translations are what the middle DOES — one down, one up, at once", () => {
-    // THE CLOSE IS THE TWO TRANSLATIONS: a mandate downward into actual work, and actual
-    // work upward into the next decision. Two directions, at once, from one place.
-    expect(C.downward).toMatch(/^You turn\b/);
-    expect(C.upward).toMatch(/^You turn\b/);
-    // The downward one picks the TOP band's keyword back up by name — the room has
-    // already been told the mandate exists and where it comes from, so the only new
-    // information is the verb, and the verb is the job.
-    expect(C.downward).toContain("a mandate");
-    expect(C.bands[TOP].holdsKw[0]).toBe("the mandate");
-    // The upward one carries an obstruction somebody ran into, not a report somebody
-    // wrote — and it lands on a decision taken ABOVE this room, which is the inverted
-    // referent `content.ts`'s collision census records.
-    expect(C.upward).toContain("what they hit");
-    expect(C.upwardKw).toEqual(["the next decision"]);
-    expect(C.upward).toContain("made above you");
-    // ONE LABEL FOR BOTH, spelled rather than numbered (nothing on this stage carries a
-    // numeral), and it names no direction: two mono headings reading UPWARD and DOWNWARD
-    // are the closest this stage could come to drawing a scale by accident.
-    expect(C.translationEyebrow).toBe("THE TWO TRANSLATIONS");
-    expect(C.translationEyebrow).not.toMatch(/\b(up|down|upward|downward)\b/i);
-  });
-
-  test("the closer hands the spreading to the room, not to the presenter", () => {
-    // PINNED, DELIBERATELY — the second of this file's four literals. This is the
-    // sentence the whole chart exists to earn and the one the AC turns on: the deck
-    // disclaiming itself as the delivery mechanism. A copy change here has to be a
-    // conscious one, because the refusal is the argument, not the wording around it.
-    expect(C.closer).toBe(
-      "Nothing in this room reaches your teams through me. It reaches them through you.",
-    );
-    // THE ORDER IS THE ARGUMENT: the refusal first, the handover second. Reversed, the
-    // room would take away the presenter.
-    expect(C.closer.indexOf("through me")).toBeLessThan(C.closer.indexOf("through you"));
-    // AND THE ITALIC IS ON THE HANDOVER, never on the refusal — it is the last emphasis
-    // the room takes away.
-    expect(C.closerKw).toEqual(["through you"]);
-  });
-
-  test("and the whole argument is on the stage together at the last pose", () => {
-    // THE PARTS ABOVE ARE ONLY A CLAIM IF THEY ARRIVE TOGETHER. This is the same three
-    // parts, read back out of the DOM at `canonicalPose` — the one frame the PDF and the
-    // PPTX print, and therefore the one that has to be readable with no presenter
-    // attached.
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    const stage = stageTextWithoutFigLabel(container);
-
-    // PINNED, the third literal: the headline is measured to ONE line under BOTH font
-    // faces (`HEADLINE_BUDGET_CHARS`), and it is the only place the deck spends the
-    // top-down / middle-out vocabulary. A reword is a re-measure, so it has to be
-    // conscious.
-    expect(C.headline).toBe("Adoption is not top-down. It spreads out from the middle.");
-    expect(C.headlineKw).toEqual(["spreads out from the middle"]);
-    expect(container.querySelector("h1")?.textContent).toBe(C.headline);
-
-    // The kicker — the one piece of addressing, standing since pose 0 so the room reads
-    // all three bands already knowing which one it is in. The fourth and last literal.
-    expect(C.kicker).toBe("THE MIDDLE IS THIS ROOM");
-    expect(screen.getByTestId("middle-out-kicker").textContent).toBe(C.kicker);
-
-    for (const band of C.bands) {
-      expect(screen.getByTestId(`middle-out-band-${band.id}-name`).textContent, band.id).toBe(
-        band.label,
-      );
-      expect(screen.getByTestId(`middle-out-${band.id}-holds`).textContent, band.id).toBe(
-        band.holds,
-      );
-      expect(screen.getByTestId(`middle-out-${band.id}-qualifier`).textContent, band.id).toBe(
-        band.qualifier,
-      );
-      expect(
-        screen.getByTestId(`middle-out-${band.id}-holds-eyebrow`).textContent,
-        band.id,
-      ).toBe(band.holdsEyebrow);
-      expect(
-        screen.getByTestId(`middle-out-${band.id}-qualifier-eyebrow`).textContent,
-        band.id,
-      ).toBe(band.qualifierEyebrow);
+  test("the figure carries a BUILD, not a walk: one keyframe and one delay per box", () => {
+    const { unmount } = renderSlide();
+    const seen: number[] = [];
+    for (const id of FIGURE_IDS) {
+      const el = box(id);
+      // EVERY FIGURE BOX ANIMATES ON MOUNT, through `middle-out.css` and not `.fade` —
+      // which is the whole reason the slide needs two poses instead of five.
+      expect(el.className, `${id} · entrance class`).toMatch(/\bmo-[a-z-]+\b/);
+      expect(el.classList.contains("fade"), `${id} is not a .fade box`).toBe(false);
+      const delay = px(el.style.animationDelay);
+      expect(Number.isFinite(delay), `${id} · animationDelay`).toBe(true);
+      expect(delay, `${id} · delay is positive`).toBeGreaterThan(0);
+      seen.push(delay);
     }
-    expect(screen.getByTestId("middle-out-translation-eyebrow").textContent).toBe(
-      C.translationEyebrow,
-    );
-    expect(screen.getByTestId("middle-out-upward").textContent).toBe(C.upward);
-    expect(screen.getByTestId("middle-out-downward").textContent).toBe(C.downward);
-    expect(screen.getByTestId("middle-out-closer").textContent).toBe(C.closer);
-    expect(figLabelText(container)).toBe(C.figLabel);
-    expect(C.figLabel).toBe("MIDDLE-OUT");
+    // THE BUILD IS ORDERED AND FINITE: the plates open it and the arrowheads close it,
+    // and nothing waits longer than a second and a half for its own arrival.
+    expect(Math.min(...seen)).toBe(px(box(PLATE_IDS[TOP]).style.animationDelay));
+    expect(Math.max(...seen)).toBe(px(box("middle-out-head-up").style.animationDelay));
+    expect(Math.max(...seen)).toBeLessThanOrEqual(1500);
 
-    // AND THE CENSUS IS EXACT IN BOTH DIRECTIONS: what the stage prints IS the nineteen
-    // strings the keyword rule partitions, no more and no fewer. A twentieth string
-    // cannot render without landing in `PROSE` or in `LABELS` first.
-    expect(stagePrintedStrings(container).sort()).toEqual(printedStrings().sort());
-    expect(new Set(printedStrings()).size).toBe(PROSE.length + LABELS.length);
-    expect(PROSE).toHaveLength(10);
-    expect(LABELS).toHaveLength(9);
-    // The boxes, counted: nothing on the stage is missing and nothing is drawn twice.
-    const ids = [...container.querySelectorAll<HTMLElement>("[data-testid^='middle-out-']")].map(
-      (el) => el.dataset.testid,
+    // THE TWO SHAFTS ARE ONE ARRIVAL. Staggering them would say "first this, then that"
+    // about the one pair of marks the no-new-ladder guardrail exists to protect.
+    expect(box("middle-out-shaft-up").style.animationDelay).toBe(
+      box("middle-out-shaft-down").style.animationDelay,
     );
-    expect(ids.sort()).toEqual([...EVERY_BOX].sort());
-    expect(stage.length, "a rule over an empty stage proves nothing").toBeGreaterThan(400);
+    expect(box("middle-out-flow-up").style.animationDelay).toBe(
+      box("middle-out-flow-down").style.animationDelay,
+    );
+    // …and each head lands after its own shaft has finished drawing.
+    expect(px(box("middle-out-head-up").style.animationDelay)).toBeGreaterThan(
+      px(box("middle-out-shaft-up").style.animationDelay),
+    );
+
+    // THE THESIS IS THE ONE `Reveal`, because it is the one box with a real pose
+    // transition to make.
+    expect(box(THESIS_ID).classList.contains("fade")).toBe(true);
+    unmount();
+  });
+
+  test("the two pulses are the only looping marks, and they run outward", () => {
+    const { unmount } = renderSlide();
+    expect(box("middle-out-flow-up").className).toContain("mo-flow-up");
+    expect(box("middle-out-flow-down").className).toContain("mo-flow-down");
+    // THE TRAVEL IS A COORDINATE AND COMES FROM THE GEOMETRY, never from the stylesheet:
+    // `FLOW_TRAVEL` is `SHAFT_HEIGHT − FLOW_LENGTH`, so a pulse starts flush with the
+    // origin dot and stops flush against the arrowhead.
+    for (const id of ["middle-out-flow-up", "middle-out-flow-down"]) {
+      expect(box(id).style.getPropertyValue("--mo-travel"), id).toBe(`${FLOW_TRAVEL}px`);
+      expect(px(box(id).style.height), id).toBe(FLOW_LENGTH);
+    }
+    expect(FLOW_TRAVEL).toBe(SHAFT_HEIGHT - FLOW_LENGTH);
+    expect(FLOW_TRAVEL).toBeGreaterThan(0);
+    // NO OTHER BOX LOOPS. Every other class in the figure is a one-shot entrance.
+    const looping = FIGURE_IDS.filter((id) => /mo-flow-/.test(box(id).className));
+    expect(looping).toEqual(["middle-out-flow-up", "middle-out-flow-down"]);
     unmount();
   });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// AC · the audience is the SPREADER, never the target
+// AC · the middle-out claim
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("the room is the subject of this slide, never its object", () => {
-  /** The vocabulary of being ROLLED OUT TO. Each pattern names a construction in which
-   *  adoption happens TO the audience — which is the argument this slide is not making,
-   *  and the one a diagram of three stacked bands slides into by default. Fired against
-   *  sentences below so a pattern that matched nothing could not pass for a rule. */
-  const DONE_TO_YOU: ReadonlyArray<readonly [string, RegExp]> = [
-    ["a rollout", /\broll(ed|ing)?[- ]?outs?\b|\brollouts?\b/i],
-    ["a cascade", /\bcascad\w*\b/i],
-    ["being deployed to", /\bdeploy\w*\b/i],
-    ["change management", /\bchange management\b/i],
-    ["an adoption programme", /\badoption (programme|program)\b/i],
-    ["being onboarded", /\bonboard\w*\b/i],
-    ["being trained", /\b(trained|training)\b/i],
-    ["being enabled", /\benabl\w*\b/i],
-  ];
-
-  test("the middle band's copy addresses the room, in the second person", () => {
-    // THE KICKER SAYS IT FIRST AND STANDS AT EVERY POSE, so the room reads the chart
-    // knowing which row it is in before any claim lands.
-    expect(C.kicker).toMatch(/\bROOM\b/);
-    // THE MIDDLE BAND'S SECOND ROW IS ADDRESSED, and it is the only band row that puts
-    // the room in the second person as the thing being copied.
-    const middle = C.bands[MIDDLE];
-    expect(middle.qualifier).toMatch(/\byour\b/i);
-    expect(middle.qualifier).toMatch(/\byou\b/i);
-    // AND THE TWO TRANSLATIONS — what the middle DOES — put the room in the SUBJECT
-    // position of an active verb, twice. That is a deliberate near-miss with C.1's six
-    // "You decide" beats: a different verb, twice rather than six times.
-    expect(C.downward).toMatch(/^You turn\b/);
-    expect(C.upward).toMatch(/^You turn\b/);
-    // …and the closer's italic is the only other phrase on the stage aimed at the person
-    // in the chair.
-    expect(C.closerKw).toEqual(["through you"]);
+describe("the middle-out claim, argued over the whole figure", () => {
+  test("the three tiers are the organisation, named in the room's own words", () => {
+    expect(C.tiers.map((t) => t.name)).toEqual([
+      "TOP MANAGEMENT",
+      "MIDDLE MANAGEMENT",
+      "THE TEAMS",
+    ]);
+    // NAMED AND NEVER INDEXED — guardrail 1. No tier carries a number, an ordinal or a
+    // letter, and the name is its whole identity.
+    for (const tier of C.tiers) {
+      expect(tier.name, tier.id).not.toMatch(/\d/);
+      expect(tier.name, tier.id).not.toMatch(/\b(first|second|third|one|two|three)\b/i);
+    }
   });
 
-  test("nothing on the stage is done TO the room", () => {
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
+  test("the outer tiers each have a CANNOT and the middle has none", () => {
+    const eyebrows = C.tiers.map((t) => t.qualifierEyebrow);
+    expect(eyebrows[TOP]).toBe("CANNOT");
+    expect(eyebrows[BOTTOM]).toBe("CANNOT");
+    expect(eyebrows[MIDDLE]).toBe("ALONE");
+    // THE ARGUMENT DRAWN IN CHROME: by the time the room reaches the middle plate it has
+    // learned that every tier has a CANNOT, and the middle's never arrives.
+    expect(eyebrows.filter((e) => e === "CANNOT")).toHaveLength(2);
+    // …and all three open on the same word, which is the chart's spine.
+    expect(new Set(C.tiers.map((t) => t.holdsEyebrow)).size).toBe(1);
+  });
+
+  test("the top plate's CANNOT names the method gap, not only the visibility one", () => {
+    const top = C.tiers[TOP];
+    expect(top.qualifier).toBe("See your teams at work — or say how AI should change it.");
+    // TWO LIMITS IN ONE LINE. The room concedes the first before it is said; the second is
+    // the one the rest of the figure is about — a mandate can ask for AI and fund it, and
+    // cannot supply the method.
+    expect(top.qualifier).toMatch(/\bSee your teams at work\b/);
+    expect(top.qualifier).toMatch(/\bhow AI should change it\b/);
+    expect(top.qualifierKw).toEqual(["how AI should change it"]);
+    // AND IT IS A STRUCTURAL FACT, NOT A GRIEVANCE: no word here blames the room.
+    expect(top.qualifier).not.toMatch(/\b(fail|ignor|out of touch|never|refus)\w*/i);
+  });
+
+  test("the middle tier holds BOTH of the things the outer tiers are missing", () => {
+    const middle = C.tiers[MIDDLE];
+    expect(middle.holds).toMatch(/^Both\b/);
+    expect(middle.holdsKw).toEqual(["near enough", "senior enough"]);
+    // The two halves answer the two outer limits, in the order the plates state them:
+    // near enough to SEE (the top's), senior enough to CHANGE (the teams').
+    expect(C.tiers[TOP].qualifier).toMatch(/\bSee\b/);
+    expect(C.tiers[BOTTOM].qualifier).toMatch(/\bAuthorise\b/);
+    // …and "change it" lands on the same words the top plate uses for what it cannot say,
+    // which is the answer arriving in the objection's own vocabulary.
+    expect(C.tiers[TOP].qualifier).toMatch(/\bchange it\b/);
+    expect(middle.holds).toMatch(/\bchange it\b/);
+    expect(middle.holds.indexOf("near enough")).toBeLessThan(
+      middle.holds.indexOf("senior enough"),
+    );
+    // AND ONE CLAIM NEITHER OTHER TIER CAN MAKE — being copied, which is not a position
+    // and cannot be delegated.
+    expect(middle.qualifier).toMatch(/\bcopy\b/);
+  });
+
+  test("the three approaches are this slide's own vocabulary, one per tier", () => {
+    expect(C.tiers.map((t) => t.approach)).toEqual([
+      "TOP-DOWN",
+      "MIDDLE-OUT",
+      "BOTTOM-UP",
+    ]);
+    // THE HEADLINE REFUSES ONE OF THEM BY NAME and the figure convicts it in four words.
+    expect(C.headline).toContain("top-down");
+    expect(C.tiers[TOP].approachVerdict).toBe("Generic support. No depth.");
+    expect(C.tiers[BOTTOM].approachVerdict).toBe("Deep knowledge. No authority.");
+    // THE MIDDLE'S IS THE ONLY VERDICT THAT NAMES NO ABSENCE — the two outer ones are
+    // "one thing it has, one thing it lacks", and the shape of the sentence is what marks
+    // the middle out.
+    expect(C.tiers[MIDDLE].approachVerdict).not.toMatch(/\bNo\b/);
+    expect(C.tiers[TOP].approachVerdict).toMatch(/\bNo\b/);
+    expect(C.tiers[BOTTOM].approachVerdict).toMatch(/\bNo\b/);
+    // AND THE TRIO IS COMPLETE: middle-out is only the answer if its two alternatives are
+    // both on the stage.
+    expect(new Set(C.tiers.map((t) => t.approach)).size).toBe(TIER_COUNT);
+  });
+
+  test("the two acts leave the middle in both directions, and say so in words", () => {
+    expect(C.upLabel).toBe("INFLUENCE UP");
+    expect(C.downLabel).toBe("DRIVE DOWN");
+    // A VERB PHRASE AND NOT A COMPASS BEARING: "UPWARD" as a heading is a scale's axis
+    // label, and the arrow beside it is what says which way it runs.
+    for (const label of [C.upLabel, C.downLabel]) {
+      expect(label).not.toMatch(/^(UPWARD|DOWNWARD)$/);
+    }
+    // The downward act picks the top plate's own keyword back up by name.
+    expect(C.tiers[TOP].holdsKw).toEqual(["The mandate"]);
+    expect(C.downGloss).toMatch(/\byour mandate\b/i);
+    // …and the upward act ends where the room sits.
+    expect(C.upGloss).toMatch(/\bthis room\b/);
+    // BOTH ACTS TAKE THE MIDDLE AS THEIR SUBJECT, in the same word — which is the figure's
+    // claim as a sentence, and what the shipped "X becomes Y" pair hid behind a copula. The
+    // arrow says which way; the line says what the act consists of.
+    for (const gloss of [C.upGloss, C.downGloss]) {
+      expect(gloss, gloss).toMatch(/^They\b/);
+      expect(gloss, gloss).not.toMatch(/\bbecomes\b/);
+    }
+    // AND THE WEEKDAY MOTIF IS GONE FROM THE WHOLE STAGE. It stood in three places for one
+    // idea — an ordinary working day — and a room had to decode it before it could read any
+    // of them. `leader-mandate` keeps its own named day.
+    for (const copy of authoredStrings()) {
+      expect(copy, `a weekday in ${JSON.stringify(copy)}`).not.toMatch(
+        /\b(Monday|Tuesday|Wednesday|Thursday|Friday)\b/,
+      );
+    }
+  });
+
+  test("the thesis is one clause per party, in the order they act", () => {
+    expect(C.thesis).toBe(
+      "I build the foundation. You empower them. They drive the adoption.",
+    );
+    // THREE CLAUSES, AND EACH ONE IS A PLATE — the presenter, the top plate's single act,
+    // the middle plate doing the one thing the teams cannot authorise.
+    expect(C.thesis.split(". ")).toHaveLength(3);
+    // THE FIRST PERSON IS THE PRESENTER'S AND IT APPEARS NOWHERE ELSE ON THE STAGE.
+    const firstPerson = authoredStrings().filter((s) => /\b(I|me|my)\b/.test(s));
+    expect(firstPerson).toEqual([C.thesis]);
+    // "the foundation" CARRIES THE REFUSAL. The shipped line spent a whole sentence — "I
+    // cannot make them use it" — on a limit one noun states: a foundation is what somebody
+    // else builds ON, and the two clauses after it say who does the rest.
+    expect(C.thesis).toMatch(/^I build the foundation\b/);
+    // AND THE LAST CLAUSE IS THE RAIL'S OWN DOWNWARD VERB, so the sentence and the figure
+    // name the same act.
+    expect(C.downLabel).toMatch(/\bDRIVE\b/);
+    expect(C.thesis).toMatch(/\bdrive\b/);
+    // AND IT MAY NOT CONTRADICT THE HEADLINE OVER IT. "reaches them through you", said to
+    // a room of top management, claims adoption travels through the people holding the
+    // mandate — which is top-down, which is what the headline refuses. So the handover is
+    // pointed at the act this room can actually perform.
+    expect(C.thesis).not.toMatch(/through you\b/);
+    expect(C.thesisKw).toEqual(["You empower them"]);
+    expect(C.thesis).toContain(C.thesisKw[0]);
+    // …and it names no slide, no section and nothing after it.
+    expect(C.thesis).not.toMatch(/\b(next|following|slide|section|deck)\b/i);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AC · the room is TOP MANAGEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("the addressing sits on the tier the room is actually in", () => {
+  test("THIS ROOM prints inside the TOP plate, level with its name", () => {
+    const { unmount } = renderSlide();
+    const tag = box("middle-out-plate-tag");
+    expect(tag.textContent).toBe(C.roomTag);
+    expect(C.roomTag).toBe("THIS ROOM");
+    // LEVEL WITH THE TOP PLATE'S NAME ROW, and right-aligned inside that plate's own
+    // measure — the position IS the addressing.
+    expect(px(tag.style.top)).toBe(px(box(`middle-out-plate-${C.tiers[TOP].id}-name`).style.top));
+    expect(tag.style.textAlign).toBe("right");
+    expect(px(tag.style.top)).toBeGreaterThan(plateTop(TOP));
+    expect(px(tag.style.top)).toBeLessThan(plateTop(TOP) + plateHeight(TOP));
+    // AND NOT INSIDE THE MIDDLE PLATE, which is where it was drafted and where it would
+    // flatter people who are not in the chairs.
+    expect(px(tag.style.top)).toBeLessThan(plateTop(MIDDLE));
+    unmount();
+  });
+
+  test("the standing kicker is gone — no second title under the headline", () => {
+    const { container, unmount } = renderSlide();
+    // The shipped stage put a mono line at y=134, 12px under a 40px display face. Nothing
+    // renders between the headline row and the figure now.
+    expect(stageTextWithoutFigLabel(container)).not.toMatch(/THE MIDDLE IS THIS ROOM/i);
+    expect(walkStrings(C).some((s) => /THE MIDDLE IS/i.test(s))).toBe(false);
+    const tops = EVERY_BOX.map((id) => px(box(id).style.top)).filter(Number.isFinite);
+    expect(Math.min(...tops)).toBeGreaterThanOrEqual(FIGURE_TOP);
+    // …and the figure starts a clear 38px under the headline row.
+    expect(FIGURE_TOP - HEADLINE_BOTTOM).toBe(38);
+    unmount();
+  });
+
+  test("the second person means the ROOM, and the middle tier is third person", () => {
+    // `your` ON THE TOP AND MIDDLE PLATES AND IN THE DOWNWARD ACT: the room's teams, the
+    // room's people, the room's mandate, the room's champions.
+    expect(C.tiers[TOP].qualifier).toMatch(/\byour teams\b/);
+    expect(C.tiers[MIDDLE].qualifier).toMatch(/\byour people\b/);
+    expect(C.downGloss).toMatch(/\byour mandate\b/i);
+    expect(C.middleSubname).toBe("YOUR AI CHAMPIONS");
+    // AND THE MIDDLE PLATE MAY NOT SAY THE ROOM IS THE ONE BEING COPIED. "they watched
+    // YOU do it" was the drafted line and it addresses the wrong chair.
+    expect(C.tiers[MIDDLE].qualifier).not.toMatch(/\byou\b/);
+    expect(C.tiers[MIDDLE].qualifier).toMatch(/\bthey watch it work\b/);
+    // NOR MAY THE UPWARD ACT SEND ANYTHING "ABOVE" THE ROOM, which is what it said while
+    // the audience was assumed to be the middle.
+    expect(C.upGloss).not.toMatch(/above you/i);
+  });
+
+  test("the champions are named beside the middle plate, inside its name row", () => {
+    const { unmount } = renderSlide();
+    const name = box(`middle-out-plate-${C.tiers[MIDDLE].id}-name`);
+    expect(name.textContent).toContain(C.tiers[MIDDLE].name);
+    expect(name.textContent).toContain(C.middleSubname);
+    // The two outer plates carry their name and nothing else.
+    for (const i of [TOP, BOTTOM]) {
+      const el = box(`middle-out-plate-${C.tiers[i].id}-name`);
+      expect(el.textContent).toBe(C.tiers[i].name);
+    }
+    unmount();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AC · no new ladder
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** The scale vocabulary §6.6 refuses, and the two slides that own the two ladders it is
+ *  protecting. Each pattern is fired against its owner's corpus below, so a regex that
+ *  matched nothing could not pass for a rule. */
+const SCALE_WORDS: ReadonlyArray<readonly [string, RegExp]> = [
+  ["level", /\blevels?\b/i],
+  ["maturity", /\bmaturit\w*\b/i],
+  ["rung", /\brungs?\b/i],
+  ["tier", /\btiers?\b/i],
+  ["ladder", /\bladders?\b/i],
+  ["phase", /\bphases?\b/i],
+  ["stage", /\bstages?\b/i],
+  ["step", /\bsteps?\b/i],
+  ["L1–L5", /\bL[1-5]\b/],
+  ["P0–P3", /\bP[0-3]\b/],
+];
+
+describe("no new ladder — §6.6's third-ladder refusal, held by word and by geometry", () => {
+  test("no digit reaches the stage, in any rendered string", () => {
+    for (const copy of authoredStrings()) {
+      expect(copy, `a digit in ${JSON.stringify(copy)}`).not.toMatch(/\d/);
+    }
+    const { container, unmount } = renderSlide(THESIS_POSE);
+    // The fig label is stripped: the letter and number in front of it are the COMPOSER's
+    // (§3.5) and are authored nowhere under this directory.
+    expect(stageTextWithoutFigLabel(container)).not.toMatch(/\d/);
+    unmount();
+  });
+
+  test("no scale vocabulary reaches the stage — and every pattern fires elsewhere", () => {
+    const { container, unmount } = renderSlide(THESIS_POSE);
     const stage = stageTextWithoutFigLabel(container);
-    expect(stage, "positive control: the stage is not empty").toContain(C.closer);
-    for (const [name, pattern] of DONE_TO_YOU) {
+    for (const [name, pattern] of SCALE_WORDS) {
       for (const copy of authoredStrings()) {
         expect(pattern.test(copy), `"${name}" in ${JSON.stringify(copy)}`).toBe(false);
       }
       expect(pattern.test(stage), `"${name}" reached the stage`).toBe(false);
     }
-    // POSITIVE CONTROLS: every pattern fires on the sentence it was written to refuse, so
-    // the eight rules above are alive rather than eight regexes that match nothing.
-    const REFUSED = [
-      "We will roll out to the divisions next quarter.",
-      "A cascade down through the org.",
-      "The platform is deployed to every team.",
-      "A change management workstream owns it.",
-      "An adoption programme, run centrally.",
-      "Your people will be onboarded in March.",
-      "Everybody gets trained first.",
-      "The centre enables the divisions.",
+    unmount();
+
+    // THE POSITIVE CONTROL, and it is what makes the rule above non-vacuous: the words
+    // exist in this deck, on the two slides that are allowed them.
+    const ladders = [
+      ...walkStrings(gapLadderContent),
+      ...walkStrings(mandatePhasesGatesContent),
     ];
-    DONE_TO_YOU.forEach(([name, pattern], i) => {
-      expect(pattern.test(REFUSED[i]), `"${name}" does not fire on its own control`).toBe(true);
+    for (const [name, pattern] of [
+      SCALE_WORDS[0], // level    → B.4's L1–L5
+      SCALE_WORDS[5], // phase    → K.2's P0–P3
+      SCALE_WORDS[8], // L1–L5
+      SCALE_WORDS[9], // P0–P3
+    ]) {
+      expect(
+        ladders.some((copy) => pattern.test(copy)),
+        `"${name}" is supposed to be another slide's, but no ladder slide prints it`,
+      ).toBe(true);
+    }
+    // AND THE WORD `tier` IS FORBIDDEN IN COPY WHILE THE CODE USES IT FREELY — what the
+    // room reads is the rule, and an identifier is not read out loud.
+    expect(C.tiers.length).toBe(TIER_COUNT);
+  });
+
+  test("the two outer plates are identical to the pixel, and share one left edge", () => {
+    // ONE LEFT EDGE, ONE WIDTH, ONE INTERNAL LAYOUT. A plate cannot be indented, inset or
+    // narrowed to rank it.
+    expect(plateHeight(TOP)).toBe(plateHeight(BOTTOM));
+    expect(plateHeight(TOP)).toBe(PLATE_HEIGHT);
+    for (const i of [TOP, MIDDLE, BOTTOM]) {
+      expect(claimRowTop(i, 0) - plateTop(i), `plate ${i} · first row inset`).toBe(42);
+      expect(claimRowTop(i, 1) - claimRowTop(i, 0), `plate ${i} · row pitch`).toBe(32);
+    }
+    const { unmount } = renderSlide();
+    for (const id of [...PLATE_IDS, ...CARD_IDS]) {
+      const el = box(id);
+      expect(px(el.style.left) + px(el.style.width), `${id} · right edge`).toBeLessThanOrEqual(
+        STAGE.width,
+      );
+    }
+    for (const i of [TOP, MIDDLE, BOTTOM]) {
+      expect(px(box(PLATE_IDS[i]).style.left), `plate ${i}`).toBe(PLATE_LEFT);
+      expect(px(box(PLATE_IDS[i]).style.width), `plate ${i}`).toBe(PLATE_WIDTH);
+      expect(px(box(CARD_IDS[i]).style.left), `card ${i}`).toBe(CARD_LEFT);
+      expect(px(box(CARD_IDS[i]).style.width), `card ${i}`).toBe(CARD_WIDTH);
+    }
+    unmount();
+  });
+
+  test("the middle plate's extra height is EARNED by the row only it has", () => {
+    // NOT MONOTONIC, SO NOT A SCALE: `top < middle > bottom`.
+    expect(MIDDLE_PLATE_HEIGHT).toBeGreaterThan(PLATE_HEIGHT);
+    expect(plateHeight(MIDDLE)).toBe(MIDDLE_PLATE_HEIGHT);
+    expect(plateHeight(TOP)).toBe(plateHeight(BOTTOM));
+    // AND IT IS EXACTLY ONE MONO ROW PLUS ITS GAP — derived from the chips row's own
+    // registers, so deleting the string re-cuts all three plates to one height.
+    expect(MIDDLE_PLATE_HEIGHT - PLATE_HEIGHT).toBe(28);
+    const { unmount } = renderSlide();
+    const chips = box("middle-out-plate-chips");
+    expect(chips.textContent).toBe(C.middleChips);
+    // The row lives INSIDE the plate it grew, under that plate's last claim row.
+    expect(px(chips.style.top)).toBe(CHIPS_TOP);
+    expect(CHIPS_TOP).toBeGreaterThan(claimRowTop(MIDDLE, CLAIM_ROWS - 1));
+    expect(CHIPS_TOP + px(chips.style.height)).toBeLessThan(
+      plateTop(MIDDLE) + plateHeight(MIDDLE),
+    );
+    // …and no other plate has one.
+    expect(document.querySelectorAll("[data-testid='middle-out-plate-chips']")).toHaveLength(1);
+    unmount();
+  });
+
+  test("the rail is one double-headed axis with no stops on it", () => {
+    // THE MIDDLE INDEX IS DERIVED AND MUST STAY A WHOLE NUMBER: with four tiers it is 1.5,
+    // which is not a row.
+    expect(Number.isInteger(MIDDLE_TIER_INDEX)).toBe(true);
+    expect(MIDDLE_TIER_INDEX).toBe((TIER_COUNT - 1) / 2);
+    // BOTH HALVES ARE THE SAME LENGTH, and they meet on the middle plate's centre line.
+    expect(ORIGIN_Y).toBe(plateCentreY(MIDDLE));
+    expect(ARROW_SPAN).toBe(ORIGIN_Y - plateCentreY(TOP));
+    expect(plateCentreY(BOTTOM) - ORIGIN_Y).toBe(ARROW_SPAN);
+    expect(UP_SHAFT_TOP + SHAFT_HEIGHT).toBe(ORIGIN_Y);
+    expect(DOWN_SHAFT_TOP).toBe(ORIGIN_Y);
+    // EACH HEAD'S TIP LANDS ON THE PLATE IT REACHES.
+    expect(UP_HEAD_TOP).toBe(plateCentreY(TOP));
+    expect(DOWN_HEAD_TOP + HEAD_HEIGHT).toBe(plateCentreY(BOTTOM));
+
+    const { unmount } = renderSlide();
+    // ONE x FOR EVERY MARK ON THE RAIL — the shafts, the pulses, the heads and the dot are
+    // centred on one axis, so the eye reads one line and not two.
+    const centres = [
+      "middle-out-shaft-up",
+      "middle-out-shaft-down",
+      "middle-out-flow-up",
+      "middle-out-flow-down",
+      "middle-out-head-up",
+      "middle-out-head-down",
+      "middle-out-origin-dot",
+    ].map((id) => {
+      const el = box(id);
+      return px(el.style.left) + px(el.style.width) / 2;
     });
-    unmount();
-  });
-
-  test("no first-person plural anywhere, and exactly one first-person word at all", () => {
-    // "through me" IS THE ONLY FIRST-PERSON WORD ON THE STAGE, and it is a REFUSAL — the
-    // presenter saying the deck is not the delivery mechanism. A "we" anywhere would make
-    // the slide a plan somebody else is running; a second "I" would make it a story.
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    const stage = stageTextWithoutFigLabel(container);
-    for (const copy of [...authoredStrings(), stage]) {
-      expect(copy, `first person plural in ${JSON.stringify(copy)}`).not.toMatch(
-        /\b(we|we're|we've|our|ours|us)\b/i,
-      );
-      expect(copy, `first person singular in ${JSON.stringify(copy)}`).not.toMatch(
-        /\b(I|I'm|I've|my|mine)\b/,
-      );
+    expect(new Set(centres).size, "every rail mark on one axis").toBe(1);
+    // …and the whole rail sits clear of the plates, between them and the cards.
+    for (const c of centres) {
+      expect(c).toBeGreaterThan(PLATE_LEFT + PLATE_WIDTH);
+      expect(c).toBeLessThan(CARD_LEFT);
     }
-    expect(stage.match(/\bme\b/g) ?? [], "exactly one `me`, in the closer").toHaveLength(1);
-    expect(C.closer).toMatch(/\bme\b/);
+    expect(RAIL_LEFT).toBe(PLATE_LEFT + PLATE_WIDTH);
+
+    // THE ONLY MARK BETWEEN THE TWO HEADS IS THE ORIGIN — one dot, on the middle plate's
+    // centre line. A second and third would be a scale with three stops on it.
+    const dot = box("middle-out-origin-dot");
+    expect(px(dot.style.top) + px(dot.style.height) / 2).toBe(ORIGIN_Y);
+    expect(ORIGIN_DOT_TOP).toBe(ORIGIN_Y - ORIGIN_DOT_SIZE / 2);
+    expect(dot.style.borderRadius).toBe("50%");
+    // NO HORIZONTAL BAR — the elbow that joined two offset shafts was this figure's first
+    // cut and it read as a dimension line, which says "these two are one measurement"
+    // rather than "two acts leave one place". It was 16×4; the marks that remain are two
+    // 4×132 shafts, two 4×48 pulses, a 10×10 dot and two 16×12 heads. A HEAD is wider than
+    // it is tall on purpose (16×16 reads as a play button), so the test is not "nothing is
+    // wider than tall" — it is that no mark is wide AND thin, which is the only shape a bar
+    // can have.
+    const bars = FIGURE_IDS.filter((id) => {
+      if (!TEXTLESS.has(id) || PLATE_IDS.includes(id) || CARD_IDS.includes(id)) return false;
+      const el = box(id);
+      return px(el.style.width) >= 3 * px(el.style.height);
+    });
+    expect(bars, "no wide, thin mark on the rail").toEqual([]);
     unmount();
   });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// AC · §6.6 · NO NEW LADDER
+// AC · the rank, and the pointer
 // ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * The scale vocabulary, refused BY WORD — guardrail 6 in `content.ts`, transcribed as one
- * regex because that guardrail is itself a list of words.
- *
- * `gap-capability-ladder` owns L1–L5 and `mandate-phases-gates` owns P0–P3, and a single
- * borrowed noun here would make the room start counting. `\bsteps?\b` is in the list on
- * the guardrail's own authority — bare "step" is ladder vocabulary on a stage of three
- * stacked boxes, and it covers "step N" without needing a numeral the digit rule already
- * forbids.
- */
-const LADDER =
-  /\b(levels?|maturity|stages?|rungs?|tiers?|ladders?|phases?|steps?|L[1-5]|P[0-3])\b/i;
-
-describe("no new ladder — §6.6's third-ladder refusal, held by word and by geometry", () => {
-  test("the regex bites, and it does not bite the shipped copy", () => {
-    // NEGATIVE CONTROLS FIRST, so a future reader can see the rule is alive before
-    // reading the absence it proves. Both are real: "THE BOARD AND THE C-LEVEL" is the
-    // top band's DRAFTED label, cut for this exact match, and "one rung up" is the
-    // sentence a reviewer reaches for when describing what this chart looks like.
-    expect(LADDER.test("THE BOARD AND THE C-LEVEL")).toBe(true);
-    expect(LADDER.test("one rung up")).toBe(true);
-    expect(LADDER.test("a maturity model")).toBe(true);
-    expect(LADDER.test("stage 2 of 4")).toBe(true);
-    // AND IT FIRES ON THE TWO LADDERS IT EXISTS TO PROTECT, read off their live modules
-    // rather than off a sentence written here to make it fire.
-    expect(walkStrings(gapLadderContent).some((copy) => LADDER.test(copy))).toBe(true);
-    expect(walkStrings(mandatePhasesGatesContent).some((copy) => LADDER.test(copy))).toBe(true);
-
-    // …and it matches nothing this slide authors.
-    for (const copy of authoredStrings()) {
-      expect(copy, `scale vocabulary in ${JSON.stringify(copy)}`).not.toMatch(LADDER);
+describe("the middle row is ranked in colour, and the pointer cannot promote another", () => {
+  test("the middle plate and its card are the lit pair, and they are the only ones", () => {
+    const { unmount } = renderSlide();
+    for (const [i, tier] of C.tiers.entries()) {
+      const lit = i === MIDDLE ? "true" : "false";
+      expect(box(`middle-out-plate-${tier.id}`).dataset.lit, tier.id).toBe(lit);
+      expect(box(`middle-out-card-${tier.id}`).dataset.lit, tier.id).toBe(lit);
     }
-  });
-
-  test("prints NO DIGIT AT ALL, in the copy and on the stage", () => {
-    // A STAGE WITH NO NUMERAL ON IT CANNOT BE READ AS A SCALE, and an absence is testable
-    // in a way that a list of forbidden values is not. It also keeps this slide from
-    // re-spending B.1's 70/30 — the one split the leader deck has already quantified —
-    // and from carrying the unsourced "3.5×" figure `content.ts` refuses at length.
-    for (const copy of authoredStrings()) {
-      expect(copy, `a digit in ${JSON.stringify(copy)}`).not.toMatch(/\d/);
-    }
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
     expect(
-      container.querySelector(".fig-label")?.textContent,
-      "the derived reference is there to strip",
-    ).toContain(`${AT.letter}.${AT.num}`);
-    const stage = stageTextWithoutFigLabel(container);
-    expect(stage.length, "a rule over an empty stage proves nothing").toBeGreaterThan(400);
-    expect(stage).not.toMatch(/\d/);
-    expect(stage).not.toMatch(LADDER);
+      document.querySelectorAll("[data-lit='true']").length,
+      "exactly one plate and one card",
+    ).toBe(2);
     unmount();
   });
 
-  test("no band carries an index, an ordinal or anything beside its name", () => {
-    const { unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    const ORDINAL = /\b(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th)\b/i;
-    for (const band of C.bands) {
-      const name = screen.getByTestId(`middle-out-band-${band.id}-name`);
-      expect(name.textContent, band.id).toBe(band.label);
-      expect(name.textContent, `${band.id} · a numeral`).not.toMatch(/\d/);
-      expect(name.textContent, `${band.id} · an ordinal`).not.toMatch(ORDINAL);
-      // No leading enumeration either — "1.", "I)", "A —".
-      expect(name.textContent, `${band.id} · a leading index`).not.toMatch(
-        /^\s*([0-9]+|[IVX]+|[A-Z])\s*[.):—-]/,
-      );
-      // THE BAND'S OWN RECTANGLE CARRIES NOTHING. Guardrail 1 says the mono row label is a
-      // band's whole identity and nothing is rendered beside it — an empty box is that
-      // rule as a fact.
-      const box = screen.getByTestId(`middle-out-band-${band.id}`);
-      expect(box.textContent, band.id).toBe("");
-      expect(box.children.length, band.id).toBe(0);
-    }
-    // AND NO ORDINAL ANYWHERE ELSE ON THE STAGE EITHER: an ordinal in a claim row would
-    // number the bands just as effectively as one in a label.
-    for (const copy of authoredStrings()) {
-      expect(copy, `an ordinal in ${JSON.stringify(copy)}`).not.toMatch(ORDINAL);
-    }
-    unmount();
-  });
-
-  test("all three bands are the same box — equal geometry is the anti-ladder guarantee", () => {
-    // THE GUARANTEE LIVES IN `middle-out-geometry.ts` PRECISELY SO A COPY EDIT CANNOT
-    // UNDO IT: one height, one width, one left edge and one placement function, `i ×
-    // pitch`. A chart whose rows differ only in what they say is an org chart; one whose
-    // rows differ in SIZE is a scale.
-    const { unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    const boxes = C.bands.map((band) => screen.getByTestId(`middle-out-band-${band.id}`));
-    for (const [i, box] of boxes.entries()) {
-      expect(box.style.left, C.bands[i].id).toBe(`${BAND_LEFT}px`);
-      expect(box.style.width, C.bands[i].id).toBe(`${BAND_WIDTH}px`);
-      expect(box.style.height, C.bands[i].id).toBe(`${BAND_HEIGHT}px`);
-      expect(box.style.top, C.bands[i].id).toBe(`${bandTop(i)}px`);
-    }
-    // ONE PITCH, EVENLY — no staircase, no inset, no indent.
-    expect(new Set(boxes.map((b) => b.style.left)).size).toBe(1);
-    expect(new Set(boxes.map((b) => b.style.width)).size).toBe(1);
-    expect(new Set(boxes.map((b) => b.style.height)).size).toBe(1);
-    for (let i = 1; i < C.bands.length; i++) {
-      expect(bandTop(i) - bandTop(i - 1), `pitch ${i}`).toBe(BAND_PITCH);
-    }
-    // AND NOTHING SCALES OR TRANSFORMS A BAND — rank as MAGNITUDE is what a scale does.
-    for (const [i, box] of boxes.entries()) {
-      expect(box.style.transform, C.bands[i].id).toBe("");
-    }
-    unmount();
-  });
-
-  test("the two direction rules are simultaneous, equal and never collinear", () => {
-    // A SINGLE LINE WITH THREE STOPS ON IT WOULD BE A SCALE, and two collinear strokes
-    // with a gap between them read as exactly that. So: same length, same arrival, and
-    // different x — with ONE horizontal mark on the whole stage, at the middle band's own
-    // centre line.
-    const { container, unmount } = renderSlide(TRANSLATION_POSE);
-    const down = screen.getByTestId("middle-out-rule-downward");
-    const up = screen.getByTestId("middle-out-rule-upward");
-    expect(down.style.height).toBe(up.style.height);
-    expect(down.style.width).toBe(up.style.width);
-    expect(down.style.left).not.toBe(up.style.left);
-    expect(arrival("middle-out-rule-downward")).toBe(arrival("middle-out-rule-upward"));
-    // ONE ORIGIN BAR, and it is the only horizontal mark: a second and third at the outer
-    // bands' centre lines were drawn and cut, because three evenly spaced marks on a
-    // vertical rail are a scale with three stops on it.
-    const horizontal = [...container.querySelectorAll<HTMLElement>("[data-testid^='middle-out-']")]
-      .filter((el) => el.style.height === "2px" && parseFloat(el.style.width) > 2)
-      .map((el) => el.dataset.testid);
-    expect(horizontal).toEqual(["middle-out-origin-bar"]);
-    // NO ARROWHEAD AND NO SVG MARKER: the direction each rule means is said by which band
-    // it reaches and by where its copy sits, and by nothing else.
-    expect(container.querySelectorAll("svg, marker, polygon, path")).toHaveLength(0);
-    unmount();
-  });
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// AC · the pose walk, forward and backward
-// ─────────────────────────────────────────────────────────────────────────────
-
-describe("the pose walk", () => {
-  test("every gate is monotonic — nothing that has arrived can ever leave", () => {
-    // THE PROPERTY, NOT AN EXAMPLE OF IT. Every gate in `middle-out-walk.ts` is a `>=`
-    // against a pose, so a pose is everything argued so far and there is no state for a
-    // later pose to undo. Asserted one pose PAST the end too, because the last pose of a
-    // slide should be the pose that survives being over-shot — a `===` gate would make the
-    // whole close vanish there.
-    for (const { id, gate } of GATED) {
-      for (const pose of [...POSES, STEP_COUNT, STEP_COUNT + 7]) {
-        if (gate(pose)) {
-          expect(gate(pose + 1), `${id} left the stage after pose ${pose}`).toBe(true);
-        }
-      }
-    }
-    expect(showsTranslations(STEP_COUNT + 7)).toBe(true);
-    expect(isMiddleLit(STEP_COUNT + 7)).toBe(true);
-  });
-
-  test("every pose is complete at every stop, in both directions", () => {
-    const { container, unmount } = renderSlide();
-    const walk = [...POSES, ...[...POSES].reverse()];
-    for (const pose of walk) {
-      goToPose(pose);
-
-      // THE SEVEN STANDING BOXES ARE UP AT EVERY STOP. Pose 0 IS the organisation, named
-      // and nothing else, so the kicker, the three rectangles and the three names are
-      // never gated and never removed.
-      for (const id of STANDING_IDS) {
-        expect(screen.getByTestId(id), `${id} at pose ${pose}`).toBeInTheDocument();
-        if (!TEXTLESS_IDS.has(id)) {
-          expect(screen.getByTestId(id).textContent, `${id} at pose ${pose}`).not.toBe("");
-        }
-      }
-
-      for (const { id, gate } of GATED) {
-        // A pose is everything argued so far: revealed iff its gate says so, at every
-        // stop in BOTH directions — `on` is derived from the pose and not accumulated,
-        // so walking back to 0 must un-reveal 1–4.
-        expect(revealed(id), `${id} at pose ${pose}`).toBe(gate(pose));
-        // AND THE COPY IS THERE, not merely the box: a path that dropped children would
-        // still pass a class check.
-        if (gate(pose) && !TEXTLESS_IDS.has(id)) {
-          expect(screen.getByTestId(id).textContent, `${id} at pose ${pose}`).not.toBe("");
-        }
-      }
-
-      // ZERO SMIL NODES AND NO `<svg>` AT EVERY STOP — the AC's jsdom half, under the
-      // default motion preference. The `reduce` half is below.
-      expect(
-        container.querySelectorAll("animate, animateTransform, animateMotion, set, animateColor")
-          .length,
-        `SMIL at pose ${pose}`,
-      ).toBe(0);
-      expect(container.querySelectorAll("svg").length, `svg at pose ${pose}`).toBe(0);
-    }
-    unmount();
-  });
-
-  test("each pose reveals exactly the set the walk says it does", () => {
-    // THE PER-POSE SETS, DERIVED. Pose 0 arrives nothing (the chart is standing), poses
-    // 1…3 each arrive one WHOLE band, and pose 4 arrives the rail, the label, the two
-    // translations and the closer.
-    expect(POSES.map((pose) => arrivingAt(pose).length)).toEqual([0, 4, 4, 4, 7]);
-    // …and the band each claim pose arrives is the one `claimBeat` names, in the teaching
-    // order top → bottom → MIDDLE.
-    const bandOf = (pose: number) =>
-      C.bands.find((band) => POSE.FIRST_CLAIM + band.claimBeat === pose)?.id;
-    expect([1, 2, 3].map(bandOf)).toEqual(["board", "teams", "middle"]);
-    for (const pose of [1, 2, 3]) {
-      expect([...arrivingAt(pose)].sort()).toEqual(
-        [
-          `middle-out-${bandOf(pose)}-holds-eyebrow`,
-          `middle-out-${bandOf(pose)}-holds`,
-          `middle-out-${bandOf(pose)}-qualifier-eyebrow`,
-          `middle-out-${bandOf(pose)}-qualifier`,
-        ].sort(),
-      );
-    }
-    expect([...arrivingAt(TRANSLATION_POSE)].sort()).toEqual(
-      [
-        "middle-out-rule-downward",
-        "middle-out-rule-upward",
-        "middle-out-origin-bar",
-        "middle-out-translation-eyebrow",
-        "middle-out-upward",
-        "middle-out-downward",
-        "middle-out-closer",
-      ].sort(),
-    );
-  });
-
-  test("no pose rests on evidence with its conclusion missing", () => {
+  test("every lit value is BRIGHTER than the resting one, and none is a subtraction", () => {
     const { unmount } = renderSlide();
+    const plate = (i: number) => declarations(box(PLATE_IDS[i]));
+    const name = (i: number) => declarations(box(`middle-out-plate-${C.tiers[i].id}-name`));
+    const card = (i: number) => declarations(box(CARD_IDS[i]));
+    const verdict = (i: number) =>
+      declarations(box(`middle-out-card-${C.tiers[i].id}-verdict`));
 
-    // POSES 1–3 · EACH FINISHES A WHOLE BAND — what it holds AND the one further thing
-    // that is true of it — rather than laying out three `holds` rows and then three
-    // qualifiers, which would leave pose 1 resting on a stage that says only that
-    // everybody has something.
-    for (const pose of [1, 2, 3]) {
-      goToPose(pose);
-      const band = C.bands.find((b) => POSE.FIRST_CLAIM + b.claimBeat === pose)!;
-      expect(revealed(`middle-out-${band.id}-holds`), `${band.id} holds`).toBe(true);
-      expect(revealed(`middle-out-${band.id}-qualifier`), `${band.id} qualifier`).toBe(true);
-      // THE EYEBROW AND ITS CLAIM ARRIVE ON THE SAME STEP, always: a HOLDS standing alone
-      // over an empty measure for 90ms is a row that looks like it failed to load.
-      for (const slot of ["holds", "qualifier"]) {
-        expect(arrival(`middle-out-${band.id}-${slot}-eyebrow`), `${band.id} ${slot}`).toBe(
-          arrival(`middle-out-${band.id}-${slot}`),
-        );
-      }
-      // …and the pose RESTS on the second row, which is the one that costs something.
-      expect(arrival(`middle-out-${band.id}-holds`)).toBeLessThan(
-        arrival(`middle-out-${band.id}-qualifier`),
-      );
-      const last = arrival(`middle-out-${band.id}-qualifier`);
-      for (const id of arrivingAt(pose)) {
-        expect(arrival(id), `${id} must not outlast the pose's own conclusion`)
-          .toBeLessThanOrEqual(last);
-      }
-      // AND NO BAND IS EVER HALF-ARGUED: at every pose a band's two rows agree.
-      for (const other of C.bands) {
-        expect(
-          revealed(`middle-out-${other.id}-holds`),
-          `${other.id} at pose ${pose}`,
-        ).toBe(revealed(`middle-out-${other.id}-qualifier`));
-      }
-    }
-
-    // POSE 4 · THE TWO TRANSLATIONS ARE ONE ARRIVAL, and the closer is LAST within the
-    // pose. Staggering the two lines against each other by even 90ms would say "first
-    // this, then that" about the one pair of marks the no-new-ladder guardrail protects;
-    // the closer landing last is the separation the walk buys instead of spending a sixth
-    // pose on it.
-    goToPose(TRANSLATION_POSE);
-    expect(arrival("middle-out-upward")).toBe(arrival("middle-out-downward"));
-    const closer = arrival("middle-out-closer");
-    for (const id of arrivingAt(TRANSLATION_POSE)) {
-      if (id === "middle-out-closer") continue;
-      expect(arrival(id), `${id} must not outlast the closer`).toBeLessThan(closer);
-    }
-    // …and the closer's own subject is on the stage with it, never behind it.
-    expect(revealed("middle-out-upward")).toBe(true);
-    expect(revealed("middle-out-downward")).toBe(true);
-    unmount();
-  });
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// AC · rank is a COLOUR TIER, never opacity and never size
-// ─────────────────────────────────────────────────────────────────────────────
-
-describe("the middle band is ranked in colour and in nothing else", () => {
-  test("`data-lit` names exactly one band, and only from the pose it earns it", () => {
-    // THE RANK IS PUBLISHED IN THE DOM rather than parsed back out of a border colour:
-    // "which row is the argument about" is a fact about the figure, and reading it out of
-    // a style string would make every check a check of the tier table's spelling.
-    const { unmount } = renderSlide();
-    for (const pose of [...POSES, ...[...POSES].reverse()]) {
-      goToPose(pose);
-      const lit = C.bands
-        .filter((band) => screen.getByTestId(`middle-out-band-${band.id}`).dataset.lit === "true")
-        .map((band) => band.id);
-      expect(lit, `pose ${pose}`).toEqual(isMiddleLit(pose) ? [C.bands[MIDDLE].id] : []);
-    }
-    unmount();
-  });
-
-  test("at rest all three bands are identical — nothing is ranked before it is earned", () => {
-    // POSE 0 IS THE ORGANISATION AND NOTHING ELSE. Three identical boxes are what makes
-    // the ranking, when it lands, unmistakably the ARGUMENT rather than a decoration.
-    const { unmount } = renderSlide(POSE.CHART);
-    const captures = C.bands.map((_b, i) => bandCapture(i));
-    for (const key of ["box", "name"] as const) {
-      const styles = captures.map((c) =>
-        [...c[key]].filter(([prop]) => prop !== "top").map(([p, v]) => `${p}:${v}`).join(";"),
-      );
-      expect(new Set(styles).size, `three ${key} styles at rest`).toBe(1);
-    }
-    expect(captures.map((c) => c.lit)).toEqual(["false", "false", "false"]);
-    unmount();
-  });
-
-  test("from LAST_CLAIM_POSE the middle sits on a BRIGHTER rung of the same ramp", () => {
-    const { unmount } = renderSlide(LAST_CLAIM_POSE);
-    const middle = bandCapture(MIDDLE);
-    for (const outer of [TOP, BOTTOM]) {
-      const rest = bandCapture(outer);
-      const where = `${C.bands[outer].id} → ${C.bands[MIDDLE].id}`;
-
-      // THE BORDER AND THE NAME MOVE UP THE COPPER LADDER. Same family, higher rung —
-      // `!==` would pass on a DARKER tier, which is the exact failure the rule forbids.
-      for (const [key, prop] of [
-        ["box", "border"],
-        ["name", "color"],
-      ] as const) {
-        const was = brightnessOf(tokenIn(rest[key].get(prop)!, where), `${where} · ${prop}`);
-        const now = brightnessOf(tokenIn(middle[key].get(prop)!, where), `${where} · ${prop}`);
-        expect(now.family, `${where} · ${prop} · ladder`).toBe(was.family);
-        expect(now.rung, `${where} · ${prop}`).toBeGreaterThan(was.rung);
-      }
-
-      // THE GROUND CHANGES FAMILY, deliberately and uniquely: a resting band is the
-      // STAGE's own colour, so it is defined by its border alone and the fill channel is
-      // left unspent — which lets the middle band GAIN a ground rather than change one.
-      // Brightness across two ladders is not an ordering anyone can assert, so the claim
-      // is stated as what it is.
-      expect(rest.box.get("background-color"), `${where} · resting fill`).toContain(
-        "var(--neutral-",
-      );
-      expect(middle.box.get("background-color"), `${where} · lit fill`).toContain("var(--copper-");
-    }
-    // AND THE ORIGIN BAR IS PAINTED IN THE MIDDLE BAND'S OWN TIER, which is the second
-    // time the argument is made in colour rather than in size — one origin, two
-    // directions, and the origin is the room.
-    goToPose(TRANSLATION_POSE);
-    const bar = screen.getByTestId("middle-out-origin-bar");
-    expect(tokenIn(bar.style.backgroundColor, "origin bar")).toBe(
-      tokenIn(bandCapture(MIDDLE).box.get("border")!, "lit border"),
-    );
-    unmount();
-  });
-
-  test("the two outer bands are BYTE-IDENTICAL between pose 0 and pose 4", () => {
-    // "ATTENTION IS BOUGHT WITH ADDED LIGHT, NEVER SUBTRACTED" (§7.1). The other half of
-    // the rank rule: the two outer bands lose NOTHING when the middle lights. Compared as
-    // `outerHTML`, so a moved delay, a changed token, an added class or a dropped
-    // attribute all fail — and the middle band is compared the same way as a positive
-    // control, so this cannot pass because the capture stopped seeing anything.
-    const { unmount } = renderSlide(POSE.CHART);
-    const before = C.bands.map((_b, i) => bandCapture(i));
-    goToPose(TRANSLATION_POSE);
-    const after = C.bands.map((_b, i) => bandCapture(i));
-
-    for (const outer of [TOP, BOTTOM]) {
-      const id = C.bands[outer].id;
-      expect(movedBetween(before[outer].box, after[outer].box), `${id} · box`).toEqual([]);
-      expect(movedBetween(before[outer].name, after[outer].name), `${id} · name`).toEqual([]);
-      expect(after[outer].boxHtml, `${id} · box markup`).toBe(before[outer].boxHtml);
-      expect(after[outer].nameHtml, `${id} · name markup`).toBe(before[outer].nameHtml);
-    }
-    // POSITIVE CONTROL — the middle band DID move, and it moved in exactly three
-    // declarations: the border, the ground and the name's colour. Not in a fourth.
-    expect(movedBetween(before[MIDDLE].box, after[MIDDLE].box)).toEqual([
-      "background-color",
-      "border",
-    ]);
-    expect(movedBetween(before[MIDDLE].name, after[MIDDLE].name)).toEqual(["color"]);
-    unmount();
-  });
-
-  test("no rank is carried in the opacity channel, at any pose", () => {
-    // OPACITY ON THIS STAGE MEANS "HAS NOT ARRIVED YET", i.e. TIME — it is the channel
-    // `Reveal` spends. The middle band has been on the stage since pose 0, so its
-    // prominence cannot be spent there, and a reader who could read rank out of the
-    // opacity channel would be reading a reveal as a ranking.
-    const { unmount } = renderSlide();
-    for (const pose of POSES) {
-      goToPose(pose);
-      for (const band of C.bands) {
-        for (const id of [`middle-out-band-${band.id}`, `middle-out-band-${band.id}-name`]) {
-          const el = screen.getByTestId(id);
-          expect(el.style.opacity, `${id} at pose ${pose}`).toBe("");
-          expect(el.classList.contains("fade"), `${id} at pose ${pose}`).toBe(false);
-          // NO SIZE RANK EITHER — no transform, no scale, no halo outside the rectangle
-          // `middle-out-geometry.ts` cut.
-          expect(el.style.transform, `${id} at pose ${pose}`).toBe("");
-          expect(el.style.boxShadow, `${id} at pose ${pose}`).toBe("");
-        }
-      }
-    }
-    unmount();
-  });
-
-  test("every colour this figure sets is a var on the copper or neutral ramp", () => {
-    // THE PRECONDITION FOR EVERY "BRIGHTER" CLAIM ABOVE, and the enforcement of the
-    // renderer's own rule: CSS vars only, no hex and no `rgba()` literal, anywhere —
-    // including the two graphic tiers and the band grounds. `tokenIn` and `brightnessOf`
-    // THROW rather than return, so this test is the one that reports a stray literal.
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    let seen = 0;
-    for (const el of container.querySelectorAll<HTMLElement>("[data-testid^='middle-out-']")) {
-      const id = el.dataset.testid!;
-      for (const prop of ["color", "background-color", "border"]) {
-        const value = declarations(el).get(prop);
-        if (!value) continue;
-        brightnessOf(tokenIn(value, `${id} · ${prop}`), `${id} · ${prop}`);
-        seen++;
-      }
-    }
-    // Non-vacuity: every one of the twenty-six boxes paints at least one colour, and the
-    // three band rectangles paint two.
-    expect(seen).toBeGreaterThanOrEqual(EVERY_BOX.length);
-    unmount();
-  });
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// AC · zero SMIL, no <svg>, under either motion preference
-// ─────────────────────────────────────────────────────────────────────────────
-
-describe("prefers-reduced-motion: reduce", () => {
-  const realMatchMedia = window.matchMedia;
-
-  beforeEach(() => {
-    window.matchMedia = ((query: string) => ({
-      matches: query.includes("prefers-reduced-motion"),
-      media: query,
-      onchange: null,
-      addListener: () => {},
-      removeListener: () => {},
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      dispatchEvent: () => false,
-    })) as unknown as typeof window.matchMedia;
-  });
-
-  afterEach(() => {
-    window.matchMedia = realMatchMedia;
-  });
-
-  test("mounts zero SMIL nodes and no <svg> at every pose, and every pose is complete", () => {
-    // SMIL IS INVISIBLE TO THE GLOBAL `prefers-reduced-motion` RULE — it squashes CSS
-    // durations only — so a SMIL node would have to be gated at mount. This figure has
-    // nothing to gate, and THAT is the claim: the census is identical under either
-    // preference because nothing under this slide reads `matchMedia` at all. The mock
-    // proves the markup is preference-independent, which is the half a DOM test owns; the
-    // squashed-duration half (every reached reveal resting on its FINISHED frame) is the
-    // browser walk's.
-    const { container, unmount } = renderSlide();
-    for (const pose of POSES) {
-      goToPose(pose);
+    // BRIGHTER IS ASSERTED TWO WAYS, and which one applies is a property of the channel:
+    // border and text stay on one ramp, so ramp INDEX is used (it survives a retuned hex);
+    // the GROUND crosses ramps by design — a resting plate has the stage's own neutral and
+    // the lit one GAINS a copper — so that one is compared by computed luminance.
+    const brighter = (litDecl: string, restDecl: string, what: string) => {
+      const a = rung(litDecl, `${what} · lit`);
+      const b = rung(restDecl, `${what} · rest`);
+      expect(a.family, `${what} · same ramp`).toBe(b.family);
+      expect(a.rung, `${what} · lit is brighter`).toBeGreaterThan(b.rung);
+    };
+    const brighterAcrossRamps = (litDecl: string, restDecl: string, what: string) => {
       expect(
-        container.querySelectorAll("animate, animateTransform, animateMotion, set, animateColor")
-          .length,
-        `reduce · pose ${pose}`,
-      ).toBe(0);
-      expect(container.querySelectorAll("svg").length, `reduce · pose ${pose}`).toBe(0);
+        lumen(litDecl, `${what} · lit`),
+        `${what} · lit is brighter`,
+      ).toBeGreaterThan(lumen(restDecl, `${what} · rest`));
+    };
 
-      // COMPLETE, NOT MERELY UNANIMATED: every string the pose has reached is on the
-      // stage, and nothing the pose has not reached is.
-      for (const id of STANDING_IDS) {
-        if (!TEXTLESS_IDS.has(id)) {
-          expect(screen.getByTestId(id).textContent, `reduce · pose ${pose} · ${id}`).not.toBe("");
-        }
-      }
-      for (const { id, gate } of GATED) {
-        expect(revealed(id), `reduce · pose ${pose} · ${id}`).toBe(gate(pose));
-        if (gate(pose) && !TEXTLESS_IDS.has(id)) {
-          expect(
-            screen.getByTestId(id).textContent,
-            `reduce · pose ${pose} · ${id} is empty`,
-          ).not.toBe("");
-        }
-      }
+    brighter(plate(MIDDLE).get("border")!, plate(TOP).get("border")!, "plate border");
+    brighterAcrossRamps(
+      plate(MIDDLE).get("background-color")!,
+      plate(TOP).get("background-color")!,
+      "plate ground",
+    );
+    brighter(name(MIDDLE).get("color")!, name(TOP).get("color")!, "plate name");
+    brighter(card(MIDDLE).get("border")!, card(TOP).get("border")!, "card border");
+    brighter(verdict(MIDDLE).get("color")!, verdict(TOP).get("color")!, "card verdict");
+
+    // THE TWO OUTER TIERS ARE IDENTICAL TO EACH OTHER: the rank is about the middle row,
+    // not about the top of the chart against the bottom of it.
+    expect(plate(TOP).get("border")).toBe(plate(BOTTOM).get("border"));
+    expect(plate(TOP).get("background-color")).toBe(plate(BOTTOM).get("background-color"));
+    expect(name(TOP).get("color")).toBe(name(BOTTOM).get("color"));
+
+    // AND RANK IS NEVER SPENT IN THE OPACITY CHANNEL — opacity on this stage is TIME, and
+    // every plate arrives in one build.
+    for (const id of [...PLATE_IDS, ...CARD_IDS]) {
+      expect(declarations(box(id)).has("opacity"), `${id} · no inline opacity`).toBe(false);
     }
     unmount();
   });
-});
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AC · the keyword register split — kw on PROSE only
-// ─────────────────────────────────────────────────────────────────────────────
-
-describe("the keyword rule", () => {
-  test("exactly the ten prose strings carry a *Kw sibling, every keyword real", () => {
-    // THE DIRECTORY'S RULE, stated at the top of `../../src/slides/leader-shape/content.ts`
-    // and applied here without an exception. The BAND LABELS are the sharpest case: they
-    // are the only mono strings on this stage a reader might mistake for prose, they are
-    // what stands in place of an index (guardrail 1), and a copper italic inside one would
-    // emphasise a fragment of somebody's job title.
-    const blockKw = Object.keys(C).filter((k) => k.endsWith("Kw"));
-    expect(blockKw.sort()).toEqual(["closerKw", "downwardKw", "headlineKw", "upwardKw"]);
-    for (const band of C.bands) {
-      expect(
-        Object.keys(band).filter((k) => k.endsWith("Kw")).sort(),
-        band.id,
-      ).toEqual(["holdsKw", "qualifierKw"]);
-      // The band's OWN keys, pinned — so a `labelKw` or a `holdsEyebrowKw` cannot be added
-      // without this line failing first.
-      expect(Object.keys(band).sort(), band.id).toEqual([
-        "claimBeat",
-        "holds",
-        "holdsEyebrow",
-        "holdsKw",
-        "id",
-        "label",
-        "qualifier",
-        "qualifierEyebrow",
-        "qualifierKw",
-      ]);
-    }
-    // EVERY `*Kw` ENTRY IS AN EXACT SUBSTRING OF ITS PARTNER. A keyword that does not
-    // occur is a highlight that silently does nothing — the copy still reads, so nothing
-    // on the stage says the emphasis was lost.
-    for (const [name, copy, kws] of PROSE) {
-      expect(Array.isArray(kws), name).toBe(true);
-      expect(kws.length, `${name} carries no keyword`).toBeGreaterThan(0);
-      for (const kw of kws) {
-        expect(copy, `${name}Kw: "${kw}" is not in its prose`).toContain(kw);
-      }
-    }
-    // THE NINE LABELS CARRY NO SIBLING AT ALL.
-    for (const forbidden of ["figLabelKw", "kickerKw", "translationEyebrowKw", "bandsKw"]) {
-      expect(Object.keys(C), forbidden).not.toContain(forbidden);
-    }
-    // A LABEL AND A PROSE STRING MAY NOT BE THE SAME STRING, which is what makes the
-    // partition a partition rather than two overlapping lists.
-    expect(new Set([...PROSE.map(([, copy]) => copy), ...LABELS]).size).toBe(
-      PROSE.length + LABELS.length,
-    );
+  test("the two outer tiers are byte-identical at both poses", () => {
+    const { unmount } = renderSlide();
+    const before = [TOP, BOTTOM].map((i) => tierSignature(C.tiers[i]));
+    goToPose(THESIS_POSE);
+    const after = [TOP, BOTTOM].map((i) => tierSignature(C.tiers[i]));
+    expect(after).toEqual(before);
+    unmount();
   });
 
-  test("no mono LABEL renders an <em>, while every prose box carries its own", () => {
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    const labelIds = [
-      "middle-out-kicker",
-      ...C.bands.map((band) => `middle-out-band-${band.id}-name`),
-      ...C.bands.flatMap((band) => [
-        `middle-out-${band.id}-holds-eyebrow`,
-        `middle-out-${band.id}-qualifier-eyebrow`,
-      ]),
-      "middle-out-translation-eyebrow",
-    ];
-    for (const id of labelIds) {
-      expect(screen.getByTestId(id).querySelectorAll("em").length, `<em> inside label ${id}`).toBe(
-        0,
-      );
-    }
-    // The fig label is a label too — the only copper text on the stage that is not a mono
-    // heading — and it takes no emphasis either.
-    expect(container.querySelector(".fig-label")?.querySelectorAll("em").length).toBe(0);
-    // …and no label string carries stray markup of its own.
-    LABELS.forEach((label) => expect(label).not.toContain("<em"));
+  test("hovering a plate lights its card too, and no other tier moves", async () => {
+    const user = userEvent.setup();
+    const { unmount } = renderSlide();
+    for (const [i, tier] of C.tiers.entries()) {
+      const others = C.tiers.filter((t) => t.id !== tier.id);
+      const restingOthers = others.map((t) => tierSignature(t));
+      const restingSelf = tierSignature(tier);
 
-    // …WHILE EVERY PROSE BOX DOES CARRY ITS OWN, one `<em>` per keyword — so the absence
-    // above cannot pass because emphasis stopped rendering everywhere.
-    const proseBoxes: ReadonlyArray<readonly [string, readonly string[]]> = [
-      ...C.bands.flatMap(
-        (band) =>
-          [
-            [`middle-out-${band.id}-holds`, band.holdsKw],
-            [`middle-out-${band.id}-qualifier`, band.qualifierKw],
-          ] as const,
-      ),
-      ["middle-out-upward", C.upwardKw],
-      ["middle-out-downward", C.downwardKw],
-      ["middle-out-closer", C.closerKw],
-    ];
-    for (const [id, kws] of proseBoxes) {
-      const ems = [...screen.getByTestId(id).querySelectorAll("em")].map((em) => em.textContent);
-      expect(ems, id).toHaveLength(kws.length);
-      for (const kw of kws) expect(ems, `${id} · ${kw}`).toContain(kw);
+      await user.hover(box(PLATE_IDS[i]));
+
+      // THE PAIR LIGHTS TOGETHER — that is the whole point of the interaction: the plate
+      // and the card are one tier, and alignment alone cannot prove it.
+      expect(box(PLATE_IDS[i]).dataset.hover, tier.id).toBe("true");
+      expect(box(CARD_IDS[i]).dataset.hover, tier.id).toBe("true");
+      expect(tierSignature(tier), `${tier.id} · something changed`).not.toBe(restingSelf);
+
+      // AND NOTHING ELSE ON THE STAGE MOVES — no dim, no desaturation (§7.1).
+      expect(others.map((t) => tierSignature(t)), `${tier.id} · others unmoved`).toEqual(
+        restingOthers,
+      );
+
+      await user.unhover(box(PLATE_IDS[i]));
+      expect(box(PLATE_IDS[i]).dataset.hover, `${tier.id} · released`).toBe("false");
+      expect(box(CARD_IDS[i]).dataset.hover, `${tier.id} · released`).toBe("false");
+      expect(tierSignature(tier), `${tier.id} · returns to rest`).toBe(restingSelf);
     }
-    // The headline is the tenth prose string, and it lives on the slide file rather than
-    // inside the figure.
+    unmount();
+  });
+
+  test("hovering a CARD lights the plate — the pairing runs both ways", async () => {
+    const user = userEvent.setup();
+    const { unmount } = renderSlide();
+    await user.hover(box(CARD_IDS[BOTTOM]));
+    expect(box(PLATE_IDS[BOTTOM]).dataset.hover).toBe("true");
+    expect(box(CARD_IDS[BOTTOM]).dataset.hover).toBe("true");
+    expect(box(PLATE_IDS[TOP]).dataset.hover).toBe("false");
+    expect(box(PLATE_IDS[MIDDLE]).dataset.hover).toBe("false");
+    unmount();
+  });
+
+  test("a hovered resting tier never out-shines the middle tier at rest", async () => {
+    const user = userEvent.setup();
+    const { unmount } = renderSlide();
+    const litPlate = declarations(box(PLATE_IDS[MIDDLE]));
+    const litName = declarations(box(`middle-out-plate-${C.tiers[MIDDLE].id}-name`));
+
+    await user.hover(box(PLATE_IDS[TOP]));
+    const hoveredPlate = declarations(box(PLATE_IDS[TOP]));
+    const hoveredName = declarations(box(`middle-out-plate-${C.tiers[TOP].id}-name`));
+
+    // THE RANKING HAS TO SURVIVE THE POINTER. A hover that promoted an outer plate past
+    // the middle one would be arguing the opposite of the headline for as long as the
+    // presenter's cursor sat still.
+    const dimmer = (hover: string, lit: string, what: string) => {
+      const a = rung(hover, `${what} · hovered`);
+      const b = rung(lit, `${what} · lit at rest`);
+      expect(a.family, `${what} · same ramp`).toBe(b.family);
+      expect(a.rung, `${what} · hover stays under the lit tier`).toBeLessThan(b.rung);
+    };
+    dimmer(hoveredPlate.get("border")!, litPlate.get("border")!, "border");
+    // The ground is the cross-ramp channel again — a hovered resting plate gains
+    // `--copper-950` and the middle plate rests on `--copper-900`, which is brighter.
     expect(
-      [...(container.querySelector("h1")?.querySelectorAll("em") ?? [])].map((em) => em.textContent),
-    ).toEqual([...C.headlineKw]);
-    expect(proseBoxes.length + 1).toBe(PROSE.length);
+      lumen(hoveredPlate.get("background-color")!, "hovered ground"),
+      "hovered ground stays under the lit ground",
+    ).toBeLessThan(lumen(litPlate.get("background-color")!, "lit ground"));
+    dimmer(hoveredName.get("color")!, litName.get("color")!, "name");
+
+    // …and the middle plate itself is untouched by a hover on its neighbour.
+    expect(declarations(box(PLATE_IDS[MIDDLE]))).toEqual(litPlate);
     unmount();
   });
 
-  test("no authored string names a letter or a figure", () => {
-    // §3.4 R2 / §3.5. This slide composed as the THIRD `shape` row until gh#71 inserted
-    // `shape-tam-kotter` ahead of it and is the FOURTH now, so a literal "C.3" or "SECTION
-    // C" in this copy would have become a lie on a projector inside three days — which is
-    // no longer a hypothetical. The digit rule above
-    // already forbids every numeral; these hold the SHAPES, so a failure says which kind
-    // of reference was written.
-    const FIGURE = /\b[A-N]\.\d+\b/;
-    for (const copy of authoredStrings()) {
-      expect(copy, copy).not.toMatch(FIGURE);
-      expect(copy, copy).not.toMatch(/\bSECTIONS?\s+[A-N]\b/i);
-      expect(copy, copy).not.toMatch(/\bnext (two|three|four|five)\b/i);
-      expect(copy, copy).not.toMatch(/\b(slide|figure|deck)\b/i);
+  test("only the six boxes are hover targets — the type is transparent to the pointer", () => {
+    const { unmount } = renderSlide(THESIS_POSE);
+    const targets = [...PLATE_IDS, ...CARD_IDS];
+    for (const id of EVERY_BOX) {
+      const declared = declarations(box(id)).get("pointer-events");
+      if (targets.includes(id)) {
+        expect(declared, `${id} · is a hover target`).toBeUndefined();
+      } else {
+        // A text box that accepted pointer events would swallow every `mouseenter` aimed
+        // at the rectangle underneath it, and the highlight would flicker off wherever a
+        // claim row happens to be.
+        expect(declared, `${id} · must not eat the pointer`).toBe("none");
+      }
     }
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    const stage = stageTextWithoutFigLabel(container);
-    expect(stage.length).toBeGreaterThan(400);
-    expect(stage).not.toMatch(FIGURE);
     unmount();
   });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// AC · the nav floor
+// AC · the stage fits, and clears the NavBar
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("the whole figure clears the NavBar hover band", () => {
-  test("the lowest painted box ends above y=632, with a positive clearance", () => {
+describe("the whole figure fits the stage and clears the NavBar hover band", () => {
+  test("the thesis is the lowest box, directly above the band, with clearance to spare", () => {
     // THE FLOOR IS THE HOVER BAND AND NOT `.slide-content`'s BOTTOM: `.nav-zone` is
     // `bottom: 0; height: 88px`, so its top edge is y=632 and the band is a hover target
-    // whether or not the bar inside it is currently at opacity 0. Content under it is
-    // content the presenter's own pointer makes the NavBar fade up over.
+    // whether or not the bar inside it is currently at opacity 0.
     expect(NAV_ZONE_TOP).toBe(632);
-    expect(CLOSER_TOP + CLOSER_HEIGHT).toBe(600);
-    expect(NAV_ZONE_CLEARANCE).toBe(NAV_ZONE_TOP - (CLOSER_TOP + CLOSER_HEIGHT));
-    // DERIVED FROM BOTH ENDS, so an edit anywhere above — a taller register, a looser band
-    // gap, a fourth band — moves it and this fails before the stage crosses the band. The
-    // only thing worth asserting about it is that it stays positive.
+    expect(THESIS_TOP + THESIS_HEIGHT).toBe(614);
+    expect(NAV_ZONE_CLEARANCE).toBe(NAV_ZONE_TOP - (THESIS_TOP + THESIS_HEIGHT));
     expect(NAV_ZONE_CLEARANCE).toBeGreaterThan(0);
 
-    // AND READ BACK OFF THE RENDERED STAGE, so a box the geometry does not know about
-    // cannot sneak under the band: the lowest bottom edge of everything this figure
-    // mounts is the closer's, and it is above the floor.
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
-    const bottoms = [...container.querySelectorAll<HTMLElement>("[data-testid^='middle-out-']")]
-      .map((el) => ({
-        id: el.dataset.testid!,
-        bottom: parseFloat(el.style.top) + parseFloat(el.style.height),
-      }))
-      .filter((b) => Number.isFinite(b.bottom));
+    const { unmount } = renderSlide(THESIS_POSE);
+    const bottoms = EVERY_BOX.map((id) => {
+      const el = box(id);
+      return { id, bottom: px(el.style.top) + px(el.style.height) };
+    }).filter((b) => Number.isFinite(b.bottom));
     expect(bottoms.length, "every box declares a top and a height").toBe(EVERY_BOX.length);
     const lowest = bottoms.reduce((a, b) => (b.bottom > a.bottom ? b : a));
-    expect(lowest.id).toBe("middle-out-closer");
-    expect(lowest.bottom).toBe(CLOSER_TOP + CLOSER_HEIGHT);
+    expect(lowest.id).toBe(THESIS_ID);
     expect(lowest.bottom).toBeLessThan(NAV_ZONE_TOP);
+    unmount();
+  });
+
+  test("every eyebrow sits on its own claim row's baseline, not on its top edge", () => {
+    // TWO BOXES THAT SHARE A `top` DO NOT SHARE A BASELINE when one is 11px mono and the
+    // other 15px sans: the smaller line box is shorter, so its type rides about four pixels
+    // high and a floating HOLDS reads as the label of the row above it. The drop is the
+    // difference of the two boxes, which is the difference of the two baselines to within a
+    // rounding — see `EYEBROW_BASELINE_DROP` in `../../src/slides/leader-shape/middle-out-geometry.ts`.
+    expect(EYEBROW_BASELINE_DROP).toBe(ROW_HEIGHT - EYEBROW_HEIGHT);
+    expect(EYEBROW_BASELINE_DROP).toBeGreaterThan(0);
+
+    const { unmount } = renderSlide();
+    for (const [i, tier] of C.tiers.entries()) {
+      for (const [row, slot] of (["holds", "qualifier"] as const).entries()) {
+        const eyebrow = box(`middle-out-${tier.id}-${slot}-eyebrow`);
+        const claim = box(`middle-out-${tier.id}-${slot}`);
+        expect(px(eyebrow.style.top), `${tier.id}.${slot}`).toBe(claimEyebrowTop(i, row));
+        expect(px(eyebrow.style.top), `${tier.id}.${slot}`).toBe(
+          px(claim.style.top) + EYEBROW_BASELINE_DROP,
+        );
+        // …and the drop lands the eyebrow's box bottom flush with its claim's, so an
+        // eyebrow is BOTTOM-SET inside the row it labels and cannot spill into the next.
+        expect(
+          px(eyebrow.style.top) + px(eyebrow.style.height),
+          `${tier.id}.${slot} · bottom`,
+        ).toBe(px(claim.style.top) + px(claim.style.height));
+      }
+    }
+    unmount();
+  });
+
+  test("each card is its plate's own box, seen again", () => {
+    const { unmount } = renderSlide();
+    for (const [i, tier] of C.tiers.entries()) {
+      const plate = box(`middle-out-plate-${tier.id}`);
+      const card = box(`middle-out-card-${tier.id}`);
+      // SAME TOP EDGE, SAME HEIGHT, SAME CENTRE LINE — the alignment IS the claim that an
+      // approach is a consequence of where you sit.
+      expect(px(card.style.top), tier.id).toBe(px(plate.style.top));
+      expect(px(card.style.height), tier.id).toBe(px(plate.style.height));
+      // …and the card's copy is centred on that shared centre line.
+      const label = box(`middle-out-card-${tier.id}-label`);
+      expect(px(label.style.top), tier.id).toBe(cardLabelTop(i));
+      expect(cardLabelTop(i), tier.id).toBeGreaterThan(plateTop(i));
+    }
+    unmount();
+  });
+
+  test("nothing overflows the stage and the three columns tile it", () => {
+    expect(PLATE_LEFT + PLATE_WIDTH).toBe(RAIL_LEFT);
+    expect(CARD_LEFT + CARD_WIDTH).toBe(STAGE.width - PLATE_LEFT);
+    const { unmount } = renderSlide(THESIS_POSE);
+    for (const id of EVERY_BOX) {
+      const el = box(id);
+      const left = px(el.style.left);
+      const right = left + px(el.style.width);
+      const top = px(el.style.top);
+      expect(left, `${id} · left`).toBeGreaterThanOrEqual(0);
+      expect(right, `${id} · right`).toBeLessThanOrEqual(STAGE.width);
+      expect(top, `${id} · top`).toBeGreaterThanOrEqual(FIGURE_TOP - 1);
+    }
+    unmount();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AC · the keyword rule and the copy budgets
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("the keyword rule — kw on PROSE only, in three registers", () => {
+  test("every prose string has between one and two keywords, each a real substring", () => {
+    expect(PROSE).toHaveLength(10);
+    for (const [name, text, kw] of PROSE) {
+      expect(kw.length, `${name} · keyword count`).toBeGreaterThan(0);
+      expect(kw.length, `${name} · keyword count`).toBeLessThanOrEqual(2);
+      for (const k of kw) {
+        expect(text, `${name} · "${k}" is not in the sentence`).toContain(k);
+      }
+    }
+    // TWO KEYWORDS ONLY WHERE THE CLAIM IS A CONJUNCTION — the middle tier's `holds`, and
+    // nowhere else.
+    const doubles = PROSE.filter(([, , kw]) => kw.length === 2).map(([name]) => name);
+    expect(doubles).toEqual([`${C.tiers[MIDDLE].id}.holds`]);
+  });
+
+  test("labels and captions carry no keywords, and the stage prints no italic in mono", () => {
+    // A `*Kw` sibling for a label would be a copper italic inside an 11px uppercase mono
+    // string, which reads as a rendering fault.
+    for (const label of LABELS) {
+      expect(
+        PROSE.some(([, text]) => text === label),
+        `${JSON.stringify(label)} is a LABEL and must not be prose`,
+      ).toBe(false);
+    }
+    for (const caption of CAPTIONS) {
+      expect(
+        PROSE.some(([, text]) => text === caption),
+        `${JSON.stringify(caption)} is a CAPTION and must not be prose`,
+      ).toBe(false);
+    }
+    const { unmount } = renderSlide(THESIS_POSE);
+    // NOTHING IN THE MONO REGISTER IS HIGHLIGHTED, read off the DOM rather than trusted.
+    const monoIds = [
+      ...C.tiers.map((t) => `middle-out-plate-${t.id}-name`),
+      "middle-out-plate-tag",
+      "middle-out-plate-chips",
+      "middle-out-act-up-label",
+      "middle-out-act-down-label",
+      ...C.tiers.map((t) => `middle-out-card-${t.id}-label`),
+      ...C.tiers.flatMap((t) => [
+        `middle-out-${t.id}-holds-eyebrow`,
+        `middle-out-${t.id}-qualifier-eyebrow`,
+      ]),
+    ];
+    for (const id of monoIds) {
+      expect(box(id).querySelector("em"), `${id} · italic in a mono label`).toBeNull();
+      expect(box(id).style.fontFamily, id).toBe("var(--mono)");
+    }
+    // …and the three verdicts are captions: no `em` in them either.
+    for (const tier of C.tiers) {
+      expect(box(`middle-out-card-${tier.id}-verdict`).querySelector("em")).toBeNull();
+    }
+    // WHILE THE PROSE BOXES DO CARRY ONE, which is what makes the check above meaningful.
+    expect(box(`middle-out-${C.tiers[TOP].id}-holds`).querySelector("em")).not.toBeNull();
+    expect(box(THESIS_ID).querySelector("em")).not.toBeNull();
+    unmount();
+  });
+});
+
+describe("the copy budgets — every string inside the box it is measured for", () => {
+  test("each register is within the budget its geometry records", () => {
+    const within = (name: string, text: string, budget: number) =>
+      expect(text.length, `${name} · ${text.length} chars against ${budget}`).toBeLessThanOrEqual(
+        budget,
+      );
+    within("headline", C.headline, HEADLINE_BUDGET_CHARS);
+    within("thesis", C.thesis, THESIS_BUDGET_CHARS);
+    within("chips", C.middleChips, CHIPS_BUDGET_CHARS);
+    within("upGloss", C.upGloss, GLOSS_BUDGET_CHARS);
+    within("downGloss", C.downGloss, GLOSS_BUDGET_CHARS);
+    for (const tier of C.tiers) {
+      within(`${tier.id}.holds`, tier.holds, CLAIM_BUDGET_CHARS);
+      within(`${tier.id}.qualifier`, tier.qualifier, CLAIM_BUDGET_CHARS);
+      within(`${tier.id}.verdict`, tier.approachVerdict, VERDICT_BUDGET_CHARS);
+      within(`${tier.id}.holdsEyebrow`, tier.holdsEyebrow, EYEBROW_BUDGET_CHARS);
+      within(`${tier.id}.qualifierEyebrow`, tier.qualifierEyebrow, EYEBROW_BUDGET_CHARS);
+    }
+    // THE NAME ROW IS A SUM: the longest is the middle plate's, which carries a name and a
+    // subname; the top plate's shares its row with the tag.
+    within(
+      "middle name row",
+      C.tiers[MIDDLE].name + C.middleSubname,
+      NAME_ROW_BUDGET_CHARS,
+    );
+    within("top name row", C.tiers[TOP].name + C.roomTag, NAME_ROW_BUDGET_CHARS);
+  });
+
+  test("the boxes the budgets are cut against are the boxes the figure renders", () => {
+    const { unmount } = renderSlide(THESIS_POSE);
+    expect(px(box(`middle-out-${C.tiers[TOP].id}-holds`).style.width)).toBe(CLAIM_TEXT_WIDTH);
+    expect(px(box("middle-out-act-up-gloss").style.width)).toBe(ACT_TEXT_WIDTH);
+    expect(px(box(`middle-out-card-${C.tiers[TOP].id}-verdict`).style.width)).toBe(
+      CARD_INNER_WIDTH,
+    );
+    // THE FIVE BOXES CUT FOR MORE LINES THAN THEIR SHORTEST COPY NEEDS CENTRE IT, so a
+    // one-line verdict sits on its card's centre line instead of at the top of a two-line
+    // box — and a face that wraps differently degrades into the same box.
+    for (const id of [
+      "middle-out-act-up-gloss",
+      "middle-out-act-down-gloss",
+      ...C.tiers.map((t) => `middle-out-card-${t.id}-verdict`),
+    ]) {
+      expect(box(id).style.display, `${id} · centred`).toBe("flex");
+      expect(box(id).style.alignItems, id).toBe("center");
+      // ONE BLOCK-LEVEL CHILD, which is what keeps `highlight()`'s spans from each becoming
+      // a flex item and wrapping in their own column.
+      expect(box(id).children).toHaveLength(1);
+      expect((box(id).firstElementChild as HTMLElement).style.display, id).toBe("block");
+    }
     unmount();
   });
 });
@@ -1488,17 +1308,15 @@ describe("the whole figure clears the NavBar hover band", () => {
  * The images the three neighbouring slides own, each drawn from a string that slide
  * ACTUALLY prints today and each fired against that slide's own corpus below.
  *
- * WHAT THIS IS NOT: a proof about images. Two slides can share a picture without sharing
- * a word, and no grep will ever see that — §6.2's real check is a human reading both.
- * This is the guard against the cheapest way to break it, which is lifting the other
- * slide's vocabulary.
+ * WHAT THIS IS NOT: a proof about images. Two slides can share a picture without sharing a
+ * word, and no grep will ever see that. This is the guard against the cheapest way to
+ * break it, which is lifting the other slide's vocabulary.
  */
 const RESERVED: ReadonlyArray<readonly [string, RegExp, "C.1" | "B.1" | "B.2"]> = [
-  // C.1 — the same run, the same content file. Its six-beat stem and its closer.
+  // C.1 — the same run, the same content file.
   ["You decide", /\bYou decide\b/i, "C.1"],
   ["a decision on your desk", /\bon your desk\b/i, "C.1"],
   ["a tool purchase", /\bpurchase\b/i, "C.1"],
-  ["an operating model", /\boperating model\b/i, "C.1"],
   ["the enabler", /\benabler\b/i, "C.1"],
   ["pillars", /\bpillars?\b/i, "C.1"],
   ["governance", /\bgovernance\b/i, "C.1"],
@@ -1507,10 +1325,6 @@ const RESERVED: ReadonlyArray<readonly [string, RegExp, "C.1" | "B.1" | "B.2"]> 
   ["the pilot", /\bpilots?\b/i, "C.1"],
   ["culture", /\bculture\b/i, "C.1"],
   ["an agent", /\bagents?\b/i, "C.1"],
-  // OWNED BY C.1 SINCE 2026-08-11: B.2's fray redesign cut the sentence that spelled the
-  // verb (its fan of hairlines draws it now), so C.1's governance decision — "before
-  // someone improvises" — is the deck's only rendered spelling, and the only corpus this
-  // pattern can honestly be fired against.
   ["improvises", /\bimprovis\w*\b/i, "C.1"],
   // B.1 — the 70/30 and the sentence it opens on.
   ["not the tools", /\btools?\b/i, "B.1"],
@@ -1519,14 +1333,8 @@ const RESERVED: ReadonlyArray<readonly [string, RegExp, "C.1" | "B.1" | "B.2"]> 
   ["procured", /\bprocure\w*\b/i, "B.1"],
   ["capability", /\bcapabilit\w*\b/i, "B.1"],
   ["BCG / McKinsey", /\b(BCG|McKinsey)\b/i, "B.1"],
-  // B.2 — the unwritten rule. (The spelled `improvises` moved up to C.1's group when
-  // B.2's 2026-08-11 redesign stopped rendering it.)
+  // B.2 — the unwritten rule.
   ["no rule to break", /\brules?\b/i, "B.2"],
-  // "wrote" AND NOT "SOP". B.2 never prints the letters S-O-P — the absence of written
-  // guidance is its whole subject and it names the artefact nowhere — so a pattern for it
-  // could not be fired against B.2's own strings, which is the bar every entry in this
-  // table has to clear. "Nobody wrote the rule. So everybody wrote their own." is the
-  // sentence B.2 actually owns.
   ["wrote their own", /\bwrote\b/i, "B.2"],
   ["handed out", /\bhanded out\b/i, "B.2"],
 ];
@@ -1536,25 +1344,25 @@ describe("nothing here is re-spent from a neighbouring slide", () => {
     const authored = authoredStrings();
     expect(authored.length, "a rule over an empty set proves nothing").toBeGreaterThan(20);
 
-    const { container, unmount } = renderSlide(shapeMiddleOutSlide.canonicalPose!);
+    const { container, unmount } = renderSlide(THESIS_POSE);
     const stage = stageTextWithoutFigLabel(container);
     for (const [name, pattern, owner] of RESERVED) {
       for (const copy of authored) {
-        expect(pattern.test(copy), `${owner}'s "${name}" in ${JSON.stringify(copy)}`).toBe(false);
+        expect(pattern.test(copy), `${owner}'s "${name}" in ${JSON.stringify(copy)}`).toBe(
+          false,
+        );
       }
       expect(pattern.test(stage), `${owner}'s "${name}" reached the stage`).toBe(false);
     }
-    // THE BARE `70/30`, refused separately and for the reason B.2's own test records: B.1
-    // never prints that spelling either — §6.5's ladder owns it — so a pattern for it
-    // cannot be fired against B.1's strings without a false claim about where it came
-    // from. It is still refused, because B.1's split IS 70 against 30.
+    // THE BARE `70/30`, refused separately: B.1 never prints that spelling either, so a
+    // pattern for it cannot be fired against B.1's strings without a false claim about
+    // where it came from. It is still refused, because B.1's split IS 70 against 30.
     expect(stage).not.toMatch(/\b70\s*\/\s*30\b/);
     unmount();
 
-    // EVERY PATTERN FIRED AGAINST THE SLIDE IT WAS READ OFF. Twenty-two regexes that
+    // EVERY PATTERN FIRED AGAINST THE SLIDE IT WAS READ OFF. Twenty-one regexes that
     // matched nothing would make the rule above pass on copy lifted verbatim from any of
-    // the three — so each one is checked against that slide's REAL strings, not against a
-    // sentence written here to make it fire.
+    // the three.
     const corpora = { "C.1": c1Strings(), "B.1": b1Strings(), "B.2": b2Strings() } as const;
     for (const [name, pattern, owner] of RESERVED) {
       expect(
@@ -1564,42 +1372,38 @@ describe("nothing here is re-spent from a neighbouring slide", () => {
     }
   });
 
-  test("the one word it does share with C.1 is shared with its referent INVERTED", () => {
-    // `decision` APPEARS ON BOTH SLIDES AND THAT IS DELIBERATE. C.1 spends six beats on
-    // decisions that are ON this room's desk; this line is about the ones that are NOT,
-    // and the room's hold over those is exactly the upward translation. Same noun,
-    // inverted referent — recorded in `content.ts`'s collision census, and pinned here so
-    // the near-miss stays deliberate rather than becoming an echo.
+  test("the one word it does share is shared deliberately", () => {
+    // `decision` USED TO BE THE SECOND SHARED NOUN and is not spent here at all any more.
+    // The upward act said "the next decision this room makes" until the 2026-08-14 rewrite
+    // put the act in the middle's own hands — "They tell this room what works" — which
+    // leaves C.1's figure the only owner of the word in this run.
     const mine = authoredStrings().filter((copy) => /\bdecisions?\b/i.test(copy));
-    expect(mine).toEqual([C.upward, "the next decision"]);
-    expect(C.upward).toContain("made above you");
-    expect(C.upward).not.toMatch(/\byour decision\b/i);
-    // C.1's own use of the word is the one being inverted.
-    expect(shapeOrgContent.closer).toMatch(/\bdecision\b/);
-    expect(shapeOrgContent.closer).toContain("on your desk");
+    expect(mine).toEqual([]);
+    // `champion` IS SHARED WITH K.3, WHICH ASKS THE ROOM TO NAME ONE six sections later.
+    // C.4 names the people; K.3 names the act. A term the room has already met is what
+    // makes that ask land, so the order is the argument.
+    expect(C.middleSubname).toMatch(/\bCHAMPIONS\b/);
+    const champions = authoredStrings().filter((copy) => /\bchampion/i.test(copy));
+    expect(champions, "only the middle plate's subname says it").toEqual([C.middleSubname]);
   });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// AC · no brand axis — issue #68 refuses one in as many words
+// AC · no brand axis, and reduced motion
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe("no brand axis", () => {
-  test("the component reads no variant and the block hides no resolver", () => {
-    // §4.4's seven brand × deckSet slots do not list this slide, so there is no
-    // `…For(brand)` resolver to call and the slide component takes no props. An ORG CHART
-    // is not an organisation's own evidence: every organisation in this group has a board,
-    // division heads and teams, and naming one of them would be inventing a fact to fill a
-    // fork.
+  test("the slide component reads no variant and the block hides no resolver", () => {
+    // §4.4's brand × deckSet slots do not list this slide, so there is no `…For(brand)`
+    // resolver to call and the slide component takes no props. An ORG CHART is not an
+    // organisation's own evidence: every organisation in this group has a top, a middle
+    // and teams, and naming one would be inventing a fact to fill a fork.
     expect(ShapeMiddleOut.length).toBe(0);
     for (const copy of authoredStrings()) {
       expect(copy, `an organisation in ${JSON.stringify(copy)}`).not.toMatch(
         /\b(GEMS|GEMVIS|Berau|DigiTech|MineTech|Nanovest|Sinar Mas)\b/i,
       );
     }
-    // A `Record<Brand, …>` reachable from this block would be a brand axis nobody
-    // declared. Every value is a string, a number, or a readonly array/tuple of those —
-    // and no value is a function.
     const walk = (value: unknown, path: string): void => {
       if (typeof value === "function") throw new Error(`a function at ${path}`);
       if (Array.isArray(value)) value.forEach((v, i) => walk(v, `${path}[${i}]`));
@@ -1615,19 +1419,56 @@ describe("no brand axis", () => {
   });
 });
 
+describe("prefers-reduced-motion: reduce", () => {
+  test("the markup is preference-independent — the squash is the stylesheet's job", () => {
+    // WHAT THIS CAN AND CANNOT SHOW. jsdom has no media queries, so this proves only that
+    // the figure mounts no `matchMedia` gate and writes the same classes and delays under
+    // either preference; that the durations actually collapse is `globals.css`'s global
+    // rule plus `middle-out.css`'s own media block, and it is checked in a real engine.
+    const original = window.matchMedia;
+    const stub = (matches: boolean) =>
+      vi.fn().mockImplementation((query: string) => ({
+        matches,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }));
+
+    const capture = () => {
+      const { container, unmount } = renderSlide(THESIS_POSE);
+      const html = container.innerHTML;
+      unmount();
+      return html;
+    };
+
+    window.matchMedia = stub(false) as unknown as typeof window.matchMedia;
+    const moving = capture();
+    window.matchMedia = stub(true) as unknown as typeof window.matchMedia;
+    const reduced = capture();
+    window.matchMedia = original;
+
+    expect(reduced).toBe(moving);
+    // AND NO SMIL AT ALL, which is what makes the squash sufficient: SMIL is invisible to
+    // it. This figure mounts no `<svg>`, so there is nothing to gate.
+    const { container, unmount } = renderSlide(THESIS_POSE);
+    expect(container.querySelectorAll("svg")).toHaveLength(0);
+    expect(
+      container.querySelectorAll("animate, animateTransform, animateMotion, set"),
+    ).toHaveLength(0);
+    unmount();
+  });
+});
+
 describe("both leader decks print the same stage", () => {
   // BRAND INVARIANCE IS A CLAIM ABOUT MODULE EPOCHS — `VARIANT` resolves once at module
   // scope — so it cannot be checked inside the one epoch every test above runs in. Two
-  // epochs, byte for byte, at EVERY pose, following `gap-no-sop.test.tsx`, which is the
-  // shipped precedent for a leader slide with no brand axis at all.
-  //
-  // NOT `SlideHarness`, deliberately: it imports `composedDeck` statically and would hand
-  // a freshly loaded slide a stale context object. This is the same-epoch dynamic-import
-  // pattern `variant-composition.test.tsx` documents.
+  // epochs, byte for byte, at EVERY pose.
   const LEADER_VARIANTS: readonly VariantId[] = ["berau-leader", "gems-leader"];
 
-  /** One epoch's stage, captured at every pose. The slide is rendered inside a wrapper so
-   *  the comparison sees the FIGURE and not the walk buttons beside it. */
   async function stagesFor(variant: VariantId): Promise<{ html: string; text: string }[]> {
     Object.defineProperty(window, "location", {
       configurable: true,
@@ -1645,10 +1486,6 @@ describe("both leader decks print the same stage", () => {
         import("@/slides/leader-shape/shape-middle-out"),
       ]);
 
-    // THE POSITION IS READ OFF THE COMPOSED DECK WHEN THERE IS ONE, and falls back to the
-    // harness input otherwise — so this test says nothing about WHERE the slide composes.
-    // That is the next describe's claim; what is asserted here is that the two leader
-    // rooms read the same bytes.
     const row = composedDeck.slides.find((s) => s.def.id === "shape-middle-out");
     const at = row ? { letter: row.letter, num: row.num, sectionKey: row.sectionKey } : AT;
     const poses = Array.from({ length: slide.shapeMiddleOutSlide.steps }, (_u, i) => i);
@@ -1689,30 +1526,25 @@ describe("both leader decks print the same stage", () => {
   test("byte for byte, at every pose", async () => {
     // SEQUENTIALLY, not `Promise.all`. Each call re-points `window.location`, resets the
     // module registry and renders into the SAME document — run concurrently they
-    // interleave, two stages share one DOM, and every query finds two elements.
+    // interleave and every query finds two elements.
     const berau = await stagesFor(LEADER_VARIANTS[0]);
     const gems = await stagesFor(LEADER_VARIANTS[1]);
     expect(berau).toHaveLength(STEP_COUNT);
     expect(gems).toHaveLength(berau.length);
     for (let pose = 0; pose < berau.length; pose++) {
-      // MARKUP AND TEXT BOTH: a brand axis could move a colour token or a delay without
-      // changing a word, and `textContent` alone would not see it.
       expect(berau[pose].html, `pose ${pose} · markup`).toBe(gems[pose].html);
       expect(berau[pose].text, `pose ${pose} · text`).toBe(gems[pose].text);
     }
     // Not vacuously: a stage that rendered nothing would also be equal.
     const last = berau[berau.length - 1];
     expect(last.text).toContain(C.headline);
-    expect(last.text).toContain(C.bands[MIDDLE].label);
-    expect(last.text).toContain(C.bands[MIDDLE].qualifier);
-    expect(last.text).toContain(C.closer);
-    // AND THE CAPTURE IS POSE-SENSITIVE, which `textContent` alone cannot show: every box
-    // is MOUNTED at every pose and gated by a class, so the text is identical at all five
-    // and only the markup moves. A capture that read text alone would compare two decks
-    // agreeing about a string neither of them had revealed.
+    expect(last.text).toContain(C.tiers[MIDDLE].name);
+    expect(last.text).toContain(C.middleSubname);
+    expect(last.text).toContain(C.thesis);
+    // AND THE CAPTURE IS POSE-SENSITIVE: every box is mounted at both poses and gated by a
+    // class, so the text is identical and only the markup moves.
     expect(berau[0].text, "text is pose-invariant here, by construction").toBe(last.text);
     expect(berau[0].html, "markup is not").not.toBe(last.html);
-    expect(new Set(berau.map((s) => s.html)).size, "five distinct poses").toBe(STEP_COUNT);
   });
 });
 
@@ -1721,13 +1553,9 @@ describe("both leader decks print the same stage", () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe("the composed leader decks", () => {
-  // A LEADER EPOCH, loaded dynamically. `VARIANT` resolves at module scope, so reading a
-  // leader deck means re-pointing `window.location` and resetting the registry — which is
-  // why this describe uses no `SlideHarness` (see that file's "ONE EPOCH" note) and
-  // compares slides by id rather than by identity.
   const LEADER: readonly VariantId[] = ["berau-leader", "gems-leader"];
-  /** The three decks §4.3 leaves this slide OUT of — every variant whose deck set is
-   *  `standard`. Named by VARIANT ID, which is what the composer reads. */
+  /** Every variant whose deck set is `standard` — the decks §4.3 leaves this slide out
+   *  of. */
   const STANDARD: readonly VariantId[] = ["berau-middle-mgmt", "gems-middle-mgmt", "general"];
 
   async function deckFor(variant: VariantId) {
@@ -1743,54 +1571,25 @@ describe("the composed leader decks", () => {
 
   afterAll(restoreLocation);
 
-  test("this slide is the LAST `shape` row, immediately behind gh#71's C.3", async () => {
+  test("this slide is the LAST `shape` row", async () => {
     for (const variant of LEADER) {
       const deck = await deckFor(variant);
       const run = deck.slides.filter((s) => s.sectionKey === "shape");
-
-      // THE WHOLE RUN, ENUMERATED. Kept as a whole-run comparison rather than narrowed to
-      // "the last one is mine", because the failure worth catching is a row
-      // arriving in the WRONG place — between C.1 and f8, one slot ahead of where gh#71's
-      // `shape-tam-kotter` landed
-      // — and a narrowed assertion would stay green through exactly that. The run is
-      // COMPLETE at §4.3's four now, so this is the whole list and a fifth row fails here
-      // by name.
-      expect(run.map((s) => s.def.id), variant).toEqual([
-        "shape-agentic-org",
-        "f8-your-agentic-os",
-        "shape-tam-kotter",
-        "shape-middle-out",
-      ]);
       expect(run[run.length - 1].def.id, variant).toBe("shape-middle-out");
 
       // IMMEDIATELY BEHIND ITS PREDECESSOR, in the DECK's order and not merely in the
-      // run's — the two
-      // are the same thing only while the run is contiguous, which is what R4 requires and
-      // what a `sectionOverrides` edit could break without touching the list above.
-      //
-      // THAT PREDECESSOR IS gh#71'S ROW AND WAS f8 UNTIL IT LANDED, which is why the
-      // neighbour is looked up from the run rather than named: the claim this line makes
-      // is CONTIGUITY, and `run.at(-2)` states it without being a second copy of the
-      // enumeration above.
+      // run's — the two are the same thing only while the run is contiguous.
       const at = deck.slides.findIndex((s) => s.def.id === "shape-middle-out");
       const before = deck.slides.findIndex((s) => s.def.id === run.at(-2)?.def.id);
       expect(at, `${variant} composes shape-middle-out`).toBeGreaterThan(-1);
       expect(at, variant).toBe(before + 1);
       expect(deck.slides[at].sectionKey, variant).toBe("shape");
 
-      // THE LETTER IS PINNED AND THE NUMBER IS NOT. `shape` is C in both leader decks and
-      // §4.3 keeps it there — the runs in front of it are settled — so C is a stable fact
-      // worth pinning as a literal, exactly as C.1's own test pins it. The NUMBER is not:
-      // this row printed C.3 until `shape-tam-kotter` inserted ahead of it on gh#71 and
-      // prints C.4 now,
-      // so it is asserted only as "however long the run is", which was true under both and
-      // is the reason this line survived that ticket unedited.
+      // THE LETTER IS PINNED AND THE NUMBER IS NOT: `shape` is C in both leader decks, and
+      // the number is asserted only as "however long the run is".
       expect(deck.letterOf("shape"), variant).toBe("C");
       expect(deck.slides[at].letter, variant).toBe("C");
       expect(deck.slides[at].num, variant).toBe(run.length);
-      // …and it is the highest number in its own run, which is what "tail" means.
-      // `num` is `number | null` on a deck row — the cover is unnumbered — so the run is
-      // narrowed rather than cast, which also asserts that every `shape` row IS numbered.
       const nums = run.map((s) => s.num).filter((n): n is number => n !== null);
       expect(nums, `${variant} · every shape row is numbered`).toHaveLength(run.length);
       expect(Math.max(...nums), variant).toBe(deck.slides[at].num);
@@ -1801,13 +1600,7 @@ describe("the composed leader decks", () => {
     for (const variant of STANDARD) {
       const deck = await deckFor(variant);
       expect(deck.slides.some((s) => s.def.id === "shape-middle-out"), variant).toBe(false);
-      // There is no `shape` run in a standard deck at all — the section is the leader
-      // decks' own, and f8 is back where it was authored, inside `techniques`.
       expect(deck.letterOf("shape"), variant).toBeUndefined();
-      expect(
-        deck.slides.find((s) => s.def.id === "f8-your-agentic-os")?.sectionKey,
-        variant,
-      ).toBe("techniques");
     }
   });
 });

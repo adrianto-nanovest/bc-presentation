@@ -1,0 +1,313 @@
+/* MIDDLE-OUT — every keyframe the figure is built with, and the one transition it is
+ * highlighted with.
+ *
+ * KEYFRAMES `mo-` PREFIXED AND IMPORTED BY ./MiddleOutBands.tsx, which is the convention
+ * `./agentic-org.css`, `./tam-kotter.css` and `../../leader-gap/components/no-sop.css` set
+ * beside it and the rule stated beside `gap-ladder-draw` in `src/styles/globals.css`: every
+ * slide family owns its own keyframes, so retiming one figure can never retime another's.
+ * Nothing here is global and nothing here is shared.
+ *
+ * ═══ WHY THIS FILE EXISTS RATHER THAN `.fade`, which is what the rest of the deck arrives
+ * with. Three reasons, and the third is the one that was found in front of a reviewer:
+ *
+ *   1. `.fade` OWNS `transform`. Its `.on` rule animates `translateY(10px) → 0`, so an
+ *      element that wants any other transform has to fight it — and this figure has three
+ *      that do: two shafts that GROW out of the middle plate, an origin dot that opens
+ *      from nothing, and two arrowheads that pop in at the tips.
+ *   2. THE DIRECTION IS THE ARGUMENT. `transform-origin` is what makes the upward shaft
+ *      grow UP and the downward shaft grow DOWN out of one origin, and no opacity
+ *      transition can express that. It is the one thing a still frame of this figure
+ *      cannot say on its own.
+ *   3. `.fade` IS ONE MOVE, AND A FIGURE THAT ARRIVES COMPLETE NEEDS SEVERAL. Everything
+ *      on this stage is present at pose 0, so the whole build happens inside one pose —
+ *      and a build in which every one of thirty boxes fades up 8px is not read as motion
+ *      at all: it reads as a slow page load. So the plates and their copy come in from the
+ *      LEFT, the approach cards come in from the RIGHT, the rail draws itself outward
+ *      between them, and the small type settles UP. Three directions, one per column, so
+ *      the build teaches the figure's own structure while it draws it.
+ *
+ * ═══ EVERY ANIMATION IS ONE-SHOT, ON MOUNT, AND ENDS ON THE RESTING FRAME.
+ * `src/deck/Deck.tsx` renders only the active slide, so mounting IS arriving; the delays
+ * are written inline by the component (one `animationDelay` per box) and the fill is
+ * `both`, so a box is invisible during its delay and keeps its finished frame afterwards.
+ * Stepping to the thesis and back does not remount, which is why nothing here has to be
+ * re-triggered — and why nothing here may end anywhere but at the resting frame.
+ *
+ * ═══ ONE THING LOOPS, AND IT IS THE CLAIM RATHER THAN DECORATION. After the rail has
+ * drawn itself, a bright 48px pulse leaves the origin along each shaft — both at once,
+ * outward, for as long as the slide is up (`mo-flow-up` / `mo-flow-down`). A drawn arrow
+ * says the act HAPPENED; a pulse that keeps leaving says it is what the middle DOES, which
+ * is the sentence the whole figure exists to make. It is the same call
+ * `./agentic-org.css` makes for C.1's spoke flow, and the two are the only infinite
+ * animations in the leader tree.
+ *
+ * TWO CONSEQUENCES WORTH KNOWING. `scripts/lib/settle.mjs` waits only for FINITE
+ * animations, so the export scripts still settle this slide exactly — the pulse is
+ * excluded by construction, and the PDF catches it wherever it happens to be. And the
+ * reduced-motion block at the bottom of this file kills the loop outright rather than
+ * squashing it: an ambient repeat is precisely what that preference is about, and the
+ * figure loses nothing but the pulse.
+ *
+ * ═══ ZERO SMIL, at both poses, under either motion preference — the rule this slide has
+ * carried since it shipped and the reason none of the below is an `<animate>` element.
+ * SMIL is invisible to the reduced-motion squash in `globals.css` and would have to be
+ * gated behind a `matchMedia` at mount; a CSS animation is not, and the media block at the
+ * bottom of this file finishes the job that squash cannot.
+ */
+
+/* ───────────────────── the build · three directions ───────────────────── */
+
+/* THE PLATES AND THEIR COPY, ARRIVING FROM THE LEFT. 20px is enough to be a direction and
+   little enough that no box crosses the column beside it mid-flight — the plates end 44px
+   short of the rail, so nothing ever paints over the arrow's own lane. */
+@keyframes mo-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.mo-in-left {
+  animation: mo-in-left 520ms var(--ease) both;
+}
+
+/* THE APPROACH CARDS, ARRIVING FROM THE RIGHT — the mirror of the rule above, and the
+   reason the two columns read as two different kinds of thing: the chart is what the room
+   is, the cards are the verdict on it, and they come from opposite sides of the stage. */
+@keyframes mo-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.mo-in-right {
+  animation: mo-in-right 520ms var(--ease) both;
+}
+
+/* THE SMALL TYPE, SETTLING UP — the two act labels, their glosses, the champions' row and
+   the THIS ROOM tag. 8px, which is `.fade`'s own distance: these are the boxes that would
+   have used it, and they keep its feel so the figure has one vocabulary rather than four. */
+@keyframes mo-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.mo-in-up {
+  animation: mo-in-up 460ms var(--ease) both;
+}
+
+/* ───────────────────── the build · the rail draws itself ───────────────────── */
+
+/* THE ORIGIN DOT, OPENING FROM NOTHING. It is the first mark on the rail to move, so the
+   room sees WHERE the two acts leave from before it sees either of them travel.
+   `scale(0.001)` rather than `scale(0)`: a zero scale collapses the rendering box and
+   Chromium is entitled to skip compositing it, which shows up as a dropped first frame. */
+@keyframes mo-dot-in {
+  from {
+    opacity: 0;
+    transform: scale(0.001);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.mo-dot-in {
+  animation: mo-dot-in 300ms var(--ease) both;
+}
+
+/* THE DOWNWARD SHAFT, GROWING OUT OF THE ORIGIN. `transform-origin: top` is the whole
+   trick: the box is positioned with its TOP edge on the middle plate's centre line, so
+   scaling from the top pins that end and walks the other end down towards the teams. */
+@keyframes mo-shaft-grow {
+  from {
+    transform: scaleY(0.001);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.mo-shaft-down {
+  transform-origin: top center;
+  animation: mo-shaft-grow 560ms var(--ease) both;
+}
+
+/* THE UPWARD SHAFT — the same keyframe with the origin at the other end. Positioned with
+   its BOTTOM edge on the middle plate's centre line, so `bottom center` pins the origin
+   and the tip travels up towards top management. ONE KEYFRAME AND TWO CLASSES, because the
+   two shafts differ only in which end is pinned: a second copy of `scaleY(0.001) → 1`
+   would be two places to retime one mark. */
+.mo-shaft-up {
+  transform-origin: bottom center;
+  animation: mo-shaft-grow 560ms var(--ease) both;
+}
+
+/* THE TWO ARROWHEADS, LANDING AS THEIR SHAFT ARRIVES. They pop rather than fade — a head
+   that faded in would look like it had always been there and merely brightened, and a head
+   is the only thing on this stage that says which way an act runs.
+
+   `scale` ON A BORDER TRIANGLE scales the borders with the box, which is exactly what is
+   wanted: the wedge grows from its own centre and lands at full size. */
+@keyframes mo-head-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.mo-head-in {
+  animation: mo-head-in 260ms var(--ease) both;
+}
+
+/* ───────────────────── the flow · what the middle keeps doing ───────────────────── */
+
+/* TWO PULSES, ONE ORIGIN, BOTH AT ONCE — the same duration and the same delay on each, so
+   they leave together and arrive together. Staggering them would say "first this, then
+   that" about the one pair of marks the no-new-ladder guardrail exists to protect.
+ *
+ * THE TRAVEL DISTANCE IS NOT IN THIS FILE. `--mo-travel` is written inline by the component
+ * from `FLOW_TRAVEL` in ../middle-out-geometry.ts, which is `SHAFT_HEIGHT − FLOW_LENGTH` —
+ * so the pulse starts flush with the origin dot and stops flush against the arrowhead, and
+ * re-cutting the chart re-cuts the travel with it. A hard-coded `-84px` here would be a
+ * coordinate living in a stylesheet, which is the one thing every geometry module in this
+ * tree exists to prevent.
+ *
+ * THE REST IS PART OF THE LOOP. The pulse is only visible for the first 62% of the cycle;
+ * the remainder is a beat of nothing, which is what keeps a repeating mark from reading as
+ * a barber's pole. Both keyframes hold their end frame invisible so the restart is a fade-in
+ * at the origin rather than a jump back down the line. */
+@keyframes mo-flow-up {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  14% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  62% {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--mo-travel)));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--mo-travel)));
+  }
+}
+.mo-flow-up {
+  animation: mo-flow-up 2400ms var(--ease) infinite both;
+}
+
+@keyframes mo-flow-down {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  14% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  62% {
+    opacity: 0;
+    transform: translateY(var(--mo-travel));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(var(--mo-travel));
+  }
+}
+.mo-flow-down {
+  animation: mo-flow-down 2400ms var(--ease) infinite both;
+}
+
+/* ───────────────────── the hover highlight ───────────────────── */
+
+/* WHAT THE POINTER IS FOR ON THIS SLIDE. Each tier is drawn TWICE — a plate on the left and
+   an approach card on the right — and the claim that they are one thing is made by
+   alignment alone, which a room takes on trust. Hovering either one lights BOTH, so the
+   presenter can point (with the pointer, mid-sentence, without a click) at "this row, and
+   therefore this approach".
+ *
+ * IT IS A TRANSITION AND NOT A KEYFRAME, because a hover has a resting pair of values to
+ * move between in both directions — and 180ms is short enough that the pair reads as one
+ * object rather than as two things that happened.
+ *
+ * NO DIM, EVER (§7.1 — attention is bought with added light, never subtracted). The two
+ * tiers that are NOT under the pointer keep every value they had; the highlight only adds
+ * light to the one that is. The component's tier table also caps the added light so a
+ * hovered resting plate never out-shines the middle plate's own standing rank — the
+ * ranking has to survive the pointer.
+ *
+ * `cursor: default` DELIBERATELY. These boxes are not links and clicking one does nothing
+ * (a click anywhere on the stage advances the deck, which is `Slide`'s own behaviour and
+ * must not be shadowed by a box that looks clickable). */
+.mo-hoverable {
+  cursor: default;
+  transition:
+    border-color 180ms var(--ease),
+    background-color 180ms var(--ease),
+    box-shadow 180ms var(--ease);
+}
+
+/* THE HOVERED BOX'S OWN COPY follows it, in the one channel type has. Applied by the
+   component to the name, label and verdict boxes through the same `data-hover` attribute
+   the box carries, so one pointer position produces one visual state. */
+.mo-hover-type {
+  transition: color 180ms var(--ease);
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* THE HALF THE GLOBAL SQUASH CANNOT DO. `src/styles/globals.css` sets
+   `animation-duration: 0.01ms !important` under `prefers-reduced-motion: reduce`, which
+   lands every animation above on its FINISHED frame — correct, and enough on its own.
+   Stated as its own block anyway, and with `animation: none`, for the reason
+   `./agentic-org.css` states: a 0.01ms animation still fires `animationstart` and still
+   composites a layer for one frame, and `none` is the declaration a reader can check
+   against the requirement. Every resting frame above is `opacity: 1` with an identity
+   transform, so removing the animation removes the motion and nothing else.
+
+   THE HOVER TRANSITIONS ARE LEFT ALONE HERE and squashed by the global rule to 0.01ms:
+   a highlight that follows the pointer is not motion the preference is about, and losing
+   it entirely would cost the presenter the one interaction this stage has. */
+@media (prefers-reduced-motion: reduce) {
+  .mo-in-left,
+  .mo-in-right,
+  .mo-in-up,
+  .mo-dot-in,
+  .mo-shaft-up,
+  .mo-shaft-down,
+  .mo-head-in {
+    animation: none;
+  }
+  /* THE PULSES ARE REMOVED, NOT PARKED. Every other rule above lands on a resting frame
+     that is part of the figure; a pulse has no resting frame — its finished state is
+     `opacity: 0` at the far end of its travel, and a squashed 0.01ms loop would flicker
+     something invisible 41 times a second. `display: none` is the honest answer: the
+     figure is the three plates, the axis and its two heads, and the pulse is the one mark
+     it can lose without losing a claim. */
+  .mo-flow-up,
+  .mo-flow-down {
+    animation: none;
+    display: none;
+  }
+}

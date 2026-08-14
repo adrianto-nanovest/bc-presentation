@@ -1,248 +1,288 @@
-// Three organisational bands, and the two directions out of the middle one.
+// Three organisational tiers, the two acts out of the middle one, and the three adoption
+// approaches those acts are the difference between.
 //
-// THE FIGURE IS AN ORG CHART THAT RANKS THE WRONG ROW ON PURPOSE. Three full-width
-// strips, top to bottom — the board and the C-suite, BU and division heads, the teams
-// — identical in size, in position and in shape, so that the ONE thing that separates
-// them is what each one says about itself. Then, at the last claim pose, the MIDDLE
-// strip gets brighter than the one above it. That inversion is the whole argument, and
-// it is made in colour rather than in a sentence: authority is at the top, the work is
-// at the bottom, and the only band that holds both — plus the one thing neither holds,
-// people who copy what it does — is the one in the middle. `../content.ts` writes the
-// words; this file is the only place the ranking is drawn.
+// ═══ REWORKED 2026-08-14, AND THE FILE KEPT ITS NAME. What it draws now is not three
+// bands: it is a three-column figure — plates on the left, a double-headed arrow in the
+// centre, approach cards on the right — built in ONE pose with a thesis on a second. The
+// name stays because the slide's id, its testid prefix and every reference to this module
+// in the tree say `middle-out`, and renaming a file is a diff nobody can review.
+//
+// THE FIGURE RANKS THE MIDDLE ROW ON PURPOSE. Three plates, one left edge, one width, and
+// the middle one warmer, brighter and one row taller than the two beside it. That
+// inversion is the whole argument and it is made in colour and in earned height rather
+// than in a sentence: authority is at the top — which is where this room sits — the work
+// is at the bottom, and the only tier that holds both, plus the one thing neither holds,
+// is the one in between. `../content.ts` writes the words; this file is the only place the
+// ranking is drawn.
+//
+// WHO IS BEING SPOKEN TO. The room is mostly TOP MANAGEMENT, so the THIS ROOM tag sits on
+// the TOP plate and the second person means that room everywhere it appears. The middle
+// plate is described in the third person, which is what makes the figure an ask rather
+// than a compliment.
 //
 // WHAT THE FIGURE REFUSES TO SAY, and each refusal is enforced by something concrete:
 //
-//   · NO LADDER, NO SCALE, NO MATURITY MODEL. `../middle-out-geometry.ts` gives all
-//     three bands one height, one left edge, one width and one placement function, so
-//     no band can be indented, inset, widened or grown to rank it — and nothing here
-//     adds a halo, a shadow or a scale that would grow a band's painted box beyond the
-//     rectangle that module cut for it. The rank is border, ground and label tier, all
-//     three of which stay inside the box.
-//   · NO INDEX, NO ORDINAL, NO NUMERAL ON A BAND. The mono row label is a band's whole
-//     identity (guardrail 1 in `../content.ts`), and nothing is rendered beside it.
-//   · NO ARROWHEAD AND NO SINGLE AXIS. The two direction rules arrive TOGETHER on one
-//     pose, are the same length, and sit 28px apart in x — two marks, never one dashed
-//     axis with a stop in the middle of it. Which direction each one carries is said by
-//     which band it reaches and by where its copy sits, and by nothing else.
-//   · NO LETTER AND NO FIGURE NUMBER. `FigLabel` takes a LABEL only; the composer
-//     supplies the rest (§3.5). Nothing under this directory names one.
+//   · NO LADDER, NO SCALE, NO MATURITY MODEL. `../middle-out-geometry.ts` gives all three
+//     plates one left edge, one width and one placement rule, so no plate can be indented,
+//     inset or narrowed to rank it. The one unequal dimension is the middle plate's HEIGHT,
+//     which is derived from the one row of copy only that plate has — and `top < middle >
+//     bottom` is not the shape of a scale, which is monotonic.
+//   · NO INDEX, NO ORDINAL, NO NUMERAL ON A PLATE. The mono name is a tier's whole identity
+//     (guardrail 1 in `../content.ts`).
+//   · NO STOPS ON THE AXIS. The rail is ONE line with an arrowhead at each end and a single
+//     dot at its middle. A scale needs marks to count; there is nothing here to count, and
+//     the two heads point away from each other, so the mark has no direction of travel.
+//     The FIRST CUT of this figure offset the two shafts and joined them with a horizontal
+//     bar; that drew a dimension-line elbow and was cut.
+//   · NO LETTER AND NO FIGURE NUMBER. `FigLabel` takes a LABEL only; the composer supplies
+//     the rest (§3.5). Nothing under this directory names one.
 //
-// RANK IS A COLOUR TIER AND OPACITY IS TIME — see {@link TIER}, which is the one place
-// either decision is made. Opacity on this stage means "has not arrived yet"; the
-// middle band has been on the stage since pose 0, so its prominence cannot be spent in
-// that channel. The other half of the same rule is that the two OUTER bands lose
-// nothing when the middle lights: their border, their ground, their label tier, their
-// claim rows and their opacity are byte-identical at pose 4 and at pose 0. Attention is
-// bought with added light, never subtracted (§7.1), and a reader who could read rank
-// out of the opacity channel would be reading a reveal as a ranking.
+// RANK IS A COLOUR TIER AND OPACITY IS TIME — see {@link TIER}, which is the one place any
+// of it is decided. Every plate arrives in the same build, so prominence cannot be spent
+// in the opacity channel at all; and the two outer plates lose NOTHING for the middle one
+// being bright, at rest or under the pointer (§7.1 — attention is bought with added light,
+// never subtracted).
 //
-// ZERO SMIL NODES, at every pose, under any motion preference — and closed BY
-// CONSTRUCTION the way `leader-gap/components/NoSopBeats.tsx` closes it: THIS FIGURE
-// MOUNTS NO `<svg>` AT ALL, so there is no `<animate>`, `<animateTransform>`,
-// `<animateMotion>`, `<set>` or `<animateColor>` to gate at mount and nothing for a
-// reduced-motion census to inspect. The three band boxes, the two direction rules and
-// the origin bar are plain absolutely-positioned `<div>`s for exactly that reason —
-// `../middle-out-geometry.ts` is shaped to make that possible and says so at its head.
-// The whole motion budget is `.fade`'s transition pair plus the two tier transitions
-// below, and the global `prefers-reduced-motion: reduce` rule in
-// `src/styles/globals.css` squashes both to 0.01ms, so every pose rests on its finished
-// frame under either preference and there is no `matchMedia` gate to write.
-// NO NEW KEYFRAME, NO NEW CLASS, NO NEW FONT.
+// THE POINTER IS THE ONE INTERACTION. Each tier is drawn TWICE — a plate and a card — and
+// the claim that they are one thing is made by alignment, which a room takes on trust.
+// Hovering either lights BOTH, so a presenter can point at "this row, and therefore this
+// approach" mid-sentence without a click. The added light is capped so a hovered resting
+// plate never out-shines the middle plate's standing rank: the ranking survives the
+// pointer, which is the property to check this table against.
 //
-// CSS VARS ONLY, NO HEX AND NO rgba() LITERAL, anywhere — including the two graphic
-// tiers (the rules and the origin bar) and the band grounds.
+// ZERO SMIL NODES, at both poses, under any motion preference — and closed BY CONSTRUCTION
+// the way `leader-gap/components/NoSopBeats.tsx` closes it: THIS FIGURE MOUNTS NO `<svg>`
+// AT ALL. The plates, the cards, the two shafts and the origin dot are plain
+// absolutely-positioned `<div>`s, and the two ARROWHEADS are CSS border triangles —
+// `../middle-out-geometry.ts` is shaped to make that possible and says so at its head. The
+// motion budget is `./middle-out.css`'s seven one-shot keyframes plus `.fade` for the
+// thesis, and the global `prefers-reduced-motion: reduce` rule in `src/styles/globals.css`
+// squashes both, with that file's own media block finishing the job. NO NEW FONT AND NO NEW
+// GLOBAL CLASS.
 //
-// EVERY COORDINATE IS READ AND EVERY GATE IS ASKED. Not one number below is computed
-// here: the placements come from `../middle-out-geometry.ts` and the poses from
-// `../middle-out-walk.ts`, which is what stops this component forming its own opinion
-// about where a band sits or what a pose means. The literals that DO appear are type
-// registers — font sizes, tracking, line heights, a 1px border — and each one is a
-// number that geometry module already assumed when it cut its boxes (see its vertical
-// budget: 11px mono on 1.3, 15px sans, 17px serif, 22px serif).
+// CSS VARS ONLY, NO HEX AND NO rgba() LITERAL, anywhere — including the arrow and the plate
+// and card grounds.
 //
-// IT READS NO VARIANT AND NO BRAND, like `leader-gap/components/NoSopBeats.tsx` and
-// unlike `./PillarOrbit.tsx` next door: issue #68 gives this slide no brand axis at all,
-// so there is no `…For(brand)` prop to look for and both leader rooms read identical
-// bytes off one stage.
-// `Fragment` is imported for its KEY and for nothing else: each band contributes three
-// absolutely-positioned boxes to one list, and a wrapping `<div>` would put a static
-// block box into `.stage`'s own flow for no reason. A keyed fragment groups them without
-// adding an element.
-import { Fragment, type CSSProperties } from "react";
-// Section E's copy, the tree's de facto shared reveal primitive — the same import
-// `NoSopBeats.tsx` and `EnablementModel.tsx` make. `CopperRule` is deliberately NOT
-// taken: it animates `scaleX` from the left, which reads as a line being DRAWN, and a
-// translation rule that drew itself in one direction would say "first this, then that"
-// about two marks that are simultaneous by construction.
+// EVERY COORDINATE IS READ AND EVERY GATE IS ASKED. Not one placement below is computed
+// here: the coordinates come from `../middle-out-geometry.ts` and the poses from
+// `../middle-out-walk.ts`. The literals that DO appear are type registers and build delays
+// — the registers are the sizes that geometry module already cut its boxes against, and the
+// delays are the one thing this file owns (see {@link BUILD}).
+//
+// IT READS NO VARIANT AND NO BRAND, like `leader-gap/components/NoSopBeats.tsx` and unlike
+// `./PillarOrbit.tsx` next door: issue #68 gives this slide no brand axis at all, so there
+// is no `…For(brand)` prop to look for and both leader rooms read identical bytes off one
+// stage.
+import { Fragment, useState, type CSSProperties } from "react";
+// The keyframes and the hover transition. Imported for its side effect, like
+// `./agentic-org.css` next door — Vite emits it into the one stylesheet.
+import "./middle-out.css";
+// Section E's copy, the tree's shared reveal primitive. IT IS USED FOR THE THESIS AND FOR
+// NOTHING ELSE: the thesis is the only box on this stage with a real POSE transition to
+// make, and `.fade` is exactly the right thing for that. Every box in the FIGURE arrives
+// through `./middle-out.css` instead, because `.fade` owns `transform` and this build needs
+// three different directions of entry (that file's header argues it in full).
 import { Reveal } from "@/slides/foundation-core-section-e/components/Reveal";
 import { highlight } from "@/components/highlight";
 import {
-  BAND_HEIGHT,
-  BAND_LEFT,
-  BAND_WIDTH,
-  BOTTOM_BAND_INDEX,
-  CLAIM_LEFT,
+  ACT_TEXT_LEFT,
+  ACT_TEXT_WIDTH,
+  BOTTOM_TIER_INDEX,
+  CARD_INNER_LEFT,
+  CARD_INNER_WIDTH,
+  CARD_LEFT,
+  CARD_VERDICT_HEIGHT,
+  CARD_WIDTH,
+  CHIPS_HEIGHT,
+  CHIPS_TOP,
   CLAIM_TEXT_LEFT,
   CLAIM_TEXT_WIDTH,
-  CLAIM_WIDTH,
-  CLOSER_HEIGHT,
-  CLOSER_LEFT,
-  CLOSER_TOP,
-  CLOSER_WIDTH,
-  CONTENT_WIDTH,
-  DOWNWARD_RULE_LEFT,
-  DOWNWARD_RULE_TOP,
+  DOWN_FLOW_TOP,
+  DOWN_HEAD_TOP,
+  DOWN_SHAFT_TOP,
   EYEBROW_HEIGHT,
   EYEBROW_WIDTH,
-  KICKER_TOP,
-  MIDDLE_BAND_INDEX,
-  ORIGIN_BAR_HEIGHT,
-  ORIGIN_BAR_LEFT,
-  ORIGIN_BAR_TOP,
-  ORIGIN_BAR_WIDTH,
+  FLOW_LENGTH,
+  FLOW_TRAVEL,
+  GLOSS_HEIGHT,
+  HEAD_HEIGHT,
+  HEAD_LEFT,
+  HEAD_WIDTH,
+  MIDDLE_TIER_INDEX,
+  ORIGIN_DOT_LEFT,
+  ORIGIN_DOT_SIZE,
+  ORIGIN_DOT_TOP,
+  PLATE_INNER_LEFT,
+  PLATE_INNER_WIDTH,
+  PLATE_LEFT,
+  PLATE_WIDTH,
   ROW_HEIGHT,
-  RULE_HEIGHT,
-  RULE_THICKNESS,
-  SIDE_MARGIN,
-  TOP_BAND_INDEX,
-  TRANSLATION_EYEBROW_TOP,
-  TRANSLATION_HEIGHT,
-  TRANSLATION_LEFT,
-  TRANSLATION_WIDTH,
-  UPWARD_RULE_LEFT,
-  UPWARD_RULE_TOP,
-  bandLabelTop,
-  bandTop,
+  SHAFT_HEIGHT,
+  SHAFT_LEFT,
+  SHAFT_THICKNESS,
+  THESIS_HEIGHT,
+  THESIS_LEFT,
+  THESIS_TOP,
+  THESIS_WIDTH,
+  TOP_TIER_INDEX,
+  UP_FLOW_TOP,
+  UP_HEAD_TOP,
+  UP_SHAFT_TOP,
+  actGlossTop,
+  actLabelTop,
+  cardLabelTop,
+  cardVerdictTop,
+  claimEyebrowTop,
   claimRowTop,
-  translationTop,
+  plateHeight,
+  plateNameTop,
+  plateTop,
 } from "../middle-out-geometry";
 import { shapeMiddleOutContent as C } from "../content";
-import {
-  isMiddleLit,
-  showsBandClaims,
-  showsCloser,
-  showsTranslations,
-} from "../middle-out-walk";
+import { showsFigure, showsThesis } from "../middle-out-walk";
 
 // ───────────────────── the tiers, in one table ─────────────────────
 
 /**
- * One tier per ROLE, and the ONLY rank on this stage is `band.rest` → `band.lit`.
+ * One tier per ROLE, and the two ranks on this stage are `rest` → `lit` (the argument) and
+ * `→ hover` (the pointer).
  *
- * Hand-derived WCAG relative luminances over `src/styles/globals.css`'s hexes,
- * brightest first, under the headline's `--neutral-50` (0.9131):
+ * Hand-derived WCAG relative luminances over `src/styles/globals.css`'s hexes:
  *
- *   role            token            luminance   what it paints
- *   verdict         --neutral-100     0.7835     22px serif — the closer
- *   claim           --neutral-200     0.6584     17px serif — the two translations
- *   band.lit.name   --copper-100      0.7897     11px mono caps — the MIDDLE band's name
- *   band.lit.edge   --copper-300      0.4200     the MIDDLE band's 1px border
- *   row             --neutral-300     0.3663     15px sans — all six claim rows
- *   band.rest.name  --copper-300      0.4200     11px mono caps — a band's own name
- *   label           --copper-400      0.2967     11px mono caps — every other label
- *   rule            --copper-600      0.1480     the two direction rules, 2px
- *   band.rest.edge  --copper-700      0.0865     a band's 1px border — the deck's own
- *                                                hairline token (`.copper-rule`)
- *   band.lit.fill   --copper-950      0.0100     the MIDDLE band's ground
- *   band.rest.fill  --neutral-900     0.0056     the stage's own — an unfilled box
+ *   token          luminance   where it appears here
+ *   --copper-50     0.8916     a hovered MIDDLE plate's name
+ *   --neutral-0     1.0000     a hovered MIDDLE card's verdict
+ *   --copper-100    0.7897     the MIDDLE plate's name · the THIS ROOM tag
+ *   --neutral-100   0.7835     the thesis · the MIDDLE card's verdict
+ *   --copper-200    0.6584     a hovered resting plate's name
+ *   --neutral-200   0.5289     a hovered plate's claim rows
+ *   --copper-300    0.4200     a resting name · the chips · the act labels · the lit edge
+ *   --neutral-300   0.3663     the claim rows · the glosses · a resting verdict
+ *   --copper-400    0.2967     the claim eyebrows · a HOVERED resting edge
+ *   --copper-500    0.1926     the two shafts and both heads
+ *   --copper-700    0.0865     a resting plate's 1px border (`.copper-rule`'s own token)
+ *   --copper-800    0.0508     a hovered lit ground
+ *   --copper-900    0.0265     the MIDDLE plate's and card's ground
+ *   --copper-950    0.0100     a hovered resting ground
+ *   --neutral-900   0.0056     the stage's own — an unfilled box
  *
- * ═══ `band.rest` AND `band.lit` ARE ONE PAIR AND MUST STAY THE SAME SHAPE. Every key
- * present in one is present in the other, for the reason `./PillarOrbit.tsx`'s `REST`
- * writes `boxHalo: "none"` out longhand: a property only the lit tier declares is a
- * property with no RELEASE, so React drops the declaration on the un-light render
- * instead of transitioning back to it — and stepping the deck backwards from 4 to 0 is
- * an acceptance criterion here, not a hypothetical.
+ * ═══ THE FOUR STATES ARE ONE SHAPE. `rest`, `restHover`, `lit` and `litHover` declare
+ * exactly the same keys, for the reason `./PillarOrbit.tsx`'s `REST` writes `boxHalo:
+ * "none"` out longhand: a property only one state declares is a property with no RELEASE,
+ * so React drops the declaration instead of transitioning back to it — and the pointer
+ * leaves as often as it arrives.
  *
- * ═══ EVERY LIT VALUE IS BRIGHTER THAN ITS RESTING COUNTERPART, AND THAT IS THE
- * INVARIANT TO CHECK THIS TABLE AGAINST BEFORE ANYTHING ELSE: `--copper-300` over
- * `--copper-700` on the border (six rungs), `--copper-950` over the stage's own
- * `--neutral-900` on the ground, `--copper-100` over `--copper-300` on the name. Not one
- * of the three is a subtraction, so the two unlit bands need no adjustment for the
- * middle one to stand out — and they get none. That is what makes the ranking legible
- * in a still: at `canonicalPose` the middle band is the brightest object on the stage
- * and the two beside it are exactly what they were at pose 0.
+ * ═══ THE RANK SURVIVES THE POINTER, WHICH IS THE INVARIANT TO CHECK FIRST. Every value in
+ * `restHover` is DIMMER than the matching value in `lit`: `--copper-400` under
+ * `--copper-300` on the edge, `--copper-950` under `--copper-900` on the ground,
+ * `--copper-200` under `--copper-100` on the name. So hovering an outer plate cannot make
+ * it look like the row the slide is about, and the middle plate is the brightest object on
+ * the stage at every pointer position.
  *
- * ═══ RANKING THE MIDDLE ABOVE THE TOP IS THE ARGUMENT, NOT A DECORATION. An org chart
- * whose brightest row is the top row is a picture the room already has. The one thing
- * this slide has to leave behind is that the row with the least authority in it is the
- * one adoption actually moves through, and a figure that hedged that — a middle band
- * ranked equal to the top, or ranked by size instead of by light — would be arguing the
- * opposite of its own headline.
+ * ═══ AND NOTHING IS EVER SUBTRACTED. A hover adds light to one tier and changes nothing
+ * about the other two — no dim, no desaturation, no opacity drop (§7.1). The two states a
+ * tier can be in differ only in how much light they have.
  *
- * ═══ THE BAND'S GROUND IS THE STAGE'S OWN UNTIL IT LIGHTS. Three filled strips at rest
- * would make the chart a table; three outlined ones read as one organisation seen in
- * section, which is what the full-bleed width in `../middle-out-geometry.ts` is for. It
- * also leaves the fill channel unspent, so the middle band can GAIN a ground rather than
- * change one.
+ * ═══ `--copper-900` AND NOT `--copper-950` FOR THE LIT GROUND, which is the one tier value
+ * the rework changed rather than moved. At `--copper-950` (#21130a, luminance 0.0100) the
+ * middle plate was a barely-warmer black on a black stage: correct on a calibrated monitor
+ * and invisible from the back of a room with the lights up. `900` (#3d2413) is unmistakably
+ * the hero plate and still leaves 5.4:1 against the claim rows on it and 10.9:1 against its
+ * own name.
  *
- * ═══ NO HALO, deliberately, though `./PillarOrbit.tsx` next door uses one. A halo is
- * painted OUTSIDE the box's own edge, so it would put the middle band's painted
- * rectangle outside the box `bandTop`/`BAND_HEIGHT` cut for it — and equal geometry is
- * the whole no-new-ladder guarantee (see that module's header). The rank stays inside
- * the rectangle.
- *
- * ═══ `--copper-400` FOR THE MONO LABELS is the shipped precedent all three sibling
- * leader figures cite — exactly this token in exactly this register, 11px mono caps.
- * The band NAMES sit one tier above it at `--copper-300`, because a band's name is what
- * stands in place of an index (guardrail 1 in `../content.ts`) and reads as the chart's
- * own row heading rather than as one more eyebrow under it.
- *
- * ═══ THE TWO GRAPHIC TIERS ARE NOT HELD TO THE TEXT FLOOR, for the reason
- * `NoSopBeats.tsx`'s marks are not: a rule is compared, not read. `--copper-600` at 2px
- * is what survives a projector at the back of a room, and the ORIGIN BAR is painted in
- * `band.lit.edge` — the MIDDLE band's own tier, which `../middle-out-geometry.ts`
- * requires in as many words. One origin, two directions, and the origin is the room.
+ * ═══ THE ARROW IS NOT HELD TO THE TEXT FLOOR, for the reason `NoSopBeats.tsx`'s marks are
+ * not: a mark is compared, not read. `--copper-500` at 4px with a 16px head is what
+ * survives a projector at the back of a room. The ORIGIN DOT is painted in `plate.lit.edge`
+ * — the MIDDLE plate's own tier — because one origin, two directions, and the origin is the
+ * row the slide is about.
  */
 const TIER = {
-  /**
-   * THE THREE BANDS, AS A RANK PAIR — and the only place on this stage where two
-   * objects of the same kind are painted differently.
-   */
-  band: {
-    /** All three bands until the middle one's claim lands, and the two outer bands
-     *  for ever after. Nothing in here changes at any pose. */
+  /** THE THREE PLATES. `lit` is the middle one at every pose; the two `*Hover` states are
+   *  the pointer's, and both are capped under `lit` (see above). */
+  plate: {
     rest: {
       edge: "var(--copper-700)",
       fill: "var(--neutral-900)",
       name: "var(--copper-300)",
+      row: "var(--neutral-300)",
     },
-    /** The MIDDLE band, from the pose its own claims arrive — `isMiddleLit` in
-     *  `../middle-out-walk.ts` owns WHEN, and this table owns WHAT. */
+    restHover: {
+      edge: "var(--copper-400)",
+      fill: "var(--copper-950)",
+      name: "var(--copper-200)",
+      row: "var(--neutral-200)",
+    },
     lit: {
       edge: "var(--copper-300)",
-      fill: "var(--copper-950)",
+      fill: "var(--copper-900)",
       name: "var(--copper-100)",
+      row: "var(--neutral-300)",
+    },
+    litHover: {
+      edge: "var(--copper-200)",
+      fill: "var(--copper-800)",
+      name: "var(--copper-50)",
+      row: "var(--neutral-200)",
     },
   },
-  /** Every mono caps string that is not a band's own name: the standing kicker, the six
-   *  claim eyebrows and the label the two translations share. ONE TIER FOR ALL EIGHT —
-   *  ranking an eyebrow would make a claim about a band that the band's own chrome
-   *  already makes. */
+  /** THE THREE CARDS — deliberately the same two moves as the plates', so a reader sees one
+   *  ranking applied twice rather than two rankings. */
+  card: {
+    rest: {
+      edge: "var(--copper-700)",
+      fill: "var(--neutral-900)",
+      label: "var(--copper-300)",
+      verdict: "var(--neutral-300)",
+    },
+    restHover: {
+      edge: "var(--copper-400)",
+      fill: "var(--copper-950)",
+      label: "var(--copper-200)",
+      verdict: "var(--neutral-200)",
+    },
+    lit: {
+      edge: "var(--copper-300)",
+      fill: "var(--copper-900)",
+      label: "var(--copper-100)",
+      verdict: "var(--neutral-100)",
+    },
+    litHover: {
+      edge: "var(--copper-200)",
+      fill: "var(--copper-800)",
+      label: "var(--copper-50)",
+      verdict: "var(--neutral-0)",
+    },
+  },
+  /** The six claim eyebrows — HOLDS, CANNOT, ALONE. ONE TIER FOR ALL SIX, and it does NOT
+   *  move under the pointer: ranking an eyebrow would make a claim about a tier that the
+   *  tier's own chrome already makes. */
   label: "var(--copper-400)",
-  /** All six claim rows, in all three bands. ONE TIER FOR ALL SIX: a `holds` row and a
-   *  `qualifier` row are the same register making two different claims, the eyebrow
-   *  beside each already says which kind it is, and the band the row sits in carries
-   *  every rank this figure draws. */
-  row: "var(--neutral-300)",
-  /** The two translations — descriptions, one tier under the verdict. */
-  claim: "var(--neutral-200)",
-  /** The closer. The brightest text under the headline row. */
-  verdict: "var(--neutral-100)",
-  /** The two direction rules. Not the origin bar — see the header. */
-  rule: "var(--copper-600)",
+  /** The middle plate's chips row — the four things a champion holds. */
+  chips: "var(--copper-300)",
+  /** THIS ROOM. The brightest mono string on the stage, and the only one addressed to a
+   *  person rather than naming a thing. */
+  tag: "var(--copper-100)",
+  /** The two act labels — INFLUENCE UP and DRIVE DOWN. One tier above the claim eyebrows
+   *  because they name what the figure's marks DO, which is the reading order the rail
+   *  wants: arrow, then act, then what the act consists of. */
+  act: "var(--copper-300)",
+  /** The two acts' glosses. */
+  gloss: "var(--neutral-300)",
+  /** Both shafts and both arrowheads. Not the origin dot — see the header. */
+  arrow: "var(--copper-500)",
+  /** The thesis. The brightest text under the headline row. */
+  thesis: "var(--neutral-100)",
 } as const;
 
-/** A band box's border weight. `1px` is the deck's own, and `boxSizing: border-box`
- *  below keeps it INSIDE the rectangle `../middle-out-geometry.ts` cut, so a border is
- *  not a coordinate this file invented. Written as a whole declaration the way
- *  `./PillarOrbit.tsx` writes its own, so only the colour differs between the tiers. */
-const bandBorder = (edge: string) => `1px solid ${edge}`;
+/** A plate's or a card's border weight. `1px` is the deck's own, and `boxSizing:
+ *  border-box` below keeps it INSIDE the rectangle `../middle-out-geometry.ts` cut, so a
+ *  border is not a coordinate this file invented. */
+const boxBorder = (edge: string) => `1px solid ${edge}`;
 
 // ───────────────────── type registers ─────────────────────
 
 /** The mono LABEL register — 11px caps at 0.22em, the size and tracking
- *  `../middle-out-geometry.ts` cut `EYEBROW_HEIGHT` and every mono budget against.
- *  Uppercase, because every mono string on this stage is a heading. */
+ *  `../middle-out-geometry.ts` cut `EYEBROW_HEIGHT` and every mono budget against. */
 function mono(color: string): CSSProperties {
   return {
     fontFamily: "var(--mono)",
@@ -254,418 +294,752 @@ function mono(color: string): CSSProperties {
   };
 }
 
-/** The sans register — all six claim rows, cut for ONE line each (`ROW_HEIGHT`). */
-const rowStyle: CSSProperties = {
-  fontFamily: "var(--sans)",
-  fontSize: 15,
-  lineHeight: 1.3,
-  color: TIER.row,
-};
-
-/** The prose register — the two translations at 17 and the closer at 22. Upright
- *  serif; the only italics on this stage are the keywords `highlight()` places, and the
- *  mono LABEL register gets none of those (`../content.ts`'s keyword rule). */
-function prose(size: number, color: string): CSSProperties {
+/** The sans register — the six claim rows at 15 (one line each) and the two act glosses at
+ *  13 (up to three). */
+function sans(size: number, color: string): CSSProperties {
   return {
-    fontFamily: "var(--serif)",
+    fontFamily: "var(--sans)",
     fontSize: size,
-    lineHeight: 1.3,
+    lineHeight: size === 13 ? 1.35 : 1.3,
     color,
     margin: 0,
   };
 }
 
-// ───────────────────── the stagger ─────────────────────
+/** The prose register — the three approach verdicts at 15 and the thesis at 18. Upright
+ *  serif; the only italics on this stage are the keywords `highlight()` places, and the
+ *  mono LABEL register gets none of those (`../content.ts`'s keyword rule). */
+function serif(size: number, color: string): CSSProperties {
+  return {
+    fontFamily: "var(--serif)",
+    fontSize: size,
+    lineHeight: size === 15 ? 1.35 : 1.3,
+    color,
+    margin: 0,
+  };
+}
 
 /**
- * 120ms of lead-in, 90ms between boxes — the leader tree's two numbers, taken from
- * `leader-mandate/type-registers.ts` and used unchanged by every leader figure that has
- * a stagger at all. 120 keeps the first box off the same frame as the click.
+ * EVERY BOX THAT CARRIES TYPE IS TRANSPARENT TO THE POINTER, and that is what makes the
+ * hover work at all.
+ *
+ * The plates and cards are declared BEFORE their own copy, so the copy paints on top — and
+ * a text box that accepted pointer events would swallow every `mouseenter` aimed at the
+ * rectangle underneath it, so the highlight would flicker off wherever a claim row happens
+ * to be. Six boxes are hover targets (three plates, three cards); everything else on this
+ * stage is invisible to the pointer.
  */
-const LEAD_MS = 120;
-const STAGGER_MS = 90;
-
-/** How many steps into a pose a box arrives, as milliseconds of delay. */
-const delay = (step: number) => LEAD_MS + step * STAGGER_MS;
+const noPointer: CSSProperties = { pointerEvents: "none" };
 
 /**
- * A band's two claim rows, as a ROW INDEX and as an ARRIVAL STEP — which are the same
- * number, because the reading order and the arrival order of the two rows are one fact.
+ * A box whose copy is VERTICALLY CENTRED inside it — the three card verdicts and the two
+ * act glosses, which are the five boxes on this stage cut for MORE lines than their
+ * shortest copy needs.
  *
- * NAMED HERE RATHER THAN WRITTEN TWICE AS A LITERAL. `../content.ts` models the two
- * rows as two named FIELDS on `Band` (`holds` / `qualifier`) rather than as an array —
- * it argues that at length — so there is nothing to map over and the index has to be
- * stated. `claimRowTop(i, row)` in `../middle-out-geometry.ts` throws on a third row,
- * and its `CLAIM_ROWS` is the count both ends are held to.
- *
- * WHAT IT MEANS AS A STEP: what a band HAS lands first, then the one further thing that
- * is true of it. On the two outer bands that is a limit, on the middle band it is the
- * claim neither of them can make — and in all three the second row is the one the pose
- * has to rest on, so it arrives last.
+ * `CARD_VERDICT_HEIGHT` is cut for two lines and two of the three verdicts take one;
+ * `GLOSS_HEIGHT` is cut for three and one gloss takes two. Top-aligned, a one-line verdict
+ * would hang 10px above its card's own centre line and the three cards would look mis-set.
  */
+const centred: CSSProperties = { display: "flex", alignItems: "center" };
+
+/**
+ * The one child a {@link centred} box may have — and it exists because of a bug this figure
+ * shipped for exactly one screenshot.
+ *
+ * `highlight()` RETURNS A LIST OF SPANS, one per run: the text either side of a keyword and
+ * an `<em>` for the keyword itself. Inside a FLEX container each of those becomes its own
+ * FLEX ITEM, so a sentence with one italic in it is laid out as three side-by-side columns
+ * that each wrap independently — which is what the two act glosses rendered as the first
+ * time they were centred (the upward gloss came out as "They tell this room / what works,
+ * and / what blocks it", in ragged stacks — the copy has since been rewritten and the fault
+ * has not). A single block-level child restores normal inline layout inside the box
+ * while the box itself stays a flex container for the one thing it is one for.
+ *
+ * The three approach verdicts pass a bare string and do NOT need this — a text node in a
+ * flex container is wrapped in ONE anonymous item and wraps normally — but they take it
+ * anyway, because "boxes that centre their copy wrap it in this" is a rule a reader can
+ * check, and "except when the copy happens to have no keyword in it" is not.
+ */
+const centredChild: CSSProperties = { display: "block", width: "100%" };
+
+// ───────────────────── the build ─────────────────────
+
+/**
+ * THE BUILD, IN MILLISECONDS — one pose, three cascades and a drawn rail between them.
+ *
+ * WRITTEN AS EXPLICIT MILLISECONDS AND NOT AS A `120 + step × 90` LADDER, which is what
+ * this figure shipped with and what the leader tree uses everywhere a stagger is a LIST.
+ * This build is not a list: it is two-dimensional (three plates, each with two rows) and it
+ * has a 560ms drawn mark in the middle of it that two other boxes have to land after. A
+ * step ladder cannot express "when the shaft gets there", and faking it with a step index
+ * that happens to multiply out to the right number is how a delay table stops meaning
+ * anything.
+ *
+ * THE ORDER IS THE FIGURE'S OWN STRUCTURE, and each cascade enters from the side of the
+ * stage it belongs to (`./middle-out.css` owns the directions):
+ *
+ *   120 → 280   THE PLATES, from the left, top to bottom. The organisation, named.
+ *   260 → 500   WHAT EACH TIER HOLDS — two rows per plate, cascading down and across, so
+ *               the reader's eye is walked down the chart rather than shown a table.
+ *   560         THE ORIGIN DOT. Where both acts leave from, before either of them moves.
+ *   620         BOTH SHAFTS, growing out of that dot in opposite directions, together —
+ *               staggering the two by even a frame would say "first this, then that" about
+ *               the one pair of marks the no-new-ladder guardrail exists to protect.
+ *  1180         THE TWO ARROWHEADS, landing exactly as their shaft arrives
+ *               ({@link BUILD.shaft} + {@link SHAFT_DRAW_MS}).
+ *   760 → 840   THE TWO ACTS IN WORDS, settling up beside their own arrow.
+ *   900 → 1060  THE THREE APPROACH CARDS, from the right. Last, because a verdict on an
+ *               approach only means something once the room has seen what the middle can do
+ *               that the other two cannot.
+ *
+ * 120ms OF LEAD-IN is the leader tree's own number, kept: it keeps the first box off the
+ * same frame as the presenter's click.
+ */
+const BUILD = {
+  /** The first plate. */
+  plate: 120,
+  /** …and each plate below it. 80ms is fast enough to read as one gesture. */
+  plateStep: 80,
+  /** The first plate's first claim row — 140ms behind its own plate, so the box is settled
+   *  before its copy arrives inside it. */
+  claim: 260,
+  /** …and each row under it, within a plate. */
+  claimRow: 40,
+  /** The origin dot. */
+  dot: 560,
+  /** Both shafts. */
+  shaft: 620,
+  /** The upward act's copy; the downward act's follows one step later, which is the only
+   *  place the two acts are staggered at all — their MARKS are simultaneous, their captions
+   *  are read one after the other. */
+  act: 760,
+  actStep: 80,
+  /** The first approach card. */
+  card: 900,
+  cardStep: 80,
+} as const;
+
+/**
+ * How long a shaft takes to draw: 560ms — WHICH MUST MATCH `mo-shaft-grow` in
+ * `./middle-out.css`, and is the only number in this file duplicated anywhere.
+ *
+ * IT IS HERE BECAUSE AN ARROWHEAD IS NOT A KEYFRAME. The heads arrive on their own
+ * animation, so their delay has to be spelled as "when the shaft gets there" —
+ * `BUILD.shaft + SHAFT_DRAW_MS` — and a CSS animation cannot tell a React prop when it
+ * finished. The duplication is stated rather than hidden: retime the keyframe and this
+ * constant moves with it, or the heads appear on a shaft that is still growing.
+ */
+const SHAFT_DRAW_MS = 560;
+
+/** The two claim rows, as a ROW INDEX and as an ARRIVAL SLOT — which are the same number,
+ *  because the reading order and the arrival order of the two rows are one fact.
+ *  `../content.ts` models them as two named FIELDS on `Tier` (`holds` / `qualifier`) rather
+ *  than as an array, so there is nothing to map over and the index has to be stated;
+ *  `claimRowTop(i, row)` throws on a third. */
 const CLAIM_ROW = { holds: 0, qualifier: 1 } as const;
 
 /**
- * THE LAST POSE'S ARRIVAL ORDER — the rail and its label, then both translations, then
- * the closer.
+ * One box's entrance, as the two things every animated box on this stage needs: which
+ * keyframe, and when.
  *
- * THE TWO TRANSLATIONS SHARE ONE STEP, and that is not tidiness. The slide's claim is
- * that the middle translates in BOTH directions at once; staggering the two lines
- * against each other by even 90ms would say "first this, then that" about the one pair
- * of marks the no-new-ladder guardrail exists to protect. `showsTranslations` in
- * `../middle-out-walk.ts` holds the same line at pose granularity — one gate for all
- * five objects — and this table holds it at millisecond granularity.
- *
- * THE CLOSER IS LAST WITHIN THE POSE, which is the separation `../middle-out-walk.ts`
- * buys instead of spending a sixth step on it: the two translations ARE the closer's
- * subject, so it needs to land after them and does not need a pose of its own.
+ * `shown` IS `showsFigure()`, THREADED THROUGH EVERY BOX IN THE FIGURE — which is what makes
+ * that walk function load-bearing rather than decorative. It answers `true` at every pose
+ * the deck can reach, so nothing below ever renders the hidden branch today; what it buys is
+ * the seam. A figure whose boxes carried a bare `animationDelay` and no gate would have
+ * nowhere for a second pose to attach, and the next author would reach for a comparison
+ * against `pose` inside this file — which is the one thing every other slide in this tree is
+ * built to prevent.
  */
-const CLOSING_STEP = { rail: 0, eyebrow: 0, translation: 1, closer: 2 } as const;
-
-/**
- * The one duration a TIER change transitions over — `.fade`'s own, so the middle band's
- * light and the two rows that explain it read as one arrival at one pace.
- *
- * NO DELAY IS EVER ATTACHED TO IT, at any pose, and that is the same call
- * `./PillarOrbit.tsx` records: a delay on a tier property lands on the RELEASE too, so
- * stepping backwards out of pose 3 would un-light the middle band late.
- */
-const TIER_TRANSITION = "0.45s var(--ease)";
+const entrance = (shown: boolean, name: string, ms: number) => ({
+  className: shown ? name : "",
+  style: (shown ? { animationDelay: `${ms}ms` } : { opacity: 0 }) as CSSProperties,
+});
 
 // ───────────────────── the figure ─────────────────────
 
 export interface MiddleOutBandsProps {
-  /** 0…4. See `../shape-middle-out.tsx` for what each pose argues, and
-   *  `../middle-out-walk.ts` for the two that are named and the three that are counted. */
+  /** 0 or 1. See `../middle-out-walk.ts` for what each pose carries. */
   pose: number;
 }
 
 export function MiddleOutBands({ pose }: MiddleOutBandsProps) {
-  // THE POSE, ASKED WHERE IT IS ANSWERED. Every question goes to
-  // `../middle-out-walk.ts` and none is re-derived from a comparison here, so no branch
-  // in this tree can form its own opinion about what pose 3 means. The two below are the
-  // ones more than one element needs; `showsBandClaims` and `showsCloser` are asked at
-  // the elements that need them.
-  const middleLit = isMiddleLit(pose);
-  const showClose = showsTranslations(pose);
+  // THE POSE, ASKED WHERE IT IS ANSWERED. Both questions go to `../middle-out-walk.ts` and
+  // neither is re-derived from a comparison here, so no branch in this tree can form its
+  // own opinion about what pose 1 means.
+  const figure = showsFigure();
+  const thesis = showsThesis(pose);
+
+  /**
+   * WHICH TIER THE POINTER IS ON, by `id` — and `null` when it is nowhere.
+   *
+   * ONE PIECE OF STATE FOR SIX BOXES, which is what makes the pairing possible: a plate and
+   * its card set and read the same value, so hovering either lights both. Keyed by the
+   * content module's own `id` rather than by an index, so the two lists cannot drift.
+   *
+   * IT IS DELIBERATELY NOT A `:hover` RULE. The two boxes that share a highlight are
+   * 236px apart with a rail between them and are siblings in an absolute layout — there is
+   * no selector that reaches from one to the other.
+   */
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  /** The middle row, asked in one place, so a plate and the card beside it can never
+   *  disagree about which row the argument is about. */
+  const isMiddle = (index: number) => index === MIDDLE_TIER_INDEX;
+
+  /** The four-state resolution, written once for the plates and once for the cards: the
+   *  argument's rank first, then the pointer's. */
+  const plateTier = (index: number, id: string) =>
+    isMiddle(index)
+      ? hovered === id
+        ? TIER.plate.litHover
+        : TIER.plate.lit
+      : hovered === id
+        ? TIER.plate.restHover
+        : TIER.plate.rest;
+
+  const cardTier = (index: number, id: string) =>
+    isMiddle(index)
+      ? hovered === id
+        ? TIER.card.litHover
+        : TIER.card.lit
+      : hovered === id
+        ? TIER.card.restHover
+        : TIER.card.rest;
 
   return (
     <>
-      {/* ───── THE STANDING KICKER ─────
-          On the stage at every pose, and never gated: it is what stops the chart being
-          about somebody else, and the room has to read all three bands already knowing
-          which one it is in. A kicker that arrived with the middle band's claim would
-          let the room spend two beats deciding whether this is a diagram about them or
-          about a layer of management they are being asked to manage. No `Reveal`
-          wrapper for the same reason `./PillarOrbit.tsx`'s kicker has none — there is no
-          pose it is absent at. */}
-      <div
-        data-testid="middle-out-kicker"
-        style={{
-          position: "absolute",
-          left: SIDE_MARGIN,
-          top: KICKER_TOP,
-          width: CONTENT_WIDTH,
-          height: EYEBROW_HEIGHT,
-          ...mono(TIER.label),
-          whiteSpace: "nowrap",
-        }}
-      >
-        {C.kicker}
-      </div>
+      {/* ───── THE THREE PLATES ─────
+          The chart itself, entering from the left, top to bottom. THESE ARE TWO OF THE SIX
+          HOVER TARGETS: the rectangle takes the pointer events for everything printed
+          inside it, which is why every type box on this stage carries `noPointer`.
 
-      {/* ───── THE THREE BAND BOXES ─────
-          Plain positioned `div`s and NOT `Reveal`s: all three stand from pose 0, so
-          there is no arrival to animate, and the one thing that DOES change on them —
-          the middle band's tier — needs an inline `transition` of its own, which would
-          override `.fade`'s. The box is the chart; the boxes' equality is the figure's
-          promise that this is an organisation and not a scale.
-
-          `data-lit` PUTS THE RANK IN THE DOM. The unit test and the browser harness read
-          which band is bright from this attribute rather than from a parsed style
-          string — "which row is the argument about" is a fact about the figure, and
-          reading it back out of a border colour would make every check a check of the
-          tier table's spelling instead. Exactly one band answers "true", and only from
-          {@link isMiddleLit}'s pose onward. */}
-      {C.bands.map((band, i) => {
-        const lit = middleLit && i === MIDDLE_BAND_INDEX;
-        const tier = lit ? TIER.band.lit : TIER.band.rest;
+          `data-lit` PUTS THE RANK IN THE DOM and `data-hover` puts the pointer there. The
+          unit test and the browser harness read both from attributes rather than from a
+          parsed style string — "which row is the argument about" is a fact about the figure,
+          and reading it back out of a border colour would make every check a check of the
+          tier table's spelling instead. */}
+      {C.tiers.map((tier, i) => {
+        const lit = isMiddle(i);
+        const t = plateTier(i, tier.id);
+        const on = hovered === tier.id;
         return (
           <div
-            key={band.id}
-            data-testid={`middle-out-band-${band.id}`}
+            key={tier.id}
+            {...entrance(figure, "mo-in-left mo-hoverable", BUILD.plate + i * BUILD.plateStep)}
+            data-testid={`middle-out-plate-${tier.id}`}
             data-lit={lit ? "true" : "false"}
+            data-hover={on ? "true" : "false"}
+            onMouseEnter={() => setHovered(tier.id)}
+            onMouseLeave={() => setHovered(null)}
             style={{
               position: "absolute",
-              left: BAND_LEFT,
-              top: bandTop(i),
-              width: BAND_WIDTH,
-              height: BAND_HEIGHT,
-              border: bandBorder(tier.edge),
-              // `border-box`, so the 1px border paints INSIDE the rectangle the
-              // geometry module cut. A content-box border would make every band 114
-              // tall against a chart budgeted at 112 and push the whole stage 6px down.
+              left: PLATE_LEFT,
+              top: plateTop(i),
+              width: PLATE_WIDTH,
+              height: plateHeight(i),
+              border: boxBorder(t.edge),
+              // `border-box`, so the 1px border paints INSIDE the rectangle the geometry
+              // module cut. A content-box border would make every plate 110 tall against a
+              // chart budgeted at 108 and push the whole stage down.
               boxSizing: "border-box",
-              backgroundColor: tier.fill,
-              // `background-color` AND NOT the `background` shorthand: only the colour
-              // moves between the two tiers, and a transition list should name the
-              // property that actually changes.
-              transition:
-                `border-color ${TIER_TRANSITION}, background-color ${TIER_TRANSITION}`,
+              backgroundColor: t.fill,
+              animationDelay: `${BUILD.plate + i * BUILD.plateStep}ms`,
             }}
           />
         );
       })}
 
-      {/* ───── EVERY BAND'S NAME, AND ITS TWO CLAIM ROWS ─────
-          MOUNTED AT EVERY POSE AND GATED BY FLAGS, never swapped: the six rows are six
-          blocks, each with its own `showsBandClaims`, so nothing that has arrived can be
-          removed by a later pose and stepping backwards asks the same question of a
-          smaller number. A single panel whose text swapped per band would have to render
-          SOMETHING at poses 0 and 4, and every available answer is wrong in front of a
-          room (`./PillarOrbit.tsx` records the three of them).
-
-          THE NAME IS NOT GATED. All three row labels stand from pose 0 — pose 0 IS the
-          organisation, named and nothing else — and the middle one's TIER is the only
-          thing about it that ever changes. */}
-      {C.bands.map((band, i) => {
-        const lit = middleLit && i === MIDDLE_BAND_INDEX;
-        const tier = lit ? TIER.band.lit : TIER.band.rest;
-        const shown = showsBandClaims(i, pose);
-        // The two rows, in reading order, which is also arrival order — see
-        // {@link CLAIM_ROW}. `slot` is a DOM handle only; no string here reaches the
-        // stage.
+      {/* ───── EVERY PLATE'S NAME ROW, AND ITS TWO CLAIM ROWS ─────
+          THE MIDDLE PLATE'S NAME ROW CARRIES TWO STRINGS — its name and the champions
+          beside it — in ONE element, because the subname has to sit immediately after a
+          name whose rendered width nothing in the geometry knows. THE TOP PLATE'S carries
+          the THIS ROOM tag as its own right-aligned box, because that position is the
+          addressing. */}
+      {C.tiers.map((tier, i) => {
+        const t = plateTier(i, tier.id);
+        const at = BUILD.claim + i * BUILD.plateStep;
+        // The two rows, in reading order, which is also arrival order. `slot` is a DOM
+        // handle only; no string here reaches the stage.
         const rows = [
           {
             slot: "holds",
             row: CLAIM_ROW.holds,
-            eyebrow: band.holdsEyebrow,
-            text: band.holds,
-            kw: band.holdsKw,
+            eyebrow: tier.holdsEyebrow,
+            text: tier.holds,
+            kw: tier.holdsKw,
           },
           {
             slot: "qualifier",
             row: CLAIM_ROW.qualifier,
-            eyebrow: band.qualifierEyebrow,
-            text: band.qualifier,
-            kw: band.qualifierKw,
+            eyebrow: tier.qualifierEyebrow,
+            text: tier.qualifier,
+            kw: tier.qualifierKw,
           },
         ];
         return (
-          <Fragment key={band.id}>
+          <Fragment key={tier.id}>
             <div
-              data-testid={`middle-out-band-${band.id}-name`}
+              {...entrance(figure, "mo-in-left mo-hover-type", BUILD.plate + i * BUILD.plateStep)}
+              data-testid={`middle-out-plate-${tier.id}-name`}
               style={{
                 position: "absolute",
-                left: CLAIM_LEFT,
-                top: bandLabelTop(i),
-                width: CLAIM_WIDTH,
+                left: PLATE_INNER_LEFT,
+                top: plateNameTop(i),
+                width: PLATE_INNER_WIDTH,
                 height: EYEBROW_HEIGHT,
-                ...mono(tier.name),
+                ...mono(t.name),
                 whiteSpace: "nowrap",
-                transition: `color ${TIER_TRANSITION}`,
+                ...noPointer,
+                animationDelay: `${BUILD.plate + i * BUILD.plateStep}ms`,
               }}
             >
-              {/* NO `highlight()` HERE, AND NONE ON ANY MONO STRING BELOW EITHER. The
-                  band labels are the chart's row names and carry no `*Kw` sibling by
-                  construction (`../content.ts`'s keyword rule); a copper italic inside
-                  an 11px uppercase mono label would emphasise a fragment of somebody's
-                  job title and read as a rendering fault. */}
-              {band.label}
+              {/* NO `highlight()` HERE, AND NONE ON ANY MONO STRING BELOW EITHER. The tier
+                  names are the chart's row names and carry no `*Kw` sibling by construction
+                  (`../content.ts`'s keyword rule); a copper italic inside an 11px uppercase
+                  mono label would emphasise a fragment of somebody's job title and read as
+                  a rendering fault. */}
+              {tier.name}
+              {isMiddle(i) && (
+                <>
+                  {/* THE SEPARATOR IS A MIDDOT AND NOT A DASH, and it is padded rather than
+                      spaced: at 0.22em tracking a space either side of an em dash opens a
+                      hole the row cannot afford, and a middot reads as "and also" rather
+                      than as "which is". */}
+                  <span style={{ padding: "0 10px", color: TIER.label }}>·</span>
+                  <span style={{ color: TIER.label }}>{C.middleSubname}</span>
+                </>
+              )}
             </div>
 
-            {rows.map((row) => (
-              // THE EYEBROW AND ITS CLAIM ARRIVE ON THE SAME STEP, always. The eyebrow
-              // is not a beat of its own — it is how the row is labelled — and a HOLDS
-              // standing alone over an empty measure for 90ms is a row that looks like
-              // it failed to load.
-              <Reveal
-                key={row.slot}
-                on={shown}
-                delay={delay(row.row)}
-                data-testid={`middle-out-${band.id}-${row.slot}-eyebrow`}
+            {/* THE ADDRESSING, AND IT SITS ON THE TOP PLATE. This deck's room is mostly TOP
+                MANAGEMENT, so "THIS ROOM" is right-aligned inside the plate that names them
+                — not the middle one, which is where the room's own managers are. Put it on
+                the middle plate and the slide flatters people who are not in the chairs; put
+                it here and the figure reads as the ask it is. `TOP_TIER_INDEX` is read from
+                the geometry, never typed as a 0. */}
+            {i === TOP_TIER_INDEX && (
+              <div
+                {...entrance(figure, "mo-in-up", at)}
+                data-testid="middle-out-plate-tag"
                 style={{
                   position: "absolute",
-                  left: CLAIM_LEFT,
-                  top: claimRowTop(i, row.row),
-                  width: EYEBROW_WIDTH,
+                  left: PLATE_INNER_LEFT,
+                  top: plateNameTop(i),
+                  width: PLATE_INNER_WIDTH,
                   height: EYEBROW_HEIGHT,
-                  ...mono(TIER.label),
+                  ...mono(TIER.tag),
+                  textAlign: "right",
                   whiteSpace: "nowrap",
+                  ...noPointer,
+                  animationDelay: `${at}ms`,
                 }}
               >
-                {row.eyebrow}
-              </Reveal>
-            ))}
+                {C.roomTag}
+              </div>
+            )}
 
             {rows.map((row) => (
-              <Reveal
-                key={row.slot}
-                on={shown}
-                as="p"
-                delay={delay(row.row)}
-                data-testid={`middle-out-${band.id}-${row.slot}`}
+              // THE EYEBROW AND ITS CLAIM ARRIVE TOGETHER, always. The eyebrow is not a beat
+              // of its own — it is how the row is labelled — and a HOLDS standing alone over
+              // an empty measure for 40ms is a row that looks like it failed to load.
+              <Fragment key={row.slot}>
+                {/* THE EYEBROW SITS ON ITS CLAIM'S BASELINE, WHICH IS 4px UNDER THE ROW'S
+                    OWN TOP EDGE — `claimEyebrowTop` and not `claimRowTop`, and the
+                    geometry module carries the arithmetic. Two boxes that share a `top`
+                    do NOT share a baseline when one is 11px mono and the other 15px sans:
+                    the smaller line box is shorter, so its type rides about four pixels
+                    high, and at the back of a room a floating HOLDS reads as the label of
+                    the row above it. */}
+                <div
+                  {...entrance(figure, "mo-in-left", at + row.row * BUILD.claimRow)}
+                  data-testid={`middle-out-${tier.id}-${row.slot}-eyebrow`}
+                  style={{
+                    position: "absolute",
+                    left: PLATE_INNER_LEFT,
+                    top: claimEyebrowTop(i, row.row),
+                    width: EYEBROW_WIDTH,
+                    height: EYEBROW_HEIGHT,
+                    ...mono(TIER.label),
+                    whiteSpace: "nowrap",
+                    ...noPointer,
+                    animationDelay: `${at + row.row * BUILD.claimRow}ms`,
+                  }}
+                >
+                  {row.eyebrow}
+                </div>
+                <p
+                  {...entrance(
+                    figure,
+                    "mo-in-left mo-hover-type",
+                    at + row.row * BUILD.claimRow,
+                  )}
+                  data-testid={`middle-out-${tier.id}-${row.slot}`}
+                  style={{
+                    position: "absolute",
+                    left: CLAIM_TEXT_LEFT,
+                    top: claimRowTop(i, row.row),
+                    width: CLAIM_TEXT_WIDTH,
+                    height: ROW_HEIGHT,
+                    ...sans(15, t.row),
+                    ...noPointer,
+                    animationDelay: `${at + row.row * BUILD.claimRow}ms`,
+                  }}
+                >
+                  {highlight(row.text, row.kw)}
+                </p>
+              </Fragment>
+            ))}
+
+            {/* THE ROW ONLY THE MIDDLE PLATE HAS, and the reason that plate is 28px taller
+                than the other two — the height is earned by this string, and
+                `MIDDLE_PLATE_HEIGHT` in `../middle-out-geometry.ts` is derived from its
+                registers rather than typed. Delete the string and all three plates come out
+                equal. */}
+            {isMiddle(i) && (
+              <div
+                {...entrance(figure, "mo-in-up", at + CLAIM_ROW.qualifier * BUILD.claimRow)}
+                data-testid="middle-out-plate-chips"
                 style={{
                   position: "absolute",
-                  left: CLAIM_TEXT_LEFT,
-                  top: claimRowTop(i, row.row),
-                  width: CLAIM_TEXT_WIDTH,
-                  height: ROW_HEIGHT,
-                  ...rowStyle,
-                  margin: 0,
+                  left: PLATE_INNER_LEFT,
+                  top: CHIPS_TOP,
+                  width: PLATE_INNER_WIDTH,
+                  height: CHIPS_HEIGHT,
+                  ...mono(TIER.chips),
+                  whiteSpace: "nowrap",
+                  ...noPointer,
+                  animationDelay: `${at + CLAIM_ROW.qualifier * BUILD.claimRow}ms`,
                 }}
               >
-                {highlight(row.text, row.kw)}
-              </Reveal>
-            ))}
+                {C.middleChips}
+              </div>
+            )}
           </Fragment>
         );
       })}
 
-      {/* ───── THE RAIL · TWO DIRECTIONS, ONE ORIGIN ─────
-          Three plain boxes, declared after the bands so they paint over the grounds they
-          cross — positioned elements at `z-index: auto` paint in DOM order, which is the
-          whole z-index policy this figure needs.
+      {/* ───── THE RAIL · ONE AXIS, TWO HEADS, ONE ORIGIN ─────
+          Declared after the plates so the marks paint over any ground they cross —
+          positioned elements at `z-index: auto` paint in DOM order, which is the whole
+          z-index policy this figure needs. All four boxes are `noPointer`: the rail is not a
+          hover target, because what a pointer means on this stage is "this tier", and the
+          rail belongs to two of them at once.
 
-          THE TWO RULES ARE ONE ARRIVAL AT ONE DELAY. Same gate, same step, same length
-          (`RULE_HEIGHT`, which IS `BAND_PITCH`), 28px apart in x. Two rules of different
-          lengths would rank one translation over the other; two rules on one x would be
-          a single dashed axis with a stop in the middle of it, which is a scale. Neither
-          carries an arrowhead: the direction each one means is said by which band it
-          reaches and by where its copy sits. */}
-      <Reveal
-        on={showClose}
-        delay={delay(CLOSING_STEP.rail)}
-        data-testid="middle-out-rule-downward"
+          THE DOT FIRST. It opens from nothing on the middle plate's centre line, and it is
+          painted in that plate's own edge tier rather than the arrow's — one origin, two
+          directions, and the origin is the row the slide is about. */}
+      <div
+        {...entrance(figure, "mo-dot-in", BUILD.dot)}
+        data-testid="middle-out-origin-dot"
         style={{
           position: "absolute",
-          left: DOWNWARD_RULE_LEFT,
-          top: DOWNWARD_RULE_TOP,
-          width: RULE_THICKNESS,
-          height: RULE_HEIGHT,
-          backgroundColor: TIER.rule,
-        }}
-      />
-      <Reveal
-        on={showClose}
-        delay={delay(CLOSING_STEP.rail)}
-        data-testid="middle-out-rule-upward"
-        style={{
-          position: "absolute",
-          left: UPWARD_RULE_LEFT,
-          top: UPWARD_RULE_TOP,
-          width: RULE_THICKNESS,
-          height: RULE_HEIGHT,
-          backgroundColor: TIER.rule,
-        }}
-      />
-      {/* THE ORIGIN BAR — the only horizontal mark on the stage, 30×2, on the MIDDLE
-          band's own centre line, joining the two rules rather than sitting under one of
-          them. It is painted in `TIER.band.lit.edge` and not in `TIER.rule`, which
-          `../middle-out-geometry.ts` requires in as many words: it is the MIDDLE band's
-          tier, so the figure says "both directions leave from here, and here is the
-          room" a second time in colour. It can only ever be drawn at a pose where that
-          band is already lit — `TRANSLATION_POSE` is past `LAST_CLAIM_POSE` — so the two
-          can never disagree. A second and third bar at the outer bands' centre lines
-          were drawn and cut: three evenly spaced marks on a vertical rail are a scale. */}
-      <Reveal
-        on={showClose}
-        delay={delay(CLOSING_STEP.rail)}
-        data-testid="middle-out-origin-bar"
-        style={{
-          position: "absolute",
-          left: ORIGIN_BAR_LEFT,
-          top: ORIGIN_BAR_TOP,
-          width: ORIGIN_BAR_WIDTH,
-          height: ORIGIN_BAR_HEIGHT,
-          backgroundColor: TIER.band.lit.edge,
+          left: ORIGIN_DOT_LEFT,
+          top: ORIGIN_DOT_TOP,
+          width: ORIGIN_DOT_SIZE,
+          height: ORIGIN_DOT_SIZE,
+          borderRadius: "50%",
+          backgroundColor: TIER.plate.lit.edge,
+          ...noPointer,
+          animationDelay: `${BUILD.dot}ms`,
         }}
       />
 
-      {/* ───── THE TRANSLATION COLUMN ─────
-          ONE LABEL FOR BOTH LINES, level with the MIDDLE band and between them rather
-          than above either — it sits at the ORIGIN of both. Two eyebrows would have had
-          to name the two directions, and UPWARD / DOWNWARD printed as headings is the
-          closest this stage could come to drawing a scale by accident. */}
-      <Reveal
-        on={showClose}
-        delay={delay(CLOSING_STEP.eyebrow)}
-        data-testid="middle-out-translation-eyebrow"
+      {/* THE TWO SHAFTS — one x, one length, one delay, growing out of the dot in opposite
+          directions. Each one's `transform-origin` is the end that touches the middle
+          plate's centre line, which is what makes the growth OUTWARD; `./middle-out.css`
+          states both. Together they read as a single 264px line, which is why they may not
+          be staggered against each other. */}
+      <div
+        {...entrance(figure, "mo-shaft-up", BUILD.shaft)}
+        data-testid="middle-out-shaft-up"
         style={{
           position: "absolute",
-          left: TRANSLATION_LEFT,
-          top: TRANSLATION_EYEBROW_TOP,
-          width: TRANSLATION_WIDTH,
-          height: EYEBROW_HEIGHT,
-          ...mono(TIER.label),
-          whiteSpace: "nowrap",
+          left: SHAFT_LEFT,
+          top: UP_SHAFT_TOP,
+          width: SHAFT_THICKNESS,
+          height: SHAFT_HEIGHT,
+          backgroundColor: TIER.arrow,
+          ...noPointer,
+          animationDelay: `${BUILD.shaft}ms`,
         }}
-      >
-        {C.translationEyebrow}
-      </Reveal>
+      />
+      <div
+        {...entrance(figure, "mo-shaft-down", BUILD.shaft)}
+        data-testid="middle-out-shaft-down"
+        style={{
+          position: "absolute",
+          left: SHAFT_LEFT,
+          top: DOWN_SHAFT_TOP,
+          width: SHAFT_THICKNESS,
+          height: SHAFT_HEIGHT,
+          backgroundColor: TIER.arrow,
+          ...noPointer,
+          animationDelay: `${BUILD.shaft}ms`,
+        }}
+      />
 
-      {/* THE COPY LANDS IN THE BAND IT REACHES, which is the layout's one real idea: the
-          translation that travels UP prints inside the TOP band, on that band's own
-          centre line — the line the upward rule terminates on — and the one that travels
-          DOWN prints inside the BOTTOM band. So the upward line sits high on the stage
-          and the downward line sits low, and that is the only place either direction is
-          drawn. Both indices are read from `../middle-out-geometry.ts`; neither is a 0
-          or a 2 typed here. */}
-      <Reveal
-        on={showClose}
-        as="p"
-        delay={delay(CLOSING_STEP.translation)}
-        data-testid="middle-out-upward"
-        style={{
-          position: "absolute",
-          left: TRANSLATION_LEFT,
-          top: translationTop(TOP_BAND_INDEX),
-          width: TRANSLATION_WIDTH,
-          height: TRANSLATION_HEIGHT,
-          ...prose(17, TIER.claim),
-        }}
-      >
-        {highlight(C.upward, C.upwardKw)}
-      </Reveal>
-      <Reveal
-        on={showClose}
-        as="p"
-        delay={delay(CLOSING_STEP.translation)}
-        data-testid="middle-out-downward"
-        style={{
-          position: "absolute",
-          left: TRANSLATION_LEFT,
-          top: translationTop(BOTTOM_BAND_INDEX),
-          width: TRANSLATION_WIDTH,
-          height: TRANSLATION_HEIGHT,
-          ...prose(17, TIER.claim),
-        }}
-      >
-        {highlight(C.downward, C.downwardKw)}
-      </Reveal>
+      {/* THE TWO PULSES — the only motion on this stage that never stops, and the figure's
+          claim rather than its decoration: a drawn arrow says the act happened once, a pulse
+          leaving the middle every two and a bit seconds says it is what the middle DOES.
+          Both leave together and travel outward, one per shaft.
 
-      {/* ───── THE CLOSER ─────
-          Full width, outside all three bands, and the last thing to arrive on the last
-          pose. It is the only sentence here that belongs to no band and the only
-          first-person word on the stage — the presenter saying that the deck is not the
-          delivery mechanism. `CLOSER_TOP` puts its lowest pixel at y = 600 against the
-          NavBar hover band at y = 632; the 32px between them is `NAV_ZONE_CLEARANCE` and
-          nothing below this element spends any of it. */}
-      <Reveal
-        on={showsCloser(pose)}
-        as="p"
-        delay={delay(CLOSING_STEP.closer)}
-        data-testid="middle-out-closer"
+          THEY START WHEN THE RAIL IS FINISHED, on the same delay as the arrowheads, so
+          nothing runs along a line that is still growing.
+
+          `--mo-travel` IS THE ONE COORDINATE THAT REACHES CSS, and it is read from the
+          geometry like every other: `FLOW_TRAVEL` is `SHAFT_HEIGHT − FLOW_LENGTH`, so the
+          pulse starts flush with the origin dot and stops flush against the head.
+
+          THE GRADIENT IS BRIGHTEST AT THE LEADING EDGE — `to top` for the pulse going up,
+          `to bottom` for the one going down — which is what gives a 48px box a direction
+          without an arrowhead of its own. `--copper-200` is two rungs over the shaft it runs
+          along, so the pulse is visible against its own line and still under the middle
+          plate's name. */}
+      <div
+        {...entrance(figure, "mo-flow-up", BUILD.shaft + SHAFT_DRAW_MS)}
+        data-testid="middle-out-flow-up"
         style={{
           position: "absolute",
-          left: CLOSER_LEFT,
-          top: CLOSER_TOP,
-          width: CLOSER_WIDTH,
-          height: CLOSER_HEIGHT,
-          ...prose(22, TIER.verdict),
+          left: SHAFT_LEFT,
+          top: UP_FLOW_TOP,
+          width: SHAFT_THICKNESS,
+          height: FLOW_LENGTH,
+          backgroundImage:
+            "linear-gradient(to top, transparent, var(--copper-200))",
+          ...noPointer,
+          animationDelay: `${BUILD.shaft + SHAFT_DRAW_MS}ms`,
+          ["--mo-travel" as string]: `${FLOW_TRAVEL}px`,
+        }}
+      />
+      <div
+        {...entrance(figure, "mo-flow-down", BUILD.shaft + SHAFT_DRAW_MS)}
+        data-testid="middle-out-flow-down"
+        style={{
+          position: "absolute",
+          left: SHAFT_LEFT,
+          top: DOWN_FLOW_TOP,
+          width: SHAFT_THICKNESS,
+          height: FLOW_LENGTH,
+          backgroundImage:
+            "linear-gradient(to bottom, transparent, var(--copper-200))",
+          ...noPointer,
+          animationDelay: `${BUILD.shaft + SHAFT_DRAW_MS}ms`,
+          ["--mo-travel" as string]: `${FLOW_TRAVEL}px`,
+        }}
+      />
+
+      {/* THE TWO ARROWHEADS — CSS border triangles, so the figure still mounts no `<svg>`.
+          `boxSizing: border-box` with a zero content box is what makes a 16×12 element
+          report 16×12 while painting a wedge: the three border widths sum to the box, and
+          the two transparent sides cut the diagonals.
+
+          THEY LAND AS THEIR SHAFT ARRIVES — `BUILD.shaft + SHAFT_DRAW_MS` — which is the one
+          place this file has to know a keyframe's duration (see {@link SHAFT_DRAW_MS}). A
+          head that appeared with its shaft's first frame would float 132px from the origin
+          with nothing under it. */}
+      <div
+        {...entrance(figure, "mo-head-in", BUILD.shaft + SHAFT_DRAW_MS)}
+        data-testid="middle-out-head-up"
+        style={{
+          position: "absolute",
+          left: HEAD_LEFT,
+          top: UP_HEAD_TOP,
+          width: HEAD_WIDTH,
+          height: HEAD_HEIGHT,
+          boxSizing: "border-box",
+          borderLeft: `${HEAD_WIDTH / 2}px solid transparent`,
+          borderRight: `${HEAD_WIDTH / 2}px solid transparent`,
+          borderBottom: `${HEAD_HEIGHT}px solid ${TIER.arrow}`,
+          ...noPointer,
+          animationDelay: `${BUILD.shaft + SHAFT_DRAW_MS}ms`,
+        }}
+      />
+      <div
+        {...entrance(figure, "mo-head-in", BUILD.shaft + SHAFT_DRAW_MS)}
+        data-testid="middle-out-head-down"
+        style={{
+          position: "absolute",
+          left: HEAD_LEFT,
+          top: DOWN_HEAD_TOP,
+          width: HEAD_WIDTH,
+          height: HEAD_HEIGHT,
+          boxSizing: "border-box",
+          borderLeft: `${HEAD_WIDTH / 2}px solid transparent`,
+          borderRight: `${HEAD_WIDTH / 2}px solid transparent`,
+          borderTop: `${HEAD_HEIGHT}px solid ${TIER.arrow}`,
+          ...noPointer,
+          animationDelay: `${BUILD.shaft + SHAFT_DRAW_MS}ms`,
+        }}
+      />
+
+      {/* ───── THE TWO ACTS, IN WORDS ─────
+          One mono label and one gloss each, centred on their arrow's own midspan and taken
+          from `actLabelTop`/`actGlossTop` — which are asked for the plate each arrow
+          REACHES (`TOP_TIER_INDEX` for the upward act, `BOTTOM_TIER_INDEX` for the downward
+          one), never for a 0 or a 2 typed here. So the upward act's copy sits high on the
+          stage beside the upward arrow, and the downward act's sits low. */}
+      {(
+        [
+          {
+            id: "up",
+            reaches: TOP_TIER_INDEX,
+            label: C.upLabel,
+            gloss: C.upGloss,
+            kw: C.upGlossKw,
+          },
+          {
+            id: "down",
+            reaches: BOTTOM_TIER_INDEX,
+            label: C.downLabel,
+            gloss: C.downGloss,
+            kw: C.downGlossKw,
+          },
+        ] as const
+      ).map((act, order) => {
+        const at = BUILD.act + order * BUILD.actStep;
+        return (
+          <Fragment key={act.id}>
+            <div
+              {...entrance(figure, "mo-in-up", at)}
+              data-testid={`middle-out-act-${act.id}-label`}
+              style={{
+                position: "absolute",
+                left: ACT_TEXT_LEFT,
+                top: actLabelTop(act.reaches),
+                width: ACT_TEXT_WIDTH,
+                height: EYEBROW_HEIGHT,
+                ...mono(TIER.act),
+                whiteSpace: "nowrap",
+                ...noPointer,
+                animationDelay: `${at}ms`,
+              }}
+            >
+              {act.label}
+            </div>
+            <p
+              {...entrance(figure, "mo-in-up", at)}
+              data-testid={`middle-out-act-${act.id}-gloss`}
+              style={{
+                position: "absolute",
+                left: ACT_TEXT_LEFT,
+                top: actGlossTop(act.reaches),
+                width: ACT_TEXT_WIDTH,
+                height: GLOSS_HEIGHT,
+                ...sans(13, TIER.gloss),
+                ...centred,
+                ...noPointer,
+                animationDelay: `${at}ms`,
+              }}
+            >
+              <span style={centredChild}>{highlight(act.gloss, act.kw)}</span>
+            </p>
+          </Fragment>
+        );
+      })}
+
+      {/* ───── THE THREE APPROACH CARDS ─────
+          Each card is its plate's own box seen again on the right of the stage: same top
+          edge, same height, same centre line, so the pairing is geometry rather than a
+          caption. THESE ARE THE OTHER THREE HOVER TARGETS, and they set the same state their
+          plate does — hover a card and the plate lights with it.
+
+          They enter from the RIGHT and they enter LAST, because a verdict on an approach
+          only means something once the room has seen what the middle can do that the other
+          two cannot. */}
+      {C.tiers.map((tier, i) => {
+        const lit = isMiddle(i);
+        const t = cardTier(i, tier.id);
+        const on = hovered === tier.id;
+        const at = BUILD.card + i * BUILD.cardStep;
+        return (
+          <Fragment key={tier.id}>
+            <div
+              {...entrance(figure, "mo-in-right mo-hoverable", at)}
+              data-testid={`middle-out-card-${tier.id}`}
+              data-lit={lit ? "true" : "false"}
+              data-hover={on ? "true" : "false"}
+              onMouseEnter={() => setHovered(tier.id)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                position: "absolute",
+                left: CARD_LEFT,
+                top: plateTop(i),
+                width: CARD_WIDTH,
+                height: plateHeight(i),
+                border: boxBorder(t.edge),
+                boxSizing: "border-box",
+                backgroundColor: t.fill,
+                animationDelay: `${at}ms`,
+              }}
+            />
+            <div
+              {...entrance(figure, "mo-in-right mo-hover-type", at)}
+              data-testid={`middle-out-card-${tier.id}-label`}
+              style={{
+                position: "absolute",
+                left: CARD_INNER_LEFT,
+                top: cardLabelTop(i),
+                width: CARD_INNER_WIDTH,
+                height: EYEBROW_HEIGHT,
+                ...mono(t.label),
+                whiteSpace: "nowrap",
+                ...noPointer,
+                animationDelay: `${at}ms`,
+              }}
+            >
+              {tier.approach}
+            </div>
+            <p
+              {...entrance(figure, "mo-in-right mo-hover-type", at)}
+              data-testid={`middle-out-card-${tier.id}-verdict`}
+              style={{
+                position: "absolute",
+                left: CARD_INNER_LEFT,
+                top: cardVerdictTop(i),
+                width: CARD_INNER_WIDTH,
+                height: CARD_VERDICT_HEIGHT,
+                ...serif(15, t.verdict),
+                ...centred,
+                ...noPointer,
+                animationDelay: `${at}ms`,
+              }}
+            >
+              {/* NO `highlight()`: the verdicts are CAPTIONS and carry no `*Kw` sibling
+                  (`../content.ts`'s keyword rule). Four words with an italic in them is a
+                  stage trying to emphasise its way out of a short sentence. */}
+              <span style={centredChild}>{tier.approachVerdict}</span>
+            </p>
+          </Fragment>
+        );
+      })}
+
+      {/* ───── THE THESIS ─────
+          The whole of pose 1, full width, outside every box, and the only sentence on this
+          stage that belongs to no tier. THE ONE `Reveal` ON THIS SLIDE: it is the only box
+          with a real pose transition to make, so `.fade` is exactly right for it and the
+          figure's own keyframes would be wrong (they fire on mount, and this arrives on a
+          click).
+
+          `THESIS_TOP` puts its lowest pixel at y = 614 against the NavBar hover band at
+          y = 632 — the 18px between them is `NAV_ZONE_CLEARANCE`, the tightest clearance in
+          the leader tree, and it is the brief: the last sentence belongs directly above the
+          navigation bar. */}
+      <Reveal
+        on={thesis}
+        as="p"
+        delay={BUILD.plate}
+        data-testid="middle-out-thesis"
+        style={{
+          position: "absolute",
+          left: THESIS_LEFT,
+          top: THESIS_TOP,
+          width: THESIS_WIDTH,
+          height: THESIS_HEIGHT,
+          ...serif(18, TIER.thesis),
+          ...noPointer,
         }}
       >
-        {highlight(C.closer, C.closerKw)}
+        {highlight(C.thesis, C.thesisKw)}
       </Reveal>
     </>
   );

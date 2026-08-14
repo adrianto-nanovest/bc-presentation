@@ -1,0 +1,282 @@
+/* THE AGENTIC ORGANIZATION — every keyframe the hub-and-spokes figure runs.
+ *
+ * KEYFRAMES `shape-` PREFIXED AND IMPORTED BY ./PillarOrbit.tsx, which is the
+ * convention `../../leader-gap/components/no-sop.css` and `./failures-pattern.css`
+ * set next door and the rule stated beside `gap-ladder-draw` in
+ * `src/styles/globals.css`: every slide family owns its own keyframes, so retiming
+ * one figure can never retime another's. Nothing here is global and nothing here is
+ * shared.
+ *
+ * WHY THIS FILE EXISTS AT ALL, when the nine-pose version of this slide shipped with
+ * the sentence "NO NEW KEYFRAME EITHER" at the top of its component. That sentence
+ * was true of a figure whose whole motion budget was ONE cross-fade per presenter
+ * click: a transition has a resting pair of values to move between, and a pose walk
+ * supplies them. This figure has neither. It arrives COMPLETE in a single pose — so
+ * its build has no "before" pose to transition from and must be a one-shot animation
+ * on mount — and its spokes CARRY MOTION AT REST, which is a loop and not a change.
+ * Both are the two shapes a transition cannot express, so both are keyframes.
+ *
+ * THREE FAMILIES, AND THEY ANSWER THREE DIFFERENT QUESTIONS:
+ *
+ *   · THE BUILD (`shape-hub-in`, `shape-spoke-draw`, `shape-pillar-in`,
+ *     `shape-panel-in`) — one shot, on mount, staggered. Runs when the slide is
+ *     REACHED rather than when a step is pressed, because `src/deck/Deck.tsx` renders
+ *     only the active slide and the component type changes on every slide move, so
+ *     mounting IS arriving. Every one of them ends on the resting frame.
+ *   · THE FLOW (`shape-spoke-flow`, `shape-spoke-surge`) — infinite, on the spokes,
+ *     and the only motion on this stage that never stops. Rest drifts INWARD (six
+ *     pillars feeding one enabler); the pillar under the pointer SURGES OUTWARD, fast
+ *     and long, which is the second half of the hover highlight.
+ *   · THE AFFORDANCE (`shape-hint-pulse`) — the one-line instruction that teaches the
+ *     hover, breathing until it is obeyed.
+ *
+ * ZERO SMIL, at every pose, under either motion preference — the rule this slide has
+ * carried since it shipped and the reason none of the above is an `<animate>`
+ * element. SMIL is invisible to the reduced-motion squash in `globals.css` and would
+ * have to be gated behind a `matchMedia` at mount; a CSS animation is not, and the
+ * media block at the bottom of this file finishes the job the squash cannot.
+ */
+
+/* ───────────────────── the build ───────────────────── */
+
+/* THE HUB, SETTLING. `backwards` and not `both`: the resting `to` frame is byte for
+   byte the inline style the component already writes (`translate(-50%, -50%)`,
+   opacity 1), so the fill is only needed BEFORE the animation starts — and leaving
+   the end unfilled hands the element back to its own inline style, which is what
+   lets the disc keep transitioning afterwards.
+
+   THE TRANSLATE IS REPEATED IN BOTH FRAMES because a keyframe's `transform` replaces
+   the element's entirely. A `from { transform: scale(0.82) }` alone would drop the
+   hub down and right by half its own size for the length of the animation, which is
+   the single most common way a centred element's entry animation goes wrong. */
+@keyframes shape-hub-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+.shape-hub-in {
+  animation: shape-hub-in 520ms var(--ease) backwards;
+}
+
+/* SIX SPOKES GROWING OUT OF THE DISC — the figure's one structural claim, drawn
+   rather than faded. The hub exists first and the pillars are reached FROM it, which
+   is the sentence the slide is making; a spoke that faded in would say the two ends
+   were always there and the line merely appeared.
+
+   OUTWARD, AND THE SIGN IS WHAT MAKES IT OUTWARD. Elements set `pathLength={1}`, so
+   the dash pattern below is `1 on / 1 off` in path-normalised units. A dashoffset of
+   −1 puts the ON segment entirely PAST the end of the path and leaves the OFF segment
+   covering it, so nothing is painted; walking the offset to 0 slides the ON segment
+   back over the path from its END. `spokeSegment` in ../geometry.ts returns the
+   pillar end as (x1,y1) and the disc end as (x2,y2), so "from the end" is "from the
+   hub". A `from { stroke-dashoffset: 1 }` — the sign the ladder's `gap-ladder-draw`
+   uses — would draw the identical line in the opposite direction, six spokes
+   converging on a disc that is already there. Same four lines, opposite argument. */
+@keyframes shape-spoke-draw {
+  from {
+    stroke-dashoffset: -1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.shape-spoke-draw {
+  /* PAIR WITH pathLength={1} on the element. The dasharray is in the same unit, so
+     one dash of 1 covers the whole spoke however long the spoke actually is — which
+     matters here because the six spokes are six DIFFERENT lengths (the ring is an
+     ellipse) and a user-unit dasharray would make each one draw at its own speed. */
+  stroke-dasharray: 1;
+  animation: shape-spoke-draw 520ms var(--ease) backwards;
+}
+
+/* A PILLAR LANDING. Opacity and scale only — no translate, because the box's own
+   centring translate lives on the wrapper ABOVE this one (see the three-layer note
+   in ./PillarOrbit.tsx) and the focus scale lives on the button BELOW it. Three
+   effects, three elements, one transform each: that is what lets a pointer land on a
+   box mid-build without two scales fighting over one property. */
+@keyframes shape-pillar-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.shape-pillar-in {
+  animation: shape-pillar-in 460ms var(--ease) backwards;
+}
+
+/* PLAIN OPACITY, AND THE ONE KEYFRAME TWO FAMILIES SHARE. The panel arrives last,
+   after the ring it reads against, and the spoke flow uses the same four lines to
+   keep its dots off a line that has not finished drawing. Opacity only: the panel is
+   placed by `left`/`right`/`top`/`bottom` and any transform on it would move the
+   hairline that is the column's only chrome — and inside the `<svg>` a transform on
+   the flow line would be in USER UNITS, which is the trap `gap-mark-in` next door
+   records. */
+@keyframes shape-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.shape-panel-in {
+  animation: shape-fade-in 520ms var(--ease) backwards;
+}
+/* THE FLOW'S OWN ENTRY, AND IT IS ON A WRAPPER `<g>` RATHER THAN ON THE LINE — the
+   one structural decision in this file that is not obvious from the rule it enforces.
+
+   `.shape-spoke-flow` GAINS AND LOSES `.is-active` ON EVERY HOVER, and a class change
+   that touches the `animation` shorthand RESTARTS every animation on the element.
+   With the entry fade on the same element, releasing a hover would restart the fade
+   too — and the fade's delay is set inline, up to 1.1s, so the flow would vanish for
+   a second every time the pointer left a pillar. On a wrapper the fade runs once, at
+   mount, and the class swaps underneath it retime nothing but the loop. */
+.shape-fade-in {
+  animation: shape-fade-in 300ms var(--ease) backwards;
+}
+
+/* ───────────────────── the flow ───────────────────── */
+
+/* AT REST: A SLOW DRIFT TOWARD THE CENTRE. Six pillars feeding one enabler, stated as
+   direction rather than as an arrowhead — six arrowheads at this scale would read as
+   chevrons and would have to be re-cut for six different angles.
+
+   USER UNITS HERE, NOT pathLength. This overlay is a SECOND line on top of the drawn
+   one and it deliberately does NOT set `pathLength`, so `2 10` is 2px of dot and 10px
+   of gap on a 1280×720 viewBox — the same dot spacing on all six spokes regardless of
+   their length, which is what makes the six read as one system. Normalising here
+   would give the short spokes tight dots and the long ones sparse ones.
+
+   −24 IS TWO WHOLE PERIODS (2 + 10 = 12), so the loop closes on itself and there is
+   no seam. Negative, so the pattern travels in the +path direction — pillar to hub. */
+@keyframes shape-spoke-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+/* UNDER THE POINTER: ONE LONG STROKE FIRED BACK OUT. Not "the same dots, faster" —
+   the direction reverses and the mark changes shape, because this is the half of the
+   hover highlight that has to be legible from the back of a room where a 2px dot is
+   not. The enabler answering the pillar you asked about.
+
+   +96 IS ONE WHOLE PERIOD (26 + 70), so this loop is seamless too. Positive, so the
+   travel is hub to pillar — the mirror of the resting drift. */
+@keyframes shape-spoke-surge {
+  to {
+    stroke-dashoffset: 96;
+  }
+}
+
+/* THE LOOP AND NOTHING ELSE — the entry fade lives on the `<g>` above (see
+   `.shape-fade-in`), so these two rules may be swapped mid-flight without retiming
+   anything a reader is already watching. */
+.shape-spoke-flow {
+  stroke-dasharray: 2 10;
+  animation: shape-spoke-flow 1800ms linear infinite;
+}
+.shape-spoke-flow.is-active {
+  stroke-dasharray: 26 70;
+  animation: shape-spoke-surge 1500ms linear infinite;
+}
+
+/* ───────────────────── the affordance ───────────────────── */
+
+/* THE HINT, BREATHING. This slide has no step that forces its content open — the six
+   decisions are reached with the pointer — so exactly one line on the stage has to
+   say so, and a line that says so silently is a line nobody reads. It stops the
+   moment the first pillar is touched (the component drops the element), so the pulse
+   is bounded by the reader's own first action rather than by a timer.
+
+   0% AND 100% ARE THE SAME FRAME, which is the deck's rule for every infinite
+   animation: the squashed single iteration a reduced-motion reader gets must land on
+   the composed frame, not on a half-faded one. */
+@keyframes shape-hint-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.shape-hint {
+  animation: shape-hint-pulse 2600ms var(--ease) infinite;
+}
+
+/* ───────────────────── the pillar box, as a control ───────────────────── */
+
+/* IT IS A <button>, so it needs the browser's defaults taken off it and the deck's
+   own focus ring put back on. `all: unset` is refused here — it would also drop the
+   `box-sizing` the geometry is measured in.
+
+   THE CURSOR IS THE FIRST AFFORDANCE. `src/deck/Slide.tsx` sets `cursor: pointer` on
+   the whole stage (every click advances a step), so a pointer cursor over a pillar
+   says nothing at all. `cursor: help` would be a lie — this opens content, it does not
+   explain it — so the box keeps the stage's pointer and spends its affordance on the
+   hint line and on the hover highlight itself. What IS declared here is
+   `-webkit-tap-highlight-color`, because a projector laptop driven from a tablet
+   would otherwise flash a grey rectangle over the copper one. */
+.shape-pillar-box {
+  appearance: none;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* `:focus-visible` AND NOT `:focus`: a mouse click on a pillar pins it, and a pinned
+   pillar that also wore a keyboard ring would tell a mouse user their pointer had
+   become a caret. The ring is the deck's copper, one tier above the focused border so
+   it is still separable from it, and it is OUTSIDE the box so it cannot be confused
+   with the focus halo the tier table paints. */
+.shape-pillar-box:focus-visible {
+  outline: 2px solid var(--copper-100);
+  outline-offset: 3px;
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* THE GLOBAL SQUASH IS NOT ENOUGH, TWICE OVER, and both gaps are the same two the
+   ladder and the fray already record.
+ *
+ *   1. AN INFINITE ANIMATION AT 0.01ms IS NOT A STOP — it is the same loop at
+ *      180,000× speed, and `animation-iteration-count: 1` then parks it on its END
+ *      frame. For the two spoke loops that end frame is a dash pattern frozen
+ *      mid-travel, laid over a solid line: a spoke that looks broken. So the overlay
+ *      is removed outright and the drawn line underneath is what the figure is left
+ *      with — which is exactly what it was before the flow existed.
+ *   2. THE GLOBAL RULE SQUASHES DURATIONS AND LEAVES DELAYS ALONE. This figure stages
+ *      its whole build INSIDE one pose, with the stagger set INLINE per element, so a
+ *      reader who asked for no animation would otherwise watch a blank stage assemble
+ *      itself silently over 1.4 seconds. The delays are given up here.
+ *
+ * `!important` because those delays are inline and a stylesheet cannot outrank an
+ * inline style any other way — the same spend the global rule already makes.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .shape-spoke-flow,
+  .shape-hint {
+    animation: none !important;
+  }
+  .shape-spoke-flow {
+    opacity: 0;
+  }
+  .shape-hub-in,
+  .shape-spoke-draw,
+  .shape-pillar-in,
+  .shape-panel-in,
+  .shape-fade-in {
+    animation-delay: 0s !important;
+  }
+}

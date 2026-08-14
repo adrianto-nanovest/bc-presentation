@@ -26,17 +26,24 @@
 // `<em>` in data.
 //
 // THE KEYWORD RULE. `kw` goes on PROSE ONLY, and THE AGENTIC ORGANIZATION — the first
-// of this file's two blocks — has THREE prose registers: the headline, the six pillar
-// DECISIONS, and the closer. (MIDDLE-OUT states its own census in its own header.)
-// Each of them
-// carries a `*Kw` sibling. Everything else is the mono LABEL register — the
-// kicker, the hub's two lines, the six pillar labels, `decisionEyebrow`, and the
-// beat counter {@link decisionCounter} builds out of it — where a copper italic
-// reads as a rendering fault, so none of them has a `*Kw` sibling and none of them
-// may gain one. The counter is the sharpest case, because it is GENERATED rather
-// than authored: a highlight inside "THE DECISION · 03 / 06" would be an emphasis
-// on arithmetic. `tests/unit/shape-agentic-org.test.tsx` holds the two registers
-// apart as lists, so a new string has to pick a side.
+// of this file's two blocks — has FOUR prose registers: the headline, the six pillar
+// DECISIONS, the panel's idle lead, and the closer. (MIDDLE-OUT states its own census
+// in its own header.) Each of them carries a `*Kw` sibling. Everything else is the
+// mono LABEL register — the hub's two lines, the six pillar labels, the six point
+// lists, the six recap fragments, `decisionEyebrow`, `recapEyebrow`, `idleEyebrow`,
+// `hint`, and the beat counter {@link decisionCounter} builds out of it — where a
+// copper italic reads as a rendering fault, so none of them has a `*Kw` sibling and
+// none of them may gain one. The counter is the sharpest case, because it is
+// GENERATED rather than authored: a highlight inside "THE DECISION · 03 / 06" would
+// be an emphasis on arithmetic. `tests/unit/shape-agentic-org.test.tsx` holds the two
+// registers apart as lists, so a new string has to pick a side.
+//
+// THE SIX RECAP FRAGMENTS ARE IN THE LABEL REGISTER AND THEY ARE SERIF — the one
+// place on this slide where those two come apart, so it is worth saying why. They are
+// set in the reading face because they are sentence fragments and a mono fragment
+// reads as a filename; they carry no keyword because a fragment IS the emphasis —
+// six of them stacked under one stem, each one already the object of its own
+// decision, and an italic inside one would be emphasis on emphasis.
 //
 // WHAT SHIPPED HERE, AND WHAT IS STILL REFUSED. The previous ticket listed three
 // items as deferred; two of them are now written. The list is kept — with the
@@ -46,15 +53,15 @@
 //
 //   1. THE SIX LEADER DECISIONS — SHIPPED, one per pillar, on `Pillar.decision`
 //      with its `decisionKw` sibling, in the ring order the array below holds.
-//      §6.6 spends the space the HR original's panel used on exactly this: a walk
-//      that names the leader's DECISION in each pillar, which is what turns the
-//      centrepiece into the index for the section behind it. Written now and not
-//      earlier because the pose that speaks them now exists — dead copy that reads
-//      as finished is how unreviewed copy ships (see `GENERAL_BLOCK` in
-//      `src/slides/leader-gap/content.ts` for the same reasoning).
-//   2. THE CLOSER — SHIPPED (`closer` / `closerKw`), on the ninth pose. It sits in
-//      the right column and not the bottom strip; §7.1 forced that and
-//      `WALK_COLUMN` in `./geometry.ts` records why in numbers.
+//      §6.6 spends the space the HR original's panel used on exactly this: copy that
+//      names the leader's DECISION in each pillar, which is what turns the
+//      centrepiece into the index for the section behind it. Each one now arrives
+//      with `Pillar.points` — HR p4's own sub-bullets — and `Pillar.recap`, the
+//      fragment the last pose prints.
+//   2. THE CLOSER — SHIPPED (`closer` / `closerKw`), now the last line of the recap
+//      rather than a pose of its own. It sits in the right column and not the bottom
+//      strip; §7.1 forced that and `WALK_COLUMN` in `./geometry.ts` records why in
+//      numbers.
 //   3. SPECIFY → GENERATE → VERIFY — STILL REFUSED, unchanged. §6.6 DROPS the HR
 //      original's panel outright — C.4 (leader F.4) already does it better — and
 //      the freed space is what the walk above is spent on. It is not missing from
@@ -153,24 +160,89 @@ export interface Pillar {
    * reads, so nothing on the stage says the emphasis was lost.
    */
   decisionKw: readonly string[];
+  /**
+   * WHAT IS ACTUALLY UNDER THE PILLAR — HR p4's own sub-bullets, and the reason this
+   * slide can be opened rather than only read.
+   *
+   * THE DECISION IS THE ARGUMENT; THIS IS THE EVIDENCE FOR IT. "You decide where the
+   * data may go" is a claim about the leader's desk, and a Div Head's next question
+   * is always the same one — *what does that actually cover?* Four nouns answer it in
+   * the time it takes to read them, and they are the difference between a diagram the
+   * room agrees with and a diagram the room can act on. They were not authored for
+   * this deck: HR p4 lists them under each pillar, and printing anything else here
+   * would be inventing a scope for a pillar that already has one.
+   *
+   * THREE OR FOUR, NEVER MORE. HR p4 gives Governance four and the other five three,
+   * and the asymmetry is kept rather than padded — a fourth line invented for Tools
+   * so the six lists match would be a scope nobody wrote. The panel is measured for
+   * four ({@link WALK_COLUMN} in `./geometry.ts`), so four is the ceiling and a fifth
+   * would run the list into the figure's own floor.
+   *
+   * MONO LABEL REGISTER, so keyword-free: these are names of things, not sentences
+   * about them, and a copper italic inside "Data privacy" would emphasise a word in a
+   * two-word noun phrase.
+   *
+   * NO VENDOR IS NAMED, and that is a deviation from HR p4 rather than a
+   * transcription slip. HR p4's Tools list opens "Claude + Gemini ecosystem"; §6.7's
+   * security block refuses every vendor token by name for a Sinar Mas audience — none
+   * of `Claude`, `Anthropic`, `Gemini`, `Google`, `Copilot`, `Microsoft` — and a
+   * centrepiece that printed two of them four slides ahead of that refusal would make
+   * the refusal look like an oversight. The scope survives without the brands; see
+   * the Tools pillar below.
+   */
+  points: readonly string[];
+  /**
+   * THE DECISION IN ONE FRAGMENT — what the recap pose prints, six of them under one
+   * shared stem.
+   *
+   * IT IS THE OBJECT OF THE DECISION AND NOT A SUMMARY OF IT. The recap sets "YOU
+   * DECIDE" once, as the panel's eyebrow, and lists six answers under it: *where the
+   * data may go · who gets a company-managed seat · whether the culture rewards or
+   * waits · …*. That is the drumbeat the six decisions build, collapsed into the one
+   * frame the room leaves with — and it only works if every fragment completes the
+   * same stem, so each one starts with an interrogative or a preposition and none of
+   * them is a sentence.
+   *
+   * IT MUST CARRY ITS DECISION'S ANCHOR WORD (§6.6). `data`, `company-managed seat`,
+   * `culture`, `pilot`, `signs`, `agent` — these are the words a leader hears again
+   * in section D and in the ladder, and the recap is the LAST place they are said. A
+   * fragment polished free of its anchor would leave the slide indexing nothing at
+   * exactly the moment the index is being handed over; the test holds each fragment
+   * to the anchor its decision already carries.
+   *
+   * NOT DERIVED FROM `decisionKw`, though four of the six would survive the
+   * derivation. The keyword is chosen for what should go copper INSIDE a full
+   * sentence, and the fragment is chosen for what reads alone in a list — "the culture
+   * rewards" is the right emphasis in context and an unfinished thought out of it. Two
+   * jobs, two fields, and the test holds them to the same anchors rather than to each
+   * other.
+   */
+  recap: string;
 }
 
 /**
- * HR p4's six pillars, in RING ORDER — which is the FOCUS WALK's order, not the
- * order HR p4 prints them in.
+ * HR p4's six pillars, in RING ORDER — which is the READING order, not the order HR
+ * p4 prints them in.
  *
  * HR p4 reads: People & Mindset · AI Companions · Process & Methodology · Tools &
  * Platform · Strategy & Leadership · Governance & Policies. This array reads
  * Governance · Tools · People · Strategy · Process · Companions, and the
  * difference is a teaching decision the owner approved along with variant A on a
- * browser walkthrough of all six #16 prototypes: the walk opens on the two
- * pillars section D opens on (§6.6 — security and no-SOP land on *Governance &
- * Policies*, subscriptions on *Tools & Platform*) so the centrepiece hands
- * straight over to the section after it.
+ * browser walkthrough of all six #16 prototypes: the two pillars section D opens on
+ * (§6.6 — security and no-SOP land on *Governance & Policies*, subscriptions on
+ * *Tools & Platform*) take twelve and two o'clock, so the centrepiece hands straight
+ * over to the section after it.
+ *
+ * THE ORDER STILL MATTERS WITH THE WALK GONE, and it is worth saying which half
+ * survives. It no longer decides what is said FIRST — the pointer does that, and a
+ * room that asks about seats gets seats. It still decides what is READ first: index 0
+ * is twelve o'clock, index 1 is the top right, and a ring is scanned clockwise from
+ * the top by everyone. It also still decides the RECAP's order, which is the one
+ * place on this slide where all six are stated in sequence.
  *
  * ONE ORDER ARRAY, NOT TWO. A second array holding "HR p4's printed order" would
  * exist only to be out of step with this one, and nothing on the slide renders
- * it — the ring, the labels and the walk's six beats all index THIS array.
+ * it — the ring, the labels, the panel and the recap all index THIS array.
  * `./geometry.ts` computes six centres in the same order, so pillar `i`'s box is
  * `PILLAR_CENTRES[i]` and there is no rung→tread table to drift.
  */
@@ -203,6 +275,12 @@ const PILLARS: readonly Pillar[] = [
     // line now — `shape-middle-out.test.tsx` records the move.
     decision: "You decide where the data may go — and you write it down before someone improvises.",
     decisionKw: ["where the data may go"],
+    // HR p4's four, verbatim, and the only pillar that gets four. "Cost control" is
+    // the one a governance list is usually missing and the one a Div Head recognises
+    // fastest — it is also what makes D.5's subscription argument a governance
+    // question rather than a procurement one.
+    points: ["Risk management", "Data privacy", "Responsible AI use", "Cost control"],
+    recap: "where the data may go",
   },
   {
     id: "tools",
@@ -220,6 +298,18 @@ const PILLARS: readonly Pillar[] = [
     // analytics possible at all.
     decision: "You decide who gets a company-managed seat, and that the company pays for it.",
     decisionKw: ["a company-managed seat"],
+    // HR p4's three, with its first line DE-BRANDED. The original reads "Claude +
+    // Gemini ecosystem"; §6.7's security block refuses every vendor token by name for
+    // this audience, so the two brands are dropped and the claim they were carrying —
+    // that there is ONE approved set of models rather than whatever each person
+    // signed up for — is what is kept. "One approved model ecosystem" is also the
+    // stronger line for a leader: the decision is the approving, not the vendor.
+    points: [
+      "One approved model ecosystem",
+      "Automation & connectors",
+      "Infrastructure & access",
+    ],
+    recap: "who gets a company-managed seat",
   },
   {
     id: "people",
@@ -242,6 +332,16 @@ const PILLARS: readonly Pillar[] = [
     // rewarding the person who waits is also a decision, made by default.
     decision: "You decide whether the culture rewards the person who tries it or the person who waits.",
     decisionKw: ["the culture rewards"],
+    // HR p4's three, verbatim. "AI Champions per dept" is the one that names a
+    // structure rather than a mood, and it is the pillar's whole answer to *what does
+    // culture cost me?* — a named person per division, which is a headcount decision
+    // and therefore this room's.
+    points: ["AI Champions per dept", "Growth mindset culture", "Knowledge & learning"],
+    // "or waits" AND NOT "the person who tries it": the contrast is the decision. A
+    // fragment that named only the rewarded half would read as a policy the room
+    // already has, and lose the point that rewarding the person who waits is also a
+    // decision, made by default.
+    recap: "whether the culture rewards or waits",
   },
   {
     id: "strategy",
@@ -260,6 +360,11 @@ const PILLARS: readonly Pillar[] = [
     // belongs on a slide addressed to the room.
     decision: "You decide which problem gets the pilot, and that leading the culture is part of the job.",
     decisionKw: ["which problem gets the pilot"],
+    // HR p4's three, verbatim, and all three are things only this room can supply.
+    // They are also the three D.3's 30-day proof asks for by another name: a sponsor,
+    // a budget line, and a stated reason.
+    points: ["Executive sponsorship", "Investment commitment", "Clear AI vision"],
+    recap: "which problem gets the pilot",
   },
   {
     id: "process",
@@ -281,6 +386,13 @@ const PILLARS: readonly Pillar[] = [
     // see items 3 and 4 at the top of this file.
     decision: "You decide where a human still signs, and everywhere they no longer do.",
     decisionKw: ["where a human still signs"],
+    // HR p4's three, verbatim — and note what is NOT here. The original's process
+    // pillar is the one #16's pointer line pointed at Specify · Generate · Verify;
+    // those three words are refused on this stage by §6.6 and by a test (item 3 at
+    // the top of this file), and HR p4's own three sub-bullets say the process thing
+    // without them.
+    points: ["Adoption framework", "Change management", "Structured pilots"],
+    recap: "where a human still signs",
   },
   {
     id: "companions",
@@ -298,6 +410,20 @@ const PILLARS: readonly Pillar[] = [
     // rebuilt slide moved what it points at.
     decision: "You decide when a tool is allowed to become an agent.",
     decisionKw: ["allowed to become an agent"],
+    // HR p4's three, verbatim, and the third one is the crossing the decision above
+    // names: "Tool → Companion → Agent" is B.5's ladder in three words, and it is the
+    // only place on this slide where a sequence is printed as a sequence. It is NOT
+    // the refused panel — that one is Specify → Generate → Verify, a method, and this
+    // is a threshold. The arrows are the same and nothing else is.
+    points: [
+      "Human–AI collaboration",
+      "Agents in every workflow",
+      "Tool → Companion → Agent",
+    ],
+    // "becomes" AND NOT the decision's "is allowed to become": the permission is
+    // carried by the stem ("YOU DECIDE …") once the fragment is standing under it, and
+    // repeating it would make this the only recap line with two verbs in it.
+    recap: "when a tool becomes an agent",
   },
 ];
 
@@ -307,30 +433,23 @@ export const shapeOrgContent = {
   figLabel: "THE AGENTIC ORGANIZATION",
 
   headline: "Six pillars move together, or none of them move.",
-  /** The headline's highlight — the first of the slide's three prose registers,
-   *  and the only one that is on the stage at every pose. */
+  /** The headline's highlight — the first of the slide's four prose registers,
+   *  and the only one that is on the stage at both poses. */
   headlineKw: ["move together"],
 
-  /**
-   * The standing kicker — the claim the figure is an argument for.
-   *
-   * STANDS AT ALL NINE POSES, unlike the prototype's, which sat inside the ring's
-   * space and had to fade out as the pillars faded in — and which then hid itself
-   * from pose 1 onward, spending a slot on a claim that is true throughout. It reads as the headline's
-   * eyebrow and it is the sentence that makes the diagram a proposal rather than
-   * an org chart: an operating model is something a division adopts, a department
-   * is something it funds and forgets, a committee is something it schedules.
-   *
-   * Mono uppercase, so keyword-free. The em dash is the deck's own; the commas
-   * are what keep the two refusals reading as one breath.
-   *
-   * STORED UPPERCASE, unlike `hubLabel` below, and the difference is not an
-   * oversight: this string is the prototype's verbatim and is never quoted in
-   * prose, so the register's `textTransform` is a no-op on it and the data reads
-   * as the stage does. `hubLabel` IS quoted — in the issue's AC, in §6.6 and in
-   * the test — so it stays in title case and lets the CSS do the shouting.
-   */
-  kicker: "AN OPERATING MODEL — NOT A DEPARTMENT, NOT A COMMITTEE",
+  // THERE IS NO `kicker`, AND ITS ABSENCE IS AUTHORED. The nine-pose version of this
+  // slide printed a standing mono line under the headline — "AN OPERATING MODEL — NOT
+  // A DEPARTMENT, NOT A COMMITTEE" — at every pose, in the band at y = 134. It is cut,
+  // owner call (2026-08-13), and cut rather than moved: the same words re-set in the
+  // panel would be the same slot spent in a quieter place, and the panel's own idle
+  // lead below already says what shape this is. What the deletion buys is the top of
+  // the stage: the headline now stands alone over the figure, which is the one thing a
+  // room reads before the diagram resolves.
+  //
+  // `KICKER_TOP` WENT WITH IT (`./geometry.ts`), so nothing is left pointing at an
+  // empty band, and `tests/unit/shape-agentic-org.test.tsx` asserts the string is
+  // absent from the stage rather than merely unrendered — a field left here "for
+  // later" is how deleted copy comes back.
 
   /**
    * The hub's first line — §6.6's generic hub.
@@ -349,36 +468,118 @@ export const shapeOrgContent = {
   hubLabel: "The Enabler",
 
   /**
-   * The walk column's eyebrow — the mono label standing over every decision.
+   * The panel's eyebrow while a pillar is open — the mono label standing over every
+   * decision.
    *
-   * SINGULAR, and it stays singular at all six beats. "THE DECISIONS" would make
-   * the column a list the room can read ahead in, and reading ahead is what a
-   * six-beat walk exists to prevent: the leader should be on the beat the presenter
-   * is on. "THE DECISION" says the column holds exactly one at a time, which is
+   * SINGULAR, and it stays singular however the pillar was opened. "THE DECISIONS"
+   * would make the panel a list, and the panel holds exactly one at a time — which is
    * what the counter beside it then quantifies.
    *
-   * STORED UPPERCASE, like `kicker` and unlike `hubLabel`: it is never quoted in
-   * prose — {@link decisionCounter} composes the printed line out of it and the
-   * tests read that line, not this field — so the register's `textTransform` is a
-   * no-op on it and the data reads as the stage does. Mono label, so keyword-free.
+   * IT SURVIVED THE WALK IT WAS WRITTEN FOR, and the counter with it. Under nine
+   * poses "03 / 06" told the presenter where they were in a fixed sequence; under the
+   * pointer there is no sequence, and it now tells the room something better — that
+   * the thing they are reading is one of exactly six, so a pillar opened out of order
+   * still arrives with its denominator. That is the half of the retired walk worth
+   * keeping.
+   *
+   * STORED UPPERCASE, unlike `hubLabel`: it is never quoted in prose —
+   * {@link decisionCounter} composes the printed line out of it and the tests read
+   * that line, not this field — so the register's `textTransform` is a no-op on it and
+   * the data reads as the stage does. Mono label, so keyword-free.
    */
   decisionEyebrow: "THE DECISION",
 
   /**
-   * The closer — the ninth pose, and the sentence the whole figure exists to earn.
+   * The panel's eyebrow with nothing open — what the six boxes ARE, before any one of
+   * them is read.
+   *
+   * IT NAMES THE FIGURE RATHER THAN THE INTERACTION. "SIX PILLARS · ONE ENABLER" is
+   * the diagram said in four words, so a room that never touches the slide still
+   * leaves with the shape; the line that explains the pointer is {@link hint} below,
+   * and it is separate because it is the only string here that stops being true once
+   * it has been obeyed. Mono label, so keyword-free.
+   */
+  idleEyebrow: "SIX PILLARS · ONE ENABLER",
+
+  /**
+   * The panel's idle lead — the prose that stands in the panel until a pillar is
+   * opened.
+   *
+   * IT IS THE HEADLINE'S PROOF, NOT ITS ECHO. "Six pillars move together, or none of
+   * them move" is a claim; this is the mechanism under it — one enabling function,
+   * six pillars that only work in company. A leader who reads only these two lines
+   * has the argument.
+   *
+   * IT DOES NOT SPEND THE CLOSER. "None of them is a tool purchase" is the recap's
+   * last line and the sentence the whole figure exists to earn; an idle lead that
+   * previewed it would make the recap a repeat. So this one describes the SHAPE and
+   * the closer keeps the REFUSAL.
+   *
+   * AND IT IS NOT THE DELETED KICKER RE-SET IN A QUIETER PLACE. See the note where
+   * `kicker` used to be: that line was cut, not moved, and reusing its words here
+   * would be the move it was refused.
+   */
+  idleLead: "One enabling function at the centre. Six pillars that only work together.",
+  /** Prose, so one keyword — on the dependency, which is the claim the ring makes and
+   *  the only part of the sentence the diagram cannot draw on its own. */
+  idleLeadKw: ["only work together"],
+
+  /**
+   * The one line on this stage that explains the pointer.
+   *
+   * IT EXISTS BECAUSE THE STEPS WENT AWAY. Under nine poses the six decisions arrived
+   * whether or not anyone touched the slide; under two, they are reached by hovering
+   * a box, and a figure that hides its content behind an ungestured interaction is a
+   * figure that shows a room six labels and nothing else. One line, once.
+   *
+   * IT IS DROPPED THE INSTANT IT IS OBEYED — the component stops rendering it after
+   * the first pillar is touched, rather than fading it or leaving it dim. An
+   * instruction that is still on the stage after the reader has followed it is
+   * chrome, and this deck spends no chrome.
+   *
+   * BOTH HALVES ARE NAMED, and the second one is the one nobody guesses: hover is
+   * discoverable by accident, pin is not. Mono label at the panel's quietest tier, so
+   * keyword-free.
+   */
+  hint: "HOVER A PILLAR TO OPEN IT · CLICK TO PIN",
+
+  /**
+   * The recap's eyebrow — and the STEM the six fragments under it complete.
+   *
+   * "YOU DECIDE" IS SAID ONCE HERE AND SIX TIMES NOWHERE. Every decision opens with
+   * those two words (see `Pillar.decision`), and the drumbeat is the argument — but
+   * six full sentences stacked in one column is a paragraph, and a room reads a
+   * paragraph by skimming it. Lifting the stem into the eyebrow leaves six OBJECTS
+   * under it, which is the same claim compressed into the one frame the room leaves
+   * with: what you decide, six times, in a single glance.
+   *
+   * STORED UPPERCASE. Mono label, so keyword-free — and the `·` is the deck's own
+   * separator, not a bullet.
+   */
+  recapEyebrow: "THE RECAP · YOU DECIDE",
+
+  /**
+   * The closer — the last line of the recap, and the sentence the whole figure exists
+   * to earn.
    *
    * TWO SENTENCES, AND THE SECOND IS THE LOAD-BEARING ONE. "None of them is a tool
    * purchase" is the refusal §6.6's centrepiece is built to state: the six decisions
-   * the room has just walked through are all things a leader signs, none of them is
-   * a line item a vendor can deliver, and a division head who leaves this slide
-   * planning a procurement has misread it. The first sentence alone would be a
-   * summary; the pair is a claim.
+   * the room has just read are all things a leader signs, none of them is a line item
+   * a vendor can deliver, and a division head who leaves this slide planning a
+   * procurement has misread it. The first sentence alone would be a summary; the pair
+   * is a claim.
+   *
+   * IT IS NO LONGER THE WHOLE OF THE LAST POSE, and that is this rewrite's one change
+   * to it. The nine-pose version gave pose 8 to this sentence alone, standing in an
+   * empty column — a thesis with its evidence already off the stage. It now stands
+   * UNDER the six recap fragments, in the same panel, separated by a hairline: the
+   * claim and the six things it is a claim about, in one frame. The words are
+   * untouched.
    *
    * IT PRINTS IN THE RIGHT COLUMN, NOT THE BOTTOM STRIP — §7.1's recorded layout
    * risk, and `WALK_COLUMN` in `./geometry.ts` holds the arithmetic: the lowest
-   * pillar's box already reaches y = 610 of a 632 floor and it GROWS on focus, so
-   * there is no bottom strip to print a second line of type in. The column the walk
-   * has just finished with is empty at exactly the pose the closer needs it.
+   * pillar's box already reaches y = 610 of a 632 floor and it GROWS when it is lit,
+   * so there is no bottom strip to print a line of type into.
    *
    * VERBATIM FROM THE PROTOTYPE. The owner approved variant A with this line in it
    * on a browser walkthrough, it names no letter and no figure, and rewriting an
@@ -400,18 +601,25 @@ export const shapeOrgContent = {
 } as const;
 
 /**
- * "THE DECISION · 03 / 06" — the beat counter, zero-padded, 1-based for the room.
+ * "THE DECISION · 03 / 06" — the counter, zero-padded, 1-based for the room.
+ *
+ * IT IS A DENOMINATOR NOW, NOT A POSITION. Under the retired nine-pose walk this told
+ * the presenter where they were in a fixed sequence; the pointer has no sequence, and
+ * what it says instead is better — that the thing being read is one of exactly six —
+ * so a pillar opened out of order still arrives with its denominator. That is the half
+ * of the walk worth keeping, and the reason this function was not deleted with it.
  *
  * ONE-BASED HERE AND ZERO-BASED EVERYWHERE ELSE, on purpose: the audience is
- * counting and the code is indexing, so beat three of six is "03 / 06" on the stage
- * and pillar index 2 in `./walk.ts`. The conversion happens in this one function
+ * counting and the code is indexing, so the third pillar reads "03 / 06" on the stage
+ * and is index 2 in `./walk.ts`. The conversion happens in this one function
  * rather than at the call site, because a `+ 1` in a renderer is a `+ 1` that gets
  * forgotten the second time the counter is printed.
  *
- * ZERO-PADDED so the string is the same width at all six beats. Unpadded, "3 / 6"
+ * ZERO-PADDED so the string is the same width for all six. Unpadded, "3 / 6"
  * and "10 / 12" are different widths and the eyebrow above a left-aligned column
  * would be stable while the counter shifted — a 1px twitch at projection scale that
- * reads as the slide re-laying out on every beat.
+ * reads as the panel re-laying out on every hover, which is worse here than it was
+ * under a walk: a hover happens far more often than a click.
  *
  * `/ 06` IS DERIVED FROM `PILLARS.length`, never typed. A seventh pillar counts to
  * 07 on its own; a hardcoded total would print "07 / 06" and tell the room the
@@ -423,12 +631,13 @@ export const shapeOrgContent = {
  * @throws on an index the ring does not have, exactly as `pillarCentre` in
  *         `./geometry.ts` does and through the same array lookup, so the two behave
  *         identically on a fractional or negative index. NOT CLAMPED: the
- *         prototype's `Math.max(focus, 0) + 1` prints "01 / 06" at the closer pose,
- *         where no pillar is focused — a beat number for a beat that is not running,
- *         under the closer's own copy. `./walk.ts` answers "which pillar, if any" and
- *         returns `NO_FOCUS` for the poses that focus none; a caller that passes that
- *         value straight in here has skipped the check, and a throw is how it finds
- *         out in a test instead of in a room.
+ *         prototype's `Math.max(focus, 0) + 1` prints "01 / 06" with nothing open —
+ *         a number for a pillar nobody asked about, under the idle copy. `./walk.ts`
+ *         answers "which pillar, if any" and returns `NO_FOCUS` when the answer is
+ *         none; a caller that passes that value straight in here has skipped the
+ *         check, and a throw is how it finds out in a test instead of in a room.
+ *         The renderer never can: all six blocks are mounted and each asks about its
+ *         OWN index, so the argument is always a pillar that exists.
  */
 export function decisionCounter(index: number): string {
   const pillar = PILLARS[index];
@@ -501,6 +710,40 @@ export function hubBrandLineFor(brand: Brand): string | null {
 // argues its claim AT the people the claim is about.
 // ═════════════════════════════════════════════════════════════════════════════
 //
+// ═══ REWORKED 2026-08-14. WHAT CHANGED AND WHY, because the block below no longer
+// matches the one the paragraphs after it were written for. The shipped figure was
+// three full-width text bands walked over FIVE poses with a reserved right-hand
+// column that stood empty for four of them, and its faults were the ones a room sees
+// first: it read as a wall of prose, the headline sat 12px off the figure's own mono
+// title, and the five-pose walk spent four clicks laying out evidence nobody could
+// take in as a picture. THE ARGUMENT IS UNCHANGED. What changed is that it is now
+// DRAWN — three tier plates on the left, two arrowed acts leaving the middle plate in
+// opposite directions, and three APPROACH cards on the right that name what each tier
+// can and cannot do about adoption (top-down, middle-out, bottom-up) — and it arrives
+// in ONE pose, with the thesis on a second. Six things follow from that:
+//
+//   · THE STANDING MONO KICKER IS GONE. "THE MIDDLE IS THIS ROOM" was a title under a
+//     title. The addressing it carried is now a bright tag ON the middle plate, where
+//     the room reads it against the row it is about instead of above the whole chart.
+//   · THE TIERS ARE NAMED IN THE ROOM'S OWN WORDS: Top Management, Middle Management
+//     (and the AI champions inside it), The Teams. The drafted "THE BOARD AND THE
+//     C-SUITE" / "BU AND DIVISION HEADS" were org-chart formalities; these are what
+//     the people in the chairs call each other.
+//   · THE THREE APPROACHES ARE ON THE STAGE. The headline refuses top-down; the cards
+//     say what is wrong with it AND with its opposite, which is the half the shipped
+//     slide left the presenter to say out loud. Bottom-up is named and refused for the
+//     right reason — deep knowledge, no authority — so the middle's claim lands as the
+//     only remaining option rather than as a compliment.
+//   · THE TWO TRANSLATIONS SURVIVE AS THE TWO ACTS, one mono label plus one prose line
+//     each, beside the arrow that draws them. Same argument, a third of the words.
+//   · THE THESIS IS REWRITTEN AND IT IS THE ONE CONTENT FIX THAT WAS OWED. See
+//     {@link shapeMiddleOutContent.thesis}.
+//   · THE MIDDLE PLATE IS TALLER THAN THE OTHER TWO, which the shipped geometry
+//     forbade in as many words. It is taller because it carries one row the others do
+//     not (the four things a champion has), and a chart whose MIDDLE row is the big one
+//     is not a scale — a scale is monotonic. Guardrail 3 below is rewritten around
+//     that, not quietly dropped.
+//
 // §6.6 gives this slide one line — "Middle-out adoption" — and one hard constraint,
 // stated two paragraphs later against a different candidate: "Learn → Experiment →
 // Build → Integrate → Own is OUT: it would be a THIRD ladder alongside L1–L5 and
@@ -508,18 +751,27 @@ export function hubBrandLineFor(brand: Brand): string | null {
 // exactly what this slide is at risk of becoming. Everything below is written so
 // that three organisational bands read as an ORG CHART and never as a scale.
 //
-// WHO IS BEING ARGUED WITH. The leader deck's room is BU and Division Heads — the
-// middle. So the slide casts the audience as the people adoption spreads FROM, and
-// never as the target of somebody else's rollout. That framing is the whole reason
-// the claim can be made here at all: in a practitioner deck the same three bands
-// would be a diagram flattering an absent party, and in this room it is a job
-// description the people holding it can act on the same afternoon.
+// ═══ WHO IS BEING ARGUED WITH, CORRECTED 2026-08-14: THE ROOM IS MOSTLY TOP
+// MANAGEMENT. The copy on this slide was written as if the audience were the middle —
+// a standing kicker that read "THE MIDDLE IS THIS ROOM", a second-person "you" inside
+// the middle plate's own claim, and an upward act that travelled to "the next decision
+// made above you". Every one of those addresses the wrong chair, and in front of the
+// people who actually sit in this room the middle plate's flattery reads as a slide
+// about somebody else.
 //
-// THE ARGUMENT, IN ORDER. The top holds authority and no visibility. The bottom
-// holds the work and no authority. The middle holds both, plus one thing neither of
-// them holds — people who copy what it does. The close is the two TRANSLATIONS the
-// middle performs: a mandate downward into actual work, and actual work upward into
-// the next decision. Two directions, at once, from one place.
+// SO THE ADDRESSING SITS ON THE TOP PLATE ({@link shapeMiddleOutContent.roomTag}) and
+// the second person means the ROOM everywhere it appears: `your teams`, `your people`,
+// `your mandate`, `your AI champions`. The middle plate is described in the third person,
+// because that is where the room's own managers are — and the slide's ask follows from
+// the geometry rather than from a compliment: you hold the mandate and cannot see the
+// work or say how AI should change it, so the layer that can is the one this has to run
+// through, and backing it is a decision only this room can take.
+//
+// THE ARGUMENT, IN ORDER. The top — this room — holds authority and no visibility. The
+// bottom holds the work and no authority. The middle holds both, plus one thing neither
+// of them holds: people who copy what it does. The two acts are what that middle
+// performs, in both directions at once — a mandate downward into actual work, and
+// actual work upward into the next decision this room makes.
 //
 // ═══ THE NO-NEW-LADDER GUARDRAIL, AND THE SIX THINGS THAT HOLD IT. Three stacked
 // bands are one keystroke away from being a maturity scale, and a reviewer cannot
@@ -533,49 +785,64 @@ export function hubBrandLineFor(brand: Brand): string | null {
 //      read as a scale, and an absence is testable in a way that a list of forbidden
 //      values is not. It also keeps this slide from re-spending `gap-hardest-part`'s
 //      70/30, which is the one split the leader deck has already quantified.
-//   3. NO ASCENT AND NO PROGRESSION. `./middle-out-geometry.ts` gives all three bands
-//      the SAME height, the same internal structure and the same left edge — there is
-//      no staircase, no inset, no arrow between bands and nothing that reads "first
-//      this, then that". Equal geometry is the anti-ladder guarantee, and it is a
-//      geometry decision precisely so a copy edit cannot undo it.
-//   4. THE TWO DIRECTION LINES ARE SIMULTANEOUS AND BIDIRECTIONAL. One down, one up,
-//      arriving on the same pose, drawn the same length, meeting at one origin bar on
-//      the middle band's own centre line. That is TRANSLATION. A single line with
-//      three stops on it would be a scale, and the geometry refuses to draw one.
-//   5. THE MIDDLE IS RANKED BY COLOUR, NEVER BY SIZE AND NEVER BY OPACITY. The middle
-//      band lights to a brighter tier on the copper/neutral ramp; it does not grow, and
-//      opacity on this stage means "not revealed yet", i.e. TIME. Ranking the middle
-//      ABOVE the top is the argument rendered as colour — and a band that were also
-//      taller would be rendering it as magnitude, which is what a scale does.
+//   3. NO ASCENT AND NO MONOTONIC PROGRESSION. `./middle-out-geometry.ts` gives all
+//      three plates ONE left edge, ONE width and ONE placement rule, so no plate can be
+//      indented, inset or narrowed to rank it, and there is no staircase and no arrow
+//      BETWEEN plates. The one dimension that is not equal is the MIDDLE plate's height,
+//      and it is unequal in the direction a scale cannot use: a scale grows in one
+//      direction, so top < middle > bottom is the shape of an emphasis and not the shape
+//      of a ladder. The extra height is spent on ONE extra row of copy that only the
+//      middle tier has ({@link shapeMiddleOutContent.middleChips}) — earned by content,
+//      not handed out as prominence — and the two outer plates are identical to the
+//      pixel.
+//   4. THE TWO ACTS ARE SIMULTANEOUS AND BIDIRECTIONAL. One arrow down, one arrow up,
+//      arriving on the same pose, drawn the same length, leaving from ONE origin bar on
+//      the middle plate's own centre line and offset in x so they can never read as one
+//      axis with a stop in it. That is TRANSLATION, in the one channel a still frame can
+//      carry it: the arrowheads point AWAY from the room, in both directions at once.
+//   5. THE MIDDLE IS RANKED BY COLOUR AND BY ONE ROW OF COPY, NEVER BY OPACITY. Its
+//      plate and its approach card light to a brighter tier on the copper/neutral ramp;
+//      opacity on this stage means "has not arrived yet", i.e. TIME, and every plate
+//      arrives on the same pose. Ranking the middle ABOVE the top is the argument
+//      rendered as colour, and the two outer plates lose nothing for it (§7.1 —
+//      attention is bought with added light, never subtracted).
 //   6. THE VOCABULARY IS REFUSED BY WORD. None of `level`, `levels`, `maturity`,
 //      `stage`, `stages`, `rung`, `tier`, `tiers`, `ladder`, `step`, `L1`–`L5`,
 //      `P0`–`P3` or `phase` appears in any rendered string in any form. That list is
 //      not decoration: `gap-capability-ladder` owns L1–L5 and `mandate-phases-gates`
 //      owns P0–P3, and a single borrowed noun here would make the room start counting.
 //
-//      THE ONE CASUALTY IS WORTH NAMING. The top band was drafted as "THE BOARD AND
-//      THE C-LEVEL", which is the ordinary business term and which rule 6 forbids —
-//      `C-LEVEL` matches `\blevel\b`, the hyphen being a word boundary. "THE BOARD AND
-//      THE C-SUITE" is the same referent in the same register at the same measured
-//      width (225.5px of 11px mono either way), so the rule costs this slide nothing
-//      but is recorded here so the next author does not "restore" the original.
+//      NOTE THE WORD `tier` IS FORBIDDEN IN RENDERED COPY AND USED FREELY IN THE CODE
+//      — the plates are `tiers` in every module under this directory. That is the same
+//      split `shape-tam-kotter` keeps for `step`: what the room reads is the rule, and
+//      an identifier is not read out loud.
 //
-// ═══ THE ONE MEASURED-FIT CHANGE, STATED OUT LOUD. The headline was drafted as
-// "Adoption does not come down from the top. It spreads out from the middle." and it
-// DOES NOT FIT. Measured as a `white-space: nowrap` clone under the real cascade in
-// Chromium — the method `leader-invest/chicken-egg-geometry.ts` records, and this
-// harness reproduces that module's own recorded figures to within 0.14% on the
-// fallback face — it is 1004.06px with Instrument Serif and **1311.22px with the
-// Georgia fallback**, against `.slide-headline-row`'s 1184px measure. So it wraps to
-// two lines the moment the webfont is absent, and a second headline line lands at
-// y = 122…164, straight through the kicker's shelf at y = 134. An auditorium without
-// the Google Fonts CDN is not a hypothetical for this deck.
+//      THE ONE CASUALTY IS WORTH NAMING, AND IT IS OLDER THAN THE 2026-08-14 REWORK.
+//      The top tier was first drafted as "THE BOARD AND THE C-LEVEL", which is the
+//      ordinary business term and which rule 6 forbids — `C-LEVEL` matches `\blevel\b`,
+//      the hyphen being a word boundary. It shipped as "THE BOARD AND THE C-SUITE" and
+//      is now "TOP MANAGEMENT", which is what this room says; the note survives so the
+//      next author does not "restore" the original.
 //
-// The shipped line is 778.33px / 1004.92px — 85% of the measure on the WIDE face,
-// one line under both — and it keeps the claim exactly: the model being refused is
-// named ("top-down"), the model being asserted is the one `figLabel` already
-// announces, and the mandated keyword is untouched. See `HEADLINE_BUDGET_CHARS`
-// in `./middle-out-geometry.ts` for the same arithmetic as a number a test can hold.
+// ═══ THE HEADLINE IS A MEASURED FIT AND SURVIVED THE REWORK UNCHANGED. It was drafted
+// as "Adoption does not come down from the top. It spreads out from the middle." and
+// that line DOES NOT FIT: measured as a `white-space: nowrap` clone under the real
+// cascade in Chromium it is over 1300px with the Georgia fallback against
+// `.slide-headline-row`'s 1184px measure, so it wraps the moment the Google Fonts CDN
+// is absent — which is not a hypothetical for an auditorium.
+//
+// The shipped line re-measures at **801.16px with Instrument Serif and 1027.72px with
+// the Georgia fallback** (2026-08-14, both faces warmed and confirmed loaded before
+// measuring), which is 87% of the measure on the WIDE face and one line under both. It
+// keeps the claim exactly: the model being refused is named ("top-down"), the model
+// being asserted is the one `figLabel` already announces, and the mandated keyword is
+// untouched. See `HEADLINE_BUDGET_CHARS` in `./middle-out-geometry.ts` for the same
+// arithmetic as a number a test can hold.
+//
+// THE SHELF IT USED TO THREATEN IS GONE. A wrapped headline used to paint through the
+// standing kicker at y = 134; there is no kicker now and the figure starts at y = 160,
+// so the failure mode is milder than it was — which is exactly why the budget stays
+// written down rather than being relaxed.
 //
 // ═══ NO BRAND AXIS, AND ISSUE #68 SAYS SO IN AS MANY WORDS: no brand slot, identical
 // copy under both brands, do not invent variance. So this block exports no
@@ -609,14 +876,18 @@ export function hubBrandLineFor(brand: Brand): string | null {
 //
 //   · "You decide …" ×6 AND "Every one of these is a decision on your desk. None of
 //     them is a tool purchase." → THE AGENTIC ORGANIZATION's, at the top of this same
-//     file and in the same run. Nothing below opens on that stem or echoes that
-//     closer. The two translations DO open on a second-person stem — "You turn …",
-//     twice — and that is a deliberate near-miss rather than an oversight: a different
-//     verb, twice rather than six times, and it names the one act the other slide's
-//     six decisions all presuppose. The word `decision` also appears once below, in
-//     "the next decision made above you", where the referent is INVERTED — a decision
-//     taken above this room, not one on its desk — and that inversion is the line's
-//     whole point.
+//     file and in the same run. Nothing below opens on that stem or echoes that closer,
+//     and the word `decision` is not spent below AT ALL. It was, once — the upward act
+//     ended on "the next decision this room makes" — and the 2026-08-14 rewrite put both
+//     acts in the middle's own hands, which returned the noun to C.1 outright.
+//   · `NAME A CHAMPION` → `leader-mandate`'s K.3 lever, AND THIS ONE OVERLAP SHIPS
+//     DELIBERATELY. {@link shapeMiddleOutContent.middleSubname} calls the middle tier
+//     "YOUR AI CHAMPIONS" because that is the term the room already uses and the term
+//     the reference figure this slide was reworked against uses. C.4 names the PEOPLE;
+//     K.3, six sections later, asks the room to name ONE of them and protect their
+//     hours. A term the room has already met is what makes that ask land, so the order
+//     is the argument: this is a setup, not an echo. It is the only shared noun with any
+//     slide in the deck and it is recorded here so a future reader does not "fix" it.
 //   · "The hardest part is not the tools." AND THE 70/30 → `gap-hardest-part`'s. The
 //     word `tools` appears nowhere below, and no percentage does either.
 //   · "Nobody wrote the rule. So everybody wrote their own." → `gap-no-sop`'s, and
@@ -625,231 +896,295 @@ export function hubBrandLineFor(brand: Brand): string | null {
 //     either. Note also that B.2's `issuedEyebrow` is "WHAT THE ORGANISATION HANDED
 //     OUT", which is why the headline below does NOT read "Adoption is not handed
 //     down" — a good line, cut for that collision alone.
-//   · "on the Tuesday after the room empties" → `leader-mandate/content.ts`'s, and
-//     THIS IS AN OVERLAP THAT SHIPS RATHER THAN AN OVERSIGHT. The band below says
-//     "on a Tuesday" and the two translations say "on Monday" twice. The ordinary
-//     working day is this slide's unit of measurement — it is what the top cannot see
-//     and what the middle translates into and out of — and section K's line reads as
-//     an echo of it rather than the other way round, because `shape` composes ahead of
-//     `mandate` in both leader decks. Indefinite article here, definite there; an
-//     ordinary day here, one named day there.
+//   · "on the Tuesday after the room empties" → `leader-mandate/content.ts`'s, AND THE
+//     OVERLAP IS GONE. This slide used to spend the weekday motif three times — "on a
+//     Tuesday" on the top plate and "on Monday" in both translations — and all three
+//     were rewritten on 2026-08-14 for being a riddle rather than a measurement (see
+//     {@link shapeMiddleOutContent.upGloss}). The ordinary working day is still this
+//     slide's unit; it is now named "each day" and "at work", which no other slide in
+//     the deck owns. Section K keeps its named day to itself.
 //
-// ═══ THE KEYWORD RULE, applied without an exception: `kw` on PROSE ONLY.
+// ═══ THE KEYWORD RULE, with THREE registers now and no exception made: `kw` on PROSE
+// ONLY.
 //
-//   · PROSE, each with a `*Kw` sibling — NINE strings: `headline`, the three bands'
-//     `holds`, the three bands' `qualifier`, `downward`, `upward` and `closer`. (Ten
-//     with the closer counted; the three bands contribute six.)
-//   · LABELS, carrying no `*Kw` and forbidden from gaining one — NINE strings:
-//     `figLabel`, `kicker`, the three band `label`s, the three bands' two eyebrows
-//     (three distinct values: HOLDS, CANNOT, ALONE) and `translationEyebrow`.
-//     THE BAND LABELS ARE THE CASE WORTH STATING, because they are the only mono
+//   · PROSE, each with a `*Kw` sibling — TEN strings: `headline`, the three tiers'
+//     `holds`, the three tiers' `limit`, `upGloss`, `downGloss` and `thesis`.
+//   · LABELS, carrying no `*Kw` and forbidden from gaining one — the mono caps
+//     register: `figLabel`, the three tier `name`s, `middleSubname`, `middleTag`,
+//     `middleChips`, the tiers' two eyebrows (three distinct values: HOLDS, CANNOT,
+//     ONLY), the three `approach` names and the two act labels.
+//     THE TIER NAMES ARE THE CASE WORTH STATING, because they are the only mono
 //     strings on this stage a reader might mistake for prose: they are the chart's
 //     row names, they are what rule 1 above puts in place of an index, and a copper
 //     italic inside one would emphasise a fragment of somebody's job title.
+//   · CAPTIONS, a third register that also carries no `*Kw` — the three
+//     `approachVerdict`s. They are two-clause verdicts of one line, and an italic
+//     fragment inside a five-word verdict emphasises nothing while making the stage
+//     look like it is trying to. The same call `shape-tam-kotter` makes for its own
+//     captions, two blocks down this file.
 //
 // NO LETTER AND NO NUMBER IN ANY RENDERED STRING (§3.4 R2 / §3.5). As a derived and
-// non-authoritative observation: this slide composes as the THIRD `shape` slide in
-// the deck built today and becomes the fourth once `shape-tam-kotter` inserts ahead
-// of it — which is precisely why neither value is written down anywhere, in this file
-// or in the two modules beside it. `FigLabel` takes a LABEL only.
+// non-authoritative observation: this slide composes LAST in the `shape` run and prints
+// C.4 today — which is precisely why neither value is written down anywhere, in this
+// file or in the modules beside it. `FigLabel` takes a LABEL only.
 
-// ───────────────────── the three bands ─────────────────────
+// ───────────────────── the three tiers ─────────────────────
 
 /** Exactly three, held by the TYPE — the fixed-length tuple idiom
  *  `leader-invest/content.ts` argues at length: a fourth entry's error lands ON the
  *  fourth entry, at the definition site, with no cast anywhere. Three is also the
- *  count `./middle-out-geometry.ts` derives `MIDDLE_BAND_INDEX` from, and an
- *  even count would leave that derivation without a whole number to land on. */
+ *  count `./middle-out-geometry.ts` derives `MIDDLE_TIER_INDEX` from, and an even
+ *  count would leave that derivation without a whole number to land on. */
 type Three<T> = readonly [T, T, T];
 
 /**
- * The mono LABEL over a band's FIRST claim row — what the band has.
+ * The mono LABEL over a tier's FIRST claim row — what the tier has.
  *
- * ONE CONSTANT, THREE USES. All three bands open on the same word, and that repetition
+ * ONE CONSTANT, THREE USES. All three tiers open on the same word, and that repetition
  * is the chart's spine: the room reads three answers to one question before it reads
  * anything else. Written once so the three cannot come to disagree.
  */
 const HOLDS_EYEBROW = "HOLDS";
 
 /**
- * The mono LABEL over the SECOND claim row on the two OUTER bands — what the band
+ * The mono LABEL over the SECOND claim row on the two OUTER tiers — what the tier
  * cannot do.
  *
- * IT APPEARS TWICE AND THE MIDDLE BAND HAS NONE, which is the argument drawn in chrome
- * rather than said in a sentence: by the time the room reaches the middle band it has
- * learned that every band has a CANNOT, and the middle's never arrives.
+ * IT APPEARS TWICE AND THE MIDDLE TIER HAS NONE, which is the argument drawn in chrome
+ * rather than said in a sentence: by the time the room reaches the middle plate it has
+ * learned that every tier has a CANNOT, and the middle's never arrives.
  */
 const CANNOT_EYEBROW = "CANNOT";
 
 /**
- * The mono LABEL over the MIDDLE band's second claim row — the row neither other band
+ * The mono LABEL over the MIDDLE tier's second claim row — the row neither other tier
  * has.
  *
  * FIVE CHARACTERS, AND THE LENGTH IS LOAD-BEARING. The eyebrow gutter in
- * `./middle-out-geometry.ts` is `EYEBROW_WIDTH` = 72px, which is 7 characters of
+ * `./middle-out-geometry.ts` is `EYEBROW_WIDTH` = 72px, which is seven characters of
  * 11px mono at 0.22em tracking; "AND ALONE" measures 81.19px and does not fit, so the
  * conjunction was cut rather than the gutter widened — widening it costs the six claim
  * rows the measure that keeps every one of them on one line.
  *
- * IT SAYS "ONLY THIS BAND" AND NOT "AND ALSO". Against CANNOT it is an opposition
- * rather than a continuation, which is what the middle band's second row is: the two
- * outer bands are missing something, and this one has something the others are.
+ * IT SAYS "ONLY THIS TIER" AND NOT "AND ALSO". Against CANNOT it is an opposition
+ * rather than a continuation, which is what the middle tier's second row is: the two
+ * outer tiers are missing something, and this one has something they are.
  */
 const ALONE_EYEBROW = "ALONE";
 
-/** One row of the org chart. */
-export interface Band {
+/** One row of the org chart, and one row of the approach panel beside it — the two are
+ *  ONE object because the whole point of the rework is that they are the same fact seen
+ *  twice: where you sit, and what that makes you able to do about adoption. */
+export interface Tier {
   id: string;
   /**
-   * WHO THIS BAND IS. A mono LABEL, keyword-free by the rule above.
+   * WHO THIS TIER IS. A mono LABEL, keyword-free by the rule above.
    *
    * THIS IS WHAT STANDS IN PLACE OF AN INDEX. Guardrail 1 in the header forbids a
-   * number, an ordinal or a letter on any band, so the label is the band's whole
+   * number, an ordinal or a letter on any tier, so the name is the tier's whole
    * identity — which is also why it is the plainest possible naming of each group and
    * carries no adjective. A reader who cannot place themselves in one of these three
    * rows within a second has been given a diagram instead of a chart.
    */
-  label: string;
-  /** {@link HOLDS_EYEBROW}, on every band. Carried per band rather than once on the
+  name: string;
+  /** {@link HOLDS_EYEBROW}, on every tier. Carried per tier rather than once on the
    *  block so the interface is uniform and the renderer needs no special case. */
   holdsEyebrow: string;
   /**
-   * WHAT THIS BAND HAS. PROSE, so it carries a `*Kw` sibling.
+   * WHAT THIS TIER HAS. PROSE, so it carries a `*Kw` sibling.
    *
-   * ALL THREE OPEN ON "Holds", under an eyebrow that says HOLDS, and the repetition is
-   * deliberate for the reason the sibling block's six "You decide" openings are: by the
-   * third the room is hearing the STEM and reading only the difference. The difference
-   * is the argument.
+   * READS AS THE CONTINUATION OF ITS EYEBROW — "HOLDS · The mandate, the budget and the
+   * air cover." — which is what lets the rows be phrases rather than sentences. The
+   * shipped version of this slide opened all three rows on the word "Holds" UNDER an
+   * eyebrow that already said HOLDS; deleting the repeated verb is most of why the new
+   * plates fit one line each with slack to spare.
    */
   holds: string;
   holdsKw: readonly string[];
   /**
    * The mono LABEL over the second claim row — {@link CANNOT_EYEBROW} on the two outer
-   * bands, {@link ALONE_EYEBROW} on the middle.
+   * tiers, {@link ALONE_EYEBROW} on the middle.
    *
-   * PER BAND, AND THAT IS THE POINT. It is the only field whose VALUE says which kind
-   * of band this is, and it is why {@link qualifier} below can be one field rather than
+   * PER TIER, AND THAT IS THE POINT. It is the only field whose VALUE says which kind
+   * of tier this is, and it is why {@link qualifier} below can be one field rather than
    * two optional ones.
    */
   qualifierEyebrow: string;
   /**
-   * THE SECOND CLAIM ABOUT THIS BAND — a LIMIT on the two outer bands, and on the
-   * middle band the thing neither of them has. PROSE.
+   * THE SECOND CLAIM ABOUT THIS TIER — a LIMIT on the two outer tiers, and on the
+   * middle tier the thing neither of them has. PROSE.
    *
    * ONE FIELD AND NOT TWO OPTIONAL ONES (`limit?` / `surplus?`), because the SHAPE of
-   * the argument is identical in all three bands — a label, what it holds, and the one
+   * the argument is identical in all three tiers — a name, what it holds, and the one
    * further thing that is true of it — and only {@link qualifierEyebrow} says which
-   * kind of second claim it is. Two optional fields would let a band ship with neither
+   * kind of second claim it is. Two optional fields would let a tier ship with neither
    * and render as a row that did not finish drawing, which on a projector is
    * indistinguishable from a slide that failed to load.
    */
   qualifier: string;
   qualifierKw: readonly string[];
   /**
-   * WHICH BEAT OF THE WALK ARGUES THIS BAND: 0-based, and a permutation of
-   * `0…bands.length - 1`.
+   * THE ADOPTION APPROACH THIS TIER CAN RUN, as a mono LABEL: TOP-DOWN, MIDDLE-OUT,
+   * BOTTOM-UP.
    *
-   * ORDER, NOT TIME. `./middle-out-walk.ts` turns a beat into a pose and owns every
-   * `>=` on the way; this field owns only the TEACHING ORDER, which is a content
-   * decision the same way the sibling block's ring order is one.
+   * THE TRIO IS THIS SLIDE'S OWN VOCABULARY and no other slide in the deck uses any of
+   * the three. It is carried PER TIER rather than as a separate panel of three because
+   * the mapping is the insight: an approach is not a strategy somebody picks off a
+   * list, it is a consequence of where the person running it sits. A free-standing
+   * table of three would let the room read them as three options of equal standing,
+   * which is exactly the reading the headline refuses.
    *
-   * AND THE ORDER IS THE ARGUMENT: top (0), then bottom (1), then MIDDLE (2). The two
-   * bands that are missing something are established first, so the middle's claim
-   * lands as a conclusion the room has already assembled rather than as a compliment
-   * paid to it. The middle arriving LAST is also what lets it arrive BRIGHT — see
-   * `isMiddleLit` in `./middle-out-walk.ts`, which reads the last claim pose and would
-   * light the wrong band if this permutation were re-sorted.
-   *
-   * THE ARRAY ORDER IS SPATIAL AND THIS FIELD IS NOT. Unlike the sibling block, which
-   * carries ONE order array, this slide genuinely has two: the array below is the CHART
-   * — top, middle, bottom, the order the bands are drawn in and the order
-   * `./middle-out-geometry.ts` places them in — and the walk argues them in a different
-   * one. Encoding the teaching order in the array order instead would put the middle
-   * band at the bottom of the chart.
+   * AND IT IS WHY THE HEADLINE CAN BE SHORT. "Adoption is not top-down" names the
+   * refused model; the card under the top plate says what is wrong with it, in four
+   * words, where the room can check it against the plate beside it.
    */
-  claimBeat: number;
+  approach: string;
+  /**
+   * WHAT THAT APPROACH GETS YOU — a CAPTION, so no `*Kw` (see the keyword rule).
+   *
+   * TWO CLAUSES, NO VERB, ONE LINE. "Generic support. No depth." is the whole finding
+   * about top-down adoption, and the two outer verdicts are deliberately the same
+   * SHAPE as each other — one thing it has, one thing it lacks — so the middle's, which
+   * lacks nothing, is the only one that breaks the pattern.
+   */
+  approachVerdict: string;
 }
 
 /**
- * The three bands, in SPATIAL order — top of the stage first.
+ * The three tiers, in SPATIAL order — top of the stage first.
  *
  * THIS ARRAY IS THE CHART. Index 0 is drawn at the top, index 1 in the middle, index 2
- * at the bottom, and `./middle-out-geometry.ts` derives `MIDDLE_BAND_INDEX` from
- * the length rather than typing a 1 — so the band the whole slide is about is found by
- * arithmetic and cannot end up pointing at the wrong row.
+ * at the bottom, and `./middle-out-geometry.ts` derives `MIDDLE_TIER_INDEX` from the
+ * length rather than typing a 1 — so the row the whole slide is about is found by
+ * arithmetic and cannot end up pointing at the wrong plate.
+ *
+ * THERE IS NO `claimBeat` FIELD ANY MORE, and its removal is the 2026-08-14 rework in
+ * one line. The shipped slide argued the three tiers over three separate poses in a
+ * teaching order that was NOT the spatial order (top, bottom, then the middle), which
+ * is a good way to build an argument in speech and a bad way to draw one: for two of
+ * the five poses the chart on the wall was a picture with holes in it. The whole figure
+ * now arrives on one pose and the presenter — not the deck — chooses the order to speak
+ * the three plates in.
  */
-const BANDS: Three<Band> = [
+const TIERS: Three<Tier> = [
   {
-    id: "board",
-    label: "THE BOARD AND THE C-SUITE",
+    id: "top",
+    // "TOP MANAGEMENT" AND NOT "THE BOARD AND THE C-SUITE". Same referent, and this is
+    // the one the room says out loud; the formal version was an org-chart formality
+    // that also cost 145px of a 604px row.
+    name: "TOP MANAGEMENT",
     holdsEyebrow: HOLDS_EYEBROW,
     // "the air cover" IS THE THIRD ITEM ON PURPOSE. The mandate and the budget are
     // what a leader expects to see credited to the top and are therefore agreed with
     // before they are read; air cover is the one a division head has actually needed
     // and been grateful for, and it is what makes the row a fair account of the top
-    // rather than a setup for the limit underneath it. The band has to be RIGHT about
+    // rather than a setup for the limit underneath it. The plate has to be RIGHT about
     // the top, or the room discounts everything under it.
-    holds: "Holds the mandate, the budget and the air cover.",
-    // The keyword goes on the first item and not the last: `the mandate` is the object
-    // the downward translation later picks up by name ("You turn a mandate into …"),
-    // so the italic here is the thing the room is asked to remember.
-    holdsKw: ["the mandate"],
+    holds: "The mandate, the budget and the air cover.",
+    // The keyword goes on the first item and not the last: the mandate is the object the
+    // downward act later picks up by name ("Your mandate becomes …"), so the italic here is
+    // the thing the room is asked to remember.
+    //
+    // CAPITALISED, BECAUSE `highlight()` MATCHES BYTES. This row lost its verb in the
+    // rework — it used to read "Holds the mandate, …" and now opens on the noun — so a
+    // lower-case "the mandate" matches nothing in the string and renders no italic at all,
+    // silently. The unit test that caught it asserts every keyword is a real substring of
+    // its own sentence, which is the only way this class of fault is visible without eyes
+    // on the stage.
+    holdsKw: ["The mandate"],
     qualifierEyebrow: CANNOT_EYEBROW,
-    // "Cannot see" AND NOT "does not know" OR "is out of touch". This is a structural
-    // fact about where people sit, not a criticism of anybody — a board that could see
-    // what every team does on an ordinary day would be doing somebody else's job. The
-    // moment this line becomes a complaint the slide stops being an org chart and
-    // becomes a grievance, and the room stops being the subject of it.
-    qualifier: "Cannot see what your people actually do on a Tuesday.",
-    qualifierKw: ["Cannot see"],
-    claimBeat: 0,
+    // TWO CANNOTS IN ONE LINE, AND THE SECOND ONE IS THE 2026-08-14 CORRECTION. The row
+    // shipped as "See what your people actually do on a Tuesday." and was reported from the
+    // stage as not straightforward: it named the visibility gap in a riddle (an ordinary
+    // day, stood for by a weekday) and said nothing at all about the gap this room actually
+    // has on this programme.
+    //
+    // WHAT THE ROOM CANNOT DO, PLAINLY. It cannot see the work — that is the old claim, said
+    // without the riddle. And it cannot say HOW: this room can ask for AI, fast, and fund
+    // it, and that is the whole of what a mandate carries. The method — which work, in what
+    // order, changed how — is not knowable from here. It is known by the people in the work
+    // and by the champions beside them, which is the plate underneath and the plate under
+    // that.
+    //
+    // IT IS STILL NOT A COMPLAINT. Both halves are structural facts about where people sit,
+    // not a criticism of anybody: a board that could see what every team does on an ordinary
+    // day, and could specify the method as well, would be doing somebody else's job. The
+    // moment this line becomes a grievance the slide stops being an org chart and the room
+    // stops being the subject of it.
+    //
+    // "See" SURVIVES THE REWRITE ON PURPOSE. The middle plate answers the two outer limits
+    // in the order the plates state them — near enough to SEE, senior enough to CHANGE — and
+    // "change it" now appears on both this row and the middle's, which is the answer landing
+    // on the objection in the same words.
+    qualifier: "See your teams at work — or say how AI should change it.",
+    // THE KEYWORD IS THE NEW HALF. The visibility gap is one this room already concedes; the
+    // method gap is the one it has not been asked to concede, and it is what the rest of the
+    // figure is about.
+    qualifierKw: ["how AI should change it"],
+    approach: "TOP-DOWN",
+    approachVerdict: "Generic support. No depth.",
   },
   {
     id: "middle",
-    label: "BU AND DIVISION HEADS",
+    // "MIDDLE MANAGEMENT" — the room, named in the room's own words. The champions
+    // ({@link shapeMiddleOutContent.middleSubname}) print beside it rather than in it,
+    // because not every middle manager is a champion and the plate has to stay a
+    // description of a LAYER.
+    name: "MIDDLE MANAGEMENT",
     holdsEyebrow: HOLDS_EYEBROW,
-    // "Holds both" IS THE HINGE OF THE WHOLE SLIDE, and it only works because the two
-    // bands it refers to have already been argued — which is what `claimBeat: 2` buys.
-    // The two clauses after the dash are the two things the outer bands were each
-    // missing, in the order they were missed: near enough to SEE (the top's limit),
-    // senior enough to CHANGE (the bottom's limit).
-    holds: "Holds both — near enough to the work to know it, senior enough to change it.",
+    // "Both" IS THE HINGE OF THE WHOLE SLIDE, and it works because the two plates it
+    // refers to are on the stage at the same moment it is. The two clauses after the
+    // dash are the two things the outer tiers are each missing, in the order the plates
+    // say them: near enough to SEE (the top's limit), senior enough to CHANGE (the
+    // teams'). Reading order is top → bottom → middle whatever the presenter does,
+    // because the middle plate is the one the eye lands on last on a stage this size.
+    holds: "Both — near enough to the work, senior enough to change it.",
     // TWO KEYWORDS AND NOT ONE, which is the only line on this stage that takes two.
-    // The claim is a conjunction — either half alone is a band that already exists —
+    // The claim is a conjunction — either half alone is a tier that already exists —
     // so an italic on one half would emphasise exactly the wrong thing.
     holdsKw: ["near enough", "senior enough"],
     qualifierEyebrow: ALONE_EYEBROW,
-    // THE ONE CLAIM NEITHER OTHER BAND CAN MAKE, and the reason this slide is not just
+    // THE ONE CLAIM NEITHER OTHER TIER CAN MAKE, and the reason this slide is not just
     // a nicer org chart: authority and proximity are both POSITIONS, and either could
-    // in principle be delegated or reorganised. Being copied cannot be. "because they
-    // watched you do it" is the mechanism stated plainly — it is not influence, it is
-    // observation — and it is what turns the rest of the deck's asks into things the
-    // room can only do by doing them first.
-    qualifier: "And the only one your people will copy, because they watched you do it.",
-    qualifierKw: ["will copy"],
-    claimBeat: 2,
+    // in principle be delegated or reorganised. Being copied cannot be. "they watch it
+    // work" is the mechanism stated plainly — it is not influence, it is observation.
+    //
+    // THIRD PERSON, AND THAT IS THE 2026-08-14 CORRECTION. This row read "they watched
+    // YOU do it" while the room was assumed to be the middle; the room is top
+    // management, so the "you" in `your people` is the room and the copying is
+    // something the room's MANAGERS get and the room does not. That asymmetry is the
+    // whole ask: the one lever this slide asks for is backing a layer whose authority
+    // over Monday is already real.
+    qualifier: "The one layer your people copy, because they watch it work.",
+    qualifierKw: ["they watch it work"],
+    approach: "MIDDLE-OUT",
+    // THE ONLY VERDICT WITH A VERB IN IT, and the only one that names no absence. The
+    // two outer cards are "one thing it has, one thing it lacks"; this one is the whole
+    // argument in five words, and the shape of the sentence is what marks it out.
+    approachVerdict: "Depth and authority. It moves both ways.",
   },
   {
     id: "teams",
-    label: "THE TEAMS",
+    name: "THE TEAMS",
     holdsEyebrow: HOLDS_EYEBROW,
     // "every workaround already in use" IS THE KEYWORD AND THE ROW'S REASON FOR
     // EXISTING. Work and exceptions are what a leader expects the teams to hold; the
-    // workarounds are the ones nobody upstairs has an inventory of, and `already`
-    // is the load-bearing word — they are not a risk to be prevented, they are a fact
+    // workarounds are the ones nobody upstairs has an inventory of, and `already` is
+    // the load-bearing word — they are not a risk to be prevented, they are a fact
     // that predates the meeting.
-    holds: "Holds the work, the exceptions and every workaround already in use.",
+    holds: "The work, the exceptions and every workaround already in use.",
     holdsKw: ["every workaround already in use"],
     qualifierEyebrow: CANNOT_EYEBROW,
-    // "Cannot authorise" AND NOT "is not allowed to" — British spelling, matching the
-    // leader tree's own rendered prose (`organisation` appears ten times across the
-    // four leader content modules; the only American forms in rendered leader copy are
-    // inside quoted programme titles). AND IT IS A CANNOT, NOT A WON'T: the teams are
-    // not reluctant, they are unauthorised, which is the exact symmetry with the top's
-    // "Cannot see" — two structural facts, neither of them anybody's fault.
-    qualifier: "Cannot authorise a change to how any of it is done.",
-    qualifierKw: ["Cannot authorise"],
-    claimBeat: 1,
+    // "Authorise" AND NOT "is not allowed to" — British spelling, matching the leader
+    // tree's own rendered prose. AND IT IS A CANNOT, NOT A WON'T: the teams are not
+    // reluctant, they are unauthorised, which is the exact symmetry with the top's
+    // CANNOT — two structural facts, neither of them anybody's fault. It is also the
+    // whole of what is wrong with bottom-up adoption, which is what the card beside
+    // this plate says.
+    qualifier: "Authorise a change to how any of it is done.",
+    qualifierKw: ["how any of it is done"],
+    approach: "BOTTOM-UP",
+    approachVerdict: "Deep knowledge. No authority.",
   },
 ];
 
@@ -859,40 +1194,23 @@ export const shapeMiddleOutContent = {
   /** The `FigLabel`'s LABEL. The letter and number in front of it are DERIVED from the
    *  composed deck (§3.5) and are authored nowhere. It is the shortest `figLabel` in
    *  the leader tree because it is a NAME rather than a description — the room hears
-   *  "middle-out" and the three bands under it are the definition. */
+   *  "middle-out" and the three plates under it are the definition. */
   figLabel: "MIDDLE-OUT",
-
-  /**
-   * The standing kicker — on the stage at every pose, and the sentence that stops the
-   * chart being about somebody else.
-   *
-   * IT IS THE SLIDE'S ONE PIECE OF ADDRESSING and it stands from the first pose, before
-   * any claim lands, so that the room reads all three bands already knowing which one
-   * it is in. A kicker that arrived with the middle band's claim would let the room
-   * spend two beats deciding whether this is a diagram about them or about a layer of
-   * management they are being asked to manage.
-   *
-   * MONO UPPERCASE, so keyword-free — the register's `textTransform` makes storing it
-   * uppercase a no-op on the stage, and it is never quoted in prose, so the data reads
-   * as the stage does (the same call `kicker` in the block above makes, and the
-   * opposite of that block's `hubLabel`, which IS quoted).
-   */
-  kicker: "THE MIDDLE IS THIS ROOM",
 
   /**
    * The claim, refused half first.
    *
-   * SHORTENED FOR MEASURED FIT, and the header records the arithmetic in full: the
-   * drafted line ("Adoption does not come down from the top. It spreads out from the
-   * middle.") measures 1311.22px against a 1184px row with the Georgia fallback, and a
-   * wrapped headline lands on the kicker's shelf. This one is 1004.92px on the same
-   * face and 778.33px with Instrument Serif — one line under either.
+   * MEASURED, and the header records the arithmetic: 801.16px with Instrument Serif and
+   * 1027.72px with the Georgia fallback against a 1184px row — one line under either
+   * face, which is what keeps it off the figure below it.
    *
    * "top-down" IS THE TERM OF ART FOR THE THING BEING REFUSED, and pairing it with
    * `figLabel` is what makes the two halves a matched pair rather than a sentence and
    * a slogan. It is also this slide's word to spend: the trio top-down / bottom-up /
-   * middle-out is the middle-out argument's own vocabulary, and no other slide in the
-   * deck uses any of the three.
+   * middle-out is the middle-out argument's own vocabulary, no other slide in the deck
+   * uses any of the three, and all three now print on this stage as {@link
+   * Tier.approach} — so the headline names the refused model and the figure convicts
+   * it.
    */
   headline: "Adoption is not top-down. It spreads out from the middle.",
   /** The mandated highlight, on the asserted half rather than the refused one — the
@@ -900,78 +1218,189 @@ export const shapeMiddleOutContent = {
    *  it takes away. */
   headlineKw: ["spreads out from the middle"],
 
-  bands: BANDS,
+  tiers: TIERS,
 
   /**
-   * The mono LABEL over the two translations, and it sits level with the MIDDLE band —
-   * between the two direction lines rather than above either of them.
+   * WHO THE MIDDLE TIER IS TO THIS PROGRAMME, printed beside its name: "YOUR AI
+   * CHAMPIONS".
    *
-   * ONE EYEBROW FOR BOTH, AND ITS POSITION IS THE ARGUMENT. `./middle-out-geometry.ts`
-   * places it on the middle band's own centre line, with one translation set high
-   * beside the top band and one set low beside the bottom band, so the label is at the
-   * ORIGIN of both. Two eyebrows — one over each — would have had to name the two
-   * directions, and "UPWARD" / "DOWNWARD" printed as headings is the closest this
-   * stage could come to drawing a scale by accident (guardrail 6).
+   * BESIDE THE NAME AND NOT INSTEAD OF IT, because they are not the same set. The plate
+   * is about a LAYER of the organisation; the champions are the people in that layer
+   * who take the work on, and the possessive is doing the work — they are the room's
+   * own people, named by the room, not a role the deck is inventing.
    *
-   * "TWO" IS SPELLED, not a digit — nothing on this stage carries a numeral (guardrail
-   * 2), and the sibling block's "Six pillars move together" is the shipped precedent
-   * for a counted word in leader copy.
+   * IT IS ALSO THE ONE NOUN THIS SLIDE SHARES WITH ANY OTHER, and the collision census
+   * in the header explains why that ships: K.3 asks the room to NAME a champion six
+   * sections later, and an ask lands better on a word the room has already met.
    */
-  translationEyebrow: "THE TWO TRANSLATIONS",
+  middleSubname: "YOUR AI CHAMPIONS",
 
   /**
-   * The downward translation — a mandate into work. PROSE.
+   * The addressing, as a bright tag at the right-hand end of the TOP plate's name row:
+   * "THIS ROOM".
    *
-   * IT PICKS THE TOP BAND'S KEYWORD BACK UP BY NAME. The board "Holds the mandate";
-   * this line is what happens to it. The room has therefore already been told that the
-   * mandate exists and where it comes from, so the only new information here is the
-   * verb — and the verb is the job.
+   * ON THE TOP PLATE, AND THAT IS THE 2026-08-14 CORRECTION. The shipped slide carried a
+   * standing mono kicker reading "THE MIDDLE IS THIS ROOM" — which was a title under a
+   * title AND was addressing the wrong chairs. This deck's room is mostly TOP
+   * MANAGEMENT, so the tag sits where the room sits, and the argument runs the honest
+   * way round: you are the plate with the mandate and without the method, and the plate
+   * that has both is the one under you.
    *
-   * "what someone actually does on Monday" AND NOT "execution" OR "implementation".
-   * The abstraction is what every leader already agrees to; the ordinary day is what
-   * they have to change. `on Monday` is also the pair to the top band's `on a Tuesday`
-   * — the same unit, seen from the two ends of it.
+   * IT IS WHAT MAKES THE SLIDE AN ASK RATHER THAN A COMPLIMENT. A middle-out figure shown
+   * to top management with no "you are here" on it is a diagram about somebody else, and
+   * the room's honest response is to agree with it and do nothing.
+   *
+   * TWO WORDS AND NO VERB, deliberately: the tag's own placement asserts the relation the
+   * old kicker spelled out, and a tag that argued would read as a caption.
    */
-  downward: "You turn a mandate into what someone actually does on Monday.",
-  downwardKw: ["what someone actually does"],
+  roomTag: "THIS ROOM",
 
   /**
-   * The upward translation — work into the next decision. PROSE, and the mirror of the
-   * line above it.
+   * The four things the middle tier holds that no org chart shows — the row that makes
+   * the middle plate the tallest of the three.
    *
-   * "what they hit" AND NOT "feedback" OR "insight". What travels up is an obstruction
-   * somebody ran into, not a report somebody wrote, and the difference is the reason
-   * the trip upward is worth making at all.
+   * FOUR NOUNS, MIDDOT-SEPARATED, NO VERB AND NO NUMERAL. They are the answer to the one
+   * fair objection this room will make out loud: "why would this work through them rather
+   * than through my announcement?" Mindset because they have to believe it; peer influence
+   * because the people beside them are watching; authority because a change to Monday
+   * needs signing for; credibility because they have done the work themselves.
    *
-   * "the next decision made above you" IS THE KEYWORD AND IT IS DELIBERATELY NOT "your
-   * decision". The block at the top of this file spends six beats on decisions that
-   * are ON this room's desk; this line is about the ones that are not, and the room's
-   * hold over those is exactly this translation. Same noun, inverted referent — see the
-   * collision census in the header.
+   * IT IS THE ONE ROW THE OUTER PLATES DO NOT HAVE, which is why the middle plate is
+   * 28px taller than they are — the height is EARNED by copy rather than handed out as
+   * emphasis (guardrail 3). Delete this string and the geometry re-cuts all three
+   * plates to one height; that is the test to run before calling the middle plate's
+   * extra height decorative.
    */
-  upward: "You turn what they hit on Monday into the next decision made above you.",
-  upwardKw: ["the next decision"],
+  middleChips: "MINDSET · PEER INFLUENCE · AUTHORITY · CREDIBILITY",
 
   /**
-   * The closer, and the sentence the whole chart exists to earn. PROSE.
+   * The UPWARD act's mono LABEL: "INFLUENCE UP".
    *
-   * IT IS THE ONLY FIRST-PERSON WORD ON THE STAGE, and it is a refusal. "through me"
-   * is the presenter, standing at the front of a room full of division heads, saying
-   * that the presentation is not the delivery mechanism — which is the one thing a
-   * deck cannot say by argument and can only say by disclaiming itself. Every slide
-   * before this one asks the room for something; this line says who it will actually
-   * reach if the room does nothing.
-   *
-   * IT NAMES NO SLIDE, NO SECTION AND NOTHING AFTER IT. "Nothing in this room" and
-   * never "nothing in this deck" or "the next four slides": the run is composed per
-   * deck set (§3.4 R2) and a closer that counted its own successors would go stale the
-   * first time one was inserted or cut.
+   * A VERB PHRASE AND NOT A DIRECTION. "UPWARD" as a heading would be a scale's axis
+   * label (guardrail 6's spirit); "INFLUENCE UP" is something a person does at work on an
+   * ordinary day, and the arrow beside it is what says which way that is.
    */
-  closer: "Nothing in this room reaches your teams through me. It reaches them through you.",
-  /** One keyword, on the second sentence — the sentence that hands the job over. The
-   *  first sentence is the refusal and needs no emphasis; "through you" is the only
-   *  phrase here addressed to the person in the chair. */
-  closerKw: ["through you"],
+  upLabel: "INFLUENCE UP",
+  /**
+   * What travelling up actually consists of. PROSE.
+   *
+   * REWRITTEN 2026-08-14, WITH ITS PAIR, AND THE FAULT WAS SHARED. The two glosses read
+   * "Their Monday becomes the next decision this room makes." and "Your mandate becomes
+   * what someone does on Monday." — one metaphor, two nouns swapped around a copula, and
+   * reported from the stage as not readable. A room gets about two seconds on a caption
+   * beside an arrow, and "X becomes Y" spends both of them on working out what X is.
+   *
+   * BOTH GLOSSES NOW OPEN ON "They", WHICH IS THE FIGURE'S OWN CLAIM AS A SENTENCE. The
+   * middle is the SUBJECT of both acts, in both directions, at once — which is what the two
+   * arrowheads draw and what the old passive constructions hid. The arrow beside each line
+   * says which way; the line says what the act consists of and nothing else.
+   *
+   * "what works, and what blocks it" AND NOT "feedback" OR "insight". What travels up is an
+   * obstruction somebody ran into, not a report somebody filed, and the difference is the
+   * reason the trip upward is worth making at all. It is also the half this room never
+   * hears: the successes arrive on their own.
+   *
+   * IT ENDS AT "this room" AND NOT "above you", which is what it said while the audience was
+   * assumed to be the middle — and it ECHOES {@link shapeMiddleOutContent.roomTag} on
+   * purpose. "This room" appears twice on the stage, once as the tag on the top plate and
+   * once as the destination of the upward arrow, and the two together are the whole reason
+   * a top-management room is being shown a diagram whose bright row is not theirs.
+   */
+  upGloss: "They tell this room what works, and what blocks it.",
+  upGlossKw: ["what blocks it"],
+
+  /**
+   * The DOWNWARD act's mono LABEL: "DRIVE DOWN". Same construction as the label above
+   * it — a verb the room can be held to, not a compass bearing.
+   */
+  downLabel: "DRIVE DOWN",
+  /**
+   * What travelling down actually consists of. PROSE, and the mirror of the line above —
+   * same subject, same shape, opposite direction. See the gloss above for why both were
+   * rewritten on 2026-08-14.
+   *
+   * IT PICKS THE TOP PLATE'S KEYWORD BACK UP BY NAME, AND IN THE SECOND PERSON: the top
+   * tier is this room and it holds "the mandate", so this line is what happens to YOUR
+   * mandate. The room has already been told the mandate exists and that it owns it, so the
+   * only new information here is the verb — and the verb is somebody else's job, which is
+   * the ask.
+   *
+   * "daily work for the teams" AND NOT "execution" OR "implementation". The abstraction is
+   * what every leader already agrees to; the ordinary day is what they have to change. IT
+   * NAMES THE BOTTOM PLATE BY ITS OWN NAME, so the downward arrow visibly ends somewhere the
+   * room can see on the same stage.
+   *
+   * AND IT IS MEASURED TO TWO LINES, which is why it does not read "…into what the teams do
+   * each day": that draft wraps at exactly 172px of {@link ACT_TEXT_WIDTH} and leaves "day."
+   * alone on a third line, beside a two-line gloss that does not. Both acts are two lines
+   * now, opening on the same word, which is what makes the pair read as one claim.
+   *
+   * THE WEEKDAY MOTIF IS GONE FROM ALL THREE PLACES IT USED TO STAND — this line, the line
+   * above it and the top plate's CANNOT. It was one image spent three times, and the room
+   * had to decode it before it could read any of them.
+   */
+  downGloss: "They turn your mandate into daily work for the teams.",
+  downGlossKw: ["daily work for the teams"],
+
+  /**
+   * THE THESIS — the sentence the whole figure exists to earn, and the one string on
+   * this slide that was rewritten for what it SAID rather than for how it fitted.
+   *
+   * WHAT WAS WRONG WITH THE SHIPPED LINE. It read "Nothing in this room reaches your
+   * teams through me. It reaches them through you." — and the first half is not true.
+   * The person at the front of this room runs an AI catalyst workshop: knowledge,
+   * technique and working habits DO reach the teams through them, and claiming
+   * otherwise trades a real handover for a rhetorical one. The room can hear the
+   * exaggeration, and a thesis the room can argue with is a thesis it does not carry
+   * out of the door.
+   *
+   * WHAT THE NEW LINE CLAIMS INSTEAD, and it is the honest division of labour: the
+   * facilitator can ARM the teams — that part is his and he will do it — and he cannot
+   * make anybody USE it, because using it is a change to how Monday is done and the teams
+   * cannot authorise one (which is the teams' plate, verbatim).
+   *
+   * AND IT ENDS ON THE MANAGERS RATHER THAN ON "YOU", WHICH IS THE 2026-08-14 CORRECTION
+   * AND A LOGICAL FIX RATHER THAN A STYLISTIC ONE. The draft ended "adoption reaches them
+   * through you" — written when the room was assumed to BE the middle. Said to a room of
+   * top management, that sentence contradicts the headline directly over it: if adoption
+   * reached the teams through the people holding the mandate, adoption would be top-down.
+   * So the handover the brief asks for is kept and pointed at the act this room can
+   * actually perform — backing the layer that has both halves. The route stays through the
+   * room's decision; it does not run through the room's announcement.
+   *
+   * AND IT IS THREE CLAUSES NOW, NOT TWO SENTENCES — the second 2026-08-14 pass, and this
+   * one was for LENGTH. The line ran 111 characters and 19 words, most of them spent on the
+   * presenter: an "I can" and an "I cannot" in front of the only clause the room is in. A
+   * thesis is the last thing on the stage and it is read, not studied.
+   *
+   * SO IT IS ONE CLAUSE PER PARTY, IN THE ORDER THEY ACT, AND EACH ONE IS A PLATE ON THE
+   * FIGURE ABOVE IT: I build the foundation (nothing on the chart — the presenter is not in
+   * this organisation), you empower them (the top plate, and the only act asked of it), they
+   * drive the adoption (the middle plate, doing the one thing the teams cannot authorise).
+   * The sentence walks the same three rows the figure draws, downward, and stops on the
+   * result. "drive" IS THE RAIL'S OWN VERB — {@link shapeMiddleOutContent.downLabel} is
+   * DRIVE DOWN — so the last clause is the figure's downward arrow said in words.
+   *
+   * "the foundation" CARRIES THE WHOLE OF THE OLD REFUSAL. "I cannot make them use it" was
+   * an honest limit stated at length; "I build the foundation" is the same limit as a noun —
+   * a foundation is what somebody else builds ON — and it leaves the two clauses that follow
+   * to say who does the rest. Nothing is conceded and forty-odd characters are returned. It
+   * is also the deck's own word for what the presenter actually delivers: §§E–F are the
+   * FOUNDATION run, so the clause names a thing the room has already sat through.
+   *
+   * "You empower them" IS THE KEYWORD FOR THAT REASON — it is the only clause addressed to
+   * the people in the chairs, the only act this slide asks them for, and the sentence K.3's
+   * "NAME A CHAMPION" lever is later going to collect. "them" is the middle plate, and the
+   * clause after it takes the same party as its subject, so the pronoun is resolved on the
+   * stage rather than left hanging. The clause in front of it needs no emphasis; it is what
+   * the presenter says about himself.
+   *
+   * IT NAMES NO SLIDE, NO SECTION AND NOTHING AFTER IT: the run is composed per deck set
+   * (§3.4 R2) and a thesis that counted its own successors would go stale the first time
+   * one was inserted or cut.
+   */
+  thesis: "I build the foundation. You empower them. They drive the adoption.",
+  thesisKw: ["You empower them"],
 } as const;
 
 // ═════════════════════════════════════════════════════════════════════════════
