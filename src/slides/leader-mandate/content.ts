@@ -15,20 +15,28 @@
 // BRAND PICK AND ONE DOES — AND THE DISAGREEMENT IS THE ARGUMENT, NOT AN
 // INCONSISTENCY. THE TWO THAT AGREE DO NOT EVEN AGREE FOR THE SAME REASON.
 //
-// K.1 (`mandate-enablement`) EXPORTS NO BRAND PICK. §6.8's model is "GENERIC
-// PILLARS AND TRACKS, ONE SPECIFIC BOTTLENECK". The pillars and the tracks are
-// generic BY CONSTRUCTION — they describe how any organisation turns a workshop
-// into a standing capability, they name no department, no system and no
-// headcount, and there is therefore nothing for a brand to vary. The bottleneck
-// is the single specific thing on that stage, and exactly ONE organisation has
-// stated its own: DigiTech's brief to this workshop (`docs/prompts/gems-catalyst.md`).
-// We hold no equivalent statement for the other brand, so a `Record<Brand, …>`
-// there would be a slot with one real entry and two that could only be filled by
-// writing a bottleneck nobody stated — the speculation §6.8 exists to prevent,
-// made to type-check. `tests/unit/mandate-enablement.test.tsx` holds that as a
-// RULE and not a spot check: exactly one rendered string on K.1 may name an
-// organisation, it is {@link mandateEnablementContent.bottleneck.source}, and
-// every other string on every pose is checked against the brand vocabulary.
+// K.1 (`mandate-enablement`) EXPORTS NO BRAND PICK, AND SINCE 2026-08-14 IT PRINTS
+// NO ORGANISATION'S NAME EITHER — WHICH IS A STRONGER PROPERTY THAN THE ONE IT
+// SHIPPED WITH AND IS WORTH READING THE HISTORY OF. §6.8's model was "GENERIC
+// PILLARS AND TRACKS, ONE SPECIFIC BOTTLENECK", and the slide drew that sentence:
+// two columns of generic structure over a bordered band holding ONE organisation's
+// quoted brief — DigiTech's (`docs/prompts/gems-catalyst.md`) — printed in BOTH
+// leader decks, including the one the brief did not come from. There was no
+// `Record<Brand, …>` for it because there was nothing to put in the other two slots:
+// we hold no equivalent statement for the other brand, and inventing one is the
+// speculation §6.8 exists to prevent, made to type-check.
+//
+// THE OWNER'S CALL REPLACED THE BAND RATHER THAN THE AXIS. The band was honest about
+// its provenance and it was still the wrong object on a Berau stage: a leader read a
+// diagnosis of somebody else and had to be told, in the closer, that naming their own
+// was their job. What stands there now is THREE GENERIC BLOCKS ({@link BLOCKS}) —
+// tools, literacy, resistance — which the owner reports meeting in BOTH rooms, under
+// generic and naming nobody. So K.1 still exports no brand pick,
+// and now for the reason K.3 has rather than the reason it used to have: every string
+// on it is generic, at every pose, in either deck. `tests/unit/mandate-enablement.test.tsx`
+// holds that as a RULE and not a spot check — NO rendered string on K.1 may name an
+// organisation, and every string on every pose is checked against the brand
+// vocabulary.
 //
 // K.2 (`mandate-phases-gates`) EXPORTS ONE, AND HAD TO. §4.4 lists it as slot 6
 // for a reason K.1's argument does not reach: this slide's subject is WHEN each
@@ -40,11 +48,10 @@
 // axis exists here because the EVIDENCE exists here, which is exactly the test
 // K.1 failed and this slide passes; neither answer is the house style.
 //
-// K.3 (`mandate-levers`) EXPORTS NONE EITHER, AND NOT FOR K.1'S REASON — which is
-// why the two are argued separately rather than filed together as "the slides
-// without an axis". K.1 has no axis because its SUBJECT is generic by
-// construction and the one specific thing on its stage is somebody else's quoted
-// sentence. K.3 has no axis because its subject is THE PERSON IN THE ROOM, and
+// K.3 (`mandate-levers`) EXPORTS NONE EITHER, AND SINCE K.1's RE-CUT THE TWO NOW
+// AGREE FOR ONE REASON RATHER THAN TWO — which is why the paragraph above records
+// what K.1's reason USED to be. K.1's stage is generic at every pose; K.3's is
+// generic because its subject is THE PERSON IN THE ROOM, and
 // that person is the same person in both rooms: a BU or Division Head with a
 // calendar, a headcount and a budget line they already hold. Every one of the
 // four levers is an act inside that authority — it names no system, no
@@ -70,17 +77,26 @@
 // `<em>` in data.
 //
 // THE KEYWORD RULE. `kw` goes on PROSE ONLY, on all three slides. K.1's prose is
-// the headline, the four pillar lines, the three track lines, the bottleneck's
-// statement and the closer; K.2's is the headline, the four gate lines, the
-// beyond-the-roadmap line, the band's statement and the closer; K.3's is the
+// the headline, the three block lines, the four pillar lines, the three track lines, the
+// three scene mini-theses and the closer; K.2's is the headline, the four gate lines, the
+// beyond-the-roadmap line, its three scene mini-theses and the closer; K.3's is the
 // headline, the four lever lines, the band's statement and the closer.
-// Everything else is the mono LABEL register: fig labels, headings, pillar and
-// track names, PHASE LABELS AND STATES, rung names, calendar rows, LEVER LABELS,
-// AUTHORITY LABELS, the three bands' eyebrows and all three CITATIONS. A copper
-// italic inside a mono label reads as a rendering fault, and inside a citation it
-// reads as the deck emphasising a fragment of somebody else's sentence — so the
-// three source lines are the sharpest case of the rule and the tests hold the
-// registers apart as lists.
+// Everything else is the mono LABEL register: fig labels, K.1's four eyebrows and
+// three column heads, K.2's four eyebrows, its two ladder notes and its plan tag,
+// BLOCK LABELS, pillar and track names, PHASE LABELS AND STATES,
+// rung names, calendar rows, LEVER LABELS, AUTHORITY LABELS, K.3's band
+// eyebrow and both CITATIONS. A copper italic inside a mono
+// label reads as a rendering fault, and inside a citation it reads as the deck
+// emphasising a fragment of somebody else's sentence — so the source lines are the
+// sharpest case of the rule and the tests hold the registers apart as lists.
+//
+// K.2'S TWO LADDER NOTES ARE THE ONE PLACE THE RULE LOOKS WRONG AND IS NOT. Each is a
+// mono label over a full SANS SENTENCE, which everywhere else in this file earns a
+// `*Kw`; these carry none, because a note in the margin of a staircase that highlighted
+// a fragment of itself would rank against the figure it exists to annotate. Prose MAY
+// carry keywords; it is not obliged to, and `leader-gap`'s five rung `sub` lines make
+// the identical call for the identical reason.
+
 //
 // THE LEVER / PILLAR BOUNDARY, NOW STATED FROM BOTH SIDES. Until Phase 7 this
 // block reserved K.3 and warned the pillars off its territory in one direction
@@ -92,12 +108,21 @@
 //
 //   · A PILLAR NAMES A STRUCTURE AND NEVER AN ACT. K.1's `access` and `support`
 //     pillars name two of the same subjects K.3's first and third levers act on,
-//     and they must keep naming structures. "Someone named to ask on the Tuesday
-//     after the room empties" is a thing that has to exist; "Name one person,
-//     protect their hours, and write it into their objectives" is a thing a
-//     leader does. The first is authored under {@link Pillar.line} and the second
-//     under {@link Lever.line}, and the file boundary between them is one screen,
-//     which is exactly why the rule is written down.
+//     and they must keep naming structures. "Named champions, and people can still
+//     ask them after the workshop ends" is a thing that has to exist; "Name your
+//     champions, give them hours every week, and put the job into their targets"
+//     is a thing a leader does. The
+//     first is authored under {@link Pillar.line} and the second under
+//     {@link Lever.line}, and the file boundary between them is one screen, which
+//     is exactly why the rule is written down.
+//   · AND NO K.1 STRING NAMES A DAY OF THE WEEK, OR USES A FIGURE OF SPEECH. The
+//     `support` pillar's line held "on the Tuesday after the room empties" until
+//     2026-08-14 and "after the room empties" until 2026-08-15. The first was a
+//     schedule this deck does not commit to; the second was an idiom, and the
+//     owner's objection to it is the objection this whole pass is made of — a room
+//     reading English as a second language should never have to decode. K.3's
+//     lever vocabulary is where a named cadence would be legitimate, and it does not
+//     use one either.
 //   · A LEVER NAMES AN ACT AND NEVER A STRUCTURE, WHICH IS THE HALF THAT IS NEW.
 //     A lever line that stopped at what the programme is made of would be K.1's
 //     pillar restated two slides later, and the room would have paid a click for
@@ -141,6 +166,141 @@ import { gapLadderContent, type Rung } from "@/slides/leader-gap/content";
 // header. Everything from here to `mandateEnablementContent` belongs to it.
 // ═════════════════════════════════════════════════════════════════════════════
 
+// ───────────────────── two tuple types, so a count is a type error ─────────────────────
+
+/**
+ * Exactly three, held by the TYPE — the idiom `leader-gap/content.ts` and
+ * `leader-invest/content.ts` both argue at length: a fourth entry's error lands ON
+ * the fourth entry, at the definition site, with no cast anywhere.
+ *
+ * IT IS ALSO WHAT LETS THE GEOMETRY PIN ITS COUNTS WITHOUT IMPORTING A VALUE.
+ * `./enablement-geometry.ts` declares `BLOCK_COUNT: EnablementCopy["blocks"]["length"]
+ * = 3`, so a re-cut list fails to compile in the module that tiles it rather than
+ * rendering a fourth card off the right edge of the stage.
+ */
+type Three<T> = readonly [T, T, T];
+
+/** Exactly four, the same way. */
+type Four<T> = readonly [T, T, T, T];
+
+// ───────────────────── what stops us ─────────────────────
+
+/**
+ * One thing that stops adoption before any programme starts.
+ *
+ * THE BLOCKS ARE NEW ON 2026-08-14 (owner's call) AND THEY ARE THE REASON THIS
+ * SLIDE NO LONGER NAMES AN ORGANISATION. What stood here was a bordered band
+ * holding ONE organisation's quoted brief — DigiTech's, printed in both leader
+ * decks, including the one the brief did not come from. The band was honest about
+ * its provenance and it was still the wrong object: a leader in the other room read
+ * a diagnosis of somebody else and had to be told, in the closer, that naming their
+ * own was their job.
+ *
+ * THREE BLOCKS REPLACE IT, AND THEY ARE GENERIC BY EVIDENCE RATHER THAN BY
+ * CONSTRUCTION. The owner runs the same programme in both rooms and reports the same
+ * three obstacles in both; the source slide the three are lifted from is a third
+ * organisation's own enablement model, where they are stated as that organisation's
+ * bottlenecks. So the set is what this workshop keeps meeting rather than what anybody
+ * audited.
+ *
+ * AND THE STAGE NO LONGER SAYS SO, which is the owner's call (2026-08-14, third pass) and
+ * is recorded here because it is the one place a reader would look for the hedge. A mono
+ * line under the three cards read "Seen in the room. Measured nowhere." — the construction
+ * `leader-invest`'s `NOT_AUDITED` uses — and it was cut as unnecessary: the three blocks
+ * name no organisation, quote nobody and carry no number, so there is no measurement for a
+ * room to mistake them for. The rule they were hedging against is still live everywhere it
+ * has a subject; it simply has none here.
+ *
+ * WHICH IS WHAT MAKES THE WHOLE SLIDE GENERIC AND THE BRAND AXIS UNNECESSARY. See
+ * the file header: K.1 exports no brand pick, and after this re-cut it prints no
+ * organisation's name at any pose in either deck.
+ */
+export interface Block {
+  id: string;
+  /**
+   * Mono, uppercase, ONE WORD. A LABEL, and keyword-free by the rule above.
+   *
+   * ONE WORD IS WHAT KEEPS A BLOCK FROM BECOMING A DEPARTMENT. "Tools",
+   * "Literacy" and "Resistance" are true of a mine, a bank and a software company;
+   * the moment a label needs a qualifier it has started describing somebody's org
+   * chart, and the slide has stopped being generic.
+   *
+   * AND NO LABEL HERE MAY REPEAT A PILLAR'S. The two sets sit beside each other in
+   * the recap pose with a connector drawn between them, so a block called ACCESS
+   * pointing at a pillar called ACCESS would read as a rendering fault rather than
+   * as a cause pointing at its answer. {@link PILLARS} carries the other half of
+   * the rule and the test holds the two label sets disjoint.
+   */
+  label: string;
+  /**
+   * What the block actually is, in ONE SHORT SENTENCE — or two, where the block is
+   * a contrast. Prose, so it carries keywords.
+   *
+   * ASD-STE100 AND ZINSSER, WHICH IS AN OWNER RULE FOR EVERY STRING ON THIS SLIDE
+   * (2026-08-14): short sentences, plain words, one idea each, and nothing the room
+   * has to decode. It is also why no line below names a weekday. The pillar that
+   * used to say "on the Tuesday after the room empties" was reworded in the same
+   * pass — a named day reads as a schedule the deck is committing to, and there is
+   * no schedule.
+   *
+   * HELD TO `CARD_LINE_BUDGET_CHARS` (`./enablement-geometry.ts`). The card budgets
+   * three lines and the narrower of the two card widths is the pillars'; a fourth
+   * line does not overflow a box, it prints under the card's bottom edge.
+   */
+  line: string;
+  lineKw: readonly string[];
+}
+
+/**
+ * The three blocks, in the order the room meets them.
+ *
+ * THE ORDER IS THE ORDER A PERSON HITS THEM. You cannot use a tool you cannot
+ * reach; once you can reach it you find out what you cannot yet do with it; and only
+ * then does what you feel about it matter. Nothing on the stage ranks them — one
+ * card size, one tier, one glyph size — because clearing one and leaving the other
+ * two standing gets the programme nowhere, which is the same argument
+ * {@link PILLARS} makes about pillars.
+ *
+ * NOT ONE OF THEM IS A TOOL, A VENDOR OR A SYSTEM. "Approval is slow" names a
+ * process every organisation has; "chat with the tool" names a capability, not a
+ * product. The source slide named a specific desktop client and a specific web app,
+ * and both were cut here: a block that names a vendor is a block the other room
+ * cannot recognise.
+ */
+const BLOCKS: Three<Block> = [
+  {
+    id: "tools",
+    label: "TOOLS",
+    // THE FIRST PILLAR'S REASON FOR EXISTING, stated as the problem. The source
+    // said it as a mechanism — a desktop client that needs a ticket, so people fall
+    // back to a browser tab with no plugins and no skills in it. Generalised here
+    // to the only part that travels: the strong version waits, the weak version is
+    // free, and people take the free one.
+    line: "Approval is slow, so people settle for the weakest tool.",
+    lineKw: ["settle for the weakest tool"],
+  },
+  {
+    id: "literacy",
+    label: "LITERACY",
+    // THE CONTRAST IS THE WHOLE BLOCK, and both halves have to stay. "Teams cannot
+    // build with it" alone reads as a training gap; the first clause is what makes
+    // it a ceiling — they are already using it, daily, and have stopped climbing.
+    line: "Teams can chat with the tool. They cannot build with it.",
+    lineKw: ["cannot build with it"],
+  },
+  {
+    id: "resistance",
+    label: "RESISTANCE",
+    // THREE FEARS AND NOT ONE, because a single named fear invites the room to
+    // dismiss it. The source lists them as replacement fear, productivity letdown
+    // and autonomy pride; they are put in plain words here because a leader should
+    // not have to translate three abstract nouns to recognise their own people in
+    // them. NO BLAME: the sentence names what people fear, not what they get wrong.
+    line: "Three fears: lost jobs, small gains, and lost control.",
+    lineKw: ["lost jobs, small gains, and lost control"],
+  },
+];
+
 // ───────────────────── the pillars ─────────────────────
 
 /** One of the standing parts an enablement programme is made of. */
@@ -156,46 +316,75 @@ export interface Pillar {
    */
   label: string;
   /**
-   * What that pillar means, in ONE LINE. Prose, so it carries keywords.
+   * What that pillar means, in ONE SHORT SENTENCE. Prose, so it carries keywords.
    *
    * A DEFINITION AND NOT AN INSTRUCTION. See the header: a line that told the
    * leader what to do would be one of K.3's levers arriving a slide early.
    *
-   * HELD TO `ONE_LINE_BUDGET_CHARS`. `./geometry.ts` budgets exactly one line per
-   * row, so a wrapped line overlaps the row beneath it rather than overflowing a
-   * box — and the test enforces the budget on the copy, where an author can act
-   * on it.
+   * HELD TO `CARD_LINE_BUDGET_CHARS` (`./enablement-geometry.ts`), and the pillar
+   * card is the NARROWER of the two the budget is cut against — four cards across
+   * the stage against the blocks' three.
    */
   line: string;
   lineKw: readonly string[];
+  /**
+   * WHICH BLOCK THIS PILLAR ANSWERS — a {@link Block} id, and the one field on
+   * either list that knows about the other.
+   *
+   * IT EXISTS BECAUSE THE RECAP POSE DRAWS IT. The fourth pose puts the blocks and
+   * the pillars side by side and wires each pillar to the block it clears, which is
+   * the one claim neither list makes alone: the programme is not four good ideas, it
+   * is four answers to three observed problems. A figure that guessed the pairing
+   * from list order would silently re-wire itself the day somebody re-orders either
+   * list.
+   *
+   * TWO PILLARS ANSWER ONE BLOCK, ON PURPOSE, and that asymmetry is the reason this
+   * is a field rather than a same-length pairing. `literacy` takes both
+   * `curriculum` and `practice`: teaching somebody the concepts and giving them a
+   * real problem are two different acts, and a room that has only had the first
+   * still cannot build. A one-to-one map would have forced the two into one pillar
+   * and lost the distinction.
+   *
+   * GUARDED AT MODULE SCOPE by {@link PILLAR_ANSWERS}, which throws on an id no
+   * block has and on a block no pillar answers.
+   */
+  answers: string;
 }
 
 /**
- * The four pillars, in the order the room reads them down the column.
+ * The four pillars, in the order the room reads them.
  *
  * THE ORDER IS THE SEQUENCE OF A PROGRAMME, not a ranking: you clear access
  * before you teach, you teach before people practise, and support is what stands
- * after the room empties. Nothing on the stage ranks them — one colour tier for
- * all four, four identical marks (`./geometry.ts`) — because a pillar that is
- * missing takes the other three down with it, which is the whole reason the word
- * "pillar" is the right one and "priority" is not.
+ * once the teaching is finished. Nothing on the stage ranks them — one card size, one
+ * colour tier, one glyph size — because a pillar that is missing takes the other
+ * three down with it, which is the whole reason the word "pillar" is the right one
+ * and "priority" is not.
  *
  * FOUR, AND WHY NOT FIVE. Measurement was the obvious fifth and is refused here:
  * `mandate-phases-gates` (K.2) is entirely about when the programme is judged and
  * on what, so a measurement pillar would announce that argument one slide before
  * it is made and leave K.2 restating it. The count is not sacred — a fifth pillar
- * re-cuts the column through `rowPitch` and needs no other edit — but it needs
+ * re-tiles the row through `pillarCardLeft` and needs no other edit — but it needs
  * an argument, and "the list felt short" is not one.
+ *
+ * NO PILLAR LABEL MAY EQUAL A BLOCK LABEL. See {@link Block.label}: the recap draws
+ * a connector between the two sets, and two identically named boxes at either end of
+ * one line read as a fault. `ACCESS` is therefore the pillar and `TOOLS` the block,
+ * even though the two are about the same obstacle.
  */
-const PILLARS: readonly Pillar[] = [
+const PILLARS: Four<Pillar> = [
   {
     id: "access",
     label: "ACCESS",
     // Indexes §6.7's D.5 (`invest-subscription` — company-managed seats) without
     // naming it, on the same mechanism `leader-shape`'s decisions use: the room
-    // hears "seats" again in the section this one closes over.
-    line: "Seats and tools cleared before the first session, not after it.",
+    // hears "seats" again in the section this one closes over. TRIMMED in the
+    // 2026-08-14 pass — it used to end "…, not after it", which spent five words
+    // restating the clause before it.
+    line: "Seats and tools cleared before the first session.",
     lineKw: ["before the first session"],
+    answers: "tools",
   },
   {
     id: "curriculum",
@@ -205,6 +394,7 @@ const PILLARS: readonly Pillar[] = [
     // current" is what separates a programme from a slide deck somebody ran once.
     line: "One body of material, taught the same way, and kept current.",
     lineKw: ["kept current"],
+    answers: "literacy",
   },
   {
     id: "practice",
@@ -214,20 +404,72 @@ const PILLARS: readonly Pillar[] = [
     // the competition — both are brand-and-programme facts and belong to K.2.
     line: "Real work, not exercises — a problem the team already owns.",
     lineKw: ["a problem the team already owns"],
+    answers: "literacy",
   },
   {
     id: "support",
     label: "SUPPORT",
-    // THE PILLAR MOST AT RISK OF BECOMING A LEVER, and the second lever is now in
-    // this file to be read against ({@link LEVERS}, `champion`): "Name one person,
-    // protect their hours, and write it into their objectives" — the leader's ACT.
-    // This line says only that the role has to exist and has to be reachable
-    // after the event, which is the structure the lever funds. "Someone named",
-    // not "you name someone".
-    line: "Someone named to ask on the Tuesday after the room empties.",
-    lineKw: ["on the Tuesday after"],
+    // THE PILLAR MOST AT RISK OF BECOMING A LEVER, and the second lever is in this
+    // file to be read against ({@link LEVERS}, `champion`): "Name your champions,
+    // give them hours every week, and put the job into their targets" — the
+    // leader's ACT. This line says only that the role has to exist and has to be
+    // reachable once the teaching is finished, which is the structure the lever
+    // funds. "Named champions", not "you name your champions".
+    //
+    // PLURAL, AS OF 2026-08-15 (owner's call). It read "One person named to ask" and
+    // that was a count this deck has no reason to make: a company runs several
+    // champions, one per department or better, and a pillar that says ONE is a
+    // structure the room would have to argue with before it could agree.
+    //
+    // NO WEEKDAY, AS OF 2026-08-14, AND NO IDIOM AS OF THE SAME OWNER PASS. It read
+    // "Someone named to ask on the Tuesday after the room empties" — a named day is
+    // a schedule this deck does not commit to, and "after the room empties" is a
+    // figure of speech a second-language room has to stop and decode. "After the
+    // workshop ends" is the same fact in words nobody has to translate.
+    line: "Named champions, and people can still ask them after the workshop ends.",
+    lineKw: ["still ask them"],
+    answers: "resistance",
   },
 ];
+
+/**
+ * The block each pillar answers, checked once at module load.
+ *
+ * A THROWING IIFE AND NOT A TEST, which is the call `leader-invest`'s
+ * `governance-geometry.ts` makes for the same class of defect. The failure this
+ * guards is a connector drawn to nowhere — a pillar pointing at a block id that does
+ * not exist, or a block with no pillar under it — and both render as a figure that
+ * looks finished with one line missing. A module that throws at load paints a blank
+ * stage, which is the loudest failure available and the one nobody ships.
+ *
+ * @throws if a pillar answers an id no block has, or if a block is answered by no
+ *         pillar. The second half matters as much as the first: an unanswered block
+ *         is the slide claiming a problem the programme does not address.
+ */
+export const PILLAR_ANSWERS: ReadonlyMap<string, readonly string[]> = (() => {
+  const byBlock = new Map<string, string[]>(BLOCKS.map((block) => [block.id, []]));
+  for (const pillar of PILLARS) {
+    const bucket = byBlock.get(pillar.answers);
+    if (!bucket) {
+      throw new Error(
+        `mandate content: pillar "${pillar.id}" answers "${pillar.answers}", which is ` +
+          `not one of the ${BLOCKS.length} blocks (${BLOCKS.map((b) => b.id).join(", ")}). ` +
+          "The recap pose draws one connector per pillar, so this would be a line to nowhere.",
+      );
+    }
+    bucket.push(pillar.id);
+  }
+  for (const [blockId, answering] of byBlock) {
+    if (answering.length === 0) {
+      throw new Error(
+        `mandate content: nothing answers block "${blockId}". A block with no pillar under ` +
+          "it is the slide naming a problem the programme does not address — add a pillar or " +
+          "cut the block.",
+      );
+    }
+  }
+  return byBlock;
+})();
 
 // ───────────────────── the tracks ─────────────────────
 
@@ -235,11 +477,12 @@ const PILLARS: readonly Pillar[] = [
 export interface Track {
   id: string;
   /** Mono, uppercase, one word. A LABEL, keyword-free — and measured: the
-   *  longest of the three is what `NARROWEST_LANE` in `./geometry.ts` is cut
-   *  against, so a longer name is a layout change and not only a copy one. */
+   *  longest of the three is what `NARROWEST_LANE` in `./enablement-geometry.ts`
+   *  is cut against, so a longer name is a layout change and not only a copy one. */
   name: string;
-  /** What that track gets, in ONE LINE. Prose, keywords, and the same
-   *  {@link Pillar.line} budget for the same reason. */
+  /** What that track gets, in ONE LINE. Prose, keywords, and held to
+   *  `LANE_LINE_BUDGET_CHARS` — a track row is full stage width, so its budget is
+   *  the loosest on the slide. */
   line: string;
   lineKw: readonly string[];
 }
@@ -249,9 +492,9 @@ export interface Track {
  *
  * READING DOWN THE COLUMN IS GOING DEEPER, which is why the order is not
  * reversible: the lane bars narrow as the reader descends (`laneWidth` in
- * `./geometry.ts`) and the colour tier brightens, so the two encodings agree with
- * the reading direction. Flipped, the figure would say the same thing and read
- * as a funnel standing on its point.
+ * `./enablement-geometry.ts`) and the colour tier brightens, so the two encodings
+ * agree with the reading direction. Flipped, the figure would say the same thing and
+ * read as a funnel standing on its point.
  *
  * THIS IS THE SLIDE'S ANSWER TO "SO WE BUY EVERYONE A SEAT?", and it answers it
  * without arithmetic: enablement is not one depth applied to a headcount, it is
@@ -264,7 +507,7 @@ export interface Track {
  * what makes the set generic and what stops it from asserting anything about
  * either organisation's internal structure.
  */
-const TRACKS: readonly Track[] = [
+const TRACKS: Three<Track> = [
   {
     id: "everyone",
     name: "EVERYONE",
@@ -272,7 +515,7 @@ const TRACKS: readonly Track[] = [
     // C.1 says the leader writes the rule down "before someone improvises", and
     // this is the training half of that same sentence. The anchor word is
     // load-bearing, not decorative: reword it and this track stops indexing C.1.
-    line: "Enough to stop improvising, and to know what may not go in.",
+    line: "Enough to stop improvising, and to know what stays out.",
     lineKw: ["stop improvising"],
   },
   {
@@ -281,7 +524,7 @@ const TRACKS: readonly Track[] = [
     // "their own team runs" is the difference between a prototype and a
     // capability, and it is the one thing this track has to buy with the hours it
     // costs. No count, no percentage — see `laneWidth`.
-    line: "Depth, and the hours to build something their own team runs.",
+    line: "Depth, and the hours to build what their own team runs.",
     lineKw: ["their own team runs"],
   },
   {
@@ -296,88 +539,6 @@ const TRACKS: readonly Track[] = [
   },
 ];
 
-// ───────────────────── the bottleneck ─────────────────────
-
-/**
- * The epistemic qualifier the bottleneck's source line MUST end in.
- *
- * A CONSTANT, AND EXPORTED, for the same structural reason
- * `leader-invest`'s `NOT_AUDITED` is one. This deck holds NO adoption assessment
- * for either organisation (§6.5, confirmed on #8), so the bottleneck below is a
- * CLAIM ITS OWNER MADE and not a finding anybody measured — and the difference
- * has to survive a reword. The test asserts the source line ends in this value,
- * so a rewrite that drops the qualifier fails here rather than shipping a
- * projected sentence that reads as a measurement.
- *
- * "us" is the deck, not the room: the workshop measured nothing. Saying so is
- * what makes it fair to put another organisation's stated bottleneck on a stage
- * at all.
- */
-export const STATED_NOT_MEASURED = "Stated by them, not measured by us.";
-
-/**
- * DigiTech's own stated bottleneck — THE ONLY SPECIFIC CONTENT ON THIS SLIDE
- * (§6.8), and the only string on it that may name an organisation.
- *
- * THREE LINES, AND EACH ONE IS A DIFFERENT KIND OF SENTENCE. That separation is
- * the honesty of the band, and collapsing any two of them loses it:
- *
- *   · `eyebrow`  — says what the room is looking at, and says that it is the one
- *                  specific thing here. Mono label.
- *   · `statement`— THE DECK'S OWN COMPRESSION of the brief, in the deck's words.
- *                  §6.8 words it exactly this way. It carries NO quotation marks,
- *                  because it is not a quotation: presenting a paraphrase inside
- *                  quotes is the small lie this three-line split exists to make
- *                  impossible.
- *   · `source`   — the brief's OWN WORDS, in quotes, attributed, and closing on
- *                  {@link STATED_NOT_MEASURED}. Mono, sentence case, keyword-free
- *                  — a citation the deck emphasises a fragment of is a citation
- *                  the deck has started arguing with.
- *
- * THE QUOTED SENTENCE IS ALSO ON `gap-capability-ladder`, under GEMS, where it
- * licenses that slide's open question. DELIBERATE, and the two must stay
- * byte-identical inside the quotation marks: one source quoted two ways in one
- * deck is a source the room stops trusting. They are authored separately rather
- * than shared through an import — `leader-gap` reaches it through a brand pick
- * this slide does not have, and importing another section's brand table to
- * borrow one string would couple two runs for a sentence — so
- * `tests/unit/mandate-enablement.test.tsx` holds them equal instead, and names
- * that as the reason on failure.
- *
- * IN A BERAU LEADER DECK THIS BAND NAMES ANOTHER ORGANISATION, ON PURPOSE. It is
- * the only stated bottleneck the deck has; the alternative is to invent one, and
- * the closer is what makes the honest version work — the model is generic, this
- * is one organisation's specific, and naming your own is the room's job. See the
- * header for why that is a decision rather than a gap.
- */
-const BOTTLENECK = {
-  /** Mono label. Names the slide's own structure — generic everywhere else, one
-   *  specific thing here — which is what stops the band reading as a diagnosis
-   *  of the room in front of it. */
-  eyebrow: "THE ONE SPECIFIC THING ON THIS SLIDE",
-
-  /** §6.8's own wording. Prose, so it carries a keyword; NO quotation marks —
-   *  see above. */
-  statement: "Adoption is concentrated in one function.",
-  statementKw: ["concentrated in one function"],
-
-  /**
-   * The citation, on the slide rather than in a footnote. Keyword-free.
-   *
-   * TRIMMED WITH THE LADDER'S, 2026-08-13. `gap-capability-ladder` prints the same
-   * brief to license its open question and lost the trailing clause — "— even some
-   * DigiTech members still falling behind" — when that slide's copy was cut back;
-   * `mandate-enablement.test.tsx` holds the two quotations identical, because a
-   * room that hears one source worded two ways stops trusting the source. The
-   * dropped clause was the stronger half, so no claim here grew by losing it — and
-   * this band's own statement is that adoption is concentrated in ONE function,
-   * which that clause slightly argued against.
-   */
-  source:
-    "DigiTech's own brief: “outside DigiTech, AI adoption is not really adopted " +
-    `well.” ${STATED_NOT_MEASURED}`,
-} as const;
-
 // ───────────────────── the slide ─────────────────────
 
 export const mandateEnablementContent = {
@@ -388,38 +549,98 @@ export const mandateEnablementContent = {
    *
    * A leader hears "enablement" as a line item. The headline names what is
    * actually being authorized — a structure that stands after the event — before
-   * the columns show what it is made of, because a room that has already priced
-   * the slide as training reads four pillars as four invoices.
+   * the cards show what it is made of, because a room that has already priced the
+   * slide as training reads four pillars as four invoices.
    */
   headline: "Enablement is a structure, not a training budget.",
   headlineKw: ["a structure"],
 
-  /** Mono headings, keyword-free. Each names its column's QUESTION rather than
-   *  its contents, so the two columns read as two different questions about one
-   *  programme instead of as two lists. */
-  pillarsHeading: "THE PILLARS · WHAT IT IS MADE OF",
-  tracksHeading: "THE TRACKS · WHO IT REACHES, AND HOW DEEP",
-
-  pillars: PILLARS,
-  tracks: TRACKS,
-  bottleneck: BOTTLENECK,
+  /**
+   * FOUR EYEBROWS ON ONE SHELF, one per scene, and never two at once.
+   *
+   * Each names its scene's QUESTION rather than its contents, so four consecutive
+   * frames read as one argument being walked rather than as four lists. Mono
+   * labels, keyword-free.
+   *
+   * THE SHELF IS y=156 AND THAT IS THE 2026-08-14 FIX. The eyebrows hung at y=134,
+   * twelve pixels under a 40px display headline, and the owner's note on it was that
+   * the two lines looked like one wrapped one. `leader-invest`'s D.1–D.4 cut the same
+   * 34px of air for the same complaint and `./enablement-geometry.ts` derives it the
+   * same way.
+   */
+  blocksEyebrow: "WHAT STOPS US TODAY",
+  pillarsEyebrow: "WHAT THE PROGRAMME IS MADE OF",
+  tracksEyebrow: "WHO IT REACHES, AND HOW DEEP",
+  modelEyebrow: "THE WHOLE MODEL, IN ONE FRAME",
 
   /**
-   * The ask, and the sentence that makes the band above it fair.
+   * The recap pose's three column heads — the same three scenes, named in three
+   * words each because they are now captions over columns rather than the title of
+   * a stage.
    *
-   * It says out loud what the slide's structure already claims: the pillars and
-   * the tracks travel to any organisation, and the one thing that decides whether
-   * the programme works cannot be handed over with them. That is also what turns
-   * another organisation's quoted bottleneck from a comparison into an example —
-   * the room is not being told what its bottleneck is, it is being told that
-   * naming it is the part it owns.
-   *
-   * IT HANDS OVER TO K.2. The next slide is phases and gates; a room that has
-   * just been asked to name its own bottleneck is a room ready to be shown what
-   * gets measured and when.
+   * SHORTER THAN THE EYEBROWS THEY COMPRESS, and deliberately not equal to them. A
+   * column head that repeated its scene's full eyebrow would be the longest string
+   * in the narrowest box on the slide; and the room has already read the long form
+   * one click earlier, so the short form is a reminder rather than a first
+   * introduction.
    */
-  closer: "The pillars and the tracks are generic. Naming the bottleneck is the part only you can do.",
-  closerKw: ["generic", "only you can do"],
+  blocksShort: "WHAT STOPS US",
+  pillarsShort: "WHAT WE BUILD",
+  tracksShort: "WHO IT REACHES",
+
+  blocks: BLOCKS,
+  pillars: PILLARS,
+  tracks: TRACKS,
+
+  /**
+   * ONE MINI-THESIS PER HERO SCENE — the owner's third-pass addition (2026-08-14).
+   *
+   * WHY THEY EXIST. Each of the first three poses shows a SET and says nothing about what
+   * the set means; a leader looking at three cards has to supply the argument themselves,
+   * and half a room will supply a different one. So every hero scene now closes on the
+   * bottom line of the slide, in the same place and the same register as {@link closer} —
+   * which is the point of putting them on one shelf: the room learns after one click that
+   * the sentence at the foot of the stage is the takeaway, and it is there every time.
+   *
+   * ONE TIER DOWN FROM THE CLOSER AND NOT ONE SIZE DOWN. `--neutral-200` against the
+   * closer's `--neutral-100`, same 19px serif, same shelf. Rank on this stage is a colour
+   * tier, and three scene-scoped lines set smaller than the one that closes the slide
+   * would read as captions rather than as arguments. The other half of the separation is
+   * geometric and is the closer's alone: it gets a copper rule over it, because it is the
+   * only one of the four that is about the WHOLE model rather than about the frame above
+   * it.
+   *
+   * EACH ONE ANSWERS THE QUESTION ITS SCENE PROVOKES, which is what keeps them from being
+   * summaries. Three blocks provoke "so we need better tools"; four pillars provoke "so
+   * which one do we fund"; three tracks provoke "so we buy everyone a seat". Prose, so all
+   * three carry keywords, and all three are held to the closer's own word budget.
+   */
+  blocksThesis: "No new tool clears any of these three. A decision does.",
+  blocksThesisKw: ["A decision does"],
+
+  pillarsThesis: "Four pillars, and a missing one takes the other three down with it.",
+  pillarsThesisKw: ["takes the other three down with it"],
+
+  tracksThesis: "Nobody gets the same depth. That is the design, not a gap.",
+  tracksThesisKw: ["That is the design"],
+
+  /**
+   * The thesis — the last pose, and the only thing on it.
+   *
+   * IT MOVED WHEN THE BAND DID. The line used to say "The pillars and the tracks are
+   * generic. Naming the bottleneck is the part only you can do." — which was fair
+   * when one organisation's bottleneck was quoted on the stage and the room's own was
+   * missing. The slide now names three blocks every room recognises, so "naming
+   * yours" is no longer the ask: the ask is which one gets cleared first, and that is
+   * a decision no consultant, no playbook and no other organisation's roadmap can
+   * make for a leader with a calendar and a budget line.
+   *
+   * IT HANDS OVER TO K.2. The next slide is phases and gates; a room that has just
+   * been asked which block it clears first is a room ready to be shown what gets
+   * measured and when.
+   */
+  closer: "The model is generic. Which block you clear first is the part only you can decide.",
+  closerKw: ["generic", "only you can decide"],
 } as const;
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -570,6 +791,28 @@ export interface Phase {
    */
   gate: string;
   gateKw: readonly string[];
+  /**
+   * The mark on this phase's card in SCENE 1, drawn small — its STATE as a verb.
+   *
+   * TWO MARKS PER PHASE AND NOT ONE, which is the whole reason the two scenes are
+   * two clicks (`./components/PhaseGlyphs.tsx`). Scene 1's marks all perform A
+   * CALENDAR ADVANCING: something moves, repeats, and arrives nowhere it has not
+   * already been. Scene 2's all perform A MEASUREMENT THAT LANDS. That pair IS
+   * the headline — a date passes on its own, a gate does not — said in the one
+   * channel a printed plan does not have, and a room that reads nothing but the
+   * movement still gets it.
+   *
+   * TYPED `string` AND NOT THE GLYPH UNION, deliberately, exactly as K.1's
+   * `Block.id` is: this module must not import a component, so the union lives in
+   * the drawing file and the pin between the two is a module-load guard in
+   * `./components/PhaseLadder.tsx`. A mark this deck has not drawn therefore
+   * throws at load, in every deck that composes the slide, rather than rendering
+   * an 88px hole in the middle of a card.
+   */
+  stateGlyph: string;
+  /** The mark on this phase's card in SCENE 2 — its GATE as a verb. Same pin,
+   *  same guard, same file. */
+  gateGlyph: string;
 }
 
 /**
@@ -610,8 +853,14 @@ const PHASES: readonly Phase[] = [
     // ask whether it "stopped at the certificate"; it was reworded on 2026-08-14
     // because the programme it asks about has not finished. The doubt is the same
     // one, which is why this gate did not move.)
-    gate: "The post-assessment moves, not just the attendance sheet.",
-    gateKw: ["The post-assessment moves"],
+    gate: "The post-assessment score moves, not just the attendance sheet.",
+    gateKw: ["The post-assessment score moves"],
+    // A FLAG ON A STEP THE ROOM CANNOT SEE UNDER IT. "Claimed" is the one state
+    // of the four that can be true while nothing is: the flag flies, the tread
+    // beneath it is dashed. And a NEEDLE for the gate, because the only way to
+    // find out is to measure the same people twice.
+    stateGlyph: "claimed",
+    gateGlyph: "measure",
   },
   {
     id: "p1",
@@ -625,6 +874,12 @@ const PHASES: readonly Phase[] = [
     // programme ends" is a structure, this is how you find out whether it worked.
     gate: "Daily use holds when the programme stops pushing it.",
     gateKw: ["when the programme stops pushing it"],
+    // A LOAD THAT PRESSES AND A STACK THAT DOES NOT MOVE — "solid" is the only
+    // state of the four that is proved by an absence. The gate takes the hand
+    // AWAY and the wheel keeps turning, which is the same claim with the
+    // programme removed from it.
+    stateGlyph: "solid",
+    gateGlyph: "unpushed",
   },
   {
     id: "p2",
@@ -639,6 +894,11 @@ const PHASES: readonly Phase[] = [
     // that reason.
     gate: "The decision contract is written down before the first agent runs.",
     gateKw: ["written down"],
+    // A DOT THAT TRAVELS AND TURNS AT A DRAWN WALL. The bound is the subject,
+    // so the wall is drawn and the agent is what moves inside it. The gate is
+    // the same wall being WRITTEN — a line, then a seal.
+    stateGlyph: "bounded",
+    gateGlyph: "contract",
   },
   {
     id: "p3",
@@ -654,6 +914,11 @@ const PHASES: readonly Phase[] = [
     // beside it.
     gate: "Every escalation path ends at a person who answers it.",
     gateKw: ["a person who answers it"],
+    // TWO BRANCHES CONVERGING ON ONE FILLED MARK. Governance is the shape, not
+    // the traffic. The gate lights the person at the end of it, because an
+    // escalation path with nobody on it is the failure this gate is for.
+    stateGlyph: "governed",
+    gateGlyph: "answered",
   },
 ];
 
@@ -739,26 +1004,45 @@ export interface PhasesGatesBrandBlock {
    *  cannot silently pair with the wrong column when a phase is inserted. */
   calendars: Record<PhaseId, PhaseCalendar>;
   /**
-   * The full-width band under the columns — THE SAME THREE-LINE SHAPE K.1's
-   * bottleneck uses, deliberately: the two slides are adjacent, and a room that
-   * has just learned to read `eyebrow / statement / citation` on K.1 should not
-   * have to learn a second band one slide later.
+   * The organisation's OWN words about its OWN roadmap — in quotes, attributed, and
+   * printed as ONE mono line under the four calendars it is the source for.
    *
-   *   · `eyebrow`    — what the room is looking at. Mono label.
-   *   · `statement`  — THE DECK'S OWN sentence, in the deck's words, unquoted.
-   *   · `provenance` — the organisation's OWN words, in quotes and attributed.
-   *                    Mono, sentence case, keyword-free.
+   * ═══ IT USED TO BE A THREE-LINE BORDERED BAND AND IT IS NOT ONE ANY MORE
+   * (2026-08-15). The band carried a mono eyebrow, the deck's own serif statement and
+   * this citation, inside a border, across the full width of a stage that already held
+   * a staircase and four columns. Two things retired it. K.1 retired its own band a
+   * week earlier for the first: on a top-management slide, ten objects at once means
+   * nothing gets more than a tenth of the room. The second is this slide's own: the
+   * band's STATEMENT was the deck speaking, and the deck now speaks in exactly one
+   * place on this stage — the bottom line — so a second, bordered, brighter sentence
+   * two inches above it was the slide arguing with itself.
+   *
+   * WHAT SURVIVED IS THE ONLY PART A ROOM CANNOT GET ANYWHERE ELSE, and it is printed
+   * where the dates it sources are printed rather than a band away from them. Mono,
+   * sentence case, keyword-free: it is somebody else's document, and a copper italic
+   * inside a quotation would be the deck emphasising a fragment of it.
+   *
+   * IT IS THE ONE STRING ON THIS SLIDE ALLOWED TO BE LONG. A citation trimmed to fit
+   * has stopped being one, so `./phases-gates-geometry.ts` budgets it two lines.
    */
-  band: {
-    eyebrow: string;
-    statement: string;
-    statementKw: readonly string[];
-    provenance: string;
-  };
-  /** The ask. On this axis because the two organisations are being asked
-   *  DIFFERENT things — one for a decision on a day that has already arrived, one
-   *  for what has to be true before a date still months out — and a shared line
-   *  would be false in one of the two rooms. */
+  provenance: string;
+  /**
+   * The thesis — the last pose, and the one thing on the stage that is an ASK.
+   *
+   * ON THE BRAND AXIS BECAUSE THE TWO ROOMS ARE BEING ASKED DIFFERENT THINGS. One
+   * organisation's own roadmap already names the destination and the deck's job is to
+   * say what earns it; the other's programme is still running and the deck's job is to
+   * say who decides what follows it. A shared line would be false in one of the two
+   * rooms.
+   *
+   * NO DATE, NO MONTH, NO DEADLINE — owner's rule, 2026-08-15, and it is a rule about
+   * what a thesis IS. The line the GEMS deck closed on used to open "January is already
+   * on the calendar", and the Berau deck's named a day and a group of people the
+   * programme has not yet named. A sentence that turns on a date expires; a sentence
+   * that turns on a decision does not, and this slide's whole argument is that the
+   * second kind is the one that matters. The dates are all above, in the columns, where
+   * they belong and where they are somebody else's.
+   */
   closer: string;
   closerKw: readonly string[];
 }
@@ -776,8 +1060,8 @@ export interface PhasesGatesBrandBlock {
  * WHY THAT IS THE WHOLE ARGUMENT FOR THIS ROOM. The strongest thing this deck can
  * say to GEMS is that it is not proposing a new direction — the destination is on
  * their own slide, in their own words, and their own programme already refuses to
- * hand out entry on a date. So the band quotes rather than argues, and the closer
- * asks only for what has to be true before January.
+ * hand out entry on a date. So the citation quotes rather than argues, and the
+ * thesis asks only for what earns the destination they have already named.
  */
 const GEMS_BLOCK: PhasesGatesBrandBlock = {
   calendars: {
@@ -790,54 +1074,62 @@ const GEMS_BLOCK: PhasesGatesBrandBlock = {
       rows: ["WORKSHOP · W1–W4 AUG", "COMPETITION · W1 SEP–W4 OCT", "POST-ASSESSMENT · W1 NOV"],
     },
     // AI Forge IS P1 (§6.8), not a fifth phase bolted on the end. The full
-    // programme title is quoted once, in the band, where it has room to be quoted
-    // whole rather than truncated into a label.
+    // programme title is quoted once, in the provenance line, where it has room to
+    // be quoted whole rather than truncated into a label.
     p1: { kind: "theirs", rows: ["AI FORGE · FROM W1 JAN 2027", "5 MONTHS · 3 PHASES"] },
     p2: { kind: "ours" },
     p3: { kind: "ours" },
   },
-  band: {
-    eyebrow: "THE ROADMAP ALREADY NAMES THE DESTINATION",
-    statement: "This is not a new direction. It is the operating model AI Forge is aimed at.",
-    statementKw: ["not a new direction", "the operating model AI Forge is aimed at"],
-    // Their words in quotes, ours around them, attributed to the programme
-    // document — the same construction as K.1's bottleneck source and for the
-    // same reason. TWO quoted fragments, because the two do different work: the
-    // TITLE is the destination and "the post-assessment result" is the gate, and
-    // a room that hears only one of them hears either an ambition with no test or
-    // a test with no purpose.
-    provenance:
-      "GEMS' own programme: “AI Forge — Deep AI Skills to Build an Agentic " +
-      "Organization”, starting W1 Jan 2027, with entry dependent on “the " +
-      "post-assessment result”.",
-  },
-  closer: "January is already on the calendar. The gates above are what has to be true before it.",
-  closerKw: ["what has to be true before it"],
+  // TWO quoted fragments, because the two do different work: the TITLE is the
+  // destination and "the post-assessment result" is the gate, and a room that hears
+  // only one of them hears either an ambition with no test or a test with no purpose.
+  provenance:
+    "GEMS' own programme: “AI Forge — Deep AI Skills to Build an Agentic " +
+    "Organization”, starting W1 Jan 2027, with entry dependent on “the " +
+    "post-assessment result”.",
+  // THE ROOM IS NOT BEING SOLD A DIRECTION, and this line's only job is to say so
+  // without saying it. "Already" concedes the destination to them; "earn" is the
+  // gate, and it is the deck's word rather than theirs.
+  closer: "Your roadmap already names the destination. The gates are what earn it.",
+  closerKw: ["what earn it"],
 };
 
 /**
- * Berau — P0 is COMPLETE, and the gate out of it is the day this deck is shown.
+ * Berau — the programme is STILL RUNNING, and what follows it has no owner yet.
  *
  * SOURCE: `docs/references/berau-presentation-plan.pdf` p3, the "Berau Coal AI
  * Journey" row — pre-assessment 27 Apr–17 May, workshop W3 May & W2 Jun,
  * competition Jun–Jul, post-assessment Jul–Aug, then "Post Program AI
- * Development · After Aug". §6.8 compresses the three delivered stages to
- * May–Jun / Jun–Jul / Jul–Aug and this block follows it.
+ * Development · After Aug".
  *
- * AUG 18 IS NOT A DATE ON THIS SLIDE, IT IS THE GATE. Every other date here
- * belongs to a phase that is over. The leader session lands exactly on the
- * boundary their own roadmap draws, which means the room is not being asked to
- * plan a programme — it is being asked to decide, that morning, whether the one
- * that finished has a next stage. That is the single hardest thing this deck
- * says, and it is why the band and the closer are on the brand axis at all.
+ * ═══ CORRECTED 2026-08-15 (owner), AND THE CORRECTION IS THE POINT OF THIS BLOCK.
+ * What stood here said P0 WAS COMPLETE — three delivered stages, a band headed "AUG 18
+ * IS THE GATE", and a thesis that the AI Ambassadors "already exist". None of the three
+ * is true today. The plan has slipped: the workshop is delivered, THE COMPETITION IS
+ * STILL RUNNING, the post-assessment has not been taken, and NO AMBASSADOR HAS BEEN
+ * NAMED. `leader-gap/content.ts` was corrected on the same evidence a day earlier and
+ * its ladder now prints "382 trained · the competition still runs · Ambassadors not yet
+ * named"; this block is that correction reaching the plan.
+ *
+ * IT MAKES THE SLIDE STRONGER RATHER THAN WEAKER, which is worth writing down so that
+ * nobody restores the old copy the day the programme finishes. A finished P0 lets a
+ * room say "good, that worked" and move on. A P0 still in flight puts the room inside
+ * the phase the whole slide is about, and the gate stops being a report on the past and
+ * becomes the thing they are being asked to set.
+ *
+ * NO DATE IS INVENTED. Every row below is either the organisation's own published
+ * window or a status word — DONE, RUNNING, TO COME — and the deck owns the status words
+ * because the deck is the thing that looked.
  */
 const BERAU_BLOCK: PhasesGatesBrandBlock = {
   calendars: {
-    // §6.8's three ranges, each under the stage that produced it, so "complete"
-    // is legible as three delivered things rather than as a claim.
+    // THE STATUS WORD IS THE SECOND HALF OF EVERY ROW, and it is the row's whole
+    // reason for existing after the correction: a window on its own reads as a
+    // promise kept. Three stages, three different states, one column — which is
+    // what "the programme is still running" looks like without a sentence.
     p0: {
       kind: "theirs",
-      rows: ["WORKSHOP · MAY–JUN", "COMPETITION · JUN–JUL", "POST-ASSESSMENT · JUL–AUG"],
+      rows: ["WORKSHOP · MAY–JUN · DONE", "COMPETITION · FROM JUN · RUNNING", "POST-ASSESSMENT · TO COME"],
     },
     // Their own label for the next stage, and their own window. Split across two
     // rows because it is a programme name and a date, not one string — and
@@ -846,26 +1138,27 @@ const BERAU_BLOCK: PhasesGatesBrandBlock = {
     p2: { kind: "ours" },
     p3: { kind: "ours" },
   },
-  band: {
-    eyebrow: "AUG 18 IS THE GATE",
-    statement: "P0 is complete. What is funded on Aug 18 decides whether there is a P1.",
-    statementKw: ["decides whether there is a P1"],
-    provenance:
-      "Berau Coal's own journey: workshop, competition and post-assessment are done, " +
-      "and the stage their roadmap puts after them is “Post Program AI Development — " +
-      "After Aug”.",
-  },
-  // THE ONE PLACE IN THIS SECTION WHERE AN IMPERATIVE IS CORRECT, and it is worth
-  // naming because K.1's header forbids exactly this shape one slide earlier: a
-  // pillar that starts with a verb aimed at the leader has become one of K.3's
-  // levers. This is not a lever. K.3's fourth is "fund the rhythm and review
-  // quarterly" — a standing practice. This is a fact with an expiry date on it:
-  // people were named AI Ambassadors, the programme that named them has ended,
-  // and the deck's own honesty requires saying what happens to them if nothing is
-  // decided. §6.8 words it this way, and softening it would be the deck declining
-  // to make the ask it flew there to make.
-  closer: "The AI Ambassadors already exist. Fund them, or lose them.",
-  closerKw: ["Fund them, or lose them"],
+  // THREE VERBS IN THREE TENSES, and they are the citation's whole content: what is
+  // delivered, what is running, what has not happened. Then their own name for the
+  // stage that comes next, quoted, because "After Aug" is the only thing their roadmap
+  // says about it and the room should hear how little that is.
+  provenance:
+    "Berau Coal's own journey: the workshop is delivered, the competition still runs, " +
+    "the post-assessment is not in. Their roadmap calls the next stage “Post Program " +
+    "AI Development — After Aug”.",
+  // ═══ THE OLD LINE WAS "The AI Ambassadors already exist. Fund them, or lose them."
+  // and it had to go on the facts alone: nobody has been named an Ambassador, so the
+  // deck would have been asking the room to fund a group that does not exist. The
+  // replacement keeps what was RIGHT about it — this is an ask, made to the one person
+  // who can answer it — and drops the two things that were wrong: a named day, and a
+  // named group.
+  //
+  // THE SHAPE IS THE HEADLINE'S. "Ends on a date" is what the programme does by
+  // itself; "your decision" is the gate. The slide has spent four poses earning the
+  // right to put those two in one sentence, and the second clause is the only
+  // imperative on the stage.
+  closer: "The programme ends on a date. Whether anything holds after it is your decision.",
+  closerKw: ["your decision"],
 };
 
 /**
@@ -883,7 +1176,7 @@ const BERAU_BLOCK: PhasesGatesBrandBlock = {
  * that reads as finished is how invented evidence gets shipped by a later edit
  * that "just fills this in". `general` names no organisation, so it has no
  * published roadmap at all — which is why all four calendars are `ours` and the
- * band cites nothing. Whoever registers `general-leader` will have to write the
+ * citation cites nothing. Whoever registers `general-leader` will have to write the
  * real thing rather than adapt a plausible draft, because there is no draft here
  * to adapt.
  */
@@ -894,18 +1187,13 @@ const GENERAL_BLOCK: PhasesGatesBrandBlock = {
     p2: { kind: "ours" },
     p3: { kind: "ours" },
   },
-  band: {
-    eyebrow: "NO PROGRAMME IS NAMED IN THIS DECK",
-    statement: "This deck names no organisation, so no phase here has a date.",
-    statementKw: ["no phase here has a date"],
-    provenance: "No organisation is named in this deck, so there is no programme to quote.",
-  },
+  provenance: "No organisation is named in this deck, so there is no programme to quote.",
   closer: "Nothing above is dated, because nothing here is anybody's programme yet.",
-  closerKw: ["nothing here is anybody's programme yet"],
+  closerKw: ["anybody's programme yet"],
 };
 
 /**
- * This slide's calendars, band and closer, brand by brand.
+ * This slide's calendars, citation and thesis, brand by brand.
  *
  * A `Record` keyed by `Brand` and not a `brand === "gems"` ternary, and not a
  * `VARIANT` read inside a component: a fourth brand must FAIL TO COMPILE here
@@ -940,8 +1228,7 @@ export const mandatePhasesGatesContent = {
   figLabel: "PHASES AND GATES",
 
   /**
-   * The whole slide in one sentence, and the refusal the columns then have to
-   * keep.
+   * The whole slide in one sentence, and the refusal the rest of it keeps.
    *
    * A leader reads a phased plan as a timeline and asks when each phase ends. The
    * headline answers before the question is asked, so the calendar rows below can
@@ -952,25 +1239,77 @@ export const mandatePhasesGatesContent = {
   headlineKw: ["a gate, not on a date"],
 
   /**
-   * The staircase's own heading — `gap-capability-ladder`'s FIG LABEL, imported,
-   * plus four words.
+   * FOUR EYEBROWS ON ONE SHELF, one per scene, and never two at once.
    *
-   * COMPOSED FROM `gapLadderContent.figLabel` RATHER THAN RE-TYPED. The room read
-   * those three words under a staircase an hour ago; printing the identical
-   * string over the identical shape is the cheapest and loudest way to say "this
-   * is the same object", and taking it from the other slide's own export means a
-   * rename there cannot leave this heading quoting a label nothing prints. Mono,
+   * THE SHELF IS y=156, WHICH IS THE 2026-08-15 FIX. They hung at 134 — twelve pixels
+   * under a 40px display headline — and the owner's note was that the room read a title
+   * and a second title as one wrapped line. K.1 cut the same 34px of air for the
+   * identical complaint a day earlier, `leader-invest`'s D.1…D.4 before that, and
+   * `./phases-gates-geometry.ts` now derives it the same way all three do.
+   *
+   * EACH ONE NAMES ITS SCENE'S QUESTION rather than its contents, so four consecutive
+   * frames read as one argument being walked rather than as four lists. Mono labels,
    * keyword-free.
    */
-  ladderHeading: `${gapLadderContent.figLabel} · READ AS A PLAN`,
-
-  /** The phase band's heading. Mono, keyword-free, and it names the column's
-   *  QUESTION rather than its contents — the same construction K.1's two headings
-   *  use, one slide earlier. */
-  phasesHeading: "THE PHASES · WHAT HAS TO BE TRUE TO LEAVE EACH ONE",
+  ladderEyebrow: "THE LADDER THIS PLAN CLIMBS",
+  phasesEyebrow: "THE FOUR PHASES, AND WHERE EACH ONE LANDS",
+  gatesEyebrow: "WHAT HAS TO BE TRUE TO LEAVE EACH PHASE",
+  planEyebrow: "THE WHOLE PLAN, IN ONE FRAME",
 
   rungs: LADDER_RUNGS,
   phases: PHASES,
+
+  /**
+   * The two notes on the ladder scene — the two rungs no phase reaches.
+   *
+   * THEY ARE THE SCENE'S ONLY COPY, and they exist because the geometry alone cannot
+   * be trusted to say it. Five rungs are drawn and three are lit; a room that reads
+   * the dim ends as "not drawn yet" on a step-reveal deck has read the opposite of
+   * what the figure means. Two dashed boxes — the deck's own mark for "not claimed",
+   * borrowed from `gap-capability-ladder`'s open marker — say which and why.
+   *
+   * NEITHER NAMES A PHASE, which is what keeps them notes rather than a fifth and
+   * sixth column. Mono labels, and a sans line each; keyword-free, because a copper
+   * italic in a marginal note would rank it against the staircase it annotates.
+   */
+  lowNote: {
+    label: "BELOW THE PLAN",
+    line: "No phase starts on L1. It is where a company sits before a programme.",
+  },
+  highNote: {
+    label: "ABOVE THE PLAN",
+    line: "No phase claims L5. That rung is declared only when it is earned.",
+  },
+
+  /** The tag over the lit stretch. Mono, keyword-free, and the shortest string on the
+   *  slide: it names what the bright run of staircase IS, and nothing else. */
+  planTag: "THE PLAN · THREE RUNGS",
+
+  /**
+   * ONE BOTTOM LINE PER SCENE, on one shelf, in one register — K.1's construction one
+   * click earlier and the reason it is worth repeating: the room learns after a single
+   * click that the sentence at the foot of the stage is the takeaway, and it is there
+   * every time.
+   *
+   * THE FIRST THREE ARE THE DECK'S AND ARE NOT ON THE BRAND AXIS. A ladder with three
+   * rungs on it, a calendar that cannot prove anything, and a gate that has to be
+   * passed are true of every organisation this deck is shown to; only the ASK differs,
+   * and the ask is {@link PhasesGatesBrandBlock.closer}. They sit one tier under it —
+   * `--neutral-200` against `--neutral-100`, same size, same shelf — because rank on
+   * this stage is a colour tier and never a size.
+   *
+   * EACH ANSWERS THE QUESTION ITS SCENE PROVOKES. A staircase provokes "so we are
+   * going to the top"; a published calendar provokes "so the plan is on track"; four
+   * gates provoke "so when does each one happen". Prose, so all three carry keywords.
+   */
+  ladderThesis: "The plan covers three rungs of five. The top one is earned, not scheduled.",
+  ladderThesisKw: ["earned, not scheduled"],
+
+  phasesThesis: "A calendar says when the work happens. It cannot say whether it worked.",
+  phasesThesisKw: ["whether it worked"],
+
+  gatesThesis: "A date arrives on its own. A gate does not.",
+  gatesThesisKw: ["A gate does not"],
 
   /**
    * What a column says when the organisation's roadmap does not reach that far —
@@ -983,140 +1322,136 @@ export const mandatePhasesGatesContent = {
    * copy-edit. Prose, so it carries a keyword — it is the deck speaking, not a
    * calendar entry.
    */
-  beyondRoadmap: "No roadmap reaches this far yet. The gate is what would decide it.",
+  beyondRoadmap: "No roadmap reaches this far yet. The gate is what will decide it.",
   beyondRoadmapKw: ["No roadmap reaches this far yet"],
 } as const;
 
 // ═════════════════════════════════════════════════════════════════════════════
-// K.3 · `mandate-levers` — the four levers, and the form beside them. No brand
-// axis; see the header for why this slide's reason is not K.1's. Everything
-// below belongs to it.
+// K.3 · `mandate-levers` — four levers, one hero each, and the one desk all four
+// arrive at. No brand axis; see the header of `./mandate-levers.tsx` for why this
+// slide's reason is not K.1's. Everything below belongs to it.
+//
+// ═══ RE-CUT 2026-08-15 (owner's call), AND TWO THINGS WERE CUT OUTRIGHT.
+//
+//   · THE SIGN-OFF FORM. The retired stage drew four authority columns — `YOU`,
+//     `THE COMMITTEE`, `GROUP HR`, `A BUDGET CYCLE` — and sixteen boxes, of which
+//     twelve stayed empty, so the figure's argument was a COUNT OF ABSENCES. Only
+//     one of the four columns is a person in the room. "The committee" is not a
+//     body a BU or Division Head can name, and a room that stops to ask whose
+//     boxes those are has stopped reading the levers. The claim is unchanged and
+//     it is now made by CONVERGENCE: four curves leave four levers and arrive at
+//     one box, and the box says `YOU`. A figure that draws only what it can name
+//     cannot be asked a question it has no answer for.
+//   · THE PROVENANCE BAND. It named an outside Group HR playbook and quoted its
+//     four labels. That is provenance for the deck's author and noise for the
+//     audience — the room has never read the document — so it is SPOKEN now and
+//     not printed. K.1 retired its own band earlier in the same week and for the
+//     same reason: on a top-management slide the largest object on the stage
+//     should be the argument, not its footnote.
+//
+//     K.2 DID NOT, AND THIS BLOCK CLAIMED IT HAD UNTIL 2026-08-15. K.2's band is
+//     live — {@link mandatePhasesGatesContent}'s `provenance`, drawn on the
+//     `phases` pose by `./components/PhaseLadder.tsx` — and the distinction the
+//     retired sentence lost is the whole point of the rule. THE TEST IS WHOSE
+//     DOCUMENT IS BEING QUOTED. K.2 quotes the ROOM's own programme and roadmap
+//     back to it, by name and with its own dates, and its closer then argues
+//     against what that roadmap does not say; take the citation away and the
+//     closer is an assertion. This slide quoted a THIRD PARTY's playbook at a room
+//     that has never opened it, which cites nothing the audience can check. A
+//     citation of the audience's own paper is evidence. A citation of somebody
+//     else's is a footnote. Only the second one had to go.
+//
+// WHAT THE REWORDING STILL IS, AND WHERE IT IS NOW GUARDED. The four levers are
+// not this deck's invention — they are an enablement playbook's, where they name
+// what a GROUP FUNCTION owns. Printed unchanged in front of a Division Head they
+// would be somebody else's job description, and the room's honest answer would be
+// "then take it to them". So every one is restated as an act inside ONE person's
+// authority, and the scoping is where the work is rather than in the verbs: "pay
+// for it from the budget you already hold" is a different ask from "pay for it",
+// and only one of the two can be signed in the room. {@link ownedByTheRoom} holds
+// that as a RULE and not as a tone — every lever names the exact phrase in its own
+// act that ties it to something the leader already holds, and the guard checks the
+// assertion against the sentence at module load.
 // ═════════════════════════════════════════════════════════════════════════════
 
-// ───────────────────── who a lever could have to wait on ─────────────────────
-
-/**
- * The four things a leader's act could be blocked by, as a closed set of ids.
- *
- * A `const` TUPLE AND NOT A BARE STRING, for the reason {@link PhaseId} is one:
- * {@link Lever.needs} is keyed by this union, so a lever that names an authority
- * this deck never drew a column for fails to compile rather than pointing at a
- * cell the form does not have.
- *
- * THREE OF THE FOUR ARE HERE ONLY TO BE EMPTY, and that is the point rather than
- * an oversight. §6.8's levers are the ones a BU or Division Head can pull ALONE —
- * "nothing that needs the committee, Group-HR or a budget cycle they do not own" —
- * and a slide that only ever drew the column it fills would be asserting that
- * property in prose while the figure said nothing. Naming the three refusals is
- * what turns the claim into something the room can check by counting.
- */
-export const AUTHORITY_IDS = ["you", "committee", "groupHr", "budget"] as const;
-export type AuthorityId = (typeof AUTHORITY_IDS)[number];
-
-/** One column of the form — somebody or something a lever could have to wait on. */
-export interface Authority {
-  id: AuthorityId;
-  /**
-   * Mono, uppercase. A LABEL, and keyword-free by the rule at the top of this
-   * file.
-   *
-   * HELD TO `AUTHORITY_LABEL_BUDGET_CHARS` (`./levers-geometry.ts`). This is the
-   * narrowest box on the stage — one of four columns in a 492px form — and a head
-   * that wraps does not overflow its column, it pushes the form's head rule down
-   * into the first lever row.
-   */
-  label: string;
-}
-
-/**
- * The one authority every lever on this slide needs, and the only one.
- *
- * EXPORTED AND NAMED, rather than written as the string `"you"` in the three
- * places that care, for the same structural reason `STATED_NOT_MEASURED` above is
- * a constant: it is the slide's whole claim, it is read by the guard below, by
- * the figure that fills the cells and by the test that holds the property, and a
- * claim spelled out three times is a claim two of the three can stop making.
- */
-export const SOLE_AUTHORITY: AuthorityId = "you";
-
-/**
- * The four columns, in the order the room reads them left to right.
- *
- * THE ORDER IS THE ANSWER FIRST. `YOU` is the leftmost column because the room
- * reads left to right and the slide's answer is the first thing it should reach;
- * the three refusals follow, and they follow in ascending order of how long each
- * one would take — a committee meets, a group function has a queue, a budget cycle
- * takes a year. Reversed, the figure would build suspense the deck has no reason
- * to build: this is the section's ask, not its reveal.
- *
- * NONE OF THE THREE REFUSALS NAMES AN ORGANISATION, which is what keeps the form
- * generic and what stops it asserting anything about either room's internal
- * structure. `GROUP HR` is a function every group has and is deliberately not
- * `NANOVEST GROUP HR` — the column asks whether the leader in this room needs
- * THEIR group's HR to sign, and the answer is no. The band below cites a specific
- * Group HR playbook by name, and it is a DIFFERENT organisation's; see
- * {@link PLAYBOOK} on why the two must not be collapsed.
- */
-const AUTHORITIES: readonly Authority[] = [
-  { id: "you", label: "YOU" },
-  { id: "committee", label: "THE COMMITTEE" },
-  { id: "groupHr", label: "GROUP HR" },
-  { id: "budget", label: "A BUDGET CYCLE" },
-];
-
-// ───────────────────── the levers ─────────────────────
-
-/** One thing the leader in the room does, and what it waits on. */
+/** One thing the leader in the room does, and the one hero pose it gets. */
 export interface Lever {
   id: string;
   /**
-   * Mono, uppercase. A LABEL, keyword-free.
+   * Mono, uppercase. A LABEL, and keyword-free by the rule at the top of this
+   * file. It is printed TWICE — as its hero pose's eyebrow and as its recap
+   * card's name — and it is one string for exactly that reason: the room has to
+   * recognise the card as the scene it already saw.
    *
    * A VERB PHRASE, NOT A NOUN, AND THAT IS THE REWORDING. The playbook these four
-   * come from labels them `Convene · Champion · Unblock access · Sustain the
-   * rhythm` — nouns, because they name what a group function OWNS. Printed here
-   * those labels would be the deck asking the room to authorize somebody else's
-   * job description. Every label below is an imperative addressed to the person
-   * sitting in front of it, which is the whole difference between the source and
-   * this slide and the reason {@link PLAYBOOK} quotes the source rather than
-   * repeating it.
+   * come from labels them as nouns, because a noun names what a group function
+   * OWNS. Every label below is an imperative addressed to the person sitting in
+   * front of it, which is the whole difference between the source and this slide.
    */
   label: string;
   /**
-   * What that act actually is, in ONE LINE. Prose, so it carries keywords.
+   * THE ACT — what the leader actually does, at hero size. Prose, so it carries
+   * keywords.
    *
-   * AN INSTRUCTION AND NEVER A DEFINITION — the exact inverse of
-   * {@link Pillar.line}, and the second half of the lever/pillar boundary the
-   * header states. A line that described a structure would be K.1's pillar
-   * restated two slides later, and the room would have paid a click for it. Every
-   * one is an IMPERATIVE with the "you" left implicit, and each one names the
-   * thing the leader signs rather than the thing that then exists.
-   *
-   * HELD TO `LEVER_LINE_BUDGET_CHARS` (`./levers-geometry.ts`). The board budgets
-   * exactly one line per row, so a wrapped line does not overflow a box — it
-   * overlaps the row beneath it, which reads on a projector as a font that failed
-   * to load.
+   * AN INSTRUCTION AND NEVER A DEFINITION, and every one names the thing the
+   * leader signs rather than the thing that then exists. Held to
+   * `HERO_ACT_BUDGET_CHARS` (`./levers-geometry.ts`): the hero budgets exactly two
+   * lines, and a third does not overflow a box — it prints over the note under it.
    */
-  line: string;
-  lineKw: readonly string[];
+  act: string;
+  actKw: readonly string[];
   /**
-   * Whose sign-off this lever waits on — the row's cells in the form.
+   * THE NOTE — why the act is the act, in one or two lines under it. Prose.
    *
-   * AN ARRAY, THOUGH IT ONLY EVER HOLDS ONE ENTRY, and the generality is what the
-   * figure runs on rather than slack left for a future that will not come. The
-   * form draws SIXTEEN cells and fills them from this field alone: filled where
-   * the row needs that column, a hairline frame where it does not. The rejected
-   * shape was a per-lever boolean beside a hand-written list of which cells stay
-   * empty — two lists that agree today and are one edit from a form with a filled
-   * cell nobody authored, which reads as a rendering fault rather than as a
-   * mistake.
-   *
-   * AND IT IS GUARDED AT MODULE LOAD. See {@link authorizableAlone}: a lever that
-   * needs anything but {@link SOLE_AUTHORITY} takes this module down in every deck
-   * that composes it, rather than drawing a second filled column under a headline
-   * that denies one exists.
+   * IT ARGUES, IT DOES NOT ELABORATE. Each one names what happens WITHOUT the act,
+   * because a room that already agrees needs no instruction and a room that does
+   * not needs a reason. Held to `HERO_NOTE_BUDGET_CHARS`.
    */
-  needs: readonly AuthorityId[];
+  note: string;
+  noteKw: readonly string[];
+  /**
+   * THE SAME ACT IN ONE LINE, for the recap card. Prose.
+   *
+   * A SEPARATE STRING AND NOT A TRUNCATION, because the recap is not a smaller
+   * copy of the hero — it is the four acts in the PAST tense of a decision already
+   * taken, which is what makes the convergence under them read as a signature and
+   * not as four more asks. Held to `RECAP_LINE_BUDGET_CHARS`, the narrowest box on
+   * the stage.
+   */
+  short: string;
+  shortKw: readonly string[];
+  /**
+   * The bottom line of this lever's own hero pose — one tier under the closing
+   * ask, on the same shelf, at the same size. Prose.
+   *
+   * IT IS A CONSEQUENCE AND NOT A SUMMARY. The act is above it; this says what the
+   * organisation gets, or loses, and it is the sentence the room should be able to
+   * repeat an hour later. Held to `THESIS_BUDGET_CHARS`.
+   */
+  thesis: string;
+  thesisKw: readonly string[];
+  /**
+   * Which mark this lever's verb is drawn as.
+   *
+   * TYPED AS `string` AND NOT AS THE GLYPH UNION, because a content module may not
+   * import a component. `components/LeverGlyphs.tsx` owns the set of ids a mark
+   * exists for and `components/LeverBoard.tsx` checks this field against it at
+   * module load — without that check, a lever naming an undrawn mark would compile
+   * and render a 260px hole no bounding test reports.
+   */
+  glyph: string;
+  /**
+   * THE EXACT PHRASE IN {@link Lever.act} THAT PUTS THE ACT INSIDE THIS PERSON'S
+   * AUTHORITY — and the whole of {@link ownedByTheRoom}.
+   *
+   * A SUBSTRING AND NOT A FLAG, which is the difference between a guard and a
+   * comment. A boolean would be four `true`s the guard could never fail: a check
+   * of the module against itself. A verbatim phrase makes each lever ASSERT which
+   * words are doing the scoping, and the guard checks the assertion against the
+   * sentence — so an author who rewords "from the budget you already hold" down to
+   * "fund it" finds out at load that this slide can no longer print the lever.
+   */
+  scope: string;
 }
 
 /**
@@ -1124,184 +1459,196 @@ export interface Lever {
  *
  * §6.8's levers are the ones a BU or Division Head can pull ALONE. That is not a
  * tone this copy happens to take — it is the criterion that decides whether a
- * sentence belongs on this stage at all, and the one thing about the slide a
- * later author is most likely to relax by writing a fifth lever that is merely
- * good advice. So it fails HERE, at load, in every deck that composes the slide,
- * naming the lever and the authority it smuggled in.
+ * sentence belongs on this stage at all, and the one thing about the slide a later
+ * author is most likely to relax by writing a fifth lever that is merely good
+ * advice. So it fails HERE, at load, in every deck that composes the slide, naming
+ * the lever and the phrase it lost.
  *
- * WHY NOT LEAVE IT TO THE TEST. A test reports the failure at CI, one commit
- * later, by which time the offending lever reads as finished copy and the
- * reviewer's question becomes "should we relax the rule?". A throw at load makes
- * the answer visible in the same edit: the slide does not render, and the message
- * says which criterion it failed. The test still holds the same property — the two
- * are not redundant, they fail at different moments and to different people.
+ * IT REPLACES A GUARD OVER A FIELD THAT NO LONGER EXISTS. The retired form gave
+ * every lever a `needs: readonly AuthorityId[]`, and `authorizableAlone` threw on
+ * any lever that named an authority other than `"you"`. That field was the FORM's
+ * data — it decided which of sixteen boxes were filled — and it went out with the
+ * form. What survived is the property it protected, so the property is now held
+ * over the copy directly: the scoping lives in the sentence the room reads, which
+ * is where it was always doing the work.
  *
- * @throws naming the lever, the authorities it named, and the criterion.
+ * WHY NOT LEAVE IT TO THE TEST. A test reports the failure at CI, one commit later,
+ * by which time the offending lever reads as finished copy and the reviewer's
+ * question becomes "should we relax the rule?". A throw at load makes the answer
+ * visible in the same edit: the slide does not render, and the message says which
+ * criterion it failed. The test still holds the same property — the two are not
+ * redundant, they fail at different moments and to different people.
+ *
+ * @throws naming the lever, the phrase it claims, and the criterion.
  */
-function authorizableAlone(levers: readonly Lever[]): readonly Lever[] {
+function ownedByTheRoom(levers: readonly Lever[]): readonly Lever[] {
   for (const lever of levers) {
-    if (lever.needs.length === 1 && lever.needs[0] === SOLE_AUTHORITY) continue;
-    throw new Error(
-      `authorizableAlone: lever "${lever.id}" waits on ` +
-        `${lever.needs.length === 0 ? "nobody at all" : lever.needs.join(", ")}, and every ` +
-        `lever on this slide must wait on "${SOLE_AUTHORITY}" and on nothing else ` +
-        `(§6.8). A lever a BU or Division Head cannot authorize alone is not a lever ` +
-        `this slide can print — it is an ask for somebody who is not in the room.`,
-    );
+    if (lever.scope.trim().length === 0) {
+      throw new Error(
+        `ownedByTheRoom: lever "${lever.id}" claims no scoping phrase at all. Every lever ` +
+          `on this slide has to name the words in its own act that put it inside one ` +
+          `person's authority (§6.8) — an act with nothing holding it there is an ask for ` +
+          `somebody who is not in the room.`,
+      );
+    }
+    if (!lever.act.includes(lever.scope)) {
+      throw new Error(
+        `ownedByTheRoom: lever "${lever.id}" claims the scoping phrase “${lever.scope}”, ` +
+          `which is not in its act — “${lever.act}”. Either the act was reworded and lost ` +
+          `what made it authorizable alone, or the claim is stale. Both are the same bug: ` +
+          `this slide cannot print a lever a Division Head has to take somewhere else.`,
+      );
+    }
   }
   return levers;
 }
 
 /**
- * The four levers, in the order the room reads them down the board.
+ * The four levers, in the order the room reads them — one hero pose each, then all
+ * four together.
  *
  * THE ORDER IS THE ORDER THEY GET PULLED IN, not a ranking: the time goes in the
  * calendar before anybody is named to fill it, the champion is named before there
  * is anybody to clear a seat for, access is cleared before there is anything to
- * fund, and the funding is the one that has to survive the quarter. Nothing on
- * the stage ranks them — one colour tier for all four labels, one for all four
- * lines, one filled cell each — because a lever nobody pulls takes the other
- * three down with it, exactly as K.1's pillars do.
+ * fund, and the funding is the one that has to survive the quarter. Nothing on the
+ * stage ranks them — one colour tier for all four names, one for all four lines,
+ * one mark size per scene — because a lever nobody pulls takes the other three down
+ * with it, exactly as K.1's pillars do.
  *
- * FOUR, AND THEY ARE THE PLAYBOOK'S FOUR, REWORDED. §6.8 names them and
- * {@link PLAYBOOK} cites where they come from. A fifth would have to be a fifth
- * lever in the source too, or the band under them stops being true — which is the
- * cheapest guard this list has against growing by whatever felt missing on the
- * day.
+ * NO LEVER CARRIES A NUMBER OR AN ORDINAL, AND NONE MAY (§6.6). The deck carries
+ * exactly two ordered vocabularies — `gap-capability-ladder`'s and K.2's — and
+ * "Learn → Experiment → Build → Integrate → Own" was cut precisely so the room
+ * would hold one set and not three. These four are not levels, not stages, and
+ * nothing about them is ordered by maturity. An eyebrow reading "LEVER ONE" would
+ * turn a list of four acts into a ladder by accident, which is why every hero's
+ * eyebrow is the lever's own name and nothing else.
  *
- * EVERY ONE OF THEM IS SCOPED TO WHAT THE ROOM ALREADY OWNS, and that scoping is
- * where the rewording actually happens — not in the verbs. "Fund it from the line
- * you already hold" is a different ask from "fund it", and only one of the two
- * survives {@link authorizableAlone}. Same for "under your own name" on the third:
- * the leader sponsors the request, which is theirs to do, rather than approving a
- * purchase, which may not be.
- *
- * `needs` IS WRITTEN AS A LITERAL ON EVERY ROW AND NOT AS `[SOLE_AUTHORITY]`, and
- * the difference is the whole value of the guard. Spelled with the constant, all
- * four rows would be boilerplate the guard could never fail — a check of the
- * module against itself. Spelled as a literal, each lever ASSERTS whose signature
- * it waits on and {@link authorizableAlone} CHECKS that assertion against the
- * criterion, which is also the shape a fifth lever will be written in: an author
- * adding one types what it needs, and finds out at load whether this slide can
- * print it.
+ * EVERY ONE OF THEM IS SCOPED TO WHAT THE ROOM ALREADY OWNS, and {@link Lever.scope}
+ * names the words that do it. That scoping is where the rewording actually happens
+ * — not in the verbs.
  */
-const LEVERS: readonly Lever[] = authorizableAlone([
+const LEVERS: readonly Lever[] = ownedByTheRoom([
   {
-    id: "calendar",
-    label: "BLOCK THE TIME",
-    // The playbook's `Convene` — "create attendance, visibility, and mandate" —
-    // as the two acts that actually create all three. "As work" is what makes
-    // attendance real; being in the room for the first session is the visibility
-    // and the mandate, and it is the half a leader delegates first.
-    line: "Put the sessions in the calendar as work, and be in the room for the first one.",
-    lineKw: ["as work", "be in the room"],
-    needs: ["you"],
+    id: "time",
+    label: "MAKE IT OFFICIAL",
+    glyph: "week",
+    // The playbook's `Convene` — "create attendance, visibility, and mandate" — as
+    // the two acts that actually create all three. The COMPANY calendar is what
+    // makes attendance real; opening the first day is the visibility and the
+    // mandate, and it is the half a leader delegates first.
+    //
+    // THE COMPANY CALENDAR AND NOT THE LEADER'S OWN, AS OF 2026-08-15 (owner's
+    // call). It read "Put the sessions in the calendar as work, and be in the room
+    // for the first one" and the owner's objection is exactly right: a Division
+    // Head does not book their own training, and a lever that asks them to has
+    // shrunk an act of authority into an act of admin. What only they can do is
+    // declare the workshop part of the job and stand up at the start of it — their
+    // team runs the rest. "BLOCK THE TIME" was the label that came with the old
+    // reading, and it went with it.
+    act: "Put the workshop in the company calendar as part of the job, and open the first day yourself.",
+    actKw: ["as part of the job", "open the first day yourself"],
+    note: "Your people watch what you do. If you skip the first day, they will treat it as extra work.",
+    noteKw: ["watch what you do"],
+    short: "The workshop is in the company calendar, and you open it.",
+    shortKw: ["and you open it"],
+    thesis: "People give time to what their leader gives time to.",
+    thesisKw: ["what their leader gives time to"],
+    scope: "in the company calendar as part of the job",
   },
   {
-    id: "champion",
-    label: "NAME A CHAMPION",
+    id: "person",
+    label: "NAME THE CHAMPIONS",
+    glyph: "champion",
     // The playbook's `Champion` — "protect and recognize the champion role through
-    // performance criteria". THE HOURS ARE THE PROTECTION AND THE OBJECTIVES ARE
-    // THE RECOGNITION, and both are inside a Division Head's own authority: an
-    // objective line is theirs to write. K.1's SUPPORT pillar says the role has to
-    // exist; this says who signs for it.
-    line: "Name one person, protect their hours, and write it into their objectives.",
-    lineKw: ["protect their hours", "into their objectives"],
-    needs: ["you"],
+    // performance criteria". THE HOURS ARE THE PROTECTION AND THE TARGETS ARE THE
+    // RECOGNITION, and both are inside a Division Head's own authority: a target
+    // line is theirs to write. K.1's SUPPORT pillar says the role has to exist;
+    // this says who signs for it.
+    //
+    // PLURAL, AS OF 2026-08-15 (owner's call), AND K.1'S PILLAR MOVED WITH IT. It
+    // read "Name one person" — a count neither deck has a reason to make. A company
+    // this size runs several champions, one per department or better, and a lever
+    // that asks for ONE is a lever the room has to argue with before it can agree.
+    // The mark moved too: `components/LeverGlyphs.tsx` raises TWO figures now, not
+    // one, because a mark that shows a single person contradicts the sentence
+    // beside it.
+    act: "Name your champions, give them hours every week, and put the job into their targets.",
+    actKw: ["hours every week", "into their targets"],
+    note: "A champion with no hours is a volunteer. Volunteers stop when the day gets busy.",
+    noteKw: ["is a volunteer"],
+    short: "Champions named, hours given, the job in their targets.",
+    shortKw: ["hours given"],
+    thesis: "Work with no name on it belongs to nobody.",
+    thesisKw: ["belongs to nobody"],
+    scope: "put the job into their targets",
   },
   {
     id: "access",
-    label: "CLEAR ACCESS AND PROCUREMENT",
-    // The playbook's `Unblock access` — "accelerate IT provisioning". THE ACT IS
-    // THE SPONSORSHIP, NOT THE APPROVAL, which is the distinction that keeps this
-    // lever inside one person's authority: raising the request under your own name
-    // and dating it is what a Division Head does, and it is what turns a ticket
-    // nobody owns into one somebody answers. Indexes §6.7's D.5 without naming it
-    // — the room heard "seats" there.
-    line: "Raise the seat and tooling request under your own name, and put a date on it.",
-    lineKw: ["under your own name", "put a date on it"],
-    needs: ["you"],
+    label: "OPEN THE ACCESS",
+    glyph: "gate",
+    // The playbook's `Unblock access` — "accelerate IT provisioning". THE ACT IS AN
+    // INSTRUCTION TO TWO FUNCTIONS AND NOT A TICKET, which is the 2026-08-15
+    // re-reading (owner's call). It read "Raise the request for seats and tools in
+    // your own name, and put a date on it", and a request — however well signed —
+    // is still somebody queueing. The person in this chair does not queue: they
+    // tell IT and Finance, and the spend cap and the end date are what make that
+    // instruction one those two functions can act on without a longer argument.
+    //
+    // THE THREE BOUNDS ARE §6.7's D.4, WORD FOR WORD WHERE THE DIGIT RULE ALLOWS.
+    // That figure hands the room "a handful of seats · one named use case each · a
+    // kill criterion · a spend cap" as the proof pilot that skips the deadlock, so
+    // the cap and the end date arrive here as vocabulary the room already has. The
+    // pilot's own length cannot be printed — this slide rejects every digit — and
+    // "an end date" is the digit-free form of it.
+    //
+    // NO SHARED ACCOUNTS IN THE COPY. D.4 tells that story ("we did it on shared
+    // accounts, and we were banned repeatedly") and telling it twice would spend
+    // the room's attention on a failure they have already agreed about. The note
+    // concedes the pilot instead — a handful IS enough — and spends its argument on
+    // the one thing a leader might still get wrong: thinking a free account counts.
+    act: "Tell IT and Finance to give every department accounts, with a spend cap and an end date.",
+    actKw: ["Tell IT and Finance", "a spend cap and an end date"],
+    note: "A handful of accounts is enough to start. A free account is not enough: it stops at chat.",
+    noteKw: ["it stops at chat"],
+    short: "Every department gets accounts, with a cap and an end date.",
+    shortKw: ["with a cap and an end date"],
+    // NOT "the tool is not for them" ANY MORE. That line argued the SIGNAL a blocked
+    // person reads, which is true and is the smaller loss. The larger one is B.5's:
+    // a browser chat is where L1 lives, and no amount of it ever becomes L3. Says so
+    // without importing B.5's vocabulary, which this slide may not print (§6.6) —
+    // "agentic" is the one word of it the room can carry alone.
+    thesis:
+      "Chat in a browser is less than half of the tool capability. Without company accounts, agentic work never starts.",
+    thesisKw: ["less than half of the tool capability", "never starts"],
+    scope: "Tell IT and Finance",
   },
   {
-    id: "rhythm",
-    label: "FUND THE RHYTHM",
+    id: "money",
+    label: "KEEP IT FUNDED",
+    glyph: "funding",
     // The playbook's `Sustain the rhythm` — "preserve calendars, funding, and
-    // visibility" — plus the source's own review cadence, "adoption dashboards and
-    // quarterly reviews". "THE LINE YOU ALREADY HOLD" IS THE WHOLE REWORDING: it
-    // is what keeps the fourth lever off a budget cycle nobody in the room owns,
-    // and without it this is the one of the four that would fail
-    // {@link authorizableAlone}. "Review it yourself" rather than "review it",
-    // because a review somebody else runs is a report, and a report is what the
-    // programme already produces.
-    line: "Fund it from the line you already hold, and review it yourself every quarter.",
-    lineKw: ["the line you already hold", "every quarter"],
-    needs: ["you"],
+    // visibility" — plus the source's own review cadence. "THE BUDGET YOU ALREADY
+    // HOLD" IS THE WHOLE REWORDING: it is what keeps the fourth lever off a budget
+    // nobody in the room owns, and without it this is the one of the four that
+    // would fail {@link ownedByTheRoom}. "Check the results yourself" rather than
+    // "check the results", because a check somebody else runs arrives as a report,
+    // and a report is what the programme already produces.
+    //
+    // "FUND THE RHYTHM" WAS THE LABEL UNTIL 2026-08-15, and a rhythm is not a thing
+    // a room can picture. "KEEP IT FUNDED" is the same instruction with nothing to
+    // decode, and the mini-thesis carries the argument the old label was reaching
+    // for: a pilot has an end date and a budget line does not.
+    act: "Pay for it from the budget you already hold, and check the results yourself each quarter.",
+    actKw: ["the budget you already hold", "check the results yourself"],
+    note: "A report tells you what happened. Your own check tells you what to do next.",
+    noteKw: ["what to do next"],
+    short: "Your own budget line, checked by you each quarter.",
+    shortKw: ["checked by you"],
+    thesis: "A pilot has an end date. A budget line does not.",
+    thesisKw: ["A budget line does not"],
+    scope: "from the budget you already hold",
   },
 ]);
-
-// ───────────────────── where the four came from ─────────────────────
-
-/**
- * The Group HR playbook these four levers are reworded FROM — the section's third
- * printing of the same three-line band, and the one that makes "reworded" honest
- * rather than asserted.
- *
- * WHY THIS SLIDE HAS A BAND AT ALL, argued once here because a third band in
- * three consecutive slides is the decision a reader will question first. The four
- * levers are not the deck's invention. They are `Convene · Champion · Unblock
- * access · Sustain the rhythm`, and printing them without their source would be
- * this deck taking credit for somebody else's frame on the one slide where it asks
- * the room for something. The band is also what lets the four rows above stay pure
- * imperatives: the original wording lives here, once, instead of trailing every
- * row as a parenthesis in a second register.
- *
- * THREE LINES, SAME SHAPE AND SAME REASONS AS K.1's BOTTLENECK AND K.2's BAND —
- * see {@link BOTTLENECK} for the full argument, which this band inherits rather
- * than restates:
- *
- *   · `eyebrow`    — what the room is looking at. Mono label.
- *   · `statement`  — THE DECK'S OWN sentence, in the deck's words, unquoted.
- *   · `provenance` — the playbook's OWN labels, in quotes and attributed. Mono,
- *                    sentence case, keyword-free.
- *
- * THE TWO "GROUP HR"s ON THIS STAGE ARE DIFFERENT ORGANISATIONS, AND NOTHING MAY
- * COLLAPSE THEM. The form's third column is the ROOM's group HR — the function a
- * BU or Division Head would otherwise have to ask, and the column that stays
- * empty. This citation is the DECK's own: Nanovest's, named, because it is the
- * document the four levers were lifted from. That is why the column head is bare
- * and this line carries the organisation's name; swapping either would make the
- * slide say that the room's own HR wrote its levers, or that a deck's internal
- * playbook has authority over somebody else's division.
- *
- * SOURCE: `docs/researches/2026-07-31-hr-group-agentic-org-analysis.md`, the
- * Group-Wide Enablement Playbook — "Four HR Group levers: Convene · Champion ·
- * Unblock access · Sustain the rhythm", with `Convene` as "create attendance,
- * visibility, and mandate", `Champion` as "protect and recognize the champion role
- * through performance criteria", `Unblock access` as "accelerate IT provisioning",
- * `Sustain the rhythm` as "preserve calendars, funding, and visibility", and the
- * deck's core message that "Group HR supplies institutional leverage".
- * Cross-checked against `docs/researches/internal-hr-group.md`, which records the
- * same playbook and the review cadence the fourth lever borrows.
- */
-const PLAYBOOK = {
-  /** Mono label. Names what the band is — a provenance, not a further ask — so a
-   *  room three clicks into being asked for things does not read the citation as
-   *  a fifth lever. */
-  eyebrow: "WHERE THE FOUR CAME FROM",
-
-  /** The deck's own compression, in the deck's words. Prose, so it carries a
-   *  keyword; NO quotation marks, because it is not a quotation. */
-  statement: "The same four levers, written for the group and reworded for the room.",
-  statementKw: ["reworded for the room"],
-
-  /** The citation, on the slide rather than in a footnote. Keyword-free. The four
-   *  source labels are quoted verbatim and in the source's own order, which is
-   *  also the order of the four rows above — so a room that wants to check the
-   *  rewording can read straight across. */
-  provenance:
-    "Nanovest's own Group HR playbook lists four levers — “Convene · Champion · " +
-    "Unblock access · Sustain the rhythm” — as the institutional leverage Group HR supplies.",
-} as const;
 
 // ───────────────────── the slide ─────────────────────
 
@@ -1309,40 +1656,79 @@ export const mandateLeversContent = {
   figLabel: "THE FOUR LEVERS",
 
   /**
-   * The whole slide in one sentence, and the claim the form below has to keep.
+   * The whole slide in one sentence, and the claim the recap has to keep.
    *
    * A leader hears a list of asks and starts sorting it into what they can do and
    * what they will have to take somewhere else. The headline answers that before
-   * the sorting starts, so the four rows can be read as four acts rather than as
-   * four requisitions — and the form is what stops the claim being a claim.
+   * the sorting starts, so the four acts can be read as four acts rather than as
+   * four requisitions.
+   *
+   * IT NO LONGER MENTIONS A SIGNATURE ANYBODY ELSE MIGHT WITHHOLD. The retired
+   * version — "Not one of them needs a signature but yours" — was cut with the
+   * form it belonged to: it answers a question by denying three answers, and a
+   * room that has not been told who the three are hears a defence rather than a
+   * claim. "You can start all four yourself" says the same thing forwards.
+   *
+   * "YOU ALREADY HOLD ALL FOUR" WAS THE 2026-08-15 MORNING VERSION and it lasted
+   * one owner pass: you HOLD a lever is a figure of speech, and this deck now owes
+   * the room a headline it can read at first sight. "Start" is also the truer verb
+   * — none of the four is a thing the leader holds, all four are things they begin.
    */
-  headline: "Four levers. Not one of them needs a signature but yours.",
-  headlineKw: ["a signature but yours"],
-
-  /** Mono headings, keyword-free. Each names its half's QUESTION rather than its
-   *  contents — the construction K.1's two headings use, two slides earlier, and
-   *  the reason this stage can also hang two of them on one shelf. */
-  leversHeading: "THE LEVERS · WHAT YOU DO ON MONDAY",
-  authorityHeading: "WHAT EACH ONE NEEDS BEFORE IT CAN HAPPEN",
+  headline: "Four levers. You can start all four yourself.",
+  headlineKw: ["start all four yourself"],
 
   levers: LEVERS,
-  authorities: AUTHORITIES,
-  playbook: PLAYBOOK,
+
+  /** The recap's eyebrow. It names what the pose ADDS to the four scenes behind it
+   *  — not the levers again, but where all four of them end. */
+  recapEyebrow: "ALL FOUR, AND WHO SIGNS THEM",
 
   /**
-   * The ask, and the last thing the mandate says before the deck moves on.
+   * The one word inside the sign box, and the only string on this slide set larger
+   * than a label.
+   *
+   * SECOND PERSON, DELIBERATELY, ON THE ONE SLIDE IN THE LEADER DECK THAT ASKS FOR
+   * SOMETHING. Everywhere else this section speaks about a programme; here the
+   * figure points at the person in the chair, because the whole re-cut exists to
+   * stop the slide pointing at bodies the room cannot name.
+   */
+  signLabel: "YOU",
+
+  /** The mono line under the sign box — what the convergence says in shape, said
+   *  once in words for the room that reads rather than looks. Keyword-free: it is a
+   *  label on the figure, not a sentence the deck is arguing. */
+  signNote: "NOBODY ELSE HAS TO AGREE",
+
+  /**
+   * The recap's own bottom line — one tier under the closing ask, same shelf, same
+   * size.
+   *
+   * IT NAMES THE SIGNATURE AND NOT THE ABSENTEES, which is the whole difference
+   * between this pose and the form it replaced. Four actions, one signature, and
+   * the room can check that by counting the curves.
+   *
+   * "END AT THE SAME DESK" WAS THE 2026-08-15 MORNING VERSION. A desk is a place
+   * and the claim is not about a place — the box under the curves says `YOU` and
+   * the word for what `YOU` supplies is a signature. It also stops the recap and
+   * the sign note saying the same thing twice from two directions.
+   */
+  recapThesis: "Four actions, and all four need the same signature.",
+  recapThesisKw: ["the same signature"],
+
+  /**
+   * The ask, and the last thing THE MANDATE says before the deck moves on.
    *
    * IT DOES NOT RESTATE THE HEADLINE, which is the temptation on a slide whose
-   * headline is already its claim. The headline says the levers need nobody else;
-   * this says what follows from that and nothing more — that with nobody to wait
-   * for, the absence of a decision is itself the decision, and it is one the room
-   * takes rather than one that happens to it. That is the whole difference between
-   * a slide that describes an enablement model and a slide that asks for one.
+   * headline is already its claim. The headline says the four are theirs; this says
+   * what follows — that with nobody to wait for, the absence of a decision is
+   * itself the decision, and it is one the room takes rather than one that happens
+   * to it. That is the whole difference between a slide that describes an
+   * enablement model and a slide that asks for one.
    *
-   * IT CLOSES THE SECTION. K.1 handed the room its own bottleneck to name, K.2
+   * IT CLOSES THE SECTION. K.1 asked the room which block it clears first, K.2
    * handed it a gate, and there is no fourth slide to hand this to: the next thing
    * the deck does is stop asking.
    */
-  closer: "Not deciding is also a decision — and with nobody else to wait for, it is the one you take.",
+  closer: "Not deciding is also a decision. And there is nobody else to wait for.",
   closerKw: ["Not deciding is also a decision"],
 } as const;

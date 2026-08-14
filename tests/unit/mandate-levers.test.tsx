@@ -1,134 +1,121 @@
-// THE FOUR LEVERS · slide tests. All five poses, and the rules gh#69's ACs state — held
-// over EVERY authored string and over the RENDERED stage rather than spot-checked.
+// K.3 · THE FOUR LEVERS — the four acts, the four heroes, and the one desk they arrive at.
 //
-// WHAT THIS FILE CAN AND CANNOT PROVE — the two siblings' preamble, inherited. jsdom has no
-// layout and no media queries, so nothing here measures a pixel a browser would place and
-// `prefers-reduced-motion: reduce` cannot really be toggled. Every geometric claim below is
-// therefore asserted as THE ONE NUMBER both sides read
-// (`../../src/slides/leader-mandate/levers-geometry.ts`), and the composition itself was
-// walked at 1280×720. What a DOM-less runner IS good for is what this slide is actually at
-// risk of, and none of the four is a layout fault:
+// ═══ WHAT THIS FILE HOLDS AFTER THE 2026-08-15 RE-CUT, and why half of it is new. The slide
+// this suite used to cover drew a four-column SIGN-OFF FORM with sixteen boxes in it and a
+// bordered citation band under the levers. Both are gone (`../../src/slides/leader-mandate/
+// levers-geometry.ts` records the four complaints), so every assertion about a cell, a mark, an
+// authority column or a playbook quotation went with them. WHAT REPLACED THEM IS NOT A SMALLER
+// SET OF THE SAME TESTS: the two things the re-cut was FOR are now the two things this file
+// guards hardest —
 //
-//   1. THE SLIDE'S WHOLE CLAIM BECOMING A SENTENCE INSTEAD OF A COUNT. "Not one of them
-//      needs a signature but yours" is a headline; the figure is what makes it checkable —
-//      sixteen boxes drawn, four filled, all four in one column. That claim is DERIVED from
-//      `Lever.needs` and from nothing else, so the assertions below compute the expected
-//      marks from the data rather than counting to four. A lever flipped to another
-//      authority has to move a mark, and the mark it moves has to fail something here.
-//   2. A THIRD LADDER GROWING BACK (§6.6). "Learn → Experiment → Build → Integrate → Own"
-//      was cut so the deck would carry ONE ordered vocabulary — `gap-capability-ladder`'s
-//      L1–L5 and K.2's P0–P3 — and four unranked acts are exactly the shape a third one
-//      would take if it ever did. Held as a forbidden-token list whose every pattern is
-//      fired against the deck's OWN live ladder vocabulary, plus the structural half a grep
-//      cannot do: the four labels take one colour tier, so no rank is expressed at all.
-//   3. THE BRAND AXIS ARRIVING BY ACCIDENT. §4.4 lists no slot for this slide and
-//      `./content.ts` argues at length why. That is a claim about MODULE EPOCHS, so it is
-//      proved by rendering both, and by reading the source for the import that would create
-//      one.
-//   4. A NUMBER OR A LETTER BEING AUTHORED. `FigLabel` takes a label only and every figure
-//      reference on this stage is the composer's (§3.5). This slide prints no quantity at
-//      all — not a date, not a count — so the rule is checkable as a SHAPE: no digit reaches
-//      any rendered string.
+//   · NOBODY THE ROOM CANNOT NAME APPEARS ON THIS STAGE. The retired form printed
+//     `THE COMMITTEE`, `GROUP HR` and `A BUDGET CYCLE` as column heads and the band named an
+//     outside playbook by organisation. `the re-cut removed a cast the room could not identify`
+//     below asserts all of it absent, on every pose and in every authored string, and fires
+//     each pattern against a control first so the rule cannot pass vacuously.
+//   · THE SLIDE STANDS ON ITS SIBLINGS' SHELVES. The eyebrow was at 134 and the ask at 572 in
+//     20px serif italic; both are K.1's now, so `the shelves` asserts the rendered numbers and
+//     not only the constants.
 //
-// WHAT IS LEFT TO THE BROWSER WALK: the reduce-mode half of the zero-SMIL AC (held here at
-// every pose under BOTH preferences, plus the structural fact that makes it true by
-// construction — the figure mounts no `<svg>` at all); the real wrap of the four lever lines
-// and the four authority heads against the measures `levers-geometry.ts` budgets; and the
-// painted colour tiers, including the hairline cell frames against their fills.
+// ═══ THE PROPERTY THE SLIDE IS ABOUT IS STILL A PROPERTY OF THE DATA. §6.8's levers are the
+// ones a BU or Division Head can pull ALONE. The retired figure held that in a `needs` field
+// the form read; the re-cut holds it in `Lever.scope` — the exact phrase in each act that ties
+// it to something the leader already holds — and `../../src/slides/leader-mandate/content.ts`'s
+// `ownedByTheRoom` throws at module load on any lever whose act has lost it. This file holds
+// the same property from the other side, over the shipped copy, for the reason that module
+// states: the two are not redundant, they fail at different moments and to different people.
 //
-// DECK COMPOSITION *IS* ASSERTED HERE, unlike in the `gap` run's files, and it is gh#69's
-// first AC: this slide is the TAIL of the `mandate` run and the run is complete at §4.3's
-// three. `deck-registry.test.ts` and the numbering fixture own the letters and the numbers;
-// what this file owns is the ORDER inside the run and the absence from every standard deck,
-// read off `DECK_SET_COMPOSITION` exactly as `variant-composition.test.tsx` and
-// `mandate-phases-gates.test.tsx` read it.
-//
-// ONE EPOCH FOR EVERYTHING EXCEPT THE LAST BLOCK. The slide file resolves no brand block and
-// the figure reads no `VARIANT`, so the whole stage mounts in the default `general` epoch
-// through `SlideHarness`. The brand-invariance block at the foot is the exception and says
-// why it has to be.
+// ═══ WHAT IS DELIBERATELY NOT HERE. jsdom computes no styles, no fonts and no layout, so
+// nothing below asserts a COMPUTED colour, a wrapped line or a painted overlay. Colour tiers
+// are held as authored inline values, keyframes are held by reading the stylesheet's bytes, and
+// `.box-hover`'s ::before overlay is held as the CLASS being present — what it paints is a
+// browser's to prove.
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import path from "node:path";
 import { act, cleanup, render, screen } from "@testing-library/react";
-import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { afterAll, afterEach, describe, expect, test, vi } from "vitest";
 import { useDeck } from "@/deck/DeckContext";
 import { SlideHarness } from "../support/slide-harness";
 import { restoreLocation } from "../harvest/deck-numbering";
-import { VARIANTS, type DeckSetId, type VariantId } from "@/deck-variants";
-import { DECK_SET_COMPOSITION } from "@/deck/deck-sets";
-import { leaderMandateSlides } from "@/slides/leader-mandate";
+import { BRANDS, type VariantId } from "@/deck-variants";
 import { MandateLevers, mandateLeversSlide } from "@/slides/leader-mandate/mandate-levers";
+import { mandateLeversContent } from "@/slides/leader-mandate/content";
 import {
-  SOLE_AUTHORITY,
-  AUTHORITY_IDS,
-  mandateLeversContent,
-  mandatePhasesGatesContent,
-  phasesGatesFor,
-} from "@/slides/leader-mandate/content";
-// THE TWO ORDERED VOCABULARIES THIS SLIDE MAY NOT BECOME A THIRD OF, as modules rather than
-// as a copy kept here. `gap-capability-ladder`'s rungs are L1–L5 and K.2's phases are P0–P3;
-// both are imported so the §6.6 token list below is CONTROLLED against what the deck
-// actually says today instead of against a transcription that can go stale while still
-// passing.
-import { gapLadderContent, capabilityLadderFor } from "@/slides/leader-gap/content";
-import {
-  AUTHORITY_HEAD_TOP,
-  AUTHORITY_LABEL_BUDGET_CHARS,
-  BAND_HEIGHT,
-  BAND_TOP,
-  BOARD_HEIGHT,
-  BOARD_TOP,
-  CELL_HEIGHT,
-  CELL_WIDTH,
-  CLOSER_HEIGHT,
-  CLOSER_TOP,
+  BODY_TOP,
+  CONNECTOR_Y0,
+  CONNECTOR_Y1,
   CONTENT_WIDTH,
-  FORM_WIDTH,
-  FORM_X,
-  HEADING_TOP,
-  HEAD_RULE_TOP,
-  LEVER_LINE_BUDGET_CHARS,
-  LEVER_ROW_HEIGHT,
-  LEVER_WIDTH,
-  MARK_HEIGHT,
-  MARK_INSET,
-  MARK_WIDTH,
+  EYEBROW_TOP,
+  GLYPH_VIEWBOX,
+  HEADLINE_BOTTOM,
+  HERO_ACT_BUDGET_CHARS,
+  HERO_ACT_HEIGHT,
+  HERO_ACT_SIZE,
+  HERO_FLOOR,
+  HERO_GLYPH_LEFT,
+  HERO_GLYPH_SIZE,
+  HERO_GLYPH_STROKE,
+  HERO_GLYPH_TOP,
+  HERO_NOTE_BUDGET_CHARS,
+  HERO_NOTE_TOP,
+  HERO_TEXT_LEFT,
+  HERO_TEXT_TOP,
+  HERO_TEXT_WIDTH,
+  LABEL_HEIGHT,
+  LABEL_SIZE,
+  LABEL_TRACKING,
+  LEVER_COUNT,
   NAV_ZONE_CLEARANCE,
   NAV_ZONE_TOP,
+  POSE_COUNT,
+  RECAP_CARD_HEIGHT,
+  RECAP_CARD_TOP,
+  RECAP_CARD_WIDTH,
+  RECAP_FLOOR,
+  RECAP_GLYPH_SIZE,
+  RECAP_GLYPH_STROKE,
+  RECAP_LINE_BUDGET_CHARS,
+  RECAP_POSE,
+  RULE_TOP,
+  SCENE_FLOOR,
   SIDE_MARGIN,
+  SIGN_BOX_HEIGHT,
+  SIGN_BOX_LEFT,
+  SIGN_BOX_TOP,
+  SIGN_BOX_WIDTH,
+  SIGN_NOTE_TOP,
   STAGE,
-  authorityColWidth,
-  authorityColX,
-  cellTop,
-  cellX,
-  leverRowPitch,
-  leverRowTop,
-  markTop,
-  markX,
+  THESIS_BUDGET_CHARS,
+  THESIS_HEIGHT,
+  THESIS_POSE,
+  THESIS_TEXT_SIZE,
+  THESIS_TOP,
+  connectorPath,
+  glyphStroke,
+  recapCardCenterX,
+  recapCardLeft,
 } from "@/slides/leader-mandate/levers-geometry";
+import { LEVER_GLYPH_IDS } from "@/slides/leader-mandate/components/LeverGlyphs";
 
 const C = mandateLeversContent;
-const POSES = [0, 1, 2, 3, 4] as const;
 
-/** The four acts and the four columns, read off the content module rather than re-listed:
- *  the rows, the cells, the marks and every rule below index the same two arrays, and a
- *  literal here would let this file disagree with the figure it is checking. */
-const LEVERS = C.levers;
-const AUTHORITIES = C.authorities;
+/** 0…5. Read from the geometry module rather than typed, so a fifth lever grows this list
+ *  with the slide instead of leaving a pose untested. */
+const POSES = Array.from({ length: POSE_COUNT }, (_, i) => i);
+
+/** The four hero poses, and the two that are not. */
+const HERO_POSES = POSES.slice(0, LEVER_COUNT);
 
 /**
- * The position the slide holds in the decks that actually run it.
+ * The composed position, as a harness INPUT and not a claim the slide makes.
  *
- * `at` IS required here, and it is the case `SlideHarness` documents: unit tests resolve the
- * default `general` deck, `general` has no leader variant, and this slide reaches the two
- * leader deck sets ALONE.
- *
- * A HARNESS INPUT AND NOT A CLAIM THE SLIDE MAKES (§3.5). K.3 is what the composed leader
- * decks derive today; nothing under `src/slides/leader-mandate/` names either half, which is
- * the rule the figure-freedom block below holds. If a Phase 7 run ever landed in front of
- * `mandate` this constant would move while no source file did.
+ * `SlideHarness` requires it for a leader-only slide and rejects it for one the general deck
+ * composes; K.3 is leader-only. Nothing under `src/slides/leader-mandate/` may author this
+ * letter or this number — see `no rendered string names a letter, a figure or a number`.
  */
 const AT = { letter: "K", num: 3, sectionKey: "mandate" } as const;
+
+const CSS_PATH = path.resolve(process.cwd(), "src/slides/leader-mandate/components/levers.css");
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {
@@ -157,91 +144,27 @@ function goToPose(pose: number) {
   act(() => screen.getByTestId(`goto-${pose}`).click());
 }
 
-function textOf(id: string): string {
-  return screen.getByTestId(id).textContent ?? "";
+const mounted = (id: string) => screen.queryByTestId(id) !== null;
+
+const box = (id: string) => screen.getByTestId(id);
+
+const px = (id: string, prop: "left" | "top" | "width" | "height"): number =>
+  Number.parseFloat(box(id).style[prop]);
+
+function delayOf(id: string): number {
+  return Number.parseFloat(box(id).style.transitionDelay);
 }
 
-function boxOf(id: string): HTMLElement {
-  return screen.getByTestId(id) as HTMLElement;
+/** The stage's text with the FigLabel removed. Every "no digit" and "no letter" rule below is
+ *  about what the SLIDE authors, and the fig label is the deck's, printed from the composed
+ *  position the harness supplies. */
+function stageText(container: HTMLElement): string {
+  const stripped = container.cloneNode(true) as HTMLElement;
+  stripped.querySelector(".fig-label")?.remove();
+  return stripped.textContent ?? "";
 }
 
-/** The inline style as AUTHORED, not as jsdom re-parsed it. `border: 1px solid var(--…)` and
- *  `font-family: var(--mono)` are shorthands cssstyle drops rather than stores, so the rules
- *  that are about those two read the attribute the component actually set. */
-function styleAttr(id: string): string {
-  return boxOf(id).getAttribute("style") ?? "";
-}
-
-// ── the boxes, by pose ───────────────────────────────────────────────────────
-//
-// Derived from the content wherever the renderer keys on an `id`, so a reworded lever or a
-// fifth authority moves these hooks with it.
-
-const leverId = (i: number) => `mandate-lever-${LEVERS[i].id}`;
-
-/** Every cell of the form — one per (lever, authority) pair, and SIXTEEN is the product of
- *  the two counts rather than a number typed here. */
-const CELL_IDS: readonly string[] = AUTHORITIES.flatMap((a) =>
-  LEVERS.map((l) => `mandate-levers-cell-${l.id}-${a.id}`),
-);
-
-/**
- * Every mark the form draws — DERIVED FROM `Lever.needs` AND FROM NOTHING ELSE, which is the
- * whole point of computing it here instead of writing four ids down.
- *
- * The figure fills a cell where `lever.needs.includes(authority.id)`; this list is that same
- * predicate over the same data. A lever that claimed a second authority would lengthen BOTH
- * sides at once — which is why the count assertions below are checked against the twelve
- * EMPTY cells and against the one column, neither of which this derivation can move.
- */
-const MARK_IDS: readonly string[] = AUTHORITIES.flatMap((a) =>
-  LEVERS.filter((l) => l.needs.includes(a.id)).map((l) => `mandate-levers-mark-${l.id}-${a.id}`),
-);
-
-/** What each pose ADDS. The four lever rows stand from pose 0 and never leave; the form, the
- *  marks, the band and the ask arrive one click each. */
-const REVEALED_AT: ReadonlyArray<readonly string[]> = [
-  LEVERS.map((_, i) => leverId(i)),
-  CELL_IDS,
-  MARK_IDS,
-  ["mandate-levers-band"],
-  ["mandate-levers-closer"],
-];
-
-/** Every gated box on the stage, flattened — the list `REVEALED_AT` is checked to be
- *  COMPLETE against, so "every pose is complete" cannot pass by naming fewer boxes than the
- *  figure draws. */
-const EVERY_REVEAL = REVEALED_AT.flat();
-
-/** The boxes that carry no text of their own — the sixteen frames and the four fills. Named
- *  once, so the "the copy is there, not merely the box" checks cannot be quietly widened. */
-const TEXTLESS_IDS = new Set<string>([...CELL_IDS, ...MARK_IDS]);
-
-/**
- * The boxes that are NOT reveals at all — two headings, four column heads and the form's head
- * rule.
- *
- * THEY STAND FROM POSE 0 BY HAVING NO GATE, which is the call K.1 makes about its empty right
- * column and this stage makes about an empty form: a half-drawn stage under no heading reads
- * as a slide that failed to finish, and the same half under its own question reads as a
- * promise. Listed apart from `REVEALED_AT` because they carry no `.fade` class and a reveal
- * check over them would pass for the wrong reason.
- */
-const STANDING_IDS: readonly string[] = [
-  "mandate-levers-heading",
-  "mandate-levers-authority-heading",
-  "mandate-levers-head-rule",
-  ...AUTHORITIES.map((a) => `mandate-levers-authority-${a.id}`),
-];
-
-const revealed = (id: string) => boxOf(id).classList.contains("on");
-
-// ── the copy, as one set of strings ──────────────────────────────────────────
-
-/** Every string reachable from `value` — the walk, not a hand list, for the sibling files'
- *  reason: a field added next month is inside every rule below the day it exists. It collects
- *  `id` fields too, deliberately: those reach the DOM as `data-testid`, and a forbidden word
- *  written into a hook is the same defect written somewhere less visible. */
+/** Every string the copy block authors, in tree order. */
 function walkStrings(value: unknown, out: string[] = []): string[] {
   if (typeof value === "string") out.push(value);
   else if (Array.isArray(value)) for (const item of value) walkStrings(item, out);
@@ -251,887 +174,930 @@ function walkStrings(value: unknown, out: string[] = []): string[] {
   return out;
 }
 
-/** Every string this slide can put on a stage. ONE block, because this slide has no brand
- *  axis — see the `no brand axis` describes below, which hold that as a rule. */
-const authoredStrings = (): string[] => walkStrings(C);
+const authored = (): string[] => walkStrings(C);
 
 /**
- * The TEN PROSE strings, each with the `*Kw` sibling the copy module pairs it with.
+ * Every test id the figure hangs a scene on, and the poses it belongs to.
  *
- * The headline, the four lever lines, the band's statement and the closer — seven, and the
- * only strings on this stage the highlighter may touch. Everything else is a LABEL.
+ * DERIVED FROM THE COPY AND FROM `RECAP_POSE`, not typed, so a fifth lever adds a hero pose to
+ * this table by existing. The four heroes are EXCLUSIVE and the last two ACCUMULATE, which is
+ * the whole shape of the slide and the thing the pose walk below is for.
  */
-const PROSE: ReadonlyArray<readonly [string, string, readonly string[]]> = [
-  ["headline", C.headline, C.headlineKw],
-  ...LEVERS.map((l): readonly [string, string, readonly string[]] => [
-    `lever.${l.id}`,
-    l.line,
-    l.lineKw,
+const SCENE_OF: readonly [string, readonly number[]][] = [
+  ...C.levers.flatMap((lever, i): [string, readonly number[]][] => [
+    [`levers-hero-eyebrow-${lever.id}`, [i]],
+    [`levers-hero-mark-${lever.id}`, [i]],
+    [`levers-hero-act-${lever.id}`, [i]],
+    [`levers-hero-note-${lever.id}`, [i]],
+    [`levers-hero-thesis-${lever.id}`, [i]],
   ]),
-  ["playbook.statement", C.playbook.statement, C.playbook.statementKw],
-  ["closer", C.closer, C.closerKw],
-];
-
-/** The MONO LABEL register — every string that may never be rendered through the highlighter,
- *  and may never gain a `*Kw`. The fig label, both headings, the four lever labels, the four
- *  authority heads, the band's eyebrow and the band's citation. Written out as a list on
- *  purpose: together with `PROSE` it is checked against what the STAGE actually prints, so a
- *  new string has to pick a side before it can render. */
-const LABELS: readonly string[] = [
-  C.figLabel,
-  C.leversHeading,
-  C.authorityHeading,
-  ...LEVERS.map((l) => l.label),
-  ...AUTHORITIES.map((a) => a.label),
-  C.playbook.eyebrow,
-  C.playbook.provenance,
-];
-
-/** The `data-testid`s the LABEL strings above are printed into. */
-const LABEL_BOXES: readonly string[] = [
-  "mandate-levers-heading",
-  "mandate-levers-authority-heading",
-  ...LEVERS.map((l) => `mandate-lever-label-${l.id}`),
-  ...AUTHORITIES.map((a) => `mandate-levers-authority-${a.id}`),
-  "mandate-levers-band-eyebrow",
-  "mandate-levers-band-provenance",
-];
-
-/** The `data-testid`s the PROSE strings are printed into, headline excepted — that one is the
- *  `<h1>` and has no hook of its own. */
-const PROSE_BOXES: ReadonlyArray<readonly [string, readonly string[]]> = [
-  ...LEVERS.map((l): readonly [string, readonly string[]] => [
-    `mandate-lever-line-${l.id}`,
-    l.lineKw,
+  ["levers-recap-eyebrow", [RECAP_POSE, THESIS_POSE]],
+  ["levers-connectors", [RECAP_POSE, THESIS_POSE]],
+  ["levers-sign-box", [RECAP_POSE, THESIS_POSE]],
+  ["levers-sign-note", [RECAP_POSE, THESIS_POSE]],
+  // THE ONE THING THE LAST POSE TAKES AWAY. Every scene line and the ask stand on ONE shelf, so
+  // the recap keeping its own line while the ask arrived would print two sentences on top of one
+  // another. The FRAME above it does not move — that is asserted separately.
+  ["levers-recap-thesis", [RECAP_POSE]],
+  ["levers-rule", [THESIS_POSE]],
+  ["levers-thesis", [THESIS_POSE]],
+  ...C.levers.map((lever): [string, readonly number[]] => [
+    `levers-recap-card-${lever.id}`,
+    [RECAP_POSE, THESIS_POSE],
   ]),
-  ["mandate-levers-band-statement", C.playbook.statementKw],
-  ["mandate-levers-closer", C.closerKw],
 ];
 
-/** Every string this slide PRINTS — the two sides of the keyword rule, together. */
-const printedStrings = (): string[] => [...PROSE.map(([, copy]) => copy), ...LABELS];
+/** Every box that must carry the hover chrome, by the pose that paints it. */
+const HOVER_BOXES: readonly [number, readonly string[]][] = [
+  [
+    RECAP_POSE,
+    [...C.levers.map((lever) => `levers-recap-card-${lever.id}`), "levers-sign-box"],
+  ],
+];
 
-/** Everything the stage renders, minus the one element that legitimately prints a DERIVED
- *  figure reference. Stripped from a CLONE: React owns those nodes and removing one behind
- *  its back throws on the next commit. */
-function stageTextWithoutFigLabel(container: HTMLElement): string {
-  const stripped = container.cloneNode(true) as HTMLElement;
-  stripped.querySelector(".fig-label")?.remove();
-  return stripped.textContent ?? "";
+/** Everything that is NOT a box and therefore may not take a pointer. */
+const INERT: readonly [number, readonly string[]][] = [
+  [
+    0,
+    [
+      `levers-hero-eyebrow-${C.levers[0].id}`,
+      `levers-hero-mark-${C.levers[0].id}`,
+      `levers-hero-act-${C.levers[0].id}`,
+      `levers-hero-note-${C.levers[0].id}`,
+      `levers-hero-thesis-${C.levers[0].id}`,
+    ],
+  ],
+  [RECAP_POSE, ["levers-recap-eyebrow", "levers-sign-note", "levers-recap-thesis"]],
+  [THESIS_POSE, ["levers-thesis"]],
+];
+
+/** Every PROSE string on the slide with its keywords, and the box that prints it. */
+const PROSE_BOXES = (): readonly [string, string, readonly string[]][] => [
+  ...C.levers.flatMap((lever): [string, string, readonly string[]][] => [
+    [`levers-hero-act-${lever.id}`, lever.act, lever.actKw],
+    [`levers-hero-note-${lever.id}`, lever.note, lever.noteKw],
+    [`levers-hero-thesis-${lever.id}`, lever.thesis, lever.thesisKw],
+    [`levers-recap-line-${lever.id}`, lever.short, lever.shortKw],
+  ]),
+  ["levers-recap-thesis", C.recapThesis, C.recapThesisKw],
+  ["levers-thesis", C.closer, C.closerKw],
+];
+
+/** Every LABEL string — mono, keyword-free, and never wrapped in an `<em>`. */
+const LABEL_BOXES = (): readonly [string, string][] => [
+  ...C.levers.map((lever): [string, string] => [
+    `levers-hero-eyebrow-${lever.id}`,
+    lever.label,
+  ]),
+  ...C.levers.map((lever): [string, string] => [
+    `levers-recap-label-${lever.id}`,
+    lever.label,
+  ]),
+  ["levers-recap-eyebrow", C.recapEyebrow],
+  ["levers-sign-label", C.signLabel],
+  ["levers-sign-note", C.signNote],
+];
+
+/** Which pose prints a given box, for the two tables above. */
+function poseOf(testId: string): number {
+  const row = SCENE_OF.find(([id]) => id === testId);
+  if (row) return row[1][0];
+  // A card's inner boxes are not in SCENE_OF — they arrive with the card.
+  if (testId.startsWith("levers-recap-") || testId.startsWith("levers-sign-")) return RECAP_POSE;
+  throw new Error(`no pose recorded for ${testId}`);
 }
 
-/** The label half of the `FigLabel` — its last span, which is the only part of that element
- *  this slide authors. The reference in front of it is the composer's. */
-function figLabelText(container: HTMLElement): string {
-  const spans = container.querySelectorAll(".fig-label span");
-  return spans[spans.length - 1]?.textContent ?? "";
-}
+afterEach(cleanup);
+afterAll(restoreLocation);
 
-/** What the stage prints, read off the DOM: the headline, the fig label's own half, and every
- *  box that carries type. */
-function stagePrintedStrings(container: HTMLElement): string[] {
-  const heading = container.querySelector("h1")?.textContent ?? "";
-  const boxes = [...container.querySelectorAll<HTMLElement>("[data-testid^='mandate-lever']")]
-    .map((el) => el.textContent ?? "")
-    .filter((text) => text !== "");
-  return [heading, figLabelText(container), ...boxes];
-}
-
-// ── the slide def (gh#69's fifth AC, and the canonical-pose half) ────────────
+// ── the slide def ────────────────────────────────────────────────────────────
 
 describe("the slide def", () => {
-  test("is the file's basename, five steps, closing on the fullest pose", () => {
-    // The id is the basename (`deck-slide-ids.test.ts` owns the rule; this pins the value).
+  test("is the file's basename, one pose per lever plus a recap and the ask", () => {
     expect(mandateLeversSlide.id).toBe("mandate-levers");
-    expect(mandateLeversSlide.steps).toBe(5);
-    expect(mandateLeversSlide.sectionKey).toBe("mandate");
     expect(mandateLeversSlide.animationMode).toBe("step-reveal");
     expect(mandateLeversSlide.surface).toBe("dark");
-  });
-
-  test("exports the closer, because the canonical pose IS the last pose", () => {
-    // THE EXPORTS PRINT `canonicalPose` AND NOTHING ELSE. A canonical pose of 3 would ship a
-    // PDF of the section's entire ask with the ask's own conclusion missing: four things a
-    // room can do, and no sentence saying what happens if it does none of them. On the slide
-    // that ENDS the mandate that is the one way this deck could travel badly.
-    //
-    // BOTH HALVES, because the number alone proves nothing — a `steps` bumped to 6 with the
-    // closer still gated at 4 would satisfy the arithmetic and export a blank shelf.
-    expect(mandateLeversSlide.canonicalPose).toBe(4);
-    expect(mandateLeversSlide.canonicalPose).toBe(mandateLeversSlide.steps - 1);
-    const { unmount } = renderSlide(mandateLeversSlide.canonicalPose);
-    expect(revealed("mandate-levers-closer")).toBe(true);
-    expect(textOf("mandate-levers-closer")).toBe(C.closer);
-    unmount();
-  });
-});
-
-// ── gh#69's first AC · where the slide composes ──────────────────────────────
-
-describe("the mandate run ends here", () => {
-  /** The run, as its own section module authors it — §6.8's three slides in §6.8's order. */
-  const RUN_IDS = leaderMandateSlides.map((def) => def.id);
-
-  /** Every registered deck set, split by the variants that resolve it. Walked rather than
-   *  listed, so a third deck set is inside these rules the day somebody registers it. */
-  const VARIANTS_BY_DECK_SET = new Map<DeckSetId, VariantId[]>();
-  for (const variant of Object.values(VARIANTS)) {
-    const row = VARIANTS_BY_DECK_SET.get(variant.deckSet) ?? [];
-    row.push(variant.id);
-    VARIANTS_BY_DECK_SET.set(variant.deckSet, row);
-  }
-
-  test("the section module puts this slide last, under the run's own key", () => {
-    // `leaderMandateSlides` is the ORDER §6.8 gives the section; `deck-sets.ts` is which
-    // decks run it. This is the first half, and it is an identity check: a copy of the def
-    // would satisfy a `toEqual` forever while drifting.
-    expect(leaderMandateSlides.at(-1)).toBe(mandateLeversSlide);
     expect(mandateLeversSlide.sectionKey).toBe("mandate");
-    // THREE, AND THE RUN IS FULL. §4.3 gives `mandate` three slides; a fourth would be a spec
-    // change first and an edit second, and it would fail here by count before it failed
-    // anywhere it costs more to read.
-    expect(RUN_IDS).toEqual(["mandate-enablement", "mandate-phases-gates", "mandate-levers"]);
+    // NEITHER NUMBER IS TYPED IN THE SLIDE FILE. Both are read from the geometry module,
+    // which derives them from the content module's own lever tuple — so a fifth lever moves
+    // the step count without an author remembering to.
+    expect(mandateLeversSlide.steps).toBe(POSE_COUNT);
+    expect(POSE_COUNT).toBe(LEVER_COUNT + 2);
+    expect(RECAP_POSE).toBe(POSE_COUNT - 2);
+    expect(THESIS_POSE).toBe(POSE_COUNT - 1);
   });
 
-  test("both leader variants compose the run in that order, with this slide at the tail", () => {
-    // READ OFF `DECK_SET_COMPOSITION`, which is what `variant-composition.test.tsx` and
-    // `mandate-phases-gates.test.tsx` read. The two leader VARIANTS resolve one leader deck
-    // set today; the rule is written per variant anyway, because "both leader decks" is the
-    // AC's wording and a second leader list is a thing this repo could grow without warning.
-    const leaderVariants = VARIANTS_BY_DECK_SET.get("leader") ?? [];
-    expect(leaderVariants.sort()).toEqual(["berau-leader", "gems-leader"]);
-    for (const variant of leaderVariants) {
-      const { slides } = DECK_SET_COMPOSITION[VARIANTS[variant].deckSet];
-      // The whole run, in order — not merely "contains", which a shuffled run also satisfies.
-      expect(slides.filter((id) => RUN_IDS.includes(id)), variant).toEqual(RUN_IDS);
-      // And CONTIGUOUS, so §6.8's three read as one run rather than as three slides that
-      // happen to share a key. R4 throws at load on a split run; "adjacent" is stronger and
-      // is what the ordering asks for.
-      const at = slides.indexOf("mandate-levers");
-      expect(at, variant).toBeGreaterThan(-1);
-      expect(slides[at - 1], variant).toBe("mandate-phases-gates");
-      expect(slides[at - 2], variant).toBe("mandate-enablement");
-      // THE TAIL, stated as the property rather than as an index: nothing else in the deck
-      // set carries a `mandate` id behind this one.
-      expect(slides.filter((id) => RUN_IDS.includes(id)).at(-1), variant).toBe("mandate-levers");
-    }
+  test("exports the ask, because the canonical pose IS the last pose", () => {
+    // The PDF and PPTX exports print `canonicalPose` and nothing else. On the slide that ENDS
+    // the mandate, a canonical pose short of the last would export a room four things it can
+    // do and stop before saying what happens if it does none of them.
+    expect(mandateLeversSlide.canonicalPose).toBe(THESIS_POSE);
+    expect(mandateLeversSlide.canonicalPose).toBe(mandateLeversSlide.steps - 1);
+
+    const { container } = renderSlide(mandateLeversSlide.canonicalPose);
+    expect(mounted("levers-thesis")).toBe(true);
+    expect(stageText(container)).toContain(C.closer);
   });
 
-  test("no standard deck set composes it, or any other row of the run", () => {
-    // The failure every leader-only ticket has had to stay clear of: one of these three ids
-    // written into `STANDARD_SLIDE_IDS` by accident would insert a leader run into a deck
-    // with no leader in the room — between `pitfalls` and `meta`, renumbering only the last
-    // eleven slides, which is the quiet kind and therefore the kind that reaches a projector.
-    const standardVariants = VARIANTS_BY_DECK_SET.get("standard") ?? [];
-    expect(standardVariants.length, "a rule over no standard variant proves nothing").toBe(3);
-    for (const variant of standardVariants) {
-      const { slides } = DECK_SET_COMPOSITION[VARIANTS[variant].deckSet];
-      expect(slides, variant).not.toContain("mandate-levers");
-      expect(slides.filter((id) => RUN_IDS.includes(id)), variant).toEqual([]);
-    }
+  test("takes no props, so there is no brand block to hand it", () => {
+    expect(MandateLevers.length).toBe(0);
   });
 });
 
-// ── gh#69's second AC · the four levers, and the signature form beside them ──
+// ── the four levers ──────────────────────────────────────────────────────────
 
 describe("the four levers", () => {
-  test("are the content module's four, in deck order, each with its label and its line", () => {
-    // FOUR, from the content module's own array rather than a literal here: the rows, the
-    // pitch, the cells and the reveal stagger all index that array.
+  test("are the content module's four, in deck order, one hero pose each", () => {
+    expect(C.levers).toHaveLength(LEVER_COUNT);
+    C.levers.forEach((lever, i) => {
+      const { container } = renderSlide(i);
+      const text = stageText(container);
+      expect(text, lever.id).toContain(lever.label);
+      expect(text, lever.id).toContain(lever.act);
+      expect(text, lever.id).toContain(lever.note);
+      expect(text, lever.id).toContain(lever.thesis);
+      cleanup();
+    });
+  });
+
+  test("every act keeps the phrase that puts it inside one person's authority", () => {
+    // §6.8's levers are the ones a BU or Division Head can pull ALONE, and `ownedByTheRoom` in
+    // the content module throws at load on a lever that fails it — the two are not redundant,
+    // they fail at different moments and to different people. Held here over the SHIPPED copy,
+    // which is the form a reviewer reading a diff can check.
+    for (const lever of C.levers) {
+      expect(lever.scope.trim().length, lever.id).toBeGreaterThan(0);
+      expect(lever.act, lever.id).toContain(lever.scope);
+    }
+    // NOT VACUOUS: the four phrases are four different phrases, so no lever is claiming a
+    // scoping so generic that every act would contain it.
+    expect(new Set(C.levers.map((l) => l.scope)).size).toBe(LEVER_COUNT);
+  });
+
+  test("every act is an instruction and never a definition", () => {
+    // An imperative addressed to the person in front of it — which is the whole difference
+    // between this slide's four levers and the playbook's four nouns. No act may open with an
+    // article or with "the programme".
+    for (const lever of C.levers) {
+      expect(lever.act, lever.id).not.toMatch(/^(?:A |An |The |Our |This )/);
+      expect(lever.act.trim().endsWith("."), lever.id).toBe(true);
+    }
+  });
+
+  test("has a drawn mark for every lever, and draws no mark nothing names", () => {
+    const named = C.levers.map((lever) => lever.glyph);
+    for (const id of named) {
+      expect(LEVER_GLYPH_IDS as readonly string[], id).toContain(id);
+    }
+    // One mark per lever and no spares: a drawn mark nothing names is a shape nobody decided
+    // to keep, and the exhaustive switch in `LeverGlyphs.tsx` cannot report it.
+    expect(new Set(named).size).toBe(LEVER_COUNT);
+    expect([...LEVER_GLYPH_IDS].sort()).toEqual([...named].sort());
+  });
+
+  test("prints each mark at hero size once, and at chip size on the recap", () => {
+    const first = C.levers[0];
     renderSlide(0);
-    expect(LEVERS).toHaveLength(4);
-    LEVERS.forEach((lever) => {
-      expect(textOf(`mandate-lever-label-${lever.id}`)).toBe(lever.label);
-      expect(textOf(`mandate-lever-line-${lever.id}`)).toBe(lever.line);
-    });
-    // IN DECK ORDER on the stage, not merely all present. The order is the order they get
-    // pulled in — the time is blocked before anybody is named to fill it — and a shuffled
-    // board still renders four correct rows.
-    expect(screen.getAllByTestId(/^mandate-lever-label-/).map((el) => el.textContent)).toEqual(
-      LEVERS.map((l) => l.label),
-    );
-    expect(screen.getAllByTestId(/^mandate-lever-line-/).map((el) => el.textContent)).toEqual(
-      LEVERS.map((l) => l.line),
-    );
-  });
-
-  test("stand from pose 0 and never leave", () => {
-    // The four acts are the figure the other four poses are laid over; a reveal written
-    // per-pose is one keystroke from making the last of them arrive with the marks — and the
-    // room would then be shown a form for a lever it had not been asked for yet.
-    const { unmount } = renderSlide(0);
-    for (const pose of POSES) {
-      goToPose(pose);
-      LEVERS.forEach((_, i) => expect(revealed(leverId(i)), `pose ${pose}`).toBe(true));
+    const heroGlyph = box(`levers-hero-glyph-${first.id}`);
+    expect(heroGlyph.style.width).toBe(`${HERO_GLYPH_SIZE}px`);
+    expect(heroGlyph.style.height).toBe(`${HERO_GLYPH_SIZE}px`);
+    goToPose(RECAP_POSE);
+    for (const lever of C.levers) {
+      const chip = box(`levers-recap-glyph-${lever.id}`);
+      expect(chip.style.width, lever.id).toBe(`${RECAP_GLYPH_SIZE}px`);
     }
-    unmount();
-  });
-
-  test("every one of them waits on the person in the room, and on nobody else", () => {
-    // §6.8's CRITERION, as a property of the data rather than as a tone the copy takes. The
-    // content module throws at load on a lever that fails it (`authorizableAlone`) — the two
-    // are not redundant, they fail at different moments and to different people: the throw
-    // stops the edit, this stops the merge.
-    //
-    // `toEqual([SOLE_AUTHORITY])` AND NOT `toContain`: a lever that ALSO needed the committee
-    // would satisfy "contains you" while drawing a second filled column under a headline that
-    // denies one exists.
-    expect(SOLE_AUTHORITY).toBe("you");
-    expect(AUTHORITY_IDS).toContain(SOLE_AUTHORITY);
-    LEVERS.forEach((lever) => {
-      expect(lever.needs, lever.id).toEqual([SOLE_AUTHORITY]);
-    });
-    // And the property stated the other way round, which is the half that would survive a
-    // future lever whose `needs` grew: no lever names an authority that is not the sole one.
-    const named = new Set(LEVERS.flatMap((l) => [...l.needs]));
-    expect([...named]).toEqual([SOLE_AUTHORITY]);
-  });
-
-  test("is an act and not a structure — every line is an imperative", () => {
-    // THE LEVER / PILLAR BOUNDARY, from this side. K.1's pillars name what has to EXIST; a
-    // lever names what the leader DOES, with the "you" left implicit. The mechanical form of
-    // it: every line opens on a capitalised verb and none opens on an article or on "There".
-    LEVERS.forEach((lever) => {
-      expect(lever.line, lever.id).toMatch(/^[A-Z][a-z]+ /);
-      expect(lever.line, lever.id).not.toMatch(/^(The|A|An|There|Someone|Somebody)\b/);
-    });
   });
 });
 
-describe("the signature form", () => {
-  test("draws a column for each authority and a cell for each pair — sixteen boxes", () => {
-    // SIXTEEN IS A PRODUCT, NOT A NUMBER. Four acts against four things an act could wait on;
-    // a fifth authority re-cuts the form through `authorityColWidth` and adds four cells
-    // without a count being re-typed anywhere.
-    renderSlide(1);
-    expect(AUTHORITIES).toHaveLength(4);
-    expect(AUTHORITIES.map((a) => a.id)).toEqual([...AUTHORITY_IDS]);
-    expect(AUTHORITIES.map((a) => a.label)).toEqual([
-      "YOU",
-      "THE COMMITTEE",
-      "GROUP HR",
-      "A BUDGET CYCLE",
-    ]);
-    const cells = screen.getAllByTestId(/^mandate-levers-cell-/);
-    expect(cells).toHaveLength(LEVERS.length * AUTHORITIES.length);
-    expect(cells.map((el) => el.getAttribute("data-testid")).sort()).toEqual([...CELL_IDS].sort());
-    // Every column head is on the stage from pose 0, over the column its cells sit in.
-    AUTHORITIES.forEach((a) => {
-      expect(textOf(`mandate-levers-authority-${a.id}`)).toBe(a.label);
-    });
-  });
+// ── the six poses ────────────────────────────────────────────────────────────
 
-  test("fills one cell per lever, all of them in the YOU column, and derives the rest empty", () => {
-    // THE FIGURE'S WHOLE CLAIM, AND IT IS A COUNT. Nothing on the stage says "you can
-    // authorize all four alone"; the marks say it, and a count is the one kind of claim a
-    // room can check from the back row.
-    //
-    // EVERY NUMBER BELOW IS READ FROM THE DATA. `MARK_IDS` is `lever.needs` applied by the
-    // same predicate the figure applies, so a lever flipped to another authority moves both
-    // sides at once — which is exactly why the assertions that MATTER are the ones it cannot
-    // move: that the filled column is one column, and that the column is `SOLE_AUTHORITY`'s.
-    renderSlide(2);
-    const marks = screen.getAllByTestId(/^mandate-levers-mark-/);
-    const expectedMarks = LEVERS.reduce((n, l) => n + l.needs.length, 0);
-    expect(marks).toHaveLength(expectedMarks);
-    expect(marks.map((el) => el.getAttribute("data-testid")).sort()).toEqual([...MARK_IDS].sort());
-    // ONE PER LEVER — no row is unsigned and no row is signed twice.
-    LEVERS.forEach((lever) => {
-      const own = marks.filter((el) =>
-        (el.getAttribute("data-testid") ?? "").startsWith(`mandate-levers-mark-${lever.id}-`),
-      );
-      expect(own, lever.id).toHaveLength(lever.needs.length);
-      expect(own, lever.id).toHaveLength(1);
-    });
-    // ONE COLUMN, AND IT IS THE FIRST ONE. Derived from the mark ids by their authority
-    // suffix, so this is a claim about what is PAINTED rather than about what was authored.
-    const columns = new Set(
-      marks.map((el) => (el.getAttribute("data-testid") ?? "").split("-").at(-1)),
-    );
-    expect(columns.size).toBe(1);
-    expect([...columns]).toEqual([SOLE_AUTHORITY]);
-    // AND TWELVE CELLS STAY EMPTY — the residue, computed rather than listed. There is no
-    // list of empty cells anywhere in this section, and this is what says so.
-    const empty = CELL_IDS.filter(
-      (id) => !MARK_IDS.includes(id.replace("-cell-", "-mark-")),
-    );
-    expect(empty).toHaveLength(LEVERS.length * AUTHORITIES.length - expectedMarks);
-    expect(empty).toHaveLength(12);
-    empty.forEach((id) => {
-      // Drawn, and drawn as a HAIRLINE FRAME rather than as a dimmed fill: an empty cell at
-      // 30% of a filled one would read as a cell the slide had not finished revealing, which
-      // on a step-reveal deck is a specific and wrong meaning.
-      expect(styleAttr(id), id).toContain("border: 1px solid var(--copper-800)");
-      expect(styleAttr(id), id).not.toContain("opacity");
-      expect(textOf(id), id).toBe("");
-    });
-  });
-
-  test("keeps three columns empty for the rest of the slide", () => {
-    // The three refusals are named ONLY to stay empty, and they have to stay empty at the two
-    // poses that follow the answer as well. A mark that arrived with the band would turn the
-    // citation into a fifth ask.
-    const { unmount } = renderSlide(2);
-    for (const pose of [2, 3, 4]) {
+describe("the six poses", () => {
+  test("four heroes are exclusive and the last two accumulate", () => {
+    renderSlide(0);
+    // AND BACK. A pose that clears something it should have kept is exactly what a presenter
+    // stepping backwards finds and what a per-pose re-render never sees.
+    const walk = [...POSES, ...[...POSES].reverse()];
+    for (const pose of walk) {
       goToPose(pose);
-      const refused = AUTHORITIES.filter((a) => a.id !== SOLE_AUTHORITY);
-      expect(refused).toHaveLength(3);
-      refused.forEach((a) => {
-        LEVERS.forEach((l) => {
-          expect(
-            screen.queryByTestId(`mandate-levers-mark-${l.id}-${a.id}`),
-            `pose ${pose} · ${l.id}/${a.id}`,
-          ).toBeNull();
-        });
-      });
+      for (const [id, at] of SCENE_OF) {
+        expect(mounted(id), `pose ${pose} · ${id}`).toBe(at.includes(pose));
+      }
+      // Never two heroes at once — the property the mount-per-scene split exists for.
+      const heroesUp = C.levers.filter((lever) => mounted(`levers-hero-mark-${lever.id}`));
+      expect(heroesUp.length, `pose ${pose}`).toBeLessThanOrEqual(1);
     }
-    unmount();
   });
 
-  test("asks the question one click before it answers it", () => {
-    // POSE 1 IS THE FORM AND POSE 2 IS THE ANSWER, and the click between them is what the
-    // whole figure is worth: a form that arrived already filled would land the question and
-    // its answer in the same glance, and the four marks would be decoration rather than a
-    // result.
-    const { unmount } = renderSlide(0);
-    CELL_IDS.forEach((id) => expect(revealed(id), `pose 0 · ${id}`).toBe(false));
-    goToPose(1);
-    CELL_IDS.forEach((id) => expect(revealed(id), `pose 1 · ${id}`).toBe(true));
-    MARK_IDS.forEach((id) => expect(revealed(id), `pose 1 · ${id}`).toBe(false));
-    goToPose(2);
-    MARK_IDS.forEach((id) => expect(revealed(id), `pose 2 · ${id}`).toBe(true));
-    unmount();
+  test("the last pose adds to the recap's FRAME and moves nothing in it", () => {
+    renderSlide(RECAP_POSE);
+    const read = () =>
+      [
+        ...C.levers.map((lever) => `levers-recap-card-${lever.id}`),
+        "levers-sign-box",
+        "levers-sign-note",
+      ].map((id) => [id, box(id).style.left, box(id).style.top, box(id).style.width].join("|"));
+    const before = read();
+    goToPose(THESIS_POSE);
+    expect(read()).toEqual(before);
+  });
+
+  test("the ask REPLACES the recap's own line rather than landing on top of it", () => {
+    // THE ONE SUBTRACTION ON THE SLIDE, and it is forced by the shelf: five scene lines and the
+    // ask share y=590, which is what makes the sentence at the foot of the stage read as one
+    // object the room learns to look at. Two of them at once is two sentences overprinted at
+    // the one moment the deck cannot afford it.
+    renderSlide(RECAP_POSE);
+    expect(mounted("levers-recap-thesis")).toBe(true);
+    expect(mounted("levers-thesis")).toBe(false);
+    goToPose(THESIS_POSE);
+    expect(mounted("levers-recap-thesis")).toBe(false);
+    expect(mounted("levers-thesis")).toBe(true);
+    // Never two sentences on the shelf, at any pose, walking either way.
+    for (const pose of [...POSES, ...[...POSES].reverse()]) {
+      goToPose(pose);
+      const onShelf = screen
+        .queryAllByTestId(/^levers-(?:hero-thesis-|recap-thesis|thesis)/)
+        .filter((el) => el.style.top === `${THESIS_TOP}px`);
+      expect(onShelf.length, `pose ${pose}`).toBe(1);
+    }
+  });
+
+  test("hangs every eyebrow from ONE shelf, 34px under the headline", () => {
+    const shelves = new Set<string>();
+    renderSlide(0);
+    for (const pose of POSES.slice(0, POSE_COUNT - 1)) {
+      goToPose(pose);
+      const id =
+        pose < RECAP_POSE ? `levers-hero-eyebrow-${C.levers[pose].id}` : "levers-recap-eyebrow";
+      expect(mounted(id), `pose ${pose} has no eyebrow`).toBe(true);
+      shelves.add(box(id).style.top);
+      expect(box(id).style.height).toBe(`${LABEL_HEIGHT}px`);
+      expect(box(id).style.fontSize).toBe(`${LABEL_SIZE}px`);
+      expect(box(id).style.letterSpacing).toBe(`${LABEL_TRACKING}em`);
+    }
+    expect(shelves).toEqual(new Set(["156px"]));
+    // THE WHOLE OF COMPLAINT 4. The shelf it replaced was 134, which left 12px under a 40px
+    // display line — that is leading, not air, so the room read two lines of one title.
+    expect(EYEBROW_TOP).toBe(156);
+    expect(HEADLINE_BOTTOM).toBe(122);
+    expect(EYEBROW_TOP - HEADLINE_BOTTOM).toBe(34);
+  });
+
+  test("reveals each scene on ONE lead-in and ONE stagger", () => {
+    renderSlide(0);
+    const first = C.levers[0];
+    const lead = delayOf(`levers-hero-eyebrow-${first.id}`);
+    expect(lead).toBe(120);
+    expect(delayOf(`levers-hero-act-${first.id}`)).toBe(lead + 90);
+    expect(delayOf(`levers-hero-note-${first.id}`)).toBe(lead + 180);
+    expect(delayOf(`levers-hero-thesis-${first.id}`)).toBe(lead + 270);
+
+    goToPose(RECAP_POSE);
+    // The cards, then the curves, then the box: a curve arriving before the card at its far
+    // end would point at nothing, and a box before the curves would answer a question nobody
+    // had drawn.
+    const lastCard = delayOf(`levers-recap-card-${C.levers[LEVER_COUNT - 1].id}`);
+    const firstCurve = Number.parseFloat(
+      box(`levers-connector-${C.levers[0].id}`).style.animationDelay,
+    );
+    expect(firstCurve).toBeGreaterThan(lastCard - 90);
+    expect(delayOf("levers-sign-box")).toBeGreaterThan(
+      Number.parseFloat(box(`levers-connector-${C.levers[LEVER_COUNT - 1].id}`).style.animationDelay),
+    );
+    expect(delayOf("levers-recap-thesis")).toBeGreaterThan(delayOf("levers-sign-note"));
   });
 });
 
-// ── gh#69's build rules · §6.6, no third ladder ──────────────────────────────
+// ── the re-cut's own subject ─────────────────────────────────────────────────
 
-/**
- * The ordered vocabularies this slide may not become another of, one regex each.
- *
- * EVERY PATTERN HERE FIRES ON THE CONTROL CORPUS BELOW, which is the deck's OWN two ladders
- * as live modules plus the two sentences §6.6's cut was written against. A list that drifted
- * out of date would otherwise pass vacuously over copy that had quietly grown a third one.
- *
- * WHY THE WORDS AND NOT ONLY THE CUT PHRASE. §6.6 cut a specific five-stage sequence, but the
- * failure it was protecting against is generic: four acts printed with a rank on them ARE a
- * ladder, whatever they are called. So the list is the vocabulary a rank would have to be
- * expressed in, and the structural half — one colour tier for all four — sits beside it.
- */
-const LADDER_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
-  ["Learn → Experiment", /\bLearn\s*[→>,·—–-]+\s*Experiment\b/i],
-  ["Build → Integrate", /\bBuild\s*[→>,·—–-]+\s*Integrate\b/i],
-  ["Integrate → Own", /\bIntegrate\s*[→>,·—–-]+\s*Own\b/i],
-  ["maturity", /\bmaturity\b/i],
-  ["level", /\blevels?\b/i],
-  ["rung", /\brungs?\b/i],
-  ["ladder", /\bladders?\b/i],
-  ["phase", /\bphases?\b/i],
-  ["stage", /\bstages?\b/i],
-  ["L1–L5", /\bL[1-5]\b/],
-  ["P0–P3", /\bP[0-3]\b/],
-];
+describe("the re-cut removed a cast the room could not identify", () => {
+  /**
+   * What the retired stage printed and what nothing on this one may.
+   *
+   * EACH PATTERN IS FIRED AGAINST A CONTROL FIRST. A rule that no longer matches anything is a
+   * rule that passes whatever the copy says, and these four were read off the slide's own
+   * previous revision — so the controls are what that revision actually printed.
+   */
+  const BANNED: readonly [string, RegExp, string][] = [
+    ["the committee", /\bcommittee\b/i, "THE COMMITTEE"],
+    ["group HR", /\bgroup[\s-]?hr\b/i, "GROUP HR"],
+    ["a budget cycle", /\bbudget cycle\b/i, "A BUDGET CYCLE"],
+    [
+      "the playbook",
+      /\bplaybook\b/i,
+      "Nanovest's own Group HR playbook lists four levers — “Convene · Champion”",
+    ],
+  ];
 
-/**
- * The two spellings with NO sentence in the control corpus to fire against, kept anyway and
- * said out loud rather than quietly padded into the list above.
- *
- * `tier` is what this deck calls its COLOUR ramp — a word the source files use constantly and
- * no rendered string anywhere uses — so a tier printed on this stage would be a rank named in
- * the deck's own internal vocabulary, and there is nothing to control it against. `step one`
- * is the shape a numbered lever would take. Both are refused here; neither can be controlled,
- * and a regex that fires on nothing would make the rule above pass on copy that had grown a
- * ladder in a word the corpus does not happen to contain.
- */
-const LADDER_UNSOURCED_TOKENS: ReadonlyArray<readonly [string, RegExp]> = [
-  ["tier", /\btiers?\b/i],
-  ["step one…five", /\bstep\s+(one|two|three|four|five)\b/i],
-];
+  test("every pattern still fires on the copy it was read off", () => {
+    for (const [name, pattern, control] of BANNED) {
+      expect(pattern.test(control), `${name} no longer matches its own control`).toBe(true);
+    }
+  });
 
-/**
- * §6.6's own sentence and the source it was written against, transcribed on 2026-08-08.
- *
- * THE CONTROL CORPUS IS THE SOURCE AND NOT A SET OF SENTENCES WRITTEN TO MAKE THE REGEXES
- * FIRE, which is the call `gap-three-failures.test.tsx` records: a control that edits its own
- * input proves the edit and not the pattern.
- *
- *   · `docs/specs/2026-08-03-gems-catalyst-implementation-spec.md` §6.6, the line that cuts
- *     the sequence and names the two ladders it would be a third of.
- *   · `docs/researches/internal-townhall-aisc.md`, the source deck's own summary of the
- *     journey, which is where the five stages and the words "maturity model" come from.
- */
-const CUT_LADDER_SOURCES: readonly string[] = [
-  '"Learn → Experiment → Build → Integrate → Own" is out: it would be a third ladder alongside L1–L5 and P0–P3.',
-  "Department journey: Learn → Experiment → Build → Integrate → Own (5-stage maturity model)",
-];
-
-/** The deck's two LIVE ordered vocabularies, plus the sentences above. Imported rather than
- *  transcribed wherever it can be: a rung retitled in `leader-gap` or a phase reworded in K.2
- *  keeps controlling this rule instead of silently ceasing to. */
-const LADDER_CONTROL = (): string[] => [
-  ...walkStrings(gapLadderContent),
-  ...walkStrings(capabilityLadderFor("gems")),
-  ...walkStrings(capabilityLadderFor("berau")),
-  ...walkStrings(mandatePhasesGatesContent),
-  ...walkStrings(phasesGatesFor("gems")),
-  ...walkStrings(phasesGatesFor("berau")),
-  ...CUT_LADDER_SOURCES,
-];
-
-describe("§6.6 · the four levers are not a third ladder", () => {
-  test("no authored string and no rendered string names a level, a rung, a phase or a stage", () => {
-    const authored = authoredStrings();
-    expect(authored.length, "a rule over an empty set proves nothing").toBeGreaterThan(20);
-
-    const { container, unmount } = renderSlide(4);
-    const stage = stageTextWithoutFigLabel(container);
-    expect(stage.length, "a rule over an empty stage proves nothing").toBeGreaterThan(600);
-    for (const [name, pattern] of [...LADDER_TOKENS, ...LADDER_UNSOURCED_TOKENS]) {
-      for (const copy of authored) {
+  test("names none of them, in any authored string", () => {
+    for (const [name, pattern] of BANNED) {
+      for (const copy of authored()) {
         expect(pattern.test(copy), `"${name}" in ${JSON.stringify(copy)}`).toBe(false);
       }
-      expect(pattern.test(stage), `"${name}" reached the stage`).toBe(false);
     }
-    unmount();
   });
+
+  test("names none of them, at any pose", () => {
+    for (const pose of POSES) {
+      const { container } = renderSlide(pose);
+      const text = stageText(container);
+      for (const [name, pattern] of BANNED) {
+        expect(pattern.test(text), `"${name}" reached pose ${pose}`).toBe(false);
+      }
+      cleanup();
+    }
+  });
+
+  test("quotes nobody — no quotation mark survives on any pose", () => {
+    // The retired band printed an outside document's own labels inside curly quotes. The
+    // provenance is spoken now, so no pose has anything to quote.
+    for (const pose of POSES) {
+      const { container } = renderSlide(pose);
+      expect(stageText(container)).not.toMatch(/["“”]/);
+      cleanup();
+    }
+  });
+
+  test("names no organisation", () => {
+    // Derived from the registered brands rather than typed, so a fourth brand tightens this
+    // rule instead of slipping past it. This slide's subject is the person in the room, and
+    // that person is the same person in both rooms.
+    const orgs = [
+      ...Object.values(BRANDS).map((b) => b.label),
+      "Nanovest",
+      "Berau",
+      "GEMS",
+    ];
+    for (const pose of POSES) {
+      const { container } = renderSlide(pose);
+      const text = stageText(container);
+      for (const org of orgs) {
+        expect(text.includes(org), `"${org}" reached pose ${pose}`).toBe(false);
+      }
+      cleanup();
+    }
+  });
+
+  test("says who signs, in shape and once in words", () => {
+    // The claim the form used to make by counting empty boxes: four curves, one box.
+    renderSlide(RECAP_POSE);
+    for (const lever of C.levers) {
+      expect(mounted(`levers-connector-${lever.id}`), lever.id).toBe(true);
+    }
+    expect(screen.getAllByTestId(/^levers-connector-/)).toHaveLength(LEVER_COUNT);
+    expect(box("levers-sign-label").textContent).toBe(C.signLabel);
+    expect(box("levers-sign-note").textContent).toBe(C.signNote);
+  });
+
+  test("runs a current down every connector, toward the box and not away from it", () => {
+    // FOUR CURVES THAT MERELY MEET SAY THE LEVERS ARE RELATED; four with something running down
+    // them say WHICH WAY. The direction is a property of two things together — the path's own
+    // start point and the SIGN of the dash offset — so both are held here.
+    renderSlide(RECAP_POSE);
+    for (const lever of C.levers) {
+      const current = box(`levers-current-${lever.id}`);
+      expect(current.getAttribute("class"), lever.id).toContain("kl-arrive");
+      const path = current.querySelector("path");
+      expect(path?.getAttribute("class"), lever.id).toBe("kl-current");
+      // Brighter than the route it rides: the curve is the road, this is the traffic.
+      expect(path?.getAttribute("stroke"), lever.id).toBe("var(--copper-300)");
+      // It arrives only after the route beneath it has finished drawing — a current on a line
+      // that is still drawing runs off the end of its own road.
+      const drawn = Number.parseFloat(box(`levers-connector-${lever.id}`).style.animationDelay);
+      expect(Number.parseFloat(current.style.animationDelay), lever.id).toBeGreaterThan(drawn);
+    }
+    const css = readFileSync(CSS_PATH, "utf8");
+    // NEGATIVE, because `connectorPath` starts at the LEVER: a negative offset travels in the
+    // +path direction, which is card → `YOU`. A positive one would run all four backwards, out
+    // of the signature and up into the levers.
+    const period = css.match(/@keyframes kl-current \{[\s\S]*?stroke-dashoffset:\s*(-?[\d.]+)/);
+    expect(period, "no kl-current keyframe").not.toBeNull();
+    expect(Number.parseFloat(period?.[1] ?? "0")).toBeLessThan(0);
+    // And one whole dash period, so the loop closes on itself with no seam.
+    const dash = css.match(/\.kl-current \{[\s\S]*?stroke-dasharray:\s*([\d.]+)\s+([\d.]+)/);
+    const on = Number.parseFloat(dash?.[1] ?? "0");
+    const off = Number.parseFloat(dash?.[2] ?? "0");
+    expect(Math.abs(Number.parseFloat(period?.[1] ?? "0"))).toBe(on + off);
+  });
+});
+
+// ── §6.6 · the four levers are not a third ladder ────────────────────────────
+
+describe("§6.6 · the four levers are not a third ladder", () => {
+  const LADDER_WORDS: readonly [string, RegExp][] = [
+    ["a level", /\blevels?\b/i],
+    ["a rung", /\brungs?\b/i],
+    ["a phase", /\bphases?\b/i],
+    ["a stage", /\bstages?\b/i],
+    ["a maturity", /\bmaturity\b/i],
+  ];
 
   test("every pattern still fires on the vocabulary it was read off", () => {
-    // ELEVEN REGEXES THAT MATCHED NOTHING would make the rule above pass on a slide that had
-    // grown a ladder. The two unsourced spellings are excluded by construction and argued at
-    // their declaration.
-    const control = LADDER_CONTROL();
-    expect(control.length, "a control over an empty corpus proves nothing").toBeGreaterThan(50);
-    for (const [name, pattern] of LADDER_TOKENS) {
-      expect(
-        control.some((line) => pattern.test(line)),
-        `"${name}" no longer fires on the deck's own ladder vocabulary`,
-      ).toBe(true);
-    }
-    for (const [name, pattern] of LADDER_UNSOURCED_TOKENS) {
-      expect(
-        control.some((line) => pattern.test(line)),
-        `"${name}" is documented as having no source sentence`,
-      ).toBe(false);
+    const control = "Level three is the rung this phase reaches at that stage of maturity.";
+    for (const [name, pattern] of LADDER_WORDS) {
+      expect(pattern.test(control), `${name} no longer matches`).toBe(true);
     }
   });
 
-  test("ranks none of the four — one colour tier for the labels, one for the lines", () => {
-    // THE STRUCTURAL HALF OF §6.6, AND THE HALF A GREP CANNOT DO. The four acts can only
-    // become a ladder if they read as a sequence with a rank on it, and nothing on this stage
-    // expresses one: reading top to bottom the ink does not change. A future edit that
-    // brightened the later rows would turn a list of four acts into a ladder by accident,
-    // without a word being added.
-    renderSlide(2);
-    const colours = (ids: readonly string[]) =>
-      new Set(ids.map((id) => boxOf(id).style.color));
-    const labelColours = colours(LEVERS.map((l) => `mandate-lever-label-${l.id}`));
-    const lineColours = colours(LEVERS.map((l) => `mandate-lever-line-${l.id}`));
-    expect(labelColours.size).toBe(1);
-    expect(lineColours.size).toBe(1);
-    // Painted, rather than identically absent.
-    expect([...labelColours][0]).toMatch(/^var\(--/);
-    expect([...lineColours][0]).toMatch(/^var\(--/);
-    // The label tier and the line tier DIFFER, which is what keeps "one tier for all four"
-    // from passing on a stage that had lost its tiers altogether.
-    expect([...labelColours][0]).not.toBe([...lineColours][0]);
-    // THE FOUR MARKS ARE ONE SHAPE AND ONE COLOUR TOO. A larger or brighter mark on any row
-    // would rank the acts in the figure while the type said they were equal.
-    const marks = MARK_IDS.map((id) => boxOf(id).style);
-    expect(new Set(marks.map((s) => `${s.width}|${s.height}|${s.background}`)).size).toBe(1);
-    expect(marks[0].background).not.toBe("");
+  test("no authored string and no rendered string names one", () => {
+    for (const [name, pattern] of LADDER_WORDS) {
+      for (const copy of authored()) {
+        expect(pattern.test(copy), `"${name}" in ${JSON.stringify(copy)}`).toBe(false);
+      }
+    }
+    for (const pose of POSES) {
+      const { container } = renderSlide(pose);
+      for (const [name, pattern] of LADDER_WORDS) {
+        expect(pattern.test(stageText(container)), `"${name}" at pose ${pose}`).toBe(false);
+      }
+      cleanup();
+    }
   });
 
-  test("prints YOU at exactly the tier of the three columns it is being compared with", () => {
-    // LOAD-BEARING, and the one tier decision on this stage that could look like a kindness.
-    // The head row asks the question; the CELLS answer it. A brighter first head would answer
-    // it before the form was drawn, and the slide would be asserting in colour what it is
-    // about to demonstrate in a count.
-    renderSlide(1);
-    const heads = new Set(
-      AUTHORITIES.map((a) => boxOf(`mandate-levers-authority-${a.id}`).style.color),
+  test("gives the levers no ordinal of any kind — the trap four hero poses set", () => {
+    // FOUR HERO POSES INVITE AN EYEBROW READING "LEVER ONE", and an ordinal on an eyebrow is
+    // how a list of four acts becomes a ladder by accident. Every hero's eyebrow is the
+    // lever's own name and nothing else.
+    const ORDINAL = /\b(?:first|second|third|fourth|one|two|three|step|no\.)\b/i;
+    for (const lever of C.levers) {
+      expect(ORDINAL.test(lever.label), lever.label).toBe(false);
+      expect(/\d/.test(lever.id), lever.id).toBe(false);
+    }
+    for (const pose of HERO_POSES) {
+      renderSlide(pose);
+      const eyebrow = box(`levers-hero-eyebrow-${C.levers[pose].id}`);
+      expect(eyebrow.textContent).toBe(C.levers[pose].label);
+      cleanup();
+    }
+    // No `order`, `index`, `rank` or `level` field anywhere in the data.
+    for (const lever of C.levers) {
+      for (const key of Object.keys(lever)) {
+        expect(key, `${lever.id}.${key}`).not.toMatch(/^(?:order|index|rank|level|step)$/);
+      }
+    }
+  });
+
+  test("ranks none of the four — one colour tier per role, at both scales", () => {
+    for (const pose of HERO_POSES) {
+      renderSlide(pose);
+      const lever = C.levers[pose];
+      expect(box(`levers-hero-act-${lever.id}`).style.color).toBe("var(--neutral-50)");
+      expect(box(`levers-hero-note-${lever.id}`).style.color).toBe("var(--neutral-300)");
+      expect(box(`levers-hero-act-${lever.id}`).style.fontSize).toBe(`${HERO_ACT_SIZE}px`);
+      cleanup();
+    }
+    renderSlide(RECAP_POSE);
+    const labelTiers = new Set(
+      C.levers.map((lever) => box(`levers-recap-label-${lever.id}`).style.color),
     );
-    expect(heads.size).toBe(1);
-    expect([...heads][0]).toMatch(/^var\(--/);
-  });
-
-  test("gives the levers no ordinal of any kind — no number, no order field", () => {
-    // The other way a ladder arrives: not a word, a FIELD. A `level`, `order` or `index` on
-    // `Lever` would be a rank the figure would eventually read, and the four labels carry no
-    // numeral either.
-    LEVERS.forEach((lever) => {
-      expect(Object.keys(lever).sort(), lever.id).toEqual(["id", "label", "line", "lineKw", "needs"]);
-      expect(lever.label, lever.id).not.toMatch(/\d/);
-      expect(lever.label, lever.id).not.toMatch(/^(first|second|third|fourth|last)\b/i);
-    });
+    const lineTiers = new Set(
+      C.levers.map((lever) => box(`levers-recap-line-${lever.id}`).style.color),
+    );
+    expect(labelTiers.size).toBe(1);
+    expect(lineTiers.size).toBe(1);
+    // AND THE ONE RANK THAT IS ALLOWED: the box the four arrive at, against the four cards.
+    const cardFrame = box(`levers-recap-card-${C.levers[0].id}`).style.border;
+    expect(box("levers-sign-box").style.border).not.toBe(cardFrame);
   });
 });
 
-// ── the poses ────────────────────────────────────────────────────────────────
+// ── the shelves ──────────────────────────────────────────────────────────────
 
-describe("the five poses", () => {
-  test("arrive in order and nothing that arrived ever leaves", () => {
-    // The whole reveal contract in one walk. Each pose adds one band and the slide never
-    // subtracts — attention is bought with added light, never taken away.
-    const { container, unmount } = renderSlide(0);
-    // THE LIST IS THE WHOLE STAGE. Every `.fade` box this figure mounts is accounted for in
-    // `REVEALED_AT`, so a box added to the stage and not to this file cannot slip through the
-    // completeness walks below — they would simply never look at it.
+describe("the shelves this slide moved onto", () => {
+  test("stands its ask where K.1 and K.2 stand theirs — 590, 19px, upright", () => {
+    renderSlide(THESIS_POSE);
+    const thesis = box("levers-thesis");
+    expect(thesis.tagName).toBe("P");
+    expect(thesis.textContent).toBe(C.closer);
+    expect(thesis.style.left).toBe(`${SIDE_MARGIN}px`);
+    expect(thesis.style.top).toBe("590px");
+    expect(thesis.style.width).toBe(`${CONTENT_WIDTH}px`);
+    expect(thesis.style.height).toBe(`${THESIS_HEIGHT}px`);
+    expect(thesis.style.fontSize).toBe("19px");
+    expect(thesis.style.fontFamily).toBe("var(--serif)");
+    // NOT ITALIC ANY MORE. The retired ask was 20px serif italic on 572, which made the last
+    // three slides of the deck end their arguments in two registers on two shelves.
+    expect(thesis.style.fontStyle).toBe("");
+    expect(THESIS_TOP).toBe(590);
+    expect(THESIS_TEXT_SIZE).toBe(19);
+  });
+
+  test("puts a copper rule over the ask, and only over the ask", () => {
+    renderSlide(RECAP_POSE);
+    expect(mounted("levers-rule")).toBe(false);
+    goToPose(THESIS_POSE);
+    const rule = box("levers-rule");
+    expect(rule.style.top).toBe(`${RULE_TOP}px`);
+    expect(rule.style.width).toBe(`${CONTENT_WIDTH}px`);
+    expect(RULE_TOP).toBe(553);
+    expect(THESIS_TOP - RULE_TOP - 1).toBe(36);
+    expect(rule.querySelector(".copper-rule")).not.toBeNull();
+  });
+
+  test("prints the five scene lines on the ask's own shelf, one tier down", () => {
+    for (const pose of HERO_POSES) {
+      renderSlide(pose);
+      const line = box(`levers-hero-thesis-${C.levers[pose].id}`);
+      expect(line.style.top).toBe(`${THESIS_TOP}px`);
+      expect(line.style.fontSize).toBe(`${THESIS_TEXT_SIZE}px`);
+      expect(line.style.color).toBe("var(--neutral-200)");
+      cleanup();
+    }
+    renderSlide(RECAP_POSE);
+    expect(box("levers-recap-thesis").style.top).toBe(`${THESIS_TOP}px`);
+    expect(box("levers-recap-thesis").style.color).toBe("var(--neutral-200)");
+    goToPose(THESIS_POSE);
+    expect(box("levers-thesis").style.color).toBe("var(--neutral-100)");
+  });
+});
+
+// ── the geometry ─────────────────────────────────────────────────────────────
+
+describe("geometry", () => {
+  test("keeps every scene clear of the rule the ask stands over", () => {
+    expect(BODY_TOP).toBe(EYEBROW_TOP + LABEL_HEIGHT + 26);
+    expect(SCENE_FLOOR).toBe(RULE_TOP);
+    expect(HERO_FLOOR).toBeLessThanOrEqual(SCENE_FLOOR);
+    expect(RECAP_FLOOR).toBeLessThanOrEqual(SCENE_FLOOR);
+    expect(THESIS_TOP + THESIS_HEIGHT).toBe(NAV_ZONE_TOP - NAV_ZONE_CLEARANCE);
+    expect(NAV_ZONE_TOP).toBe(STAGE.height - 88);
+  });
+
+  test("centres the hero's mark and its words on one middle line", () => {
+    const centre = (BODY_TOP + SCENE_FLOOR) / 2;
+    expect(Math.abs(HERO_GLYPH_TOP + HERO_GLYPH_SIZE / 2 - centre)).toBeLessThanOrEqual(1);
+    renderSlide(0);
+    const first = C.levers[0];
+    expect(px(`levers-hero-mark-${first.id}`, "left")).toBe(HERO_GLYPH_LEFT);
+    expect(px(`levers-hero-mark-${first.id}`, "top")).toBe(HERO_GLYPH_TOP);
+    expect(px(`levers-hero-act-${first.id}`, "left")).toBe(HERO_TEXT_LEFT);
+    expect(px(`levers-hero-act-${first.id}`, "top")).toBe(HERO_TEXT_TOP);
+    expect(px(`levers-hero-note-${first.id}`, "top")).toBe(HERO_NOTE_TOP);
+    // The words start clear of the mark and end on the content edge.
+    expect(HERO_TEXT_LEFT).toBeGreaterThan(HERO_GLYPH_LEFT + HERO_GLYPH_SIZE);
+    expect(HERO_TEXT_LEFT + HERO_TEXT_WIDTH).toBe(SIDE_MARGIN + CONTENT_WIDTH);
+    expect(HERO_NOTE_TOP).toBe(HERO_TEXT_TOP + HERO_ACT_HEIGHT + 22);
+  });
+
+  test("tiles the recap into equal cards with no remainder", () => {
+    renderSlide(RECAP_POSE);
+    C.levers.forEach((lever, i) => {
+      const card = box(`levers-recap-card-${lever.id}`);
+      expect(card.style.left, lever.id).toBe(`${recapCardLeft(i)}px`);
+      expect(card.style.top, lever.id).toBe(`${RECAP_CARD_TOP}px`);
+      expect(card.style.width, lever.id).toBe(`${RECAP_CARD_WIDTH}px`);
+      expect(card.style.height, lever.id).toBe(`${RECAP_CARD_HEIGHT}px`);
+    });
+    expect(recapCardLeft(0)).toBe(SIDE_MARGIN);
+    expect(recapCardLeft(LEVER_COUNT - 1) + RECAP_CARD_WIDTH).toBe(SIDE_MARGIN + CONTENT_WIDTH);
+    expect(() => recapCardLeft(LEVER_COUNT)).toThrow(/no card 4/);
+    expect(() => recapCardLeft(-1)).toThrow(/no card -1/);
+  });
+
+  test("runs every connector from its own card to the one box", () => {
+    const boxCentre = SIGN_BOX_LEFT + SIGN_BOX_WIDTH / 2;
+    expect(SIGN_BOX_LEFT + SIGN_BOX_WIDTH / 2).toBe(SIDE_MARGIN + CONTENT_WIDTH / 2);
+    expect(CONNECTOR_Y0).toBeGreaterThan(RECAP_CARD_TOP + RECAP_CARD_HEIGHT);
+    expect(CONNECTOR_Y1).toBeLessThan(SIGN_BOX_TOP);
+    for (let i = 0; i < LEVER_COUNT; i += 1) {
+      const d = connectorPath(i);
+      // Leaves its own card's middle, arrives at the box's.
+      expect(d.startsWith(`M ${recapCardCenterX(i)} ${CONNECTOR_Y0} `), `curve ${i}`).toBe(true);
+      expect(d.endsWith(`${boxCentre} ${CONNECTOR_Y1}`), `curve ${i}`).toBe(true);
+    }
+    // Four different curves, so nothing is drawn twice on top of itself.
+    expect(new Set(POSES.slice(0, LEVER_COUNT).map(connectorPath)).size).toBe(LEVER_COUNT);
+  });
+
+  test("keeps the sign box centred, and its note under it", () => {
+    renderSlide(RECAP_POSE);
+    const sign = box("levers-sign-box");
+    expect(sign.style.left).toBe(`${SIGN_BOX_LEFT}px`);
+    expect(sign.style.top).toBe(`${SIGN_BOX_TOP}px`);
+    expect(sign.style.height).toBe(`${SIGN_BOX_HEIGHT}px`);
+    expect(SIGN_NOTE_TOP).toBeGreaterThan(SIGN_BOX_TOP + SIGN_BOX_HEIGHT);
+    expect(box("levers-sign-note").style.textAlign).toBe("center");
+  });
+
+  test("derives a mark's line weight from its size, so a hero is not a chip enlarged", () => {
+    // The rule this slide had to break with its siblings: at 260px a `stroke-width: 1.6` in a
+    // 20-unit box paints twenty-one pixels. The optical weight is the constant instead.
+    expect(glyphStroke(HERO_GLYPH_SIZE, HERO_GLYPH_STROKE)).toBeCloseTo(
+      (HERO_GLYPH_STROKE * GLYPH_VIEWBOX) / HERO_GLYPH_SIZE,
+      6,
+    );
+    expect(glyphStroke(HERO_GLYPH_SIZE, HERO_GLYPH_STROKE) * (HERO_GLYPH_SIZE / GLYPH_VIEWBOX)).toBe(
+      HERO_GLYPH_STROKE,
+    );
     expect(
-      [...container.querySelectorAll<HTMLElement>(".fade[data-testid]")]
-        .map((el) => el.getAttribute("data-testid") ?? "")
-        .sort(),
-    ).toEqual([...EVERY_REVEAL].sort());
-    for (const pose of POSES) {
-      goToPose(pose);
-      for (let band = 0; band <= pose; band += 1) {
-        for (const id of REVEALED_AT[band]) {
-          expect(revealed(id), `pose ${pose} · ${id} has arrived`).toBe(true);
-        }
-      }
-      for (let band = pose + 1; band < REVEALED_AT.length; band += 1) {
-        for (const id of REVEALED_AT[band]) {
-          expect(revealed(id), `pose ${pose} · ${id} is not reached yet`).toBe(false);
-        }
-      }
-      // The headings, the four column heads and the head rule are on the stage at every pose
-      // — including pose 0, where the form under them holds nothing at all.
-      for (const id of STANDING_IDS) {
-        expect(screen.getByTestId(id), `pose ${pose} · ${id}`).toBeInTheDocument();
-      }
-    }
-    unmount();
-  });
-
-  test("walks backwards to the same poses it walked forwards through", () => {
-    // Every gate is a function of the pose alone — no state, no "previously shown" — so
-    // stepping back is arithmetic rather than cleanup. Asserted because `ArrowLeft` is a key a
-    // presenter actually presses.
-    const { unmount } = renderSlide(4);
-    goToPose(0);
-    expect(revealed("mandate-levers-closer")).toBe(false);
-    expect(revealed("mandate-levers-band")).toBe(false);
-    MARK_IDS.forEach((id) => expect(revealed(id), id).toBe(false));
-    CELL_IDS.forEach((id) => expect(revealed(id), id).toBe(false));
-    // And the four acts, which pose 0 owns, are exactly as they were.
-    LEVERS.forEach((_, i) => expect(revealed(leverId(i))).toBe(true));
-    unmount();
-  });
-
-  test("puts the band before the ask, and the ask last", () => {
-    // ORDER IS THE ARGUMENT. A room that has just been shown that all four are theirs can
-    // hear "and these are not even ours" as provenance; the same band first would read as a
-    // disclaimer on an ask that had not been made yet. And the closer is the last arrival on
-    // the stage, which is what makes the canonical pose safe to export.
-    const { unmount } = renderSlide(3);
-    expect(revealed("mandate-levers-band")).toBe(true);
-    expect(revealed("mandate-levers-closer")).toBe(false);
-    expect(textOf("mandate-levers-band-eyebrow")).toBe(C.playbook.eyebrow);
-    expect(textOf("mandate-levers-band-statement")).toBe(C.playbook.statement);
-    expect(textOf("mandate-levers-band-provenance")).toBe(C.playbook.provenance);
-    goToPose(4);
-    expect(revealed("mandate-levers-closer")).toBe(true);
-    unmount();
-  });
-
-  test("cites the playbook the four were reworded from, in the source's own words", () => {
-    // "Reworded to the room" is a claim about somebody else's document, and the band is what
-    // stops it being a thing the deck says about itself. The four SOURCE labels are quoted
-    // verbatim and in the source's own order — which is also the order of the four rows above
-    // — so a room that wants to check the rewording can read straight across.
-    renderSlide(3);
-    const provenance = textOf("mandate-levers-band-provenance");
-    ["Convene", "Champion", "Unblock access", "Sustain the rhythm"].forEach((label) =>
-      expect(provenance, label).toContain(label),
+      glyphStroke(RECAP_GLYPH_SIZE, RECAP_GLYPH_STROKE) * (RECAP_GLYPH_SIZE / GLYPH_VIEWBOX),
+    ).toBe(RECAP_GLYPH_STROKE);
+    // The hero's line is heavier than the chip's IN STAGE PIXELS and lighter IN UNITS, which
+    // is exactly the inversion the naive shared constant gets wrong.
+    expect(HERO_GLYPH_STROKE).toBeGreaterThan(RECAP_GLYPH_STROKE);
+    expect(glyphStroke(HERO_GLYPH_SIZE, HERO_GLYPH_STROKE)).toBeLessThan(
+      glyphStroke(RECAP_GLYPH_SIZE, RECAP_GLYPH_STROKE),
     );
-    expect(provenance).toMatch(/“[^”]+”/);
-    // The deck's OWN sentence carries no quotation marks — a paraphrase inside quotes is the
-    // small lie the band's three-line split exists to make impossible. Same rule as K.1's
-    // bottleneck and K.2's statement, one and two clicks earlier.
-    expect(textOf("mandate-levers-band-statement")).not.toMatch(/[“”"]/);
+    expect(() => glyphStroke(0, HERO_GLYPH_STROKE)).toThrow(/no line weight/);
   });
 
-  test("prints the fig label from the composed position, and no letter of its own", () => {
-    const { container, unmount } = renderSlide(0);
-    const fig = container.querySelector(".fig-label")?.textContent ?? "";
-    expect(fig).toContain(C.figLabel);
-    // The letter and number come from `SlideNumberContext`, which the harness supplied — see
-    // `AT`. Nothing under `src/slides/leader-mandate/` names one.
-    expect(fig).toContain(`${AT.letter}.${AT.num}`);
-    unmount();
-  });
-});
-
-// ── gh#69's fifth AC · zero SMIL, every pose complete, under either preference ─
-
-/** The census, run at one pose. Scoped to what this DIRECTORY renders and not to `document`,
- *  because that is the claim: `src/slides/leader-mandate/` mounts no SVG. `.fig-label` — the
- *  deck's own caption, which this slide only calls — is excluded, so a marker added to that
- *  shared component later is a failure of ITS suite rather than of all three of this
- *  section's. */
-function smilCensus(container: HTMLElement, where: string) {
-  const figLabel = container.querySelector(".fig-label");
-  for (const tag of ["animate", "animateTransform", "animateMotion", "set", "svg"]) {
-    const ours = [...container.querySelectorAll(tag)].filter((el) => !figLabel?.contains(el));
-    expect(ours, `${where} · <${tag}>`).toHaveLength(0);
-  }
-}
-
-/** Every box the pose has reached is revealed AND carries its text; nothing it has not
- *  reached is. "Complete" is a claim about THIS pose, not about the last one. */
-function poseIsComplete(pose: number, where: string) {
-  for (let band = 0; band <= pose; band += 1) {
-    for (const id of REVEALED_AT[band]) {
-      expect(revealed(id), `${where} · ${id}`).toBe(true);
-      if (!TEXTLESS_IDS.has(id)) {
-        expect(textOf(id), `${where} · ${id} is empty`).not.toBe("");
-      }
-    }
-  }
-  for (let band = pose + 1; band < REVEALED_AT.length; band += 1) {
-    for (const id of REVEALED_AT[band]) {
-      expect(revealed(id), `${where} · ${id} is not reached yet`).toBe(false);
-    }
-  }
-  for (const id of STANDING_IDS) {
-    expect(screen.getByTestId(id), `${where} · ${id}`).toBeInTheDocument();
-  }
-}
-
-describe("motion", () => {
-  const realMatchMedia = window.matchMedia;
-
-  afterEach(() => {
-    window.matchMedia = realMatchMedia;
-  });
-
-  test("mounts no <svg> at all, at any pose, with no preference mocked", () => {
-    // ZERO BY CONSTRUCTION, AND THIS IS THE ASSERTION THAT MAKES IT A CONSTRUCTION. SMIL is
-    // invisible to the global `prefers-reduced-motion` rule in `globals.css` — that rule
-    // squashes CSS durations only — so a SMIL node has to be gated at mount, as
-    // `E12LoopAnatomy` gates its `<animateMotion>`. This figure has nothing to gate: the
-    // sixteen cells, the four marks and the head rule are plain boxes. The cheapest way to
-    // break that contract is to reach for one `<rect>`, and the rect is not what would go
-    // wrong — it is the `<animate>` somebody adds to it next.
-    for (const pose of POSES) {
-      const { container, unmount } = renderSlide(pose);
-      smilCensus(container, `default · pose ${pose}`);
-      unmount();
-    }
-  });
-
-  describe("under prefers-reduced-motion: reduce", () => {
-    beforeEach(() => {
-      window.matchMedia = ((query: string) => ({
-        matches: query.includes("prefers-reduced-motion"),
-        media: query,
-        onchange: null,
-        addListener: () => {},
-        removeListener: () => {},
-        addEventListener: () => {},
-        removeEventListener: () => {},
-        dispatchEvent: () => false,
-      })) as unknown as typeof window.matchMedia;
-    });
-
-    test("mounts zero SMIL nodes at every pose, and every pose still renders complete", () => {
-      // WHAT THIS CAN AND CANNOT SAY. jsdom runs no animation, so "the pose rests on its
-      // finished frame" is not checkable here — the global rule squashes a duration jsdom
-      // never computes. What is checkable is that the MARKUP is preference-independent:
-      // nothing under this slide reads `matchMedia` at all, so the census is identical under
-      // either preference and every box the pose has reached is mounted, revealed and
-      // carrying its text.
-      const { container, unmount } = renderSlide(0);
-      for (const pose of POSES) {
-        goToPose(pose);
-        smilCensus(container, `reduce · pose ${pose}`);
-        poseIsComplete(pose, `reduce · pose ${pose}`);
-      }
-      unmount();
-    });
-  });
-
-  test("every pose is complete under the default preference too", () => {
-    // The same walk without the mock, so the reduce-mode result above cannot pass because the
-    // stage renders identically badly in both conditions.
-    const { unmount } = renderSlide(0);
-    for (const pose of POSES) {
-      goToPose(pose);
-      poseIsComplete(pose, `default · pose ${pose}`);
-    }
-    unmount();
-  });
-
-  test("ranks nothing by opacity — no inline opacity anywhere on the stage", () => {
-    // §6.8's build rule, and the reason the empty cells are a hairline frame rather than a
-    // dimmed fill. On a step-reveal deck opacity means TIME: an object at 30% is one the
-    // slide has not finished revealing. A rank expressed that way would say "this lever is
-    // still arriving", which is a claim nobody authored.
-    const { container, unmount } = renderSlide(4);
-    const styles = [...container.querySelectorAll<HTMLElement>("[data-testid^='mandate-lever']")]
-      .map((el) => el.getAttribute("style") ?? "")
-      .join(" ");
-    expect(styles.length, "a rule over empty styles proves nothing").toBeGreaterThan(400);
-    expect(styles).not.toMatch(/\bopacity\s*:/i);
-    unmount();
+  test("writes the derived weight onto the mark the figure renders", () => {
+    renderSlide(0);
+    const hero = box(`levers-hero-glyph-${C.levers[0].id}`);
+    expect(hero.style.getPropertyValue("--kl-stroke")).toBe(
+      String(glyphStroke(HERO_GLYPH_SIZE, HERO_GLYPH_STROKE)),
+    );
+    goToPose(RECAP_POSE);
+    const chip = box(`levers-recap-glyph-${C.levers[0].id}`);
+    expect(chip.style.getPropertyValue("--kl-stroke")).toBe(
+      String(glyphStroke(RECAP_GLYPH_SIZE, RECAP_GLYPH_STROKE)),
+    );
   });
 });
 
-// ── gh#69's build rules · figures and letters are derived, never authored ────
+// ── the pointer ──────────────────────────────────────────────────────────────
 
-describe("no rendered string names a letter, a figure or any number at all", () => {
-  test("every string on every pose is free of a figure reference and of a digit", () => {
-    // §3.4 R2 / §3.5. `FigLabel` takes a LABEL only: the letter and the number in front of it
-    // are the composer's, derived from where the run falls in each deck. `mandate` takes K
-    // today and this slide takes K.3, and both would move the first time a Phase 7 run landed
-    // in front of the mandate — so a literal here would be a lie on a projector within the
-    // week.
-    //
-    // AND NO DIGIT AT ALL, which is stronger than the figure rule and is a shape rather than a
-    // list. This slide prints no quantity: no date, no count, no percentage. That makes "no
-    // authored number" checkable in one pass instead of as a growing set of patterns, and it
-    // is the property that would break first if somebody numbered the four levers.
-    const FIGURE = /\b[A-N]\.\d+\b/;
-    for (const pose of POSES) {
-      const { container, unmount } = renderSlide(pose);
-      // The derived reference IS on the stage — asserted first, so the strip below is proved
-      // to be removing something.
-      expect(
-        container.querySelector(".fig-label")?.textContent,
-        `pose ${pose}: the derived reference is there to strip`,
-      ).toContain(`${AT.letter}.${AT.num}`);
-      const strings = stagePrintedStrings(container);
-      expect(strings.length, `pose ${pose}`).toBeGreaterThan(10);
-      for (const rendered of strings) {
-        expect(rendered, `pose ${pose}: ${JSON.stringify(rendered)}`).not.toMatch(FIGURE);
-        expect(rendered, `pose ${pose}: ${JSON.stringify(rendered)}`).not.toMatch(/\d/);
-        expect(rendered, `pose ${pose}: ${JSON.stringify(rendered)}`).not.toMatch(
-          /\bSECTIONS?\s+[A-N]\b/i,
-        );
+describe("the pointer", () => {
+  test("hands every box the hover chrome, and the whole box is the target", () => {
+    // WHAT `.box-hover` PAINTS IS A ::before OVERLAY jsdom cannot compute, so what is held
+    // here is the CLASS and WHERE IT SITS: on the node that carries the geometry, so the hover
+    // rectangle is the painted box and not the text inside it.
+    for (const [pose, ids] of HOVER_BOXES) {
+      renderSlide(pose);
+      for (const id of ids) {
+        const el = box(id);
+        expect(el.className, id).toContain("box-hover");
+        expect(el.className, id).toContain("kl-card");
+        // The geometry is on the SAME node — that is what makes the whole rectangle hoverable.
+        expect(el.style.position, id).toBe("absolute");
+        expect(el.style.width, id).not.toBe("");
+        expect(el.style.height, id).not.toBe("");
+        // And the border is inline, which is why the hover is a pseudo-element and not a
+        // `:hover { border-color }` the stylesheet could never win.
+        expect(el.style.border, id).toMatch(/^1px solid var\(--copper-\d{3}\)$/);
       }
-      // And over the whole stripped stage in one string, so a digit in a box this file forgot
-      // to hook is inside the rule too.
-      expect(stageTextWithoutFigLabel(container), `pose ${pose}`).not.toMatch(/\d/);
-      unmount();
+      cleanup();
     }
   });
 
-  test("no authored string names a section letter, a figure number or a slide", () => {
-    // Held over the authored VALUES as well as the stage: the doc comments under
-    // `src/slides/leader-mandate/` DO name sections, because that is how a spec reference is
-    // written, and a rule over comments would forbid the provenance this slide is required to
-    // record.
-    const authored = authoredStrings();
-    expect(authored.length).toBeGreaterThan(20);
-    for (const copy of authored) {
-      expect(copy, copy).not.toMatch(/\b[A-N]\.\d+\b/);
-      expect(copy, copy).not.toMatch(/\bSECTIONS?\s+[A-N]\b/i);
-      expect(copy, copy).not.toMatch(/\b(slide|figure)\b/i);
-      expect(copy, copy).not.toMatch(/\d/);
+  test("gives every box's inner content no pointer of its own", () => {
+    // ITEM 6, HELD STRUCTURALLY: nothing inside a card carries `pointer-events`, so a pointer
+    // over the label, the mark, the hairline, the line or the padding is a pointer over the
+    // card. An inner element that opted out of hit-testing would leave a hole in the box.
+    renderSlide(RECAP_POSE);
+    for (const lever of C.levers) {
+      const card = box(`levers-recap-card-${lever.id}`);
+      for (const child of Array.from(card.querySelectorAll("*"))) {
+        expect(
+          (child as HTMLElement).style.pointerEvents,
+          `${lever.id} · ${child.getAttribute("data-testid") ?? child.tagName}`,
+        ).toBe("");
+      }
+    }
+  });
+
+  test("keeps every sentence and every eyebrow off the pointer", () => {
+    for (const [pose, ids] of INERT) {
+      renderSlide(pose);
+      for (const id of ids) {
+        expect(box(id).style.pointerEvents, id).toBe("none");
+      }
+      cleanup();
+    }
+  });
+
+  test("draws the connectors on a layer that cannot swallow a hover", () => {
+    renderSlide(RECAP_POSE);
+    expect(box("levers-connectors").getAttribute("class")).toContain("svg-layer");
+  });
+});
+
+// ── the copy ─────────────────────────────────────────────────────────────────
+
+describe("the copy", () => {
+  test("names no day of the week", () => {
+    // The retired headings read "THE LEVERS · WHAT YOU DO ON MONDAY". A weekday is a date the
+    // deck cannot keep and a room cannot check, and it reads as an instruction about a
+    // calendar rather than about a decision.
+    const DAYS = /\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i;
+    expect(DAYS.test("Put it in the calendar on Monday")).toBe(true);
+    for (const copy of authored()) {
+      expect(DAYS.test(copy), JSON.stringify(copy)).toBe(false);
+    }
+    for (const pose of POSES) {
+      const { container } = renderSlide(pose);
+      expect(DAYS.test(stageText(container)), `pose ${pose}`).toBe(false);
+      cleanup();
+    }
+  });
+
+  test("prints no digit and no figure reference on any pose", () => {
+    for (const pose of POSES) {
+      const { container } = renderSlide(pose);
+      const text = stageText(container);
+      expect(/\d/.test(text), `a digit at pose ${pose}: ${text}`).toBe(false);
+      expect(/\b[A-Z]\.\d\b/.test(text), `a figure reference at pose ${pose}`).toBe(false);
+      cleanup();
+    }
+    for (const copy of authored()) {
+      expect(/\b[A-Z]\.\d\b/.test(copy), JSON.stringify(copy)).toBe(false);
+    }
+  });
+
+  test("keeps every string inside its box's budget", () => {
+    for (const lever of C.levers) {
+      expect(lever.act.length, `${lever.id} act`).toBeLessThanOrEqual(HERO_ACT_BUDGET_CHARS);
+      expect(lever.note.length, `${lever.id} note`).toBeLessThanOrEqual(HERO_NOTE_BUDGET_CHARS);
+      expect(lever.short.length, `${lever.id} short`).toBeLessThanOrEqual(
+        RECAP_LINE_BUDGET_CHARS,
+      );
+      expect(lever.thesis.length, `${lever.id} thesis`).toBeLessThanOrEqual(
+        THESIS_BUDGET_CHARS,
+      );
+    }
+    expect(C.recapThesis.length).toBeLessThanOrEqual(THESIS_BUDGET_CHARS);
+    expect(C.closer.length).toBeLessThanOrEqual(THESIS_BUDGET_CHARS);
+    // The labels are the narrowest boxes on the recap and are set on one line.
+    for (const lever of C.levers) {
+      expect(lever.label.length, lever.label).toBeLessThanOrEqual(20);
+    }
+  });
+
+  test("exactly the prose strings carry a *Kw sibling, and every keyword is real", () => {
+    const withKw = new Set<string>();
+    for (const [, text, kw] of PROSE_BOXES()) {
+      withKw.add(text);
+      expect(kw.length, JSON.stringify(text)).toBeGreaterThan(0);
+      for (const k of kw) {
+        expect(text.includes(k), `"${k}" is not in ${JSON.stringify(text)}`).toBe(true);
+      }
+    }
+    // AND NO LABEL DOES. A copper italic inside an uppercase name would emphasise a fragment
+    // of it and read as a rendering fault.
+    for (const [, label] of LABEL_BOXES()) {
+      expect(withKw.has(label), JSON.stringify(label)).toBe(false);
+    }
+    expect(C.headlineKw.every((k) => C.headline.includes(k))).toBe(true);
+  });
+
+  test("renders one <em> per keyword in every prose box, and none in a label", () => {
+    for (const [id, text, kw] of PROSE_BOXES()) {
+      renderSlide(poseOf(id));
+      const el = box(id);
+      expect(el.textContent, id).toBe(text);
+      expect(el.querySelectorAll("em"), id).toHaveLength(kw.length);
+      cleanup();
+    }
+    for (const [id, label] of LABEL_BOXES()) {
+      renderSlide(poseOf(id));
+      const el = box(id);
+      expect(el.textContent, id).toBe(label);
+      expect(el.querySelectorAll("em"), id).toHaveLength(0);
+      expect(el.style.fontFamily, id).toBe("var(--mono)");
+      cleanup();
     }
   });
 
   test("carries no stray markup — the data is plain strings", () => {
-    authoredStrings().forEach((copy) => expect(copy).not.toContain("<em"));
+    for (const copy of authored()) {
+      expect(copy, JSON.stringify(copy)).not.toMatch(/[<>]/);
+    }
+  });
+
+  test("has no brand axis in it at all", () => {
+    expect(Object.keys(C)).not.toContain("byBrand");
+    for (const key of Object.keys(C)) {
+      expect(key).not.toMatch(/brand/i);
+    }
   });
 });
 
-// ── gh#69's build rules · no brand axis ─────────────────────────────────────
+// ── motion ───────────────────────────────────────────────────────────────────
 
-describe("no brand axis", () => {
-  /** The three files this slide owns. `../content.ts` is deliberately NOT among them: it is
-   *  the section's module and K.2's brand pick lives in it, so a `VARIANT` rule held over it
-   *  would be a rule about another slide. */
-  const OWN_FILES = [
-    "mandate-levers.tsx",
-    "components/LeverBoard.tsx",
-    "levers-geometry.ts",
-  ].map((name) => resolve(__dirname, "../../src/slides/leader-mandate", name));
-
-  /** Comments legitimately argue at length about the `VARIANT` this slide does not import —
-   *  the slide file says so twice — so only executable code is under test. The `[^:]` guard
-   *  keeps a `https://` inside a comment from eating the rest of a line. */
-  const codeOf = (file: string) =>
-    readFileSync(file, "utf8")
-      .replace(/\/\*[\s\S]*?\*\//g, "")
-      .replace(/(^|[^:])\/\/.*$/gm, "$1");
-
-  test("imports no VARIANT and resolves no brand block, in any file it owns", () => {
-    // THE SOURCE-LEVEL HALF, which is the one that says WHY the two epochs below are equal.
-    // `deck-variants.test.ts` holds the same kind of rule over `src/deck-variants.ts`'s import
-    // block; this one is narrower and reads only for the axis.
-    for (const file of OWN_FILES) {
-      const code = codeOf(file);
-      expect(code.length, `${file}: nothing left after stripping comments`).toBeGreaterThan(200);
-      expect(code, file).not.toMatch(/\bVARIANT\b/);
-      expect(code, file).not.toMatch(/from\s+["']@\/variant["']/);
-      expect(code, file).not.toMatch(/\bBrand\b/);
-      expect(code, file).not.toMatch(/\w+For\(/);
-    }
-    // POSITIVE CONTROL — the stripper leaves the imports alone and would find one. K.2 is the
-    // slide in this section that DOES resolve a brand, so it is the corpus that proves the
-    // rule above is not passing over an empty string.
-    const k2 = codeOf(resolve(__dirname, "../../src/slides/leader-mandate/mandate-phases-gates.tsx"));
-    expect(k2).toMatch(/\bVARIANT\b/);
-    // …and that the comments the rule ignores really do name it, so "stripped" is doing work.
-    expect(readFileSync(OWN_FILES[0], "utf8")).toMatch(/VARIANT/);
-  });
-
-  test("the component takes no props, so there is no block to hand it", () => {
-    // K.2 takes its resolved brand block as a prop; this one takes nothing, which is the
-    // shape of "there is no axis" rather than "the axis is unused".
-    expect(MandateLevers.length).toBe(0);
-  });
-
-  test("the content block is plain data — no resolver hiding in it", () => {
-    // A `Record<Brand, …>` reachable from this block would be an axis nobody declared. Every
-    // value is a string, a readonly array of strings, or a record of levers and authorities —
-    // and no value is a function.
-    const walk = (value: unknown, path: string): void => {
-      if (typeof value === "function") throw new Error(`a function at ${path}`);
-      if (Array.isArray(value)) value.forEach((v, i) => walk(v, `${path}[${i}]`));
-      else if (value !== null && typeof value === "object") {
-        for (const [k, v] of Object.entries(value)) walk(v, `${path}.${k}`);
+describe("motion", () => {
+  test("mounts zero SMIL nodes at every pose, under either preference", () => {
+    for (const reduce of [false, true]) {
+      const mql = vi.fn().mockImplementation((query: string) => ({
+        matches: reduce && query.includes("reduce"),
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }));
+      vi.stubGlobal("matchMedia", mql);
+      for (const pose of POSES) {
+        const { container, unmount } = renderSlide(pose);
+        expect(
+          container.querySelectorAll("animate, animateTransform, animateMotion, set, animateColor")
+            .length,
+          `SMIL at pose ${pose}, reduce=${reduce}`,
+        ).toBe(0);
+        // NOTHING READS `matchMedia` AT MOUNT, which is the property that makes the global
+        // reduced-motion squash the whole answer: every mark here is a CSS animation.
+        expect(mql, `matchMedia read at pose ${pose}`).not.toHaveBeenCalled();
+        unmount();
       }
-    };
-    expect(() => walk(C, "mandateLeversContent")).not.toThrow();
-    // POSITIVE CONTROL — the walk is alive and would find a resolver one level down.
-    expect(() => walk({ nested: { leversFor: () => C } }, "control")).toThrow(
-      /a function at control\.nested\.leversFor/,
+      vi.unstubAllGlobals();
+    }
+  });
+
+  test("ranks nothing by opacity — no inline opacity anywhere on the stage", () => {
+    // Opacity on a step-reveal deck means "not revealed yet", i.e. TIME. Rank is a colour
+    // tier and never an alpha.
+    for (const pose of POSES) {
+      const { container, unmount } = renderSlide(pose);
+      for (const el of Array.from(container.querySelectorAll<HTMLElement>("[style]"))) {
+        expect(el.style.opacity, `pose ${pose} · ${el.getAttribute("data-testid")}`).toBe("");
+      }
+      unmount();
+    }
+  });
+});
+
+// ── the stylesheet ───────────────────────────────────────────────────────────
+
+describe("the stylesheet", () => {
+  // READ OFF DISK AND NOT IMPORTED. Vite resolves a `.css` import to an injected stylesheet
+  // and jsdom computes no stylesheet at all, so the only way to hold a rule over this file's
+  // CONTENT in a jsdom suite is to read the bytes.
+  const css = readFileSync(CSS_PATH, "utf8");
+
+  test("prefixes every keyframe with the figure's own name", () => {
+    const names = [...css.matchAll(/@keyframes\s+([\w-]+)/g)].map((m) => m[1]);
+    expect(names.length, "a rule over no keyframes proves nothing").toBeGreaterThan(5);
+    names.forEach((name) => expect(name, name).toMatch(/^kl-/));
+  });
+
+  test("uses tokens only — no hex, no rgb(), no bare colour", () => {
+    const declarations = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(declarations).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+    expect(declarations).not.toMatch(/\brgba?\(/);
+    const tokens = [...declarations.matchAll(/var\(--([\w-]+)\)/g)].map((m) => m[1]);
+    expect(tokens.length).toBeGreaterThan(5);
+    // `kl-stroke` is this figure's own custom property and not a colour — it carries the line
+    // weight the geometry module derives, which is the one thing this stylesheet cannot know.
+    tokens.forEach((token) =>
+      expect(token, token).toMatch(/^(?:ease|kl-stroke|copper-\d{3}|neutral-\d{1,3})$/),
     );
   });
 
-  test("names no organisation on the stage", () => {
-    // The subject of this stage is THE PERSON IN THE ROOM, and that person is the same person
-    // in both rooms. The one exception is the CITATION, which names the organisation whose
-    // playbook the four levers were lifted from — a different Group HR from the form's third
-    // column, and the two may never be collapsed.
-    const { container, unmount } = renderSlide(4);
-    const ORGS = /\b(GEMS|GEMVIS|Berau|DigiTech|MineTech|Sinar Mas)\b/i;
-    expect(stageTextWithoutFigLabel(container)).not.toMatch(ORGS);
-    // The citation is the one string that names one, asserted as a POSITIVE so "reworded
-    // from" has an owner rather than being a claim the deck makes about itself.
-    expect(textOf("mandate-levers-band-provenance")).toContain("Nanovest");
-    // …and the form's third column is BARE, so nothing on the stage says the room's own HR
-    // wrote its levers.
-    const groupHr = AUTHORITIES.find((a) => a.id === "groupHr");
-    expect(groupHr?.label).toBe("GROUP HR");
-    expect(groupHr?.label).not.toMatch(/Nanovest/i);
-    unmount();
+  test("names every infinite animation in its reduced-motion block", () => {
+    const block = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(block.length, "there is no reduced-motion block at all").toBeGreaterThan(200);
+    const infinite = new Set(
+      [...css.matchAll(/\.([\w-]+)\s*\{[^}]*animation:[^;]*\binfinite\b/g)].map((m) => m[1]),
+    );
+    expect(infinite.size).toBeGreaterThanOrEqual(8);
+    infinite.forEach((cls) =>
+      expect(block, `${cls} is not disarmed under reduced motion`).toContain(`.${cls}`),
+    );
+    // A draw rule left with its dasharray and no offset flashes an undrawn frame.
+    expect(block).toMatch(/stroke-dashoffset:\s*0/);
+  });
+
+  test("declares transform-box, so an origin resolves against the mark and not the stage", () => {
+    expect(css).toMatch(/\[class\*="kl-anim"\][\s\S]*?transform-box:\s*fill-box/);
+  });
+
+  test("reaches the two things the hover overlay cannot — the hairline and the strokes", () => {
+    expect(css).toMatch(/\.kl-card:hover \.kl-hairline\s*\{/);
+    expect(css).toMatch(/\.kl-card:hover \.kl-glyph :is\(/);
+    expect(css).toMatch(/\.kl-card:hover \.kl-glyph \.kl-solid\s*\{/);
+    // AND IT ADDS LIGHT RATHER THAN SUBTRACTING IT (§7.1): no rule under `:hover` dims a
+    // sibling, so the boxes beside the pointer are byte for byte unchanged.
+    expect(css).not.toMatch(/:hover[^{]*\{[^}]*opacity:\s*0?\.\d/);
+  });
+
+  test("takes its line weight from the caller and states it once", () => {
+    expect(css).toMatch(/stroke-width:\s*var\(--kl-stroke\)/);
+    expect(css).toMatch(/stroke-width:\s*calc\(var\(--kl-stroke\)/);
+    // No literal stroke width survives: a number here would be the constant the re-cut removed.
+    expect(css.replace(/\/\*[\s\S]*?\*\//g, "")).not.toMatch(/stroke-width:\s*[\d.]+\s*;/);
   });
 });
 
+// ── the axis this slide does NOT have ────────────────────────────────────────
+
 describe("both leader decks print the same stage", () => {
-  // BRAND INVARIANCE IS A CLAIM ABOUT MODULE EPOCHS — `VARIANT` resolves once at module scope
-  // — so it cannot be checked inside the one epoch every test above runs in. Two epochs, byte
-  // for byte, following `mandate-enablement.test.tsx`, which holds K.1's identical property
-  // and is the shipped precedent in this very section.
+  // The four levers are generic and identical across brands, and this slide holds that in the
+  // strongest available form: it resolves no brand block at all. That is a claim about MODULE
+  // EPOCHS — `VARIANT` resolves at module scope — so it cannot be checked inside the one epoch
+  // every test above runs in. Two epochs, byte for byte.
   //
   // NOT `SlideHarness`, deliberately: it imports `composedDeck` statically and would hand a
-  // freshly loaded slide a stale context object. This is the same-epoch dynamic-import pattern
-  // `variant-composition.test.tsx` documents.
+  // freshly loaded slide a stale context object.
   const LEADER_VARIANTS: VariantId[] = ["berau-leader", "gems-leader"];
 
-  async function stageFor(variant: VariantId): Promise<{ html: string; text: string }> {
+  async function stageTextFor(variant: VariantId): Promise<string> {
     Object.defineProperty(window, "location", {
       configurable: true,
       writable: true,
@@ -1167,259 +1133,25 @@ describe("both leader decks print the same stage", () => {
       </DeckProvider>,
     );
     act(() => screen.getByTestId("goto-epoch").click());
-    return { html: container.innerHTML, text: container.textContent ?? "" };
+    return container.textContent ?? "";
   }
 
-  afterAll(restoreLocation);
-
   test("byte for byte, at the fullest pose", async () => {
-    // SEQUENTIALLY, not `Promise.all`. Each call re-points `window.location`, resets the
-    // module registry and renders into the SAME document — run concurrently they interleave,
-    // two stages share one DOM, and every query finds two elements.
-    const berau = await stageFor(LEADER_VARIANTS[0]);
-    const gems = await stageFor(LEADER_VARIANTS[1]);
-    // MARKUP AND TEXT BOTH: an axis could move a colour token or a delay without changing a
-    // word, and `textContent` alone would not see it.
-    expect(berau.html).toBe(gems.html);
-    expect(berau.text).toBe(gems.text);
+    // SEQUENTIALLY, not `Promise.all`. Each call re-points `window.location`, resets the module
+    // registry and renders into the SAME document — run concurrently they interleave, two
+    // stages share one DOM, and every `getByTestId` finds two elements.
+    const berau = await stageTextFor(LEADER_VARIANTS[0]);
+    const gems = await stageTextFor(LEADER_VARIANTS[1]);
     // Includes the fig label, so this also says the two decks compose the slide at the same
     // position — which they do, from one shared `LEADER_SLIDE_IDS`.
-    expect(berau.text).toContain(`${AT.letter}.${AT.num}`);
-    // Not vacuously: a stage that rendered nothing would also be equal.
-    expect(berau.text).toContain(C.headline);
-    expect(berau.text).toContain(LEVERS[0].label);
-    expect(berau.text).toContain(LEVERS.at(-1)!.line);
-    expect(berau.text).toContain(C.playbook.provenance);
-    expect(berau.text).toContain(C.closer);
-  });
-});
-
-// ── gh#69's build rules · the keyword register split ─────────────────────────
-
-describe("the keyword rule", () => {
-  test("exactly the prose strings carry a *Kw sibling, and every keyword is real", () => {
-    // The directory's rule, stated at the top of `../../src/slides/leader-mandate/content.ts`
-    // and applied here without an exception. PROSE is the headline, the four lever lines, the
-    // band's statement and the closer; everything else is a LABEL.
-    //
-    // HELD OVER THE BLOCK'S OWN KEYS IN EVERY LAYER, so a `labelKw` cannot be added at any
-    // level without failing here first.
-    expect(Object.keys(C).sort()).toEqual([
-      "authorities",
-      "authorityHeading",
-      "closer",
-      "closerKw",
-      "figLabel",
-      "headline",
-      "headlineKw",
-      "levers",
-      "leversHeading",
-      "playbook",
-    ]);
-    AUTHORITIES.forEach((a) => expect(Object.keys(a).sort(), a.id).toEqual(["id", "label"]));
-    expect(Object.keys(C.playbook).sort()).toEqual([
-      "eyebrow",
-      "provenance",
-      "statement",
-      "statementKw",
-    ]);
-    for (const [name, copy, kws] of PROSE) {
-      expect(Array.isArray(kws), name).toBe(true);
-      // `highlight()` is a `String.includes` match that NO-OPS SILENTLY: a typo drops a copper
-      // highlight with no error anywhere.
-      expect(kws.length, `${name} carries no keyword`).toBeGreaterThan(0);
-      for (const kw of kws) {
-        expect(copy, `${name}Kw: "${kw}" is not in its prose`).toContain(kw);
-      }
+    expect(berau).toBe(gems);
+    // Not vacuously: a stage that rendered nothing would also be equal. The canonical pose is
+    // the recap under the ask, so all four cards and the closer are on it.
+    for (const lever of C.levers) {
+      expect(berau).toContain(lever.label);
+      expect(berau).toContain(lever.short);
     }
-    // A LABEL AND A PROSE STRING MAY NOT BE THE SAME STRING, which is what makes the partition
-    // above a partition rather than two overlapping lists.
-    expect(new Set(printedStrings()).size).toBe(printedStrings().length);
-  });
-
-  test("every mono label renders with no emphasis, in the mono register", () => {
-    // Rendered check, not an authored one: `<em>` is what a highlight IS on the stage. The
-    // CITATION is the sharpest case — a copper italic inside somebody else's quoted sentence
-    // is the deck emphasising a fragment of a source it is supposed to be reporting — and the
-    // four AUTHORITY HEADS are the second, because they are a question the cells answer and
-    // an emphasised `YOU` would answer it in ink.
-    const { container, unmount } = renderSlide(4);
-    for (const id of LABEL_BOXES) {
-      expect(boxOf(id).querySelectorAll("em"), id).toHaveLength(0);
-      // AND IN THE MONO REGISTER, which is the half that says these are labels rather than
-      // short prose that happens to carry no keyword.
-      expect(styleAttr(id), id).toContain("font-family: var(--mono)");
-    }
-    // The fig label is a label too, and the only copper text on the stage that is not mono —
-    // it takes no emphasis either.
-    expect(container.querySelector(".fig-label")?.querySelectorAll("em")).toHaveLength(0);
-    unmount();
-  });
-
-  test("every prose box carries its highlight, one <em> per keyword", () => {
-    // The other direction, and not implied by the one above: a `*Kw` array that silently
-    // stopped matching leaves copy that still reads, so nothing on the stage says the emphasis
-    // was lost.
-    const { container, unmount } = renderSlide(4);
-    for (const [id, kws] of PROSE_BOXES) {
-      const ems = [...boxOf(id).querySelectorAll("em")].map((em) => em.textContent);
-      expect(ems, id).toHaveLength(kws.length);
-      for (const kw of kws) expect(ems, `${id} · ${kw}`).toContain(kw);
-    }
-    const heading = container.querySelector("h1");
-    expect([...(heading?.querySelectorAll("em") ?? [])].map((em) => em.textContent)).toEqual([
-      ...C.headlineKw,
-    ]);
-    // The four lever LINES are the sans INSTRUCTION register — a mono instruction under a mono
-    // label reads as part of the label, which is exactly the collapse this slide cannot
-    // afford: the label is the act's name and the line is the act.
-    LEVERS.forEach((l) =>
-      expect(styleAttr(`mandate-lever-line-${l.id}`), l.id).toContain("font-family: var(--sans)"),
-    );
-    unmount();
-  });
-
-  test("prints exactly the strings the copy block authors, and nothing else", () => {
-    // The two registers checked against the STAGE, so a new string has to pick a side before
-    // it can render. Every printed box's text is one of the authored strings; every authored
-    // string reaches a box.
-    const { container, unmount } = renderSlide(4);
-    const stage = stagePrintedStrings(container);
-    for (const copy of printedStrings()) {
-      expect(stage.some((rendered) => rendered.includes(copy)), JSON.stringify(copy)).toBe(true);
-    }
-    unmount();
-  });
-});
-
-// ── the geometry, as the two sides agree on it ───────────────────────────────
-
-describe("geometry", () => {
-  test("stacks board, band and closer without overlap, clear of the NavBar's hover band", () => {
-    // The vertical budget, worked from the floor upward. `.nav-zone` is `bottom: 0;
-    // height: 88px`, so anything under y=632 sits behind the presenter's own hover target.
-    expect(HEADING_TOP).toBeLessThan(AUTHORITY_HEAD_TOP);
-    expect(AUTHORITY_HEAD_TOP).toBeLessThan(HEAD_RULE_TOP);
-    expect(HEAD_RULE_TOP).toBeLessThan(BOARD_TOP);
-    expect(BOARD_TOP + BOARD_HEIGHT).toBeLessThan(BAND_TOP);
-    expect(BAND_TOP + BAND_HEIGHT).toBeLessThan(CLOSER_TOP);
-    expect(CLOSER_TOP + CLOSER_HEIGHT).toBeLessThanOrEqual(NAV_ZONE_TOP);
-    expect(NAV_ZONE_CLEARANCE).toBeGreaterThan(0);
-  });
-
-  test("right-aligns the form to the content edge and splits it into equal columns", () => {
-    // EQUAL WIDTH IS AN ARGUMENT, not a default: the column whose cells are filled is the same
-    // width as the three whose cells are not, so the image says "one of four" rather than "the
-    // important one and some others".
-    const count = AUTHORITIES.length;
-    expect(FORM_X + FORM_WIDTH).toBe(SIDE_MARGIN + CONTENT_WIDTH);
-    expect(SIDE_MARGIN + CONTENT_WIDTH).toBe(STAGE.width - SIDE_MARGIN);
-    expect(authorityColX(0, count)).toBe(FORM_X);
-    expect(authorityColX(count - 1, count) + authorityColWidth(count)).toBeCloseTo(
-      FORM_X + FORM_WIDTH,
-      6,
-    );
-    // And the levers get the residue, clear of the form.
-    expect(SIDE_MARGIN + LEVER_WIDTH).toBeLessThan(FORM_X);
-  });
-
-  test("lands the last lever row on the board's bottom edge, whatever the count", () => {
-    // "One past the end" arithmetic — a fifth lever re-cuts the board and cannot push the band
-    // down. Derived, so this holds for any count rather than for today's four.
-    for (const count of [2, 4, 6]) {
-      expect(leverRowTop(0, count), `${count} rows`).toBe(BOARD_TOP);
-      expect(leverRowTop(count - 1, count) + LEVER_ROW_HEIGHT, `${count} rows`).toBeCloseTo(
-        BOARD_TOP + BOARD_HEIGHT,
-        6,
-      );
-    }
-  });
-
-  test("centres every cell in its column and on its row, and every mark inside its cell", () => {
-    // THE WELD BETWEEN THE FIGURE AND ITS ARITHMETIC. A cell placed with a literal would pass
-    // every rule above and land beside the wrong lever on a projector — the one failure this
-    // figure is actually at risk of.
-    const { unmount } = renderSlide(2);
-    const columns = AUTHORITIES.length;
-    const rows = LEVERS.length;
-    AUTHORITIES.forEach((a, ai) => {
-      LEVERS.forEach((l, li) => {
-        const cell = boxOf(`mandate-levers-cell-${l.id}-${a.id}`);
-        expect(parseFloat(cell.style.left), `${l.id}/${a.id}`).toBeCloseTo(cellX(ai, columns), 6);
-        expect(parseFloat(cell.style.top), `${l.id}/${a.id}`).toBeCloseTo(cellTop(li, rows), 6);
-        expect(parseFloat(cell.style.width), `${l.id}/${a.id}`).toBe(CELL_WIDTH);
-        expect(parseFloat(cell.style.height), `${l.id}/${a.id}`).toBe(CELL_HEIGHT);
-        if (!l.needs.includes(a.id)) return;
-        const mark = boxOf(`mandate-levers-mark-${l.id}-${a.id}`);
-        expect(parseFloat(mark.style.left), `${l.id}/${a.id}`).toBeCloseTo(markX(ai, columns), 6);
-        expect(parseFloat(mark.style.top), `${l.id}/${a.id}`).toBeCloseTo(markTop(li, rows), 6);
-        expect(parseFloat(mark.style.width), `${l.id}/${a.id}`).toBe(MARK_WIDTH);
-        expect(parseFloat(mark.style.height), `${l.id}/${a.id}`).toBe(MARK_HEIGHT);
-      });
-      // The cell sits centred under its head rather than hugging the column's left edge,
-      // which would read as belonging to the column to its left.
-      expect(cellX(ai, columns) - authorityColX(ai, columns)).toBeCloseTo(
-        (authorityColWidth(columns) - CELL_WIDTH) / 2,
-        6,
-      );
-    });
-    // A MARK IS A SIBLING OF ITS CELL, NOT A CHILD OF IT — the inset is the same on both
-    // sides, so the hairline frame survives the fill.
-    expect(MARK_WIDTH).toBe(CELL_WIDTH - 2 * MARK_INSET);
-    expect(MARK_HEIGHT).toBe(CELL_HEIGHT - 2 * MARK_INSET);
-    // And the lever rows are where the module puts them.
-    LEVERS.forEach((_, i) =>
-      expect(parseFloat(boxOf(leverId(i)).style.top), `row ${i}`).toBeCloseTo(
-        leverRowTop(i, rows),
-        6,
-      ),
-    );
-    expect(parseFloat(boxOf("mandate-levers-closer").style.top)).toBe(CLOSER_TOP);
-    unmount();
-  });
-
-  test("refuses a column or a row the figure does not have", () => {
-    // A silently clamped column is two authority heads printed on top of one another, and a
-    // clamped row is a lever drawn on top of another lever — both look deliberate on a stage,
-    // which is why these throw rather than saturate.
-    expect(() => authorityColX(AUTHORITIES.length, AUTHORITIES.length)).toThrow(/no column 4/);
-    expect(() => authorityColX(-1, 4)).toThrow(/no column -1/);
-    expect(() => authorityColWidth(1)).toThrow(/COMPARISON/);
-    expect(() => leverRowTop(LEVERS.length, LEVERS.length)).toThrow(/no row 4/);
-    expect(() => leverRowTop(1.5, 4)).toThrow(/no row 1.5/);
-    expect(() => leverRowPitch(1)).toThrow(/no pitch/);
-  });
-
-  test("keeps every lever line and every authority head inside its budget", () => {
-    // `../levers-geometry.ts` budgets exactly ONE line per lever row, so a line that wraps does
-    // not overflow a box — it overlaps the row beneath it, which reads on a projector as a font
-    // that failed to load. The authority head is the BINDING budget: a head that wraps pushes
-    // the form's head rule down into the first lever row. Enforced on the COPY, where an author
-    // can act on it, because jsdom computes no text width.
-    LEVERS.forEach((l) =>
-      expect(l.line.length, `lever ${l.id}: ${l.line.length} chars`).toBeLessThanOrEqual(
-        LEVER_LINE_BUDGET_CHARS,
-      ),
-    );
-    AUTHORITIES.forEach((a) =>
-      expect(a.label.length, `head ${a.id}: "${a.label}"`).toBeLessThanOrEqual(
-        AUTHORITY_LABEL_BUDGET_CHARS,
-      ),
-    );
-  });
-
-  test("no hex literal and no rgba() anywhere the figure paints", () => {
-    // CSS VARS ONLY. Held over the rendered inline styles rather than over the source, so a
-    // colour arriving from a helper is inside the rule too.
-    const { container, unmount } = renderSlide(4);
-    const styles = [...container.querySelectorAll<HTMLElement>("[data-testid^='mandate-lever']")]
-      .map((el) => el.getAttribute("style") ?? "")
-      .join(" ");
-    expect(styles.length, "a rule over empty styles proves nothing").toBeGreaterThan(400);
-    expect(styles).not.toMatch(/#[0-9a-f]{3,8}\b/i);
-    expect(styles).not.toMatch(/rgba?\(/i);
-    expect(styles).toMatch(/var\(--copper-500\)/);
-    expect(styles).toMatch(/var\(--copper-800\)/);
-    unmount();
+    expect(berau).toContain(C.signLabel);
+    expect(berau).toContain(C.closer);
   });
 });

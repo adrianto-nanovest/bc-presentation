@@ -1,136 +1,131 @@
-// THE FOUR LEVERS — the last slide of THE MANDATE, and the first one that asks
-// the room to do something on a specific morning.
+// THE FOUR LEVERS — the last slide of THE MANDATE, and the only one that asks the
+// room to sign something.
 //
 // Spec §6.8 (content) · §4.3's leader deck table, which gives the `mandate` run
 // three slides and this one the tail of it · §4.4, which lists NO slot for this
 // slide · §6.6's guardrail on new ladders · §11 Phase 7. No #16 prototype covers
-// this slide, so nothing is productionized from one: the visual contract is
-// settled here, and settled the same way every leader-only slide's in this tree
-// has been — one figure component, one geometry module, copy in the section's own
-// content module.
+// this slide, so nothing is productionized from one: the visual contract is settled
+// here, the same way its two siblings' were — one figure component, one geometry
+// module, one stylesheet, one glyph module, copy in the section's own content module.
 //
-// WHERE THE FOUR COME FROM, AND WHY THE REWORDING IS THE SLIDE. They are Group
-// HR's own enablement levers — `Convene · Champion · Unblock access · Sustain the
-// rhythm` — and in that playbook they are what a GROUP FUNCTION pulls. Printed
-// unchanged in front of a BU or Division Head they would be somebody else's job
-// description, and the room's honest answer would be "then take it to them". So
-// every one is restated as an act inside one person's authority, and the scoping
-// is where the work is rather than in the verbs: "fund it from the line you
-// already hold" is a different ask from "fund it", and only one of the two can be
-// signed in the room. `./content.ts` holds that as a RULE and not as a tone —
-// `authorizableAlone` throws at module load on any lever that waits on the
-// committee, on Group HR or on a budget cycle — so the property fails in the edit
-// that breaks it rather than at CI a commit later.
+// ═══ RE-CUT 2026-08-15 (owner's call), AND THE RE-CUT IS THE FILE. What shipped was
+// ONE STAGE HOLDING EVERYTHING: four lever rows of 13.5px prose down the left, a
+// four-column SIGN-OFF FORM down the right with sixteen boxes in it, a bordered
+// citation band under both, and the ask under that — five bands of content assembled
+// over five poses that only ever added. `./levers-geometry.ts` records the four
+// complaints that retired it, and all four had already been answered on K.1 and K.2:
 //
-// WHY THE SLIDE IS SHAPED THIS WAY. A slide whose whole claim is "you can
-// authorize all of this alone" has to survive a leader mentally sorting the list
-// into what they can sign and what they will have to take somewhere else. So the
-// stage does the sorting in front of them: four acts down the left, and to the
-// right a FORM with a column for each of the four things a leader's act could
-// wait on — themselves, the committee, Group HR, a budget cycle. SIXTEEN BOXES
-// ARE DRAWN AND FOUR ARE FILLED, all four in the same column. Nothing says that
-// in a sentence; the count says it, and a count is the one kind of claim a room
-// can check from the back row.
+//   1. THE FORM NAMED PEOPLE THE ROOM COULD NOT IDENTIFY. Its columns were `YOU`,
+//      `THE COMMITTEE`, `GROUP HR` and `A BUDGET CYCLE`, and only the first is a
+//      person in the room. Nothing in either organisation's own vocabulary tells a
+//      BU or Division Head which committee that is, and a figure whose argument is a
+//      COUNT OF EMPTY BOXES fails the moment the room stops to ask whose boxes they
+//      are. THE CLAIM IS UNCHANGED AND IS NOW MADE BY CONVERGENCE: four curves leave
+//      four levers and arrive at one box, and the box says `YOU`.
+//   2. THE CITATION BAND QUOTED A DOCUMENT THE ROOM HAS NEVER READ — an outside
+//      Group HR playbook, by name, with its four labels in quotation marks. That is
+//      provenance for the deck's author and noise for the audience. It is spoken
+//      now, not printed, which is the call K.1 made about its own band earlier the
+//      same week. K.2 KEPT ITS OWN AND SHOULD HAVE: that band quotes the ROOM's
+//      programme and roadmap, not a stranger's, so it is evidence rather than a
+//      footnote. This note read "K.1 and K.2 each" until 2026-08-15 and was simply
+//      wrong about the sibling — `./components/PhaseLadder.tsx` prints K.2's band on
+//      the `phases` pose and always has.
+//   3. THE STAGE WAS FULL AND NOTHING ON IT WAS BIG. Four of the six poses are now
+//      HEROES with one 260px animated mark each, and the fifth recaps all four.
+//   4. THE SHELVES WERE THIS SLIDE'S OWN. The headings hung at 134 — twelve pixels
+//      under a 40px display headline, so the room read the title and the first mono
+//      line as one wrapped line — and the ask stood at 572 in 20px serif ITALIC
+//      while both siblings' stood at 590 in 19px UPRIGHT over a copper rule. Both
+//      are K.1's now, and this was the last slide in the deck standing on either.
 //
-// AND IT IS NOT EITHER SIBLING'S IMAGE, which was a requirement rather than a
-// preference. K.1 is two text columns under two headings with a lane ramp down
-// the right; K.2 is a staircase over four calendar columns; this is a single
-// column of rows ruled off against a four-column form. What the three DO share is
-// the row idiom — a mono label over one line — because that is the deck's standard
-// construction for "a named thing and what it means", and a third reading habit
-// in three consecutive slides is a cost the room pays for nothing.
+// ═══ WHERE THE FOUR COME FROM, AND WHY THE REWORDING IS STILL THE SLIDE. They are an
+// enablement playbook's four levers, and in that playbook they are what a GROUP
+// FUNCTION pulls. Printed unchanged in front of a Division Head they would be somebody
+// else's job description, and the room's honest answer would be "then take it to
+// them". So every one is restated as an act inside one person's authority, and the
+// scoping is where the work is rather than in the verbs: "pay for it from the budget
+// you already hold" is a different ask from "pay for it", and only one of the two can
+// be signed in the room. `./content.ts` holds that as a RULE and not as a tone —
+// `ownedByTheRoom` throws at module load on any lever whose act has lost the phrase
+// that keeps it authorizable alone — so the property fails in the edit that breaks it
+// rather than at CI a commit later.
 //
-// THE BAND IS THE SECTION'S THIRD, AND IT IS EARNED RATHER THAN INHERITED. The
-// question was whether a third bordered band in three consecutive slides makes the
-// run read as one long slide. It does not, and the reason is what the band holds:
-// on K.1 it is DigiTech's stated bottleneck, on K.2 the organisation's own
-// roadmap, and here the playbook these four levers were lifted from — three
-// attributed claims somebody actually made, in the one object this section uses
-// for exactly that. The alternative was to assert the rewording in the closer and
-// cite nothing, which would have made "reworded to you" a thing the deck says
-// about itself. It also buys the four rows their purity: the source's own labels
-// live in the citation, once, instead of trailing every row as a parenthesis in a
-// second register. The FIGURES differ on all three slides; the CITATION APPARATUS
-// is deliberately constant, and a reader tempted to vary it should read
-// `../leader-mandate/type-registers.ts` on why the band's tokens are shared at all.
+// ═══ 6 POSES, one argument each, AND THE FIRST FOUR ARE MUTUALLY EXCLUSIVE WHILE THE
+// LAST TWO ACCUMULATE. `./components/LeverBoard.tsx` carries the reasoning for the
+// split and for why each hero is conditionally MOUNTED rather than gated.
 //
-// 5 POSES, one argument each:
-//   0 — THE FOUR ACTS. Both headings, the form's four heads and its head rule
-//       stand from here — the empty form under its own question reads as a
-//       promise rather than as a half-drawn stage (K.1's call about its empty
-//       right column, made for the same reason). The four levers land top to
-//       bottom, and the room is asked for all four before it is told what any of
-//       them costs in signatures.
-//   1 — THE FORM. Sixteen boxes, every one of them empty, building left to right.
-//       This is the pose that asks the question — "what does each one need before
-//       it can happen?" — and it is worth its own click precisely because the
-//       answer is one click away: a form that arrived already filled would land
-//       the question and its answer in the same glance, and the marks would be
-//       decoration rather than a result.
-//   2 — THE ANSWER. Four marks, one per lever, in the same column, at the same
-//       stagger the levers themselves arrived on. Three columns stay empty for
-//       the rest of the slide, which is the whole figure.
-//   3 — THE BAND. Where the four came from, quoted and attributed. It arrives
-//       AFTER the answer rather than before it, because a room that has just been
-//       shown that all four are theirs is a room that can hear "and these are not
-//       even ours" as provenance; the same band first would have read as a
-//       disclaimer on an ask that had not been made yet.
-//   4 — THE CLOSER. What follows from a set of levers that waits on nobody: the
-//       absence of a decision is itself a decision, and it is one the room takes.
+//   0 — MAKE IT OFFICIAL. A week that keeps turning over and one block that never
+//       moves. The act beside it, the reason under that, and what the organisation
+//       loses without it on the shelf at the foot of the stage.
+//   1 — NAME THE CHAMPIONS. Six figures, TWO of them clear of the row under one
+//       guard breathing around both. The mark's subject is the boundary, not the
+//       people, and the boundary is one act of authority over everybody inside it.
+//   2 — OPEN THE ACCESS. A barrier that lifts, one mark that passes, and posts that
+//       never move — because what opens is the access and not the wall.
+//   3 — KEEP IT FUNDED. A block that does not shrink, a flow that keeps arriving off
+//       it, and a check that lands. The block is the argument: the money comes off a
+//       line that is already there.
+//   4 — ALL FOUR, AND WHERE THEY END. The four levers as cards on one shelf, each
+//       carrying the mark the room has just seen at hero size, and four curves leaving
+//       them for a single box that says `YOU`. The one frame that says the four acts
+//       have ONE signature between them — no hero pose can, because a hero shows one
+//       lever and the claim is about the set.
+//   5 — THE THESIS, UNDER THE RECAP THAT EARNS IT. A copper rule and one line of 19px
+//       serif, and POSE 4 DOES NOT MOVE.
 //
-// `canonicalPose: 4` — the fullest pose, and the only one the PDF and PPTX exports
-// print. A canonical pose of 3 would export the section's entire ask with its
-// closer missing, which on the slide that ENDS the mandate is the one way this
-// deck could travel badly: the exported page would show a room four things it can
-// do and stop before saying what happens if it does none of them.
+// `canonicalPose: 5` — the last pose, and for this slide that is also the fullest one,
+// which is what `canonicalPose` has to be: it is the frame the PDF and PPTX exports
+// print, and a canonical pose short of it would export the section's whole ask with
+// its closer missing. On the slide that ENDS the mandate that is the one way this deck
+// could travel badly — the exported page would show a room four things it can do and
+// stop before saying what happens if it does none of them.
 //
-// THERE IS NO BRAND AXIS, and this is the second slide in THIS SECTION to import
+// ═══ NEITHER NUMBER IS TYPED HERE. `steps` and `canonicalPose` are read from
+// `./levers-geometry.ts`'s `POSE_COUNT` and `THESIS_POSE`, which are derived from the
+// content module's own lever tuple. One hero per lever plus a recap plus the ask is
+// the slide's shape, so a fifth lever moves the step count, the recap's tiling and the
+// figure's timetable in one edit and leaves nothing for an author to remember.
+//
+// ═══ NO THIRD LADDER IS INVENTED (§6.6). The deck carries exactly two ordered
+// vocabularies — `gap-capability-ladder`'s L1–L5 and K.2's P0–P3 — and "Learn →
+// Experiment → Build → Integrate → Own" was cut precisely so the room would hold one
+// set of levels and not three. The four levers here cannot become a third: they are
+// not levels, they are not stages, and nothing about them is ordered by MATURITY.
+// `./content.ts` says on the field that their order is the order they get pulled in,
+// and the stage backs that up by ranking none of them — one tier for all four names,
+// one for all four acts, one mark size per scene. THIS IS THE RULE THE RE-CUT CAME
+// CLOSEST TO BREAKING: four hero poses invite an eyebrow reading "LEVER ONE", and an
+// ordinal on an eyebrow is how a list of four acts becomes a ladder by accident. Every
+// hero's eyebrow is the lever's own name and nothing else.
+//
+// ═══ THERE IS NO BRAND AXIS, and this is the second slide in THIS SECTION to import
 // no `VARIANT` at all — `mandate-enablement.tsx` is the first, and a reader coming
-// from `mandate-phases-gates.tsx`, which does import one, should read
-// `./content.ts`'s header before concluding that one of the three is wrong.
-//
-// ONE COUNT RECORDED HERE SO NOBODY RE-DERIVES IT FROM A STALE LINE: K.1's own
-// header calls itself "the only leader-only slide in the tree that imports no
-// `VARIANT` at all". That was true when gh#60 wrote it and is not any more —
-// `gap-hardest-part`, `gap-no-sop`, `gap-three-failures`, `gap-the-pattern` and
-// `invest-chicken-egg` each abstain too, which makes this the seventh and not the
-// second. Rewording that file is not this ticket's to do; repeating its number
-// would have been.
+// from `mandate-phases-gates.tsx`, which does import one, should read `./content.ts`'s
+// header before concluding that one of the three is wrong.
 //
 // THE TWO IN THIS SECTION ABSTAIN FOR DIFFERENT REASONS and `./content.ts` argues
-// both. K.1 has no axis because its subject is generic by construction and the one
-// specific thing on its stage is a quotation; this slide has no axis because its
-// subject is THE PERSON IN THE ROOM, and that person is the same person in both
-// rooms — a BU or Division Head with a calendar, a headcount and a budget line
-// they already hold. §4.4 lists seven brand slots and none of them is this slide;
-// §6.8 gives it no brand callback. A `Record<Brand, …>` here would be three
-// byte-identical blocks, which is what a deck looks like on the day somebody edits
-// one of them.
+// both. K.1 has no axis because its subject is generic by construction; this slide has
+// none because its subject is THE PERSON IN THE ROOM, and that person is the same
+// person in both rooms — a BU or Division Head with a calendar, a headcount and a
+// budget line they already hold. §4.4 lists seven brand slots and none of them is this
+// slide; §6.8 gives it no brand callback. A `Record<Brand, …>` here would be three
+// byte-identical blocks, which is what a deck looks like on the day somebody edits one
+// of them.
 //
-// NO THIRD LADDER IS INVENTED (§6.6). The deck carries exactly two ordered
-// vocabularies — `gap-capability-ladder`'s L1–L5 and K.2's P0–P3 — and "Learn →
-// Experiment → Build → Integrate → Own" was cut precisely so the room would hold
-// one set of levels and not three. The four levers here cannot become a third: they
-// are not levels, they are not stages, and nothing about them is ordered by
-// MATURITY. `./content.ts` says on the field that their order is the order they get
-// pulled in, and the stage backs that up by ranking none of them — one tier for all
-// four labels, one for all four lines, one mark each. A future edit that numbered
-// them, or dimmed the later ones, would turn a list of four acts into a ladder by
-// accident.
-//
-// THE LETTER IS NOT AUTHORED HERE, and like `mandate-phases-gates.tsx` this slide
-// APPENDS inside a run that already exists — so it moves no letter and no number
-// anywhere in either leader deck: `mandate` was already K when gh#60 opened it, and
-// `meta`/`principles`/`lab` were already L/M/N. It also COMPLETES the run at §4.3's
-// three slides, which is the last thing that can be appended to it without a spec
-// change. What this slide prints is derived from the composed deck (§3.5):
-// `FigLabel` takes a label only, and no rendered string under
-// `src/slides/leader-mandate/` may name a letter or a number.
+// ═══ THE LETTER IS NOT AUTHORED HERE, and this re-cut moves no letter and no number
+// anywhere in either leader deck: `mandate` was already K, this row is still the run's
+// last, and R3 renumbers only inside a run that changed. Nothing composed changed at
+// all — the slide's id, its section key and its position in `./index.ts` are what they
+// were. What this slide PRINTS is derived from the composed deck (§3.5): `FigLabel`
+// takes a label only, and no rendered string under `src/slides/leader-mandate/` may
+// name a letter or a number.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { LeverBoard } from "./components/LeverBoard";
+import { POSE_COUNT, THESIS_POSE } from "./levers-geometry";
 import { mandateLeversContent as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
@@ -142,6 +137,11 @@ export function MandateLevers() {
     <>
       <FigLabel label={C.figLabel} />
 
+      {/* `.slide-headline.small` — 40px and not the base 46, for the shelf reason every
+          recent leader slide records: 40px on 1.05 from top 80 ends the headline row at
+          122, and 46px would end it at 128.3. The 34px of air under it is what
+          `./levers-geometry.ts`'s `EYEBROW_TOP` spends, and it is the whole of
+          complaint 4 in this file's header. */}
       <div className="slide-headline-row">
         <h1 className="slide-headline small">{highlight(C.headline, C.headlineKw)}</h1>
       </div>
@@ -153,15 +153,15 @@ export function MandateLevers() {
 
 // ───────────────────── slide def ─────────────────────
 
-// NO `const BRAND_CONTENT = …For(VARIANT.brand)` HERE, and its absence is the
-// decision — see the header. Importing no `VARIANT` is also what lets a test mount
-// this stage in two variant epochs and compare the rendered bytes, which is the
-// form `tests/unit/mandate-enablement.test.tsx` holds K.1's identical property in
-// and the cheapest way to prove the two leader decks print the same slide.
+// NO `const BRAND_CONTENT = …For(VARIANT.brand)` HERE, and its absence is the decision
+// — see the header. Importing no `VARIANT` is also what lets a test mount this stage in
+// two variant epochs and compare the rendered bytes, which is the form
+// `tests/unit/mandate-enablement.test.tsx` holds K.1's identical property in and the
+// cheapest way to prove the two leader decks print the same slide.
 export const mandateLeversSlide: SlideDef = {
   id: "mandate-levers",
-  steps: 5,
-  canonicalPose: 4,
+  steps: POSE_COUNT,
+  canonicalPose: THESIS_POSE,
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "mandate",

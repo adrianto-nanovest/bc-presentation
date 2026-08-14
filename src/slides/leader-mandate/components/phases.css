@@ -1,0 +1,504 @@
+/* PHASES AND GATES (§6.8) — every keyframe the four-scene figure runs.
+ *
+ * KEYFRAMES `pg-` PREFIXED AND IMPORTED BY ./PhaseGlyphs.tsx, which is the convention
+ * `./enablement.css`, `../../leader-shape/components/tam-kotter.css`,
+ * `../../leader-gap/components/no-sop.css` and
+ * `../../leader-invest/components/governance.css` set in this tree, and the rule stated
+ * beside `gap-ladder-draw` in `src/styles/globals.css`: every slide family owns its own
+ * keyframes, so retiming one figure can never retime another's. Nothing here is global
+ * and nothing here is shared — including the two modifier classes `.pg-quiet` and
+ * `.pg-solid`, whose names deliberately echo K.1's `.en-quiet` and `.en-solid` without
+ * being them.
+ *
+ * ═══ TWO KINDS OF MOTION LIVE HERE AND THEY ARE NOT THE SAME KIND.
+ *
+ *   ARRIVALS run ONCE, when their element mounts, and END ON THE FRAME THE PICTURE RESTS
+ *   ON: `pg-draw` (the staircase sweeping itself in) and `pg-arrive` (an SVG mark's
+ *   opacity-only fade). `both`/`backwards` holds them there, which is also the frame the
+ *   reduced-motion squash lands on. Every HTML box arrives through `Reveal` instead —
+ *   `.fade.on` in `src/styles/globals.css` — because a scene's boxes are mounted WITH the
+ *   scene and a mount is what `Reveal` is for.
+ *
+ *   AMBIENT LOOPS run forever and are each mark's own VERB drawn small — ten of them
+ *   across eight glyphs. Every one is authored so its 0% and 100% frames are the SAME
+ *   frame, so the loop has no seam and the single squashed iteration a reduced-motion
+ *   reader gets is a composed picture. THERE IS NO LICENSED EXCEPTION IN THIS FILE:
+ *   K.1's `en-reach` is a ring whose whole life is a fade-out and has to be removed
+ *   outright under reduced motion; `answered`'s pulse was authored as a SCALE precisely
+ *   so this file would not need the same escape hatch, because the mark it pulses is a
+ *   person and a person who is not there is that gate's failure.
+ *
+ * ═══ THE MOTION IS THE ARGUMENT AND NOT THE DECORATION. The two card scenes print the
+ * same four columns on the same shelf, and the only thing that separates them is the
+ * grammar of the marks:
+ *
+ *   · THE STATE MARKS all perform A CALENDAR ADVANCING. A flag flies over a step drawn
+ *     dashed, a load presses a stack that does not move, a dot crosses its box and turns
+ *     back, three agents take turns. Nothing in that scene arrives anywhere it has not
+ *     already been.
+ *   · THE GATE MARKS all perform A MEASUREMENT THAT LANDS. A needle sweeps and holds, a
+ *     hand lets go and the wheel keeps turning, a line is written and sealed, a signal
+ *     reaches somebody who answers.
+ *
+ * Swap the two and the slide would be arguing that a date decides something.
+ *
+ * ═══ ZERO SMIL, at every pose, under either motion preference. No `<animate>`,
+ * `<animateTransform>`, `<animateMotion>`, `<set>` or `<animateColor>` element: SMIL is
+ * invisible to the reduced-motion squash in `globals.css` and would have to be gated
+ * behind a `matchMedia` at mount, and a CSS animation is not and does not.
+ *
+ * ═══ NO HEX AND NO rgba() LITERAL. Every colour here is a `src/styles/globals.css`
+ * token.
+ *
+ * ═══ THE BOX CHROME IS `src/styles/globals.css`'s `.box-hover` AND NOT THIS FILE'S,
+ * which is the one thing a reader looking for the hover will not find below. That class
+ * puts a pseudo-element at `inset: -1px` carrying `border: inherit` at `--copper-200`
+ * over a 6% copper wash, and it is the right mechanism here for the reason it was
+ * written: this figure's boxes declare their border INLINE (the geometry and the border
+ * arrive together), an inline declaration outranks every stylesheet rule at any
+ * specificity, and a `:hover { border-color }` in this file would therefore be silently
+ * ignored. What IS here are the two things the pseudo-element cannot reach: the card's
+ * inner hairline and the mark's own strokes, both declared in this file precisely so
+ * `:hover` can win them.
+ */
+
+/* ───────────────────── the arrivals ───────────────────── */
+
+/* THE STAIRCASE DRAWING ITSELF IN — the one thing an SVG `<path>` buys over four
+   rectangles, and the reason the hero ladder is a path at all.
+
+   PAIR WITH pathLength={1} ON THE ELEMENT: the dasharray below is in the same
+   path-normalised unit, so one dash of 1 covers the whole stretch however the treads are
+   re-cut and whatever the three stretches' different real lengths are. A dashoffset of 1
+   pushes the ON segment entirely before the start of the path and leaves nothing
+   painted; walking it to 0 slides the segment back over the path FROM ITS START, which
+   for every path in `../phases-gates-geometry.ts` is the low, left, unearned end. A
+   `from { stroke-dashoffset: -1 }` would draw the identical staircase downhill.
+
+   `both`, so the frame this rests on is the FINISHED staircase — which is also what
+   makes it correct under `prefers-reduced-motion: reduce`: the global squash sets the
+   duration to 0.01ms and the ladder is simply already drawn.
+
+   THE DURATION IS A DEFAULT AND NOT THE CONTRACT. Two paths wear this class and each
+   overrides `animation-duration` and `animation-delay` inline, because the sequence
+   between them is a figure decision and belongs beside the figure. */
+@keyframes pg-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.pg-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: pg-draw 1100ms var(--ease) both;
+}
+
+/* A MARK ARRIVING INSIDE THE SVG LAYER, and opacity is the whole of it.
+
+   Every HTML box on this stage arrives through `Reveal` — `.fade.on`'s `fadeReveal` in
+   `src/styles/globals.css`, which moves opacity AND `transform: translateY`. That is
+   exactly what an SVG child must not have: a `translateY` on a `<g>` inside this layer
+   would slide a dashed leader 8px off the tread it points at, which is the trap
+   `../../leader-invest/components/GovernanceBeats.tsx` records and answers with its own
+   opacity-only primitive. So the dashed stretches and the two leaders fade on this rule,
+   and nothing in the SVG layer is ever transformed by an arrival. */
+@keyframes pg-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.pg-arrive {
+  opacity: 0;
+  animation: pg-arrive 420ms var(--ease) both;
+}
+
+/* ───────────────────── the card, under the pointer ───────────────────── */
+
+/* THE HAIRLINE BETWEEN A CARD'S NAME AND ITS MARK. It brightens WITH the border, so a
+   card leaning in reads as one gesture rather than as a border doing something on its
+   own — the call `./enablement.css` and `../../leader-gap/components/no-sop.css` both
+   make about the same element. Declared here and not inline for exactly that reason:
+   `:hover` has to be able to win it. */
+.pg-hairline {
+  background: var(--copper-800);
+  transition: background 200ms var(--ease);
+}
+.pg-card:hover .pg-hairline {
+  background: var(--copper-500);
+}
+
+/* IT IS ALL ADDED LIGHT AND NOT ONE THING IS SUBTRACTED, which is §7.1: the box under
+   the pointer GAINS a brighter overlay border (`.box-hover`), a brighter hairline and
+   brighter mark strokes; the boxes beside it are byte for byte unchanged. Nothing is
+   dimmed to promote anything, and nothing moves.
+ *
+ * THE WHOLE BOX IS THE TARGET, and that is a property of WHERE THE CLASS SITS rather
+ * than of a rule here: `.pg-card` IS the absolutely-positioned `left/top/width/height`
+ * node, so its hover rectangle is the painted box and not the text inside it, and a
+ * pointer anywhere in it — over the label, the rung target, the hairline, the mark, a
+ * calendar row or a gate line — is a pointer over the box. Every other element on the
+ * stage that is not a box carries `pointerEvents: "none"` inline, and
+ * `.fade:not(.on) { pointer-events: none }` in `globals.css` keeps the scenes this figure
+ * is NOT showing from hit-testing over the one it is. */
+
+/* A FILLED SHAPE IS EXCLUDED BY NAME, and this is the one specificity trap in the register.
+ * `.pg-glyph .pg-solid { stroke: none }` is (0,2,0) and this rule is (0,3,1), so without the
+ * `:not()` the hover WINS and every filled shape in a mark gains a 1.6-unit stroke straddling
+ * its own edge — which in a 20-unit box drawn at 88px is about seven pixels of growth on all
+ * four sides. The marks with solid fills looked like they GREW under the pointer while the
+ * purely stroked ones only changed colour.
+ *
+ * NOTHING MAY CHANGE SIZE ON HOVER (§7.1 is about added LIGHT): a mark that grew under the
+ * pointer would move the line printed under it, and a card whose contents shift is a card the
+ * room reads as a button. Found on `leader-invest`'s D.2 on 2026-08-15 and fixed in all four
+ * copies of this register in the same edit. */
+.pg-card:hover .pg-glyph :is(path, line, circle, rect, polyline, polygon):not(.pg-solid) {
+  stroke: var(--copper-200);
+}
+
+/* The other half of the same fix, and it is belt AND braces on purpose: this rule is (0,4,0)
+ * and beats the one above whatever the `:not()` does, so `stroke: none` is restated here
+ * rather than left to specificity arithmetic a future edit could tip. A filled shape
+ * brightens by its FILL and by nothing else. */
+.pg-card:hover .pg-glyph .pg-solid {
+  fill: var(--copper-200);
+  stroke: none;
+}
+
+/* ───────────────────── the marks ───────────────────── */
+
+/* THE BASE, AND EVERY MARK IS STROKED COPPER UNLESS IT ASKS TO BE FILLED. One stroke
+   width for all eight (1.6 in a 20-unit viewBox), one cap, one join, one tier — because
+   a mark drawn heavier than the three beside it would rank its phase, and ranking a
+   phase is the one thing this stage may not do. */
+.pg-glyph {
+  display: block;
+}
+.pg-glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* THREE OF THE EIGHT ANIMATE OUT OF THEIR OWN BOUNDS — `measure`'s needle sweeps 104°,
+     `contract`'s seal reaches 1.55, and `unpushed`'s pusher retreats past its own left
+     edge — so a mark authored flush to its viewBox would clip on the one frame it is
+     moving. */
+  overflow: visible;
+}
+.pg-glyph :is(path, line, circle, rect, polyline, polygon) {
+  fill: none;
+  stroke: var(--copper-300);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 200ms var(--ease);
+}
+/* THE ONE OPT-OUT. A filled mark inside a stroked one is what makes a dot an agent and a
+   circle a person; it is the same tier, so it adds no rank. */
+.pg-glyph .pg-solid {
+  fill: var(--copper-300);
+  stroke: none;
+  transition: fill 200ms var(--ease);
+}
+/* Quieter chrome INSIDE a mark — a dial's face, a page's frame, a bound, an escalation
+   path, a dashed tread. One tier down, so the moving part of every glyph is the part the
+   eye lands on. `--copper-400` and not `--copper-500`, which is the measured floor
+   `tam-kotter.css` records: at 1.3px in `--copper-500` a ground does not resolve at all
+   in a 2× screenshot, and a mark whose surface has vanished is a shape that means
+   nothing. */
+.pg-glyph .pg-quiet {
+  stroke: var(--copper-400);
+  stroke-width: 1.3;
+}
+/* THE `transform-box` DECLARATION IS LOAD-BEARING AND IS SET ONCE, HERE. A CSS transform
+   on an SVG child resolves `transform-origin` against the element's own bounding box only
+   if `transform-box: fill-box` is declared; without it the origin is the nearest
+   viewport's origin and a `scale` on a 3px dot sends it across the glyph. Groups that
+   rotate or scale about a named point in the glyph's own coordinates opt back out to
+   `view-box` on their own rule. */
+.pg-glyph [class*="pg-anim"] {
+  transform-box: fill-box;
+}
+
+/* ══════════════ THE FOUR STATES · a calendar advancing ══════════════ */
+
+/* ── CLAIMED · the flag flies and the step under it stays dashed ─────────────
+   THE SCENE'S GRAMMAR, SET BY ITS FIRST MARK: something moves and nothing is decided.
+   `scaleX` about the pole, so the pennant shortens and fills the way cloth does rather
+   than sliding sideways off its own staff. Rests at full — a flag at rest is a flag. */
+.pg-glyph-claimed .pg-anim-flutter {
+  transform-box: view-box;
+  transform-origin: 6px 6.9px;
+  animation: pg-flutter 2800ms ease-in-out infinite;
+}
+@keyframes pg-flutter {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  46% {
+    transform: scaleX(0.78);
+  }
+}
+
+/* ── SOLID · the load comes down and the stack does not move ─────────────────
+   THE MOVING PART IS THE LOAD AND THE SUBJECT IS WHAT REFUSES IT. `ease-in-out` and not
+   `var(--ease)`, for the reason `en-saw` records: the deck's curve is a hard ease-OUT,
+   and on a reciprocating stroke it snaps one way and floats the other, which reads as a
+   fault in the mechanism rather than as weight. The pause is AFTER the press — a pause
+   before it reads as hesitation, and this gate is about a load that keeps coming. */
+.pg-glyph-solid .pg-anim-press {
+  animation: pg-press 3000ms ease-in-out infinite;
+}
+@keyframes pg-press {
+  0%,
+  30%,
+  100% {
+    transform: translateY(0);
+  }
+  56% {
+    transform: translateY(1.6px);
+  }
+}
+
+/* ── BOUNDED · the dot crosses and turns at the wall ────────────────────────
+   IT WAITS AT BOTH ENDS, which is what makes the turn read as a LIMIT rather than as a
+   bounce. A dot that reversed on the frame it arrived would look elastic; one that stops,
+   holds and comes back looks stopped. 0% and 100% are the same frame. */
+.pg-glyph-bounded .pg-anim-cross {
+  animation: pg-cross 3400ms var(--ease) infinite;
+}
+@keyframes pg-cross {
+  0%,
+  8%,
+  100% {
+    transform: translateX(0);
+  }
+  46%,
+  62% {
+    transform: translateX(7.2px);
+  }
+}
+
+/* ── GOVERNED · three agents take turns, and the person never moves ─────────
+   ONE KEYFRAME AND THREE DELAYS, so over a cycle every agent gets a byte-identical turn
+   and the mark ranks none of them — the same construction `en-many` uses, and for the
+   same reason: "agents split one job" is a claim about a set, and a set with a favourite
+   in it is a hierarchy. The delays are typed rather than computed because there are three
+   of them and they are not a list this file maps over. */
+.pg-glyph-governed .pg-anim-agent-1 {
+  animation: pg-agent 2600ms var(--ease) infinite;
+}
+.pg-glyph-governed .pg-anim-agent-2 {
+  animation: pg-agent 2600ms var(--ease) 180ms infinite;
+}
+.pg-glyph-governed .pg-anim-agent-3 {
+  animation: pg-agent 2600ms var(--ease) 360ms infinite;
+}
+@keyframes pg-agent {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* ══════════════ THE FOUR GATES · a measurement that lands ══════════════ */
+
+/* ── MEASURE · the needle sweeps up and HOLDS ────────────────────────────────
+   THE HOLD IS THE GATE. The needle spends 44% of the loop at the top of the dial, which
+   is what separates a measurement that landed from a meter twitching; the return is what
+   a loop costs and not what the score does. `view-box` origin, because the needle rotates
+   about the dial's pivot and not about its own bounding box. */
+.pg-glyph-measure .pg-anim-sweep {
+  transform-box: view-box;
+  transform-origin: 10px 14.4px;
+  animation: pg-sweep 3600ms var(--ease) infinite;
+}
+@keyframes pg-sweep {
+  0%,
+  100% {
+    transform: rotate(-58deg);
+  }
+  30%,
+  74% {
+    transform: rotate(46deg);
+  }
+}
+
+/* ── UNPUSHED · the hand lets go, the wheel keeps turning ────────────────────
+   TWO PARTS, ONE ARGUMENT, AND THEY DELIBERATELY DO NOT SHARE A TIMER. The wheel is
+   `linear` and `infinite` at its own pace: that is the gate — daily use holds when the
+   programme stops pushing it — and a wheel whose speed tracked the pusher would be
+   answering to it. `linear` and not `var(--ease)` for `en-current`'s reason: an eased
+   rotation accelerates inside every cycle, which reads as a mechanical fault rather than
+   as travel.
+
+   THE PUSHER RESTS WHERE IT STARTS, VISIBLE, which is the frame a reduced-motion reader
+   gets — a hand still on the wheel, about to leave. The 61% frame is the one that does
+   the work nobody sees: the pusher is returned to its post while it is still at zero
+   opacity, so the last third of the cycle is a fade back IN PLACE rather than a hand
+   flying backwards through its own retreat. */
+.pg-glyph-unpushed .pg-anim-spin {
+  transform-box: view-box;
+  transform-origin: 11.6px 10px;
+  animation: pg-spin 4800ms linear infinite;
+}
+@keyframes pg-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.pg-glyph-unpushed .pg-anim-letgo {
+  animation: pg-letgo 3200ms var(--ease) infinite;
+}
+@keyframes pg-letgo {
+  0%,
+  20% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translateX(-2.2px);
+    opacity: 0;
+  }
+  61% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ── CONTRACT · the line is written, then the seal presses ───────────────────
+   ONE DURATION, TWO EVENTS, AND THE ORDER IS THE GATE'S OWN. The contract is written
+   DOWN before the first agent runs, so the write occupies the first two thirds of the
+   loop and the seal the last — both on 3600ms, so the two can never drift out of
+   sequence. A seal on its own timer would eventually stamp a blank page.
+
+   `scaleX` FROM THE LEFT, the way a line is actually written, and it rests at full: the
+   resting page is a signed one. */
+.pg-glyph-contract .pg-anim-write {
+  transform-box: view-box;
+  transform-origin: 6.2px 9.2px;
+  animation: pg-write 3600ms var(--ease) infinite;
+}
+@keyframes pg-write {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  14% {
+    transform: scaleX(0.04);
+  }
+  46% {
+    transform: scaleX(1);
+  }
+}
+.pg-glyph-contract .pg-anim-seal {
+  animation: pg-seal 3600ms var(--ease) infinite;
+}
+@keyframes pg-seal {
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.55);
+    opacity: 0.3;
+  }
+  80% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── ANSWERED · the signal travels and somebody answers ──────────────────────
+   USER UNITS ON THE DASH, NOT pathLength, and the travelling overlay therefore
+   deliberately does NOT set `pathLength`. `2.4 10` is 2.4 units of dot and 10 of gap in
+   the glyph's own 20-unit box, which is the same spacing whatever the path's real length
+   — what makes it read as one signal rather than as a texture. −12.4 IS ONE WHOLE PERIOD
+   (2.4 + 10), so the loop closes on itself and there is no seam; NEGATIVE, so the pattern
+   travels in the +path direction, which is desk → person.
+
+   THE PULSE IS A SCALE AND NOT A FADING RING. A ring that expands and fades has no
+   visible resting frame, which is a licensed exception in K.1's stylesheet and would be
+   the wrong one here: this mark IS the gate, and a person who is not there is the failure
+   it exists to catch. */
+.pg-glyph-answered .pg-anim-travel {
+  stroke-dasharray: 2.4 10;
+  animation: pg-travel 1600ms linear infinite;
+}
+@keyframes pg-travel {
+  to {
+    stroke-dashoffset: -12.4;
+  }
+}
+.pg-glyph-answered .pg-anim-answer {
+  animation: pg-answer 2600ms var(--ease) infinite;
+}
+@keyframes pg-answer {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  34% {
+    transform: scale(1.3);
+  }
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* WHAT THE GLOBAL SQUASH CANNOT FINISH. `src/styles/globals.css` sets every animation to
+   0.01ms and one iteration, which parks each rule above on its 100% frame — correct for
+   all ten loops and both arrivals, because every one of them is authored to rest there.
+   TWO THINGS STILL NEED SAYING:
+     · `pg-draw` parks on its finished frame only if the offset is WRITTEN. The squash
+       sets a duration, not a value, and a 0.01ms animation with a `both` fill can flash
+       its `from` frame — on a path carrying `stroke-dasharray: 1` and an unwritten
+       offset, that frame is an empty staircase.
+     · `pg-travel` is the file's only other dashed rule and it must NOT get the same
+       treatment: its dash pattern is the drawing, so `animation: none` alone is the whole
+       answer and restating an offset would move the dots off their rest positions.
+   THE LIST BELOW IS EXHAUSTIVE OVER EVERY `infinite` CLASS IN THIS FILE, and the
+   stylesheet test holds it that way — a mark added above without a line here is a mark
+   that keeps moving for a reader who asked it not to. */
+@media (prefers-reduced-motion: reduce) {
+  .pg-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .pg-arrive {
+    opacity: 1;
+    animation: none;
+  }
+  .pg-glyph-claimed .pg-anim-flutter,
+  .pg-glyph-solid .pg-anim-press,
+  .pg-glyph-bounded .pg-anim-cross,
+  .pg-glyph-governed .pg-anim-agent-1,
+  .pg-glyph-governed .pg-anim-agent-2,
+  .pg-glyph-governed .pg-anim-agent-3,
+  .pg-glyph-measure .pg-anim-sweep,
+  .pg-glyph-unpushed .pg-anim-spin,
+  .pg-glyph-unpushed .pg-anim-letgo,
+  .pg-glyph-contract .pg-anim-write,
+  .pg-glyph-contract .pg-anim-seal,
+  .pg-glyph-answered .pg-anim-travel,
+  .pg-glyph-answered .pg-anim-answer {
+    animation: none;
+  }
+}

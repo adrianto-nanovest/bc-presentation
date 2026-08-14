@@ -1,0 +1,577 @@
+/* THE ENABLEMENT MODEL (§6.8) — every keyframe the four-scene figure runs.
+ *
+ * KEYFRAMES `en-` PREFIXED AND IMPORTED BY ./EnablementModel.tsx, which is the convention
+ * `../../leader-shape/components/tam-kotter.css`, `../../leader-gap/components/no-sop.css` and
+ * `../../leader-invest/components/governance.css` set in this tree, and the rule stated beside
+ * `gap-ladder-draw` in `src/styles/globals.css`: every slide family owns its own keyframes, so
+ * retiming one figure can never retime another's. Nothing here is global and nothing here is
+ * shared.
+ *
+ * ═══ TWO KINDS OF MOTION LIVE HERE AND THEY ARE NOT THE SAME KIND.
+ *
+ *   ARRIVALS run ONCE, when their element mounts, and END ON THE FRAME THE PICTURE RESTS ON:
+ *   `en-arrive` (the SVG layer's opacity-only fade), `en-draw` (a connector being drawn),
+ *   `en-grow` (a lane bar reaching its width). `backwards`/`both` holds them there, which is also
+ *   the frame the reduced-motion squash lands on. Every HTML box arrives through `Reveal`
+ *   instead — `.fade.on` in `src/styles/globals.css` — because a scene's boxes are mounted WITH
+ *   the scene and a mount is what `Reveal` is for.
+ *
+ *   AMBIENT LOOPS run forever and are each glyph's own VERB drawn small — eleven of them, one
+ *   per mark plus the recap's current. Every one is authored so its 0% and 100% frames are the
+ *   SAME frame, so the loop has no seam and the single squashed iteration a reduced-motion
+ *   reader gets is a composed picture. THE ONE EXCEPTION IS `en-reach`, whose whole life is a
+ *   fade-out; it is documented where it is defined and the media block at the foot of this file
+ *   removes it outright.
+ *
+ * ═══ THE MOTION IS THE ARGUMENT AND NOT THE DECORATION, which is the only reason this file is
+ * as long as it is. The slide's three scenes make three different KINDS of claim and each glyph
+ * family says so in a channel a printed diagram does not have:
+ *
+ *   · THE BLOCKS all perform a FAILURE. A dot that reaches a gate and comes back, a block that
+ *     drops out of a talking bubble and dissolves before it lands, an arrow that hits a wall and
+ *     recoils. Nothing in the first scene completes, which is what the scene is about.
+ *   · THE PILLARS all perform a STRUCTURE WORKING. A key turns, a line is rewritten, a saw takes
+ *     two more strokes, a person is reachable. Everything in the second scene completes and
+ *     repeats, because a pillar is a standing thing rather than an event.
+ *   · THE TRACKS all perform REACH. Many marks lighting at once, three rising in order, one
+ *     going round and round. Swap any of the three and the figure would be arguing depth
+ *     backwards.
+ *
+ * ═══ ZERO SMIL, at every pose, under either motion preference. No `<animate>`,
+ * `<animateTransform>`, `<animateMotion>`, `<set>` or `<animateColor>` element: SMIL is
+ * invisible to the reduced-motion squash in `globals.css` and would have to be gated behind a
+ * `matchMedia` at mount, and a CSS animation is not and does not.
+ *
+ * ═══ NO HEX AND NO rgba() LITERAL. Every colour here is a `src/styles/globals.css` token.
+ *
+ * ═══ THE BOX CHROME IS `src/styles/globals.css`'s `.box-hover` AND NOT THIS FILE'S, which is
+ * the one thing a reader looking for the hover will not find below. That class puts a
+ * pseudo-element at `inset: -1px` carrying `border: inherit` at `--copper-200` over a 6% copper
+ * wash, and it is the right mechanism here for the reason it was written: this figure's boxes
+ * declare their border INLINE (the geometry and the border arrive together), an inline
+ * declaration outranks every stylesheet rule at any specificity, and a `:hover { border-color }`
+ * in this file would therefore be silently ignored — the defect
+ * `../../leader-shape/components/tam-kotter.css` records measuring in a browser. What IS here
+ * are the two things the pseudo-element cannot reach: the card's inner hairline and the glyph's
+ * own strokes, both declared in this file precisely so `:hover` can win them.
+ */
+
+/* ───────────────────── the arrivals ───────────────────── */
+
+/* PLAIN OPACITY, AND THE ONE ARRIVAL THE SVG LAYER CAN USE. Every HTML box on this stage arrives
+   through `Reveal` — `.fade.on`'s `fadeReveal` in `src/styles/globals.css`, which moves opacity
+   AND `transform: translateY`. That is exactly what an SVG child must not have: a `translateY` on
+   a `<g>` inside the connector layer would slide four curves 8px off the chips they are drawn
+   between, which is the trap `../../leader-invest/components/GovernanceBeats.tsx` records and
+   answers with its own opacity-only primitive. So the recap's overlays fade on a wrapper `<g>`
+   carrying this rule, and nothing in the SVG layer is ever transformed by an arrival.
+ *
+ * IT IS ALSO WHY THE WRAPPER EXISTS AT ALL. An element carrying both `en-arrive` and `en-current`
+ * carries ONE `animation` shorthand, so any later class change on it would restart BOTH and the
+ * current would blink. On a wrapper the fade runs once and the loop underneath it is never
+ * retimed — the same trap `../../leader-shape/components/tam-kotter.css` records. */
+@keyframes en-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.en-arrive {
+  animation: en-arrive 420ms var(--ease) backwards;
+}
+
+/* A CONNECTOR BEING DRAWN — the recap's structural claim, drawn rather than faded. Four paths
+   run this, one per pillar.
+ *
+ * FROM THE START OF THE PATH, WHICH IS THE BLOCK END OF EVERY PATH IN THIS FIGURE. Elements set
+ * `pathLength={1}`, so `stroke-dasharray: 1` is one dash covering the whole path in
+ * path-normalised units whatever its real length — which matters because the four curves are
+ * four different lengths. A dashoffset of 1 pushes the ON segment entirely BEFORE the start of
+ * the path and leaves nothing painted; walking it to 0 slides the segment back over the path
+ * from its START. `connectorPath` in `../enablement-geometry.ts` authors every `d` cause-first,
+ * so "from the start" is "from the problem toward the thing that answers it". A
+ * `from { stroke-dashoffset: -1 }` would draw the identical four lines backwards: four answers
+ * reaching back to their problems.
+ *
+ * `backwards` AND NOT `both`: the resting `to` frame is the element's own painted state, so the
+ * fill is only needed BEFORE the animation starts, and leaving the end unfilled hands the
+ * element back to the stylesheet. */
+@keyframes en-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.en-draw {
+  /* PAIR WITH pathLength={1} ON THE ELEMENT. */
+  stroke-dasharray: 1;
+  animation: en-draw 620ms var(--ease) backwards;
+}
+
+/* A LANE BAR REACHING ITS WIDTH. `scaleX` and not `width`, so it composites on the GPU and — the
+   half that matters — so the rest frame is the element's OWN authored width. A bar animated on
+   `width` from 0 rests at whatever the last keyframe says; this one rests at the number
+   `laneWidth` produced, which is the ordinal claim the figure is making.
+
+   FROM THE LEFT, because all three lanes start on one left edge and the comparison the room is
+   asked to make is where they END. */
+@keyframes en-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.en-grow {
+  transform-origin: left center;
+  animation: en-grow 700ms var(--ease) both;
+}
+
+/* ───────────────────── the recap's current ───────────────────── */
+
+/* MANY DOTS, ALWAYS, IN ONE DIRECTION: FROM THE BLOCK TO THE PILLAR. The recap's claim is that
+   the four pillars exist BECAUSE of the three blocks, and a standing cause is a current rather
+   than an event — so the four connectors keep carrying one after they have been drawn.
+ *
+ * USER UNITS HERE, NOT pathLength, and the overlay therefore deliberately does NOT set
+ * `pathLength`. `3 15` is 3px of dot and 15px of gap on a 1280×720 viewBox, which is the same
+ * dot spacing on all four paths regardless of length — what makes the four read as one system.
+ * Normalising would give the shortest curve one vast dot and the longest a dense stipple.
+ *
+ * −18 IS ONE WHOLE PERIOD (3 + 15), so the loop closes on itself and there is no seam. NEGATIVE,
+ * so the pattern travels in the +path direction, which is cause → answer.
+ *
+ * `linear` AND NOT `var(--ease)`. An eased loop accelerates and decelerates inside every cycle,
+ * which on a repeating dash pattern reads as a mechanical fault rather than as travel. Travel is
+ * the one place this deck does not use its own ease. */
+@keyframes en-current {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+.en-current {
+  stroke-dasharray: 3 15;
+  animation: en-current 1200ms linear infinite;
+}
+
+/* ───────────────────── the card, under the pointer ───────────────────── */
+
+/* THE HAIRLINE BETWEEN A CARD'S NAME AND ITS MARK. It brightens WITH the border, so a card
+   leaning in reads as one gesture rather than as a border doing something on its own — the call
+   `../../leader-gap/components/no-sop.css` makes about the same element. Declared here and not
+   inline for exactly that reason: `:hover` has to be able to win it. */
+.en-hairline {
+  background: var(--copper-800);
+  transition: background 200ms var(--ease);
+}
+.en-card:hover .en-hairline {
+  background: var(--copper-500);
+}
+
+/* IT IS ALL ADDED LIGHT AND NOT ONE THING IS SUBTRACTED, which is §7.1: the card under the
+   pointer GAINS a brighter overlay border (`.box-hover`), a brighter hairline and brighter glyph
+   strokes; the cards beside it are byte for byte unchanged. Nothing is dimmed to promote
+   anything, and nothing moves — a card that grew under the pointer would move the connector the
+   recap draws at it.
+ *
+ * THE WHOLE BOX IS THE TARGET, and that is a property of where the class sits rather than of a
+ * rule here: `.en-card` IS the absolutely-positioned `left/top/width/height` node, so its hover
+ * rectangle is the painted card and not the text inside it, and a pointer anywhere in it —
+ * including over the label, the hairline, the mark or the line — is a pointer over the card.
+ * `.fade:not(.on) { pointer-events: none }` in `globals.css` is what keeps the three scenes this
+ * figure is NOT showing from hit-testing over the one it is. */
+
+/* A FILLED SHAPE IS EXCLUDED BY NAME, and this is the one specificity trap in the register.
+ * `.en-glyph .en-solid { stroke: none }` is (0,2,0) and this rule is (0,3,1), so without the
+ * `:not()` the hover WINS and every filled shape in a mark gains a 1.6-unit stroke straddling
+ * its own edge — which in a 20-unit box drawn at 88px is about seven pixels of growth on all
+ * four sides. The marks with solid fills looked like they GREW under the pointer while the
+ * purely stroked ones only changed colour.
+ *
+ * NOTHING MAY CHANGE SIZE ON HOVER (§7.1 is about added LIGHT): a mark that grew under the
+ * pointer would move the line printed under it, and a card whose contents shift is a card the
+ * room reads as a button. Found on `leader-invest`'s D.2 on 2026-08-15 and fixed in all four
+ * copies of this register in the same edit. */
+.en-card:hover .en-glyph :is(path, line, circle, rect, polyline, polygon):not(.en-solid) {
+  stroke: var(--copper-200);
+}
+
+/* The other half of the same fix, and it is belt AND braces on purpose: this rule is (0,4,0)
+ * and beats the one above whatever the `:not()` does, so `stroke: none` is restated here
+ * rather than left to specificity arithmetic a future edit could tip. A filled shape
+ * brightens by its FILL and by nothing else. */
+.en-card:hover .en-glyph .en-solid {
+  fill: var(--copper-200);
+  stroke: none;
+}
+
+/* ───────────────────── the marks ───────────────────── */
+
+/* THE BASE, AND EVERY GLYPH IS STROKED COPPER UNLESS IT ASKS TO BE FILLED. One stroke width for
+   all ten marks (1.6 in a 20-unit viewBox), one cap, one join, one tier — because a mark drawn
+   heavier than the nine beside it would rank its card, and ranking a card is the one thing this
+   stage may not do. `../enablement-geometry.ts` holds the same line in space by giving every mark
+   in a scene one size. */
+.en-glyph {
+  display: block;
+}
+.en-glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* TWO OF THE TEN ANIMATE OUT OF THEIR OWN BOUNDS — `support`'s pulse ring reaches 1.35 and
+     `access`'s key sweeps 90° — so a mark authored flush to its viewBox would clip on the one
+     frame it is moving. */
+  overflow: visible;
+}
+.en-glyph :is(path, line, circle, rect, polyline, polygon) {
+  fill: none;
+  stroke: var(--copper-300);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 200ms var(--ease);
+}
+/* THE ONE OPT-OUT. A filled mark inside a stroked one is what makes a knob a knob and a dot a
+   person; it is the same tier, so it adds no rank. */
+.en-glyph .en-solid {
+  fill: var(--copper-300);
+  stroke: none;
+  transition: fill 200ms var(--ease);
+}
+/* Quieter chrome INSIDE a mark — a gate's ground, a page's rule, a ramp, a wall. One tier down,
+   so the moving part of every glyph is the part the eye lands on. `--copper-400` and not
+   `--copper-500`, which is the measured floor `tam-kotter.css` records: at 1.3px in
+   `--copper-500` a ground does not resolve at all in a 2× screenshot, and a mark whose surface
+   has vanished is a shape that means nothing. */
+.en-glyph .en-quiet {
+  stroke: var(--copper-400);
+  stroke-width: 1.3;
+}
+/* THE `transform-box` DECLARATION IS LOAD-BEARING AND IS SET ONCE, HERE. A CSS transform on an
+   SVG child resolves `transform-origin` against the element's own bounding box only if
+   `transform-box: fill-box` is declared; without it the origin is the nearest viewport's origin
+   and a `scale` on a 3px dot sends it across the glyph. Groups that rotate about a named point in
+   the glyph's own coordinates opt back out to `view-box` on their own rule. */
+.en-glyph [class*="en-anim"] {
+  transform-box: fill-box;
+}
+
+/* ── TOOLS · a dot that reaches the gate and comes back ──────────────────────
+   THE FIRST BLOCK, AND THE ONE THAT SETS THE SCENE'S GRAMMAR: nothing completes. The dot travels
+   most of the way to the barrier, waits, and returns to where it started — which is what
+   "approval is slow" looks like from the desk. 0% and 100% are the same frame. */
+.en-glyph-tools .en-anim-waiting {
+  animation: en-waiting 3400ms var(--ease) infinite;
+}
+@keyframes en-waiting {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30%,
+  62% {
+    transform: translateX(5.2px);
+  }
+}
+
+/* ── LITERACY · a bubble talking, and what it says never lands ───────────────
+   THE CONTRAST IS THE MARK. Three dots in the bubble keep blinking — the chatting works, and it
+   is the half of the block that is already true. Under the tail, the square block the talk would
+   have built drops out, falls, and dissolves in mid-air short of the ground: the building does
+   not.
+
+   `en-drop` REPLACED `en-stall` ON 2026-08-14 and the reason is in `./EnablementGlyphs.tsx`. The
+   old rule walked a part-drawn square's `stroke-dashoffset` between 1 and 0.4, which cost the
+   mark its whole right half and paid for a shape a room reads as a rendering fault. THE TRADE
+   THIS RULE MAKES INSTEAD: the failure is carried by a solid block LEAVING, which needs no dash
+   and no `pathLength`, and it rests where it starts.
+
+   IT RESTS AT THE MOUTH, VISIBLE, which is the frame a reduced-motion reader gets — a block that
+   has just arrived and has not fallen yet. The 65% frame is the one that does the work nobody
+   sees: the block is returned to the mouth while it is still at zero opacity, so the last third
+   of the cycle is a fade back IN PLACE rather than a block flying up through its own fall. */
+.en-glyph-literacy .en-anim-say-1 {
+  animation: en-say 2600ms var(--ease) infinite;
+}
+.en-glyph-literacy .en-anim-say-2 {
+  animation: en-say 2600ms var(--ease) 200ms infinite;
+}
+.en-glyph-literacy .en-anim-say-3 {
+  animation: en-say 2600ms var(--ease) 400ms infinite;
+}
+@keyframes en-say {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+.en-glyph-literacy .en-anim-drop {
+  animation: en-drop 3000ms var(--ease) infinite;
+}
+@keyframes en-drop {
+  0%,
+  22% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  64% {
+    transform: translateY(2.6px);
+    opacity: 0;
+  }
+  65% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ── RESISTANCE · an arrow that hits the wall and recoils ────────────────────
+   THE THIRD FAILURE, and the only one of the three where the thing that stops the motion is
+   drawn. The wall is `en-quiet` — it is the surface, not the subject. */
+.en-glyph-resistance .en-anim-recoil {
+  animation: en-recoil 2800ms var(--ease) infinite;
+}
+@keyframes en-recoil {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(4.4px);
+  }
+  52% {
+    transform: translateX(2.2px);
+  }
+}
+
+/* ── ACCESS · a key that turns ───────────────────────────────────────────────
+   THE SECOND SCENE'S GRAMMAR: everything completes, and repeats. The key turns a quarter, holds
+   while the lock is open, and returns — a pillar is a standing thing, so the mark cannot end in
+   a state it will not be in again. `view-box` origin, because the key rotates about the lock's
+   centre and not about its own bounding box. */
+.en-glyph-access .en-anim-turn {
+  transform-box: view-box;
+  transform-origin: 7px 10px;
+  animation: en-turn 3600ms var(--ease) infinite;
+}
+@keyframes en-turn {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  32%,
+  74% {
+    transform: rotate(90deg);
+  }
+}
+
+/* ── CURRICULUM · a line being rewritten ─────────────────────────────────────
+   "Kept current" is the pillar's own claim and this is the only channel that can say it: the top
+   rule of the page empties and is written again, forever. `scaleX` from the LEFT, the way a line
+   is actually written. Rests at full — the resting page is a complete one. */
+.en-glyph-curriculum .en-anim-rewrite {
+  transform-box: view-box;
+  transform-origin: 5px 7.4px;
+  animation: en-rewrite 3800ms var(--ease) infinite;
+}
+@keyframes en-rewrite {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  38% {
+    transform: scaleX(0.06);
+  }
+  76% {
+    transform: scaleX(1);
+  }
+}
+
+/* ── PRACTICE · two strokes of a saw, then the next thing ────────────────────
+   TWO STROKES PER CYCLE AND THEN A PAUSE, which is the rhythm of somebody working rather than the
+   rhythm of a mechanism. One stroke per cycle would read as a metronome; three would read as
+   agitation. The pause is AFTER the work — a pause before the first stroke reads as hesitation.
+
+   ONE NUMBER IN ONE AXIS, and the shape file is why: `./EnablementGlyphs.tsx` nests the saw inside
+   a `<g transform="rotate(24 …)">`, so a local `translateX` here IS a stroke along the blade. The
+   sign is negative — the blade pulls back toward the hand and pushes forward again — so 0% is the
+   deepest frame and the mark rests in the cut.
+
+   `ease-in-out` AND NOT `var(--ease)`, for the reason the hammer this replaced recorded: the deck's
+   curve is a hard ease-OUT, and on a reciprocating stroke it snaps one direction and floats the
+   other, which reads as a fault in the tool rather than as an arm. A symmetric curve puts the
+   weight at both ends of the stroke, where a hand actually turns it around.
+
+   2800ms IS THE ROW'S PACE AND NOT THE SAW'S. Every mark in the pillar row loops between 2600ms
+   and 3800ms, and a 900ms saw — which is the honest tempo of the thing — would pull the eye off
+   the three cards beside it. So the local rhythm is a working one and the cycle is a neighbourly
+   one: the pause absorbs the difference. */
+.en-glyph-practice .en-anim-saw {
+  animation: en-saw 2800ms ease-in-out infinite;
+}
+@keyframes en-saw {
+  0%,
+  36%,
+  72%,
+  100% {
+    transform: translateX(0);
+  }
+  18%,
+  54% {
+    transform: translateX(-1.4px);
+  }
+}
+
+/* ── SUPPORT · someone still reachable ───────────────────────────────────────
+   THE PILLAR IS A PERSON WHO ANSWERS AFTER THE ROOM EMPTIES, so the mark is a person with a
+   signal still going out. THE ONE LOOP IN THIS FILE WHOSE 0% AND 100% FRAMES ARE NOT IDENTICAL
+   IN EVERY PROPERTY: its whole life is a fade-out, so both ends are `opacity: 0` and only the
+   scale differs — the ring is INVISIBLE at both, which is the correct resting frame for a
+   decoration that is a departure. The person underneath it carries the fact, and the media block
+   at the foot of this file removes the ring outright. */
+.en-glyph-support .en-anim-reach {
+  animation: en-reach 2600ms ease-out infinite;
+}
+@keyframes en-reach {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  22% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* ── EVERYONE · many marks, one soft wave ────────────────────────────────────
+   THE THIRD SCENE'S GRAMMAR IS REACH, and the widest track's is the only mark on the slide with
+   more than four moving parts, because "everyone" is the only claim on it that is about number.
+   Eight dots, one keyframe, eight delays cut from `i × pitch` — so over a cycle every dot gets a
+   byte-identical turn and the mark ranks none of them. */
+.en-glyph-everyone .en-anim-many {
+  animation: en-many 2800ms var(--ease) infinite;
+}
+@keyframes en-many {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* ── BUILDERS · three parts going up in order ────────────────────────────────
+   THE TRACK'S OWN CLAIM: they build something, and a build has an order. The bars dip and
+   recover rather than growing from nothing, which is the correction `tam-kotter.css` records —
+   growing from 0 parks a reduced-motion reader on three collapsed stubs. */
+.en-glyph-builders .en-anim-rise {
+  transform-origin: bottom;
+}
+.en-glyph-builders .en-anim-rise-1 {
+  animation: en-rise 3200ms var(--ease) infinite;
+}
+.en-glyph-builders .en-anim-rise-2 {
+  animation: en-rise 3200ms var(--ease) 200ms infinite;
+}
+.en-glyph-builders .en-anim-rise-3 {
+  animation: en-rise 3200ms var(--ease) 400ms infinite;
+}
+@keyframes en-rise {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  34% {
+    transform: scaleY(0.34);
+  }
+  68% {
+    transform: scaleY(1);
+  }
+}
+
+/* ── STEWARDS · one mark keeping something running ───────────────────────────
+   THE NARROWEST TRACK AND THE ONLY MARK THAT NEVER RESTS. A steward's whole job is that the
+   thing does not stop, so the dot goes round the loop at one speed forever — `linear`, for
+   `en-current`'s reason, and 0°/360° are the same frame by construction. */
+.en-glyph-stewards .en-anim-orbit {
+  transform-box: view-box;
+  transform-origin: 10px 10px;
+  animation: en-orbit 5200ms linear infinite;
+}
+@keyframes en-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* WHAT THE GLOBAL SQUASH CANNOT FINISH. `src/styles/globals.css` sets every animation to 0.01ms
+   and one iteration, which parks each rule above on its 100% frame — correct for all eleven
+   loops and all three arrivals, because every one of them is authored to rest there. TWO
+   THINGS STILL NEED SAYING:
+     · `en-reach` is the licensed exception above and rests INVISIBLE. `display: none` is
+       stronger than the squash and removes the element rather than leaving a zero-opacity node.
+     · `en-draw` parks on its finished frame only if the offset is written; the squash sets a
+       duration, not a value, and a 0.01ms animation with `backwards` fill can flash its `from`
+       frame. Stating the resting offset closes it. */
+@media (prefers-reduced-motion: reduce) {
+  .en-glyph-support .en-anim-reach {
+    animation: none;
+    display: none;
+  }
+  .en-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .en-current {
+    animation: none;
+  }
+  .en-arrive,
+  .en-grow {
+    animation-delay: 0s !important;
+  }
+  /* NOTHING IN THE TEN IS DASH-DRAWN ANY MORE, which is the one line of this block that changed on
+     2026-08-14. `literacy`'s square used to stall at three-fifths of its own outline and needed
+     BOTH properties restated here, because `animation: none` on a path carrying
+     `stroke-dasharray: 1` and no offset paints it COMPLETE — the one state that block says the
+     room cannot reach. The mark's failure is now a solid block leaving the bubble
+     (`.en-anim-drop`), which carries no dash and rests where it is authored, so `animation: none`
+     is the whole answer for it and the restatement went with the square. `.en-draw` above is the
+     figure's only remaining dashed arrival and keeps its own. */
+  .en-glyph-tools .en-anim-waiting,
+  .en-glyph-literacy .en-anim-say-1,
+  .en-glyph-literacy .en-anim-say-2,
+  .en-glyph-literacy .en-anim-say-3,
+  .en-glyph-literacy .en-anim-drop,
+  .en-glyph-resistance .en-anim-recoil,
+  .en-glyph-access .en-anim-turn,
+  .en-glyph-curriculum .en-anim-rewrite,
+  .en-glyph-practice .en-anim-saw,
+  .en-glyph-everyone .en-anim-many,
+  .en-glyph-builders .en-anim-rise-1,
+  .en-glyph-builders .en-anim-rise-2,
+  .en-glyph-builders .en-anim-rise-3,
+  .en-glyph-stewards .en-anim-orbit {
+    animation: none;
+  }
+}
