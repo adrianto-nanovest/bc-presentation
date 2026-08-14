@@ -73,7 +73,7 @@
 // import exists to prevent, and the closer shelf is the one that would have hurt.
 // A verification script that needs numbers off this stage should import
 // `./geometry.ts` for the shared eight and read the rest through Vite, exactly as
-// `scripts/gh56-verify.mjs` reads its slide's.
+// `scripts/d2-figure-verify.mjs` reads its slide's.
 import {
   BAND_PADDING_X,
   BAND_PADDING_Y,

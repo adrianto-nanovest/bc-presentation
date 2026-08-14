@@ -342,12 +342,13 @@ describe("leader deck sets", () => {
       // it landed in front of the run's last row, not behind it. Both runs are FINAL now
       // — §4.3 asks for no fifth `shape` slide and §6.7 for no sixth `invest` one — so
       // this ladder of offsets stops growing at `at + 8`.
+      // ONE OFFSET SHORTER SINCE THE `invest` MERGE, which retired that run's last two rows
+      // into `invest-governance`: the ladder now stops at `at + 7`.
       expect(ids[at + 3], id).toBe("invest-base-rates");
       expect(ids[at + 4], id).toBe("invest-own-proof");
       expect(ids[at + 5], id).toBe("invest-chicken-egg");
-      expect(ids[at + 6], id).toBe("invest-security");
-      expect(ids[at + 7], id).toBe("invest-subscription");
-      expect(ids[at + 8], id).toBe("b1-evolution-journey");
+      expect(ids[at + 6], id).toBe("invest-governance");
+      expect(ids[at + 7], id).toBe("b1-evolution-journey");
       // And the run it left has closed up behind it: `g10` now hands straight to
       // the bridge, with no hole where f8 stood.
       expect(ids[ids.indexOf("g10-beyond-big-three") + 1], id).toBe("g11-bridge-to-h");
@@ -506,8 +507,7 @@ describe("leader deck sets", () => {
           "invest-base-rates",
           "invest-own-proof",
           "invest-chicken-egg",
-          "invest-security",
-          "invest-subscription",
+          "invest-governance",
           "mandate-enablement",
           "mandate-phases-gates",
           "mandate-levers",

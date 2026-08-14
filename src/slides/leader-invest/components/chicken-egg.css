@@ -1,0 +1,420 @@
+/* THE LOCK AND THE TWO ROADS — every keyframe and every transition D.3's figure is built with.
+ *
+ * KEYFRAMES `ce-` PREFIXED AND IMPORTED BY ./ChickenEggBeats.tsx, which is the convention
+ * `../../leader-shape/components/middle-out.css`, `./agentic-org.css`, `./tam-kotter.css` and
+ * `../../leader-gap/components/no-sop.css` set beside it, and the rule stated beside
+ * `gap-ladder-draw` in `src/styles/globals.css`: every slide family owns its own keyframes, so
+ * retiming one figure can never retime another's. Nothing here is global and nothing here is
+ * shared.
+ *
+ * ═══ WHY THIS FILE EXISTS RATHER THAN `.fade`, which is what the rest of this slide still
+ * arrives with — the ordinary boxes (prose, labels, item boxes) are `Reveal`s and are NOT in
+ * this file. Four things on this stage cannot be:
+ *
+ *   1. THE LOCK TRAVELS RATHER THAN ARRIVES. It is drawn once, at the ring's centre, and at
+ *      pose 1 it moves to the long road's head and shrinks to fit its token — one object, two
+ *      placements. `.fade` owns `transform` (its `.on` rule animates `translateY(10px) → 0`),
+ *      so an element that wants any other transform has to fight it. {@link .ce-lock} is a bare
+ *      transition instead, which also makes the walk BACKWARDS free: the same declaration runs
+ *      in reverse when the pose drops.
+ *   2. THE PROOF PLATE GROWS. Same argument, different properties: it moves and RESIZES between
+ *      the ring's pole and the destination column, so the transition is on `left/top/width/
+ *      height/font-size` and not on `transform` at all — a scaled box would scale the type
+ *      inside it, and this plate's word has to end at 42px whatever it started at.
+ *   3. TWO ROADS THAT MUST NOT MOVE THE SAME WAY. The long road is a DASHED line whose dashes
+ *      travel for as long as the slide is up; the short road is a SOLID line that draws itself
+ *      once and stops. A dash pattern and a draw animation cannot share one element — the draw
+ *      IS the dash pattern — so they are two rules, and the contrast between them is the
+ *      argument: the route we took never stops costing, the route on offer arrives.
+ *   4. "REPEATEDLY" IS DRAWN AS MOTION AND NOT AS A COUNT. §6.7 gives this slide one quantity
+ *      (30-DAY) and its copy rule forbids any other. Three drawn seals would assert a number
+ *      nothing sourced; ONE seal that keeps re-stamping itself asserts repetition and no count.
+ *      That is {@link .ce-ban-echo}, and it is the reason the ban is an infinite animation
+ *      rather than a static mark.
+ *
+ * ═══ ONE-SHOT ANIMATIONS ARE APPLIED BY CLASS, NOT BY DELAY. Everything on `middle-out`'s
+ * stage is present at pose 0, so its build can be one mount-time cascade of `animationDelay`s.
+ * This figure is not: the roads, the tokens and the boxes arrive at three different poses, and
+ * an animation declared at mount would have finished long before the pose that shows it. So the
+ * component adds the class WITH the pose (`on ? "ce-draw" : ""`), React re-renders, and the
+ * animation starts then. Removing the class on the way back leaves the element on its declared
+ * resting frame, which for every rule below is the finished one.
+ *
+ * ═══ FOUR THINGS LOOP, AND EVERY ONE OF THEM IS A CLAIM RATHER THAN DECORATION — the same bar
+ * `middle-out.css` and `agentic-org.css` set for the only other infinite animations in the
+ * leader tree. The ring's dashes circulate because a deadlock is not a state, it is a loop that
+ * keeps running; the long road's dashes travel because the route it draws was not one act but a
+ * standing arrangement; the ban seal re-stamps itself because "repeatedly" is a word in the copy
+ * and a count is not; and the two pole glyphs reach for each other in antiphase because that is
+ * what the two poles of a deadlock DO. None of them is a barber's pole: each cycle has a rest
+ * in it.
+ *
+ * `scripts/lib/settle.mjs` waits only for FINITE animations, so the export scripts still settle
+ * this slide exactly — every infinite rule is excluded by construction, and the PDF catches them
+ * wherever they happen to be.
+ *
+ * ═══ ZERO SMIL, at every pose, under either motion preference. Every mark that moves on this
+ * stage is a CSS animation or a CSS transition; there is no `<animate>`, `<animateTransform>`,
+ * `<animateMotion>` or `<set>` anywhere in the figure. SMIL is invisible to the reduced-motion
+ * squash in `globals.css` and would have to be gated behind a `matchMedia` at mount. The media
+ * block at the bottom of this file finishes the job that squash cannot.
+ */
+
+/* ───────────────────── the ring · a loop that keeps running ───────────────────── */
+
+/* THE DASHES CIRCULATE, CLOCKWISE, FOREVER. Both arcs are authored in the clockwise direction
+   (the top one left-to-right, the bottom one right-to-left), so ONE negative dashoffset ramp
+   moves both of them the same way round the ring — which is what makes two arrows read as one
+   cycle instead of as two opposed statements.
+
+   THE PERIOD IS THE POINT. 2600ms for a 32px pattern is slow enough to read as circulation
+   rather than as a strobe, and it is the same order as the two other infinite marks in this
+   tree (`mo-flow-*` at 2400ms, C.1's spoke flow). A room should notice it once and then stop
+   noticing it. */
+@keyframes ce-loop-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+.ce-loop-flow {
+  animation: ce-loop-flow 2600ms linear infinite;
+}
+
+/* `linear` AND NOT `var(--ease)`, HERE AND ON THE ROAD BELOW. An eased loop accelerates and
+   decelerates inside every cycle, which on a repeating dash pattern reads as a mechanical fault
+   — the deck's ease is a cubic-bezier with a hard stop at the end, and a hard stop that repeats
+   every 2.6 seconds is a tick. Travel is the one place this deck does not use its own ease. */
+
+/* ───────────────────── the two poles' glyphs · reaching, and not arriving ───────────────────── */
+
+/* EACH ONE LEANS TOWARDS THE THING IT CANNOT HAVE. BUDGET's note leans RIGHT, towards PROOF;
+   PROOF's sheet leans LEFT, towards BUDGET; each fades as it goes and recovers as it comes back.
+   That is the fourth drawing of one claim on this stage — the loop says it with two arrows, the
+   padlock says it with a shackle, and these two say it with two objects that keep reaching past
+   each other.
+
+   THE ANTIPHASE IS THE POINT AND IT IS ONE NEGATIVE DELAY. Half a period (−1300ms of a 2600) puts
+   PROOF at the far end of its reach while BUDGET is home and vice versa, so the pair reads as
+   TAKING TURNS rather than as two things pulsing together — which would read as a heartbeat, and a
+   heartbeat says nothing about a deadlock. The period is the ring's own (`ce-loop-flow`), so
+   everything alive on pose 0 is on one clock.
+
+   `--ce-reach` CARRIES THE DIRECTION AND THE COMPONENT DOES NOT WRITE IT. Both values are in this
+   file because they are properties of the MOTION and not of the layout — nothing in
+   `../chicken-egg-geometry.ts` places them, and 4px is what a 26px glyph can travel inside a
+   216px pole without leaving the word beside it looking loose.
+
+   THE FADE BOTTOMS OUT AT 0.7 AND NOT AT NOTHING, which is the one number here that was tuned
+   against a rendered frame rather than argued. A deeper dip photographs as a glyph that lost its
+   colour — the two poles are drawn at `--copper-200` beside 26px type in the same token, and a
+   screenshot taken at the bottom of the cycle showed one of them reading as grey. 0.7 is far
+   enough to see the reach and near enough that neither glyph ever looks like a different tier
+   from the word it stands beside. */
+@keyframes ce-glyph-reach {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(var(--ce-reach));
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.ce-glyph {
+  animation: ce-glyph-reach 2600ms var(--ease) infinite both;
+}
+.ce-glyph-budget {
+  --ce-reach: 4px;
+}
+.ce-glyph-proof {
+  --ce-reach: -4px;
+  animation-delay: -1300ms;
+}
+
+/* ───────────────────── the lock · one object, two placements ───────────────────── */
+
+/* THE TRAVEL, AS A TRANSITION AND NOT A KEYFRAME, because it has a resting pair of values to
+   move between in BOTH directions: forward it shrinks into the long road's token, backward it
+   grows back into the ring. A keyframe would need a second, reversed copy of itself and would
+   still jump on a fast walk.
+
+   THE COMPONENT WRITES THE TRANSFORM, not this file. `--ce-lock-x`, `--ce-lock-y` and
+   `--ce-lock-k` come from `../chicken-egg-geometry.ts` (`LOCK_TRAVEL_X`, `LOCK_TRAVEL_Y`,
+   `LOCK_TOKEN_SCALE`), which are themselves DIFFERENCES between the ring's centre and the
+   token's — so re-cutting either end re-cuts the journey. A hard-coded `-550px` in a stylesheet
+   is exactly the coordinate-in-CSS this tree's geometry modules exist to prevent.
+
+   `transform-box: fill-box` + `transform-origin: center` IS LOAD-BEARING ON AN SVG GROUP.
+   Without it the origin is the SVG viewport's own (0 0), and `scale(0.55)` would drag the lock
+   a third of the way across the stage before the translate even applied. */
+.ce-lock {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 700ms var(--ease);
+}
+.ce-lock.ce-lock-parked {
+  transform: translate(var(--ce-lock-x), var(--ce-lock-y)) scale(var(--ce-lock-k));
+}
+
+/* THE RING ITSELF DOES NOT TRAVEL — it contracts toward the token the lock is heading for and
+   fades out, so the two marks leave together and only one of them arrives. Same transition
+   pair, same duration, so the group and the lock inside it stay visually attached for the whole
+   journey. */
+.ce-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 700ms var(--ease),
+    opacity 520ms var(--ease);
+}
+.ce-ring.ce-ring-gone {
+  opacity: 0;
+  transform: scale(0.14);
+}
+
+/* ───────────────────── the proof plate · the one box that grows ───────────────────── */
+
+/* FIVE PROPERTIES AND NOT `transform`, for the reason the header gives: the word inside this
+   plate has to land at its own declared size, and a scaled box scales its type. `font-size` is
+   in the list on purpose — the label goes from 26px in the ring's pole to 42px on the
+   destination column, and interpolating it is what makes the plate read as one object being
+   promoted rather than as two boxes swapping.
+
+   700ms MATCHES THE LOCK'S TRAVEL, so the act change is ONE move with two things in it. */
+.ce-morph {
+  transition:
+    left 700ms var(--ease),
+    top 700ms var(--ease),
+    width 700ms var(--ease),
+    height 700ms var(--ease),
+    font-size 700ms var(--ease),
+    border-color 700ms var(--ease),
+    background-color 700ms var(--ease);
+}
+
+/* NOTHING ABOUT THE HOVER STATE IS IN THIS LIST, AND THAT IS DELIBERATE. The plate carries
+   `globals.css`'s `.box-hover`, whose lit state is an OVERLAY on a pseudo-element rather than a
+   pair of properties on the box — so this seven-property list is the whole of what the plate
+   itself transitions, exactly as it was before the hover existed, and no rule in that file can
+   take it. The note beside `.box-hover` records why the overlay is the right shape for the job. */
+
+/* ───────────────────── the long road · a route that never stops costing ───────────────────── */
+
+/* THE DASHES TRAVEL TOWARDS THE DESTINATION and keep travelling. Same argument as the ring, one
+   axis instead of two: the arrangement this road draws was not a single act, and a static
+   dashed line would say it was.
+
+   THE PATTERN IS WRITTEN INLINE by the component (`strokeDasharray`), not here, because it is a
+   drawn property of the mark rather than a property of the motion — and because a dasharray in
+   this file and a dasharray on the element would be two authorities over one value. */
+@keyframes ce-road-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+.ce-road-flow {
+  animation: ce-road-flow 1400ms linear infinite;
+}
+
+/* ───────────────────── the short road · a route that arrives ───────────────────── */
+
+/* THE ONE-SHOT DRAW, LEFT TO RIGHT. `--ce-len` is the road's own length, written inline from
+   `../chicken-egg-geometry.ts`; the dasharray is one dash as long as the line, so offsetting it
+   by its own length hides it completely and walking that offset to zero paints it from the
+   start. This is the deck's standard draw and it is the only place on this stage where a line
+   is REVEALED rather than faded.
+
+   520ms IS DELIBERATELY FASTER THAN THE ACT CHANGE (700ms). The short road is the slide's
+   answer, and an answer that took longer to draw than the question would be the wrong
+   stagecraft. */
+@keyframes ce-draw {
+  from {
+    stroke-dashoffset: var(--ce-len);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.ce-draw {
+  animation: ce-draw 520ms var(--ease) both;
+}
+
+/* THE ARROWHEAD LANDS AS ITS ROAD ARRIVES — it pops rather than fades, because a head that
+   faded in would look like it had always been there and merely brightened, and a head is the
+   only mark that says which way a road runs. */
+@keyframes ce-head-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.ce-head-in {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ce-head-in 260ms var(--ease) both;
+}
+
+/* ───────────────────── the key · what the room already holds ───────────────────── */
+
+/* IT TURNS ON THE WAY IN. A key that merely faded up would be an icon; a key that arrives at an
+   angle and settles level is a key being TURNED, which is the one gesture the whole second half
+   of this slide is about. −22° is enough to read at projection distance and small enough that
+   the glyph never leaves its token. */
+@keyframes ce-key-in {
+  from {
+    opacity: 0;
+    transform: rotate(-22deg) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+.ce-key-in {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ce-key-in 620ms var(--ease) both;
+}
+
+/* ───────────────────── the ban · repetition without a number ───────────────────── */
+
+/* A SEAL THAT KEEPS RE-STAMPING ITSELF. The mark under it is static and always visible; this is
+   a second ring that grows out of it and fades, on a loop, so what the room reads is "again,
+   and again" rather than "three times". See the header for why that distinction is a copy rule
+   and not a taste.
+
+   THE REST IS PART OF THE LOOP. The echo is only alive for the first 55% of the cycle; the
+   remainder is a beat of nothing, which is what keeps a repeating mark from reading as a pulse
+   generator. */
+@keyframes ce-ban-echo {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+.ce-ban-echo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ce-ban-echo 2200ms var(--ease) infinite both;
+}
+
+/* ───────────────────── the small marks ───────────────────── */
+
+/* THE NODES ON EITHER ROAD, OPENING FROM NOTHING. `scale(0.001)` rather than `scale(0)`: a zero
+   scale collapses the rendering box and Chromium is entitled to skip compositing it, which
+   shows up as a dropped first frame. */
+@keyframes ce-node-in {
+  from {
+    opacity: 0;
+    transform: scale(0.001);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.ce-node-in {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ce-node-in 300ms var(--ease) both;
+}
+
+/* THE TICKS THAT DROP FROM A ROAD TO THE BOX IT NAMES. They grow downward out of the road, so
+   the room reads the mark on the road first and the words second — which is the order the
+   figure argues in. */
+@keyframes ce-tick-drop {
+  from {
+    transform: scaleY(0.001);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.ce-tick-drop {
+  transform-box: fill-box;
+  transform-origin: top;
+  animation: ce-tick-drop 320ms var(--ease) both;
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* THE HALF THE GLOBAL SQUASH CANNOT DO. `src/styles/globals.css` sets
+   `animation-duration: 0.01ms !important` under `prefers-reduced-motion: reduce`, which lands
+   every one-shot above on its FINISHED frame — correct, and enough on its own. Stated as its
+   own block anyway, and with `animation: none`, for the reason `./agentic-org.css` states: a
+   0.01ms animation still fires `animationstart` and still composites a layer for one frame, and
+   `none` is the declaration a reader can check against the requirement.
+ *
+ * EVERY RESTING FRAME ABOVE IS THE FIGURE'S OWN. `ce-draw` ends at `stroke-dashoffset: 0`, which
+ * is a fully painted road; `ce-head-in`, `ce-key-in`, `ce-node-in` and `ce-tick-drop` all end at
+ * opacity 1 with an identity transform. So removing the animation removes the motion and nothing
+ * else — with ONE exception, handled below. */
+@media (prefers-reduced-motion: reduce) {
+  .ce-draw,
+  .ce-head-in,
+  .ce-key-in,
+  .ce-node-in,
+  .ce-tick-drop {
+    animation: none;
+  }
+
+  /* `ce-draw` LEAVES A DASH PATTERN BEHIND WHEN ITS ANIMATION IS REMOVED. The element still
+     carries `stroke-dasharray: var(--ce-len)` and an initial `stroke-dashoffset` of the same
+     length — that is what the animation was there to walk to zero — so `animation: none` alone
+     would leave the short road INVISIBLE under this preference, which is the one failure mode
+     that turns a motion setting into a missing argument. The offset is zeroed here by hand. */
+  .ce-draw {
+    stroke-dashoffset: 0;
+  }
+
+  /* THE THREE LOOPS ARE REMOVED, NOT PARKED. A squashed 0.01ms infinite animation restarts 41
+     times a second, which for the two dash flows is a shimmer and for the ban echo is a strobe.
+     Both flows lose only their travel: the ring stays a dashed loop and the long road stays a
+     dashed road, which is the whole of what they draw. The echo has no resting frame at all —
+     its finished state is an invisible ring at 2.1× — so it is removed from the box tree
+     outright, and the static seal it echoes is untouched. */
+  .ce-loop-flow,
+  .ce-road-flow {
+    animation: none;
+  }
+  .ce-ban-echo {
+    animation: none;
+    display: none;
+  }
+
+  /* THE TWO POLE GLYPHS KEEP THEIR MARK AND LOSE THEIR REACH. Unlike the echo, `ce-glyph-reach`
+     HAS a resting frame and it is the drawing itself — `translateX(0)` at full opacity is both
+     the 0% and the 100% keyframe — so removing the animation leaves a banknote and a signed sheet
+     sitting square beside their words, which is the whole of what they draw. Only the argument
+     they make by MOVING is lost, and the ring and the padlock make it too. */
+  .ce-glyph {
+    animation: none;
+  }
+
+  /* THE TWO ACT-CHANGE TRANSITIONS are left to the global squash, which lands them on their
+     declared end state in 0.01ms. They are not decoration — the lock's placement and the
+     plate's size ARE the second act's layout — so removing them is not an option; arriving
+     instantly is exactly right. */
+}

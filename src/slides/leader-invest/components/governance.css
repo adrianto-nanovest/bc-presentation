@@ -1,0 +1,353 @@
+/* THE THREE DOORS AND THE FOUR SWITCHES — every keyframe and every transition D.4's figure is
+ * built with.
+ *
+ * KEYFRAMES `gv-` PREFIXED AND IMPORTED BY ./GovernanceBeats.tsx, which is the convention
+ * `./chicken-egg.css`, `./own-proof.css`, `../../leader-shape/components/middle-out.css` and
+ * `../../leader-gap/components/no-sop.css` set beside it, and the rule stated beside
+ * `gap-ladder-draw` in `src/styles/globals.css`: every slide family owns its own keyframes, so
+ * retiming one figure can never retime another's. Nothing here is global and nothing here is
+ * shared.
+ *
+ * ═══ WHY THIS FILE EXISTS RATHER THAN `.fade`, which is what most of this slide still arrives
+ * with — the ordinary boxes (the three doors, the four gaps, the four controls, every line of
+ * prose) are `Reveal`s and are NOT in this file. Five things on this stage cannot be:
+ *
+ *   1. THE DOOR TRAVELS RATHER THAN ARRIVES. It is drawn once, inside the first destination,
+ *      and at pose 1 it moves to the left margin and grows into the token the whole circuit
+ *      hangs off — one object, two placements. `.fade` owns `transform` (its `.on` rule animates
+ *      `translateY(10px) → 0`), so an element that wants any other transform has to fight it.
+ *      {@link .gv-travel} is a bare transition instead, which also makes the walk BACKWARDS
+ *      free: the same declaration runs in reverse when the pose drops.
+ *   2. THE DOOR SHUTS. That is a SECOND transform on the same object, on the leaf inside it,
+ *      hinged at its own left edge — so it is a separate rule on a separate element, and the
+ *      travel and the shut can run at different poses without either one clobbering the other.
+ *      It is the payoff of the whole figure: the thing that leaked in act 1 is the thing that
+ *      closes when the switches flip.
+ *   3. FOUR SWITCHES THAT FLIP, WHICH IS THE ONE MOTION THE SLIDE IS ABOUT. A switch is the
+ *      only drawing of governance a board reads from the back of a room: two states, somebody
+ *      flipped it, and the flip is visible. It is a TRANSITION and not a keyframe because it
+ *      has a resting pair of values to move between in BOTH directions — a keyframe would need
+ *      a second, reversed copy of itself and would still jump on a fast walk backwards.
+ *   4. A CIRCUIT THAT IS BROKEN UNTIL IT IS NOT. Each row's right-hand wire is DASHED and dim
+ *      while its switch is off, and DRAWN — left to right, once — when it flips. A dash pattern
+ *      and a draw animation cannot share one element (the draw IS the dash pattern), so they are
+ *      two rules on two elements, and the contrast between them is the argument.
+ *   5. "NOBODY OWNS IT" IS DRAWN AS ABSENCE THAT PERSISTS, NOT AS A COUNT. Each empty slot
+ *      carries one mark that breathes for as long as the pose is up. Four static dashes would
+ *      say "four things are missing"; four marks that keep dimming and recovering say the
+ *      absence is ongoing, which is what the sentence above them claims.
+ *
+ * ═══ ONE-SHOT ANIMATIONS ARE APPLIED BY CLASS, NOT BY DELAY. Everything on `middle-out`'s
+ * stage is present at pose 0, so its build can be one mount-time cascade of `animationDelay`s.
+ * This figure is not: the bus arrives at pose 0, the circuit at pose 1 and the four completed
+ * wires at pose 2, and an animation declared at mount would have finished long before the pose
+ * that shows it. So the component adds the class WITH the pose (`on ? "gv-draw" : ""`),
+ * React re-renders, and the animation starts then. Removing the class on the way back leaves
+ * the element on its declared resting frame, which for every rule below is the finished one.
+ *
+ * ═══ FOUR THINGS LOOP, AND EVERY ONE OF THEM IS A CLAIM RATHER THAN DECORATION — the same bar
+ * `chicken-egg.css` and `middle-out.css` set for the only other infinite animations in the
+ * leader tree. The caret blinks because a prompt box with a still caret is a screenshot and not
+ * a screen; the personal lane's dashes travel because data that has left does not stop; the
+ * packet keeps escaping through the open door because "your words can train the model" is a
+ * standing condition and not an event; and the empty slots keep being empty. None of them is a
+ * barber's pole: each cycle has a rest in it.
+ *
+ * `scripts/lib/settle.mjs` waits only for FINITE animations, so the export scripts still settle
+ * this slide exactly — every infinite rule is excluded by construction, and the PDF catches them
+ * wherever they happen to be.
+ *
+ * ═══ ZERO SMIL, at every pose, under either motion preference. Every mark that moves on this
+ * stage is a CSS animation or a CSS transition; there is no `<animate>`, `<animateTransform>`,
+ * `<animateMotion>` or `<set>` anywhere in the figure. SMIL is invisible to the reduced-motion
+ * squash in `globals.css` and would have to be gated behind a `matchMedia` at mount. The media
+ * block at the bottom of this file finishes the job that squash cannot.
+ */
+
+/* ───────────────────── act 1 · the screen ───────────────────── */
+
+/* THE CARET BLINKS, AND IT IS THE ONLY MARK ON THIS STAGE THAT IS PURELY RECOGNITION. Act 1's
+   claim is that the picture is identical whatever account is behind it, so the screen has to
+   read as a screen in under a second and without a logo on it. A blinking caret is what does
+   that; a still one reads as a diagram of a rectangle.
+
+   IT BOTTOMS OUT AT 0.15 AND NOT AT NOTHING. A caret that vanished would flash at projection
+   scale, and a flash on the one object the whole room recognises is the last thing this figure
+   wants to draw attention with. 1100ms is slower than a real terminal's on purpose — the mark
+   has to be noticed once and then stop being noticed. */
+@keyframes gv-caret {
+  0%,
+  42% {
+    opacity: 1;
+  }
+  58%,
+  100% {
+    opacity: 0.15;
+  }
+}
+.gv-caret {
+  animation: gv-caret 1100ms steps(1, end) infinite;
+}
+
+/* ───────────────────── act 1 · the one lane that keeps moving ───────────────────── */
+
+/* ONE LANE OF THE THREE KEEPS MOVING, AND IT IS THE PERSONAL ONE. The other two are solid and
+   still: the words arrive and stop. This one is dashed and its dashes travel for as long as the
+   pose is up, because what a personal account's terms permit is not an event that finished — it
+   is a standing arrangement, and a static dashed line would say it was over.
+
+   `linear` AND NOT `var(--ease)`. An eased loop accelerates and decelerates inside every cycle,
+   which on a repeating dash pattern reads as a mechanical fault: the deck's ease is a
+   cubic-bezier with a hard stop at the end, and a hard stop that repeats every 1.4 seconds is a
+   tick. Travel is the one place this deck does not use its own ease. */
+@keyframes gv-lane-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+.gv-lane-flow {
+  animation: gv-lane-flow 1400ms linear infinite;
+}
+
+/* ───────────────────── the door · one object, three states ───────────────────── */
+
+/* THE TRAVEL, AS A TRANSITION AND NOT A KEYFRAME, because it has a resting pair of values to
+   move between in BOTH directions: forward it grows into the token, backward it returns to its
+   door. A keyframe would need a second, reversed copy of itself and would still jump on a fast
+   walk.
+
+   THE COMPONENT WRITES THE TRANSFORM, not this file. `--gv-door-x`, `--gv-door-y` and
+   `--gv-door-k` come from `../governance-geometry.ts` (`DOOR_TRAVEL_X`, `DOOR_TRAVEL_Y`,
+   `DOOR_TOKEN_SCALE`), which are themselves DIFFERENCES between the door's centre and the
+   token's — so re-cutting either end re-cuts the journey. A hard-coded `-144px` in a stylesheet
+   is exactly the coordinate-in-CSS this tree's geometry modules exist to prevent.
+
+   `transform-box: fill-box` + `transform-origin: center` IS LOAD-BEARING ON AN SVG GROUP.
+   Without it the origin is the SVG viewport's own (0 0), and `scale(1.15)` would drag the door
+   most of the way across the stage before the translate even applied. */
+.gv-travel {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 700ms var(--ease);
+}
+.gv-travel.gv-travel-parked {
+  transform: translate(var(--gv-door-x), var(--gv-door-y)) scale(var(--gv-door-k));
+}
+
+/* THE LEAF SWINGS SHUT — the payoff of the whole figure, and one declaration.
+
+   HINGED AT ITS OWN LEFT EDGE, which is what `transform-origin: left center` buys and what makes
+   the motion read as a door rather than as a rectangle being scaled. Open is a narrow, sheared
+   leaf standing away from its frame; shut is the leaf at rest filling it. The shear is what
+   supplies the perspective — 16 degrees is enough to read at projection distance and small
+   enough that the leaf never crosses the frame it belongs to.
+
+   `scaleX(0.34)` AND NOT A SECOND PATH. Two shapes cannot be transitioned into one another
+   without a morph library; one shape with two transforms can, in both directions, for free —
+   and the element is the same node at every pose, so a room that looks away for a second still
+   knows which mark it is looking at.
+
+   700ms MATCHES THE TRAVEL, so the two moves this object makes are one gesture at two poses. */
+.gv-leaf {
+  transform-box: fill-box;
+  transform-origin: left center;
+  transition: transform 700ms var(--ease);
+  transform: scaleX(0.34) skewY(-16deg);
+}
+.gv-leaf.gv-leaf-shut {
+  transform: none;
+}
+
+/* WHAT LEAVES THROUGH THE OPEN DOOR, AND KEEPS LEAVING. One mark, on a loop with a rest in it,
+   travelling out through the gap the leaf leaves. It is the drawing of "your words can train the
+   model" — a claim about a standing default, so a single escaping dot would be a claim about one
+   conversation.
+
+   THE REST IS PART OF THE LOOP. The packet is only alive for the first 60% of the cycle; the
+   remainder is a beat of nothing, which is what keeps a repeating mark from reading as a pulse
+   generator. It is removed outright from pose 2 onward by the component — a shut door with
+   something still coming out of it would unsay the act change. */
+@keyframes gv-leak {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateX(15px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(15px);
+    opacity: 0;
+  }
+}
+.gv-leak {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gv-leak 2200ms var(--ease) infinite both;
+}
+
+/* A MARK THAT POPS RATHER THAN FADES — the badge on the shut door, and the arrowhead at the head
+   of each completed lead. Two marks, one rule, and the shared reason is the same: something that
+   faded in would look like it had always been there and merely brightened, and both of these are
+   claims that something ARRIVED. Each user is delayed behind the motion that caused it by the
+   component, so the room reads the cause and then sees the mark.
+
+   `gv-pop` AND NOT `gv-badge-in`, which is what this rule was called while it had one user. A
+   keyframe named after one of its two callers is a keyframe the second caller looks wrong in. */
+@keyframes gv-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.gv-pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gv-pop 300ms var(--ease) both;
+}
+
+/* ───────────────────── act 2 · the four switches ───────────────────── */
+
+/* THE ONE-SHOT DRAW, LEFT TO RIGHT — act 2's completed lead, and the only line on this stage
+   that is REVEALED rather than faded.
+
+   `--gv-len` IS 1 AND SO IS THE DASHARRAY, because every element that carries this class also
+   carries `pathLength={1}`: the line's own length is normalised in user space, so the keyframe
+   holds no coordinate and no length of its own and the same rule works on a lead of any width.
+   One dash as long as the line, offset by its own length, hides it completely; walking that
+   offset to zero paints it from the start.
+
+   520ms IS DELIBERATELY UNDER THE SWITCH'S 620. The lead is what the switch DID, so it has to
+   finish inside the gesture that caused it rather than trail out behind it. */
+@keyframes gv-draw {
+  from {
+    stroke-dashoffset: var(--gv-len);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.gv-draw {
+  animation: gv-draw 520ms var(--ease) both;
+}
+
+/* THE KNOB THROWS, AND EVERYTHING ELSE ON THIS STAGE IS AN ARGUMENT FOR IT BEING VISIBLE.
+
+   `--gv-throw` is `SWITCH_THROW` from `../governance-geometry.ts` — the distance between the two
+   rest positions the module declares, so the knob cannot land anywhere its own track does not
+   have room for.
+
+   620ms, WHICH IS DELIBERATELY UNDER THE DOOR'S 700. The four switches flip and THEN the door
+   shuts: the switches are the cause and the door is the consequence, and a consequence that
+   completed first would be the wrong stagecraft. Each row's own delay is written inline by the
+   component, so the four read as a sequence — one hand going down a panel — rather than as four
+   things happening at once. */
+.gv-knob {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 620ms var(--ease),
+    fill 620ms var(--ease);
+}
+.gv-knob.gv-knob-on {
+  transform: translateX(var(--gv-throw));
+}
+
+/* THE TRACK LIGHTS UNDER THE KNOB, on the knob's own clock, so the pair reads as ONE object
+   changing state rather than as a dot moving across a shape. */
+.gv-track {
+  transition:
+    fill 620ms var(--ease),
+    stroke 620ms var(--ease);
+}
+
+/* ───────────────────── act 2 · the slot that is empty, and stays empty ───────────────────── */
+
+/* ONE MARK PER EMPTY SLOT, BREATHING. See the header for why the absence is drawn as motion
+   rather than as four static dashes.
+
+   IT NEVER REACHES ZERO. A mark that disappeared and came back would be a blink, and a blink is
+   an alarm; this is meant to read as something missing rather than something wrong. 0.25 at the
+   bottom of the cycle is far enough to see and near enough that the mark is always on the stage
+   for a photograph to catch. */
+@keyframes gv-empty {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+.gv-empty {
+  animation: gv-empty 2400ms var(--ease) infinite both;
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* THE HALF THE GLOBAL SQUASH CANNOT DO. `src/styles/globals.css` sets
+ * `animation-duration: 0.01ms !important` under `prefers-reduced-motion: reduce`, which lands
+ * every one-shot above on its FINISHED frame — correct, and enough on its own. Stated as its own
+ * block anyway, and with `animation: none`, for the reason `./chicken-egg.css` states: a 0.01ms
+ * animation still fires `animationstart` and still composites a layer for one frame, and `none`
+ * is the declaration a reader can check against the requirement.
+ *
+ * EVERY RESTING FRAME ABOVE IS THE FIGURE'S OWN. `gv-draw` ends at `stroke-dashoffset: 0`, which
+ * is a fully painted wire; `gv-pop` ends at opacity 1 with an identity transform. So
+ * removing the animation removes the motion and nothing else — with ONE exception, handled
+ * below. */
+@media (prefers-reduced-motion: reduce) {
+  .gv-draw,
+  .gv-pop {
+    animation: none;
+  }
+
+  /* `gv-draw` LEAVES A DASH PATTERN BEHIND WHEN ITS ANIMATION IS REMOVED. The element still
+     carries `stroke-dasharray: var(--gv-len)` and an initial `stroke-dashoffset` of the same
+     length — that is what the animation was there to walk to zero — so `animation: none` alone
+     would leave every drawn wire INVISIBLE under this preference, which is the one failure mode
+     that turns a motion setting into a missing argument: the completed circuit is the whole of
+     what pose 2 claims. The offset is zeroed here by hand. */
+  .gv-draw {
+    stroke-dashoffset: 0;
+  }
+
+  /* THE FOUR LOOPS ARE REMOVED, NOT PARKED. A squashed 0.01ms infinite animation restarts 41
+     times a second, which for the caret and the empty marks is a strobe and for the lane flow is
+     a shimmer.
+
+     TWO OF THEM LOSE ONLY THEIR MOTION. The lane stays a dashed lane, which is the whole of what
+     it draws; the caret stays a caret at full opacity, which is the whole of what it draws. The
+     other two have no resting frame worth keeping: `gv-empty`'s finished state is an arbitrary
+     point of a breath, so it is pinned to its own brightest frame by hand, and `gv-leak`'s is an
+     invisible packet 15px to the right of the door, so it is removed from the box tree outright.
+     The open door it escapes from is untouched, and the door is the claim. */
+  .gv-caret,
+  .gv-lane-flow {
+    animation: none;
+  }
+  .gv-empty {
+    animation: none;
+    opacity: 0.85;
+  }
+  .gv-leak {
+    animation: none;
+    display: none;
+  }
+
+  /* THE THREE STATE TRANSITIONS — the door's travel, the leaf's swing and the four knobs — are
+     left to the global squash, which lands them on their declared end state in 0.01ms. They are
+     not decoration: the door's placement IS act 2's layout and the knob's position IS the
+     switch's state, so removing them is not an option; arriving instantly is exactly right. */
+}

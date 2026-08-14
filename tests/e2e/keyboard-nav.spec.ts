@@ -163,11 +163,11 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   await expect(page.locator(".fig-label")).toHaveText(/THE AGENTIC ORGANIZATION/);
 
   // `d` is WHY INVEST — the run gh#56 inserted, and on a standard deck the same key
-  // is PROCESS & METHODOLOGY. The run holds FIVE slides since gh#70 inserted D.1 at
-  // its head, ahead of gh#56's, gh#57's, gh#58's and gh#59's, so R5's "first NUMBERED
-  // slide of the run" is a real
-  // distinction here and not a one-slide coincidence: `d` must land on D.1 and not
-  // on the D.2, D.3, D.4 or D.5 behind it. Five is FINAL — §6.7 asks for no sixth.
+  // is PROCESS & METHODOLOGY. The run holds FOUR slides: gh#70's D.1 at its head, then
+  // gh#56's, gh#57's and — since the merge that folded gh#58's and gh#59's two rows into
+  // `invest-governance` — one D.4. So R5's "first NUMBERED slide of the run" is a real
+  // distinction here and not a one-slide coincidence: `d` must land on D.1 and not on the
+  // D.2, D.3 or D.4 behind it. FOUR IS FINAL — the run argues for no fifth.
   //
   // AND IT LANDS ON A DIFFERENT SLIDE THAN IT DID BEFORE gh#70, AT THE SAME FIGURE —
   // the `b` case above, repeated on this key. `invest` has held D since gh#56 and R5
@@ -176,11 +176,15 @@ test("the leader deck's own letters jump, and a letter it does not claim is a no
   // behind. The figure line below did not move and could not have; the label line is
   // the whole of what gh#70 cost this file, and a test that read `/D\.1/` and stopped
   // would have gone on passing while landing somewhere else.
+  //
+  // THE LABEL LINE MOVED A SECOND TIME ON 2026-08-14, for a different reason and with the
+  // figure line again untouched: D.1 was re-cut and re-sourced, and its label went from
+  // THE BASE RATE, AND THE DEFAULT IT PRICES to THE BASE RATE, AND WHAT IT EARNS. Same
+  // slide, same figure, same key — which is exactly the case this assertion is written to
+  // notice.
   await page.keyboard.press("d");
   await expect(page.locator(".fig-label")).toHaveText(/FIG\.\s*D\.1/);
-  await expect(page.locator(".fig-label")).toHaveText(
-    /THE BASE RATE, AND THE DEFAULT IT PRICES/,
-  );
+  await expect(page.locator(".fig-label")).toHaveText(/THE BASE RATE, AND WHAT IT EARNS/);
 
   // `k` is THE MANDATE as of gh#60 — the FOURTH section this one key has meant in
   // this deck, and the sharpest case in the file. It printed K.1 at every one of

@@ -217,13 +217,16 @@ const LEADER_SPINE: readonly SectionRun[] = [
   // Contrast `gap`'s row above, which rose the same way three times and cost one number
   // each time, and `invest`'s below, which rose once and cost four.
   ["shape", 4],
-  // `invest-base-rates` (gh#70, §6.7's D.1) + `invest-own-proof` (gh#56, D.2) +
-  // `invest-chicken-egg` (gh#57, D.3) + `invest-security` (gh#58, D.4) +
-  // `invest-subscription` (gh#59, D.5), all leader-only — §6.7's full run, and the
-  // composed figures agree with §6.7's for the first time since gh#56 opened it: this
-  // number is FINAL, the THIRD of the four to be, after `gap` (gh#67) and `mandate`
-  // (gh#69).
-  ["invest", 5],
+  // `invest-base-rates` (gh#70, D.1) + `invest-own-proof` (gh#56, D.2) +
+  // `invest-chicken-egg` (gh#57, D.3) + `invest-governance` (D.4), all leader-only.
+  //
+  // FOUR AND NOT §6.7's FIVE, and the row that is missing is not missing. gh#58's
+  // `invest-security` and gh#59's `invest-subscription` were the run's last two rows and
+  // were one argument told from two desks; `invest-governance` states it once. This is
+  // the SECOND run in this table to shorten that way — `gap` is four rows for §4.3's
+  // five, because §6.4 has no content of its own — so a run length under its spec count
+  // is a documented shape here and not a hole.
+  ["invest", 4],
   ["landscape", 5],
   ["mindset", 6],
   ["process", 5],
@@ -261,9 +264,11 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
  *  and `gap-the-pattern` had closed that run at §4.3's five, 70 once gh#68's
  *  `shape-middle-out` sat at the tail of the `shape` run, 71 once gh#69's
  *  `mandate-levers` had closed the `mandate` run at §6.8's three, 72 once
- *  gh#70's `invest-base-rates` had closed the `invest` run from ITS front, and 73 now
- *  that gh#71's `shape-tam-kotter` has closed the LAST of the four, `shape`, from its
- *  middle. §4.3's count, reached — this constant is a finished deck's now, not a floor.
+ *  gh#70's `invest-base-rates` had closed the `invest` run from ITS front, 73 once
+ *  gh#71's `shape-tam-kotter` had closed the LAST of the four, `shape`, from its
+ *  middle, and 71 now that the `invest` merge has retired two of that run's rows into
+ *  one. This constant is a finished deck's, not a floor — it moves again only on a merge
+ *  or a spec change.
  *
  *  ELEVEN OF THOSE SIXTEEN MOVED NO LETTER — gh#57 first, gh#61 second, gh#58 third,
  *  gh#59 fourth, gh#65 fifth, gh#66 sixth, gh#67 seventh, gh#68 eighth, gh#69
@@ -311,9 +316,12 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
  *
  *  73 → 74 → 72: `gap-failures-pattern` composed behind its two parents for the
  *  side-by-side review of three merge candidates (74), then REPLACED them when the
- *  triptych won (72). The only DECREASE this constant has ever taken, and the last edit
- *  it will take: all four leader-only runs stand at their spec'd content. */
-const LEADER_TOTAL_WITH_LAB = 72;
+ *  triptych won (72). AND 72 → 71 AT THE `invest` MERGE, which is the SECOND decrease and
+ *  the same shape as the first: `invest-security` and `invest-subscription` were that
+ *  run's last two rows, they argued one thing from two desks, and `invest-governance`
+ *  argues it once. Two merges, four rows retired into two, no run opened or closed by
+ *  either. */
+const LEADER_TOTAL_WITH_LAB = 71;
 
 /** The eight cut F slides — `f1`–`f7` and `f9`, with `f8-your-agentic-os` kept
  *  and relocated. Held apart from the total above so a leader-only ADDITION can
@@ -374,7 +382,7 @@ const LEADER_CUT_F_SLIDES = 8;
  * 16 → 17 → 15: `gap-failures-pattern` joined its two leader-only parents for the merge
  * review (17), then replaced them (15). Leader-only like everything in `gap`.
  */
-const LEADER_ONLY_SLIDES = 15;
+const LEADER_ONLY_SLIDES = 14;
 
 /** Standard-deck slides the leader list relocates INTO one of those leader-only
  *  runs: `f8-your-agentic-os` alone, moved to `shape` by the deck set's single
@@ -540,8 +548,9 @@ test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the cut F section,
   // (gh#53), `shape-agentic-org` (gh#54), `invest-own-proof` (gh#56),
   // `invest-chicken-egg` (gh#57, the second row of that same `invest` run),
   // `mandate-enablement` (gh#60), `mandate-phases-gates` (gh#61, the second row of
-  // that `mandate` run), `invest-security` (gh#58) and `invest-subscription` (gh#59,
-  // the third and fourth rows of `invest`), `gap-hardest-part` (gh#65, the FIRST
+  // that `mandate` run), `invest-governance` (the third row of `invest`, and the
+  // merge of gh#58's `invest-security` with gh#59's `invest-subscription`),
+  // `gap-hardest-part` (gh#65, the FIRST
   // row of `gap`), `gap-no-sop` (gh#66, its second), `gap-three-failures` plus
   // `gap-the-pattern` (gh#67, its third and fourth, closing that run at §4.3's five)
   // `shape-middle-out` (gh#68, the LAST row of `shape`),
@@ -552,8 +561,9 @@ test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the cut F section,
   // and `shape-tam-kotter` (gh#71, the THIRD row of `shape`, closing THAT run at
   // §4.3's four from its MIDDLE — the last of the four runs to close)
   // — and the relocated f8 is in NEITHER number, because it is
-  // present in both decks and cancels out of a difference. Sixteen additions against
-  // eight cuts is why the difference below is NEGATIVE: the leader deck is eight
+  // present in both decks and cancels out of a difference. FIFTEEN and not sixteen since
+  // the `invest` merge: two of those sixteen additions are one row now. Fifteen additions
+  // against eight cuts is why the difference below is NEGATIVE: the leader deck is seven
   // slides longer than the standard one, which it had never been at all before gh#65.
   expect(OBSERVED_TOTAL_WITH_LAB - LEADER_TOTAL_WITH_LAB).toBe(
     LEADER_CUT_F_SLIDES - LEADER_ONLY_SLIDES,

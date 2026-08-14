@@ -1,0 +1,266 @@
+/* OWN PROOF — every keyframe D.2's dossier is built with, and the two that keep running.
+ *
+ * KEYFRAMES `op-` PREFIXED AND IMPORTED BY ./ProofLedger.tsx, which is the convention
+ * `../../leader-shape/components/middle-out.css` and `../../leader-gap/components/no-sop.css`
+ * set beside it and the rule stated beside `gap-ladder-draw` in `src/styles/globals.css`:
+ * every slide family owns its own keyframes, so retiming one figure can never retime
+ * another's. Nothing here is global and nothing here is shared.
+ *
+ * ═══ WHY THIS FILE EXISTS RATHER THAN `.fade`, which is what this slide arrived with. Three
+ * reasons, and they are the same three C.4 records:
+ *
+ *   1. `.fade` OWNS `transform`. Its `.on` rule animates `translateY(10px) → 0`, so an
+ *      element that wants any other transform has to fight it — and this figure is mostly
+ *      elements that do: a trunk and four branches that GROW out of the plate, a spine that
+ *      opens from its own centre, four leaders that draw toward their chip, and two dots that
+ *      open from nothing.
+ *   2. THE DIRECTION IS THE ARGUMENT. `transform-origin` is what makes a wire grow AWAY from
+ *      the plate and a spine open BOTH WAYS from the trunk that feeds it. The slide's claim is
+ *      that the figures came from the owner on the left; a build in which the wires faded in
+ *      from nowhere would draw a harness and say nothing with it.
+ *   3. `.fade` IS ONE MOVE, AND A FIGURE THAT ARRIVES COMPLETE NEEDS SEVERAL. Everything
+ *      except the thesis is present at pose 0, so the whole build happens inside one pose —
+ *      and a build in which thirty boxes each fade up 8px is not read as motion at all: it
+ *      reads as a slow page load. So the plate and the cards come in from the LEFT, the
+ *      harness DRAWS, the chips STAMP, and the small type settles UP.
+ *
+ * ═══ EVERY ARRIVAL ANIMATION IS ONE-SHOT, ON MOUNT, AND ENDS ON THE RESTING FRAME.
+ * `src/deck/Deck.tsx` renders only the active slide, so mounting IS arriving; the delays are
+ * written inline by the component (one `animationDelay` per box) and the fill is `both`, so a
+ * box is invisible during its delay and keeps its finished frame afterwards. Stepping to the
+ * thesis and back does not remount, which is why nothing here has to be re-triggered — and
+ * why nothing here may end anywhere but at the resting frame. The THESIS is the one box on
+ * the stage that is not built this way: it has a real pose transition, so it stays on the
+ * deck's shared `.fade` primitive through `Reveal`.
+ *
+ * ═══ TWO THINGS LOOP, AND BOTH ARE THE CLAIM RATHER THAN DECORATION.
+ *   · `op-ring` — a ring opening out of the origin dot, for as long as the slide is up. The
+ *     plate is not a caption on this stage, it is a SOURCE, and a source that pulses is the
+ *     cheapest way a still frame says so.
+ *   · `op-pulse` — a short bright segment travelling each dotted leader, from the figure to
+ *     the chip that says how the figure is known. That trip IS the slide's rule: no number
+ *     without its provenance. It runs on every card, staggered, for ever.
+ * These are the same call `middle-out.css` makes for C.4's two spoke pulses.
+ *
+ * TWO CONSEQUENCES WORTH KNOWING. `scripts/lib/settle.mjs` waits only for FINITE animations,
+ * so the export scripts still settle this slide exactly — the loops are excluded by
+ * construction, and the PDF catches them wherever they happen to be. And the reduced-motion
+ * block at the bottom of this file kills both outright rather than squashing them: an ambient
+ * repeat is precisely what that preference is about, and the figure loses nothing but a ring
+ * and four moving dashes.
+ *
+ * ═══ ZERO SMIL, at both poses, under either motion preference — and closed BY CONSTRUCTION
+ * rather than by discipline, because this slide mounts no `<svg>` at all (the harness is
+ * four `div`s and a hairline). SMIL is invisible to the reduced-motion squash in
+ * `globals.css` and would have to be gated behind a `matchMedia` at mount; a CSS animation is
+ * not, and the media block at the bottom of this file finishes the job that squash cannot.
+ *
+ * ═══ CSS VARS ONLY, NO HEX AND NO rgba() LITERALS — the rule the whole `leader-invest`
+ * directory keeps. The one custom property this file reads (`--op-travel`) is a DISTANCE
+ * written inline by the component from `./../geometry.ts`, never a colour.
+ */
+
+/* ───────────────────── the build · the plate and the cards ───────────────────── */
+
+/* THE PLATE AND THE CARDS, ARRIVING FROM THE LEFT — 18px, which is enough to be a direction
+   and little enough that no box crosses the column beside it mid-flight. Left, because the
+   plate is where the evidence comes from and the cards are what it produced: the whole
+   figure enters in the direction the argument runs. */
+@keyframes op-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.op-in-left {
+  animation: op-in-left 520ms var(--ease) both;
+}
+
+/* THE SMALL TYPE, SETTLING UP — the plate's caption and name, every metric name, and the
+   citation. 8px, which is `.fade`'s own distance: these are the boxes that would have used
+   it, and they keep its feel so the figure has one vocabulary rather than four. */
+@keyframes op-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.op-in-up {
+  animation: op-in-up 460ms var(--ease) both;
+}
+
+/* ───────────────────── the build · the harness draws itself ───────────────────── */
+
+/* THE ORIGIN DOT AND EVERY NODE, OPENING FROM NOTHING. The origin is the first mark on the
+   harness to move, so the room sees WHERE the evidence leaves from before any of it travels.
+   `scale(0.001)` rather than `scale(0)`: a zero scale collapses the rendering box and
+   Chromium is entitled to skip compositing it, which shows up as a dropped first frame. */
+@keyframes op-dot-in {
+  from {
+    opacity: 0;
+    transform: scale(0.001);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.op-dot-in {
+  animation: op-dot-in 300ms var(--ease) both;
+}
+
+/* EVERY HORIZONTAL WIRE — the trunk out of the plate, the four branches into the cards, and
+   the dotted leader inside each card. `transform-origin: left` is the whole trick: the box is
+   positioned with its LEFT edge at the end the wire comes FROM, so scaling from the left pins
+   that end and walks the other one toward its destination. One keyframe for all three kinds,
+   because they are one gesture repeated at three scales — and a second copy of
+   `scaleX(0.001) → 1` would be two places to retime one mark. */
+@keyframes op-draw-x {
+  from {
+    transform: scaleX(0.001);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.op-draw-x {
+  transform-origin: left center;
+  animation: op-draw-x 420ms var(--ease) both;
+}
+
+/* THE SPINE, OPENING BOTH WAYS FROM THE TRUNK THAT FEEDS IT. `transform-origin: center` is
+   the argument: the trunk arrives at the spine's middle, so the spine grows symmetrically
+   from that point instead of dropping from its top. What the room sees is one wire arriving
+   and the harness opening out of it. */
+@keyframes op-draw-y {
+  from {
+    transform: scaleY(0.001);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.op-draw-y {
+  transform-origin: center;
+  animation: op-draw-y 520ms var(--ease) both;
+}
+
+/* THE CHIP, LANDING AS A STAMP. It arrives LAST on its own card and it arrives differently
+   from everything else on the stage: down onto the leader that just reached it, from slightly
+   too big. A chip that faded in would look like it had always been there and merely
+   brightened; a stamp is the gesture of a mark being APPLIED, which is what an epistemic
+   label is. 1.12 and not 1.4 — this is the quietest type on the slide and it may not arrive
+   as the loudest motion. */
+@keyframes op-stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.op-stamp {
+  animation: op-stamp 320ms var(--ease) both;
+}
+
+/* ───────────────────── the loops · what the figure keeps saying ───────────────────── */
+
+/* THE ORIGIN'S RING — one ring, opening out of the dot and fading, for ever. The rest is part
+   of the loop: the ring is only visible for the first two thirds of the cycle and the
+   remainder is a beat of nothing, which is what keeps a repeating mark from reading as a
+   metronome. It ends invisible, so the restart is a new ring at the dot rather than a jump
+   back inward. */
+@keyframes op-ring {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.28);
+  }
+  70% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+.op-ring {
+  animation: op-ring 2800ms var(--ease) infinite both;
+}
+
+/* THE LEADER'S PULSE — a short bright segment travelling from the figure to the chip, on
+   every card, for ever.
+ *
+ * THE TRAVEL DISTANCE IS NOT IN THIS FILE. `--op-travel` is written inline by the component
+ * from `LEADER_WIDTH` in `../geometry.ts` minus the pulse's own length, so the segment starts
+ * flush with the figure and stops flush against the chip, and re-cutting the figure column
+ * re-cuts the travel with it. A hard-coded `250px` here would be a coordinate living in a
+ * stylesheet, which is the one thing every geometry module in this tree exists to prevent.
+ *
+ * It fades in at the start of its run and out at the end, so nothing ever appears to strike
+ * the chip or to leave the figure abruptly; the last third of the cycle is empty. */
+@keyframes op-pulse {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  12% {
+    opacity: 1;
+  }
+  52% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 0;
+    transform: translateX(var(--op-travel));
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(var(--op-travel));
+  }
+}
+.op-pulse {
+  animation: op-pulse 2600ms var(--ease) infinite both;
+}
+
+/* ───────────────────── reduced motion ───────────────────── */
+
+/* THE HALF THE GLOBAL SQUASH CANNOT DO. `src/styles/globals.css` sets
+   `animation-duration: 0.01ms !important` under `prefers-reduced-motion: reduce`, which lands
+   every arrival above on its FINISHED frame — correct, and enough on its own. Stated as its
+   own block anyway, and with `animation: none`, for the reason `middle-out.css` states: a
+   0.01ms animation still fires `animationstart` and still composites a layer for one frame,
+   and `none` is the declaration a reader can check against the requirement. Every resting
+   frame above is `opacity: 1` with an identity transform, so removing the animation removes
+   the motion and nothing else. */
+@media (prefers-reduced-motion: reduce) {
+  .op-in-left,
+  .op-in-up,
+  .op-dot-in,
+  .op-draw-x,
+  .op-draw-y,
+  .op-stamp {
+    animation: none;
+  }
+  /* THE TWO LOOPS ARE REMOVED, NOT PARKED. Every rule above lands on a resting frame that is
+     part of the figure; a ring and a pulse have no resting frame — each one's finished state
+     is `opacity: 0` at the far end of its travel, and a squashed 0.01ms loop would flicker
+     something invisible 41 times a second. `display: none` is the honest answer: the figure
+     is the plate, the harness, the cards and their marks, and these two are the marks it can
+     lose without losing a claim. */
+  .op-ring,
+  .op-pulse {
+    animation: none;
+    display: none;
+  }
+}

@@ -270,8 +270,12 @@ describe("DECK_SET_COMPOSITION", () => {
     // review (74), then replaced them when the triptych won (72). §6.4 has no content of
     // its own — it is the SHAPE of §6.3 — so the `gap` run carries §4.3's five sections
     // in four rows.
+    // AND 72 → 71 AT THE `invest` MERGE, the second run to do the same thing: gh#58's
+    // `invest-security` and gh#59's `invest-subscription` argued one thing from two desks
+    // and are `invest-governance` now, so that run carries §6.7's five sections in four
+    // rows too.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(72);
+    expect(leader.slides).toHaveLength(71);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
@@ -303,7 +307,7 @@ describe("DECK_SET_COMPOSITION", () => {
     // FIRST: they are the only leader-only
     // slides that sit BEHIND the curriculum rather than in front of it, and
     // `filter` preserves both facts. A `mandate` row that had drifted up among the
-    // other thirteen, any pair swapped, the five `invest` rows out of §6.7's
+    // other twelve, any pair swapped, the four `invest` rows out of §6.7's
     // order, the three `shape` rows out of §4.3's, or the five `gap` rows out of §4.3's
     // order, would fail here as an
     // ordering mismatch
@@ -349,8 +353,11 @@ describe("DECK_SET_COMPOSITION", () => {
       "invest-base-rates",
       "invest-own-proof",
       "invest-chicken-egg",
-      "invest-security",
-      "invest-subscription",
+      // §6.7's D.4 + D.5 on ONE stage — leader-only like the rest of `invest`. It replaced
+      // `invest-security` and `invest-subscription`, which argued one thing from two desks,
+      // which is why this run is four rows for five spec sections — the same shape
+      // `gap-failures-pattern` gives its own run three lines up.
+      "invest-governance",
       "mandate-enablement",
       "mandate-phases-gates",
       "mandate-levers",
@@ -534,14 +541,16 @@ describe("DECK_SET_COMPOSITION", () => {
     const at = slides.indexOf("invest-base-rates");
     expect(at).toBeGreaterThan(-1);
     expect(slides[at - 1]).toBe("shape-middle-out");
-    expect(slides.slice(at, at + 5)).toEqual([
+    // FOUR ROWS AND NOT FIVE SINCE THE MERGE. `invest-security` and `invest-subscription`
+    // held the last two slots and hold one between them now, `invest-governance`; the run
+    // still carries §6.7's five sections, in four rows.
+    expect(slides.slice(at, at + 4)).toEqual([
       "invest-base-rates",
       "invest-own-proof",
       "invest-chicken-egg",
-      "invest-security",
-      "invest-subscription",
+      "invest-governance",
     ]);
-    expect(slides[at + 5]).toBe("b1-evolution-journey");
+    expect(slides[at + 4]).toBe("b1-evolution-journey");
   });
 
   test("runs the mandate between the pitfalls bridge and the meta run", () => {

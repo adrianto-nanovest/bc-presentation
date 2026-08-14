@@ -1,693 +1,667 @@
-// The deadlock and the offer, as numbers — stage coordinates for a 1280×720 stage.
+// THE LOCK AND THE TWO ROADS — stage coordinates for D.3 on a 1280×720 stage.
 //
-// TWO COLUMNS, ONE STAGE, AND NOTHING SHARED WITH THE LEDGER BUT THE STAGE. `./geometry.ts`
-// says in its own first line why it exists — the ledger's column is not the same height in
-// both decks — and none of that is true here: §6.7's D.3 has no brand axis (§4.4's table of
-// seven slots does not list it) and both of its lists are fixed-length tuples in
-// `./content.ts`. So this slide's numbers are a second module rather than a second half of
-// that one: a file whose whole subject is "how tall is a column of `n` figures" has no room
-// for a budget whose subject is "which of two columns hits the floor first".
+// ═══ WHAT THIS FILE MEASURES, AFTER THE 2026-08-14 REDRAW. The slide used to be two columns
+// of type: a story on the left, an offer on the right, and no drawn object anywhere on the
+// stage. It is now ONE FIGURE IN TWO ACTS, and every number below belongs to one of them.
 //
-// THE FOUR STAGE FACTS ARE RESTATED HERE, NOT IMPORTED, AND THAT IS A CHOICE UNDER THE
-// COMPILER OPTIONS THIS REPO SETS TODAY — not a law. Importing `STAGE`, `SIDE_MARGIN`,
-// `CONTENT_WIDTH` and `NAV_ZONE_TOP` from `./geometry` would be the better shape, and no
-// specifier satisfies tsc and bare Node at once as `tsconfig.json` stands. Measured three
-// ways on 2026-08-05, on Node v23.9.0:
+//   ACT 1 · THE LOCK (pose 0)          ACT 2 · THE TWO ROADS (poses 1…3)
 //
-//   · `import { STAGE } from "./geometry"` — tsc accepts it; bare Node does NOT.
-//     `ERR_MODULE_NOT_FOUND … Cannot find module '…/geometry'`: ESM does no extension
-//     search.
-//   · `… from "./geometry.js"` — tsc accepts it (`moduleResolution: "bundler"` maps it onto
-//     the `.ts` file); bare Node does NOT, for the same reason — it looks for a `.js` that
-//     is not there.
-//   · `… from "./geometry.ts"` — bare Node accepts it; tsc does NOT:
-//     `error TS5097: An import path can only end with a '.ts' extension when
-//     'allowImportingTsExtensions' is enabled`, and that flag is explicitly `false` in
-//     `tsconfig.json`.
+//        NO BUDGET WITHOUT PROOF            ○ ─────────── the short road ──────────▶ ┐
+//        ╭───────────────────────╮          YOU  │    │    │    │                    │
+//   ┌────┤                       ├────┐          [term][term][term][term]            │
+//   │ BUD│        🔒 (lock)      │PROOF│                                          ┌──┴───┐
+//   └────┤                       ├────┘     🔒 ─⊘─────── the long road ─────────▶ │PROOF │
+//        ╰───────────────────────╯          │    │    │    │    │                 └──────┘
+//        NO PROOF WITHOUT BUDGET            └──  [cost][cost][cost][cost]
 //
-// THE THIRD ROW IS THE ONE THAT COULD BE UNLOCKED, AND IT WAS NOT TRIED. `tsconfig.json`
-// already sets `noEmit: true`, which is the precondition `allowImportingTsExtensions`
-// needs, so flipping that flag to `true` is legal today and `./geometry.ts` would then
-// satisfy both tools. It is out of this ticket's scope for a reason that is about blast
-// radius and not about difficulty: the flag is repo-wide, it is set to `false`
-// deliberately, and every one of the extensionless relative imports under `src` and
-// `tests` is written to that convention. So read this section as "the seam is here because
-// of a flag one line of `tsconfig.json` controls", not as "the import is impossible".
+// ═══ WHY A LOOP AND THEN TWO ROADS, because every coordinate below follows from it. §6.7's
+// D.3 is a TRADE told in four beats, and the two things a room has to SEE are (1) that the
+// opening condition has no exit — which is what a closed cycle is, and the one shape in this
+// deck that says it without a word — and (2) that the expensive route we took and the cheap
+// route the room can authorise END IN THE SAME PLACE. Two roads to one destination is the
+// whole argument drawn: same end, four costs against four limits, and the second one short.
 //
-// BARE-NODE IMPORTABILITY WINS, because this ticket's browser harness is to read these
-// constants the way `scripts/gh56-verify.mjs` reads the ledger's — bare Node, no bundler —
-// and cross-check them against boxes measured off a real page. A geometry module a harness
-// cannot import is a geometry module nothing measures. So the two facts the ledger types
-// LITERALLY are PINNED to it instead, through a type-only `import()` that is erased before
-// either tool runs, and the two it widens to `number` are re-derived from those pins by the
-// same one-line arithmetic with the CSS rule quoted beside them. See {@link STAGE} and
-// {@link NAV_ZONE_TOP} for what that does and does not guarantee.
+// THE DESTINATION IS `PROOF`, AND THAT IS WHAT CLOSES THE LOOP. Act 1's cycle is BUDGET ⇄
+// PROOF; act 2's plate is the PROOF plate, TRANSLATED AND GROWN out of the ring
+// ({@link PROOF_HERO_LEFT} → {@link DEST_LEFT}). The room watches the thing the deadlock made
+// unobtainable become the thing both roads reach, which is a claim no caption has to make.
 //
-// PROVED IMPORTABLE, not assumed — the claim `./content.ts` explicitly cannot make:
+// ═══ THE VERTICAL BUDGET, top to bottom, and it is arithmetic rather than measurement.
+// `.fig-label` sits at y=36 and `.slide-headline-row` at y=80; a one-line
+// `.slide-headline.small` is 40px on 1.05, so the headline row ends at y=122 and the figure
+// takes the stage from {@link BAND_TOP} = 156 — `.slide-content`'s own top.
+//
+//   ─────────────── ACT 1 · THE LOCK (pose 0, alone on the stage) ──────────────────────
+//   190  clause 0 · 15px mono caps, centred over the top arc              → 214
+//   224  the ring's top arc                     (cy 352 − ry 128)
+//   316  the two poles · 216×72, each a 26px glyph + its word            → 388
+//   480  the ring's bottom arc                  (cy 352 + ry 128)
+//   490  clause 1 · centred under the bottom arc                         → 514
+//
+//   ─────────────── ACT 2 · THE TWO ROADS (poses 1…3) ──────────────────────────────────
+//   156  the turn · 17px serif, ONE line, full width          (pose 2)   → 182
+//   192  the pilot's eyebrow · 11px mono caps, x=132          (pose 2)   → 206
+//   226  THE SHORT ROAD, x=132…1044, and its key token        (pose 2)
+//   262  the four terms · 206×36                              (pose 2)   → 298
+//   262  the key token's label · x=48, centred on its token   (pose 2)   → 276
+//   318  the act · 17px serif, ONE line, full width           (pose 1)   → 344
+//   396  THE LONG ROAD, x=132…1044, and its lock token        (pose 1)
+//   414  the bill's eyebrow · 11px mono caps, x=132           (pose 1)   → 428
+//   434  the four costs · 206×62                              (pose 1)   → 496
+//   434  the lock token's label · x=48, centred on its token  (pose 1)   → 448
+//   506  the verdict · 17px serif, ONE line                   (pose 1)   → 530
+//
+//   ─────────────── THE FLOOR · THE THESIS, MEASURED UP FROM THE NAVBAR ────────────────
+//   553  copper rule ···· spans the full width                (pose 3)   → 554
+//   590  the thesis · 19px serif, full width, ONE line        (pose 3)   → 616
+//   ────────────────────────────────────────────────────────────────────────────────────
+//   floor y=632 · lowest painted box 616 · {@link NAV_ZONE_CLEARANCE} = 16
+//
+// ═══ THE FLOOR IS THE HOVER BAND AND NOT `.slide-content`'s BOTTOM — the rule every geometry
+// module in this directory keeps. `.nav-zone` is `bottom: 0; height: 88px`, so nothing on this
+// stage may cross y=632, and `bottom: 80px` (which `.slide-content` declares) would put a box
+// 8px INSIDE the band the presenter's own pointer fades the chrome up over.
+//
+// ═══ THE THESIS BAND IS D.1's AND D.2's, TO THE PIXEL. {@link NAV_ZONE_CLEARANCE} = 16, a
+// 19px thesis in a 26px box, a rule 36px above it. That is not a coincidence and it is not
+// this file's decision: §4.5 gives the leader deck ONE thesis shelf, and a room that reads
+// three slides in a row wants the last line in the same place every time. It is also the
+// half of this redraw the owner asked for by name — the sentence that used to be the LOUDEST
+// thing on this stage (26px, two lines, at y=533) is 19px on one line on the floor, and it
+// arrives last.
+//
+// ═══ TWO PROSE LINES ON THE FLOOR AND NOT ONE, WHICH IS A CONSTRAINT AND NOT A PREFERENCE.
+// {@link VERDICT_TOP} carries §6.7's beat 3 and {@link THESIS_TOP} carries the deck's closer,
+// and the reason they are two boxes is #57's AC: "no pose of the slide ends on beat 2". The
+// verdict has to be on the stage in the SAME pose as the bill above it — otherwise a presenter
+// resting on pose 1 leaves a room looking at an account of a workaround with the sentence that
+// licenses it not yet spoken — and the closer has to be LAST, which is a different pose. One
+// box cannot be in two poses. See `./components/ChickenEggBeats.tsx` for the arrival order.
+//
+// ═══ EVERY ROW ON THIS STAGE SHARES ONE COLUMN GRID. The four costs and the four terms are
+// laid out by the same {@link itemLeft}, on the same pitch, at the same width, between the
+// same two x — so the bill and the offer are legible AS a comparison: term `i` sits directly
+// above cost `i`, four against four, and the eye can travel down. That is the one thing a
+// two-column layout of this copy could never say.
+//
+// Pure data and pure functions. No React, no DOM, and no work at module scope beyond the
+// arithmetic below — so it stays importable from bare Node:
 //
 //   $ node --experimental-strip-types -e \
 //       'import("./src/slides/leader-invest/chicken-egg-geometry.ts")
 //          .then(m => console.log(Object.keys(m).length, "exports"))'
-//   39 exports
-//
-// (Plus Node's own ExperimentalWarning on stderr.) The two type-only `import()`s below —
-// `./geometry` for the stage pins, `./content` for the three counts — cost nothing at run
-// time: they live in type positions, both tsc and Node's type stripper erase them, and the run
-// above is the proof that nothing resolves `./content.ts`, which bare Node cannot load at all
-// (its `@/` runtime import is documented at the top of that file).
-//
-// THE TYPE BUDGET, MEASURED IN A REAL ENGINE. Every box height below is cut for a line count
-// this table settles; jsdom computes no text, so these were measured in Chromium at 1:1 with
-// the deck's own webfonts loaded from `index.html`'s Google Fonts URL (`document.fonts.load`
-// awaited, `status === "loaded"` asserted), and then measured again with the webfonts absent
-// so a projector with no network is inside the budget too. The fallback FACE is the one
-// Chromium actually chose, read back through `CSS.getPlatformFontsForNode` rather than
-// assumed from the stack. Widths include the copper keyword italic wherever `highlight()`
-// puts one, because an italic run is not the same width as its upright. Measured 2026-08-05.
-//
-// EVERY WIDTH BELOW IS A LAYOUT MEASUREMENT, AND THE METHOD MATTERS. Each one is a
-// `white-space: nowrap` CLONE of the rendered box, appended to that box's own parent so it
-// inherits the same cascade, read back through `getBoundingClientRect()` — cross-checked
-// against the sum of the box's own run rects, which agrees. NOT `canvas.measureText` with the
-// element's computed font: that method drops `.slide-headline`'s `letter-spacing: -0.01em`
-// (`src/styles/globals.css`) and sets the copper `<em>` UPRIGHT, so it disagrees with the
-// layout by 1.3% on the headline row (572.08 against 564.94 at 40px, 751.09 against 736.86
-// with the webfonts absent) and it cannot honour the italic rule this table states. The
-// headline row was RE-MEASURED that way on 2026-08-05 after shipping with the canvas figures.
-//
-//   box            type                       line box   width: webfont / no webfont   measure  lines
-//   headline       40px display                  42.00    564.94 / 736.86  (Georgia)     1184     1
-//   clause         20px mono ·0.14em ·upper      24.00    340.41 / 340.45  (Courier)      728     1
-//   workaround     22px serif + kw italic        28.60    641.00 / 636.03  (Georgia)      728     1
-//   costsEyebrow   11px mono ·0.22em ·upper      13.75    108.25 / 108.27  (Courier)      728     1
-//   cost label     15px sans (longest of 4)      19.50    405.23 / 390.41  (.SF NS)       728     1
-//   verdict        26px serif + kw italic        33.80    825.44 / 805.91  (Georgia)      728     2
-//   turn           24px serif + kw italic        31.19    459.70 / 443.09  (Georgia)      400     2
-//   pilotEyebrow   11px mono ·0.22em ·upper      13.75    270.61 / 270.64  (Courier)      320     1
-//   constraint     15px sans (longest of 4)      19.50    188.41 / 180.58  (.SF NS)       320     1
-//
-// The last two rows were measured against 320 — 16px STRICTER than the 336 the card actually
-// gives them ({@link CARD_MEASURE}) — so their one-line verdicts have that much more room
-// than the table claims. The LINE BOX column is face-independent: every line-height here is a
-// multiple, so the fallback measures the same height, which is why no box below needs a
-// second number for it.
-//
-// EVERY BOX BELOW IS ITS TYPE'S PAINTED EXTENT PLUS ≈2px, AND THE LINE BOX IS NOT THAT
-// EXTENT. Each of these line-heights is TIGHTER than the face's own content area — measured at
-// `line-height: normal`: JetBrains Mono 1.3em, Source Serif 4 1.364/1.375/1.385em at 22/24/26,
-// Inter 1.267em, Instrument Serif 1.3em — so glyphs paint slightly outside their line box, and
-// only the first line's overflow at the top and the last line's at the bottom escape the block
-// (interior overflow falls inside the next line box). So painted extent is
-// `n · lineBox + (contentArea − lineBox)`:
-//
-//   clause      24.00 + 2.00  = 26.00  → box 28  (2.00 spare)
-//   eyebrow     13.75 + 0.25  = 14.00  → box 16  (2.00)
-//   workaround  28.60 + 1.40  = 30.00  → box 32  (2.00)
-//   list row    19.50 + 0     = 19.50  → box 22  (2.50 — Inter's content area is SMALLER here)
-//   turn        62.38 + 1.81  = 64.19  → box 66  (1.81)
-//   verdict     67.59 + 2.20  = 69.79  → box 72  (2.21)
-//
-// THE VERDICT'S BOX WAS 70 UNTIL THAT ARITHMETIC WAS DONE, which left 0.21px — a box that
-// passes every check and clips its own second line the first time a face rounds differently.
-// 72 is the number that makes the ≈2px rule true of all six.
-//
-// Every size clears gh#50's projector floors (mono ≥ 9.5px, prose ≥ 10.5px) with room to
-// spare, and the quietest colour tier any of them may take is `--neutral-300` — the floor
-// `./components/ProofLedger.tsx` records for text on this stage, with `--neutral-400` under
-// it. THE ONE ROW THAT IS NOT COMFORTABLE is the workaround: 641.00 in a 728 measure is 87px
-// of spare, so the string may grow 13.6% before it wraps. THE WEBFONT IS THE WORSE CASE
-// THERE, which is the opposite of what a fallback argument usually finds — Georgia sets the
-// same sentence 4.97px narrower. It is the one string on this slide whose rendered LINE COUNT
-// a browser check has to assert, because a second line does not overflow into air: it lands
-// in the 24px above the eyebrow under it.
-//
-// THE VERTICAL BUDGET, top to bottom, both columns, and why these numbers and not rounder
-// ones. `.fig-label` is at y=36 and `.slide-headline-row` at y=80; a one-line
-// `.slide-headline.small` is 40px on 1.05, so the headline ends at y=122 (measured at the base
-// 46px too, where the same string is 649.69px on one line and the row ends at y=128.3 — the
-// budget holds at either headline size). Both columns then start on ONE shelf,
-// {@link COLUMN_TOP} = 156, which is
-// `.slide-content`'s own `top` in `src/styles/globals.css` — the shelf the deck declares for
-// content under a headline row, and this slide has no eyebrow band to cross first.
-//
-//   STORY (left, x=48, w=728)                    OFFER (right, x=832, w=400)
-//   156  clause 0            → 184              156  turn                     → 222
-//   194  clause 1            → 222              254  card                     → 482
-//   262  workaround          → 294                286    card eyebrow         → 302
-//   318  WHAT IT COST        → 334                314    term 0               → 336
-//   346  cost 0              → 368                352    term 1               → 374
-//   384  cost 1              → 406                390    term 2               → 412
-//   422  cost 2              → 444                428    term 3               → 450
-//   460  cost 3              → 482                       (450 + 32 pad = 482)
-//   512  copper rule         → 513
-//   533  verdict             → 605
-//   ───────────────────────────────────────────────────────────────────────────────
-//   floor y=632 · lowest painted box 605 · {@link NAV_ZONE_CLEARANCE} = 27
-//
-// THE FLOOR IS THE HOVER BAND AND NOT `.slide-content`'s BOTTOM. This slide takes that
-// class's `top` and refuses its `bottom`: `bottom: 80px` puts a floor at y=640, which is 8px
-// INSIDE `.nav-zone` (`bottom: 0; height: 88px`), and a box there is a box the presenter's
-// own pointer makes the chrome fade up over. Nothing on this stage may cross y=632.
-//
-// THE TWO LISTS END ON THE SAME LINE, BY DERIVATION. The bill's last row and the pilot
-// card's bottom border both land on y=482 because {@link CARD_TOP} is
-// `COST_ROWS_BOTTOM − CARD_HEIGHT` — the card hangs UP from the bill's floor rather than
-// down from the turn. Two things follow, and both are the point: below y=482 only the
-// verdict speaks, alone, in the wider column; and the gap between the turn and the card is
-// the RESIDUE of that derivation ({@link TURN_TO_CARD}, 32px today) rather than a number
-// chosen beside it. A near-miss here — a card ending at 460 against a bill ending at 482 —
-// would read as a mistake at projection scale, which is the reason the alignment is
-// structural instead of eyeballed.
-//
-// THE RIGHT COLUMN IS SHORTER, AND THE BAND UNDER IT IS DELIBERATE. 150px of stage between
-// the card and the floor holds nothing. The offer is one sentence and four terms; padding it
-// out to the story's height would be air pretending to be content, and the empty band is
-// what lets the only bordered box on the stage read as an object rather than as a panel. Do
-// not fill it.
-//
-// TWO CAPACITIES, TWO DIFFERENT NEIGHBOURS, EACH ONE MEASURED. A fifth cost row and a fifth
-// pilot term fail in opposite directions, and the throw messages say which — gh#56 shipped a
-// row cap that blamed the NavBar band 80px away when the real collision was a fixed shelf,
-// and the cost of that was two comments, two messages and two tests all pointing a later
-// author at the wrong number.
-//
-//   · A FIFTH COST ROW hits THE FLOOR. Everything under the rows hangs off the row count, so
-//     the copper rule and the verdict TRAVEL with a fifth row rather than being hit by it:
-//     the rule would move to y=550 and the verdict's box would end at y=643, 11px inside the
-//     band. (It also drags the pilot card down 38px, through the alignment above.)
-//   · A FIFTH PILOT TERM hits THE TURN LINE. The card's bottom is pinned, so the card grows
-//     UPWARD: its top border would land at y=216 — inside the turn's box (156…222) and
-//     2.38px inside its second line box (187.19…218.38), i.e. in the leading under the
-//     sentence the card is the terms for. The band takes no part in it; the card's bottom
-//     edge is 150px above y=632.
-//
-// Pure data and pure functions. No React, no DOM, and no work at module scope beyond the
-// arithmetic below.
 
 // ───────────────────── the stage, restated and pinned ─────────────────────
 
 /**
  * The ledger module, as a TYPE only — the pin's other end.
  *
- * `typeof import(…)` is a type-space construct: tsc resolves it, Node's type stripper
- * deletes it, and no runtime import exists to resolve. That is what lets this module hold
- * the ledger's numbers to account without borrowing its resolution problem (see the header).
+ * `typeof import(…)` is a type-space construct: tsc resolves it, Node's type stripper deletes
+ * it, and no runtime import exists to resolve. That is what lets this module hold `./geometry`'s
+ * numbers to account without borrowing its resolution problem — no specifier for a `.ts` sibling
+ * satisfies both tsc and bare Node under this repo's `tsconfig.json` (`allowImportingTsExtensions`
+ * is `false`), which is why the four stage facts below are RESTATED rather than imported.
  */
 type Ledger = typeof import("./geometry");
 
 /**
  * This slide's copy, as a TYPE only — the other end of the three count pins
- * ({@link DEADLOCK_CLAUSE_COUNT}, {@link COST_COUNT}, {@link CONSTRAINT_COUNT}).
- *
- * ONE ALIAS FOR THREE PINS, so each of them reads as a field lookup rather than as a
- * 120-character type path, and so `./content.ts` is named once. Type-space again: bare Node
- * cannot load that module at all (its `@/` runtime import is the point of it), and this
- * reference does not ask it to.
+ * ({@link DEADLOCK_CLAUSE_COUNT}, {@link COST_COUNT}, {@link CONSTRAINT_COUNT}). Type-space
+ * again: bare Node cannot load that module at all (its `@/` runtime import is the point of it),
+ * and this reference does not ask it to.
  */
 type ChickenEggCopy = (typeof import("./content"))["investChickenEggContent"];
 
 /**
  * The stage. 1280×720, PINNED to `./geometry.ts`'s own `STAGE`.
  *
- * The annotation is the lock: `./geometry.ts` declares `STAGE` with `as const`, so its type
- * is `{ readonly width: 1280; readonly height: 720 }`, and a stage resized there stops this
- * file compiling. BOTH PINS WERE DEFECT-INJECTED BEFORE THEY WERE TRUSTED: writing 40 into
- * `SIDE_MARGIN` below fails with `error TS2322: Type '40' is not assignable to type '48'`,
- * and a third entry in `./content.ts`'s clause tuple fails with `Type '2' is not assignable
- * to type '3'` on {@link DEADLOCK_CLAUSE_COUNT}. Neither passes quietly.
- *
- * WHAT THE PIN DOES NOT DO: it is exactly as strong as the ledger's literal type. If a later
- * edit there widens the declaration (`export const STAGE: { width: number … }`), this
- * annotation goes vacuous and says nothing — silently. The browser harness is the other
- * half: it measures the stage element rather than reading either module's copy.
+ * The annotation is the lock: `./geometry.ts` declares `STAGE` with `as const`, so its type is
+ * `{ readonly width: 1280; readonly height: 720 }`, and a stage resized there stops this file
+ * compiling. What the pin does NOT do is survive a widened declaration there — the browser
+ * harness is the other half, and it measures the stage element rather than reading either
+ * module's copy.
  */
 export const STAGE: Ledger["STAGE"] = { width: 1280, height: 720 };
 
-/** The deck's side margin — `.fig-label`, `.slide-headline-row` and `.slide-content` all sit
- *  at `left: 48px` in `src/styles/globals.css`. PINNED, like {@link STAGE}. */
+/** The deck's side margin — `.fig-label`, `.slide-headline-row` and `.slide-content` all sit at
+ *  `left: 48px` in `src/styles/globals.css`. PINNED, like {@link STAGE}. */
 export const SIDE_MARGIN: Ledger["SIDE_MARGIN"] = 48;
 
-/**
- * The width every full-bleed box on this stage gets: 1184.
- *
- * RE-DERIVED, NOT PINNED, and the difference is worth stating. `./geometry.ts` computes this
- * one, so its declared type is the widened `number` — and an annotation of `number` accepts
- * any number at all, which is a check that cannot fail. So this is the ledger's own
- * expression over the two pinned facts above: agreeing requires no coincidence, only that
- * nobody edits the arithmetic. Same for {@link NAV_ZONE_TOP}.
- */
+/** The width every full-bleed box on this stage gets: 1184. Re-derived from the two pinned
+ *  facts above rather than pinned itself — `./geometry.ts` computes its own, so its declared
+ *  type is the widened `number`, and an annotation of `number` is a check that cannot fail. */
 export const CONTENT_WIDTH = STAGE.width - 2 * SIDE_MARGIN;
 
+/** The right edge everything on this stage stops at: 1232. */
+export const CONTENT_RIGHT = SIDE_MARGIN + CONTENT_WIDTH;
+
 /** `.nav-zone` is `bottom: 0; height: 88px`, so its top edge is y=632 — the floor for slide
- *  content (see the header). Re-derived, not pinned, for the reason
- *  {@link CONTENT_WIDTH} gives. */
+ *  content. Re-derived, not pinned, for the reason {@link CONTENT_WIDTH} gives. */
 export const NAV_ZONE_TOP = STAGE.height - 88;
 
-// ───────────────────── the two columns ─────────────────────
+// ───────────────────── the three counts, pinned to the copy ─────────────────────
 
 /**
- * The gutter between the story and the offer: 56.
+ * Two clauses, and the TYPE says so — a two-clause cycle is what a deadlock IS.
  *
- * WIDER THAN EVERY GAP INSIDE EITHER COLUMN, which is the whole job. The largest of those is
- * 40 ({@link BEAT_GAP}), so 56 is what makes the room group the stage vertically first — two
- * arguments side by side — rather than reading eight loose blocks. At 24 (the ledger's
- * within-a-row gutter) the two columns would read as one wide table.
- */
-export const COLUMN_GAP = 56;
-
-/**
- * The offer column: 400 wide.
- *
- * CUT FOR THE WIDEST THING IN IT, which is not a constraint label but the card's mono
- * eyebrow: "INSTEAD — A 30-DAY PROOF PILOT" measures 270.61px, and inside
- * {@link CARD_PAD} that leaves 65.39px of the card's 336px measure spare. A wrapped eyebrow
- * inside a bordered box reads as damage rather than as a label, so this is the number the
- * browser check watches. The four terms are far shorter — 188.41px at their longest.
- */
-export const OFFER_COL_W = 400;
-
-/**
- * The story column: 728 — WHATEVER IS LEFT, and deliberately the wider of the two.
- *
- * It carries three prose lines and four long labels; the offer carries one sentence and four
- * short ones. The residue goes here for the same reason `METRIC_COL_W` in `./geometry.ts`
- * takes it: this is the column whose strings are longest and most likely to be reworded. Its
- * two tightest fits are measured in the header's table — the workaround at 641.00 of 728, and
- * the verdict, which is MEANT to take two lines (825.44 of 728).
- *
- * That the three numbers tile {@link CONTENT_WIDTH} is an identity, not a check: this one is
- * defined as the remainder. What a browser check can prove is that the rendered columns land
- * on these edges and that neither one's type crosses the gutter.
- */
-export const STORY_COL_W = CONTENT_WIDTH - COLUMN_GAP - OFFER_COL_W;
-
-/** The story column's left edge — the deck's own margin. */
-export const STORY_COL_LEFT = SIDE_MARGIN;
-
-/** The offer column's left edge: 832. Derived, so widening the gutter cannot leave the two
- *  columns overlapping or the right one hanging past the margin — `832 + 400 = 1232`, which
- *  is `1280 − 48`. */
-export const OFFER_COL_LEFT = STORY_COL_LEFT + STORY_COL_W + COLUMN_GAP;
-
-/**
- * The one shelf both columns start on: 156.
- *
- * `.slide-content`'s own `top` in `src/styles/globals.css` — the shelf the deck declares for
- * content under a headline row. It clears the headline by 34px (40px display on 1.05 from
- * y=80 ends at 122), and this slide has no mono eyebrow under the headline to cross, which is
- * what the sibling leader slides spend their y=134 shelf on.
- *
- * BOTH COLUMNS, ONE NUMBER. The deadlock and the turn are the two things the room reads
- * first, and a stage where one of them started 20px lower would rank them.
- */
-export const COLUMN_TOP = 156;
-
-// ───────────────────── the story column · beat 1, the deadlock ─────────────────────
-
-/**
- * How many clauses the loop has: 2, PINNED to `./content.ts`'s tuple.
- *
- * The type is that file's `deadlockClauses["length"]`, read through a type-only `import()`,
- * so the count cannot be 2 in the copy and 3 in the arithmetic — a third clause there stops
- * THIS file compiling. Which is the honest direction for the lock: the count is a fact about
- * the argument (a two-clause cycle is what a deadlock IS), not about the layout, and geometry
- * is the borrower.
+ * Pinned to `./content.ts`'s tuple through the type-only alias above, so a third clause fails
+ * to compile HERE, at the number the figure is drawn from, rather than painting a third label
+ * over an ellipse that has two ends.
  */
 export const DEADLOCK_CLAUSE_COUNT: ChickenEggCopy["deadlockClauses"]["length"] = 2;
 
-/**
- * One clause's box: 28.
- *
- * 20px mono on 1.2 is a 24.00 line box, and the face's content area is 26.00 — so the type
- * paints 26 and the box carries 2 more, which is the ≈2px rule the header's table holds all six
- * boxes to. THE SLACK IS NOT DESCENDER ROOM: both clauses are set in caps and have none.
- */
-export const CLAUSE_HEIGHT = 28;
-
-/** The air between the two clause BOXES — not between two lines of type: what the room sees
- *  between them is `CLAUSE_PITCH − 26.00 = 12px` of painted air, not 10.
- *
- *  SMALL ON PURPOSE either way. They are one locked pair, not two statements, and this keeps
- *  them reading as a single block against the 40px that separates the block from beat 2. Not
- *  exported — it exists to derive the pitch. */
-const CLAUSE_GAP = 10;
-
-/** How far apart the two clauses sit. Derived, so the pair's air is one number to change. */
-const CLAUSE_PITCH = CLAUSE_HEIGHT + CLAUSE_GAP;
-
-/** The whole deadlock block's height: 66. Derived from the count, so the block is as tall as
- *  the loop is long.
- *
- *  NOT EXPORTED — it exists to derive {@link WORKAROUND_TOP}, and nothing outside this file
- *  reads it. Same rule as {@link BELOW_ROWS_HEIGHT} below and as `./geometry.ts`'s
- *  `CLOSER_GAP`: an exported constant with no outside reader is a number two places could
- *  come to disagree about for no gain. The renderer places beat 1 with {@link clauseTop} and
- *  {@link CLAUSE_HEIGHT}; the block's total is this file's own arithmetic. */
-const DEADLOCK_HEIGHT = (DEADLOCK_CLAUSE_COUNT - 1) * CLAUSE_PITCH + CLAUSE_HEIGHT;
-
-// ───────────────────── the story column · beat 2, what we did and what it cost ────────────
-
-/**
- * The gap that separates beat 1 from beat 2: 40 — the largest in either column.
- *
- * IT IS THE BEAT CHANGE, and it is 4× the air inside the deadlock block, because that is the
- * only thing on the stage saying the confession is not a third clause. Not exported.
- */
-const BEAT_GAP = 40;
-
-/** The workaround line's shelf: 262. Derived from the block above it. */
-export const WORKAROUND_TOP = COLUMN_TOP + DEADLOCK_HEIGHT + BEAT_GAP;
-
-/**
- * One line of 22px serif on 1.3 is a 28.60 line box that paints 30.00, and this box is cut for
- * ONE line: 32.
- *
- * 1.3 IS THE RENDERER'S NUMBER, READ BACK OFF THE ELEMENT — `prose()` in
- * `./components/ChickenEggBeats.tsx` sets `lineHeight: 1.3` for all three prose boxes, and
- * `getComputedStyle` on the rendered box reports `line-height: 28.6px` at `font-size: 22px`
- * (Chromium, 1280×720, 2026-08-05). The line box is SMALLER than the painted extent, not
- * larger: Source Serif 4's content area at 22px measures 30.00 (ratio 1.3636), which is the
- * ≈2px rule in the header's second table.
- *
- * ONE LINE IS A MEASURED CLAIM, NOT AN ASSUMPTION — 641.00px of type in a 728px measure with
- * the copper italics in place, and 636.03 with the webfonts absent. It is also the tightest
- * fit on the slide (87px, so 13.6% of growth headroom), and the failure is not cosmetic: a
- * second line lands in the 24px of air above the eyebrow under it. A browser check has to
- * assert the rendered line count here; the box does not have room to hide a wrap.
- */
-export const WORKAROUND_HEIGHT = 32;
-
-/** The air between the confession and the label over its bill: 24. Bigger than the 12 that
- *  binds an eyebrow to its own list, smaller than the 40 of a beat change — the bill is part
- *  of beat 2, not a new beat. Not exported. */
-const WORKAROUND_TO_EYEBROW = 24;
-
-/** `WHAT IT COST`'s shelf: 318. */
-export const COSTS_EYEBROW_TOP = WORKAROUND_TOP + WORKAROUND_HEIGHT + WORKAROUND_TO_EYEBROW;
-
-/** A mono eyebrow's box: 16. 11px on 1.25 is a 13.75 line box that paints 14.00, so 2 spare.
- *  ONE CONSTANT FOR BOTH eyebrows — the bill's and the card's — because they are the same
- *  string register at the same size, and two numbers here would only ever drift. */
-export const EYEBROW_HEIGHT = 16;
-
-/** The air between an eyebrow and the list it labels: 12. Deliberately the smallest gap in
- *  the column — the eyebrow belongs TO its list, and a larger gap would let it read as a
- *  heading over the whole beat. Used by both lists. Not exported. */
-const EYEBROW_TO_LIST = 12;
-
-/** The bill's first row: 346. */
-export const COST_ROWS_TOP = COSTS_EYEBROW_TOP + EYEBROW_HEIGHT + EYEBROW_TO_LIST;
-
-/** A list row's box: 22. 15px sans on 1.3 is a 19.50 line box, and this is the one row on the
- *  slide whose face asks for LESS than its line box (Inter's content area is 19.00), so 19.50
- *  is the painted extent and 2.5 is spare.
- *  ONE HEIGHT FOR BOTH LISTS: the bill and the terms are the same register at the same size,
- *  and what differs between them is the budget each has, not the shape of a row. */
-export const LIST_ROW_HEIGHT = 22;
-
-/** The air between two list rows: 16, which puts 18.5px between two rendered 19.50px lines.
- *  A LIST, NOT FOUR STATEMENTS — the four costs are one bill and the four terms are one
- *  offer, so they are set to be read as blocks. (`./geometry.ts` spends 53.4px between its
- *  figures for the opposite reason: those are four separate claims.) Not exported. */
-const LIST_ROW_GAP = 16;
-
-/** How far apart two list rows sit: 38. Derived, so both capacities move with it. */
-const LIST_ROW_PITCH = LIST_ROW_HEIGHT + LIST_ROW_GAP;
-
-/** How tall a block of `count` list rows is. Private: it exists to derive the two capacities
- *  and to keep their throw messages measured rather than typed. */
-function listBlockHeight(count: number): number {
-  return (count - 1) * LIST_ROW_PITCH + LIST_ROW_HEIGHT;
-}
-
-/**
- * How many costs the bill names: 4, PINNED to `./content.ts`'s tuple, exactly as
- * {@link DEADLOCK_CLAUSE_COUNT} is.
- *
- * A SECOND LOCK AND NOT THE FIRST ONE. `./content.ts` already refuses a fifth cost at its own
- * `Four<LineItem>` annotation; this pin is what makes the geometry notice if that tuple is
- * ever widened, because every shelf under the bill is derived from this number. The relation
- * it CANNOT express is `COST_COUNT <= COST_ROW_CAPACITY` — the capacity is a computed
- * `number`, so that one belongs to `tests/unit/invest-chicken-egg.test.tsx`.
- */
+/** §6.7's four costs. Pinned. A fifth is a different argument, not a longer list. */
 export const COST_COUNT: ChickenEggCopy["costs"]["length"] = 4;
 
-/** Where the bill ends: 482. Derived from the count, and the line the pilot card's bottom
- *  border is pinned to (see {@link CARD_TOP}) — which is why it is exported: a browser check
- *  measures both lists' last rows against it. */
-export const COST_ROWS_BOTTOM = COST_ROWS_TOP + listBlockHeight(COST_COUNT);
-
-// ───────────────────── the story column · beat 3, the verdict ─────────────────────
-
-/** The air between the bill and the rule that closes it: 30. Not exported. */
-const ROWS_TO_RULE_GAP = 30;
-
-/**
- * The copper rule's shelf: 512.
- *
- * IT IS THE BILL'S TOTAL RULE, not a divider for the slide — which is why it spans
- * {@link STORY_COL_W} and stops at the gutter. A rule carried across both columns would tie
- * the offer to the bill's arithmetic, and the offer is the thing the bill is an argument for.
- */
-export const RULE_TOP = COST_ROWS_BOTTOM + ROWS_TO_RULE_GAP;
-
-/** `.copper-rule` is `height: 1px` in `src/styles/globals.css`. Its `scaleX` reveal is a
- *  transform, so it takes no layout space beyond this pixel and adds no SMIL node. */
-export const RULE_HEIGHT = 1;
-
-/** The air between the rule and the verdict: 20. Close, so the rule reads as the verdict's
- *  own rule rather than as a floating divider halfway down the column. Not exported. */
-const RULE_TO_VERDICT_GAP = 20;
-
-/** Beat 3's shelf: 533. */
-export const VERDICT_TOP = RULE_TOP + RULE_HEIGHT + RULE_TO_VERDICT_GAP;
-
-/**
- * Two lines of 26px serif on 1.3 are 67.59 of line box that paint 69.79, and this box is cut
- * for both with the same ≈2px every other box gets: 72.
- *
- * TWO LINES BY DESIGN, NOT BY ACCIDENT — 825.44px of type in a 728px measure, and 805.91 with
- * the webfonts absent. Beat 3 is the biggest prose on the slide on purpose (26 over the
- * turn's 24 over the confession's 22): §6.7 makes it load-bearing, and it is the one sentence
- * a Div Head repeats upward. A third line would take roughly twice the string it has.
- */
-export const VERDICT_HEIGHT = 72;
-
-/** Everything that hangs under the bill, as one number: 123. Private — it is the input to
- *  the capacity below, and an exported constant with no outside reader is a number two
- *  places could come to disagree about for no gain (`./geometry.ts` deletes one for exactly
- *  that reason). */
-const BELOW_ROWS_HEIGHT =
-  ROWS_TO_RULE_GAP + RULE_HEIGHT + RULE_TO_VERDICT_GAP + VERDICT_HEIGHT;
-
-/** What the bill may spend between its first row and the floor, once the rule and the
- *  verdict under it are paid for: 163. Private, for the reason above. */
-const COST_ROWS_BUDGET = NAV_ZONE_TOP - COST_ROWS_TOP - BELOW_ROWS_HEIGHT;
-
-/**
- * How many cost rows this column can hold — DERIVED, so lowering the verdict or growing the
- * rule's gaps lowers the capacity in the same edit.
- *
- * `n` rows occupy `(n − 1) · pitch + height`, so the budget allows
- * `floor((budget − height) / pitch) + 1`. It comes out at 4, which is §6.7's count, with 27px
- * of the budget unspent — and that leftover IS {@link NAV_ZONE_CLEARANCE}, read from the
- * other end. The two are one piece of arithmetic, so a test that compares them proves
- * nothing; what a test can prove is that four rows fit and five do not.
- */
-export const COST_ROW_CAPACITY =
-  Math.floor((COST_ROWS_BUDGET - LIST_ROW_HEIGHT) / LIST_ROW_PITCH) + 1;
-
-/** What is left between the lowest box on the stage — the verdict — and the NavBar's hover
- *  band: 27px. Derived from both ends, so an edit anywhere in the story column moves it and a
- *  browser check fails on it. The verdict's own type stops 2.21px above its box's bottom edge
- *  (see {@link VERDICT_HEIGHT}), so the painted clearance is 29.21. */
-export const NAV_ZONE_CLEARANCE = NAV_ZONE_TOP - (VERDICT_TOP + VERDICT_HEIGHT);
-
-// ───────────────────── the offer column · beat 4, the turn and its terms ─────────────────────
-
-/**
- * Two lines of 24px serif on 1.3 are 62.38 of line box that paint 64.19, and this box is cut
- * for both: 66.
- *
- * TWO LINES BY DESIGN: 459.70px of type in a 400px measure (443.09 with the webfonts absent,
- * still two lines). 24px and not 26 — the verdict is the load-bearing beat and stays the
- * biggest prose on the stage — and not 22 either, because this is the only sentence on the
- * slide addressed to the person in the chair.
- *
- * ITS BOX ENDS AT 222, WHICH IS ALSO WHERE THE DEADLOCK BLOCK ENDS, and that is arithmetic
- * coincidence: `66 = DEADLOCK_HEIGHT` today, by two unrelated derivations. Nothing derives
- * one from the other and no test should assert it — a 3-line turn or a taller clause box
- * breaks the coincidence and breaks nothing else.
- */
-export const TURN_HEIGHT = 66;
-
-/** The card's own padding: 32 — which leaves its type the {@link CARD_MEASURE} below, and the
- *  eyebrow 65.39 of that spare. It is also the number the alignment below was bought with: the
- *  card's height is what lands its bottom edge on the bill's, and the padding is the only input
- *  to that height with slack in it (the rows' pitch and the eyebrow's box are shared with the
- *  story column). */
-export const CARD_PAD = 32;
-
-/**
- * The card's own type measure: 336 — what its eyebrow and its four terms are set in.
- *
- * EXPORTED BECAUSE THREE FILES NEED IT, which is the test this module applies to every
- * constant in it (see {@link BELOW_ROWS_HEIGHT} for the other side of it). The renderer
- * declares it as the width of the card's inner boxes, the unit test asserts that declared
- * width, and the browser harness measures it off the rendered eyebrow. All three computed
- * `OFFER_COL_W − 2 * CARD_PAD` for themselves until 2026-08-05, which is three places one
- * subtraction could come to disagree about.
- *
- * THE INNER BOXES ARE THE CARD'S SIBLINGS, NOT ITS CHILDREN — every box on this slide is
- * placed against the STAGE (see {@link clauseTop}) — so an absolutely-positioned term with no
- * declared width would shrink-wrap against the stage's 1280 and let an over-long reword run
- * past the card's own border with `scrollWidth === clientWidth` the whole way. A declared
- * measure is what gives an overflow check something true to compare.
- */
-export const CARD_MEASURE = OFFER_COL_W - 2 * CARD_PAD;
-
-/**
- * How many terms the pilot names: 4, PINNED to `./content.ts`'s tuple — see
- * {@link COST_COUNT}.
- */
+/** The pilot's four limits. Pinned, and DELIBERATELY EQUAL TO {@link COST_COUNT} — see
+ *  {@link ITEM_COUNT}, which is where the two are required to agree. */
 export const CONSTRAINT_COUNT: ChickenEggCopy["pilotConstraints"]["length"] = 4;
 
 /**
- * The bordered card's height: 228. Derived from what is inside it — two paddings, the
- * eyebrow, the gap that binds the eyebrow to its list, and the terms.
+ * How many columns the item grid has: 4.
  *
- * THE ONLY BORDERED BOX ON THE STAGE, and the reason the offer reads as something a division
- * head can write down: the story is prose and lists, the offer is a box with terms in it.
+ * ONE GRID FOR BOTH ROWS, WHICH IS THE FIGURE'S SHARPEST CLAIM AND ITS ONE FRAGILE JOINT. The
+ * bill and the offer are drawn as four boxes each, at one width and one pitch, so a room reads
+ * them as a COMPARISON — four things it cost against four things that bound it — rather than as
+ * two unrelated lists. That only works while the counts match, so the equality is asserted here
+ * instead of assumed: a copy edit that adds a fifth pilot term without a fifth cost stops the
+ * build at this line with the reason attached.
+ *
+ * @throws at module load if the two counts diverge. A geometry module that throws is a blank
+ *         stage at first paint, which is the loudest possible failure and exactly the right one:
+ *         the alternative is a stage that silently draws five boxes over four.
  */
-export const CARD_HEIGHT =
-  2 * CARD_PAD + EYEBROW_HEIGHT + EYEBROW_TO_LIST + listBlockHeight(CONSTRAINT_COUNT);
+export const ITEM_COUNT: number = (() => {
+  if (COST_COUNT !== CONSTRAINT_COUNT) {
+    throw new Error(
+      `chicken-egg-geometry: ${COST_COUNT} costs against ${CONSTRAINT_COUNT} pilot terms. ` +
+        "The bill and the offer share ONE column grid so the room can read them as four " +
+        "against four; unequal counts have no grid. Change the copy or redraw the figure.",
+    );
+  }
+  return COST_COUNT;
+})();
+
+// ───────────────────── the floor · the thesis, measured up from the NavBar ─────────────────────
+//
+// Declared FIRST because the figure's own bottom edge is derived from it — the stage is cut
+// from the floor upward, and a `const` read before its declaration is a temporal-dead-zone
+// throw at module load, which for a geometry module means a blank stage at first paint.
+
+/** What is left between the thesis and the NavBar's hover band: 16px — the same 16 D.1 and D.2
+ *  keep, because the thesis is the last thing the room reads and the closest thing to the edge
+ *  of the stage. */
+export const NAV_ZONE_CLEARANCE = 16;
+
+/** The thesis' box: 26, cut for ONE line of 19px serif on 1.3 (24.70 line box). */
+export const THESIS_HEIGHT = 26;
+
+/** The thesis' shelf: 590. Full width, alone, and as low as the NavBar band allows — DERIVED
+ *  BACKWARDS from {@link NAV_ZONE_CLEARANCE}, exactly as its two siblings are. */
+export const THESIS_TOP = NAV_ZONE_TOP - NAV_ZONE_CLEARANCE - THESIS_HEIGHT;
+
+/** `.copper-rule` is `height: 1px` in `src/styles/globals.css` — restated, because jsdom
+ *  computes no stylesheet and a test that read this box's height off the DOM would read
+ *  `NaN`. */
+export const RULE_HEIGHT = 1;
+
+/** The air between the rule and the sentence it opens for: 36 — D.1's own number. Wider than
+ *  any gap inside the figure, because the rule divides the SLIDE and not two bands of it. */
+const RULE_TO_THESIS = 36;
+
+/** The copper rule's shelf: 553. Above it is what happened; below it is the one line this deck
+ *  asks the room to leave with. */
+export const RULE_TOP = THESIS_TOP - RULE_TO_THESIS - RULE_HEIGHT;
+
+// ───────────────────── the figure's band ─────────────────────
+
+/** Where the figure starts: 156 — `.slide-content`'s own top in `src/styles/globals.css`, and
+ *  the shelf the deck declares for content under a headline row. This slide has no eyebrow band
+ *  to cross first. */
+export const BAND_TOP = 156;
+
+// ───────────────────── act 1 · the lock ─────────────────────
 
 /**
- * The card's top edge: 254 — DERIVED UPWARD FROM THE BILL'S FLOOR.
+ * The ring: an ELLIPSE at (640, 352), 272 × 128.
  *
- * `COST_ROWS_BOTTOM − CARD_HEIGHT`, so the card's bottom border and the bill's last row land
- * on the same line (y=482) by construction rather than by eye. The last cost label itself
- * paints to y=479.5 — the 2.5px of spare in its own row box — so the border aligns with the
- * ROW and sits clear of the type.
+ * WIDER THAN IT IS TALL, AND THAT IS THE WHOLE PLACEMENT ARGUMENT. A circle big enough to carry
+ * two 216px poles at its extremes would be 544px across AND 544px tall, which does not fit
+ * between y=156 and the floor. The ellipse keeps the horizontal reach — the poles land where a
+ * room expects two opposed things to be — and spends only 256px of height, which leaves a clause
+ * label above the top arc and another under the bottom one INSIDE the band.
  *
- * WHY THIS DIRECTION. The alignment is what makes the two lists read as the two halves of
- * one trade — what it cost us, what it costs you — and below it only the verdict speaks. Cut
- * the other way (a chosen gap under the turn, the card growing downward) the alignment would
- * be a coincidence of {@link CARD_PAD}, and a card ending 20px off the bill reads as a
- * mistake rather than as a decision. The price is that a fifth term grows the card upward
- * into the turn line — see {@link constraintRowTop} — and that the story column's row pitch
- * moves the card.
+ * IT IS NOT A PIE, A DIAL OR A CYCLE-OF-N. Two nodes and two arcs, nothing else on the ring: a
+ * deadlock has exactly two participants and any third mark would make it a process.
  */
-export const CARD_TOP = COST_ROWS_BOTTOM - CARD_HEIGHT;
+export const RING_CX = 640;
+export const RING_CY = 352;
+export const RING_RX = 272;
+export const RING_RY = 128;
+
+/** The ring's top and bottom apexes: y=224 and y=480. The two arrowheads sit here — at an
+ *  ellipse's apex the tangent is horizontal, so a head placed here points cleanly along the
+ *  direction of travel and needs no rotation. */
+export const RING_TOP_Y = RING_CY - RING_RY;
+export const RING_BOTTOM_Y = RING_CY + RING_RY;
+
+/** A pole: 216 × 72 — one for BUDGET, one for PROOF, centred on the ring's own extremes. Both
+ *  are the same box, because the deadlock ranks neither: each one is waiting on the other. */
+export const POLE_W = 216;
+export const POLE_H = 72;
+
+/** The BUDGET pole's box: centred on (368, 352), so x=260…476, y=316…388. */
+export const BUDGET_LEFT = RING_CX - RING_RX - POLE_W / 2;
+export const POLE_TOP = RING_CY - POLE_H / 2;
+
+/** The PROOF pole's HERO box: centred on (912, 352), so x=804…1020.
+ *
+ *  THIS IS THE ONE BOX ON THE STAGE THAT MOVES BETWEEN POSES rather than arriving or leaving.
+ *  At pose 1 it travels to {@link DEST_LEFT} and grows into the destination plate — see the
+ *  header. Its two placements are declared 200 lines apart on purpose: the transition is
+ *  between two independently-argued positions, not a nudge. */
+export const PROOF_HERO_LEFT = RING_CX + RING_RX - POLE_W / 2;
+
+/** The pole label's register: 26px display serif, in a 34px box centred in the pole. */
+export const POLE_LABEL_SIZE = 26;
 
 /**
- * The air between the turn and the card: 32px today, and A RESIDUE rather than a choice —
- * everything else in this column is derived, so this gap is what is left.
+ * The glyph that stands to the LEFT of each pole's word: 26px square, 12px clear of the type.
  *
- * {@link TURN_TO_CARD_MIN} is the floor it may not fall through, and the capacity below is
- * what holds it there. Exported because it is the one number in this column that a browser
- * check should watch: it is where an edit anywhere else in either column shows up first.
+ * TWO GLYPHS, ONE PER POLE, AND THEY ARE THE POLES' OWN NOUNS — a banknote for BUDGET, a signed
+ * sheet for PROOF. Act 1's argument is that neither of the two things a division needs can be had
+ * without the other, and until the redraw the room had to READ both of them: two words in boxes,
+ * with the only drawn object on the stage the padlock between them. A glyph beside each word is
+ * the same claim at a glance, in the register the padlock and the key already set in this figure
+ * (primitives, not an icon set — see `./components/ChickenEggBeats.tsx`).
+ *
+ * THE PAIR IS LAID OUT BY FLEXBOX AND NOT BY THIS MODULE, which is why only a size and a gap are
+ * declared here. The glyph and the word are centred TOGETHER inside the pole, so the block's own
+ * width is whatever the display face sets — a number this module cannot know and must not guess.
  */
-export const TURN_TO_CARD = CARD_TOP - (COLUMN_TOP + TURN_HEIGHT);
+export const POLE_GLYPH_SIZE = 26;
+export const POLE_GLYPH_GAP = 12;
 
-/** The least air the card's top border may have under the turn: 16, measured from the turn's
- *  BOX bottom — which is itself 1.81px below where its second line stops painting. Under 16 a
- *  1px border 400px wide stops reading as the top of a box and starts reading as an underline
- *  of the sentence above it. Private — it is an input to the capacity. */
-const TURN_TO_CARD_MIN = 16;
+/** A clause label's box: 24, cut for ONE line of 15px mono caps on 1.5 (22.50 painted). */
+export const CLAUSE_HEIGHT = 24;
 
-/** The card's eyebrow: 286. */
-export const CARD_EYEBROW_TOP = CARD_TOP + CARD_PAD;
+/** The air between an arc's apex and the clause label outside it: 10. Close enough that the
+ *  label reads as the arc's caption and not as a free line of type. */
+const ARC_TO_CLAUSE = 10;
 
-/** The first pilot term: 314. */
-export const CONSTRAINT_ROWS_TOP = CARD_EYEBROW_TOP + EYEBROW_HEIGHT + EYEBROW_TO_LIST;
-
-/** What the terms may spend inside a card that must keep its bottom on the bill's floor and
- *  its top clear of the turn: 152. Private — it derives the capacity. */
-const CONSTRAINT_ROWS_BUDGET =
-  COST_ROWS_BOTTOM -
-  (COLUMN_TOP + TURN_HEIGHT) -
-  TURN_TO_CARD_MIN -
-  (2 * CARD_PAD + EYEBROW_HEIGHT + EYEBROW_TO_LIST);
+/** A clause label's measure: 480, centred on the ring's own centre — x=400…880. Both strings
+ *  are 23 characters of 15px mono at 0.18em tracking (≈244px measured), so the box is roughly
+ *  double what either needs and neither can wrap. */
+export const CLAUSE_W = 480;
+export const CLAUSE_LEFT = RING_CX - CLAUSE_W / 2;
 
 /**
- * How many terms the card can hold — DERIVED, by the same arithmetic as
- * {@link COST_ROW_CAPACITY} and against a different neighbour: the turn line above, not the
- * floor below. It comes out at 4, which is the issue's own count, with 16px of the budget
- * unspent — which is the 16 that turns {@link TURN_TO_CARD_MIN} into today's 32px of air.
- */
-export const CONSTRAINT_ROW_CAPACITY =
-  Math.floor((CONSTRAINT_ROWS_BUDGET - LIST_ROW_HEIGHT) / LIST_ROW_PITCH) + 1;
-
-// ───────────────────── the derivations ─────────────────────
-
-/**
- * Clause `index`'s top edge, in stage coordinates.
+ * Clause `index`'s shelf: 190 above the top arc, 490 below the bottom one.
  *
- * ABSOLUTE AND NOT SLOT-RELATIVE, unlike `rowOffset` in `./geometry.ts`: there is no slot
- * here with two possible fills, every box on this slide is placed against the stage, and a
- * renderer that has to add an origin is a renderer that can forget to.
+ * OUTSIDE THE RING AND NOT INSIDE IT. The interior is the lock's, and a caption inside an
+ * ellipse has to be short enough to clear the curve at its own height — which for these two
+ * strings it is not. Outside, each label is simply the arc it belongs to, read in the direction
+ * that arc travels.
  *
- * @throws on a third clause. Refused in two places on purpose — the content's tuple is the
- *         first — because the count is an argument and not a length.
+ * @throws on a clause the copy does not have.
  */
 export function clauseTop(index: number): number {
   if (!Number.isInteger(index) || index < 0 || index >= DEADLOCK_CLAUSE_COUNT) {
-    const nextTop = COLUMN_TOP + DEADLOCK_CLAUSE_COUNT * CLAUSE_PITCH;
     throw new Error(
-      `clauseTop: no clause ${index} — the loop is a ${DEADLOCK_CLAUSE_COUNT}-clause cycle ` +
-        `(0…${DEADLOCK_CLAUSE_COUNT - 1}), and a third clause is not a deadlock. It would ` +
-        `land at y=${nextTop}…${nextTop + CLAUSE_HEIGHT}, spending the ${BEAT_GAP}px that ` +
-        `separates beat 1 from the workaround line at y=${WORKAROUND_TOP} and leaving ` +
-        `${WORKAROUND_TOP - (nextTop + CLAUSE_HEIGHT)}px between them.`,
+      `clauseTop: no clause ${index} — the deadlock has ${DEADLOCK_CLAUSE_COUNT} ` +
+        "(0…1, the cycle's two directions). A third clause is a queue, not a deadlock.",
     );
   }
-  return COLUMN_TOP + index * CLAUSE_PITCH;
+  return index === 0
+    ? RING_TOP_Y - ARC_TO_CLAUSE - CLAUSE_HEIGHT
+    : RING_BOTTOM_Y + ARC_TO_CLAUSE;
 }
 
 /**
- * Cost row `index`'s top edge, in stage coordinates.
+ * The padlock, at the ring's centre: 60 wide, 76 tall (shackle included), centred on (640, 352).
  *
- * @throws on a row the column cannot hold. THE FLOOR IS WHAT REFUSES IT, and the message says
- *         so rather than naming the rule or the verdict: both of those hang off the row count
- *         and travel with a fifth row instead of being hit by it.
+ * THE ONE PICTORIAL GLYPH ON THIS STAGE, and it earns its place by being the only mark that
+ * says WHAT the cycle amounts to without a word of English — which for a room that reads slides
+ * in its second language is the difference between a diagram and a caption. It is drawn from
+ * primitives (a rounded body, an arc for the shackle, a keyhole), not imported: no icon set in
+ * this deck ships a lock at a stroke weight that survives projection.
  */
-export function costRowTop(index: number): number {
-  if (!Number.isInteger(index) || index < 0 || index >= COST_ROW_CAPACITY) {
-    const overflow = listBlockHeight(COST_ROW_CAPACITY + 1) - COST_ROWS_BUDGET;
-    throw new Error(
-      `costRowTop: no cost row ${index} — the bill holds ${COST_ROW_CAPACITY} rows ` +
-        `(0…${COST_ROW_CAPACITY - 1}). Row ${COST_ROW_CAPACITY} needs ` +
-        `${listBlockHeight(COST_ROW_CAPACITY + 1)}px of the ${COST_ROWS_BUDGET}px this column ` +
-        `has between y=${COST_ROWS_TOP} and the NavBar's hover band at y=${NAV_ZONE_TOP}, ` +
-        `once the ${BELOW_ROWS_HEIGHT}px of rule and verdict under it are paid for — ` +
-        `${overflow}px more than there is. The rule and the verdict are not what it collides ` +
-        `with: they hang off the row count and move down with it, which is how the verdict's ` +
-        `box ends up ${overflow}px inside the band.`,
-    );
-  }
-  return COST_ROWS_TOP + index * LIST_ROW_PITCH;
-}
+export const LOCK_W = 60;
+export const LOCK_H = 76;
+
+// ───────────────────── act 2 · the two roads ─────────────────────
+
+/** Where both roads start and stop: x=132 and x=1044. The left end clears the token that heads
+ *  the road ({@link TOKEN_CX} + {@link TOKEN_R} = 122, plus 10px of air); the right end is the
+ *  destination plate's own left edge, so an arrowhead lands ON the plate rather than near it. */
+export const LANE_LEFT = 132;
+
+/** The two lanes' centre lines: 226 and 396.
+ *
+ * 170px APART, WHICH IS THE FIGURE'S RANKING. Everything the short road owns lives above y=310
+ * and everything the long road owns below y=380, so the stage splits into two readable halves
+ * with the act's own sentence in the gap between them. Any closer and the two rows of boxes
+ * read as one eight-column table; any further and the long road falls into the thesis band.
+ */
+export const SHORT_LANE_Y = 226;
+export const LONG_LANE_Y = 396;
+
+/** A road's own weight: 2px for the short one, 2px for the long one. Equal, deliberately — the
+ *  difference between them is drawn in DASH and COLOUR, never in weight, because a thicker line
+ *  would rank one route as more real than the other and both of them happened. */
+export const ROAD_WEIGHT = 2;
 
 /**
- * Pilot term `index`'s top edge, in stage coordinates.
+ * A token: a 32px-radius circle at x=90, on its own lane's centre line. The lock heads the long
+ * road, the key heads the short one.
  *
- * @throws on a term the card cannot hold. THE TURN LINE IS WHAT REFUSES IT — the card's
- *         bottom is pinned to the bill's floor, so it grows upward, away from the band and
- *         into the sentence above it.
+ * 90 AND NOT 94, AND THE FOUR PIXELS ARE THE LABEL'S. A token's caption is centred on it
+ * ({@link TOKEN_LABEL_W}), so a symmetric caption box can only be twice the narrower of the two
+ * gaps around the token — and at 94 that is 2 × (132 − 94) = 76, which "THE DEADLOCK" fills to
+ * within 0.4px (75.25px, measured in Chromium at 9.5px/0.06em). A caption that touches the first
+ * box of the bill beside it is the failure this figure has already had once, at a different
+ * tier.
+ *
+ * AT 90 THE TWO CONSTRAINTS LINE UP EXACTLY: the caption box becomes 2 × (132 − 90) = 84, which
+ * is {@link SIDE_MARGIN} to {@link LANE_LEFT} — the whole of the room there is — so the same
+ * string sits centred with 4.4px of air on BOTH sides and the box lands on the deck's own margin
+ * rather than 8px inside it. What it costs is 4px of the air between the token and the lane,
+ * which had 6 and now has 10, and nothing else on the stage is measured from this number that is
+ * not derived from it ({@link LOCK_TRAVEL_X}, the key, the ban seal's clearance).
  */
-export function constraintRowTop(index: number): number {
-  if (!Number.isInteger(index) || index < 0 || index >= CONSTRAINT_ROW_CAPACITY) {
+export const TOKEN_CX = 90;
+export const TOKEN_R = 32;
+
+/** How far the hero lock shrinks to become the long road's token: 0.55.
+ *
+ *  DERIVED FROM THE TOKEN, NOT CHOSEN: {@link LOCK_W} × 0.55 = 33 and {@link LOCK_H} × 0.55 =
+ *  41.8, which sits inside a 64px circle with ≈11px of margin on the narrow axis. The lock is
+ *  the ONE object that survives the act change — it does not fade out and fade back in
+ *  somewhere else, it travels — so a room that looks away for a second still knows which mark
+ *  it is looking at. */
+export const LOCK_TOKEN_SCALE = 0.55;
+
+/** How far the hero lock travels to reach the long road's token: (−550, +44). Both are
+ *  DIFFERENCES between two placements this file already declares, so re-cutting either end
+ *  re-cuts the journey with it — a hard-coded pair here is how a redraw of the ring leaves the
+ *  lock landing 30px outside its own token. */
+export const LOCK_TRAVEL_X = TOKEN_CX - RING_CX;
+export const LOCK_TRAVEL_Y = LONG_LANE_Y - RING_CY;
+
+/**
+ * A token label's box: 84 × 14, at x=48…132 — CENTRED ON ITS OWN TOKEN, at x=90.
+ *
+ * IT WAS LEFT-ALIGNED UNTIL 2026-08-14, and the note here argued for it: both strings are wider
+ * than the 64px circle, so a centred label was said to hang past the stage's own margin. THAT IS
+ * TRUE ONLY OF A LABEL CENTRED ON A TOKEN THE BOX CANNOT REACH AROUND. Left-aligned, "YOU" —
+ * three characters, ≈19px of ink — sits centred at x≈57, THIRTY-THREE PIXELS left of the circle
+ * it is the caption for, and reads as a label belonging to the stage edge rather than to the
+ * token. That is the defect the owner review named.
+ *
+ * SO THE BOX IS SYMMETRIC ABOUT {@link TOKEN_CX} AND THE TOKEN MOVED 4px TO MEET IT — see
+ * {@link TOKEN_CX}, which carries that argument. The two ends land on the two things that were
+ * already there:
+ *
+ *   left  = TOKEN_CX − W/2 = 48 = {@link SIDE_MARGIN}, the deck's own margin
+ *   right = TOKEN_CX + W/2 = 132 = {@link LANE_LEFT}, where the item grid starts
+ *
+ * MEASURED, NOT ASSUMED: "THE DEADLOCK" sets 75.25px in Chromium at 9.5px/0.06em, so it rests
+ * with 4.4px of air on each side. `scripts/d3-figure-verify.mjs` owns both channels that can see
+ * this go wrong — `scrollWidth > clientWidth` for the string, and the box's own right edge
+ * against {@link LANE_LEFT} for the box.
+ */
+export const TOKEN_LABEL_W = 2 * (LANE_LEFT - TOKEN_CX);
+export const TOKEN_LABEL_LEFT = TOKEN_CX - TOKEN_LABEL_W / 2;
+export const TOKEN_LABEL_HEIGHT = 14;
+
+/** How far under its own lane a token's label hangs: 12px clear of the circle's rim. */
+export const TOKEN_LABEL_DROP = TOKEN_R + 12;
+
+/**
+ * A token label's type: 9.5px mono at 0.10em — the SMALLEST type on this stage, and the only
+ * place in this figure that goes to gh#50's mono floor rather than sitting above it.
+ *
+ * IT IS A WIDTH PROBLEM AND THE MEASUREMENT IS THE REASON. The label has 84px between the stage's
+ * own margin and the item grid ({@link TOKEN_LABEL_W}), and the longer of the two strings has to
+ * fit it with air on both sides now that it is CENTRED rather than flush left. MEASURED IN
+ * CHROMIUM rather than estimated, in JetBrains Mono, whose advance is 0.6em: "THE DEADLOCK" is 12
+ * characters, so it sets 12 × (5.70 + tracking) and the whole budget is the tracking. At 0.10em —
+ * what this label carried while it was left-aligned — that is 80.0px, which leaves 2px a side. At
+ * 0.06em it is 75.25px and leaves 4.4. At 10.5px/0.16em, the tier every other mono label on this
+ * stage uses, the same string sets ≈88px and crosses the first cost box, which is what the first
+ * render of this figure did.
+ *
+ * SO THE TRACKING BUYS THE AIR, AND THE SIZE DOES NOT. 9.5px is this deck's mono floor and the
+ * label stays on it; what gives is 0.04em of letter-spacing, which is the cheapest thing on the
+ * stage to spend — it is invisible at three characters and it is not a legibility floor. Both
+ * channels of `scripts/d3-figure-verify.mjs` hold the result: `scrollWidth > clientWidth` on a
+ * `nowrap` label is the only check that can see an overflow of a few px, and the box's own right
+ * edge against {@link LANE_LEFT} is the only one that can see it hit the grid.
+ */
+export const TOKEN_LABEL_SIZE = 9.5;
+export const TOKEN_LABEL_TRACKING = 0.06;
+
+/** A road label's box: 14, cut for ONE line of 11px mono caps on 1.3 (14.30 painted). */
+export const ROAD_LABEL_HEIGHT = 14;
+
+/** The pilot's eyebrow, above the short road: y=192. The widest string in the figure's label
+ *  register — "INSTEAD — A 30-DAY PROOF PILOT" measured 270.61px at 11px/0.16em — and it has
+ *  the whole lane to run in, so it cannot wrap. */
+export const SHORT_LABEL_TOP = 192;
+
+/** The bill's eyebrow, above the long road: y=362 — the same 20px over its own lane that
+ *  {@link SHORT_LABEL_TOP} keeps over the other. BOTH ROAD LABELS SIT ABOVE THEIR ROAD, which
+ *  leaves the whole band under each road to the boxes that hang off it and gives the two lanes
+ *  one grammar: a name over the line, the marks on it, the words under it. */
+export const LONG_LABEL_TOP = 362;
+
+// ───────────────────── the destination plate ─────────────────────
+
+/**
+ * The plate both roads end on: x=1044…1232, y=192…492.
+ *
+ * A TALL COLUMN AND NOT A CARD, because it has to be the terminus of two lanes 170px apart. Its
+ * left edge is where both arrowheads land, and its height spans from above the short road to
+ * below the long one — so the picture reads as two roads arriving at ONE door rather than as two
+ * roads arriving at two boxes that happen to be stacked.
+ *
+ * 188 WIDE IS WHAT IS LEFT, AND IT IS ENOUGH. The item grid needs 890 of the stage
+ * ({@link ITEM_PITCH} × 4), the roads start at 132, and the stage stops at 1232. What remains
+ * holds a 42px display word and a two-line mono eyebrow with 16px of padding either side.
+ */
+export const DEST_LEFT = 1044;
+export const DEST_W = CONTENT_RIGHT - DEST_LEFT;
+export const DEST_TOP = 192;
+export const DEST_BOTTOM = 496;
+export const DEST_H = DEST_BOTTOM - DEST_TOP;
+
+/** A road label's measure: 912 — the road's own run, from {@link LANE_LEFT} to the destination
+ *  plate's left edge. NOT the stage's full {@link CONTENT_WIDTH}: these two boxes start at 132,
+ *  so a full-width measure would end at x=1316, 84px past the stage. Neither string can wrap
+ *  (both are `nowrap`), so what this width actually decides is whether the box overhangs the
+ *  stage — which is a thing a margin check can see and a reader cannot. */
+export const ROAD_LABEL_W = DEST_LEFT - LANE_LEFT;
+
+/** The plate's own padding: 16. */
+export const DEST_PAD = 16;
+
+/** The plate's eyebrow box: 30, cut for TWO lines of 10.5px mono caps on 1.4 (29.40 painted) —
+ *  "WHAT UNLOCKS THE BUDGET" is 23 characters at ≈168px against the 156px this plate leaves,
+ *  so it wraps by design and the box is cut for the wrap rather than against it. */
+export const DEST_EYEBROW_HEIGHT = 30;
+
+/** The word on the plate: 42px display serif, in a 50px box centred in what the eyebrow leaves.
+ *  The largest type on the stage under the headline — this is the thing both roads are for. */
+export const DEST_WORD_SIZE = 42;
+export const DEST_WORD_HEIGHT = 50;
+
+/**
+ * Where the word's box sits inside the POLE: 11 — `(72 − 50) / 2`.
+ *
+ * DERIVED, AND IT USED TO BE ZERO, which is the whole reason this constant exists. The PROOF word
+ * is ONE absolutely-placed box in TWO placements, {@link DEST_WORD_HEIGHT} tall in both, and at
+ * the destination it is centred on the plate by arithmetic. At the pole it was pinned to `top: 0`
+ * — so a 50px line box sat at the top of a 72px pole and the word rode 11px HIGH of the pole's
+ * own middle, out of line with the flex-centred BUDGET beside it. That is the defect the
+ * 2026-08-14 owner review caught on the shipped frame, and the fix is arithmetic rather than a
+ * nudge: both placements are now centred, each in the box it is centred IN.
+ *
+ * DECLARED HERE AND NOT BESIDE {@link POLE_LABEL_SIZE}, 170 lines up, because `const` has a
+ * temporal dead zone: reading {@link DEST_WORD_HEIGHT} before its own declaration throws at module
+ * load, and a geometry module that throws is a blank stage at first paint.
+ */
+export const POLE_WORD_TOP = (POLE_H - DEST_WORD_HEIGHT) / 2;
+
+// ───────────────────── the item grid · four costs over four terms ─────────────────────
+
+/** The air between two items: 22. Enough that four boxes read as four items rather than as one
+ *  table, and little enough that a row reads as one bill. */
+export const ITEM_GAP = 22;
+
+/**
+ * One item: 206 wide.
+ *
+ * CUT FOR THE LONGEST STRING IN EITHER ROW, WHICH IS A COST AND NOT A TERM. §6.7's fourth cost —
+ * "Usage invisible to the people who later have to approve it", 57 characters — sets ≈2 lines of
+ * 13px Inter inside the 184px this width leaves after padding, and every other string in both
+ * rows is shorter. The four terms are one line each at the same width, which is why the offer
+ * row is 26px shorter than the bill row and not padded out to match it.
+ *
+ * DERIVED FROM THE LANE, NOT MEASURED INTO IT: the grid spans {@link LANE_LEFT} to the
+ * destination plate's left edge less one gap, so moving either end re-cuts the boxes rather than
+ * leaving them overlapping the plate. What a browser has to check is the LINE COUNT inside the
+ * box, which jsdom cannot see — `scripts/d3-figure-verify.mjs` owns that.
+ */
+export const ITEM_PITCH = Math.floor((DEST_LEFT - LANE_LEFT) / ITEM_COUNT);
+export const ITEM_W = ITEM_PITCH - ITEM_GAP;
+
+/** Every item box's own padding: 11 either side, 12 top and bottom. */
+export const ITEM_PAD_X = 11;
+export const ITEM_PAD_Y = 12;
+
+/**
+ * Item `index`'s left edge: 132, 360, 588, 816.
+ *
+ * ONE FUNCTION FOR BOTH ROWS — see the header. Term `i` sits directly above cost `i` because
+ * both call this, not because two lists happened to be laid out the same way.
+ *
+ * @throws on a column the grid does not have.
+ */
+export function itemLeft(index: number): number {
+  if (!Number.isInteger(index) || index < 0 || index >= ITEM_COUNT) {
     throw new Error(
-      `constraintRowTop: no pilot term ${index} — the card holds ` +
-        `${CONSTRAINT_ROW_CAPACITY} terms (0…${CONSTRAINT_ROW_CAPACITY - 1}). Its bottom edge ` +
-        `is pinned to the bill's last row at y=${COST_ROWS_BOTTOM}, so term ` +
-        `${CONSTRAINT_ROW_CAPACITY} grows the card UPWARD: its top border would land at ` +
-        `y=${CARD_TOP - LIST_ROW_PITCH}, inside the turn line's box ` +
-        `(${COLUMN_TOP}…${COLUMN_TOP + TURN_HEIGHT}) instead of ${TURN_TO_CARD_MIN}px or more ` +
-        `below it. The NavBar's band is not the constraint here — the card's bottom edge is ` +
-        `${NAV_ZONE_TOP - COST_ROWS_BOTTOM}px above it.`,
+      `itemLeft: no column ${index} in a ${ITEM_COUNT}-column grid (0…${ITEM_COUNT - 1}). ` +
+        "The bill and the offer share the grid, so a fifth of either needs a fifth of both.",
     );
   }
-  return CONSTRAINT_ROWS_TOP + index * LIST_ROW_PITCH;
+  return LANE_LEFT + index * ITEM_PITCH;
 }
+
+/** Where item `index`'s marker sits ON its road: the column's own centre. The node, the tick
+ *  that drops from it and the box under it are one vertical, which is what binds a mark on a
+ *  road to the words that price it. */
+export function itemCenterX(index: number): number {
+  return itemLeft(index) + ITEM_W / 2;
+}
+
+/** The four terms: 206 × 36, at y=262 — one line of 13px sans with 12px of padding, hung 36px
+ *  under the short road. */
+export const TERM_TOP = 262;
+export const TERM_HEIGHT = 36;
+
+/** The four costs: 206 × 62, at y=434 — two lines of 13px sans with 12px of padding, hung 38px
+ *  under the long road. Two lines, because one of §6.7's four strings needs them and equal boxes
+ *  are what make the row a bill rather than four unrelated notes. */
+export const COST_TOP = 434;
+export const COST_HEIGHT = 62;
+
+/** The item's own text: 13px sans on 1.4. Above gh#50's 10.5px prose floor with room to spare,
+ *  and the smallest type on this stage. */
+export const ITEM_TEXT_SIZE = 13;
+
+/** A toll node on the long road, and a term node on the short one: 9 and 5. The bill's markers
+ *  are the larger pair because each one is an event that happened; a term's is a tick, because a
+ *  limit is a property of the road rather than something that befell it. */
+export const TOLL_R = 9;
+export const TERM_NODE_R = 5;
+
+/** The ban seal, on the long road between the token and the first toll: r=13 at x=180. ONE seal
+ *  and not three — "repeatedly" is a word in the copy, and a drawn count would be a quantity this
+ *  slide's own copy rule forbids it from asserting (the only quantity D.3 prints is 30-DAY). The
+ *  repetition is carried by MOTION instead: the seal re-stamps itself for as long as the slide is
+ *  up. See `./components/chicken-egg.css`.
+ *
+ *  x=168 IS MEASURED AGAINST ITS TWO NEIGHBOURS AND NOT CENTRED BETWEEN THEM. The token's rim is
+ *  at 122 and the first toll is at 235; a seal at the midpoint would sit 56px from each, and the
+ *  two circles it has to be told apart from are the TOLLS. So it is pushed left, 32px clear of
+ *  the token and 67 clear of the nearest toll — and it carries a slash, which no toll does. */
+export const BAN_R = 14;
+export const BAN_CX = 168;
+
+// ───────────────────── the prose ─────────────────────
+
+/** The three beat lines' register: 17px serif on 1.3 (22.10 line box) in a 26px box. ONE LINE
+ *  each, which is a budget and not an observation — the longest of the three is the verdict at
+ *  78 characters, ≈718px of a 1000px measure. */
+export const BEAT_HEIGHT = 26;
+export const BEAT_TEXT_SIZE = 17;
+
+/** Beat 4's turn: y=156, full width, on the figure's own top shelf and directly above the road
+ *  it is the caption for. */
+export const TURN_TOP = BAND_TOP;
+
+/** Beat 2's act: y=318, in the gap between the two lanes. The one sentence that belongs to
+ *  NEITHER road — it is why the long one exists — so it sits between them. */
+export const ACT_TOP = 318;
+
+/** Beat 3's verdict: y=506, under the bill it settles. */
+export const VERDICT_TOP = 506;
+
+/**
+ * THE MEASURE FOR THE TWO BEATS THAT RUN AT THE PLATE'S OWN HEIGHT: 996 — they stop short of
+ * the destination rather than running under it.
+ *
+ * IT WAS `VERDICT_W` AND IT HELD FOR THE WRONG BEAT UNTIL 2026-08-14. The verdict sits at
+ * {@link VERDICT_TOP} = 506, and the plate's band is 192 to 496 ({@link DEST_TOP} +
+ * {@link DEST_H}) — so the verdict never reached it and the measure was a precaution. The beat
+ * that DOES cross the plate is the ACT, at {@link ACT_TOP} = 318, and it was full width.
+ *
+ * TWO THINGS GO WRONG WHEN A BEAT'S BOX PASSES BEHIND THE PLATE, and only the first was known
+ * when this constant was written. A sentence long enough to reach the plate reads as two
+ * fragments — that is the typographic half. The other half is that the box is a HIT TARGET the
+ * whole of its width, ink or no ink: the act's box lay across the plate from y=318 to y=344 and
+ * took every pointer in that band, so the plate lit everywhere except a 26px stripe through the
+ * top half of the word PROOF. Capping the measure fixes both at once, which is why the fix is
+ * here and not a `pointer-events` rule in the component.
+ *
+ * THE TURN KEEPS THE FULL WIDTH and does not need this: it ends at 182, ten pixels above the
+ * plate's top edge. It is the caption for the road that arrives AT the plate, and a caption cut
+ * short of the thing it points at would be the odd one out on the shelf.
+ */
+export const BEAT_W = DEST_LEFT - ITEM_GAP - SIDE_MARGIN;
+
+/** The thesis' register: 19px serif, full width — D.1's own. */
+export const THESIS_TEXT_SIZE = 19;
+
+// ───────────────────── the one check the stage cannot fail quietly ─────────────────────
+
+/**
+ * The lowest thing the FIGURE paints: 530, the verdict's own bottom edge.
+ *
+ * ASSERTED RATHER THAN TRUSTED, because everything above it is a fixed shelf and a fixed shelf
+ * is exactly what a later edit moves without arithmetic. If the figure ever grows past the rule,
+ * the stage does not overlap subtly at projection scale — it refuses to load.
+ *
+ * @throws at module load if the figure reaches the thesis band.
+ */
+export const FIGURE_BOTTOM: number = (() => {
+  const bottom = VERDICT_TOP + BEAT_HEIGHT;
+  if (bottom > RULE_TOP) {
+    throw new Error(
+      `chicken-egg-geometry: the figure ends at y=${bottom}, past the copper rule at ` +
+        `y=${RULE_TOP}. The thesis band is measured up from the NavBar (${NAV_ZONE_TOP}) and ` +
+        "does not move; cut the figure, not the floor.",
+    );
+  }
+  return bottom;
+})();

@@ -634,6 +634,23 @@ interface ObservedDeck {
  *     touched, and all 72 pre-existing rows surviving IN ORDER offset-aware with that one
  *     exception. Read the diff, every time.
  *
+ * ON 2026-08-14 NO FIGURE MOVED AND NO ROW WAS ADDED — the FIRST entry here to record a
+ * LABEL-ONLY re-record, and the reason this file's diff is read by ordered `(fig, label)`
+ * pair rather than by figure alone. D.1 was re-cut and re-sourced (its pair turned out to be
+ * a cross-wave mashup no single study states; `src/slides/leader-invest/content.ts` carries
+ * the trace), and one consequence reaches this fixture:
+ *
+ *   · ONE label changed per leader deck, at index 10, and its FIGURE did not: `D.1 · THE
+ *     BASE RATE, AND THE DEFAULT IT PRICES` became `D.1 · THE BASE RATE, AND WHAT IT EARNS`.
+ *     The two gh#70 entries above still quote the OLD label, correctly — they are the record
+ *     of what that ticket shipped, and this entry is what supersedes it.
+ *   · NOTHING ELSE. Still **73** rows per leader deck, still fourteen sections, still closing
+ *     on **N.3**; the five `invest` rows are still D.1–D.5 and `berau`, `gems` and `general`
+ *     are untouched. The re-record needed no `ALLOW_MOVED_FIGURES=1`, because no figure
+ *     moved: a label-only change is invisible to an index-keyed detector and visible only to
+ *     the pair diff. That is the one shape of change this file's convention was written for
+ *     and had never yet seen.
+ *
  * `berau`, `gems` and `general` are byte-identical to the previous record, through
  * all fifteen tickets — sixteen leader-only slides now, since gh#67 brought two.
  * That
@@ -660,8 +677,17 @@ const OBSERVED: Record<string, ObservedDeck> = {
   // not move, as ever, and the CLOSER did not move either — a `gap` edit renumbers inside
   // `gap` and nothing else (§3.5 R3), which is the whole reason this file is the artifact
   // that proves it.
-  "berau-leader": { slides: 72, closer: "N.3" },
-  "gems-leader": { slides: 72, closer: "N.3" },
+  // AND 72 → 71 AT THE `invest` MERGE, which is the SAME SHAPE one run later: gh#58's
+  // `invest-security` (D.4) and gh#59's `invest-subscription` (D.5) argued one thing from
+  // two desks and are `invest-governance` (D.4) now, so `invest` carries §6.7's five
+  // sections in four rows. NO figure moved on that re-record and 116 appeared to — the
+  // drift report compares by INDEX, and a retired row shifts every index behind it while
+  // every letter and number stays exactly where it was. That is the one case where
+  // `ALLOW_MOVED_FIGURES=1` is recording an index shift rather than a renumber, and the
+  // proof is in the diff: D.5's row is deleted, D.4's label is the merged slide's, and no
+  // other `fig` value in the file changes.
+  "berau-leader": { slides: 71, closer: "N.3" },
+  "gems-leader": { slides: 71, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

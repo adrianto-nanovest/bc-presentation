@@ -1,3 +1,19 @@
+// ⚠ SUPERSEDED, 2026-08-14, AND KEPT AS THE RECORD OF WHAT gh#57 SHIPPED.
+//
+// D.3 was redrawn as ONE FIGURE IN TWO ACTS — a closed BUDGET ⇄ PROOF cycle with a padlock in
+// it, then two roads to one destination with four costs under the long one and four limits under
+// the short one. The two-column stage of type this harness measures no longer exists: there is
+// no story column, no offer column, no bordered card, no 728px measure, and the verdict is 17px
+// on one line rather than 26px on two. The slide also gained a thesis on §4.5's floor shelf, and
+// beat 3 was re-worded (it no longer says "Management was convinced" to a room of top
+// management). This harness WILL FAIL against the current slide — that is the harness being out
+// of date, not the slide being broken.
+//
+// The live harness is `scripts/d3-figure-verify.mjs`. Run that one.
+//
+// Nothing below has been edited: the point of leaving it is that #57's acceptance criteria and
+// the numbers they were met with stay readable.
+//
 // gh#57's browser evidence — THE DEADLOCK, AND WHO CAN SKIP IT. Both leader decks,
 // four poses, walked forward and back, in both motion preferences.
 //
@@ -380,7 +396,9 @@ const VERDICT = "It worked. Management was convinced. Full investment was releas
  * NOT A VERBATIM COMPARISON, and the reason is that the issue and the stage disagree on
  * purpose. §6.7 phrases the turn as "you are the person who can skip beats 1–3" — the
  * spec's own numbering of this slide's beats, which the room is never shown — and the
- * copy prints "skip all three" instead. So the assertions are: the turn is addressed to
+ * copy prints "skip the deadlock entirely" instead (it printed "skip all three" until
+ * 2026-08-14, when the count was replaced by the noun it was counting). So the
+ * assertions are: the turn is addressed to
  * the room ("you are"), it offers to skip, and it does NOT leak the spec's numbering.
  * The card's four terms and its clock are the AC's own words and are checked as such.
  */

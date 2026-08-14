@@ -61,7 +61,9 @@ import { findSlideDefs } from "../harvest/slide-defs";
  *  three visual candidates behind `?proto=a|b|c` — so the candidates cost one file here
  *  and not three (86). The triptych won, `gap-three-failures` and `gap-the-pattern`
  *  retired, and the count landed one BELOW where it started (84). */
-const EXPECTED_DEFS = 84;
+// 84 UNTIL THE `invest` MERGE, WHICH RETIRED TWO DEFS AND ADDED ONE. `invest-security` and
+// `invest-subscription` are `invest-governance` now — see `src/slides/leader-invest/index.ts`.
+const EXPECTED_DEFS = 83;
 
 /** `hexLadderDevSlide` is declared in `registry.tsx` beside `deckSlides`, so it
  *  has no file of its own to be named after. It is the ONLY def whose id is not
