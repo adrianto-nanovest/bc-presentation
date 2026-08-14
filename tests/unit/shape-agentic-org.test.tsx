@@ -23,7 +23,7 @@
 // a pixel a browser would place — every geometric claim is asserted as the ONE NUMBER
 // both sides read (`../../src/slides/leader-shape/geometry.ts`), and the rendered
 // composition is walked at 1280×720 in a real engine separately
-// (`scripts/gh55-verify.mjs`). What jsdom is good for is the five things this slide
+// (`scripts/c1-figure-verify.mjs`). What jsdom is good for is the five things this slide
 // is actually at risk of:
 //
 //   1. THE FLOOR. §7.1 recorded one open risk against variant A — the lowest pillar
@@ -1744,7 +1744,7 @@ describe("the panel", () => {
     expect(WALK_COLUMN.right).toBe(SIDE_MARGIN);
     // And there is no `width`: one was carried here, read by nothing but this
     // assertion, and named for the column's outer edge rather than the measure the
-    // type gets. `scripts/gh55-verify.mjs` measures the content box off the element.
+    // type gets. `scripts/c1-figure-verify.mjs` measures the content box off the element.
     expect("width" in WALK_COLUMN).toBe(false);
     // Symmetric about the hub's own eye level, which is why the eight blocks inside
     // share one `top: 50%` instead of stacking from the top: the panel is a REPLY to
@@ -2264,7 +2264,7 @@ describe("the lit pose's geometry", () => {
   test("the LIT lowest pillar still clears the NavBar hover band", () => {
     // THE AC'S OWN CLAIM: "the focused bottom pillar — at its grown size — clears
     // the NavBar hover zone at 1280×720". The rendered half of that is measured by
-    // `scripts/gh55-verify.mjs`; this is the arithmetic it is measured against, and
+    // `scripts/c1-figure-verify.mjs`; this is the arithmetic it is measured against, and
     // it is the half that can see the halo at all.
     expect(FOCUSED_LOWEST_PILLAR_BOTTOM).toBe(LOWEST_PILLAR_BOTTOM + FOCUS_GROWTH_SPENT);
     expect(FOCUSED_LOWEST_PILLAR_BOTTOM).toBeLessThan(NAV_ZONE_TOP);
@@ -2398,7 +2398,7 @@ describe("the lit pose's geometry", () => {
     // NO GLYPH LEAVES THE MARGIN: the box's own 10px horizontal padding scales
     // with it, so the label's content edge sits at `left + 10 × FOCUS_SCALE`. The
     // sum is checked here; the RENDERED label rect is measured by
-    // `scripts/gh55-verify.mjs`, because the padding lives in the renderer and
+    // `scripts/c1-figure-verify.mjs`, because the padding lives in the renderer and
     // jsdom places nothing.
     expect(
       FOCUSED_OUTERMOST_LEFT + FOCUS_HALO_WIDTH + 10 * FOCUS_SCALE,

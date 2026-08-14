@@ -1,11 +1,13 @@
 // THE AGENTIC ORGANIZATION, IN A REAL ENGINE — the browser evidence for C.1 after the
 // 2026-08-13 rework (two poses, a pointer-driven walk, animated connectors, a recap).
 //
-// IT REPLACES `scripts/gh54-verify.mjs` AND `scripts/gh55-verify.mjs`, which are the
-// harnesses for the nine-pose figure and are left in the tree as the record of what
-// #54 and #55 shipped. Both carry a banner saying so. Do not run them against this
-// slide: the contract they check — poses 2…7 lighting one pillar each, a closer at
-// pose 8, a `steps: 9` budget — no longer exists.
+// IT REPLACED `scripts/gh54-verify.mjs` AND `scripts/gh55-verify.mjs`, the harnesses for
+// the nine-pose figure, and BOTH WERE DELETED ON 2026-08-15. They were kept for a while as
+// the record of what #54 and #55 shipped, which is a job git already does better: the
+// contract they checked — poses 2…7 lighting one pillar each, a closer at pose 8, a
+// `steps: 9` budget — has not existed since 2026-08-13, and a harness that cannot pass is a
+// harness somebody eventually runs and then debugs. This file is the only browser evidence
+// C.1 has.
 //
 // `tests/unit/shape-agentic-org.test.tsx` owns everything jsdom can see, and
 // `src/slides/leader-shape/walk.ts` is a pure function of its arguments, so a node

@@ -385,11 +385,16 @@ const GEMS_BLOCK: LadderBrandBlock = {
     // "— even some DigiTech members still falling behind". Cutting it cannot
     // overstate the source, because it was the STRONGER half: it says adoption is
     // thin even inside the division this slide credits at L3. What it cost the room
-    // was a third line of 11px serif. `mandate-enablement` quotes the same brief
-    // and `mandate-enablement.test.tsx` holds the two quotations identical — one
-    // source worded two ways in one deck is how a room stops trusting the source —
-    // so this string and K.1's `BOTTLENECK.source` are reworded together or not
-    // at all.
+    // was a third line of 11px serif.
+    //
+    // THIS IS NOW THE DECK'S ONLY PRINTING OF THIS BRIEF (2026-08-14).
+    // `mandate-enablement` quoted the same sentence in a bordered band, and
+    // `mandate-enablement.test.tsx` held the two identical on the rule that one source
+    // worded two ways in one deck is how a room stops trusting the source. That band
+    // was retired when K.1 was re-cut — it named another organisation in a room the
+    // brief did not come from — so there is no second copy to keep in step and no test
+    // pinning this one any more. WHICH MAKES THIS STRING SOLELY THIS SLIDE'S, and it
+    // reaches only a GEMS leader deck, because it lives in that brand's block.
     evidence:
       "DigiTech's own brief: “outside DigiTech, AI adoption is not really adopted well.”",
     evidenceKw: [],
@@ -1706,3 +1711,35 @@ export const gapFailuresPatternContent = {
 //     `tests/unit/invest-base-rates.test.tsx` records the same fact from the other side.
 //   · `closer` — "Three failures, one absence — and no amount of buying would have closed
 //     it." Replaced by `mindset` as the slide's last arrival.
+
+// ─────────────────── THE GAP · BRIDGE OUT (gh#72) ───────────────────
+
+/**
+ * The bridge that closes this run — leader decks only, and the run's LAST slide.
+ *
+ * WHY THE `gap` RUN GETS A BRIDGE AND `shape` DOES NOT. Every section from `mindset`
+ * onward ends on one (`c6`, `d5`, `e13`, `g11`, `h3`), and the three leader-only runs
+ * in front of the curriculum ended on a content slide — so the deck's biggest turn,
+ * diagnosis into prescription, happened between two figures with no beat of silence
+ * between them. `shape` still ends without one, deliberately: C.4 closes on "I build
+ * the foundation. You empower them. They drive the adoption.", which IS the handoff
+ * into WHY INVEST, and a bridge behind it would be two closers in a row.
+ *
+ * BEAT 1 IS THIS RUN'S FOUR SLIDES IN TWO LINES, and it restates rather than adds,
+ * which is what a bridge is for. "A tool problem" is B.1's 30/70 split said as a
+ * verdict — and it is NOT "none of it was the tools", which the room would hear
+ * against B.1's own number: the tools are the 30%, not zero.
+ *
+ * BEAT 2 NAMES THE NEXT SECTION IN PROSE AND NOT BY LETTER (§3.5). "The shape" is
+ * `SECTION_NAMES.shape` in the room's words; the letter it takes is derived per
+ * composed deck and appears nowhere in this file.
+ */
+export const gapBridgeContent = {
+  heroSrc: "/heroes/gap-to-shape-bridge.jpg",
+  figLabel: "BRIDGE · SHAPE",
+  beat1: {
+    lineA: { text: "The gap is named.", kw: ["named"] },
+    lineB: { text: "None of it was a tool problem.", kw: ["a tool problem"] },
+  },
+  beat2: { text: "Next: the shape that closes it.", kw: ["the shape"] },
+} as const;

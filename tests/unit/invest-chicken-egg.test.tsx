@@ -10,10 +10,11 @@
 // neighbour or cross the NavBar's band. The other half — that the workaround sets on
 // one line, that beat 3 is measurably the brightest run under the headline row, that a
 // squashed transition rests on its FINISHED frame under `reduce` — belongs to this
-// ticket's TASK 5, which measures the composed slide in Chromium at 1280×720 through
-// `scripts/gh57-verify.mjs` (not on disk when this file was written, so it is named here
-// as the owner of those claims and not as a run this file can point at). Neither half
-// alone is the AC; both are owed.
+// ticket's TASK 5, which measures the composed slide in Chromium at 1280×720. That work
+// landed as `scripts/d3-figure-verify.mjs` and NOT as the `scripts/gh57-verify.mjs` this
+// paragraph used to name: the 2026-08-14 redraw retired #57's contract entirely, that
+// harness stopped even loading, and it was deleted on 2026-08-15. Neither half alone is the
+// AC; both are owed, and `d3-figure-verify.mjs` is where the browser half now lives.
 //
 // WHAT jsdom IS GOOD FOR IS THE FOUR THINGS THIS SLIDE IS ACTUALLY AT RISK OF:
 //
@@ -162,7 +163,7 @@ const POSES = [0, 1, 2, 3] as const;
  * the number is authored in the slide (§3.5), so this is a harness INPUT and not a claim
  * the slide makes.
  */
-const AT = { letter: "D", num: 3, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 4, sectionKey: "invest" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {

@@ -142,7 +142,7 @@ const POSES = [0, 1] as const;
  * input and not a claim the slide makes — and it is the number the two leader decks
  * actually derive, which `tests/fixtures/deck-numbering.json` records for both.
  */
-const AT = { letter: "D", num: 2, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 3, sectionKey: "invest" } as const;
 
 /** One button per pose, so a test can WALK the slide inside one mounted tree. */
 function Nav() {

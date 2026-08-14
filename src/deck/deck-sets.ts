@@ -157,7 +157,36 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
 ];
 
 /**
- * The leader deck — 71 slides across FOURTEEN sections, and §4.3's FINISHED one. The
+ * The leader deck — 75 slides across FOURTEEN sections.
+ *
+ * ═══ READ THIS BEFORE THE LEDGER BELOW: gh#72 ADDED THREE ROWS AND MOVED ONE, AND THE
+ * SECTION COUNT DID NOT CHANGE. Everything under this block was written when the list
+ * held 71 and said, correctly at the time, that no row was owed and that the next id
+ * written here would be a spec change first. THAT IS WHAT HAPPENED — §4.3 and §6 were
+ * amended in the same commit — so the ledger is not wrong, it is one entry short. The
+ * entry is:
+ *
+ *   · THREE BRIDGES, one per leader-only run that lacked one: `gap-bridge-to-shape`,
+ *     `invest-bridge-to-curriculum` (which closes `shape` as well, since that run gets
+ *     none) and `pitfalls-bridge-to-mandate`. The first two are TAIL APPENDS and cost
+ *     nothing — no letter, no number. The third takes a slot that was already occupied.
+ *   · ONE MOVE: `h3-bridge-to-i`, from the tail of `pitfalls` to the tail of `mandate`,
+ *     under the second `sectionOverrides` entry this deck has ever had. It prints K.4
+ *     here and H.3 in a standard deck, and the standard list did not change at all.
+ *
+ * SO NOT ONE FIGURE IN THIS DECK MOVED, WHICH IS THE PART WORTH CHECKING: a tail append
+ * has no row behind it to renumber (R3), a bridge that replaces a bridge in the same
+ * slot renumbers nothing either, and the moved row lands at the END of the run it joins.
+ * B.4, C.4, D.4, J.1–J.2 and K.1–K.3 all print exactly what they printed at 71 rows.
+ * THREE FIGURES ARE NEW — B.5, D.5 and K.4 — and one, J.3, is the same figure on a
+ * different slide. Every fixture ROW INDEX behind `gap-bridge-to-shape` moved, which is
+ * a different thing (`tests/unit/deck-numbering-fixture.test.tsx`).
+ *
+ * The three counts the paragraphs below still state correctly are: FOURTEEN sections,
+ * FOUR leader-only runs, and §4.3's five/four/five/three ARGUMENT slides per run. A
+ * bridge is furniture, not an argument — it opens no run and closes no gap in §6. ═══
+ *
+ * The 71-row history, and §4.3's FINISHED argument set. The
  * COUNT is the `invest` MERGE (72 → 71: two rows retired into one) over gh#67's own MERGE
  * (73 → 72, the same shape one run earlier) over gh#71's total, and the
  * SECTION COUNT is gh#60's, and the gap between those two tickets is the thing to read
@@ -272,7 +301,11 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * by pushing H, and NO LEADER SLIDE IS UNBUILT ANY MORE: every run §4.3 and §6.7–§6.8
  * ask for stands at its spec'd length — `gap` on gh#67 at five, `mandate` on gh#69 at
  * three, `invest` on gh#70 at five, `shape` on gh#71 at four. The next row written into
- * this list is a SPEC CHANGE first and an edit second, whichever run it joins.
+ * this list is a SPEC CHANGE first and an edit second, whichever run it joins — AND ONE HAS
+ * BEEN, which is why this paragraph is no longer the last word. `invest-showcase-trap`
+ * landed MID-RUN in `invest` on 2026-08-15, taking that run to SIX rows against §6.7's five,
+ * and it arrived with its spec amendment rather than without one. See the `invest` block
+ * below for what it cost and §6.7's amendment for why the run was one argument short.
  * Anyone checking a figure on a leader deck reads the
  * COMPOSED deck,
  * never a
@@ -288,8 +321,11 @@ const STANDARD_SLIDE_IDS: readonly string[] = [
  * the FOURTH and LAST — this line said `shape` was one row short from gh#68 until that
  * ticket landed. The
  * section COUNT was already final at
- * fourteen, and the ROW COUNT is final now: NO ROW IS OWED, so the count above is a
- * finished deck's and not a floor, and every id below is the whole list.
+ * fourteen, and NO ROW IS OWED — but "the ROW COUNT is final" is what this line used to say
+ * and it is not a thing a comment can promise. `invest` grew by one on 2026-08-15 for a
+ * reason no phase table had (§6.7's amendment), which is the difference between a run that
+ * is COMPLETE against its spec and a spec that is complete against the argument. Every id
+ * below is the whole list as it stands.
  *
  * WHAT THIS LIST DOES NOT HOLD, and why:
  *
@@ -375,6 +411,18 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // moved on any of them.
   "gap-failures-pattern",
   "gap-capability-ladder",
+  // gh#72, and it is a TAIL APPEND — the cheapest shape this list takes, and the
+  // seventh time it has taken it. NO LETTER MOVED (`gap` has held B since gh#53) and NO
+  // NUMBER MOVED (R3 renumbers only inside the changed run and nothing sits behind this
+  // row), so `gap-capability-ladder` still prints B.4 and this prints B.5.
+  //
+  // IT IS NOT ONE OF §4.3's FIVE `gap` SLIDES, and the comment above is still true of
+  // those: §6.1–§6.5 are complete in four rows and nothing inserts among them. This is
+  // a BRIDGE — the furniture `c6`, `d5`, `e13`, `g11` and `h3` are — added because every
+  // section from `mindset` on ends with one and the three leader-only runs in front of
+  // the curriculum did not, so the deck's diagnosis-to-prescription turn happened
+  // between two figures with no beat between them.
+  "gap-bridge-to-shape",
   // shape — the second leader-only run (gh#54), and the second push. §4.3 gives
   // this run four slides and ALL FOUR ARE NOW HERE, in §4.3's order: C.1
   // `shape-agentic-org` (gh#54), C.2 the relocated `f8-your-agentic-os`, C.3
@@ -437,10 +485,10 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // invest — the third leader-only run (gh#56), and the third push: the loop slide
   // prints H.12 here now and this push is what took the closer to M.3. It reads N.3
   // today, because gh#60's `mandate` run pushed it once more — see the doc above.
-  // THIS RUN IS FOUR ROWS LONG, adjacent and in argument order — `invest-base-rates`
-  // (D.1), `invest-own-proof` (D.2), `invest-chicken-egg` (D.3) and `invest-governance`
-  // (D.4). All four composed figures are derived per deck (§3.5); nothing here and nothing
-  // in any of the four slides pins one.
+  // THIS RUN IS FIVE ROWS LONG, adjacent and in argument order — `invest-base-rates`
+  // (D.1), `invest-showcase-trap` (D.2), `invest-own-proof` (D.3), `invest-chicken-egg`
+  // (D.4) and `invest-governance` (D.5). All five composed figures are derived per deck
+  // (§3.5); nothing here and nothing in any of the five slides pins one.
   //
   // IT WAS FIVE UNTIL THE MERGE, AND THE FIFTH IS FOLDED INTO THE FOURTH. gh#58's
   // `invest-security` (D.4) and gh#59's `invest-subscription` (D.5) were the last two rows
@@ -462,8 +510,25 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   //   · EVERY FIXTURE ROW INDEX BEHIND IT MOVED BY ONE, which is a different thing and is
   //     recorded in `tests/unit/deck-numbering-fixture.test.tsx`. Both leader decks went
   //     72 rows → 71.
-  // NOTHING MORE INSERTS HERE — a fifth `invest` row would be a slide the run does not
-  // argue for.
+  //
+  // THIS BLOCK SAID "NOTHING MORE INSERTS HERE" AND IT WAS WRONG, which is recorded rather
+  // than deleted because reversing a declaration silently is how a closed run comes back
+  // open by accident. It was true from gh#70 until `invest-showcase-trap` landed on
+  // 2026-08-15, and what reopened the run was an ABSENCE rather than a preference: no slide
+  // in either deck said that a finished-looking result carries no signal about the work
+  // under it, and a sweep of `src/` for data readiness, data quality and time-to-prepare
+  // returned nothing at all. §6.7's own amendment carries the argument; what matters HERE
+  // is only what the list did, which is one MID-RUN insert, four numbers, no letter.
+  //
+  // IT IS THE FIRST MID-RUN INSERT THIS RUN HAS TAKEN, and the third this list has seen
+  // after gh#66's and gh#67's in `gap`. NO LETTER MOVED — `invest` has held D since gh#56,
+  // and a row that neither opens nor closes a run claims nothing (§3.4 R2). FOUR NUMBERS
+  // MOVED, all inside this run by R3: `invest-own-proof` D.2 → D.3, `invest-chicken-egg`
+  // D.3 → D.4, `invest-governance` D.4 → D.5 and `invest-bridge-to-curriculum` D.5 → D.6.
+  // Four rather than gh#66's one for one reason only: four rows sit behind the insert
+  // inside its run. Not one of those four files was opened to change a rendered string.
+  // Both leader decks went 74 rows → 75, and `tests/fixtures/deck-numbering.json` needed
+  // `ALLOW_MOVED_FIGURES=1` to absorb it, because four figures really do move.
   //
   // THIS RUN IS THE THIRD OF THE FOUR TO CLOSE, NOT THE SECOND, and the order is worth
   // stating because all FOUR closed inside five tickets: `gap` on gh#67 at §4.3's
@@ -497,9 +562,27 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // ticket between them is further off still: gh#69's `mandate-levers` appends behind
   // `pitfalls`, seven runs downstream, and moved nothing here either.
   "invest-base-rates",
+  // 2026-08-15, and it is the row that reopened a run this file had declared closed — see
+  // the block above for what it cost and the amendment in
+  // `docs/specs/2026-08-03-gems-catalyst-implementation-spec.md` §6.7 for why it is owed.
+  // It sits HERE, second, and not at the run's tail, because it is the MECHANISM of D.1's
+  // number: the picture became free and the thing under the picture did not, so the common
+  // position is a stage full of finished-looking results with nothing behind them. Behind
+  // D.1 it answers a question the room is already holding; anywhere later it would arrive
+  // after the ask in D.4 had already been made, with the acceptance test the ask needs
+  // still unspoken.
+  "invest-showcase-trap",
   "invest-own-proof",
   "invest-chicken-egg",
   "invest-governance",
+  // gh#72, a TAIL APPEND like the `gap` one above: no letter moved, no number moved, and
+  // D.1–D.4 print exactly what gh#70 left them printing. `shape` gets NO bridge — C.4's
+  // "I build the foundation. You empower them. They drive the adoption." already hands off
+  // to WHY INVEST — so THIS row is the last word for both runs, and it is the deck's
+  // largest hinge: everything behind it is curriculum, retained verbatim and skimmed
+  // (§4.3), and until this landed the deck went from a governance sentence straight into
+  // "FROM RULES TO REASONING" with no reason given for the change of pace.
+  "invest-bridge-to-curriculum",
   // landscape
   "b1-evolution-journey",
   "b2-fields-terminology",
@@ -547,10 +630,16 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   "g9-workflow",
   "g10-beyond-big-three",
   "g11-bridge-to-h",
-  // pitfalls
+  // pitfalls — and its bridge is NOT the standard deck's (gh#72). `h3-bridge-to-i`
+  // hands off to THE META-PROCESS, which is where the standard deck goes next and where
+  // this deck goes next-but-one: §3.6 puts `mandate` between `pitfalls` and `meta`, so
+  // the leader deck used to say "next: the discipline, in practice" and then show the
+  // ask. The row MOVED to the tail of `mandate` below, where its target really is next,
+  // and this leader-only bridge takes the slot it vacated. Same J.3 figure, different
+  // slide.
   "h1-pitfall-wall",
   "h2-discipline-wall",
-  "h3-bridge-to-i",
+  "pitfalls-bridge-to-mandate",
   // mandate — the fourth leader-only run (gh#60), and the ONLY one that is not in
   // front of the curriculum: §3.6 puts it between `pitfalls` and `meta`, so it
   // pushed `meta`/`principles`/`lab` to L/M/N and moved no curriculum letter at
@@ -586,6 +675,18 @@ const LEADER_SLIDE_IDS: readonly string[] = [
   // gh#70 took `invest` to §6.7's five and gh#71 took `shape` to §4.3's four. None is
   // still short.
   "mandate-levers",
+  // THE STANDARD DECK'S PITFALLS BRIDGE, RELOCATED (gh#72) — the SECOND row in this list
+  // to be composed outside its own section, after `f8-your-agentic-os`, and the second
+  // `sectionOverrides` entry. It carries `sectionKey: "pitfalls"`, so without the
+  // override it would form a SECOND `pitfalls` run here and R4 would throw at module
+  // load; the move and the override are one edit for exactly that reason.
+  //
+  // WHY IT MOVED RATHER THAN BEING RE-WRITTEN: the slide bridges into THE META-PROCESS
+  // and always did. In a standard deck `meta` is the next run and the bridge sits at H.3;
+  // in this deck `mandate` sits in between (§3.6), so the bridge pointed one section too
+  // far. Behind `mandate-levers` its target is next again and it prints K.4. Its beat 1
+  // line B is deck-set-scoped (`h3Beat1LineBFor`) and nothing else about it changed.
+  "h3-bridge-to-i",
   // meta
   "i1-meta-process",
   "i2-profile-journey",
@@ -642,10 +743,23 @@ export const DECK_SET_COMPOSITION: Record<DeckSetId, DeckSet> = {
   leader: {
     id: "leader",
     slides: LEADER_SLIDE_IDS,
-    // ONE ENTRY, and §4.3's `shape` as of gh#54 — f8 now sits at C.2, directly
-    // behind `shape-agentic-org`. The value must name the run f8 lands inside or
-    // R4 throws at load — see the `sectionOverrides` doc above.
-    sectionOverrides: { "f8-your-agentic-os": "shape" },
+    // TWO ENTRIES as of gh#72, and each one relocates a slide out of its own section:
+    //
+    //   · `f8-your-agentic-os` → `shape`. §4.3's C.2, directly behind
+    //     `shape-agentic-org` (gh#54).
+    //   · `h3-bridge-to-i` → `mandate`. The standard deck's PITFALLS bridge, moved to
+    //     the tail of THE MANDATE so the section it hands off to — `meta` — is actually
+    //     the one that follows it.
+    //
+    // BOTH VALUES MUST NAME THE RUN THE ROW LANDS INSIDE or R4 throws at load, and for
+    // the h3 entry that is not a theoretical risk: its `sectionKey` is `pitfalls`, a key
+    // this deck ALREADY runs, so without the entry the deck composes a second `pitfalls`
+    // run behind `mandate` — the loudest of the three failure modes documented on
+    // `sectionOverrides` above, and the reason the move and the override are one edit.
+    sectionOverrides: {
+      "f8-your-agentic-os": "shape",
+      "h3-bridge-to-i": "mandate",
+    },
   },
 };
 

@@ -489,13 +489,15 @@ const FOCUSED_BOXES: readonly Box[] = Array.from(
  *
  *   · NOTHING IS CLIPPED. 38.65 > 0, so the halo is on the stage, not off it. A
  *     browser reports 38.64 for it, one 1/64px `LayoutUnit` quantum below this
- *     module's 38.6529 — which is why `scripts/gh55-verify.mjs` compares the two
- *     within a sub-pixel tolerance rather than for equality.
+ *     module's 38.6529, so the browser evidence compares the two within a sub-pixel
+ *     tolerance rather than for equality. (`scripts/gh55-verify.mjs` owned that
+ *     comparison and was deleted on 2026-08-15 with the nine-pose figure it measured;
+ *     `scripts/c1-figure-verify.mjs` replaced it.)
  *   · NO GLYPH LEAVES THE MARGIN. The box's own 10px horizontal padding scales with
  *     it, so the label's content edge sits at `42.65 + 10 × 1.07 = 53.35` — still
  *     inside 48. The margin is a TYPE margin, and it is type that keeps it. The halo
- *     carries no glyphs. `scripts/gh55-verify.mjs` measures the rendered label rect
- *     rather than trusting that sum, because the padding lives in the renderer.
+ *     carries no glyphs. The browser evidence measures the rendered label rect rather
+ *     than trusting that sum, because the padding lives in the renderer.
  *   · THE RIGHT SIDE, where the constraint is real, is unaffected — see
  *     {@link FOCUSED_WALK_COLUMN_GAP}.
  *

@@ -5,6 +5,13 @@
 //
 // Body examples are universal knowledge-work scenarios — never mining-specific.
 // Source spec: docs/specs/2026-05-12-slides-application-H-discipline.md
+//
+// TWO BRIDGE BLOCKS LIVE AT THE FOOT OF THIS FILE, not one, and they belong to
+// different decks: `h3Content` (which the leader deck composes at K.4, behind THE
+// MANDATE) and `pitfallsBridgeContent` (leader-only, this section's own end). One
+// string in the first varies with the deck set — see `h3Beat1LineBFor`. Type-only
+// import, so this module still pulls in nothing at runtime and stays plain data.
+import type { DeckSetId } from "@/deck-variants";
 
 // ─────────────────── H.1 — THE TRAP ───────────────────
 
@@ -180,17 +187,107 @@ export const h2Content = {
   ] as const,
 } as const;
 
-// ─────────────────── H.3 — BRIDGE TO I ───────────────────
+// ─────────────────── THE BRIDGE OUT OF THIS SECTION ───────────────────
+//
+// NAMED FOR THE SLIDE AND NOT FOR A NUMBER, because as of gh#72 the two decks do not
+// even agree on which SECTION it ends. `h3-bridge-to-i` prints H.3 in a standard deck,
+// last slide of PITFALLS; in a leader deck it composes behind `mandate-levers` and
+// prints K.4, last slide of THE MANDATE (`sectionOverrides` in
+// `src/deck/deck-sets.ts`). It bridges into THE META-PROCESS in both — which is the
+// reason the move was the fix and a re-write was not: the slide always pointed at
+// `meta`, and in the leader deck it had `mandate` sitting between it and its target.
+//
+// The leader deck's PITFALLS run ends on `pitfalls-bridge-to-mandate` below instead.
+
+/** One reveal: the string, plus the substrings rendered as keywords. Structurally
+ *  `BridgeBeat` in `@/components/BridgeHero`; declared here so this module keeps its
+ *  no-runtime-import property and stays plain data. */
+interface H3Beat {
+  text: string;
+  kw: readonly string[];
+}
+
+/**
+ * BEAT 1's SECOND LINE — the one string in this section that depends on the deck set.
+ *
+ * Same shape as `e13Beat2For` in `../foundation-core-section-e/content.tsx`, and for
+ * the same reason: copy varies by deck set, composition does not, so the pick lives in
+ * the content module behind a typed resolver and `sectionOverrides` stays composition
+ * only (§4.1).
+ *
+ * WHY THE LEADER LINE DIFFERS. In a standard deck this slide follows the discipline
+ * wall and addresses a room of practitioners, so the competitor is a PERSON —
+ * "someone". In a leader deck it lands one slide after THE FOUR LEVERS, in front of a
+ * BU or Division Head who has just been asked to fund a mandate, and "someone" is too
+ * small for that room: the thing that beats them is another ORGANISATION that started
+ * earlier.
+ *
+ * IT IS "THE COMPANY" AND NOT "THE DIVISION", WHICH IS A DECISION AND NOT A SYNONYM.
+ * A leader deck is presented to peers who run sibling divisions of one group; a line
+ * that makes the winner an internal division sets the room against itself two slides
+ * before the ask. An external competitor is the only version of this sentence that
+ * every seat in that room is on the same side of.
+ *
+ * A `Record<DeckSetId, …>` and not a `deckSet === "leader"` ternary: a third deck set
+ * fails to compile HERE, rather than reaching a projector as an `undefined` beat.
+ */
+const H3_BEAT1_LINE_B_BY_DECK_SET: Record<DeckSetId, H3Beat> = {
+  standard: {
+    text: "It's someone learning the discipline first.",
+    kw: ["the discipline"],
+  },
+  leader: {
+    text: "It is the company that learns the discipline first.",
+    kw: ["learns the discipline"],
+  },
+};
+
+/** The beat-1 second line a deck set prints. The table stays private so the pick is
+ *  the only way in, exactly as `e13Beat2For` keeps its own. */
+export function h3Beat1LineBFor(deckSet: DeckSetId): H3Beat {
+  return H3_BEAT1_LINE_B_BY_DECK_SET[deckSet];
+}
 
 export const h3Content = {
   heroSrc: "/heroes/h3-bridge.jpg",
   beat1: {
     lineA: { text: "The competition is not AI.", kw: ["not AI"] },
-    lineB: {
-      text: "It's someone learning the discipline first.",
-      kw: ["the discipline"],
-    },
+    /** Line B is NOT here: it depends on the deck set, so it is resolved by
+     *  `h3Beat1LineBFor` and this object holds only what every deck prints alike. */
   },
   beat2: { text: "Next: the discipline, in practice.", kw: ["in practice"] },
   figLabel: "BRIDGE · DISCIPLINE",
+} as const;
+
+// ─────────────────── PITFALLS · BRIDGE INTO THE MANDATE (gh#72) ───────────────────
+
+/**
+ * The leader deck's own end to this section — leader decks only, and the slot
+ * `h3-bridge-to-i` vacated when it moved to K.4.
+ *
+ * WHY IT IS KEYED `pitfalls` AND LIVES IN THIS DIRECTORY, next to the standard
+ * section's three slides rather than in a `leader-*` one: the run it closes IS this
+ * section's, and every index module in the tree says what its own section contains.
+ * A bridge keyed `mandate` would have to sit at the FRONT of that run — the deck's
+ * bridges are the last slide of the section they leave, never the first of the one
+ * they arrive in.
+ *
+ * BEAT 1 IS THE TWO SLIDES IN FRONT OF IT, TURNED INTO A DEMAND. J.1 shows untrained
+ * use, J.2 shows what discipline looks like, and the leader's question after both is
+ * why the second does not simply spread — so the answer, "someone must make room for
+ * it", is what the four levers of THE MANDATE then are. Beat 2 names the section in
+ * prose (§3.5) and points at the one thing this room can do that no other room can.
+ *
+ * "AUTHORISE" AND NOT "AUTHORIZE", matching D.3's shipped closer ("You can simply
+ * authorise it"), which is the only other rendered string in either deck to use the
+ * word.
+ */
+export const pitfallsBridgeContent = {
+  heroSrc: "/heroes/pitfalls-to-mandate-bridge.jpg",
+  figLabel: "BRIDGE · MANDATE",
+  beat1: {
+    lineA: { text: "Discipline does not spread by itself.", kw: ["by itself"] },
+    lineB: { text: "Someone must make room for it.", kw: ["make room"] },
+  },
+  beat2: { text: "Next: what only you can authorise.", kw: ["only you"] },
 } as const;

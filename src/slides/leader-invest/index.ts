@@ -13,8 +13,21 @@
 // ORDER IS THE SECTION'S, NOT THE DECK'S. This array says what the section contains, in
 // the order §6.7 gives it; `src/deck/deck-sets.ts` says which decks run it and where.
 //
-// THE RUN IS FOUR SLIDES LONG, adjacent and in argument order: `invest-base-rates` (D.1) ·
-// `invest-own-proof` (D.2) · `invest-chicken-egg` (D.3) · `invest-governance` (D.4).
+// THE RUN IS FIVE SLIDES LONG, adjacent and in argument order: `invest-base-rates` (D.1) ·
+// `invest-showcase-trap` (D.2) · `invest-own-proof` (D.3) · `invest-chicken-egg` (D.4) ·
+// `invest-governance` (D.5).
+//
+// IT WAS FOUR UNTIL 2026-08-15, AND THE FIFTH IS A SPEC CHANGE FIRST. This comment said
+// "NOTHING MORE INSERTS HERE" from gh#70 until `invest-showcase-trap` landed, and the
+// reversal is recorded rather than quietly dropped, because that is how a closed run comes
+// back open by accident. What reopened it was an absence, not a preference: NO SLIDE IN
+// EITHER DECK said that a finished-looking result carries no signal about the work under
+// it, and a sweep of `src/` for data readiness, data quality and time-to-prepare returned
+// nothing at all. The four base-rate slides say projects FAIL; §J's eight traps say an
+// untrained operator SHIPS the wrong thing; the one slide that ever carried ground truth,
+// `f2-rag-ground-truth`, is in the section the leader deck CUTS. See `./content.ts`'s D.2
+// block for the whole argument and for the token list that lets it sit between D.1 and D.3
+// without repeating a string either of them owns.
 //
 // IT WAS FIVE UNTIL THE MERGE, and the fifth is not missing — it is folded into the fourth.
 // §6.7 asked for five and the last two of them, `invest-security` ("where the data goes, and
@@ -26,7 +39,15 @@
 // file header carries the whole argument and `./content.ts`'s D.4 block records, string by
 // string, what the merge kept and what it dropped.
 //
-// NOTHING MORE INSERTS HERE. A fifth `invest` row would be a slide the run does not argue for.
+// THE LAST EDIT WAS A MID-RUN INSERT, the first this array has taken. `invest-showcase-trap`
+// landed between D.1 and the row that was D.2, so: NO LETTER MOVED — `invest` has held D
+// since gh#56 and a row inside a run neither opens nor closes it (§3.4 R2) — and FOUR NUMBERS
+// MOVED, all inside this run by R3: `invest-own-proof` D.2 → D.3, `invest-chicken-egg`
+// D.3 → D.4, `invest-governance` D.4 → D.5 and `invest-bridge-to-curriculum` D.5 → D.6. Four
+// rather than one because four rows sat behind the insert inside its run. Not one of those
+// four files was opened to change a rendered string; what did change is each one's `AT`
+// harness input in its own test, which is the figure a test MOUNTS at rather than a figure
+// any slide pins. Both leader decks went 74 rows → 75.
 //
 // THE LAST EDIT THIS ARRAY TOOK WAS A HEAD-OF-RUN INSERT, and it is the shape this comment
 // predicted rather than the one it had seen. Until gh#70 the four lines below were the
@@ -66,15 +87,25 @@
 // the Phase 7 row with no ticket behind it. That was true when it was written; **gh#70** —
 // "Phase 7 · D.1 · invest-base-rates — 78% adopt, 6% implement properly" — is the issue that
 // did not exist then, and it is the one that built the entry below.
+//
+// A FIFTH ROW, AND IT ARGUES NOTHING (gh#72). §6.7's four argument slides are complete and
+// closed; `investBridgeToCurriculumSlide` is the BRIDGE this run never had, appended at the
+// TAIL, and it carries `shape` as well as this run because `shape` ships none. A tail append
+// moves no letter and no number — the four rows above it print D.1–D.4 exactly as gh#70 left
+// them. It is also the deck's largest hinge: everything behind it is skimmed (§4.3).
 import type { SlideDef } from "@/deck/types";
 import { investBaseRatesSlide } from "./invest-base-rates";
+import { investShowcaseTrapSlide } from "./invest-showcase-trap";
 import { investOwnProofSlide } from "./invest-own-proof";
 import { investChickenEggSlide } from "./invest-chicken-egg";
 import { investGovernanceSlide } from "./invest-governance";
+import { investBridgeToCurriculumSlide } from "./invest-bridge-to-curriculum";
 
 export const leaderInvestSlides: SlideDef[] = [
   investBaseRatesSlide,
+  investShowcaseTrapSlide,
   investOwnProofSlide,
   investChickenEggSlide,
   investGovernanceSlide,
+  investBridgeToCurriculumSlide,
 ];

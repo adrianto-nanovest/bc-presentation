@@ -1683,3 +1683,427 @@ export const investBaseRatesContent = {
   closer: "Doing what everyone does buys what everyone gets.",
   closerKw: ["what everyone gets"],
 } as const;
+
+// ─────────────────── WHY INVEST · BRIDGE OUT (gh#72) ───────────────────
+
+/**
+ * The bridge out of the leader deck's front block and into the retained curriculum —
+ * leader decks only, and the biggest tonal change in either deck.
+ *
+ * IT CARRIES TWO RUNS, NOT ONE, and that is why beat 1 names both. `shape` ships no
+ * bridge of its own (see `../leader-gap/content.ts`'s `gapBridgeContent` for the
+ * argument), so this stage is the last word for THE SHAPE and WHY INVEST together:
+ * "The shape is drawn" is C's, "The case is made" is D's, and `shape` / `case` are
+ * each run's own vocabulary rather than a summary word invented here.
+ *
+ * BEAT 1 LINE B IS THE WHOLE REASON THIS SLIDE EXISTS. §4.3 retains curriculum
+ * sections E–J verbatim and has them SKIMMED live, and until this bridge landed the
+ * deck went from a governance sentence straight into "FROM RULES TO REASONING" with
+ * nothing said about why forty slides were about to go past at speed. "Neither one
+ * teaches a single person" is the reason, stated as the argument's own next step: an
+ * operating model and a budget create no capability, and what follows is what does.
+ *
+ * NO COUNT IN ANY STRING. "Forty slides" is a fact about the composed deck (§3.4) and
+ * would go stale on the next insert — the bridge says what the run IS, never how long
+ * it is, and beat 2 hands off in prose because the letter is derived.
+ */
+export const investBridgeContent = {
+  heroSrc: "/heroes/invest-to-curriculum-bridge.jpg",
+  figLabel: "BRIDGE · CURRICULUM",
+  beat1: {
+    lineA: { text: "The shape is drawn. The case is made.", kw: ["shape", "case"] },
+    lineB: { text: "Neither one teaches a single person.", kw: ["teaches"] },
+  },
+  beat2: { text: "Next: what your people actually learn.", kw: ["actually learn"] },
+} as const;
+
+// ───────────────────── §6.7's D.2 · the surface, and what holds it up ─────────────────────
+//
+// ═══════════════════════════════════════════════════════════════════════════════════════
+// ═══ THE SLIDE THE RUN DID NOT HAVE. READ THIS BEFORE EDITING ANY STRING BELOW.
+// ═══════════════════════════════════════════════════════════════════════════════════════
+//
+// NO SLIDE IN EITHER DECK SAYS THAT A FINISHED-LOOKING RESULT PROVES NOTHING, and a sweep
+// of `src/` for data readiness, data quality and time-to-prepare found nothing at all. The
+// four base-rate slides say projects FAIL; the eight traps in `../application-section-h`
+// say an untrained operator SHIPS the wrong thing. Neither says the sentence a division
+// head has to leave with, which is that THE ARTIFACT CARRIES NO SIGNAL ABOUT THE WORK
+// UNDER IT. That is a different claim from every one of them, and it is the one that
+// changes what a leader does in a review.
+//
+// ═══ IT IS A REFUSAL AND NOT AN ACCUSATION, which is D.1's own gate and the harder half
+// of this block. A room of division heads has approved work on exactly the evidence this
+// slide is about to disqualify, so every sentence below is written to fault the ARTIFACT
+// and never the reader:
+//
+//   · "Both charts look the same" is a property of two drawings.
+//   · "The surface does not tell you which" faults the surface. The verb's subject is the
+//     thing on the stage, not the person looking at it.
+//   · The specimen is OURS. The two figures in the headline are our own build times on our
+//     own work, so the slide opens by disqualifying the presenter's artifact — which is
+//     the only artifact in the room nobody has to defend.
+//   · NOTHING IS DATED AND NOBODY IS NAMED. No organisation, no vendor, no month.
+//
+// A ROOM CANNOT BE TOLD IT WAS FOOLED. It can be told that a signal it has used for
+// twenty years stopped working, which is the same information with the blame on the tool.
+//
+// ═══ THE SLIDE CARRIES ITS OWN PROVENANCE MARK, and that is the argument rather than a
+// disclaimer. {@link investShowcaseTrapContent.mark} says the two figures are ours and
+// that nobody audited them — the same epistemic grammar `investOwnProofContent` puts on
+// every card it prints. A slide that asks a room to demand provenance and then shows its
+// own cannot be heard as a lecture, and a slide that asked without showing would be the
+// exact failure it describes. It also settles a logistics problem in copy: the artifact
+// behind these numbers is not publishable, so the mark says SHOWN LIVE and the stage
+// carries no link, no screenshot and no address.
+//
+// ═══ WHAT IS ON THE STAGE, in five poses, and each hero is ONE drawn object:
+//
+//   0 — THE CHART. One finished chart assembles itself and stops. Beside it an effort
+//       column fills three pixels of two hundred and forty. The SPEED is the claim.
+//   1 — WHAT IS UNDER IT. Four dashed rows arrive under the same chart, one at a time and
+//       slowly, and the effort column crawls to its top. The TEMPO is the claim.
+//   2 — TWO CHARTS. The same chart twice. One keeps its four rows; the other has an empty
+//       frame under it. A scan travels across both and finds no difference on top.
+//   3 — THE RECAP. Three boxes, and each one turns a finding into a question a leader can
+//       ask in any review. This is the pose the room writes down.
+//   4 — THE FLOOR. The rule, and the thesis alone under it.
+//
+// ═══ THE COPY RULES THIS BLOCK KEEPS.
+//
+//   · ASD-STE100 AND ZINSSER, and for this block the measurable form is: no sentence runs
+//     past ten words, no sentence carries two claims, every sentence is active voice, and
+//     no word is longer than its job. The room is a board, read to in a second language.
+//   · THE PLAIN WORD EVERY TIME. `chart` and not artifact, `source` and not provenance,
+//     `meaning` and not ontology, `match` and not reconciliation, `check` and not
+//     validation. The four rows below are the four expensive things, named in words a
+//     division head uses at their own desk.
+//   · NO LETTER AND NO NUMBER IN ANY RENDERED STRING (§3.4 R2 / §3.5). This slide composes
+//     **D.2** today, second in the `invest` run. `FigLabel` takes a label only.
+//   · THE FIGURES ARE PRINTED AS WORDS, NOT DIGITS — "thirty minutes", "five days" — and
+//     both are welded to the drawing in `../showcase-trap-geometry.ts`. Neither carries a
+//     keyword: a copper italic on a quantity emphasises the count instead of the claim.
+//   · AND NEITHER FIGURE IS IN THE HEADLINE. They are printed BESIDE the column that
+//     measures them and in the two eyebrows that title the acts, which is where a
+//     measurement belongs. The title makes the claim; see the note on `headline`.
+//   · THE KEYWORD RULE, unchanged from every block in this file: `kw` goes on PROSE ONLY.
+//     · PROSE, each with a `*Kw` sibling — `headline`, `surfaceLine`, `sourceLine`,
+//       `twinLine`, `closer`, and each question's `question`.
+//     · LABELS, carrying no `*Kw` and forbidden from gaining one — `figLabel`, the four
+//       pose eyebrows, the chart's own title, `mark`, `hollowLabel`, both meter readings,
+//       and every `label` and `finding` on the four layers and the three questions.
+//
+// ═══ WHAT THIS SLIDE MAY NOT SAY, and the sibling that owns each token. Every one of
+// these is a live string somewhere else in the composed leader deck, and the whole reason
+// this slide can be inserted between D.1 and D.3 is that it repeats none of them:
+//
+//   · `70%` / `30%` / any "70/30" split ....... B.1 `gap-hardest-part`
+//   · `88%` / `6%` ............................ D.1 `invest-base-rates`
+//   · `25%` / `5.5%` .......................... E.5 `b5-todays-landscape`
+//   · `73%` ................................... G.1 `d1-the-trap`
+//   · `vibe coding`, `prompt-and-pray`,
+//     `confidently wrong`, `hallucinat*`,
+//     `stale data`, `context rot` ............. J.1 `h1-pitfall-wall`
+//   · `human-in-the-loop`, `eval-driven` ...... J.2 `h2-discipline-wall`
+//   · `shadow AI` ............................. banned deck-wide (§6.2's three passes)
+//   · `kill criterion`, `spend cap`, `seats`,
+//     `shared accounts` ....................... D.3 `invest-chicken-egg`
+//   · `audit`, `revoke`, `managed seat`,
+//     `the account` ........................... D.5 `invest-governance`
+//   · `not independently audited`,
+//     `vendor-reported`, `participant-claimed`  D.4 `invest-own-proof`
+//   · `block the time`, `name a champion` ..... K.3 `mandate-levers`
+//   · `a gate, not a date` .................... K.2 `mandate-phases-gates`
+//
+// NO BRAND AXIS, EITHER SLOT. The specimen is ours and the questions are generic, so this
+// block imports no `Brand` and both leader decks render it byte for byte — which is a
+// claim a test settles by mounting it twice and diffing.
+
+/**
+ * One of the four expensive things under a finished chart.
+ *
+ * `label` IS THE PLAIN NAME and `finding` IS WHAT IT COSTS, in that order, because a room
+ * reading four rows at speed needs the noun before the sentence. Both are LABELS in the
+ * keyword sense — the noun is a name and the sentence is already the whole of the row —
+ * so neither may gain a `*Kw`.
+ */
+export interface HiddenLayer {
+  id: string;
+  /** The plain name. Mono caps, keyword-free, and no longer than the label box holds. */
+  label: string;
+  /** What the layer actually took. One sentence, active voice, keyword-free. */
+  line: string;
+}
+
+/**
+ * One of the three questions the recap hands the room.
+ *
+ * THE SHAPE IS FINDING → QUESTION, and the order is the argument. `finding` is what the
+ * three acts established and `question` is what a leader can do with it tomorrow, which
+ * is the only thing on this slide that survives the meeting. The question is the ONE
+ * prose string on the row and therefore the one that carries a keyword; `label` and
+ * `finding` are a name and a verdict, and both are keyword-free.
+ *
+ * EVERY QUESTION ENDS IN A QUESTION MARK AND OPENS ON AN INTERROGATIVE. That is the form
+ * B.4 already uses for an open question, so the room reads three of them as a set rather
+ * than as three more assertions.
+ */
+export interface TrapQuestion {
+  id: string;
+  /** The subject, in one or two words. Mono caps, keyword-free. */
+  label: string;
+  /** What the acts proved about it. Sans, keyword-free. */
+  finding: string;
+  /** What a leader asks in a review. Serif, and the row's only prose. */
+  question: string;
+  /** 1–3 substrings of {@link question}. */
+  questionKw: readonly string[];
+  /** Which mark in `./components/ShowcaseTrapGlyphs.tsx` draws this row. */
+  glyph: "chart" | "source" | "decision";
+}
+
+/**
+ * The four things under the chart, and they are the four EXPENSIVE ones rather than the
+ * four technical ones.
+ *
+ * EXACTLY FOUR, HELD BY THE TYPE. A fifth is a different argument: these are the four
+ * stages a number passes through before anybody may sign under it, and each one is a
+ * separate day of somebody's week. `../showcase-trap-geometry.ts` pins its row count to
+ * this tuple, so a fifth row fails to compile at the number the stack is drawn from.
+ *
+ * THEY ARE ORDERED BY DEPENDENCY, not by cost. A field with no agreed meaning cannot be
+ * matched; two systems that disagree cannot be checked. The stack reads top to bottom as
+ * the order the work has to happen in, which is why no row carries a duration.
+ */
+const HIDDEN_LAYERS: Four<HiddenLayer> = [
+  {
+    id: "source",
+    label: "THE SOURCE",
+    line: "Where each number comes from.",
+  },
+  {
+    id: "meaning",
+    label: "THE MEANING",
+    line: "What each field really means.",
+  },
+  {
+    id: "match",
+    label: "THE MATCH",
+    line: "Two systems, made to agree.",
+  },
+  {
+    id: "check",
+    label: "THE CHECK",
+    line: "A person compared it to the real thing.",
+  },
+];
+
+/**
+ * The three questions, and this tuple is the slide's whole deliverable.
+ *
+ * EXACTLY THREE, HELD BY THE TYPE, and one per act: pose 0 earns the first, pose 1 the
+ * second, pose 2 the third. A fourth question would be one the stage never proved.
+ *
+ * THEY ARE A TOOL AND NOT A TEST. Each one is answerable by the person presenting, costs
+ * the asker nothing, and implies no view about the answer — which is what keeps a slide
+ * about bad evidence from reading as a slide about bad judgment.
+ */
+const TRAP_QUESTIONS: Three<TrapQuestion> = [
+  {
+    id: "chart",
+    label: "THE CHART",
+    finding: "Fast to make.",
+    question: "How long did the data take?",
+    questionKw: ["the data take"],
+    glyph: "chart",
+  },
+  {
+    id: "data",
+    label: "THE DATA",
+    finding: "Slow to make, and hidden.",
+    question: "Where did each number come from?",
+    questionKw: ["each number"],
+    glyph: "source",
+  },
+  {
+    id: "decision",
+    label: "THE DECISION",
+    finding: "Both look the same.",
+    question: "Who checked it, and against what?",
+    questionKw: ["against what"],
+    glyph: "decision",
+  },
+];
+
+export const investShowcaseTrapContent = {
+  figLabel: "THE SURFACE AND THE SOURCE",
+
+  /**
+   * The headline, and it is what a division head is buying, in eight words.
+   *
+   * IT REPLACED "The chart took thirty minutes. The data took five days." on 2026-08-15, on
+   * the owner's call, and the fault was that the sentence was EVIDENCE rather than a CLAIM.
+   * Two measurements are what the figure below is for — §3's rule is that the label names
+   * the figure and the TITLE MAKES THE CLAIM, and a headline reporting a stopwatch leaves
+   * the room to work out what it was told. The two figures did not leave the stage; they
+   * moved to where they are measured, beside the drawing that measures them
+   * ({@link investShowcaseTrapContent.surfaceReading}, {@link
+   * investShowcaseTrapContent.sourceReading}) and into the two eyebrows that title the acts.
+   * The old sentence was also 55 characters against this one's 41, which is the other half
+   * of the problem — see the note on length below.
+   *
+   * IT IS A PURCHASE AND NOT A WARNING, which is what puts it in WHY INVEST. The room is
+   * not told it has been fooled; it is told what its money is actually for. "You are buying
+   * the work" is a sentence a division head can repeat to a board without conceding
+   * anything, and the whole risk of this slide is a room that has to concede something
+   * before it can agree.
+   *
+   * THE SUBJECT IS THE PURCHASE AND NOT THE BUYER. "You are buying the work, not the
+   * picture" describes a transaction; "do not be fooled by the picture" describes a person.
+   * Same information, and only one of them can be said to a room that has approved work on
+   * exactly the evidence this stage is about to disqualify.
+   *
+   * BOTH KEYWORDS ARE NEEDED, and they are the two halves of the contrast — the same call
+   * D.5's `answerLine` makes. "the work" alone is a platitude and "not the picture" alone is
+   * a rebuke; the pair is the claim.
+   *
+   * IT MUST FIT ONE LINE, and that is geometry rather than taste. `.slide-headline.small` is
+   * 40px on 1.05 from `top: 80`, so ONE line ends at y=122 and the eyebrow shelf starts at
+   * 156; a second line would end at 164 and print through it.
+   * {@link HEADLINE_BUDGET_CHARS} in `../showcase-trap-geometry.ts` holds the ceiling and a
+   * test holds this string against it.
+   *
+   * IT SHARES NO WORD WITH {@link investShowcaseTrapContent.figLabel}. The label names the
+   * two halves of the drawing (the surface, the source) and the title names the trade; a
+   * title in its label's words is a caption.
+   */
+  headline: "You are buying the work, not the picture.",
+  headlineKw: ["the work", "not the picture"],
+
+  /** Pose 0's eyebrow. Mono, keyword-free. It states the input, so the drawing under it
+   *  reads as an output rather than as a diagram in search of a caption. */
+  surfaceEyebrow: "THIRTY MINUTES · ONE PROMPT",
+
+  /**
+   * The chart's own title, and it is deliberately the dullest string on the stage.
+   *
+   * A GENERIC BUSINESS NOUN, because the specimen may not be interesting. The moment this
+   * says something a room recognises, the room starts assessing the chart instead of the
+   * argument about charts. Mono, keyword-free.
+   */
+  chartTitle: "QUARTERLY VIEW",
+
+  /**
+   * POSE 0's LINE.
+   *
+   * "AS A PICTURE" IS THE WHOLE CONCESSION, and it has to be a concession rather than a
+   * complaint. The chart IS complete: the work of making a picture is genuinely finished,
+   * which is why the room was right to find it impressive. The sentence grants that in
+   * full and moves the incompleteness to a word the next pose can open.
+   */
+  surfaceLine: "One prompt built this. As a picture, it is complete.",
+  surfaceLineKw: ["As a picture"],
+
+  /**
+   * The mark, and it is the slide's argument turned on itself.
+   *
+   * THREE TOKENS, EACH DOING ONE JOB. `OUR OWN WORK` names whose artifact is on trial —
+   * ours, so nobody in the room has to defend anything. `SELF-REPORTED` is the epistemic
+   * mark the two figures in the headline require, in the same grammar
+   * `investOwnProofContent` uses on every card it prints: nobody audited our stopwatch.
+   * `SHOWN LIVE` is why the stage carries no link — the artifact behind these numbers is
+   * not publishable, and a slide that promised a reference it cannot give would fail its
+   * own third question.
+   *
+   * Mono, keyword-free: it is three tokens, not a sentence.
+   */
+  mark: "OUR OWN WORK · SELF-REPORTED · SHOWN LIVE",
+
+  /** Pose 0's reading, at the foot of the effort column. Mono, keyword-free — it is the
+   *  headline's first figure, printed where the drawing can be measured against it. */
+  surfaceReading: "THIRTY MINUTES",
+
+  /** Pose 1's reading, at the head of the same column. Mono, keyword-free. */
+  sourceReading: "FIVE DAYS",
+
+  /** Pose 1's eyebrow. Mono, keyword-free. "NOBODY SEES THIS" is the half that makes the
+   *  slide a trap rather than a cost breakdown: the four rows below are not merely
+   *  expensive, they are INVISIBLE, and invisible is what the acts have to establish
+   *  before pose 2 can land. */
+  sourceEyebrow: "FIVE DAYS · NOBODY SEES THIS",
+
+  layers: HIDDEN_LAYERS,
+
+  /**
+   * POSE 1's LINE.
+   *
+   * "NOT ONE OF THEM SHOWS" AND NOT "NONE OF THEM SHOWS". Same meaning, and the emphatic
+   * form is what a sentence needs when it is the one the whole slide turns on. It is also
+   * the plainer of the two read aloud in a second language.
+   *
+   * THE SUBJECT IS THE WORK AND NOT THE VIEWER. "Nobody sees them" would put a person in
+   * the sentence; "not one of them shows" leaves the fault with the four rows, which is
+   * this block's rule.
+   */
+  sourceLine: "Four things sit under it. Not one of them shows.",
+  sourceLineKw: ["Not one of them shows"],
+
+  /** Pose 2's eyebrow. Mono, keyword-free. */
+  twinEyebrow: "TWO CHARTS · ONE SURFACE",
+
+  /**
+   * What the second chart has under it, printed inside the empty frame.
+   *
+   * IT NAMES AN ABSENCE, WHICH A DRAWING CANNOT. An empty dashed frame beside a stack of
+   * four full ones reads as "not drawn yet" unless something says otherwise, and the one
+   * reading this slide cannot afford is that the right-hand chart is unfinished. It is
+   * finished. That is the point. Mono, keyword-free.
+   */
+  hollowLabel: "NOTHING UNDER IT",
+
+  /**
+   * POSE 2's LINE, and it is the sentence the deck did not have.
+   *
+   * "THE SURFACE DOES NOT TELL YOU WHICH" — the verb's subject is the surface. Every
+   * other way of writing this sentence puts the room in it ("you cannot tell which",
+   * "nobody can tell which"), and a division head who has approved work on a surface
+   * hears those as a verdict on themselves. This one is a statement about a drawing.
+   *
+   * IT ASSERTS NO CONSEQUENCE. There is no "and that is dangerous", no "and it gets
+   * signed". A room that has just watched two identical charts with different foundations
+   * does not need the consequence spelled out, and spelling it out is where a slide like
+   * this turns into a warning.
+   */
+  twinLine: "Both charts look the same. The surface does not tell you which.",
+  twinLineKw: ["The surface does not tell you which"],
+
+  /** The recap's eyebrow. Mono, keyword-free, and it says what the pose is FOR — three
+   *  boxes under a heading that promises questions read as a tool, and the same three
+   *  under a heading that promised findings read as a summary. */
+  recapEyebrow: "THREE QUESTIONS TO ASK",
+
+  questions: TRAP_QUESTIONS,
+
+  /**
+   * THE THESIS — the one line this slide asks the room to leave with, on §4.5's shelf.
+   *
+   * IT IS AN INSTRUCTION AND THE OTHER THREE PROSE LINES ARE STATEMENTS, which is the
+   * same division D.5's closer makes and for the same reason: three observations followed
+   * by a fourth observation is a slide with no ask in it. "Ask what is under it" is the
+   * shortest ask this argument has, and the room can act on it in the next meeting they
+   * sit in.
+   *
+   * "THAT QUESTION COSTS NOTHING" IS THE HALF THAT MAKES IT SAFE TO GIVE. The whole risk
+   * of this slide is that a room hears it as "you have been approving the wrong things";
+   * the second sentence reframes the ask as free rather than as remedial — nobody has to
+   * concede anything to start asking it, and a question that costs nothing needs no
+   * admission behind it.
+   *
+   * IT NAMES NO ARTEFACT AND NO ROLE. Not "under the chart", not "of your team" — "it"
+   * is whatever the room is looking at next week, which is every artifact rather than
+   * this one.
+   *
+   * ONE LINE, full width, 19px upright on the same shelf D.1, D.3, D.4 and D.5 use.
+   */
+  closer: "Ask what is under it. That question costs nothing.",
+  closerKw: ["what is under it", "costs nothing"],
+} as const;

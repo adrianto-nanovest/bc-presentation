@@ -365,10 +365,13 @@ const caption: CSSProperties = {
  * raised back to 22 without the line box following it — and the line would paint into the
  * NavBar band with nothing to report it.
  *
- * UPRIGHT SERIF, and the only italics on this stage are the keywords `highlight()` places.
- * `mandate-levers` sets its closer in serif ITALIC and this stage deliberately does not
- * follow it: an italic keyword inside an already-italic sentence changes colour and nothing
- * else, which spends the deck's one emphasis channel for free.
+ * UPRIGHT SERIF, and the only italics on this stage are the keywords `highlight()` places. The
+ * reason is that an italic keyword inside an already-italic sentence changes colour and nothing
+ * else, which spends the deck's one emphasis channel for free. This paragraph used to cite
+ * `mandate-levers` as the counter-example that set its closer in serif ITALIC; that slide was
+ * re-cut on 2026-08-15 and now closes upright on the same 590 shelf, so THERE IS NO LONGER A
+ * SLIDE IN EITHER DECK THAT CLOSES IN ITALIC — the call this comment records is now the deck's
+ * rule rather than this stage's preference.
  */
 function prose(size: number, color: string): CSSProperties {
   return {

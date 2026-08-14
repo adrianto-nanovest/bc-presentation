@@ -1,10 +1,11 @@
 // THE LOCK AND THE TWO ROADS, IN A REAL ENGINE — the browser evidence for D.3 after the
 // 2026-08-14 redraw.
 //
-// IT REPLACES `scripts/gh57-verify.mjs` FOR THIS SLIDE. That harness is the record of what #57
-// shipped — a two-column stage of type, a bordered card, a 26px two-line verdict at y=533 — and
-// none of that contract exists any more. It is left in the tree as history; do not run it
-// against this slide.
+// IT REPLACED `scripts/gh57-verify.mjs`, WHICH WAS DELETED ON 2026-08-15. That harness checked
+// what #57 shipped — a two-column stage of type, a bordered card, a 26px two-line verdict at
+// y=533 — and none of that contract has existed since the 2026-08-14 redraw. It had also stopped
+// LOADING: it imported twenty-five names from `chicken-egg-geometry.ts` that the redraw removed,
+// so it threw before it measured anything. This file is the only browser evidence D.3 has.
 //
 // `tests/unit/invest-chicken-egg.test.tsx` owns everything jsdom can see, and it says in its own
 // first paragraph what it cannot: jsdom has no layout engine, so it computes no text width, no

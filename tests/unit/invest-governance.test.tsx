@@ -122,7 +122,7 @@ import {
  * its tail — re-measured off `tests/fixtures/deck-numbering.json`, which records D.1–D.4 for the
  * FOUR `invest` rows in both leader decks since the merge.
  */
-const AT = { letter: "D", num: 4, sectionKey: "invest" } as const;
+const AT = { letter: "D", num: 5, sectionKey: "invest" } as const;
 
 const POSES = [0, 1, 2, 3] as const;
 
@@ -261,10 +261,18 @@ describe("the slide def", () => {
     expect(leader.slides).not.toContain("invest-security");
     expect(leader.slides).not.toContain("invest-subscription");
 
-    // At the TAIL of the run: the row behind it opens the next one.
+    // THE LAST ARGUMENT OF THE RUN, AND NO LONGER ITS LAST ROW (gh#72). This slide still
+    // closes §6.7 — nothing argues after it — but `invest-bridge-to-curriculum` now sits
+    // behind it and is what hands off to the curriculum. The bridge carries `shape` as well,
+    // since that run ships none. This slide's own figure did not move: a tail append leaves
+    // R3 nothing behind it to renumber, so it still prints D.4.
     const at = leader.slides.indexOf("invest-governance");
     expect(leader.slides[at - 1]).toBe("invest-chicken-egg");
-    expect(leader.slides[at + 1]).toBe("b1-evolution-journey");
+    expect(leader.slides[at + 1]).toBe("invest-bridge-to-curriculum");
+    expect(leader.slides[at + 2]).toBe("b1-evolution-journey");
+    // The bridge is the run's last row, and it argues nothing — asserted here because "the
+    // tail of the run" is what this case is named for and the answer changed.
+    expect(standard.slides).not.toContain("invest-bridge-to-curriculum");
   });
 });
 

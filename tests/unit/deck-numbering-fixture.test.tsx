@@ -686,8 +686,21 @@ const OBSERVED: Record<string, ObservedDeck> = {
   // `ALLOW_MOVED_FIGURES=1` is recording an index shift rather than a renumber, and the
   // proof is in the diff: D.5's row is deleted, D.4's label is the merged slide's, and no
   // other `fig` value in the file changes.
-  "berau-leader": { slides: 71, closer: "N.3" },
-  "gems-leader": { slides: 71, closer: "N.3" },
+  // AND 71 → 74 ON gh#72 — three BRIDGES, and the first re-record in this file's history
+  // where a leader deck grew and NOT ONE `fig` VALUE CHANGED. `gap-bridge-to-shape` and
+  // `invest-bridge-to-curriculum` are tail appends (R3 has no row behind them to
+  // renumber), `pitfalls-bridge-to-mandate` takes the slot `h3-bridge-to-i` vacated, and
+  // `h3-bridge-to-i` itself lands at the END of `mandate` — so B.5, D.5 and K.4 are NEW
+  // figures and J.3 is the SAME figure carrying a different slide's label. The closer
+  // stays N.3 across FOURTEEN sections: three rows were added and no letter moved, because
+  // a bridge appended inside an existing run opens nothing.
+  //
+  // WHAT THE DRIFT REPORT SHOWS, and why `ALLOW_MOVED_FIGURES=1` was needed anyway: it
+  // compares by INDEX, and three inserted rows shift every index behind them. Read the
+  // diff, not the count — `fig` is unchanged on every row that existed before, one row's
+  // LABEL changed at J.3 (BRIDGE · DISCIPLINE → BRIDGE · MANDATE), and three rows are new.
+  "berau-leader": { slides: 75, closer: "N.3" },
+  "gems-leader": { slides: 75, closer: "N.3" },
 };
 
 /** The expectations for one deck, or a failure naming the deck that has none. */

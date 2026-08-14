@@ -345,10 +345,20 @@ describe("leader deck sets", () => {
       // ONE OFFSET SHORTER SINCE THE `invest` MERGE, which retired that run's last two rows
       // into `invest-governance`: the ladder now stops at `at + 7`.
       expect(ids[at + 3], id).toBe("invest-base-rates");
-      expect(ids[at + 4], id).toBe("invest-own-proof");
-      expect(ids[at + 5], id).toBe("invest-chicken-egg");
-      expect(ids[at + 6], id).toBe("invest-governance");
-      expect(ids[at + 7], id).toBe("b1-evolution-journey");
+      // ONE OFFSET LONGER AGAIN AS OF 2026-08-15, and this time the added row IS an
+      // argument — a mid-run insert at the run's second position, so every offset below
+      // it steps by one and the ladder stops at `at + 9`.
+      expect(ids[at + 4], id).toBe("invest-showcase-trap");
+      expect(ids[at + 5], id).toBe("invest-own-proof");
+      expect(ids[at + 6], id).toBe("invest-chicken-egg");
+      expect(ids[at + 7], id).toBe("invest-governance");
+      // ONE OFFSET LONGER AGAIN AS OF gh#72, and the added row is the `invest` run's
+      // BRIDGE rather than a sixth argument: the ladder stops at `at + 8`, and the slide
+      // that now hands to the curriculum is the bridge that says so out loud. The joins
+      // this case exists to pin are unchanged in meaning — `shape` still ends on
+      // `shape-middle-out`, `invest` still hands straight to `b1-evolution-journey`.
+      expect(ids[at + 8], id).toBe("invest-bridge-to-curriculum");
+      expect(ids[at + 9], id).toBe("b1-evolution-journey");
       // And the run it left has closed up behind it: `g10` now hands straight to
       // the bridge, with no hole where f8 stood.
       expect(ids[ids.indexOf("g10-beyond-big-three") + 1], id).toBe("g11-bridge-to-h");
@@ -433,14 +443,35 @@ describe("leader deck sets", () => {
       expect(at, id).toBeGreaterThan(-1);
       expect(composed[at][1], id).toBe("mandate");
       expect(composed[at - 1]?.[1], id).toBe("pitfalls");
-      expect(composed[at + 3]?.[1], id).toBe("meta");
+      // FOUR ROWS AS OF gh#72, so `meta` starts one offset later — and the fourth row is
+      // `h3-bridge-to-i`, RELOCATED here out of `pitfalls` by the deck set's second
+      // override. §6.8 still asks for three and holds three; what the fourth row buys is
+      // that the run hands off to `meta` from the slide that bridges INTO `meta`, which is
+      // the defect this ticket fixed (before it, that bridge sat in front of `mandate` and
+      // pointed one section too far).
+      expect(composed[at + 3]?.[1], id).toBe("mandate");
+      expect(composed[at + 4]?.[1], id).toBe("meta");
       // THE WHOLE RUN, for the same reason the `shape` case above asserts one: a
       // second `mandate` row elsewhere in the deck throws as R4 where it is
-      // non-adjacent and silently lengthens the run where it is not.
+      // non-adjacent and silently lengthens the run where it is not. THE RELOCATED ROW IS
+      // WHAT MAKES THIS THE SHARPEST VERSION OF THAT CHECK — `h3-bridge-to-i` authors
+      // `pitfalls` in its own file, so its presence in THIS list is the override working,
+      // and its absence from the `pitfalls` run below is the other half.
       expect(
         composed.filter(([, key]) => key === "mandate").map(([slide]) => slide),
         id,
-      ).toEqual(["mandate-enablement", "mandate-phases-gates", "mandate-levers"]);
+      ).toEqual([
+        "mandate-enablement",
+        "mandate-phases-gates",
+        "mandate-levers",
+        "h3-bridge-to-i",
+      ]);
+      // And `pitfalls` is the leader deck's own three, ending on the leader-only bridge:
+      // one run, not two, with the relocated row absent from it.
+      expect(
+        composed.filter(([, key]) => key === "pitfalls").map(([slide]) => slide),
+        id,
+      ).toEqual(["h1-pitfall-wall", "h2-discipline-wall", "pitfalls-bridge-to-mandate"]);
     }
   });
 
@@ -505,6 +536,7 @@ describe("leader deck sets", () => {
           "shape-tam-kotter",
           "shape-middle-out",
           "invest-base-rates",
+          "invest-showcase-trap",
           "invest-own-proof",
           "invest-chicken-egg",
           "invest-governance",

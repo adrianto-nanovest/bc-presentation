@@ -63,7 +63,15 @@ import { findSlideDefs } from "../harvest/slide-defs";
  *  retired, and the count landed one BELOW where it started (84). */
 // 84 UNTIL THE `invest` MERGE, WHICH RETIRED TWO DEFS AND ADDED ONE. `invest-security` and
 // `invest-subscription` are `invest-governance` now — see `src/slides/leader-invest/index.ts`.
-const EXPECTED_DEFS = 83;
+//
+// 83 → 86 ON gh#72: `gap-bridge-to-shape`, `invest-bridge-to-curriculum` and
+// `pitfalls-bridge-to-mandate` — three FILES, three bridges, all leader-only. It is the
+// first ticket to add three at once since the count began, and it moved NO figure at all:
+// two are tail appends and the third takes the slot `h3-bridge-to-i` vacated when it moved
+// to the tail of `mandate`. THE MOVE ADDED NOTHING HERE, which is the distinction this
+// number exists to make — relocating a def writes no file, so gh#72 is +3 and the deck is
+// +3 while FOUR rows changed position in the leader list.
+const EXPECTED_DEFS = 87;
 
 /** `hexLadderDevSlide` is declared in `registry.tsx` beside `deckSlides`, so it
  *  has no file of its own to be named after. It is the ONLY def whose id is not

@@ -167,10 +167,21 @@ const LEADER_BRANDS: readonly Brand[] = ["berau", "gems"];
 // were the run's last two rows and are one row now, `invest-governance`; the run is four long,
 // so this slide has three siblings behind it. Every count in this file that reads "four
 // siblings" or "FOUR numbers moved" is derived from this list rather than typed beside it.
+// FOUR SINCE gh#72, AND THE FOURTH ARGUES NOTHING. `invest-bridge-to-curriculum` is the
+// run's BRIDGE, appended at its tail, so it is a sibling in the only sense this list is used
+// for: the rows a HEAD insert renumbers. It stepped D.4 → D.5 with the other three when
+// `invest-base-rates` landed — proved rather than assumed by the counterfactual test below,
+// which recomposes the deck without this slide and compares. §6.7 still asks for five
+// argument slides and the run still carries them in four rows.
 const SIBLING_IDS: readonly string[] = [
+  // 2026-08-15 put a mid-run row between D.1 and what was D.2, so the slide directly
+  // behind this one is no longer `invest-own-proof`. This list is what D.1's renumber
+  // proof walks, so its ORDER is the run's order behind the head.
+  "invest-showcase-trap",
   "invest-own-proof",
   "invest-chicken-egg",
   "invest-governance",
+  "invest-bridge-to-curriculum",
 ];
 
 /**
@@ -1474,12 +1485,15 @@ describe("the composed decks", () => {
         expect(r.num, `${brand} · ${r.def.id}`).toBe((run[0].num ?? 0) + i);
         expect(r.letter, `${brand} · ${r.def.id}`).toBe(letter);
       });
-      // Read back: the four figures the two leader rooms actually see today. It was five until
-      // the `invest` merge folded the run's last two rows into `invest-governance`.
+      // Read back: the five figures the two leader rooms actually see today. Four between the
+      // `invest` merge (which folded the run's last two argument rows into
+      // `invest-governance`) and gh#72 (which appended the run's bridge at D.5) — the count has
+      // been five, four and five again, for three different reasons, which is why the
+      // RELATIONSHIP above is the assertion and this line is the read-back.
       expect(
         run.map((r) => `${r.letter}.${r.num}`),
         brand,
-      ).toEqual(["D.1", "D.2", "D.3", "D.4"]);
+      ).toEqual(["D.1", "D.2", "D.3", "D.4", "D.5", "D.6"]);
       expect(letter, brand).toBe("D");
     }
   });

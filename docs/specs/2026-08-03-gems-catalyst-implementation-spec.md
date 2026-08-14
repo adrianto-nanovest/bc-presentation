@@ -557,24 +557,36 @@ brand's `practiceLab` flag (absent → `k1`, `k2` drop, and `k3` renumbers to `K
 Letters and numbers are **identical to today** except inside E, where E.12 is new and the
 bridge becomes E.13.
 
-### 4.3 Leader deck set — 73 slides, 16 leader-only new
+### 4.3 Leader deck set — 76 slides, 19 leader-only new
 
-`64 (today) + 1 (e12-loop-engineering, all-variant) − 8 (F cut, F.8 kept) + 16 (new) = 73.`
+`64 (today) + 1 (e12-loop-engineering, all-variant) − 8 (F cut, F.8 kept) + 19 (new) = 76.`
 #8's "72" predates E.12's insertion.
+
+> **Amendment 2026-08-15 (#72) — three bridges, and one relocation. 73 → 76.** Every section
+> from **F · MINDSET** onward ends on a bridge (`c6`, `d5`, `e13`, `g11`, `h3`, `i4`); the three
+> leader-only runs in front of the curriculum ended on an argument slide, so the deck's own
+> biggest turns had no beat between them. **B, D and J now end on a bridge** — and **C
+> deliberately does not**: C.4 closes on *"I build the foundation. You empower them. They drive
+> the adoption."*, which is already the handoff into WHY INVEST, so D's bridge speaks for both
+> runs. **`h3-bridge-to-i` MOVED to K.4** under a second `sectionOverrides` entry: it bridges
+> into **L · THE META-PROCESS** and this deck puts **K · THE MANDATE** in between, so at J.3 it
+> pointed one section too far and the room was told *"next: the discipline, in practice"* before
+> being shown the ask. **No figure in the deck moved** — two bridges are tail appends, the third
+> takes the slot h3 vacated, and h3 lands at the end of the run it joins. Copy: §6.9.
 
 | Letter · name | # | Slides (in order) |
 |---|---|---|
 | **A · OPENING** | 2 | `title` (cover, leader title override) · `a1-what-youve-seen` → **A.1** |
-| **B · THE GAP** | 5 | `gap-hardest-part` **new** · `gap-no-sop` **new** · `gap-three-failures` **new** · `gap-the-pattern` **new** · `gap-capability-ladder` **new** |
-| **C · THE SHAPE** | 4 | `shape-agentic-org` **new** · `f8-your-agentic-os` *(relocated, `sectionOverrides`)* · `shape-tam-kotter` **new** · `shape-middle-out` **new** |
-| **D · WHY INVEST** | 5 | `invest-base-rates` **new** · `invest-own-proof` **new** · `invest-chicken-egg` **new** · `invest-security` **new** · `invest-subscription` **new** |
+| **B · THE GAP** | 6 | `gap-hardest-part` **new** · `gap-no-sop` **new** · `gap-three-failures` **new** · `gap-the-pattern` **new** · `gap-capability-ladder` **new** · `gap-bridge-to-shape` **new (#72)** |
+| **C · THE SHAPE** | 4 | `shape-agentic-org` **new** · `f8-your-agentic-os` *(relocated, `sectionOverrides`)* · `shape-tam-kotter` **new** · `shape-middle-out` **new** — **no bridge, by decision (#72)** |
+| **D · WHY INVEST** | 6 | `invest-base-rates` **new** · `invest-own-proof` **new** · `invest-chicken-egg` **new** · `invest-security` **new** · `invest-subscription` **new** · `invest-bridge-to-curriculum` **new (#72)** |
 | **E · THE LANDSCAPE** | 5 | `b1`…`b5` |
 | **F · MINDSET** | 6 | `c1`…`c5`, `c6-bridge-to-d` |
 | **G · PROCESS & METHODOLOGY** | 5 | `d1`…`d5` |
 | **H · ENGINEERING FUNDAMENTALS** | 13 | `e1`…`e11`, `e12-loop-engineering`, `e13-bridge-to-f` *(beat-2 copy override)* |
 | **I · TOOLS ECOSYSTEM** | 11 | `g1`…`g11` |
-| **J · PITFALLS & BEST PRACTICES** | 3 | `h1`…`h3` |
-| **K · THE MANDATE** | 3 | `mandate-enablement` **new** · `mandate-phases-gates` **new** · `mandate-levers` **new** |
+| **J · PITFALLS & BEST PRACTICES** | 3 | `h1` · `h2` · `pitfalls-bridge-to-mandate` **new (#72)** — h3 moves to K.4 |
+| **K · THE MANDATE** | 4 | `mandate-enablement` **new** · `mandate-phases-gates` **new** · `mandate-levers` **new** · `h3-bridge-to-i` *(relocated, `sectionOverrides`, #72)* |
 | **L · THE META-PROCESS** | 4 | `i1`…`i4` |
 | **M · PRINCIPLES** | 4 | `j1`…`j4` |
 | **N · THE PRACTICE LAB** | 3 | `k1`, `k2`, `k3` |
@@ -752,7 +764,7 @@ live in `content.ts` and are reproduced in §3.6's standard-deck row for referen
 
 ---
 
-## 6 · Leader deck content (sections B, C, D, K)
+## 6 · Leader deck content (sections B, C, D, K — and §6.9's bridges)
 
 All of §6 applies to **both** `berau-leader` and `gems-leader`. Driver: event-committee
 feedback recorded in `docs/prompts/gems-catalyst.md` — (1) shape of the agentic
@@ -844,8 +856,66 @@ a **third** ladder alongside L1–L5 and P0–P3.
 
 **`invest-base-rates` — D.1.** 78% → 6%.
 
-**`invest-own-proof` — D.2 · brand-varying (slot 3).** A Div Head discounts an outsider's
-case study and cannot discount their own company's.
+**`invest-showcase-trap` — composes D.2 · 5 poses · no brand axis.** The mechanism of D.1's
+number: making the picture became free, making the thing under the picture did not, so the
+common position is a stage full of finished-looking results with nothing behind them. Three
+acts — one chart that assembles in 380ms beside an effort column filled 3px of 240 · the four
+things under it (the source · the meaning · the match · the check), arriving on a 260ms pitch
+and each drawing for 900ms · the same chart twice, one over its four rows and one over an
+empty frame, with a scan that finds no difference on top. Then a recap that turns each act
+into **a question a leader can ask in any review** (*How long did the data take? / Where did
+each number come from? / Who checked it, and against what?*), and the thesis under it.
+
+> **Amendment 2026-08-15 — the `invest` run was one argument short, and it is the argument
+> the whole deck was already obeying.** §6.7 asked for five slides, `src/deck/deck-sets.ts`
+> declared the run closed at gh#70, and the run is now SIX. What reopened it was an absence
+> rather than a preference. A sweep of `src/` for data readiness, data quality,
+> garbage-in-garbage-out and time-to-prepare returns **nothing at all**, in either deck: the
+> four base-rate slides (B.1's 70/30, D.1's 88/6, E.5's 25/5.5, G.1's 73%) say projects
+> FAIL; J.1's eight traps say an untrained operator SHIPS the wrong thing; H.6 says a perfect
+> prompt cannot "verify its own output against reality" — one bullet, in a section §4.3 has
+> SKIMMED. **No slide said that the artifact carries no signal about the work under it**,
+> which is a different claim from all of them and the only one that changes what a division
+> head does in a review. The one slide that ever carried ground truth,
+> `f2-rag-ground-truth`, is in the section the leader deck CUTS.
+>
+> **IT SITS SECOND AND NOT AT THE TAIL.** Behind D.1 it answers a question the room is
+> already holding (why is the gap that wide?) and it ARMS D.3 — after it, `invest-own-proof`'s
+> epistemic marks read as integrity rather than as pedantry. At the tail it would arrive after
+> D.4's 30-day pilot had already been asked for, with the acceptance test that pilot's kill
+> criterion needs still unspoken. Cost: one MID-RUN insert, **no letter, four numbers** —
+> `invest-own-proof` D.2→D.3, `invest-chicken-egg` D.3→D.4, `invest-governance` D.4→D.5,
+> `invest-bridge-to-curriculum` D.5→D.6. Both leader decks 74 → 75 rows, closer still N.3.
+> `tests/fixtures/deck-numbering.json` needed `ALLOW_MOVED_FIGURES=1`.
+>
+> **IT IS A REFUSAL AND NOT AN ACCUSATION**, which is D.1's own gate and the harder half of
+> this slide. A room of division heads has approved work on exactly the evidence this stage
+> disqualifies, so: the specimen is OURS (both figures are our own build times on our own
+> work, so the only artifact on trial is the presenter's); every sentence faults the ARTIFACT
+> and never the reader ("Both charts look the same. **The surface** does not tell you which.");
+> and the slide carries **its own provenance mark** — `OUR OWN WORK · SELF-REPORTED · SHOWN
+> LIVE` — in the same grammar D.3 puts on every card it prints. A slide that asks a room to
+> demand provenance and then shows its own cannot be heard as a lecture. `SHOWN LIVE` also
+> settles a logistics constraint in copy: the artifact behind these numbers is not
+> publishable, so the stage carries no link, no screenshot and no address, and says so.
+>
+> **THE THESIS IS AN ASK AND NOT A FIFTH OBSERVATION** — *"Ask what is under it. That question
+> costs nothing."* The second sentence is what makes the first safe to give: nobody has to
+> concede anything to start asking it.
+>
+> **NO BRAND AXIS, EITHER SLOT.** The specimen is ours and the questions are generic, so both
+> leader decks render it byte for byte — asserted by mounting it twice and diffing.
+>
+> **WHAT IT MAY NOT SAY.** `src/slides/leader-invest/content.ts`'s D.2 block carries the
+> token list, owner by owner: no percentage or digit of any kind; nothing of J.1's or J.2's
+> vocabulary; nothing of D.4's (`kill criterion`, `spend cap`, `shared accounts`) or D.5's
+> (`audit`, `revoke`, `managed seat`, `the account`); none of D.3's three epistemic marks;
+> `shadow AI` nowhere; and K.2's and K.3's asks left to K.2 and K.3. Enforced token by token
+> in `tests/unit/invest-showcase-trap.test.tsx`, resolved from each sibling's own module.
+
+**`invest-own-proof` — D.2 in this section's numbering, composes **D.3** since 2026-08-15 ·
+brand-varying (slot 3).** A Div Head discounts an outsider's case study and cannot discount
+their own company's.
 
 - **GEMS** — GEMVIS: executive decision speed **+90%**, multi-operational retrieval
   **2 days → under 1 hour**, **50+** application portfolios, **4,000+** users. Google Cloud
@@ -929,6 +999,59 @@ leader deck only.
 **`mandate-levers` — K.3.** Four levers, reworded from Group-HR to a BU/Div Head: put it on
 the calendar and show up · name a champion, protect them, put it in their objectives ·
 clear access and procurement · fund the rhythm and review quarterly.
+
+### 6.9 The leader deck's bridges (#72, 2026-08-15)
+
+Three new stages, one relocation, and one section that deliberately gets none. All of §6.9
+applies to **both** leader decks — the copy is brand-invariant, because a bridge restates the
+argument the room has just heard and neither brand's evidence is in it.
+
+**The form is E.13's, not H.3's.** Two steps: beat 1 is two display lines at 56px with a copper
+rule under them, beat 2 an italic copper handoff at 40px that opens with *"Next:"*. Keywords are
+substrings, highlighted at render (`highlight()`), never `<em>` in the data. One shared stage
+renders all three — `src/components/BridgeHero.tsx` — and the five Phase-2 bridges are
+**deliberately not ported** to it.
+
+| Slide | Figure today | FigLabel | Beat 1 | Beat 2 |
+|---|---|---|---|---|
+| `gap-bridge-to-shape` | B.5 | BRIDGE · SHAPE | *"The gap is named. / None of it was a tool problem."* | *"Next: the shape that closes it."* |
+| `invest-bridge-to-curriculum` | D.5 | BRIDGE · CURRICULUM | *"The shape is drawn. The case is made. / Neither one teaches a single person."* | *"Next: what your people actually learn."* |
+| `pitfalls-bridge-to-mandate` | J.3 | BRIDGE · MANDATE | *"Discipline does not spread by itself. / Someone must make room for it."* | *"Next: what only you can authorise."* |
+
+**B's beat 1 says "a tool problem" and not "the tools", and that is not a style choice.** B.1
+prices the tools at **30%** of the problem, so *"none of it was the tools"* is a sentence the
+room can check against a figure four slides earlier and find wrong. Held by a test, because the
+wrong version is the more natural thing to write.
+
+**D's bridge carries TWO runs.** `shape` ships none, so this is the last word for THE SHAPE and
+WHY INVEST both — hence `shape` and `case`, each run's own word, in one line. Beat 1's second
+line is the reason the slide exists: §4.3 has curriculum sections E–J **skimmed live**, and
+before this bridge the deck went from a governance sentence straight into *"FROM RULES TO
+REASONING"* with nothing said about the change of pace. An operating model and a budget teach
+nobody; the ~40 slides that follow are what does. **No count appears in the copy** — the run's
+length is composed (§3.4) and a sentence that counted its own successors would go stale.
+
+**`h3-bridge-to-i` moves to K.4, and one string in it becomes deck-set-scoped.** Beat 1's second
+line reads *"It's someone learning the discipline first."* in a standard deck and **"It is the
+company that learns the discipline first."** in a leader deck — the competitor is a person to a
+room of practitioners and an organisation to a Div Head who has just been asked to fund a
+mandate. It is **"the company"** and not "the division": a leader deck is presented to peers
+running sibling divisions of one group, and a line that makes the winner an internal division
+sets the room against itself two slides before the ask. Line A, beat 2 and the photo are shared.
+Resolver: `h3Beat1LineBFor`, the shape `e13Beat2For` already uses.
+
+**Assets** — `assets/heroes/gap-to-shape-bridge.jpg`, `invest-to-curriculum-bridge.jpg`,
+`pitfalls-to-mandate-bridge.jpg`; K.4 keeps `h3-bridge.jpg`. Named by section **key**, never by
+letter, and prompts are archived in `docs/runbooks/image-gen-prompts.md` with the two rejections
+recorded — a wall with no gap in it, and a gate that was `k3-open-horizon.jpg`'s composition and
+meaning fifteen slides before the closer.
+
+**Composition cost, stated because it is the part reviewers check:** `sectionOverrides` gains a
+second entry (`"h3-bridge-to-i": "mandate"`) and **must** be written in the same edit as the
+move — h3 carries `sectionKey: "pitfalls"`, a key this deck already runs, so the move alone
+composes a second `pitfalls` run and R4 throws at module load. Nothing else moved: B.4, C.4,
+D.4, J.1–J.2, K.1–K.3 and the closer N.3 all print exactly what they printed at 71 rows, proved
+by `tests/fixtures/deck-numbering.json` (three new figures, one changed label, no changed `fig`).
 
 ---
 

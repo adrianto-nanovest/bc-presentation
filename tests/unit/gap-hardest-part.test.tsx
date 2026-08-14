@@ -784,6 +784,11 @@ describe("the composed decks", () => {
         // `gap-the-pattern`, so this run is FOUR rows for §4.3's five sections.
         "gap-failures-pattern",
         "gap-capability-ladder",
+        // gh#72's bridge out of the run, appended behind the ladder. It argues nothing —
+        // §4.3's five sections are still the four rows above — and it moved no figure,
+        // because a tail append leaves R3 nothing behind it to renumber. THIS SLIDE still
+        // opens the run and is still the jump target, which is what this case is about.
+        "gap-bridge-to-shape",
       ]);
       expect(sectionFirstIndex.get(row.letter), brand).toBe(at);
     }

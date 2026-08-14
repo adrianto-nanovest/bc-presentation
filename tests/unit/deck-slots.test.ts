@@ -274,8 +274,14 @@ describe("DECK_SET_COMPOSITION", () => {
     // `invest-security` and gh#59's `invest-subscription` argued one thing from two desks
     // and are `invest-governance` now, so that run carries §6.7's five sections in four
     // rows too.
+    // AND 71 → 74 ON gh#72, which is the first ADDITION here since gh#71 closed the
+    // fourth leader-only run — a spec change (§4.3, §6.9) and an edit second, exactly as
+    // the composition file said the next row would have to be. Three bridges, on the
+    // three runs that lacked one: `gap`, `invest` (which covers `shape` too) and
+    // `pitfalls`. `h3-bridge-to-i` MOVED in the same edit and is not in this +3: a move
+    // changes membership, not length.
     const { leader, standard } = DECK_SET_COMPOSITION;
-    expect(leader.slides).toHaveLength(71);
+    expect(leader.slides).toHaveLength(75);
     expect(leader.slides).toContain("f8-your-agentic-os");
 
     // The two lists no longer differ by the cut alone, and gh#53 is why: the
@@ -333,6 +339,11 @@ describe("DECK_SET_COMPOSITION", () => {
       // review, which is why this run is four rows for five spec sections.
       "gap-failures-pattern",
       "gap-capability-ladder",
+      // gh#72's bridge, at the TAIL of `gap` in the leader list and adjacent to the
+      // ladder in both lists. It is leader-only like the rest of the run, and it is the
+      // first row here that argues nothing: §4.3's five `gap` sections are the four rows
+      // above it.
+      "gap-bridge-to-shape",
       "shape-agentic-org",
       // gh#71, and NOT adjacent to the row above it in the leader LIST: f8 stands
       // between them there. It is adjacent HERE because this array is the leader list
@@ -351,6 +362,10 @@ describe("DECK_SET_COMPOSITION", () => {
       // the ones R3 stepped when it landed; their ORDER here is unchanged by that, and
       // that is the point of asserting ids rather than figures.
       "invest-base-rates",
+      // 2026-08-15, and it is the FIRST mid-run insert this run has taken: it landed
+      // between D.1 and the row that was D.2, moving four numbers inside `invest` and
+      // no letter anywhere. Leader-only like every other row in this run.
+      "invest-showcase-trap",
       "invest-own-proof",
       "invest-chicken-egg",
       // §6.7's D.4 + D.5 on ONE stage — leader-only like the rest of `invest`. It replaced
@@ -358,21 +373,43 @@ describe("DECK_SET_COMPOSITION", () => {
       // which is why this run is four rows for five spec sections — the same shape
       // `gap-failures-pattern` gives its own run three lines up.
       "invest-governance",
+      // gh#72's second bridge, at the TAIL of `invest` — and the LAST leader-only row in
+      // front of the curriculum, so the join below it is where this deck stops arguing.
+      "invest-bridge-to-curriculum",
+      // gh#72's third, and THE ONLY ROW IN THIS ARRAY THAT SITS IN A SHARED RUN. Every
+      // other id here belongs to a leader-only run; this one closes `pitfalls`, which both
+      // decks run, and it appears in this filtered list for the only reason that matters
+      // to the filter — no standard list names it. It sits between `invest-governance`'s
+      // bridge and the `mandate` rows because that is where the leader list puts it, ten
+      // curriculum runs downstream, and the gap in the sequence is those runs.
+      "pitfalls-bridge-to-mandate",
       "mandate-enablement",
       "mandate-phases-gates",
       "mandate-levers",
+      // NOT HERE, deliberately, and it is gh#72's other half: `h3-bridge-to-i` composes
+      // BEHIND `mandate-levers` in the leader list, at the tail of `mandate`, but the
+      // standard deck runs it too — so the filter drops it exactly as it drops f8. A
+      // relocated slide is invisible to this assertion by construction, which is why the
+      // ORDER of the leader list is pinned separately below.
     ]);
   });
 
-  test("relocates F.8 with the one override that names the run it lands in", () => {
+  test("relocates two rows, each with an override that names the run it lands in", () => {
     // The VALUE is what matters and is easy to get wrong: as of gh#54
     // `f8-your-agentic-os` sits at §4.3's C.2, directly behind
     // `shape-agentic-org`, so the override must say `shape`. `tools` — the value
     // it carried while f8 sat inside the retained TOOLS run — would now make
     // `tools` a second run at `g1`, and R4 throws at module load. The row moved
     // and the value flipped in ONE edit, because either half alone throws.
+    //
+    // A SECOND ENTRY AS OF gh#72, and its value is the loud kind of wrong to get right:
+    // `h3-bridge-to-i` carries `sectionKey: "pitfalls"`, a key this deck ALREADY runs, so
+    // omitting the entry composes a SECOND `pitfalls` run behind `mandate` and R4 throws at
+    // module load. f8's case is the quiet one by comparison — it carries a key this deck
+    // does not run at all. Both must name the run the row lands inside.
     expect(DECK_SET_COMPOSITION.leader.sectionOverrides).toEqual({
       "f8-your-agentic-os": "shape",
+      "h3-bridge-to-i": "mandate",
     });
   });
 
@@ -435,8 +472,13 @@ describe("DECK_SET_COMPOSITION", () => {
       // `gap-the-pattern`, so the run is FOUR rows carrying §4.3's five sections.
       "gap-failures-pattern",
       "gap-capability-ladder",
+      // gh#72's bridge, appended behind the ladder — so the ladder is no longer LAST and
+      // the `at(-1)` assertion below moved with it. The paragraph above is unchanged in
+      // substance: §4.3 asks for no sixth `gap` ARGUMENT and this is not one. A tail
+      // append moves nothing (R3 has no row behind it), so the ladder still prints B.4.
+      "gap-bridge-to-shape",
     ]);
-    expect(run.at(-1)).toBe("gap-capability-ladder");
+    expect(run.at(-1)).toBe("gap-bridge-to-shape");
 
     // And they reach the leader list ALONE — the half every leader-only ticket has to
     // keep true. Either id written into `STANDARD_SLIDE_IDS` by accident would open a
@@ -479,9 +521,14 @@ describe("DECK_SET_COMPOSITION", () => {
     ]);
     // And it comes straight after the `gap` run — §4.3's C follows B. Still the
     // LADDER on the other side of that join after gh#65, gh#66 and gh#67: those tickets
-    // lengthened `gap` at its HEAD and in its MIDDLE, so the run's last row is the one
-    // it always was — and, `gap` being complete, the one it stays.
-    expect(slides[c1 - 1]).toBe("gap-capability-ladder");
+    // lengthened `gap` at its HEAD and in its MIDDLE, so the run's last row was the one
+    // it always was through all three.
+    //
+    // gh#72 IS THE TICKET THAT FINALLY MOVED IT, and it did so from the other side: the
+    // `gap` run gained a BRIDGE at its tail, so this join now reads that bridge and not
+    // the ladder. A tail append is exactly the shape that moves a join and nothing else —
+    // the same thing gh#68 did to the `shape`/`invest` join below, one run along.
+    expect(slides[c1 - 1]).toBe("gap-bridge-to-shape");
   });
 
   test("opens the invest run right behind the shape run, base rates first", () => {
@@ -544,13 +591,19 @@ describe("DECK_SET_COMPOSITION", () => {
     // FOUR ROWS AND NOT FIVE SINCE THE MERGE. `invest-security` and `invest-subscription`
     // held the last two slots and hold one between them now, `invest-governance`; the run
     // still carries §6.7's five sections, in four rows.
-    expect(slides.slice(at, at + 4)).toEqual([
+    //
+    // AND FIVE AGAIN AS OF gh#72, WITHOUT A FIFTH ARGUMENT: the added row is the run's
+    // BRIDGE, appended at the tail, and it is the row the curriculum join now reads. §6.7
+    // is still five sections in four argument rows.
+    expect(slides.slice(at, at + 6)).toEqual([
       "invest-base-rates",
+      "invest-showcase-trap",
       "invest-own-proof",
       "invest-chicken-egg",
       "invest-governance",
+      "invest-bridge-to-curriculum",
     ]);
-    expect(slides[at + 4]).toBe("b1-evolution-journey");
+    expect(slides[at + 6]).toBe("b1-evolution-journey");
   });
 
   test("runs the mandate between the pitfalls bridge and the meta run", () => {
@@ -596,21 +649,43 @@ describe("DECK_SET_COMPOSITION", () => {
     // hands to `meta` from" is the fact §6.8 pins on this slide and the reason gh#69
     // moved no number (R3 renumbers only behind the changed row, and there is nothing
     // behind this one inside the run).
+    //
+    // BOTH JOINS MOVED ON gh#72 AND THE RUN GREW A FOURTH ROW THAT IS NOT §6.8's, which is
+    // the one edit this case had never taken. In FRONT of the run: `h3-bridge-to-i` left
+    // this slot for the tail of the run itself, and `pitfalls-bridge-to-mandate` — the
+    // leader deck's own PITFALLS bridge — took it. BEHIND the three §6.8 rows:
+    // `h3-bridge-to-i` arrived, relocated under a `mandate` override, so the run hands off
+    // to `meta` from the slide that was always the bridge INTO `meta`. §6.8 still asks for
+    // three and holds three; the fourth row is furniture, and `mandate-levers` still
+    // prints K.3 because a row appended behind it renumbers nothing (R3).
     const { slides } = DECK_SET_COMPOSITION.leader;
     const at = slides.indexOf("mandate-enablement");
     expect(at).toBeGreaterThan(-1);
-    expect(slides[at - 1]).toBe("h3-bridge-to-i");
-    const run = slides.slice(at, at + 3);
-    expect(run).toEqual(["mandate-enablement", "mandate-phases-gates", "mandate-levers"]);
-    expect(run.at(-1)).toBe("mandate-levers");
-    expect(slides[at + 3]).toBe("i1-meta-process");
-    // And they reach the leader list ALONE. The standard deck hands `h3` straight
-    // to `i1`, which is the half a leader-only ticket has to keep true: one id
-    // written into the wrong constant would insert a section in front of `meta`
-    // in a deck with no leader in the room.
+    expect(slides[at - 1]).toBe("pitfalls-bridge-to-mandate");
+    const run = slides.slice(at, at + 4);
+    expect(run).toEqual([
+      "mandate-enablement",
+      "mandate-phases-gates",
+      "mandate-levers",
+      "h3-bridge-to-i",
+    ]);
+    expect(run.at(-1)).toBe("h3-bridge-to-i");
+    expect(slides[at + 4]).toBe("i1-meta-process");
+    // And the leader-only ones reach the leader list ALONE — `h3-bridge-to-i` is excepted
+    // by name, because gh#72 made it the second row this deck relocates and the standard
+    // deck runs it too. There it still hands straight to `i1`, from inside `pitfalls`,
+    // which is the half a leader-only ticket has to keep true: one id written into the
+    // wrong constant would insert a section in front of `meta` in a deck with no leader in
+    // the room. THE ASSERTION BELOW IS THE PROOF THE MOVE COST THE STANDARD DECK NOTHING.
     const { slides: std } = DECK_SET_COMPOSITION.standard;
-    for (const id of run) expect(std, id).not.toContain(id);
+    for (const id of run) {
+      if (id === "h3-bridge-to-i") continue;
+      expect(std, id).not.toContain(id);
+    }
+    expect(std).toContain("h3-bridge-to-i");
     expect(std[std.indexOf("h3-bridge-to-i") + 1]).toBe("i1-meta-process");
+    expect(std[std.indexOf("h3-bridge-to-i") - 1]).toBe("h2-discipline-wall");
+    expect(std).not.toContain("pitfalls-bridge-to-mandate");
   });
 
   test("carries no section override on the standard deck, which needs none", () => {

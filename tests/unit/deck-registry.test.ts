@@ -202,7 +202,13 @@ const LEADER_SPINE: readonly SectionRun[] = [
   // retired into one when the triptych won — §6.4 has no content of its own, so the pair
   // spent two stages saying one thing. This count is the RUN's length and not §4.3's
   // section count; `src/slides/leader-gap/index.ts` records the same fact.
-  ["gap", 4],
+  // FIVE AS OF gh#72, AND THE FIFTH ROW IS NOT A §4.3 SECTION. `gap-bridge-to-shape` is
+  // the BRIDGE this run never had, appended at the tail behind the ladder — the same
+  // furniture `c6`, `d5`, `e13`, `g11` and `h3` are in the curriculum runs. The four
+  // ARGUMENT rows above are still §4.3's five-in-four and still final; a bridge opens no
+  // run, closes no §6 gap and moved no figure here (a tail append has nothing behind it
+  // for R3 to renumber, so the ladder still prints B.4).
+  ["gap", 5],
   // `shape-agentic-org` (gh#54, leader-only) + the relocated f8 at C.2 +
   // `shape-tam-kotter` (gh#71, leader-only, §4.3's C.3) + `shape-middle-out` (gh#68,
   // leader-only, §4.3's C.4) — §4.3's full run, and the LAST of the four to be: this
@@ -226,17 +232,32 @@ const LEADER_SPINE: readonly SectionRun[] = [
   // the SECOND run in this table to shorten that way — `gap` is four rows for §4.3's
   // five, because §6.4 has no content of its own — so a run length under its spec count
   // is a documented shape here and not a hole.
-  ["invest", 4],
+  // FIVE AS OF gh#72, on the same rule as `gap` above: `invest-bridge-to-curriculum` is
+  // a bridge appended at the tail, not a fifth argument. It is the only bridge in the
+  // deck that closes TWO runs, because `shape` gets none — C.4 already hands off — and it
+  // is the hinge into the skimmed curriculum (§4.3). D.1–D.4 print what gh#70 left them.
+  ["invest", 6],
   ["landscape", 5],
   ["mindset", 6],
   ["process", 5],
   ["fundamentals", 13], // e1–e11, E.12 · LOOP ENGINEERING (gh#48), the bridge
   ["tools", 11], // g1–g11, the standard length again since f8 left on gh#54
+  // STILL THREE, AND ONE OF THE THREE IS A DIFFERENT SLIDE AS OF gh#72 — the length is
+  // unchanged and the membership is not. `h3-bridge-to-i` LEFT this run (it composes at
+  // the tail of `mandate` below, under the deck set's second `sectionOverrides` entry,
+  // because it bridges into `meta` and this deck puts `mandate` in between) and the
+  // leader-only `pitfalls-bridge-to-mandate` took the slot. So J.3 is the same figure on
+  // a new slide, which is exactly the case a length-only table cannot show: the ids are
+  // pinned in `deck-slots.test.ts`.
   ["pitfalls", 3],
   // K.1 `mandate-enablement` (gh#60) + K.2 `mandate-phases-gates` (gh#61) + K.3
   // `mandate-levers` (gh#69), all leader-only — §6.8's full run: this number is FINAL,
   // the second of the four to be.
-  ["mandate", 3],
+  // FOUR AS OF gh#72, and the fourth row is a slide BOTH decks run. §6.8's three
+  // leader-only slides are unchanged; `h3-bridge-to-i` joins them at the tail, relocated
+  // out of `pitfalls` so that the section it bridges into — `meta` — is the one that
+  // actually follows it. It prints K.4 here and H.3 in a standard deck, from one file.
+  ["mandate", 4],
   ["meta", 4],
   ["principles", 4],
 ];
@@ -321,7 +342,15 @@ function leaderRuns(brand: Brand): readonly SectionRun[] {
  *  run's last two rows, they argued one thing from two desks, and `invest-governance`
  *  argues it once. Two merges, four rows retired into two, no run opened or closed by
  *  either. */
-const LEADER_TOTAL_WITH_LAB = 71;
+/* 71 → 74 ON gh#72: three bridges added (`gap-bridge-to-shape`,
+ *  `invest-bridge-to-curriculum`, `pitfalls-bridge-to-mandate`) and one row MOVED
+ *  (`h3-bridge-to-i`, out of `pitfalls` and onto the tail of `mandate`). A move changes no
+ *  total, which is why this is +3 and not +4, and no figure in the deck moved at all:
+ *  two of the three are tail appends, the third replaces a bridge in the slot it vacated,
+ *  and the moved row lands at the END of the run it joins. THE SPEC MOVED WITH IT — §4.3
+ *  and §6.9 were amended in the same commit, which is what the sentence above about a
+ *  merge or a spec change was waiting for. */
+const LEADER_TOTAL_WITH_LAB = 75;
 
 /** The eight cut F slides — `f1`–`f7` and `f9`, with `f8-your-agentic-os` kept
  *  and relocated. Held apart from the total above so a leader-only ADDITION can
@@ -382,7 +411,14 @@ const LEADER_CUT_F_SLIDES = 8;
  * 16 → 17 → 15: `gap-failures-pattern` joined its two leader-only parents for the merge
  * review (17), then replaced them (15). Leader-only like everything in `gap`.
  */
-const LEADER_ONLY_SLIDES = 14;
+/* 14 → 17 ON gh#72: `gap-bridge-to-shape`, `invest-bridge-to-curriculum` and
+ *  `pitfalls-bridge-to-mandate`. THE THIRD ONE IS A SHAPE THIS CONSTANT HAD NEVER SEEN —
+ *  a leader-only slide that sits in a run BOTH decks run (`pitfalls`), where every one of
+ *  the other sixteen sits in a leader-only run. That is why the run-table assertion below
+ *  needs {@link LEADER_ONLY_SLIDES_IN_SHARED_RUNS} to reconcile: this count is "files no
+ *  standard deck composes" and the table is "slides per run", and those two stopped
+ *  agreeing in a second way on gh#72. */
+const LEADER_ONLY_SLIDES = 18;
 
 /** Standard-deck slides the leader list relocates INTO one of those leader-only
  *  runs: `f8-your-agentic-os` alone, moved to `shape` by the deck set's single
@@ -401,7 +437,29 @@ const LEADER_ONLY_SLIDES = 14;
  *  gh#71 wrote a file. f8 kept its key, its run and its figure (C.2) through it; the
  *  only figure that moved was `shape-middle-out`'s, one row further back. gh#68 and
  *  gh#70 make the same point at one and two slots' distance from f8. */
-const RELOCATED_INTO_LEADER_ONLY_RUNS = 1;
+/* ONE → TWO ON gh#72, and it is the first time this constant has moved: `h3-bridge-to-i`
+ *  is now relocated into `mandate`, exactly as f8 is into `shape`, through the deck set's
+ *  second `sectionOverrides` entry. The paragraph above still holds for every leader-only
+ *  FILE — writing one relocates nothing — and gh#72 is the ticket that moved a row rather
+ *  than writing one, which is what this constant counts. */
+const RELOCATED_INTO_LEADER_ONLY_RUNS = 2;
+
+/**
+ * Leader-only slides that DO NOT sit in a leader-only run — `pitfalls-bridge-to-mandate`
+ * alone, which closes the shared `pitfalls` run in leader decks only.
+ *
+ * Zero until gh#72, and it exists because {@link LEADER_ONLY_SLIDES} and the run table
+ * count different things. That constant is "files no standard deck composes"; the table is
+ * "how many slides each run holds". A leader-only slide in a leader-only run raises both.
+ * A leader-only slide in a SHARED run raises only the first — the `pitfalls` row still
+ * reads 3, because the slide took the slot `h3-bridge-to-i` vacated in the same edit.
+ *
+ * WITHOUT THIS TERM the assertion below would demand a nineteen-slide leader-only span
+ * where eighteen slides exist, and the cheapest way to "fix" that would be to lengthen the
+ * `pitfalls` row to 4 — a claim that the leader deck runs FOUR pitfalls slides, which it
+ * does not. The term is one number and it keeps the table honest instead.
+ */
+const LEADER_ONLY_SLIDES_IN_SHARED_RUNS = 1;
 
 interface DeckCase {
   brand: Brand;
@@ -577,12 +635,21 @@ test(`the leader spine is ${LEADER_TOTAL_WITH_LAB} slides — the cut F section,
   // leader-only slides PLUS whatever the deck set relocates into a leader-only run.
   // Adding f8's row to the total above instead would claim the leader deck is a
   // slide longer than it is.
+  //
+  // THE SUM HAS THREE TERMS AS OF gh#72, and each one names a different way a slide can
+  // be in one of these counts but not the other: a leader-only FILE (17), minus the one
+  // that lives in a SHARED run and so appears in no leader-only row (1), plus the two
+  // standard-deck rows this deck RELOCATES into a leader-only run (f8 and h3).
   const standardKeys = standardRuns("berau").map(([key]) => key);
   expect(
     leaderRuns("berau")
       .filter(([key]) => !standardKeys.includes(key))
       .reduce((n, [, length]) => n + length, 0),
-  ).toBe(LEADER_ONLY_SLIDES + RELOCATED_INTO_LEADER_ONLY_RUNS);
+  ).toBe(
+    LEADER_ONLY_SLIDES -
+      LEADER_ONLY_SLIDES_IN_SHARED_RUNS +
+      RELOCATED_INTO_LEADER_ONLY_RUNS,
+  );
 });
 
 describe.each(CASES)("deck composed for $brand · $deckSet", (deckCase) => {
