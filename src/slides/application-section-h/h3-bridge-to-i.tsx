@@ -1,4 +1,16 @@
-// H.3 — BRIDGE · DISCIPLINE (final slide of Section H)
+// BRIDGE · DISCIPLINE — and NOT "final slide of Section H" any more (gh#72).
+//
+// This slide is the last slide of PITFALLS in a standard deck, printing H.3, and the
+// last slide of THE MANDATE in a leader deck, printing K.4 — where it composes behind
+// `mandate-levers` through a `sectionOverrides` entry (`src/deck/deck-sets.ts`). It
+// bridges into THE META-PROCESS in both, which is why the move was the whole fix: the
+// slide always pointed at `meta`, and the leader deck had `mandate` sitting between it
+// and that target, so the room heard "next: the discipline, in practice" and was then
+// shown the ask. The leader deck's PITFALLS run now ends on
+// `./pitfalls-bridge-to-mandate.tsx` instead.
+//
+// ONE STRING IS DECK-SET-SCOPED as of the same ticket — beat 1's second line, resolved
+// by `h3Beat1LineBFor`. Everything else is shared, byte for byte.
 //
 // Mirrors `src/slides/foundation-core-section-e/e11-bridge-to-f.tsx` —
 // same two-beat reveal cadence. Only the hero file path, headline text,
@@ -21,15 +33,22 @@
 // discipline first" is the only setup — Section I answers the question.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
+import { VARIANT } from "@/variant";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { Reveal, CopperRule } from "../foundation-core-section-e/components/Reveal";
-import { h3Content as C } from "./content";
+import { h3Beat1LineBFor, h3Content as C } from "./content";
 
 // ───────────────────── slide ─────────────────────
 
 export function H3BridgeToI() {
   const { stepIndex } = useDeck();
+
+  // Beat 1's second line names WHO the competition is, and the two decks answer
+  // differently — a person in a standard deck, a rival company in a leader deck, where
+  // this slide lands one step after the ask. Resolved by the content module's own pick
+  // off `VARIANT.deckSet`, the same shape `e13Beat2For` uses.
+  const beat1LineB = h3Beat1LineBFor(VARIANT.deckSet);
 
   const showBeat1 = stepIndex >= 0;
   const showBeat2 = stepIndex >= 1;
@@ -138,7 +157,7 @@ export function H3BridgeToI() {
                 letterSpacing: "-0.01em",
               }}
             >
-              {highlight(C.beat1.lineB.text, C.beat1.lineB.kw)}
+              {highlight(beat1LineB.text, beat1LineB.kw)}
             </p>
           </Reveal>
         </div>

@@ -40,15 +40,25 @@
 // Those issue numbers were wrong: §11's Phase 7 row is what holds the four
 // second-tier `gap` slides — gh#65 delivered the first, gh#66 the second, and gh#67
 // the last two, now merged into one row.)
+//
+// A FIFTH ROW LANDED AFTER ALL, AND IT IS NOT ONE OF §4.3's FIVE (gh#72). The paragraphs
+// above are about the run's ARGUMENT slides, and they still hold: §6.1–§6.5 are complete
+// in four rows and nothing more inserts among them. `gapBridgeToShapeSlide` is a BRIDGE —
+// the same furniture `c6`, `d5`, `e13`, `g11` and `h3` are, on the section that had none —
+// so it appends at the TAIL, behind the ladder, and it moved no letter and no number: R3
+// renumbers only inside the run that changed and there was no row behind this one to
+// renumber. `gap-capability-ladder` still prints B.4.
 import type { SlideDef } from "@/deck/types";
 import { gapHardestPartSlide } from "./gap-hardest-part";
 import { gapNoSopSlide } from "./gap-no-sop";
 import { gapFailuresPatternSlide } from "./gap-failures-pattern";
 import { gapCapabilityLadderSlide } from "./gap-capability-ladder";
+import { gapBridgeToShapeSlide } from "./gap-bridge-to-shape";
 
 export const leaderGapSlides: SlideDef[] = [
   gapHardestPartSlide,
   gapNoSopSlide,
   gapFailuresPatternSlide,
   gapCapabilityLadderSlide,
+  gapBridgeToShapeSlide,
 ];
