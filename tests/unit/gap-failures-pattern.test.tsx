@@ -469,7 +469,15 @@ describe("the sibling boundaries", () => {
    */
   const SIBLING_TOKENS: ReadonlyArray<readonly [string, RegExp, string]> = [
     ["70%", /\b70\s*%/, "B.1"],
-    ["70/30", /\b70\s*\/\s*30\b/, "B.1 · B.4"],
+    // §6.5 AND NO SLIDE, since 2026-08-13. The spelling used to be printed by B.4's
+    // L3 rung ("Decision contract · 70/30 split") and by nothing else — B.1 renders
+    // 70% and 30% as two separate bar labels and never the ratio. That rung now
+    // defines the decision contract in words instead, so the token has an owning
+    // SPEC SECTION and no owning STRING, which is the same shape as the two below
+    // it and is why the owner is spelled as a section rather than a slide: an owner
+    // this file has no corpus for is skipped by the control loop, not asserted
+    // against an empty list.
+    ["70/30", /\b70\s*\/\s*30\b/, "§6.5"],
     ["people & process", /people\s*&\s*process/i, "B.1"],
     ["tool access", /\btool access\b/i, "B.1"],
     ["procured", /\bprocure\w*\b/i, "B.1"],

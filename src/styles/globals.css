@@ -306,6 +306,22 @@ em.kw {
   transform: translateY(0);
   animation: fadeReveal 0.5s var(--ease) both;
 }
+/* A BOX THAT HAS NOT ARRIVED MAY NOT TAKE A POINTER. `.fade` rests at `opacity: 0`
+   and — without this — stays hit-testable, so every reveal a slide has not made yet
+   is an invisible rectangle lying across the ones it has. It is not a hypothetical:
+   D.3 stages four beats over one 1280×720 frame, and its two poles sit UNDER three
+   later beats' full-width prose blocks (the workaround sentence, the bill's eyebrow,
+   the turn), which ate the pointer in horizontal stripes across both plates — a box
+   that lit in bands. `FailuresPatternTriptych` found the same bug from the other end
+   in 2026-08 and fixed it locally with `pointer-events: none` on one wrapper; this is
+   that fix, generalised to the primitive it belongs to.
+
+   IT CAN ONLY GIVE, NEVER TAKE. An element this rule touches is at `opacity: 0` by
+   the two declarations directly above, so nothing hoverable, clickable or readable is
+   being withdrawn — only a hit target for something nobody can see. */
+.fade:not(.on) {
+  pointer-events: none;
+}
 @keyframes fadeReveal {
   from {
     opacity: 0;
@@ -326,6 +342,78 @@ em.kw {
 }
 .copper-rule.on {
   transform: scaleX(1);
+}
+
+/* ─────────────────── BOX HOVER · the leader deck's own ramp ───────────────────
+   ONE CLASS, FIVE STAGES: B.3's shift pair, B.4's three markers, D.1's two
+   readings, D.2's plate · cards · chips, and D.3's ten boxes. Every bordered box
+   on those slides lights while the pointer is on it, and the ramp is not invented
+   here — it is the one B.3's own three cards already run in JS
+   (`FailuresPatternTriptych`'s `lit`, itself B4CategoryCard's): the border steps
+   to `--copper-200` and a copper wash at 0.06 comes up under it.
+
+   COLOUR TIER ONLY, WHICH IS §8.3's RULE. Nothing fades, nothing grows and
+   nothing lifts: these are figures with type in them, and a box that moved under
+   the pointer would move a sentence the room is reading.
+
+   THE LIT STATE IS A LAYER AND NOT THE BOX'S OWN PROPERTIES, WHICH IS THE ONE
+   NON-OBVIOUS DECISION HERE — and it is what makes the ramp instant instead of
+   arriving up to a second and a half late. Every box on these five stages is
+   revealed on a stagger, and `Reveal` writes that stagger INLINE as
+   `transition-delay`, which is one value for EVERY property the element
+   transitions. A hover that ramped `border-color` on the box would therefore wait
+   out the box's own arrival delay before it started — a 610ms wait on B.3's shift
+   pair, longer on B.4's aside. A pseudo-element has its own transition and
+   inherits no delay, so the hover is 200ms from the pointer landing, on every box,
+   whatever the figure staggers around it.
+
+   IT ALSO MEANS THIS FILE FIGHTS NOBODY OVER `transition`. That property is a
+   shorthand: any rule here would replace `.fade`'s opacity/transform pair on the
+   revealed boxes, and D.3's travelling PROOF plate transitions five geometry
+   properties of its own from another stylesheet — at equal specificity the winner
+   would be whichever sheet the bundler emitted last, and a plate that loses stops
+   travelling and starts teleporting. Nothing below touches `transition` on a box.
+
+   `border: inherit` IS WHAT KEEPS THE ENCODINGS INTACT. The overlay takes the
+   box's own border width and STYLE and repaints it one tier up, so solid stays
+   solid, dashed stays dashed and dotted stays dotted — B.4's first encoding is the
+   border's style and a pointer may not flatten it. `inset: -1px` lands the
+   overlay's hairline exactly on the box's own, which holds because every border on
+   these five stages is 1px (`WIRE_WEIGHT`, `READING_BORDER`, `SHIFT_BOX_BORDER`
+   and D.3's four literals). A 2px box added later would need its own inset.
+
+   THE WASH IS ON THE OVERLAY FOR THE SAME REASON IT IS NOT A `background-color`:
+   these boxes rest on four different fills — nothing at all, `--neutral-900`, a
+   0.6 black, and B.4's asserted chip on `--copper-950` — and a translucent hover
+   COLOUR would REPLACE each of them, which on the one box that already has a warm
+   fill reads as a DARKENING. A layer composites over whatever is underneath it, so
+   the same 0.06 copper lifts all four.
+
+   A HIDDEN BOX MAY NOT LIGHT, AND THAT IS ANSWERED ABOVE RATHER THAN HERE. A
+   pointer crossing where a box WILL be would light an invisible rectangle, so
+   `.fade:not(.on)` leaves hit-testing to the boxes that have arrived — one rule,
+   for every reveal in the deck, next to the primitive it belongs to. D.2's boxes
+   are not `.fade`: they answer the same question in their own component, which
+   hands them this class only in the branch that paints them. */
+.box-hover {
+  /* Only bites the one target with no inline `position` of its own (D.2's caveat
+     chip, a flex item): an inline `position: absolute` outranks this, so every
+     other box goes on positioning the overlay exactly as it did before. */
+  position: relative;
+}
+.box-hover::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: inherit;
+  border-color: var(--copper-200);
+  background: rgba(184, 110, 61, 0.06);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+  pointer-events: none;
+}
+.box-hover:hover::before {
+  opacity: 1;
 }
 
 /* Type scale */
@@ -1250,5 +1338,121 @@ em.kw {
 .gap-ladder-draw {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
+  /* THE DURATION IS A DEFAULT, NOT THE CONTRACT: three paths wear this class —
+     the earned climb, the dashed step above it, and the lit stretch on the last
+     pose — and each one overrides `animation-duration` and `animation-delay`
+     inline, because the sequence between them is a figure decision and belongs
+     beside the figure (`BEAT` in ./components/CapabilityLadder.tsx). A dashed
+     top step that drew for as long as the whole climb would finish long after
+     the sentence about it. */
   animation: gap-ladder-draw 1400ms var(--ease) both;
+}
+
+/* A MARK ARRIVING, and opacity is the whole of it. The chips fade through
+   `Reveal`, which also translates 8px — inside an <svg> that offset is in USER
+   UNITS, so a fading dot would walk onto its tread from 8px away and a fading
+   leader would detach from the chip it hangs off. So the SVG marks get this: the
+   same fade, no transform, and a delay set inline per mark so each one lands on
+   its own beat. Squashed to nothing under the global reduced-motion rule, and
+   `both` leaves them at opacity 1. */
+@keyframes gap-mark-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.gap-mark-in {
+  opacity: 0;
+  animation: gap-mark-in 420ms var(--ease) both;
+}
+
+/* THE THREE BOXES, ALIVE — a slow clockwise travel around each border.
+
+   THE STATIC BORDER IS STILL THE ENCODING and this does not touch it. Solid,
+   dashed and dotted are §7.2's first encoding and the one a reviewer checks by
+   reading three inline styles; the travel is an OVERLAY drawn by `::after` on the
+   same rectangle, so a box that lost its border style would lose the distinction
+   here exactly as loudly as before. It is also why the ants are one colour and one
+   speed on all three: a per-box rhythm would be a fifth encoding nobody authored.
+
+   FOUR EDGES, FOUR BACKGROUNDS, ONE 32px CYCLE. Each edge is a 1px strip carrying
+   a repeating gradient at a 32px period, and the keyframe walks each strip exactly
+   one period — top right, right down, bottom left, left up — so the loop is
+   seamless and the direction is clockwise. `inset: -1px` puts the strips ON the
+   border rather than inside the padding box, and `pointer-events: none` keeps the
+   overlay out of the way of anything the deck ever makes clickable.
+
+   `--copper-300` at a low alpha through `opacity`, not a dimmer copper: the deck's
+   copper ramp is rank, and this is not ranking anything. */
+@keyframes gap-box-ants {
+  to {
+    background-position:
+      32px 0,
+      100% 32px,
+      -32px 100%,
+      0 -32px;
+  }
+}
+.gap-box-live {
+  position: relative;
+}
+.gap-box-live::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(90deg, var(--copper-300) 0 14px, transparent 14px),
+    linear-gradient(180deg, var(--copper-300) 0 14px, transparent 14px),
+    linear-gradient(90deg, var(--copper-300) 0 14px, transparent 14px),
+    linear-gradient(180deg, var(--copper-300) 0 14px, transparent 14px);
+  background-size:
+    32px 1px,
+    1px 32px,
+    32px 1px,
+    1px 32px;
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    0 0;
+  animation: gap-box-ants 3200ms linear infinite;
+}
+
+/* AND IT STOPS DEAD FOR A READER WHO ASKED FOR THAT. The global rule at the top of
+   this file squashes durations to 0.01ms, which on an INFINITE animation is not a
+   stop — it is the same loop at 320,000× speed. So this one is removed outright
+   rather than shortened, and the borders underneath are what the box is left with,
+   which is what they were before the travel existed. */
+@media (prefers-reduced-motion: reduce) {
+  .gap-box-live::after {
+    animation: none !important;
+    background-image: none;
+  }
+}
+
+/* REDUCED MOTION MEANS NO MOTION, NOT A WAIT. The global rule at the top of this
+   file squashes every DURATION to 0.01ms and leaves DELAYS alone — which is right
+   for a deck that stages one reveal per keypress, and wrong for the two places this
+   figure stages reveals INSIDE one pose: the pose-0 build (staircase, five rung
+   labels, two marks) and the last pose's lit stretch. Left alone, a reader who asked
+   for no animation would watch boxes appear silently over 1.9 seconds.
+
+   So the classes that carry those delays give them up here. `!important` because the
+   delays are set INLINE, per element, from the figure's own `BEAT` table — a
+   stylesheet cannot outrank an inline style any other way, and the global rule above
+   already spends `!important` for the same reason. `.gap-beat` marks the HTML
+   reveals; `.gap-mark-in` is the SVG half. Both are asserted in
+   `tests/unit/gap-capability-ladder.test.tsx`, so this escape hatch cannot be lost
+   by a later edit that adds a sixth delayed box and forgets the class. */
+@media (prefers-reduced-motion: reduce) {
+  .gap-beat,
+  .gap-mark-in {
+    animation-delay: 0s !important;
+    transition-delay: 0s !important;
+  }
 }

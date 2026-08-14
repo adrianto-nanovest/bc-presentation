@@ -328,6 +328,7 @@ export function FailuresPatternTriptych({ pose }: { pose: number }) {
             key={col.title}
             on={isShape}
             delay={CONTRACT_MS + i * 90}
+            className="box-hover"
             data-testid={`gfp-shift-col-${i}`}
             style={{
               position: "absolute",
@@ -341,6 +342,15 @@ export function FailuresPatternTriptych({ pose }: { pose: number }) {
               boxSizing: "border-box",
               border: `${SHIFT_BOX_BORDER}px solid var(--copper-700)`,
               background: "rgba(10,10,10,0.6)",
+              // THE ONE HOLE IN THE WRAPPER'S INERTNESS, AND IT IS CUT PER POSE. These two
+              // boxes light under the pointer like every other box in the four sibling
+              // figures (`globals.css`'s `.box-hover`), which needs them hit-testable — and
+              // the block above them is `pointer-events: none` precisely because at pose 0
+              // they are invisible and sitting over the lower half of the three cards. So the
+              // hole opens exactly when the boxes are painted and on nothing else in here: at
+              // pose 1 they stand below `CARD_BOTTOM_LESSON` and shadow nothing. The bullets
+              // inherit `auto` from the box they are inside, which is the box itself.
+              pointerEvents: isShape ? "auto" : "none",
             }}
           >
             <p
