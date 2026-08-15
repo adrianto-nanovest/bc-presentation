@@ -1,23 +1,27 @@
 // D.2 — THE SURFACE AND THE SOURCE.
 //
-// WHAT THIS FILE IS FOR. Five things jsdom can settle, and it settles only those:
+// WHAT THIS FILE IS FOR. Six things jsdom can settle, and it settles only those:
 //
 //   1. THE COMPOSITION — that the slide reaches both leader decks, second in the `invest`
 //      run, behind D.1 and in front of the row that used to be D.2, and no standard deck.
-//   2. THE GEOMETRY — that the effort column's whole quantitative claim is arithmetic:
-//      three whole pixels of two hundred and forty, derived from the two figures the
-//      headline prints. A reworded headline that left the drawing alone fails here.
-//   3. THE POSE WALK — that the three acts, the recap and the floor build forward and
-//      unbuild backward inside ONE mounted tree, and that the plate is one object across
-//      three poses rather than three plates.
-//   4. THE COPY — the keyword rule, the boundary list, and the character budgets. This is
+//   2. THE GEOMETRY — that the effort line's whole quantitative claim is arithmetic: six
+//      whole pixels of four hundred and eighty, derived from the two figures the readings
+//      print. A reworded reading that left the drawing alone fails here.
+//   3. THE FLOOR — that every scene bottoms out on ONE line, which is the 2026-08-16
+//      redraw's structural claim and the defect it was drawn to fix. A pose that holds less
+//      than another may not open a hole above the NavBar.
+//   4. THE POSE WALK — that the three acts, the recap and the floor build forward and
+//      unbuild backward inside ONE mounted tree; that the plate, the four frames and the
+//      left column's dimension line are ONE object across three poses rather than three;
+//      and that pose 0 → 1 moves nothing.
+//   5. THE COPY — the keyword rule, the boundary list, and the character budgets. This is
 //      the block that enforces ASD-STE100 on the copy, where an author can act on it.
-//   5. THE STYLESHEET — read off disk, because the tempo contrast IS the argument and a
+//   6. THE STYLESHEET — read off disk, because the tempo contrast IS the argument and a
 //      retimed keyframe is a changed claim.
 //
 // WHAT IT DOES NOT DO. Widths, line counts, computed matrices and the hover overlay's own
 // opacity belong to a browser; jsdom computes no text and no layout. Nothing below asserts
-// a duration as EVIDENCE either — the ratio is the column, and only the column.
+// a duration as EVIDENCE either — the ratio is the line, and only the line.
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -41,25 +45,23 @@ import {
   investGovernanceContent,
 } from "@/slides/leader-invest/content";
 import {
-  ACT_LINE_BUDGET_CHARS,
-  ACT_LINE_HEIGHT,
-  HEADLINE_BUDGET_CHARS,
-  ACT_LINE_TOP,
   BAR_COUNT,
+  BAR_WIDTH,
+  BODY_TOP,
   BOX_FINDING_BUDGET_CHARS,
-  BOX_FINDING_OFFSET,
-  BOX_GLYPH_OFFSET,
-  BOX_HAIRLINE_OFFSET,
   BOX_HEIGHT,
   BOX_QUESTION_BUDGET_CHARS,
   BOX_TOP,
   BOX_WIDTH,
+  COLUMN_GAP,
+  COLUMN_WIDTH,
   CONTENT_RIGHT,
   CONTENT_WIDTH,
+  DELIVERABLE_COUNT,
   EFFORT_RATIO,
   EYEBROW_TOP,
   FIGURE_BOTTOM,
-  GLYPH_SIZE,
+  HEADLINE_BUDGET_CHARS,
   HERO_LEFT,
   HOLLOW_HEIGHT,
   HOLLOW_TOP,
@@ -68,26 +70,45 @@ import {
   LAYER_STACK_BOTTOM,
   LAYER_TOP,
   MARK_BUDGET_CHARS,
-  METER_HEIGHT,
+  MARK_LEFT,
+  MARK_WIDTH,
+  METER_TOP,
+  METER_UNIT,
+  METER_WIDTH,
   NAV_ZONE_TOP,
+  PLATE_PAD,
   PLATE_TOP,
   PLATE_WIDTH,
+  PROMPT_BUILD_BUDGET_CHARS,
+  PROMPT_FOOT_BUDGET_CHARS,
+  PROMPT_HEIGHT,
+  PROMPT_LEFT,
+  PROMPT_LINE_BUDGET_CHARS,
+  PROMPT_TOP,
   QUESTION_COUNT,
+  READING_TOP,
+  RIGHT_COL,
   RULE_TOP,
+  SCENE_BOTTOM,
+  SENTENCE_BUDGET_CHARS,
+  SENTENCE_CLEARANCE,
+  SENTENCE_HEIGHT,
+  SENTENCE_SIZE,
+  SENTENCE_TOP,
   SIDE_MARGIN,
   SOURCE_DAYS,
   SURFACE_FILL,
   SURFACE_MINUTES,
-  THESIS_BUDGET_CHARS,
-  THESIS_CLEARANCE,
-  THESIS_HEIGHT,
-  THESIS_TEXT_SIZE,
-  THESIS_TOP,
+  THUMB_HEIGHT,
+  THUMB_WIDTH,
   TWIN_LEFT,
   WORKDAY_HOURS,
   barLeft,
   boxLeft,
   layerTop,
+  meterFootTick,
+  meterHeadTick,
+  promptBuildTop,
 } from "@/slides/leader-invest/showcase-trap-geometry";
 import { TRAP_GLYPH_IDS } from "@/slides/leader-invest/components/ShowcaseTrapGlyphs";
 
@@ -164,6 +185,22 @@ function stageTextWithoutFigLabel(container: HTMLElement): string {
 const LAYER_IDS = C.layers.map((l) => l.id);
 const QUESTION_IDS = C.questions.map((q) => q.id);
 
+/** One sentence tenant per pose, in pose order — the shelf's whole tenancy. */
+const SENTENCES = [
+  "showcase-trap-surface-line",
+  "showcase-trap-source-line",
+  "showcase-trap-twin-line",
+  "showcase-trap-recap-line",
+  "showcase-trap-thesis",
+] as const;
+
+const EYEBROWS = [
+  "showcase-trap-surface-eyebrow",
+  "showcase-trap-source-eyebrow",
+  "showcase-trap-twin-eyebrow",
+  "showcase-trap-recap-eyebrow",
+] as const;
+
 const STYLESHEET = readFileSync(
   path.resolve(process.cwd(), "src/slides/leader-invest/components/showcase-trap.css"),
   "utf8",
@@ -176,8 +213,8 @@ describe("the slide def", () => {
     expect(investShowcaseTrapSlide.id).toBe("invest-showcase-trap");
     expect(investShowcaseTrapSlide.steps).toBe(5);
     // BOTH AS A LITERAL AND AS A DERIVATION: the fullest pose is the last one, and it is
-    // the one PDF and PPTX export. Any earlier pose exports the recap with no sentence
-    // under it, which is this slide's argument with its conclusion missing.
+    // the one PDF and PPTX export. Any earlier pose exports the recap with no ask under it,
+    // which is this slide's argument with its conclusion missing.
     expect(investShowcaseTrapSlide.canonicalPose).toBe(4);
     expect(investShowcaseTrapSlide.canonicalPose).toBe(investShowcaseTrapSlide.steps - 1);
     expect(investShowcaseTrapSlide.animationMode).toBe("step-reveal");
@@ -240,17 +277,17 @@ describe("the slide def", () => {
 // ───────────────────── the geometry ─────────────────────
 
 describe("the geometry", () => {
-  test("derives the effort ratio from the two figures the headline prints", () => {
+  test("derives the effort ratio from the two figures the readings print", () => {
     expect(SURFACE_MINUTES).toBe(30);
     expect(SOURCE_DAYS).toBe(5);
     expect(WORKDAY_HOURS).toBe(8);
     expect(EFFORT_RATIO).toBe((SOURCE_DAYS * WORKDAY_HOURS * 60) / SURFACE_MINUTES);
     expect(EFFORT_RATIO).toBe(80);
 
-    // THE WELD, AND IT IS THE POINT OF THIS FILE. The two figures are printed BESIDE the
-    // column that measures them and in the two eyebrows that title the acts — NOT in the
-    // headline, which makes the claim. If any of these four strings is reworded without
-    // moving the drawing, one of these assertions fails.
+    // THE WELD, AND IT IS THE POINT OF THIS FILE. The two figures are printed at the two
+    // ENDS of the line that measures them, and in the two eyebrows that title the acts —
+    // NOT in the headline, which makes the claim. If any of these four strings is reworded
+    // without moving the drawing, one of these assertions fails.
     expect(C.surfaceReading.toLowerCase()).toContain("thirty minutes");
     expect(C.sourceReading.toLowerCase()).toContain("five days");
     expect(C.surfaceEyebrow.toLowerCase()).toContain("thirty minutes");
@@ -262,26 +299,58 @@ describe("the geometry", () => {
     expect(C.headline.toLowerCase()).not.toContain("thirty");
     expect(C.headline.toLowerCase()).not.toContain("five days");
     expect(C.headline.toLowerCase()).not.toMatch(
-        /\b(minute|hour|day|week)s?\b|\bhow long\b|\btook\b/,
+      /\b(minute|hour|day|week)s?\b|\bhow long\b|\btook\b/,
     );
   });
 
-  test("cuts the column as a whole multiple of the ratio, so the sliver is 3 real pixels", () => {
-    expect(METER_HEIGHT % EFFORT_RATIO).toBe(0);
-    expect(SURFACE_FILL).toBe(METER_HEIGHT / EFFORT_RATIO);
+  test("cuts the line as a whole multiple of the ratio, so the sliver is 7 real pixels", () => {
+    expect(METER_WIDTH % EFFORT_RATIO).toBe(0);
+    expect(SURFACE_FILL).toBe(METER_WIDTH / EFFORT_RATIO);
+    expect(SURFACE_FILL).toBe(METER_UNIT);
     expect(Number.isInteger(SURFACE_FILL)).toBe(true);
-    expect(SURFACE_FILL).toBe(3);
-    expect(METER_HEIGHT).toBe(240);
+    expect(SURFACE_FILL).toBe(7);
+    expect(METER_WIDTH).toBe(560);
+
+    // IT RUNS ACROSS THE STAGE AND NOT UP IT. A 16:9 stage has 1184 usable pixels across
+    // and 476 down from `BODY_TOP` to the rule, so the long axis is the only one that can
+    // carry 1:80 at a unit a room can see.
+    expect(meterHeadTick(HERO_LEFT)).toBe(HERO_LEFT + SURFACE_FILL);
+    expect(meterFootTick(HERO_LEFT)).toBe(HERO_LEFT + METER_WIDTH);
   });
 
-  test("puts the thesis on the deck's own shelf, derived up from the NavBar", () => {
+  test("spans the line across its whole column, edge for edge with the plate above it", () => {
+    // THE LINE MEASURES THE COLUMN, SO IT HAS TO BE THE COLUMN. It shipped once at 480
+    // inside a 528 column and read as a bar that had stalled short of the end — and it
+    // stopped short of the plate and the four rows it is a reading for.
+    expect(METER_WIDTH).toBe(COLUMN_WIDTH);
+    expect(COLUMN_WIDTH % EFFORT_RATIO).toBe(0);
+    for (const colLeft of [HERO_LEFT, RIGHT_COL]) {
+      expect(meterFootTick(colLeft)).toBe(colLeft + COLUMN_WIDTH);
+    }
+    // and the twin's line stops exactly where the content does
+    expect(meterFootTick(RIGHT_COL)).toBe(CONTENT_RIGHT);
+  });
+
+  test("centres the seven bars in their own plate, whatever the column is cut to", () => {
+    // A RE-CUT COLUMN MUST NOT LEAVE THE CHART LOPSIDED — the bars' slot is derived from the
+    // plate, so the margin is the same on both ends. It was two literals cut for a narrower
+    // plate, and widening the column left 64px of air on the right and 26 on the left.
+    const first = barLeft(HERO_LEFT, 0);
+    const last = barLeft(HERO_LEFT, BAR_COUNT - 1) + BAR_WIDTH;
+    const leftMargin = first - HERO_LEFT;
+    const rightMargin = HERO_LEFT + COLUMN_WIDTH - last;
+    expect(Math.abs(leftMargin - rightMargin), `${leftMargin} vs ${rightMargin}`).toBeLessThanOrEqual(1);
+    expect(leftMargin).toBeGreaterThanOrEqual(PLATE_PAD);
+  });
+
+  test("puts the sentence shelf on the deck's own floor, derived up from the NavBar", () => {
     expect(NAV_ZONE_TOP).toBe(632);
-    expect(THESIS_HEIGHT).toBe(26);
-    expect(THESIS_TEXT_SIZE).toBe(19);
-    expect(THESIS_TOP).toBe(590);
+    expect(SENTENCE_HEIGHT).toBe(26);
+    expect(SENTENCE_SIZE).toBe(19);
+    expect(SENTENCE_TOP).toBe(590);
     expect(RULE_TOP).toBe(553);
     // A tautology today, and the point is that it stays one.
-    expect(THESIS_CLEARANCE).toBe(16);
+    expect(SENTENCE_CLEARANCE).toBe(16);
   });
 
   test("clears the headline by 34px, which is why no eyebrow reads as a wrapped line", () => {
@@ -291,19 +360,40 @@ describe("the geometry", () => {
     expect(EYEBROW_TOP - 122).toBe(34);
   });
 
-  test("keeps every scene clear of the thesis band, and says so at module load", () => {
+  test("bottoms EVERY scene out on one line, which is what closed the hole in the stage", () => {
+    // THE REDRAW'S STRUCTURAL CLAIM, and the defect it was drawn to fix: the figure used to
+    // end at y=486 and leave 104 pixels of black above the NavBar on three poses and 174 on
+    // a fourth. Every scene now ends on `SCENE_BOTTOM`, and the module says so at load.
+    expect(FIGURE_BOTTOM).toBe(SCENE_BOTTOM);
     expect(FIGURE_BOTTOM).toBeLessThan(RULE_TOP);
-    expect(ACT_LINE_TOP + ACT_LINE_HEIGHT).toBeLessThan(RULE_TOP);
-    expect(LAYER_STACK_BOTTOM).toBeLessThan(RULE_TOP);
-    expect(BOX_TOP + BOX_HEIGHT).toBeLessThan(RULE_TOP);
+
+    for (const [name, bottom] of [
+      ["the four rows", LAYER_STACK_BOTTOM],
+      ["the hollow frame", HOLLOW_TOP + HOLLOW_HEIGHT],
+      ["the prompt card", PROMPT_TOP + PROMPT_HEIGHT],
+      ["the recap", BOX_TOP + BOX_HEIGHT],
+    ] as const) {
+      expect(bottom, name).toBeLessThanOrEqual(SCENE_BOTTOM);
+    }
+
+    // and the three scenes that CAN reach it, do — a column that stopped short is the same
+    // hole in a smaller size.
+    expect(PROMPT_TOP + PROMPT_HEIGHT).toBe(SCENE_BOTTOM);
+    expect(BOX_TOP + BOX_HEIGHT).toBe(SCENE_BOTTOM);
+
+    // every scene also starts on one line
+    expect(PLATE_TOP).toBe(BODY_TOP);
+    expect(PROMPT_TOP).toBe(BODY_TOP);
+    expect(BOX_TOP).toBe(BODY_TOP);
   });
 
   test("draws the hero and the twin at the same size, edge to edge", () => {
     // THE ONE THING ACT 3 MAY NOT ALLOW is a difference on the surface. Same width, same
     // top, and the twin's right edge is the content's own.
     expect(HERO_LEFT).toBe(SIDE_MARGIN);
+    expect(TWIN_LEFT).toBe(RIGHT_COL);
     expect(TWIN_LEFT + PLATE_WIDTH).toBe(CONTENT_RIGHT);
-    expect(2 * PLATE_WIDTH).toBeLessThanOrEqual(CONTENT_WIDTH);
+    expect(2 * COLUMN_WIDTH + COLUMN_GAP).toBe(CONTENT_WIDTH);
     // and the two charts' bars are the same bars, offset by nothing but a left edge
     for (let i = 0; i < BAR_COUNT; i += 1) {
       expect(barLeft(TWIN_LEFT, i) - barLeft(HERO_LEFT, i)).toBe(TWIN_LEFT - HERO_LEFT);
@@ -319,73 +409,118 @@ describe("the geometry", () => {
     // compares two equal rectangles rather than a tall thing against a short one.
     expect(HOLLOW_TOP).toBe(LAYER_TOP);
     expect(HOLLOW_TOP + HOLLOW_HEIGHT).toBe(LAYER_STACK_BOTTOM);
+    // and the readings sit under both, over the line they name
+    expect(READING_TOP).toBeGreaterThan(LAYER_STACK_BOTTOM);
+    expect(METER_TOP).toBeGreaterThan(READING_TOP);
   });
 
-  test("tiles the three boxes across the full content width, and centres each mark", () => {
+  test("gives the prompt card the rectangle the twin column later takes", () => {
+    // TWO TENANTS, ONE REGION. Pose 2 does not add an object beside the argument — it
+    // replaces the thing that made the picture with a second picture made the same way.
+    expect(PROMPT_LEFT).toBe(RIGHT_COL);
+    expect(PROMPT_TOP).toBe(PLATE_TOP);
+    expect(promptBuildTop(0)).toBeLessThan(promptBuildTop(DELIVERABLE_COUNT - 1));
+    expect(DELIVERABLE_COUNT).toBe(C.promptBuilds.length);
+  });
+
+  test("tiles the three cards across the full content width, at the thumbnail's own ratio", () => {
     expect(boxLeft(0)).toBe(SIDE_MARGIN);
     expect(boxLeft(QUESTION_COUNT - 1) + BOX_WIDTH).toBeLessThanOrEqual(CONTENT_RIGHT);
-    // The mark is the midpoint of the band between the hairline and the finding — derived,
-    // so a re-cut box or a third finding line moves it.
-    expect(BOX_GLYPH_OFFSET).toBe(
-      Math.round(BOX_HAIRLINE_OFFSET + (BOX_FINDING_OFFSET - BOX_HAIRLINE_OFFSET - GLYPH_SIZE) / 2),
-    );
-    expect(GLYPH_SIZE).toBe(88);
+    // THE THUMBNAIL IS 2:1, which is the user space `ShowcaseTrapGlyphs` authors all three
+    // marks in (164×70 ≈ 2.34:1 painted into 328×140). A card that changed the ratio would
+    // scale one mark differently from the next and put three line weights on one shelf.
+    expect(THUMB_WIDTH).toBe(BOX_WIDTH - 2 * 20);
+    expect(THUMB_WIDTH / THUMB_HEIGHT).toBeCloseTo(328 / 140, 5);
+  });
+
+  test("keeps the mark on the eyebrow's shelf, right of every eyebrow", () => {
+    expect(MARK_LEFT + MARK_WIDTH).toBe(CONTENT_RIGHT);
+    expect(MARK_LEFT).toBeGreaterThan(SIDE_MARGIN);
   });
 
   test("refuses an index it does not draw, rather than clamping it", () => {
     expect(() => layerTop(LAYER_COUNT)).toThrow(/no layer/);
     expect(() => boxLeft(QUESTION_COUNT)).toThrow(/no question/);
     expect(() => barLeft(HERO_LEFT, BAR_COUNT)).toThrow(/no bar/);
+    expect(() => promptBuildTop(DELIVERABLE_COUNT)).toThrow(/no deliverable/);
   });
 });
 
 // ───────────────────── the three acts ─────────────────────
 
-describe("act 1 · the chart", () => {
-  test("paints one plate, its ink, the column and nothing of act 2", () => {
+describe("act 1 · the picture", () => {
+  test("paints one plate, its ink, the prompt card, the line, and four EMPTY frames", () => {
     const { unmount } = renderSlide(0);
 
     expect(mounted("showcase-trap-hero")).toBe(true);
     expect(mounted("showcase-trap-hero-ink")).toBe(true);
-    expect(mounted("showcase-trap-column")).toBe(true);
+    expect(mounted("showcase-trap-meter")).toBe(true);
+    expect(mounted("showcase-trap-prompt")).toBe(true);
     expect(mounted("showcase-trap-surface-eyebrow")).toBe(true);
     expect(mounted("showcase-trap-mark")).toBe(true);
     expect(mounted("showcase-trap-surface-line")).toBe(true);
+    expect(mounted("showcase-trap-reading-head")).toBe(true);
+
+    // THE FOUR FRAMES ARE ALREADY ON THE STAGE and their text is not. That is the pose's
+    // second claim: there is something under this and the room is looking straight past it.
+    for (const id of LAYER_IDS) {
+      expect(gateOpen(`showcase-trap-layer-${id}`), id).toBe(true);
+      expect(gateOpen(`showcase-trap-layer-label-${id}`), id).toBe(false);
+      expect(gateOpen(`showcase-trap-layer-line-${id}`), id).toBe(false);
+      // and nothing is drawing across a row that has not been named
+      expect(mounted(`showcase-trap-wipe-${id}`), id).toBe(false);
+    }
+
+    // the foot reading has not arrived — the bar has not reached it
+    expect(gateOpen("showcase-trap-reading-foot")).toBe(false);
 
     // nothing of the later acts
-    for (const id of LAYER_IDS) {
-      expect(mounted(`showcase-trap-layer-${id}`), id).toBe(false);
-    }
     expect(mounted("showcase-trap-twin")).toBe(false);
     expect(mounted("showcase-trap-hollow")).toBe(false);
-    expect(mounted("showcase-trap-reading-head")).toBe(false);
+    expect(mounted("showcase-trap-twin-meter")).toBe(false);
     // and nothing of the recap or the floor
     for (const id of QUESTION_IDS) {
       expect(mounted(`showcase-trap-box-${id}`), id).toBe(false);
     }
     expect(mounted("showcase-trap-thesis")).toBe(false);
+    expect(mounted("showcase-trap-rule")).toBe(false);
 
     unmount();
   });
 
-  test("fills the column to its sliver and no further", () => {
+  test("fills the line to its sliver and no further", () => {
     const { unmount } = renderSlide(0);
-    const fill = screen.getByTestId("showcase-trap-column-fill");
-    // A full-height rect scaled from its own foot: 3 of 240.
-    expect(fill.style.transform).toBe(`scaleY(${SURFACE_FILL / METER_HEIGHT})`);
+    const fill = screen.getByTestId("showcase-trap-meter-fill");
+    // A full-length rect scaled from its own left edge: 6 of 480.
+    expect(fill.style.transform).toBe(`scaleX(${SURFACE_FILL / METER_WIDTH})`);
     // IT IS A TRANSITION AND NOT A KEYFRAME, so walking backwards is free and a reader
-    // with motion turned off still lands on a measurable column.
+    // with motion turned off still lands on a measurable bar.
     expect(fill.style.transition).toContain("transform");
     unmount();
   });
 
-  test("arrives eyebrow → plate → column → reading → mark → line, and the line is LAST", () => {
+  test("quotes the prompt, and three more things the same prompt makes", () => {
+    const { unmount } = renderSlide(0);
+    expect(screen.getByTestId("showcase-trap-prompt-label").textContent).toBe(C.promptLabel);
+    expect(screen.getByTestId("showcase-trap-prompt-line").textContent).toBe(C.promptLine);
+    expect(screen.getByTestId("showcase-trap-prompt-builds-label").textContent).toBe(
+      C.promptBuildsLabel,
+    );
+    C.promptBuilds.forEach((line, i) => {
+      expect(screen.getByTestId(`showcase-trap-prompt-build-${i}`).textContent).toBe(line);
+    });
+    expect(screen.getByTestId("showcase-trap-prompt-foot").textContent).toBe(C.promptFoot);
+    unmount();
+  });
+
+  test("arrives eyebrow → plate → card → line → reading → mark → sentence", () => {
     const { unmount } = renderSlide(0);
     const order = [
       "showcase-trap-surface-eyebrow",
       "showcase-trap-hero",
-      "showcase-trap-column",
-      "showcase-trap-reading-foot",
+      "showcase-trap-prompt",
+      "showcase-trap-meter",
+      "showcase-trap-reading-head",
       "showcase-trap-mark",
       "showcase-trap-surface-line",
     ];
@@ -393,38 +528,79 @@ describe("act 1 · the chart", () => {
     for (let i = 1; i < delays.length; i += 1) {
       expect(delays[i], order[i]).toBeGreaterThan(delays[i - 1] as number);
     }
+    // and the first frame lands AFTER the chart it stands under, never in front of it
+    expect(delayOf(`showcase-trap-layer-${LAYER_IDS[0]}`)).toBeGreaterThan(
+      delayOf("showcase-trap-hero"),
+    );
     unmount();
   });
 });
 
 describe("act 2 · what is under it", () => {
-  test("keeps the SAME plate and adds four rows under it", () => {
+  test("moves nothing at all — the same plate, the same frames, in the same place", () => {
     const { unmount } = renderSlide(0);
     const heroAtZero = screen.getByTestId("showcase-trap-hero");
+    const frameAtZero = screen.getByTestId(`showcase-trap-layer-${LAYER_IDS[0]}`);
+    const frameTop = frameAtZero.style.top;
+    const cardAtZero = screen.getByTestId("showcase-trap-prompt");
 
     goToPose(1);
-    // THE PLATE IS ONE OBJECT ACROSS THREE POSES. If it remounted, this identity fails and
-    // the room would watch three charts assemble instead of one.
+
+    // POSE 0 → 1 IS THE SMOOTHEST STEP ON THIS STAGE, and that is asserted as IDENTITY
+    // rather than as coordinates: if any of these three remounted, the room would watch an
+    // object leave and another arrive where the figure means "you were already looking at
+    // it".
     expect(screen.getByTestId("showcase-trap-hero")).toBe(heroAtZero);
+    expect(screen.getByTestId(`showcase-trap-layer-${LAYER_IDS[0]}`)).toBe(frameAtZero);
+    expect(screen.getByTestId("showcase-trap-prompt")).toBe(cardAtZero);
+    expect(frameAtZero.style.top).toBe(frameTop);
 
     for (const id of LAYER_IDS) {
-      expect(gateOpen(`showcase-trap-layer-${id}`), id).toBe(true);
+      expect(gateOpen(`showcase-trap-layer-label-${id}`), id).toBe(true);
+      expect(gateOpen(`showcase-trap-layer-line-${id}`), id).toBe(true);
+      expect(mounted(`showcase-trap-wipe-${id}`), id).toBe(true);
     }
-    expect(mounted("showcase-trap-reading-head")).toBe(true);
+    expect(gateOpen("showcase-trap-reading-foot")).toBe(true);
     expect(mounted("showcase-trap-source-line")).toBe(true);
     expect(mounted("showcase-trap-surface-line")).toBe(false);
     unmount();
   });
 
-  test("fills the column to its top", () => {
+  test("lights the four frames rather than replacing them", () => {
+    const { unmount } = renderSlide(0);
+    // READ OFF THE `border` SHORTHAND AND NOT OFF `borderColor`. jsdom keeps a shorthand
+    // whose colour is a `var()` as the string it was written as and resolves no longhand
+    // from it, so `borderColor` is empty on both sides of the step and would compare equal
+    // whatever the figure did.
+    const dormant = LAYER_IDS.map(
+      (id) => screen.getByTestId(`showcase-trap-layer-${id}`).style.border,
+    );
+    goToPose(1);
+    const lit = LAYER_IDS.map(
+      (id) => screen.getByTestId(`showcase-trap-layer-${id}`).style.border,
+    );
+
+    // §7.1 — ATTENTION IS BOUGHT WITH ADDED LIGHT. The border changes tier and the border
+    // STYLE does not: dashed is the encoding, and a frame that went solid would be saying
+    // the room can now see the thing it is about to be told it cannot.
+    for (let i = 0; i < LAYER_IDS.length; i += 1) {
+      expect(lit[i], LAYER_IDS[i]).not.toBe(dormant[i]);
+      expect(
+        screen.getByTestId(`showcase-trap-layer-${LAYER_IDS[i]}`).style.border,
+      ).toMatch(/^1px dashed /);
+    }
+    unmount();
+  });
+
+  test("fills the line to its far end", () => {
     const { unmount } = renderSlide(1);
-    expect(screen.getByTestId("showcase-trap-column-fill").style.transform).toBe("scaleY(1)");
+    expect(screen.getByTestId("showcase-trap-meter-fill").style.transform).toBe("scaleX(1)");
     unmount();
   });
 
   test("lands the four rows on a WIDER pitch than the deck's, which is the tempo claim", () => {
     const { unmount } = renderSlide(1);
-    const delays = LAYER_IDS.map((id) => delayOf(`showcase-trap-layer-${id}`));
+    const delays = LAYER_IDS.map((id) => delayOf(`showcase-trap-layer-label-${id}`));
     for (let i = 1; i < delays.length; i += 1) {
       expect(delays[i], LAYER_IDS[i]).toBeGreaterThan(delays[i - 1] as number);
     }
@@ -433,6 +609,10 @@ describe("act 2 · what is under it", () => {
     const pitch = (delays[1] as number) - (delays[0] as number);
     expect(pitch).toBe(260);
     expect(pitch).toBeGreaterThan(90);
+
+    // AND THE SENTENCE WAITS FOR ALL FOUR. It is the longest wait on this stage and it is
+    // the point of the pose: the room finishes reading before the figure finishes drawing.
+    expect(delayOf("showcase-trap-source-line")).toBeGreaterThan(delays[3] as number);
     unmount();
   });
 
@@ -451,7 +631,7 @@ describe("act 2 · what is under it", () => {
 });
 
 describe("act 3 · two charts", () => {
-  test("draws a second plate with an empty frame, and takes the column off the stage", () => {
+  test("draws a second column with an empty frame and a bill of its own", () => {
     const { unmount } = renderSlide(2);
 
     expect(mounted("showcase-trap-hero")).toBe(true);
@@ -459,17 +639,36 @@ describe("act 3 · two charts", () => {
     expect(mounted("showcase-trap-twin-ink")).toBe(true);
     expect(mounted("showcase-trap-hollow")).toBe(true);
     expect(mounted("showcase-trap-scan")).toBe(true);
+    expect(mounted("showcase-trap-twin-meter")).toBe(true);
+    expect(mounted("showcase-trap-twin-reading")).toBe(true);
 
-    // The four rows are still there, in the same tier: nothing is dimmed to promote the
-    // twin (§7.1), and the only thing that changed is what appears BESIDE them.
+    // The four rows are still there, still lit, in the same tier: nothing is dimmed to
+    // promote the twin (§7.1), and the only thing that changed is what appears BESIDE them.
     for (const id of LAYER_IDS) {
-      expect(gateOpen(`showcase-trap-layer-${id}`), id).toBe(true);
+      expect(gateOpen(`showcase-trap-layer-label-${id}`), id).toBe(true);
     }
+    expect(gateOpen("showcase-trap-reading-foot")).toBe(true);
 
-    // TWO TENANTS, ONE RECTANGLE. The column occupied the twin's rectangle and is gone.
-    expect(mounted("showcase-trap-column")).toBe(false);
-    expect(mounted("showcase-trap-mark")).toBe(false);
-    expect(mounted("showcase-trap-reading-foot")).toBe(false);
+    // TWO TENANTS, ONE RECTANGLE. The prompt card occupied the twin's rectangle and is gone.
+    expect(mounted("showcase-trap-prompt")).toBe(false);
+    unmount();
+  });
+
+  test("bills the two charts differently and draws both bills at ONE scale", () => {
+    const { unmount } = renderSlide(2);
+    // THE PAYOFF FRAME. Two surfaces the room has just failed to tell apart, over two
+    // dimension lines that are not close — and the two lines are the same object at the
+    // same length, so the comparison is a reading and not an illustration.
+    expect(screen.getByTestId("showcase-trap-meter-fill").style.transform).toBe("scaleX(1)");
+    expect(screen.getByTestId("showcase-trap-twin-meter-fill").style.transform).toBe(
+      `scaleX(${SURFACE_FILL / METER_WIDTH})`,
+    );
+    expect(screen.getByTestId("showcase-trap-twin-reading").textContent).toBe(
+      C.surfaceReading,
+    );
+    expect(screen.getByTestId("showcase-trap-reading-foot").textContent).toBe(
+      C.sourceReading,
+    );
     unmount();
   });
 
@@ -493,12 +692,14 @@ describe("act 3 · two charts", () => {
 // ───────────────────── the recap and the floor ─────────────────────
 
 describe("the recap", () => {
-  test("replaces all three acts with three boxes, each carrying a mark", () => {
+  test("replaces all three acts with three cards, each carrying a thumbnail", () => {
     const { unmount } = renderSlide(3);
 
     expect(mounted("showcase-trap-hero")).toBe(false);
     expect(mounted("showcase-trap-twin")).toBe(false);
-    expect(mounted("showcase-trap-column")).toBe(false);
+    expect(mounted("showcase-trap-prompt")).toBe(false);
+    expect(mounted("showcase-trap-meter")).toBe(false);
+    expect(mounted("showcase-trap-mark")).toBe(false);
     expect(mounted("showcase-trap-recap-eyebrow")).toBe(true);
 
     for (const q of C.questions) {
@@ -513,13 +714,30 @@ describe("the recap", () => {
       );
     }
 
+    // the pose has its OWN sentence — the shelf is never empty, which is what stops the
+    // stage opening a hole above the NavBar on the one pose that used to have none
+    expect(mounted("showcase-trap-recap-line")).toBe(true);
+
     // the floor has NOT arrived yet — that is what pose 4 is for
     expect(mounted("showcase-trap-thesis")).toBe(false);
     expect(mounted("showcase-trap-rule")).toBe(false);
     unmount();
   });
 
-  test("hands every box a hover overlay over its whole painted area", () => {
+  test("draws each thumbnail at the card's own measured box", () => {
+    const { unmount } = renderSlide(3);
+    for (const q of C.questions) {
+      const thumb = screen.getByTestId(`showcase-trap-glyph-${q.id}`);
+      expect(thumb.style.width, q.id).toBe(`${THUMB_WIDTH}px`);
+      expect(thumb.style.height, q.id).toBe(`${THUMB_HEIGHT}px`);
+      // ONE USER SPACE FOR ALL THREE, so a bar in the first card and a bar in the third are
+      // the same bar at the same weight.
+      expect(thumb.querySelector("svg")?.getAttribute("viewBox"), q.id).toBe("0 0 164 70");
+    }
+    unmount();
+  });
+
+  test("hands every card a hover overlay over its whole painted area", () => {
     const { unmount } = renderSlide(3);
     for (const q of C.questions) {
       const box = screen.getByTestId(`showcase-trap-box-${q.id}`);
@@ -538,15 +756,18 @@ describe("the recap", () => {
   test("hands every box on the ACTS a hover overlay too", () => {
     const zero = renderSlide(0);
     expect(screen.getByTestId("showcase-trap-hero").classList.contains("box-hover")).toBe(true);
-    zero.unmount();
-
-    const two = renderSlide(2);
+    expect(screen.getByTestId("showcase-trap-prompt").classList.contains("box-hover")).toBe(
+      true,
+    );
     for (const id of LAYER_IDS) {
       const row = screen.getByTestId(`showcase-trap-layer-${id}`);
       expect(row.classList.contains("box-hover"), id).toBe(true);
       // DASHED IS THE ENCODING, and `border: inherit` keeps it dashed under the pointer.
       expect(row.style.border, id).toMatch(/^1px dashed /);
     }
+    zero.unmount();
+
+    const two = renderSlide(2);
     expect(screen.getByTestId("showcase-trap-twin").classList.contains("box-hover")).toBe(true);
     expect(screen.getByTestId("showcase-trap-hollow").classList.contains("box-hover")).toBe(true);
     two.unmount();
@@ -554,10 +775,7 @@ describe("the recap", () => {
 
   test("lets no shelf take a pointer, so nothing eats a box's hover", () => {
     const { unmount } = renderSlide(4);
-    for (const id of [
-      "showcase-trap-recap-eyebrow",
-      "showcase-trap-thesis",
-    ]) {
+    for (const id of ["showcase-trap-recap-eyebrow", "showcase-trap-thesis"]) {
       expect(screen.getByTestId(id).style.pointerEvents, id).toBe("none");
     }
     unmount();
@@ -567,6 +785,7 @@ describe("the recap", () => {
       "showcase-trap-surface-eyebrow",
       "showcase-trap-surface-line",
       "showcase-trap-mark",
+      "showcase-trap-reading-head",
       "showcase-trap-reading-foot",
     ]) {
       expect(screen.getByTestId(id).style.pointerEvents, id).toBe("none");
@@ -590,17 +809,18 @@ describe("the floor", () => {
 
     goToPose(4);
 
-    // POSE 4 IS POSE 3 PLUS A RULE AND A LINE. The recap does not move, does not
-    // re-animate and does not re-tile — the thesis is what the recap is FOR.
+    // POSE 4 IS POSE 3 PLUS A RULE AND A NEW SENTENCE. The recap does not move, does not
+    // re-animate and does not re-tile — the ask is what the recap is FOR.
     expect(screen.getByTestId(`showcase-trap-box-${QUESTION_IDS[0]}`)).toBe(boxAtThree);
     expect(boxAtThree.style.top).toBe(topAtThree);
 
     expect(mounted("showcase-trap-rule")).toBe(true);
+    expect(mounted("showcase-trap-recap-line")).toBe(false);
     expect(topOf("showcase-trap-rule")).toBe(`${RULE_TOP}px`);
-    expect(topOf("showcase-trap-thesis")).toBe(`${THESIS_TOP}px`);
+    expect(topOf("showcase-trap-thesis")).toBe(`${SENTENCE_TOP}px`);
 
     const thesis = screen.getByTestId("showcase-trap-thesis");
-    expect(thesis.style.fontSize).toBe(`${THESIS_TEXT_SIZE}px`);
+    expect(thesis.style.fontSize).toBe(`${SENTENCE_SIZE}px`);
     // UPRIGHT, not italic — an italic sentence alone on a cleared stage reads as a caption
     // for a picture that is missing. The only italic on the shelf is a keyword.
     expect(thesis.style.fontStyle).toBe("");
@@ -624,28 +844,28 @@ describe("the pose walk", () => {
     const EXPECT: ReadonlyArray<readonly [number, readonly string[], readonly string[]]> = [
       [
         0,
-        ["showcase-trap-hero", "showcase-trap-column", "showcase-trap-surface-line"],
-        ["showcase-trap-twin", "showcase-trap-thesis", `showcase-trap-layer-${LAYER_IDS[0]}`],
+        ["showcase-trap-hero", "showcase-trap-meter", "showcase-trap-prompt", "showcase-trap-surface-line"],
+        ["showcase-trap-twin", "showcase-trap-thesis", "showcase-trap-twin-meter", `showcase-trap-wipe-${LAYER_IDS[0]}`],
       ],
       [
         1,
-        ["showcase-trap-hero", `showcase-trap-layer-${LAYER_IDS[0]}`, "showcase-trap-reading-head"],
+        ["showcase-trap-hero", "showcase-trap-prompt", `showcase-trap-wipe-${LAYER_IDS[0]}`, "showcase-trap-source-line"],
         ["showcase-trap-twin", "showcase-trap-thesis", "showcase-trap-surface-line"],
       ],
       [
         2,
-        ["showcase-trap-hero", "showcase-trap-twin", "showcase-trap-hollow", "showcase-trap-scan"],
-        ["showcase-trap-column", "showcase-trap-mark", "showcase-trap-thesis"],
+        ["showcase-trap-hero", "showcase-trap-twin", "showcase-trap-hollow", "showcase-trap-scan", "showcase-trap-twin-meter"],
+        ["showcase-trap-prompt", "showcase-trap-thesis", "showcase-trap-recap-line"],
       ],
       [
         3,
-        [`showcase-trap-box-${QUESTION_IDS[0]}`, "showcase-trap-recap-eyebrow"],
-        ["showcase-trap-hero", "showcase-trap-twin", "showcase-trap-thesis", "showcase-trap-rule"],
+        [`showcase-trap-box-${QUESTION_IDS[0]}`, "showcase-trap-recap-eyebrow", "showcase-trap-recap-line"],
+        ["showcase-trap-hero", "showcase-trap-twin", "showcase-trap-thesis", "showcase-trap-rule", "showcase-trap-mark"],
       ],
       [
         4,
         [`showcase-trap-box-${QUESTION_IDS[0]}`, "showcase-trap-rule", "showcase-trap-thesis"],
-        ["showcase-trap-hero", "showcase-trap-twin", "showcase-trap-column"],
+        ["showcase-trap-hero", "showcase-trap-twin", "showcase-trap-meter", "showcase-trap-recap-line"],
       ],
     ];
 
@@ -672,40 +892,37 @@ describe("the pose walk", () => {
     unmount();
   });
 
-  test("prints exactly one sentence on the act shelf at every act pose", () => {
+  test("prints exactly one sentence on ONE shelf at EVERY pose", () => {
+    // THE STRUCTURAL FIX, ASSERTED. Five poses, five tenants, one rectangle — a pose with
+    // no sentence is a pose with a hole between the figure and the NavBar, and that is the
+    // defect the 2026-08-16 redraw was drawn to close.
     const { unmount } = renderSlide(0);
-    const LINES = [
-      "showcase-trap-surface-line",
-      "showcase-trap-source-line",
-      "showcase-trap-twin-line",
-    ];
-    for (const pose of [0, 1, 2]) {
+    for (const pose of POSES) {
       goToPose(pose);
-      const present = LINES.filter(mounted);
+      const present = SENTENCES.filter(mounted);
       expect(present, `pose ${pose}`).toHaveLength(1);
-      expect(topOf(present[0] as string)).toBe(`${ACT_LINE_TOP}px`);
-    }
-    // and none of them survives into the recap
-    for (const pose of [3, 4]) {
-      goToPose(pose);
-      expect(LINES.filter(mounted), `pose ${pose}`).toHaveLength(0);
+      expect(present[0], `pose ${pose}`).toBe(SENTENCES[pose]);
+      expect(topOf(present[0] as string)).toBe(`${SENTENCE_TOP}px`);
     }
     unmount();
   });
 
   test("prints exactly one eyebrow on one shelf at every pose", () => {
     const { unmount } = renderSlide(0);
-    const EYEBROWS = [
-      "showcase-trap-surface-eyebrow",
-      "showcase-trap-source-eyebrow",
-      "showcase-trap-twin-eyebrow",
-      "showcase-trap-recap-eyebrow",
-    ];
     for (const pose of POSES) {
       goToPose(pose);
       const present = EYEBROWS.filter(mounted);
       expect(present, `pose ${pose}`).toHaveLength(1);
       expect(topOf(present[0] as string), `pose ${pose}`).toBe(`${EYEBROW_TOP}px`);
+    }
+    unmount();
+  });
+
+  test("shows the provenance mark exactly while our specimen is on the stage", () => {
+    const { unmount } = renderSlide(0);
+    for (const pose of POSES) {
+      goToPose(pose);
+      expect(mounted("showcase-trap-mark"), `pose ${pose}`).toBe(pose <= 2);
     }
     unmount();
   });
@@ -782,6 +999,7 @@ describe("the copy", () => {
       [C.surfaceLine, C.surfaceLineKw],
       [C.sourceLine, C.sourceLineKw],
       [C.twinLine, C.twinLineKw],
+      [C.recapLine, C.recapLineKw],
       [C.closer, C.closerKw],
       ...C.questions.map((q) => [q.question, q.questionKw] as const),
     ];
@@ -801,6 +1019,7 @@ describe("the copy", () => {
       "surfaceLineKw",
       "sourceLineKw",
       "twinLineKw",
+      "recapLineKw",
       "closerKw",
     ]);
     for (const key of Object.keys(C)) {
@@ -810,8 +1029,20 @@ describe("the copy", () => {
       );
     }
 
-    // and the labels are forbidden from gaining one
-    for (const key of ["figLabel", "chartTitle", "mark", "hollowLabel", "recapEyebrow"]) {
+    // and the labels are forbidden from gaining one — INCLUDING every string on the prompt
+    // card, which is the room's own position quoted without comment. A copper italic there
+    // would rank a concession against the claim on the shelf under it.
+    for (const key of [
+      "figLabel",
+      "chartTitle",
+      "mark",
+      "hollowLabel",
+      "recapEyebrow",
+      "promptLabel",
+      "promptLine",
+      "promptBuildsLabel",
+      "promptFoot",
+    ]) {
       expect(Object.keys(C)).not.toContain(`${key}Kw`);
     }
     for (const layer of C.layers) {
@@ -824,16 +1055,20 @@ describe("the copy", () => {
   });
 
   test("holds every sentence to its own box, and to ASD-STE100's ten words", () => {
-    const SENTENCES: ReadonlyArray<readonly [string, string, number]> = [
+    const SENTENCE_BUDGETS: ReadonlyArray<readonly [string, string, number]> = [
       // THE HEADLINE HAS ITS OWN, TIGHTER CEILING, and it is the one budget on this stage
       // that is a hard floor: a two-line headline ends at y=164 and prints through the
       // eyebrow shelf at 156. jsdom computes no text, so it is held here.
       ["headline", C.headline, HEADLINE_BUDGET_CHARS],
-      ["surfaceLine", C.surfaceLine, ACT_LINE_BUDGET_CHARS],
-      ["sourceLine", C.sourceLine, ACT_LINE_BUDGET_CHARS],
-      ["twinLine", C.twinLine, ACT_LINE_BUDGET_CHARS],
-      ["closer", C.closer, THESIS_BUDGET_CHARS],
+      ["surfaceLine", C.surfaceLine, SENTENCE_BUDGET_CHARS],
+      ["sourceLine", C.sourceLine, SENTENCE_BUDGET_CHARS],
+      ["twinLine", C.twinLine, SENTENCE_BUDGET_CHARS],
+      ["recapLine", C.recapLine, SENTENCE_BUDGET_CHARS],
+      ["closer", C.closer, SENTENCE_BUDGET_CHARS],
       ["mark", C.mark, MARK_BUDGET_CHARS],
+      ["promptLine", C.promptLine, PROMPT_LINE_BUDGET_CHARS],
+      ["promptFoot", C.promptFoot, PROMPT_FOOT_BUDGET_CHARS],
+      ...C.promptBuilds.map((l, i) => [`build ${i}`, l, PROMPT_BUILD_BUDGET_CHARS] as const),
       ...C.layers.map((l) => [`layer ${l.id}`, l.line, LAYER_LINE_BUDGET_CHARS] as const),
       ...C.questions.map((q) => [`finding ${q.id}`, q.finding, BOX_FINDING_BUDGET_CHARS] as const),
       ...C.questions.map(
@@ -841,7 +1076,7 @@ describe("the copy", () => {
       ),
     ];
 
-    for (const [name, sentence, budget] of SENTENCES) {
+    for (const [name, sentence, budget] of SENTENCE_BUDGETS) {
       expect(sentence.length, `${name}: "${sentence}"`).toBeLessThanOrEqual(budget);
     }
 
@@ -853,7 +1088,11 @@ describe("the copy", () => {
       C.surfaceLine,
       C.sourceLine,
       C.twinLine,
+      C.recapLine,
       C.closer,
+      C.promptLine,
+      C.promptFoot,
+      ...C.promptBuilds,
       ...C.layers.map((l) => l.line),
       ...C.questions.map((q) => q.finding),
       ...C.questions.map((q) => q.question),
@@ -899,6 +1138,21 @@ describe("the copy", () => {
     }
   });
 
+  test("concedes before it argues, and concedes without a hedge", () => {
+    // THE SLIDE'S WHOLE RISK is a room that has to give something up before it can agree.
+    // The prompt card is the concession and it may not be written as a complaint: no
+    // "only", no "just", no "merely", and nothing on it may be a question.
+    const CARD = [C.promptLabel, C.promptLine, C.promptBuildsLabel, ...C.promptBuilds, C.promptFoot];
+    for (const s of CARD) {
+      expect(s, s).not.toMatch(/\b(only|just|merely|but|however|although)\b/i);
+      expect(s, s).not.toContain("?");
+    }
+    // and it is on the stage BEFORE the argument is — pose 0, not pose 1.
+    const { unmount } = renderSlide(0);
+    expect(mounted("showcase-trap-prompt")).toBe(true);
+    unmount();
+  });
+
   test("renders every authored string it is supposed to, and nothing it is not", () => {
     const WALKED = new Set(authoredStrings());
     const seen = new Set<string>();
@@ -914,8 +1168,6 @@ describe("the copy", () => {
       unmount();
     }
 
-    // Every authored string EXCEPT the figLabel (stripped above) and the glyph selectors
-    // (which are ids, not copy) reaches a pose.
     // AN ID IS A SELECTOR AND NOT COPY. `figLabel` is stripped above; the layer and question
     // ids and the glyph names are keys this figure indexes by, and none of them is printed.
     const SELECTORS = new Set<string>([
@@ -950,6 +1202,19 @@ describe("the stylesheet", () => {
     expect(Number(row?.[1])).toBeGreaterThan(Number(bar?.[1]));
   });
 
+  test("restates the two properties `.fade` owns, so a frame's light can ramp", () => {
+    // THE ONE SHORTHAND TRAP IN THE FIGURE. `.fade` declares `transition: opacity,
+    // transform`; a frame that only carried that class would snap its border colour in one
+    // frame at pose 1, which is the moment the whole slide turns on. The rule has to be more
+    // specific than `.fade` so it does not depend on which sheet the bundler emits last.
+    const rule = /\.fade\.st-row\s*\{([^}]*)\}/.exec(STYLESHEET);
+    expect(rule, "no `.fade.st-row` transition rule").not.toBeNull();
+    const body = rule?.[1] ?? "";
+    for (const property of ["opacity", "transform", "border-color"]) {
+      expect(body, property).toContain(property);
+    }
+  });
+
   test("answers `prefers-reduced-motion` for every infinite rule, and finishes the draws", () => {
     const at = STYLESHEET.indexOf("@media (prefers-reduced-motion: reduce)");
     expect(at, "no reduced-motion block").toBeGreaterThan(0);
@@ -968,6 +1233,8 @@ describe("the stylesheet", () => {
     // and a squashed DRAW must be told where to land — `stroke-dasharray: 1` survives the
     // global squash, so an unrestated offset leaves the line invisible.
     expect(squash).toContain("stroke-dashoffset: 0");
+    // the typed line's rest width IS the whole string, so killing its animation is the fix
+    expect(squash).toContain(".st-type");
   });
 
   test("holds every colour as a variable — no hex, no rgb(), no named colour", () => {
@@ -986,6 +1253,17 @@ describe("the stylesheet", () => {
         /^(?:ease|copper-\d{3}|neutral-\d{1,3}|st-[\w-]+)$/,
       );
     }
+  });
+
+  test("draws the thumbnails at the plates' own hairline weight", () => {
+    // THE MARKS ARE NO LONGER EMBLEMS, so they may not be drawn at an emblem's weight. The
+    // shared user space is 164×70 painted into 328×140 — a scale of two — so a stroke over
+    // one unit lands heavier than every hairline on the full-size stage.
+    const base = /\.st-glyph :is\([^)]*\)\s*\{([^}]*)\}/.exec(STYLESHEET);
+    expect(base, "no base stroke rule for the marks").not.toBeNull();
+    const width = /stroke-width:\s*([\d.]+)/.exec(base?.[1] ?? "");
+    expect(width, "the base stroke rule declares no width").not.toBeNull();
+    expect(Number(width?.[1])).toBeLessThanOrEqual(1);
   });
 
   test("brightens the box under the pointer and dims nothing beside it", () => {
@@ -1011,10 +1289,9 @@ describe("the stylesheet", () => {
   test("never puts a stroke on a FILLED shape under the pointer — the mark may not grow", () => {
     // THE ONE SPECIFICITY TRAP IN THIS REGISTER, and it shipped once.
     // `.st-glyph .st-solid { stroke: none }` is (0,2,0); the hover stroke rule is (0,3,1) and
-    // out-specified it, so every filled bar of the `chart` mark gained a 1.6-unit stroke on
-    // its own edge — about seven pixels of growth per side at 88px. Both halves of the fix
-    // are asserted, because either one alone would be specificity arithmetic a future edit
-    // could tip.
+    // out-specified it, so every filled bar of a thumbnail gained a stroke on its own edge.
+    // Both halves of the fix are asserted, because either one alone would be specificity
+    // arithmetic a future edit could tip.
     const declarations = STYLESHEET.replace(/\/\*[\s\S]*?\*\//g, "");
 
     // 1 · the hover stroke rule excludes filled shapes by name
@@ -1030,8 +1307,8 @@ describe("the stylesheet", () => {
     expect(solidRule?.[1] ?? "").toMatch(/stroke:\s*none/);
     expect(solidRule?.[1] ?? "").toMatch(/fill:\s*var\(--copper-200\)/);
 
-    // 3 · the `chart` mark is the only one that draws a filled shape, which is why it was the
-    //     only one that grew — a second filled mark would need this test to keep holding.
+    // 3 · every filled shape in the marks carries the class the two rules above key off —
+    //     the scan head is filled too, and it shipped as the second one.
     const glyphs = readFileSync(
       path.resolve(
         process.cwd(),
@@ -1040,6 +1317,7 @@ describe("the stylesheet", () => {
       "utf8",
     );
     expect(glyphs).toContain("st-solid");
+    expect(glyphs).toContain("st-solid st-scan-head");
   });
 
   test("declares no SMIL anywhere in the figure", () => {

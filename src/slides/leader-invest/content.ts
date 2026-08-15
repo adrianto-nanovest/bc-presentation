@@ -1758,15 +1758,20 @@ export const investBridgeContent = {
 //
 // ═══ WHAT IS ON THE STAGE, in five poses, and each hero is ONE drawn object:
 //
-//   0 — THE CHART. One finished chart assembles itself and stops. Beside it an effort
-//       column fills three pixels of two hundred and forty. The SPEED is the claim.
-//   1 — WHAT IS UNDER IT. Four dashed rows arrive under the same chart, one at a time and
-//       slowly, and the effort column crawls to its top. The TEMPO is the claim.
-//   2 — TWO CHARTS. The same chart twice. One keeps its four rows; the other has an empty
-//       frame under it. A scan travels across both and finds no difference on top.
-//   3 — THE RECAP. Three boxes, and each one turns a finding into a question a leader can
-//       ask in any review. This is the pose the room writes down.
-//   4 — THE FLOOR. The rule, and the thesis alone under it.
+//   0 — THE PICTURE. One finished chart assembles itself and stops, over four empty frames
+//       nobody looks at. Beside it, the prompt that built it and three more finished-looking
+//       things the same prompt makes. Under both, an effort line filled six pixels of four
+//       hundred and eighty. The SPEED is the claim, and the card is the CONCESSION.
+//   1 — WHAT IS UNDER IT. The four frames light up and take their names, one at a time and
+//       slowly, while the effort line crawls the other seventy-nine eightieths. Nothing
+//       leaves the stage. The TEMPO is the claim.
+//   2 — TWO CHARTS. The same chart twice, each over its own effort line. One keeps its four
+//       rows and its five days; the other has an empty frame and thirty minutes. A scan
+//       travels across both and finds no difference on top.
+//   3 — THE RECAP. Three cards, each holding a small drawing of the act it recaps, and each
+//       turning a finding into a question a leader can ask in any review. This is the pose
+//       the room writes down.
+//   4 — THE FLOOR. The rule, and the ask alone under it.
 //
 // ═══ THE COPY RULES THIS BLOCK KEEPS.
 //
@@ -1787,10 +1792,16 @@ export const investBridgeContent = {
 //     measurement belongs. The title makes the claim; see the note on `headline`.
 //   · THE KEYWORD RULE, unchanged from every block in this file: `kw` goes on PROSE ONLY.
 //     · PROSE, each with a `*Kw` sibling — `headline`, `surfaceLine`, `sourceLine`,
-//       `twinLine`, `closer`, and each question's `question`.
+//       `twinLine`, `recapLine`, `closer`, and each question's `question`.
 //     · LABELS, carrying no `*Kw` and forbidden from gaining one — `figLabel`, the four
 //       pose eyebrows, the chart's own title, `mark`, `hollowLabel`, both meter readings,
-//       and every `label` and `finding` on the four layers and the three questions.
+//       `promptLabel`, `promptLine`, `promptBuildsLabel`, every line of `promptBuilds`,
+//       `promptFoot`, and every `label` and `finding` on the four layers and the three
+//       questions.
+//     · THE PROMPT CARD'S FIVE STRINGS ARE ALL LABELS, and that is deliberate rather than
+//       an oversight. A copper italic inside the card would rank a concession against the
+//       claim on the shelf under it; the card is the room's own position, quoted without
+//       comment, and a slide that emphasises the other side's words is arguing with them.
 //
 // ═══ WHAT THIS SLIDE MAY NOT SAY, and the sibling that owns each token. Every one of
 // these is a live string somewhere else in the composed leader deck, and the whole reason
@@ -1907,6 +1918,23 @@ const HIDDEN_LAYERS: Four<HiddenLayer> = [
  * the asker nothing, and implies no view about the answer — which is what keeps a slide
  * about bad evidence from reading as a slide about bad judgment.
  */
+/**
+ * The three other things the same prompt makes, and the third one is this deck.
+ *
+ * EXACTLY THREE, HELD BY THE TYPE. Three reads as a range; four reads as an inventory, and
+ * an inventory invites the room to audit it instead of agreeing with it.
+ *
+ * THEY GO GENERAL → GENERAL → PRESENT. A dashboard and a landing page are things the room
+ * has commissioned; the third is the object in front of them right now. The order matters:
+ * the first two earn the claim, and the third spends it on the one artifact nobody has to
+ * defend.
+ */
+const PROMPT_BUILDS: Three<string> = [
+  "A dashboard.",
+  "A landing page.",
+  "A deck like this one.",
+];
+
 const TRAP_QUESTIONS: Three<TrapQuestion> = [
   {
     id: "chart",
@@ -2004,6 +2032,41 @@ export const investShowcaseTrapContent = {
   surfaceLineKw: ["As a picture"],
 
   /**
+   * THE PROMPT CARD — five strings, and together they are the slide's CONCESSION.
+   *
+   * WHY A CONCESSION IS ON THE STAGE AT ALL. The room in front of this slide has approved
+   * work on exactly the evidence the next two poses disqualify, and a room that has to
+   * concede something before it can agree will not agree. So pose 0 agrees FIRST, in the
+   * room's own terms and without a caveat: one line of typing, and three more finished-
+   * looking things the same speed produces. Everything on this card is true, none of it is
+   * hedged, and the argument does not start until pose 1.
+   *
+   * `promptLabel` NAMES WHOSE TYPING IT IS. "WHAT WE TYPED" and not "THE PROMPT", because
+   * the specimen is ours — the same reason `mark` says OUR OWN WORK. It also keeps the word
+   * "prompt" off a third shelf; the eyebrow and the act line already carry it.
+   *
+   * `promptLine` IS THE ARTIFACT AND NOT A DESCRIPTION OF ONE. It is set in the mono
+   * register behind a chevron, so a room reads it as the thing that was typed rather than as
+   * a sentence about typing. It is deliberately lazy, unpunctuated by any instruction and
+   * shorter than any specification would be — which is the whole reason the four rows under
+   * the chart cost what they cost.
+   *
+   * `promptBuilds` IS THREE AND THE THIRD ONE IS THIS DECK. Naming the artifact the room is
+   * looking at is the safest way to make the point: nobody in the room has to be the example,
+   * because the presenter already is. It is also simply true, and a slide that asks for
+   * provenance while hiding its own would fail its own second question.
+   *
+   * `promptFoot` IS THE PIVOT, AND IT ACCUSES NOBODY. "All of it looks finished" is a
+   * statement about four artifacts, not about anyone's judgment of them — and "looks" is the
+   * one word pose 1 needs to have been said out loud before it can say what does not show.
+   */
+  promptLabel: "WHAT WE TYPED",
+  promptLine: "Make a quarterly view of this.",
+  promptBuildsLabel: "IT ALSO BUILDS",
+  promptBuilds: PROMPT_BUILDS,
+  promptFoot: "All of it looks finished.",
+
+  /**
    * The mark, and it is the slide's argument turned on itself.
    *
    * THREE TOKENS, EACH DOING ONE JOB. `OUR OWN WORK` names whose artifact is on trial —
@@ -2014,15 +2077,22 @@ export const investShowcaseTrapContent = {
    * not publishable, and a slide that promised a reference it cannot give would fail its
    * own third question.
    *
+   * IT SITS ON THE EYEBROW'S OWN SHELF, RIGHT-ALIGNED, on every pose that has our specimen
+   * on the stage. That is the one place a second mono line cannot be read as a caption for a
+   * drawing or as a heading for the column under it — and it puts the provenance where a
+   * reader looks for it on a printed figure, at the top, beside the title.
+   *
    * Mono, keyword-free: it is three tokens, not a sentence.
    */
   mark: "OUR OWN WORK · SELF-REPORTED · SHOWN LIVE",
 
-  /** Pose 0's reading, at the foot of the effort column. Mono, keyword-free — it is the
-   *  headline's first figure, printed where the drawing can be measured against it. */
+  /** The reading at the HEAD of the effort line — the point six pixels along it that the
+   *  picture's own cost reaches. Mono, keyword-free, and on the stage from pose 0: it is
+   *  what the extension tick under it is pointing at. */
   surfaceReading: "THIRTY MINUTES",
 
-  /** Pose 1's reading, at the head of the same column. Mono, keyword-free. */
+  /** The reading at the FOOT of the same line, four hundred and eighty pixels further on.
+   *  Mono, keyword-free. It arrives when the line does. */
   sourceReading: "FIVE DAYS",
 
   /** Pose 1's eyebrow. Mono, keyword-free. "NOBODY SEES THIS" is the half that makes the
@@ -2084,6 +2154,27 @@ export const investShowcaseTrapContent = {
   questions: TRAP_QUESTIONS,
 
   /**
+   * POSE 3's LINE — the sentence the whole run was for, and the one a board repeats.
+   *
+   * IT NAMES THE PURCHASE, WHICH IS WHY THIS SLIDE IS IN "WHY INVEST". Three acts have shown
+   * that the picture is cheap and the work under it is not; without this line the room
+   * leaves with a warning, and a warning is not a budget decision. "Getting it right is the
+   * investment" is the same claim the headline makes, said in the room's own accounting
+   * word, at the moment the room has just been handed the three questions that spend it.
+   *
+   * "SPEED IS CHEAP NOW" IS A COMPLIMENT AND NOT A COMPLAINT. It grants the thing the room
+   * already believes — and grants it in the present tense, as a change in the market rather
+   * than as a fault in anyone's judgment. What follows is what the money is for. Nobody has
+   * conceded anything and nothing has been taken away.
+   *
+   * IT PROMISES NO NUMBER AND NAMES NO PROGRAMME. Not "the right investment is a pilot",
+   * not "budget for specs" — the sentence is about what a leader is buying, and the slides
+   * behind it are where the mechanism belongs.
+   */
+  recapLine: "Speed is cheap now. Getting it right is the investment.",
+  recapLineKw: ["Getting it right", "the investment"],
+
+  /**
    * THE THESIS — the one line this slide asks the room to leave with, on §4.5's shelf.
    *
    * IT IS AN INSTRUCTION AND THE OTHER THREE PROSE LINES ARE STATEMENTS, which is the
@@ -2102,7 +2193,13 @@ export const investShowcaseTrapContent = {
    * is whatever the room is looking at next week, which is every artifact rather than
    * this one.
    *
-   * ONE LINE, full width, 19px upright on the same shelf D.1, D.3, D.4 and D.5 use.
+   * IT FOLLOWS `recapLine` ON ONE SHELF AND DOES NOT SIT BESIDE IT. Pose 3 names what the
+   * room is buying; pose 4 names the one thing it can do about it on Monday. Two sentences
+   * on one shelf, in that order, is a claim followed by an ask — and the second one only
+   * costs nothing because the first one has already said what the money is for.
+   *
+   * ONE LINE, full width, 19px upright on the same shelf D.1, D.3, D.4 and D.5 use — and,
+   * since the 2026-08-16 redraw, the same shelf this slide's own four other sentences use.
    */
   closer: "Ask what is under it. That question costs nothing.",
   closerKw: ["what is under it", "costs nothing"],
