@@ -85,7 +85,7 @@ test("step 1 → Includes package + 6 mitigation chips revealed", () => {
   const pkg = screen.getByTestId("e10-includes-package");
   expect(pkg.className).toMatch(/\bon\b/);
   expect(screen.getByTestId("e10-includes-kicker").textContent).toMatch(
-    /six context mitigations/,
+    /Six context mitigations/,
   );
 
   const includeChips = screen.getAllByTestId(/^e10-include-\d+$/);

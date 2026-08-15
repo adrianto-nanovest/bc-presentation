@@ -3,12 +3,11 @@ import { NanovestProduct } from "@/slides/reveal-and-closing/simulations/Nanoves
 
 test("NanovestProduct renders the named sub-agents and the parallel flowchart fan-out", () => {
   render(<NanovestProduct />);
-  // "draft-agent" (anchored) avoids collision with "draft-reviewer"
   [
     { pattern: /brainstorm/i },
     { pattern: /research/i },
     { pattern: /plan-reviewer/i },
-    { pattern: /^draft-agent$/i },
+    { pattern: /prd-drafter/i },
     { pattern: /draft-reviewer/i },
     { pattern: /validate/i },
     { pattern: /Figma/i },

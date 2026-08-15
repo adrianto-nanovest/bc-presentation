@@ -392,7 +392,7 @@ export const a1GeneralContent: A1Content = {
 //   - Excluded: MIRRAX, Databricks (publicly unverified) and AI-OCR (a GEMVIS
 //     sub-capability). SiCantik and WIM are kept separate.
 //
-// Known and accepted: three of the five are field/ops systems, so back-office
+// Known and accepted: two of the four are field/ops systems, so back-office
 // participants recognise the names rather than their own daily use. The frame
 // works on brand recognition.
 
@@ -426,7 +426,7 @@ export const a1GemsContent: A1Content = {
   tagline: "DigiTech built these for you. Now build with them.",
   taglineKw: ["built these for you", "build with them"],
   ruleHeader: "Already In Production",
-  leftHeading: "Five systems already running",
+  leftHeading: "Four systems already running",
   rightHeading: "Questions we'll answer",
   capabilities: [
     {
@@ -463,7 +463,7 @@ export const a1GemsContent: A1Content = {
   // brands. REWORDING ANY OF THE FIVE FOR GEMS REQUIRES CLONING THE ARRAY
   // FIRST — otherwise the edit ships to berau and general too.
   questions: a1Content.questions,
-  footerCaption: "Five systems already live. Five questions still ahead.",
+  footerCaption: "Four systems already live. Five questions still ahead.",
   footerCaptionKw: ["already live", "ahead"],
 };
 

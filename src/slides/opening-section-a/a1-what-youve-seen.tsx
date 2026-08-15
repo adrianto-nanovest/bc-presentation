@@ -610,7 +610,7 @@ function QuestionCard({ q }: { q: A1Question }) {
 
 // THE RULE MEASURES THE HEADING, NOT THE COLUMN. It used to be `width="40%"` — a
 // fixed 208px of the 520px column, drawn identically under a 28-character label
-// ("Five systems already running") and a 22-character one ("Questions we'll
+// ("Four systems already running") and a 22-character one ("Questions we'll
 // answer"), so neither column's rule agreed with its own text and the two
 // disagreed with each other (owner review, 2026-08-05).
 //

@@ -3,7 +3,7 @@ import { ExchangeAlerts } from "@/slides/reveal-and-closing/simulations/Exchange
 
 test("ExchangeAlerts renders 6 exchange feed labels", () => {
   render(<ExchangeAlerts />);
-  ["Binance", "OKX", "Tokocrypto", "BitMart", "Indodax", "Alpaca"]
+  ["Binance", "OKX", "Tokocrypto", "Bitmart", "Indodax", "Alpaca"]
     .forEach((label) => expect(screen.getByText(label)).toBeInTheDocument());
 });
 
@@ -11,7 +11,7 @@ test("ExchangeAlerts renders the 3-layer dedup ladder", () => {
   render(<ExchangeAlerts />);
   expect(screen.getByText(/hash/i)).toBeInTheDocument();
   expect(screen.getByText(/fuzzy/i)).toBeInTheDocument();
-  expect(screen.getByText(/AI-semantic/i)).toBeInTheDocument();
+  expect(screen.getByText(/source canonical/i)).toBeInTheDocument();
 });
 
 test("ExchangeAlerts mentions Opsgenie", () => {

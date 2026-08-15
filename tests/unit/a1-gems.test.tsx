@@ -89,9 +89,11 @@ describe("A.1 (GEMS) copy", () => {
     // line wrapped and closed on the rule header 110px below it.
     expect(a1GemsContent.tagline).toBe("DigiTech built these for you. Now build with them.");
     expect(a1GemsContent.ruleHeader).toBe("Already In Production");
-    expect(a1GemsContent.leftHeading).toBe("Five systems already running");
+    // Four systems, five questions: MIRRAX is held out of `capabilities` until
+    // it is in production, but the shared questions array is still five.
+    expect(a1GemsContent.leftHeading).toBe("Four systems already running");
     expect(a1GemsContent.footerCaption).toBe(
-      "Five systems already live. Five questions still ahead.",
+      "Four systems already live. Five questions still ahead.",
     );
   });
 
@@ -255,7 +257,7 @@ describe("A.1 (GEMS) renders", () => {
     expect(a1GemsSlide.sectionKey).toBe(a1Slide.sectionKey);
   });
 
-  test("step 0 shows the GEMS fig label, title, tagline, rule header and five chips", () => {
+  test("step 0 shows the GEMS fig label, title, tagline, rule header and four chips", () => {
     const { container } = renderAtStep(0);
 
     const fig = container.querySelector(".fig-label") as HTMLElement;
@@ -269,19 +271,21 @@ describe("A.1 (GEMS) renders", () => {
     expect(screen.getByTestId("a1-rule-header").textContent).toContain("Already In Production");
     expect(opacityOf("a1-rule-header")).toBe("1");
 
-    expect(screen.getAllByTestId("capability-chip")).toHaveLength(5);
+    // Four, not five: MIRRAX is held out of the array until it is in
+    // production (content.ts keeps it commented beside the others).
+    expect(screen.getAllByTestId("capability-chip")).toHaveLength(4);
     // The two step-1+ payloads are hidden, not merely absent-looking.
     expect(isRevealed("a1-footer-caption")).toBe(false);
   });
 
-  test("step 1 shows the five product cards and reveals the shared questions column", () => {
+  test("step 1 shows the four product cards and reveals the shared questions column", () => {
     renderAtStep(1);
 
-    for (const icon of ["MessageSquare", "Camera", "Truck", "FileSignature", "Map"]) {
+    for (const icon of ["MessageSquare", "Camera", "Truck", "FileSignature"]) {
       expect(screen.getByTestId(`a1-cap-card-${icon}`)).toBeInTheDocument();
     }
     expect(screen.getByTestId("a1-capabilities-column").textContent).toContain(
-      "Five systems already running",
+      "Four systems already running",
     );
 
     const questions = screen.getByTestId("a1-questions-column");
@@ -295,9 +299,9 @@ describe("A.1 (GEMS) renders", () => {
     expect(isRevealed("a1-footer-caption")).toBe(false);
   });
 
-  test("the three NEW icons render at the same size and stroke weight as the reused ones", () => {
+  test("the three NEW icons render at the same size and stroke weight as the reused one", () => {
     // The AC in gh#25: Camera, Truck and FileSignature must not look bolder or
-    // larger than MessageSquare and Map, which the berau A.1 already ships.
+    // larger than MessageSquare, which the berau A.1 already ships.
     renderAtStep(1);
 
     const svgOf = (icon: string) =>
@@ -311,7 +315,7 @@ describe("A.1 (GEMS) renders", () => {
     ];
 
     expect(attrs(reference)).toEqual(["22", "22", "1.5"]);
-    for (const icon of ["Camera", "Truck", "FileSignature", "Map"]) {
+    for (const icon of ["Camera", "Truck", "FileSignature"]) {
       expect(attrs(svgOf(icon)), icon).toEqual(attrs(reference));
     }
   });
@@ -319,7 +323,7 @@ describe("A.1 (GEMS) renders", () => {
   test("step 2 reveals the footer, which stays hidden before it", () => {
     renderAtStep(2);
     expect(screen.getByTestId("a1-footer-caption").textContent).toBe(
-      "Five systems already live. Five questions still ahead.",
+      "Four systems already live. Five questions still ahead.",
     );
     // `Reveal` never unmounts, so `.on` — not presence — is what "revealed"
     // means. The step-0 and step-1 cases above assert the other side of this.

@@ -8,11 +8,11 @@ describe("foundationCoreSlides", () => {
     expect(foundationCoreSlides[1].steps).toBe(3);   // D.2 — convergence (3 steps)
     expect(foundationCoreSlides[2].steps).toBe(5);   // D.3 — one process · four levels (5 steps)
     expect(foundationCoreSlides[3].steps).toBe(6);   // D.4 — which level · when (6 steps)
-    expect(foundationCoreSlides[4].steps).toBe(3);   // D.5 — bridge to E (3 steps)
+    expect(foundationCoreSlides[4].steps).toBe(2);   // D.5 — bridge to E (2 steps)
   });
 
-  test("total advances after revamp = 20", () => {
+  test("total advances after revamp = 19", () => {
     const total = foundationCoreSlides.reduce((s, x) => s + x.steps, 0);
-    expect(total).toBe(20);
+    expect(total).toBe(19);
   });
 });

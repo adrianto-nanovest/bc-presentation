@@ -28,14 +28,17 @@ test("I.2 renders the FIG label", () => {
   expect(fig?.textContent).toMatch(/FIG\.\s*I\.2.*THE JOURNEY/i);
 });
 
-test("I.2 renders the headline 'Who am I' with 'am I' highlighted", () => {
+test("I.2 renders the headline with 'Introduction' and 'am I' highlighted", () => {
   renderSlide();
-  // `highlight()` splits the headline into separate spans for "Who " and
-  // "am I" (the latter wrapped in <em class="text-copper-400 italic">).
-  expect(screen.getByText("Who")).toBeInTheDocument();
-  const highlighted = screen.getByText("am I");
-  expect(highlighted).toBeInTheDocument();
-  expect(highlighted.tagName).toBe("EM");
+  const headline = document.querySelector("h1.slide-headline");
+  expect(headline?.textContent).toBe("Introduction. Who am I.");
+  // `highlight()` wraps each keyword in <em class="text-copper-400 italic">;
+  // the plain runs around them stay bare text / <span>.
+  for (const keyword of ["Introduction", "am I"]) {
+    const highlighted = screen.getByText(keyword);
+    expect(highlighted).toBeInTheDocument();
+    expect(highlighted.tagName).toBe("EM");
+  }
 });
 
 test("I.2 renders name, role, and delivery lines", () => {

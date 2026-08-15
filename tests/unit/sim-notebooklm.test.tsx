@@ -5,11 +5,14 @@ test("NotebookLM renders the 6 perimeter sub-agents", () => {
   render(<NotebookLM />);
   ["deep-researcher", "cross-notebook-query", "youtube-curator",
    "drive-scout", "url-crawler", "brain-compiler"]
-    .forEach((label) => expect(screen.getByText(new RegExp(label))).toBeInTheDocument());
+    // "deep-researcher" also appears in the router's intent map, so allow >= 1
+    .forEach((label) => expect(screen.getAllByText(new RegExp(label)).length)
+      .toBeGreaterThanOrEqual(1));
 });
 
-test("NotebookLM names the central main agent + the MCP tool pool", () => {
+test("NotebookLM names the central intent classifier and its routing table", () => {
   render(<NotebookLM />);
-  expect(screen.getByText(/NotebookLM agent/i)).toBeInTheDocument();
-  expect(screen.getByText(/50\+ MCP tools/i)).toBeInTheDocument();
+  expect(screen.getByText(/NLM INTENT CLASSIFIER/i)).toBeInTheDocument();
+  expect(screen.getByText("nlm")).toBeInTheDocument();
+  expect(screen.getByText(/intent → agent/i)).toBeInTheDocument();
 });
