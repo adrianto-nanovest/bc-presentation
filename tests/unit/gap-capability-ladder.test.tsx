@@ -677,13 +677,25 @@ describe("Berau", () => {
     // NOT "382 leaders trained" — that word is the throwaway prototype's, and §6.5
     // says "382 trained". A headcount is exactly what a leader checks.
     expect(evidence).not.toContain("382 leaders");
-    // AND THE TWO FACTS §6.5 GOT WRONG STAY WRONG-PROOF. §6.5 was written against a
-    // plan: it says the competition is complete and the Ambassadors are named, and
-    // on 2026-08-14 neither had happened. A deck that tells a room its own programme
-    // has finished loses the room, so both are held as absences here — this is the
-    // kind of claim a reword restores by accident.
+    // THE FACT §6.5 GOT WRONG STAYS WRONG-PROOF. §6.5 was written against a plan and
+    // says the competition is complete; it is still running. A deck that tells a room
+    // its own programme has finished loses the room, so it is held as an absence here —
+    // this is the kind of claim a reword restores by accident.
     expect(evidence).not.toMatch(/competition is complete/i);
-    expect(evidence).not.toMatch(/Ambassadors named/i);
+    // ═══ THE SECOND ABSENCE WAS `Ambassadors named`, AND IT IS GONE (2026-08-16). The
+    // 08-14 pass banned the phrase because §6.5 asserted a roster nobody had checked; it
+    // then wrote "Ambassadors not yet named" onto the stage, which the Culture
+    // department's framework sheet contradicts outright — five are named at Berau Coal.
+    // So the ban had stopped protecting a fact and started pinning a false one. The
+    // count is now printed, and what is held instead is the SHAPE of the claim: a number
+    // named, never a programme declared finished.
+    expect(evidence).toMatch(/5 Ambassadors named/);
+    expect(evidence).not.toMatch(/not yet named/i);
+    // AND THE RING STAYS OPEN, which is the whole reason this fix is safe on this slide.
+    // A roster is not an outcome: the question above asks whether the training reached
+    // the desk, and five names on a list answer it no better than a certificate would.
+    expect(berau.open.rung).toBe(0);
+    expect(berau.open.label).toContain("?");
     // The certificate went with them: it asked about what people kept AFTER an event
     // that has not happened.
     expect(berau.open.question).not.toMatch(/certificate/i);

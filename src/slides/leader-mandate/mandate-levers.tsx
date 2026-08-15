@@ -55,12 +55,17 @@
 // LAST TWO ACCUMULATE. `./components/LeverBoard.tsx` carries the reasoning for the
 // split and for why each hero is conditionally MOUNTED rather than gated.
 //
-//   0 — MAKE IT OFFICIAL. A week that keeps turning over and one block that never
-//       moves. The act beside it, the reason under that, and what the organisation
-//       loses without it on the shelf at the foot of the stage.
-//   1 — NAME THE CHAMPIONS. Six figures, TWO of them clear of the row under one
+//   0 — SPEAK AT THE START. A lectern that stands, and one figure that walks up to it
+//       over and over. The act beside it, the reason under that, and what the
+//       organisation loses without it on the shelf at the foot of the stage. The mark
+//       was a churning week under this lever's two earlier readings; both turned on
+//       booking time, and 2026-08-16 retired the premise — see `./content.ts`.
+//   1 — BACK THE AMBASSADORS. Six figures, TWO of them clear of the row under one
 //       guard breathing around both. The mark's subject is the boundary, not the
 //       people, and the boundary is one act of authority over everybody inside it.
+//       IT SURVIVED THE 2026-08-15 RETERMING UNTOUCHED, and reads truer for it: the
+//       lever no longer asks the room to pick the two figures — the Culture
+//       department's framework does that — so the guard IS the whole act now.
 //   2 — OPEN THE ACCESS. A barrier that lifts, one mark that passes, and posts that
 //       never move — because what opens is the access and not the wall.
 //   3 — KEEP IT FUNDED. A block that does not shrink, a flow that keeps arriving off

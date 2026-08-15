@@ -18,8 +18,11 @@
  *   Every HTML box arrives through `Reveal` instead — `.fade.on` in `src/styles/globals.css` —
  *   because a scene's boxes are mounted WITH the scene and a mount is what `Reveal` is for.
  *
- *   AMBIENT LOOPS run forever and are each lever's own VERB drawn small — eight of them across
- *   four marks. Every one is authored so its 0% and 100% frames are the SAME frame, so the loop
+ *   AMBIENT LOOPS run forever and are each lever's own VERB drawn small — SIX of them across
+ *   four marks (`walk`, `guard`, `lift`, `pass`, `drop`, `review`), plus `current` on the recap
+ *   connectors, which belongs to no mark. It was eight until 2026-08-16, when `churn`'s four
+ *   delayed cells retired with the week glyph and one `walk` took their place. Every one is
+ *   authored so its 0% and 100% frames are the SAME frame, so the loop
  *   has no seam and the single squashed iteration a reduced-motion reader gets is a composed
  *   picture. THERE IS NO LICENSED EXCEPTION IN THIS FILE: K.1's `en-reach` is a ring whose whole
  *   life is a fade-out and has to be removed outright, and `kl-review` was authored as a SCALE
@@ -27,10 +30,13 @@
  *   not there is that lever's failure.
  *
  * ═══ THE MOTION IS THE ARGUMENT AND NOT THE DECORATION. Each mark is a mechanical sentence
- * about what one signature changes, and in three of the four the SUBJECT IS THE PART THAT DOES
- * NOT MOVE — the blocked session while the week churns, the two gate posts while the barrier
- * lifts, the budget block while the money flows off it. Only `champion` moves its subject's
- * boundary rather than its surroundings, and it moves the boundary and not the person.
+ * about what one signature changes, and in TWO of the four the SUBJECT IS THE PART THAT DOES
+ * NOT MOVE — the two gate posts while the barrier lifts, the coin stack while the next coin
+ * lands on it. The other two move a person or the boundary round one, which is what those two
+ * levers actually buy: `champion` moves the guard and not the people inside it, and `lectern`
+ * moves the one figure the lever is about, because whether that person walks up IS the lever.
+ * The split was three-to-one until 2026-08-16; the week glyph was the third fixed subject and
+ * it went out with the calendar reading of its lever.
  * `./LeverGlyphs.tsx` holds the four shapes; nothing there knows how long anything takes.
  *
  * ═══ THE LINE WEIGHT IS A CUSTOM PROPERTY AND NOT A NUMBER, which is the one thing a reader
@@ -251,34 +257,45 @@
   transform-box: fill-box;
 }
 
-/* ── WEEK · the week turns over and one block does not ───────────────────────
-   ONE KEYFRAME AND FOUR DELAYS, so over a cycle every cell gets a byte-identical turn and the
-   mark ranks none of them — the construction `en-many` and `pg-agent` both use, and for the same
-   reason: "the week fills with other things" is a claim about a SET, and a set with a favourite
-   in it is a hierarchy. The delays are typed rather than computed because there are four of them
-   and they are not a list this file maps over.
+/* ── LECTERN · the lectern stands, and the leader walks up to it ─────────────
+   REPLACED `kl-churn` AND ITS FOUR DELAYS ON 2026-08-16, with the lever the mark draws. That
+   rule faded four cells of a week around one that never moved — the right drawing for a lever
+   about protected time, and the wrong one for a lever about who is at the front of the room.
 
-   THE BLOCKED SESSION HAS NO RULE HERE AT ALL, and that absence is the mark. It is the only
-   element in the glyph that is never named below, so it is the only one that is identical on
-   every frame of every cycle. */
-.kl-glyph-week .kl-anim-churn-1 {
-  animation: kl-churn 3200ms var(--ease) infinite;
+   IT RESTS ARRIVED. 0% and 100% are the same frame — the figure at the lectern — so the loop
+   closes on itself, and the single squashed iteration a reduced-motion reader gets is the
+   composed picture rather than a person stopped mid-stride. The figure is authored at its
+   ARRIVED coordinates in `./LeverGlyphs.tsx` for exactly that reason: rest is `translateX(0)`,
+   and the walk is drawn as a departure from rest and a return to it.
+
+   THE TELEPORT AT 11% IS `kl-pass`'s TRICK, used here for the third time in this file. The
+   figure is returned to the left edge WHILE IT IS AT ZERO OPACITY, so the cycle reads as one
+   arrival repeated and never as a leader backing away from the lectern — which is the same
+   claim in reverse and would be just as legible. `-3.4` in viewBox units puts the shoulders'
+   left edge at x 2.0 at the far end, on the boundary of the 2…18 the marks are drawn within,
+   so the walk needs none of the overflow the guard, the barrier and the coin do. It is the
+   travel that is pinned by that bound, not the figure: widening the shoulders means shortening
+   the walk. */
+.kl-glyph-lectern .kl-anim-walk {
+  animation: kl-walk 3200ms var(--ease) infinite;
 }
-.kl-glyph-week .kl-anim-churn-2 {
-  animation: kl-churn 3200ms var(--ease) 240ms infinite;
-}
-.kl-glyph-week .kl-anim-churn-3 {
-  animation: kl-churn 3200ms var(--ease) 480ms infinite;
-}
-.kl-glyph-week .kl-anim-churn-4 {
-  animation: kl-churn 3200ms var(--ease) 720ms infinite;
-}
-@keyframes kl-churn {
+@keyframes kl-walk {
   0%,
-  100% {
-    opacity: 0.28;
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  11% {
+    transform: translateX(-3.4px);
+    opacity: 0;
   }
   32% {
+    transform: translateX(-3.4px);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: translateX(0);
     opacity: 1;
   }
 }
@@ -289,12 +306,15 @@
    which is the opposite claim. It rests at full: a boundary at rest is still a boundary, and that
    resting frame is what a reduced-motion reader gets.
 
-   THE ORIGIN DID NOT MOVE WHEN THE MARK WENT PLURAL (2026-08-15). The arc is wider now — two
-   figures to clear instead of one — but it is still the semicircle centred on 10, 9.4, so one
-   pair of coordinates still describes both the shape and what it grows about. */
+   THE ORIGIN MOVED WITH THE 2026-08-16 REDRAW, and it is the one line in this file that had to
+   move with it. The figures are head-and-shoulders now rather than bare circles, so they stand
+   taller and the guard sits lower to clear them: the semicircle is centred on 10, 12.2 and no
+   longer on 10, 9.4. A `view-box` origin left at the old value would grow the arc about a point
+   above its own centre and the guard would drift up and off the pair it encloses. The pair is
+   still symmetric about x=10, which is why only the second coordinate changed. */
 .kl-glyph-champion .kl-anim-guard {
   transform-box: view-box;
-  transform-origin: 10px 9.4px;
+  transform-origin: 10px 12.2px;
   animation: kl-guard 3000ms ease-in-out infinite;
 }
 @keyframes kl-guard {
@@ -360,21 +380,42 @@
   }
 }
 
-/* ── FUNDING · the money keeps arriving and the review lands on it ───────────
-   USER UNITS ON THE DASH, NOT pathLength, and the flowing path therefore deliberately does NOT
-   set `pathLength`. `2 3.2` is 2 units of dash and 3.2 of gap in the glyph's own 20-unit box,
-   which is the same spacing whatever the curve's real length — what makes it read as a flow
-   rather than as a texture. −5.2 IS ONE WHOLE PERIOD (2 + 3.2), so the loop closes on itself and
-   there is no seam; NEGATIVE, so the pattern travels in the +path direction, which is
-   budget → review. `linear`, because money arriving in even instalments is the claim and an eased
-   flow would surge. */
-.kl-glyph-funding .kl-anim-flow {
-  stroke-dasharray: 2 3.2;
-  animation: kl-flow 1700ms linear infinite;
+/* ── FUNDING · one more coin keeps arriving, and the review lands beside it ──
+   REPLACED `kl-flow` ON 2026-08-16. That rule travelled a dash pattern along a curve, which was
+   an honest drawing of "money moves" and an unreadable one: at 260px the dashes read as loose
+   strokes floating over a block and at 30px they closed into a solid line. A coin that falls onto
+   a stack needs no decoding at either size.
+
+   IT RESTS LANDED, WHICH IS WHAT MAKES THE LOOP SEAMLESS AND THE REDUCED-MOTION FRAME HONEST.
+   0% and 100% are the same frame — the coin on top of the stack — so the cycle closes on itself,
+   and a reader who asked for no motion gets a four-coin stack rather than a coin stopped in
+   mid-air. The budget did not stop arriving; it arrived.
+
+   THE TELEPORT AT 9% IS THE `kl-pass` TRICK, and this file already documents it on the gate: the
+   coin is returned to the top of its fall WHILE IT IS AT ZERO OPACITY, so the cycle is a fall
+   repeated rather than a coin flying back up out of the stack. Without it the mark would read as
+   money being taken off the line, which is the opposite claim. */
+.kl-glyph-funding .kl-anim-drop {
+  animation: kl-drop 2600ms var(--ease) infinite;
 }
-@keyframes kl-flow {
-  to {
-    stroke-dashoffset: -5.2;
+@keyframes kl-drop {
+  0%,
+  8% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  9% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+  62%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 /* THE REVIEW IS A SCALE AND NOT A FADING RING. A ring that expands and fades has no visible
@@ -404,11 +445,13 @@
        duration, not a value, and a 0.01ms animation with a `both` fill can flash its `from`
        frame — on a path carrying `stroke-dasharray: 1` and an unwritten offset, that frame is an
        undrawn connector.
-     · `kl-flow` and `kl-current` are the file's other dashed rules and neither may get the same
-       treatment: in both, the dash PATTERN is the drawing, so `animation: none` alone is the
-       whole answer and restating an offset would move the dashes off their rest positions. The
-       four connectors therefore rest as four dotted curves running to the box, which still says
-       the direction — it just says it without moving.
+     · `kl-current` is the file's only other dashed rule and it may NOT get the same treatment:
+       its dash PATTERN is the drawing, so `animation: none` alone is the whole answer and
+       restating an offset would move the dashes off their rest positions. The four connectors
+       therefore rest as four dotted curves running to the box, which still says the direction —
+       it just says it without moving. (`kl-flow` was the second such rule until 2026-08-16;
+       `kl-drop` replaced it and is a transform, not a dash, so it parks on its 100% frame like
+       everything else.)
    THE LIST BELOW IS EXHAUSTIVE OVER EVERY `infinite` CLASS IN THIS FILE, and the stylesheet test
    holds it that way — a mark added above without a line here is a mark that keeps moving for a
    reader who asked it not to. */
@@ -422,25 +465,20 @@
     animation: none;
   }
   .kl-current,
-  .kl-glyph-week .kl-anim-churn-1,
-  .kl-glyph-week .kl-anim-churn-2,
-  .kl-glyph-week .kl-anim-churn-3,
-  .kl-glyph-week .kl-anim-churn-4,
+  .kl-glyph-lectern .kl-anim-walk,
   .kl-glyph-champion .kl-anim-guard,
   .kl-glyph-gate .kl-anim-lift,
   .kl-glyph-gate .kl-anim-pass,
-  .kl-glyph-funding .kl-anim-flow,
+  .kl-glyph-funding .kl-anim-drop,
   .kl-glyph-funding .kl-anim-review {
     animation: none;
   }
-  /* THE FOUR CELLS REST AT THEIR OWN 100% FRAME, which is `opacity: 0.28` — a legible quiet, and
-     the frame the loop is authored to close on. Stated rather than left implicit because a reader
-     checking this block against the requirement should be able to see that the week is still a
-     week when nothing in it is moving. */
-  .kl-glyph-week .kl-anim-churn-1,
-  .kl-glyph-week .kl-anim-churn-2,
-  .kl-glyph-week .kl-anim-churn-3,
-  .kl-glyph-week .kl-anim-churn-4 {
-    opacity: 0.28;
-  }
+  /* NOTHING NEEDS A REST VALUE WRITTEN HERE ANY MORE, and that is a simplification rather than
+     an omission. The four week cells used to need `opacity: 0.28` restated, because their loop
+     closed on a value the element did not carry in its own markup. `kl-walk` and `kl-drop` both
+     close on `translate(0)` and `opacity: 1`, which is where an un-animated element already
+     sits, so `animation: none` parks each of the six on its composed frame with nothing else
+     said. A mark added above that rests anywhere other than its authored position needs a line
+     back in this block, and the stylesheet test that holds the list above exhaustive is what
+     will make the omission visible. */
 }

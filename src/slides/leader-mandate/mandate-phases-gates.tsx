@@ -27,12 +27,19 @@
 //
 // AND ONE CORRECTION THAT IS NOT A LAYOUT DECISION AT ALL. The Berau block asserted that
 // P0 WAS COMPLETE, headed its band "AUG 18 IS THE GATE", and closed on "The AI
-// Ambassadors already exist." None of the three is true: the plan has slipped, the
-// competition is still running, the post-assessment has not been taken, and no
-// Ambassador has been named. `./content.ts` carries the corrected block and the argument
-// for why a P0 still in flight makes this slide STRONGER — a finished phase lets a room
-// say "good, that worked"; an unfinished one puts them inside the phase the slide is
-// about. `leader-gap/content.ts` took the same correction a day earlier.
+// Ambassadors already exist." None of the three was true: the plan had slipped, the
+// competition is still running and the post-assessment has not been taken.
+// `./content.ts` carries the corrected block and the argument for why a P0 still in
+// flight makes this slide STRONGER — a finished phase lets a room say "good, that
+// worked"; an unfinished one puts them inside the phase the slide is about.
+// `leader-gap/content.ts` took the same correction a day earlier.
+//
+// THIS NOTE ALSO SAID "no Ambassador has been named", AND THAT HALF WAS PUT BACK ON
+// 2026-08-16: five are named at Berau Coal, on the Culture department's own framework
+// sheet. The 08-14/08-15 pass corrected a claim that was too early by writing one that
+// was false, in three files at once. See `./content.ts`'s `BERAU_BLOCK` header for the
+// whole history — it is kept because the failure mode (one source, propagated
+// everywhere, no second source asked) is the part worth not repeating.
 //
 // ═══ 5 POSES, one argument each, AND THE FIRST THREE ARE MUTUALLY EXCLUSIVE WHILE THE
 // LAST TWO ACCUMULATE. `./components/PhaseLadder.tsx` carries the reasoning for the

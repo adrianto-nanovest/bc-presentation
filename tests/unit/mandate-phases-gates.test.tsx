@@ -811,14 +811,42 @@ describe("Berau", () => {
   test("does not claim P0 is complete", () => {
     // ═══ THE CORRECTION THIS DESCRIBE BLOCK EXISTS FOR (owner, 2026-08-15). The block
     // asserted "P0 is complete", headed its band "AUG 18 IS THE GATE", and closed on "The
-    // AI Ambassadors already exist. Fund them, or lose them." The plan has slipped: the
-    // workshop is delivered, THE COMPETITION IS STILL RUNNING, the post-assessment has not
-    // been taken, and NO AMBASSADOR HAS BEEN NAMED. The failure mode is somebody restoring
-    // the crisper, false version, so the forbidden claims are named here.
+    // AI Ambassadors already exist. Fund them, or lose them." The plan had slipped: the
+    // workshop is delivered, THE COMPETITION IS STILL RUNNING and the post-assessment has
+    // not been taken. The failure mode is somebody restoring the crisper, false version,
+    // so the forbidden claims are named here.
     const everything = [BERAU.provenance, BERAU.closer].join(" ").toLowerCase();
     expect(everything).not.toContain("p0 is complete");
-    expect(everything).not.toContain("ambassador");
     expect(everything).not.toContain("aug 18");
+    // ═══ THE WORD `ambassador` WAS BANNED OUTRIGHT HERE UNTIL 2026-08-16, AND THAT WAS AN
+    // OVER-CORRECTION OF AN OVER-CORRECTION. The 08-15 pass read the retired closer's fault
+    // as the NOUN when the fault was the CLAIM — "already exist … or lose them" asserted a
+    // roster the deck had not checked. It then went further and asserted the opposite, "no
+    // Ambassador has been named", which the Culture department's own framework sheet
+    // contradicts: five are named at Berau Coal.
+    //
+    // SO THE BAN IS NOW ON THE CLAIM AND NOT THE WORD. The citation may say how many are
+    // named, because that is a fact with a source; it may not tell the room what to do
+    // about them, because the closer is where this slide makes its one ask and K.3 is where
+    // the Ambassadors are asked for.
+    expect(everything).not.toContain("already exist");
+    expect(everything).not.toContain("lose them");
+    expect(BERAU.closer.toLowerCase()).not.toContain("ambassador");
+  });
+
+  test("names how many Ambassadors exist, and does not say what to do about them", () => {
+    // The fact belongs to the CITATION — it is Berau Coal's own journey, sourced to the
+    // framework sheet's footnote ("Berau Coal already have 5 AI Ambassador"). The deck
+    // asserted the opposite until 2026-08-16, in this file and in `leader-gap`'s ladder,
+    // and both were corrected in one edit.
+    expect(BERAU.provenance.toLowerCase()).toContain("five ai ambassadors");
+    // AND THE TARGET IS NOT ON THE STAGE. The framework sets Berau Coal at two Champions and
+    // twelve Agents; five against fourteen is HR's shortfall, and this deck has no standing
+    // to project it at the people it would read as a criticism of. Held as a rule rather
+    // than left to judgement, because "it makes the ask land harder" is exactly the argument
+    // that would put it back.
+    expect(BERAU.provenance.toLowerCase()).not.toContain("fourteen");
+    expect(BERAU.provenance).not.toMatch(/\b14\b/);
   });
 
   test("prints the three P0 stages with their true status", () => {

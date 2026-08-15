@@ -332,11 +332,30 @@ const PILLARS: readonly Pillar[] = [
     // rewarding the person who waits is also a decision, made by default.
     decision: "You decide whether the culture rewards the person who tries it or the person who waits.",
     decisionKw: ["the culture rewards"],
-    // HR p4's three, verbatim. "AI Champions per dept" is the one that names a
-    // structure rather than a mood, and it is the pillar's whole answer to *what does
-    // culture cost me?* — a named person per division, which is a headcount decision
-    // and therefore this room's.
-    points: ["AI Champions per dept", "Growth mindset culture", "Knowledge & learning"],
+    // HR p4's three, with its FIRST LINE RETERMED (2026-08-15). It read "AI Champions
+    // per dept", which was HR p4's own wording; the Culture department's AI Ambassador
+    // framework supersedes it and gives the same structure a name and a shape — AI
+    // Ambassador is the programme, Champion is a top-level leader/CxO inside it and
+    // Agent is any BU employee, at one Champion to six Agents. So the line names the
+    // PROGRAMME rather than one of its two roles.
+    //
+    // "AI Ambassadors per BU" AND NOT "AI Champions per dept", FOR TWO REASONS THAT
+    // COMPOUND. First, the framework's Champion is a CxO — printing it on the culture
+    // pillar would tell the room its champions are somewhere below it when the
+    // framework puts them in it. Second, "Agent" is unusable here: the AI Companions
+    // pillar on THIS SAME STAGE prints "Agents in every workflow" and "Tool →
+    // Companion → Agent", and its recap fragment is "when a tool becomes an agent", so
+    // a human AI Agent and a software one would collide inside one figure. The
+    // umbrella term collides with neither and is true of both roles.
+    //
+    // "per BU" AND NOT "per dept" because the framework's targets are set per BUSINESS
+    // UNIT — Berau Coal 720 employees → 2 Champions and 12 Agents — and a department
+    // count is one this deck has no source for.
+    //
+    // IT IS STILL THE ONE LINE THAT NAMES A STRUCTURE RATHER THAN A MOOD, which is the
+    // pillar's whole answer to *what does culture cost me?* — named people against a
+    // headcount, which is a decision and therefore this room's.
+    points: ["AI Ambassadors per BU", "Growth mindset culture", "Knowledge & learning"],
     // "or waits" AND NOT "the person who tries it": the contrast is the decision. A
     // fragment that named only the rewarded half would read as a policy the room
     // already has, and lose the point that rewarding the person who waits is also a
@@ -352,8 +371,11 @@ const PILLARS: readonly Pillar[] = [
     // and a kill criterion — and §6.6's second half of "Leading AI Culture". So
     // `pilot`, a form of `lead`, and `culture`.
     //
-    // NOT THE PROTOTYPE'S "and name its owner". Naming and protecting a champion is
-    // K.3's own lever, printed there in those words; repeating it here spends a beat
+    // NOT THE PROTOTYPE'S "and name its owner". Resourcing and protecting the
+    // ambassadors is K.3's own lever — and since the Culture department's framework
+    // NAMES them centrally (open recruitment, calibration, internal mapping), the act
+    // left to this room is the backing rather than the naming, which is exactly what
+    // K.3 now asks for. Repeating any of it here spends a beat
     // of section K on the centrepiece and lets the leader hand the pillar to the
     // person they just named. "leading the culture is part of the job" is the half
     // of D.3's turn that CANNOT be delegated, which is why it is the half that
@@ -880,14 +902,19 @@ export function hubBrandLineFor(brand: Brand): string | null {
 //     and the word `decision` is not spent below AT ALL. It was, once — the upward act
 //     ended on "the next decision this room makes" — and the 2026-08-14 rewrite put both
 //     acts in the middle's own hands, which returned the noun to C.1 outright.
-//   · `NAME A CHAMPION` → `leader-mandate`'s K.3 lever, AND THIS ONE OVERLAP SHIPS
+//   · `BACK THE AMBASSADORS` → `leader-mandate`'s K.3 lever, AND THIS ONE OVERLAP SHIPS
 //     DELIBERATELY. {@link shapeMiddleOutContent.middleSubname} calls the middle tier
-//     "YOUR AI CHAMPIONS" because that is the term the room already uses and the term
-//     the reference figure this slide was reworked against uses. C.4 names the PEOPLE;
-//     K.3, six sections later, asks the room to name ONE of them and protect their
-//     hours. A term the room has already met is what makes that ask land, so the order
-//     is the argument: this is a setup, not an echo. It is the only shared noun with any
+//     "YOUR AI AMBASSADORS" because that is the Culture department's own programme name
+//     and therefore the term the room will already have met outside this deck. C.4 names
+//     the PEOPLE; K.3, six sections later, asks the room to give them hours and a target
+//     line. A term the room has already met is what makes that ask land, so the order is
+//     the argument: this is a setup, not an echo. It is the only shared noun with any
 //     slide in the deck and it is recorded here so a future reader does not "fix" it.
+//
+//     THE WORD WAS `CHAMPIONS` UNTIL 2026-08-15 ON BOTH SLIDES, and it was retermed on
+//     both in one pass — see the subname's own header for why the framework's meaning of
+//     `Champion` (a CxO) made it the wrong noun for this plate, and K.3's `person` lever
+//     for why the framework's recruitment pipeline made `name` the wrong verb.
 //   · "The hardest part is not the tools." AND THE 70/30 → `gap-hardest-part`'s. The
 //     word `tools` appears nowhere below, and no percentage does either.
 //   · "Nobody wrote the rule. So everybody wrote their own." → `gap-no-sop`'s, and
@@ -1103,7 +1130,7 @@ const TIERS: Three<Tier> = [
     // without the riddle. And it cannot say HOW: this room can ask for AI, fast, and fund
     // it, and that is the whole of what a mandate carries. The method — which work, in what
     // order, changed how — is not knowable from here. It is known by the people in the work
-    // and by the champions beside them, which is the plate underneath and the plate under
+    // and by the ambassadors beside them, which is the plate underneath and the plate under
     // that.
     //
     // IT IS STILL NOT A COMPLAINT. Both halves are structural facts about where people sit,
@@ -1126,10 +1153,11 @@ const TIERS: Three<Tier> = [
   },
   {
     id: "middle",
-    // "MIDDLE MANAGEMENT" — the room, named in the room's own words. The champions
+    // "MIDDLE MANAGEMENT" — the room, named in the room's own words. The ambassadors
     // ({@link shapeMiddleOutContent.middleSubname}) print beside it rather than in it,
-    // because not every middle manager is a champion and the plate has to stay a
-    // description of a LAYER.
+    // because not every middle manager is an ambassador — and, since the framework
+    // recruits Agents from any employee, not every ambassador is a middle manager. The
+    // plate has to stay a description of a LAYER either way.
     name: "MIDDLE MANAGEMENT",
     holdsEyebrow: HOLDS_EYEBROW,
     // "Both" IS THE HINGE OF THE WHOLE SLIDE, and it works because the two plates it
@@ -1222,18 +1250,38 @@ export const shapeMiddleOutContent = {
 
   /**
    * WHO THE MIDDLE TIER IS TO THIS PROGRAMME, printed beside its name: "YOUR AI
-   * CHAMPIONS".
+   * AMBASSADORS".
    *
-   * BESIDE THE NAME AND NOT INSTEAD OF IT, because they are not the same set. The plate
-   * is about a LAYER of the organisation; the champions are the people in that layer
-   * who take the work on, and the possessive is doing the work — they are the room's
-   * own people, named by the room, not a role the deck is inventing.
+   * RETERMED 2026-08-15, AND THE OLD WORD SAID THE OPPOSITE OF WHAT THIS PLATE MEANS.
+   * It read "YOUR AI CHAMPIONS", which was the term the room used before the Culture
+   * department's AI Ambassador framework fixed one: in that framework a CHAMPION is a
+   * "top level leader/CxO talent" and an AGENT is "any Business Unit employee", at one
+   * Champion to six Agents. So "champions" on the MIDDLE plate told a room of top
+   * management that its champions sit below it, while HR was telling the same people
+   * that the champions ARE them — on a slide whose entire claim is that adoption does
+   * not run top-down. The contradiction was in the noun, not in the figure.
+   *
+   * "AMBASSADORS" AND NOT "AGENTS", which is the other role and the more literal fit.
+   * `shape-agentic-org` two slides back prints "Agents in every workflow" and "Tool →
+   * Companion → Agent", and this deck spends the whole of section B teaching `agent` as
+   * a class of software. A human AI Agent named on a leader stage that has just defined
+   * the software one is a collision no presenter can talk their way out of. The
+   * umbrella term collides with nothing and is true of both roles.
+   *
+   * BESIDE THE NAME AND NOT INSTEAD OF IT, because they are still not the same set —
+   * and the mismatch is now WIDER rather than narrower, which is worth stating. The
+   * plate is about a LAYER; the framework's Agents are drawn from ANY employee, so part
+   * of the cadre sits on the plate below this one. The subname stays here because this
+   * is the layer the argument is about and the layer most of the cadre sits in; the
+   * presenter says the rest out loud ("Champions lead them, Agents are in every
+   * department"). The possessive is still doing its work — they are the room's own
+   * people, on a roster the room can ask for by name, not a role the deck is inventing.
    *
    * IT IS ALSO THE ONE NOUN THIS SLIDE SHARES WITH ANY OTHER, and the collision census
-   * in the header explains why that ships: K.3 asks the room to NAME a champion six
+   * in the header explains why that ships: K.3 asks the room to BACK these people six
    * sections later, and an ask lands better on a word the room has already met.
    */
-  middleSubname: "YOUR AI CHAMPIONS",
+  middleSubname: "YOUR AI AMBASSADORS",
 
   /**
    * The addressing, as a bright tag at the right-hand end of the TOP plate's name row:
@@ -1390,7 +1438,10 @@ export const shapeMiddleOutContent = {
    *
    * "You empower them" IS THE KEYWORD FOR THAT REASON — it is the only clause addressed to
    * the people in the chairs, the only act this slide asks them for, and the sentence K.3's
-   * "NAME A CHAMPION" lever is later going to collect. "them" is the middle plate, and the
+   * "BACK THE AMBASSADORS" lever is later going to collect. It also survives the 2026-08-15
+   * reterming unchanged, and gets stronger for it: "them" now points at a roster the
+   * Culture department has already recruited and launched, so `empower` is the whole of
+   * what is left to this room. "them" is the middle plate, and the
    * clause after it takes the same party as its subject, so the pronoun is resolved on the
    * stage rather than left hanging. The clause in front of it needs no emphasis; it is what
    * the presenter says about himself.

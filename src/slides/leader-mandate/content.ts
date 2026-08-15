@@ -108,9 +108,9 @@
 //
 //   · A PILLAR NAMES A STRUCTURE AND NEVER AN ACT. K.1's `access` and `support`
 //     pillars name two of the same subjects K.3's first and third levers act on,
-//     and they must keep naming structures. "Named champions, and people can still
-//     ask them after the workshop ends" is a thing that has to exist; "Name your
-//     champions, give them hours every week, and put the job into their targets"
+//     and they must keep naming structures. "Named AI Ambassadors, and people can
+//     still ask them after the workshop ends" is a thing that has to exist; "Give
+//     your AI Ambassadors hours every week, and put the job into their targets"
 //     is a thing a leader does. The
 //     first is authored under {@link Pillar.line} and the second under
 //     {@link Lever.line}, and the file boundary between them is one screen, which
@@ -382,8 +382,29 @@ const PILLARS: Four<Pillar> = [
     // hears "seats" again in the section this one closes over. TRIMMED in the
     // 2026-08-14 pass — it used to end "…, not after it", which spent five words
     // restating the clause before it.
-    line: "Seats and tools cleared before the first session.",
-    lineKw: ["before the first session"],
+    //
+    // ═══ "before the first session" IS GONE (owner, 2026-08-16), AND IT WAS THE ONE
+    // MISLEADING STRING ON THIS SLIDE. A pillar states what has to EXIST; that clause
+    // dated the structure to a specific event, and the event has already happened
+    // without it. Berau's own workshop cleared access for some of the room and not
+    // all of it; GEMS got none at all. So a leader reading the old line either heard a
+    // promise the programme did not keep, or read the pillar as a report on a session
+    // they had already sat through — and a pillar that can be read as a report is a
+    // pillar that can be argued with instead of agreed to.
+    //
+    // THE REPLACEMENT NAMES THE FAILURE MODE AND NOT A DATE. "before anyone is asked
+    // to use them" is true whenever the teaching happens, so it cannot go stale and it
+    // cannot be checked against a calendar. It is also the exact condition the block
+    // this pillar answers describes — TOOLS: "Approval is slow, so people settle for
+    // the weakest tool" — which is what makes the connector between the two boxes read
+    // as cause and answer in the recap pose.
+    //
+    // AND NO BRAND AXIS, THOUGH THE TWO ROOMS HAD TWO OUTCOMES. K.1 exports no brand
+    // pick by design (see the file header); the reword is true of both organisations,
+    // so the difference between them is the presenter's to name out loud and not a
+    // second copy of this slide.
+    line: "Seats and tools cleared before anyone is asked to use them.",
+    lineKw: ["before anyone is asked to use them"],
     answers: "tools",
   },
   {
@@ -410,15 +431,25 @@ const PILLARS: Four<Pillar> = [
     id: "support",
     label: "SUPPORT",
     // THE PILLAR MOST AT RISK OF BECOMING A LEVER, and the second lever is in this
-    // file to be read against ({@link LEVERS}, `champion`): "Name your champions,
-    // give them hours every week, and put the job into their targets" — the
+    // file to be read against ({@link LEVERS}, `champion`): "Give your AI
+    // Ambassadors hours every week, and put the job into their targets" — the
     // leader's ACT. This line says only that the role has to exist and has to be
     // reachable once the teaching is finished, which is the structure the lever
-    // funds. "Named champions", not "you name your champions".
+    // funds. "Named AI Ambassadors", not "you name them".
+    //
+    // RETERMED 2026-08-15 (owner's call, with the Culture department's AI Ambassador
+    // framework). It read "Named champions", which is now a word with a fixed and
+    // DIFFERENT meaning: in that framework a Champion is a "top level leader/CxO
+    // talent" and an Agent is "any Business Unit employee", one Champion to six
+    // Agents. The person a team can still ask after the teaching ends is mostly an
+    // AGENT, and `agent` is unprintable in this deck as a person (§B teaches it as a
+    // class of software), so the pillar names the PROGRAMME both roles belong to.
+    // `leader-shape`'s C.1 and C.4 took the same reterming in the same pass.
     //
     // PLURAL, AS OF 2026-08-15 (owner's call). It read "One person named to ask" and
-    // that was a count this deck has no reason to make: a company runs several
-    // champions, one per department or better, and a pillar that says ONE is a
+    // that was a count this deck has no reason to make — and the framework has since
+    // put a number on it that is plural everywhere: Berau Coal's target is 2
+    // Champions and 12 Agents against 720 employees. A pillar that says ONE is a
     // structure the room would have to argue with before it could agree.
     //
     // NO WEEKDAY, AS OF 2026-08-14, AND NO IDIOM AS OF THE SAME OWNER PASS. It read
@@ -426,7 +457,7 @@ const PILLARS: Four<Pillar> = [
     // a schedule this deck does not commit to, and "after the room empties" is a
     // figure of speech a second-language room has to stop and decode. "After the
     // workshop ends" is the same fact in words nobody has to translate.
-    line: "Named champions, and people can still ask them after the workshop ends.",
+    line: "Named AI Ambassadors, and people can still ask them after the workshop ends.",
     lineKw: ["still ask them"],
     answers: "resistance",
   },
@@ -1105,11 +1136,23 @@ const GEMS_BLOCK: PhasesGatesBrandBlock = {
  * ═══ CORRECTED 2026-08-15 (owner), AND THE CORRECTION IS THE POINT OF THIS BLOCK.
  * What stood here said P0 WAS COMPLETE — three delivered stages, a band headed "AUG 18
  * IS THE GATE", and a thesis that the AI Ambassadors "already exist". None of the three
- * is true today. The plan has slipped: the workshop is delivered, THE COMPETITION IS
- * STILL RUNNING, the post-assessment has not been taken, and NO AMBASSADOR HAS BEEN
- * NAMED. `leader-gap/content.ts` was corrected on the same evidence a day earlier and
- * its ladder now prints "382 trained · the competition still runs · Ambassadors not yet
- * named"; this block is that correction reaching the plan.
+ * was true on the day: the plan had slipped, the workshop was delivered, THE COMPETITION
+ * WAS STILL RUNNING and the post-assessment had not been taken.
+ *
+ * ═══ AND ONE HALF OF THAT CORRECTION WAS ITSELF WRONG, PUT BACK 2026-08-16. The
+ * 08-15 pass also wrote "NO AMBASSADOR HAS BEEN NAMED" here and pushed the same claim
+ * into `leader-gap`'s ladder. The Culture department's framework sheet says five are
+ * named at Berau Coal, so the deck had over-corrected: it replaced a claim that was too
+ * early with one that was simply false, in two slides at once. Both are fixed, and the
+ * history is kept rather than tidied away because the failure mode is the interesting
+ * part — a correction made from ONE source, applied everywhere, with no second source
+ * asked. The competition month moved on the same day and for the same reason: the plan
+ * PDF said June and the committee says July.
+ *
+ * WHAT IS TRUE TODAY: the workshop is delivered, the competition runs from July, the
+ * post-assessment has not been taken, and FIVE AMBASSADORS ARE NAMED against a
+ * framework target of fourteen. The target is not on the stage — see
+ * {@link BERAU_BLOCK.provenance} for why.
  *
  * IT MAKES THE SLIDE STRONGER RATHER THAN WEAKER, which is worth writing down so that
  * nobody restores the old copy the day the programme finishes. A finished P0 lets a
@@ -1127,14 +1170,29 @@ const BERAU_BLOCK: PhasesGatesBrandBlock = {
     // reason for existing after the correction: a window on its own reads as a
     // promise kept. Three stages, three different states, one column — which is
     // what "the programme is still running" looks like without a sentence.
+    // "FROM JUL" AND NOT "FROM JUN", corrected 2026-08-16 from the programme
+    // committee direct. The window was read off the plan PDF, which shows the
+    // competition band starting in June; the committee runs it from July. A month
+    // this deck prints against somebody else's programme is theirs to confirm, and
+    // they have.
     p0: {
       kind: "theirs",
-      rows: ["WORKSHOP · MAY–JUN · DONE", "COMPETITION · FROM JUN · RUNNING", "POST-ASSESSMENT · TO COME"],
+      rows: ["WORKSHOP · MAY–JUN · DONE", "COMPETITION · FROM JUL · RUNNING", "POST-ASSESSMENT · TO COME"],
     },
     // Their own label for the next stage, and their own window. Split across two
     // rows because it is a programme name and a date, not one string — and
     // because the whole title on one row overruns the column.
-    p1: { kind: "theirs", rows: ["POST PROGRAM AI DEVELOPMENT", "AFTER AUG"] },
+    //
+    // THE STATUS WORD JOINS THE WINDOW RATHER THAN REPLACING IT (owner, 2026-08-16).
+    // "AFTER AUG" alone is their roadmap's whole statement about this stage, and read
+    // in the back half of August it is a date that has effectively arrived — so the
+    // row said nothing about whether the stage had started. It has not. `TO COME` is
+    // the deck's own status word, the same one P0's post-assessment carries, and it is
+    // the deck's to write because the deck is the thing that looked. Their window
+    // stays beside it because the citation under the cards quotes it verbatim, and a
+    // card that dropped it would leave that quotation with nothing on the stage to
+    // point at.
+    p1: { kind: "theirs", rows: ["POST PROGRAM AI DEVELOPMENT", "AFTER AUG · TO COME"] },
     p2: { kind: "ours" },
     p3: { kind: "ours" },
   },
@@ -1142,10 +1200,28 @@ const BERAU_BLOCK: PhasesGatesBrandBlock = {
   // delivered, what is running, what has not happened. Then their own name for the
   // stage that comes next, quoted, because "After Aug" is the only thing their roadmap
   // says about it and the room should hear how little that is.
+  //
+  // AND A FOURTH FACT AS OF 2026-08-16, WHICH IS A CORRECTION AND NOT AN ADDITION. This
+  // block used to state — here and in the header above — that no Ambassador had been
+  // named. The Culture department's AI Ambassador framework says otherwise on its own
+  // face: a footnote under the business-unit target table reads "Berau Coal already
+  // have 5 AI Ambassador". So the deck was asserting the opposite of the programme's
+  // own published sheet, on a slide about that programme's plan.
+  //
+  // IT IS THE SENTENCE THAT MAKES K.3's SECOND LEVER AN ASK RATHER THAN A HYPOTHESIS.
+  // "Give your AI Ambassadors hours every week" lands on a room that has just read that
+  // five of them exist; the same lever read against "not yet named" is a lever about
+  // people who might one day be recruited.
+  //
+  // THE TARGET COUNT IS DELIBERATELY NOT HERE. The framework sets Berau Coal at two
+  // Champions and twelve Agents, so five against fourteen is a shortfall — and it is
+  // HR's shortfall, printed on HR's sheet, which this deck has no standing to put on a
+  // projector in front of the people it would be read as a criticism of. The presenter
+  // has the number if the room asks for it.
   provenance:
     "Berau Coal's own journey: the workshop is delivered, the competition still runs, " +
-    "the post-assessment is not in. Their roadmap calls the next stage “Post Program " +
-    "AI Development — After Aug”.",
+    "the post-assessment is not in. Five AI Ambassadors are already named. Their " +
+    "roadmap calls the next stage “Post Program AI Development — After Aug”.",
   // ═══ THE OLD LINE WAS "The AI Ambassadors already exist. Fund them, or lose them."
   // and it had to go on the facts alone: nobody has been named an Ambassador, so the
   // deck would have been asking the room to fund a group that does not exist. The
@@ -1507,9 +1583,9 @@ function ownedByTheRoom(levers: readonly Lever[]): readonly Lever[] {
  * The four levers, in the order the room reads them — one hero pose each, then all
  * four together.
  *
- * THE ORDER IS THE ORDER THEY GET PULLED IN, not a ranking: the time goes in the
- * calendar before anybody is named to fill it, the champion is named before there
- * is anybody to clear a seat for, access is cleared before there is anything to
+ * THE ORDER IS THE ORDER THEY GET PULLED IN, not a ranking: the room shows up before
+ * anybody believes the programme is real, the ambassadors are backed before there is
+ * anybody to clear a seat for, access is cleared before there is anything to
  * fund, and the funding is the one that has to survive the quarter. Nothing on the
  * stage ranks them — one colour tier for all four names, one for all four lines,
  * one mark size per scene — because a lever nobody pulls takes the other three down
@@ -1530,34 +1606,68 @@ function ownedByTheRoom(levers: readonly Lever[]): readonly Lever[] {
 const LEVERS: readonly Lever[] = ownedByTheRoom([
   {
     id: "time",
-    label: "MAKE IT OFFICIAL",
-    glyph: "week",
-    // The playbook's `Convene` — "create attendance, visibility, and mandate" — as
-    // the two acts that actually create all three. The COMPANY calendar is what
-    // makes attendance real; opening the first day is the visibility and the
-    // mandate, and it is the half a leader delegates first.
+    label: "SPEAK AT THE START",
+    glyph: "lectern",
+    // The playbook's `Convene` — "create attendance, visibility, and mandate". This
+    // lever is the VISIBILITY, and after 2026-08-16 it is only that.
     //
-    // THE COMPANY CALENDAR AND NOT THE LEADER'S OWN, AS OF 2026-08-15 (owner's
-    // call). It read "Put the sessions in the calendar as work, and be in the room
-    // for the first one" and the owner's objection is exactly right: a Division
-    // Head does not book their own training, and a lever that asks them to has
-    // shrunk an act of authority into an act of admin. What only they can do is
-    // declare the workshop part of the job and stand up at the start of it — their
-    // team runs the rest. "BLOCK THE TIME" was the label that came with the old
-    // reading, and it went with it.
-    act: "Put the workshop in the company calendar as part of the job, and open the first day yourself.",
-    actKw: ["as part of the job", "open the first day yourself"],
-    note: "Your people watch what you do. If you skip the first day, they will treat it as extra work.",
-    noteKw: ["watch what you do"],
-    short: "The workshop is in the company calendar, and you open it.",
-    shortKw: ["and you open it"],
-    thesis: "People give time to what their leader gives time to.",
-    thesisKw: ["what their leader gives time to"],
-    scope: "in the company calendar as part of the job",
+    // ═══ THE CALENDAR CLAUSE IS GONE, AND IT WAS NEVER A DECISION (owner). Two
+    // readings of this lever shipped before this one and both turned on booking time:
+    // "Put the sessions in the calendar as work, and be in the room for the first one",
+    // then "Put the workshop in the company calendar as part of the job, and open the
+    // first day yourself". The owner's ruling retires the premise under both — the AI
+    // sessions ARE work hours already, so a lever that asks the room to declare them so
+    // is an assumption dressed as an ask. A room asked to decide something that is
+    // settled stops listening to the three levers after it.
+    //
+    // AND "the workshop" WAS THE AMBIGUITY UNDERNEATH IT. This deck is delivered to top
+    // management; the Catalyst workshop for middle management is finished; and the
+    // sessions still ahead belong to the AI Ambassadors under the Culture department's
+    // Jul–Sep window. So a room reading "put the workshop in the calendar" had three
+    // candidates and no way to pick, and the two most available were both already done.
+    //
+    // ═══ WHAT IS LEFT IS THE ONE THING IN THIS PROGRAMME NOBODY CAN DELEGATE. A seat, a
+    // budget line and a target line can all be signed and handed over. Being at the
+    // front of the room cannot. That is why this act is now presence and speech and
+    // nothing else, and why {@link Lever.scope} below is the strongest of the four —
+    // the other three name an authority the room holds; this one names a body only the
+    // room has.
+    //
+    // IT IS ALSO HR'S OWN ASK, WHICH IS WHY IT LANDS. The framework's Champion job desc
+    // reads "Be Speaker of Techconnect Talkshow", "Internal Sharing Session" and "Be
+    // Role Model & Promote AI", and its Champions are top level leaders. The Culture
+    // department is already asking this room to speak; this slide hands them the same
+    // ask with a reason attached.
+    //
+    // TWO SENTENCES, ONE INSTRUCTION EACH (ASD-STE100, owner's rule for this pass).
+    // Attendance is the floor and speaking is the ask, and the act states them in that
+    // order so a leader who will only do the first still knows what the second was.
+    act: "Be at the first session your AI Ambassadors give. Speak at the start of it yourself.",
+    actKw: ["Be at the first session", "Speak at the start"],
+    // THE NOTE IS WHERE THE AMBIGUITY DIES: it names WHOSE sessions these are. Every
+    // draft before this one left the room to guess, and the guess was usually the
+    // workshop they were sitting in. "Two minutes" is the whole cost, stated so the ask
+    // cannot be heard as a day out of a Division Head's week.
+    note: "Your people want to know if the session is important. Two minutes from you at the start tells them.",
+    noteKw: ["Two minutes from you"],
+    short: "You are at the first session, and you speak at the start.",
+    shortKw: ["you speak at the start"],
+    // TWO PARALLEL SENTENCES AND NO APHORISM. The retired line — "People give time to
+    // what their leader gives time to" — spent one phrase twice in two senses, which is
+    // a construction a second-language room has to unpick before it can agree with it.
+    // This states the same claim as a plain contrast, and the sting is in the last word.
+    thesis: "When the leader speaks first, the session is important. When the leader is absent, it is optional.",
+    thesisKw: ["it is optional"],
+    // NOT AN ADMINISTRATIVE PHRASE ANY MORE, and that is the upgrade. The retired scope
+    // was "in the company calendar as part of the job" — a thing a Division Head can
+    // ask an assistant to do. Nobody can attend a session on somebody else's behalf, so
+    // this is the only one of the four scopes that cannot be delegated even in
+    // principle.
+    scope: "Speak at the start of it yourself",
   },
   {
     id: "person",
-    label: "NAME THE CHAMPIONS",
+    label: "BACK THE AMBASSADORS",
     glyph: "champion",
     // The playbook's `Champion` — "protect and recognize the champion role through
     // performance criteria". THE HOURS ARE THE PROTECTION AND THE TARGETS ARE THE
@@ -1565,21 +1675,53 @@ const LEVERS: readonly Lever[] = ownedByTheRoom([
     // line is theirs to write. K.1's SUPPORT pillar says the role has to exist;
     // this says who signs for it.
     //
+    // THE VERB CHANGED FROM `NAME` TO `BACK` ON 2026-08-15, AND IT IS THE ONE EDIT IN
+    // THIS SECTION THAT WAS A CORRECTNESS FIX RATHER THAN A RETERMING. It read "Name
+    // your champions, give them hours every week, and put the job into their
+    // targets", and the Culture department's AI Ambassador framework had already
+    // taken the first clause away: naming runs centrally, through open recruitment,
+    // a capability and mindset assessment, a calibration review and an internal
+    // mapping that assigns each candidate as Champion or Agent. Berau Coal's roster
+    // exists — the framework's own footnote says it already has five. So "name your
+    // champions" asked a Division Head for an act somebody else had performed, which
+    // is the one thing {@link ownedByTheRoom} exists to keep off this stage.
+    //
+    // WHAT IS LEFT IS THE HALF THE FRAMEWORK DOES NOT SUPPLY, and it is the whole of
+    // this lever. That framework recruits on "strong motivation" and lists a job desc
+    // — social media campaign, talkshow, sharing session, judging, logbook — with no
+    // hours behind any of it and no line in anybody's targets. Hours and a target
+    // line are exactly what a BU or Division Head can write alone. So the lever got
+    // SHORTER and STRICTER at once: it now asks for nothing that is already done, and
+    // everything it asks for is signable in this room.
+    //
+    // `AMBASSADORS` AND NOT `CHAMPIONS`, matching C.1, C.4 and K.1's SUPPORT pillar in
+    // the same pass. In the framework a Champion is a "top level leader/CxO talent" —
+    // this room, or one step off it — so a lever telling this room to resource its
+    // champions would be telling it to resource itself. The people who need the hours
+    // are mostly Agents, `agent` is unprintable in this deck as a person, and the
+    // programme name covers both roles.
+    //
     // PLURAL, AS OF 2026-08-15 (owner's call), AND K.1'S PILLAR MOVED WITH IT. It
-    // read "Name one person" — a count neither deck has a reason to make. A company
-    // this size runs several champions, one per department or better, and a lever
-    // that asks for ONE is a lever the room has to argue with before it can agree.
+    // read "Name one person" — a count neither deck has a reason to make, and one the
+    // framework now contradicts outright at 2 Champions and 12 Agents for Berau Coal.
     // The mark moved too: `components/LeverGlyphs.tsx` raises TWO figures now, not
     // one, because a mark that shows a single person contradicts the sentence
     // beside it.
-    act: "Name your champions, give them hours every week, and put the job into their targets.",
+    act: "Give your AI Ambassadors hours every week, and put the job into their targets.",
     actKw: ["hours every week", "into their targets"],
-    note: "A champion with no hours is a volunteer. Volunteers stop when the day gets busy.",
+    // "An ambassador" AND NOT "A champion", and the sentence is MORE true after the
+    // reterming than before it: the framework selects on motivation and asks for
+    // advocacy work on top of a full job, which is the definition of a volunteer.
+    note: "An ambassador with no hours is a volunteer. Volunteers stop when the day gets busy.",
     noteKw: ["is a volunteer"],
-    short: "Champions named, hours given, the job in their targets.",
+    short: "Ambassadors backed, hours given, the job in their targets.",
     shortKw: ["hours given"],
-    thesis: "Work with no name on it belongs to nobody.",
-    thesisKw: ["belongs to nobody"],
+    // NOT "Work with no name on it belongs to nobody" ANY MORE. That line argued for
+    // the naming, and the naming is done — a mini-thesis that argues for the clause
+    // its own act no longer contains is the loudest kind of stale copy. The roster has
+    // names on it; what it does not have is time, and that is the gap this lever fills.
+    thesis: "A roster with no hours behind it is a list of volunteers.",
+    thesisKw: ["a list of volunteers"],
     scope: "put the job into their targets",
   },
   {

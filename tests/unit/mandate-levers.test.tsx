@@ -1056,7 +1056,18 @@ describe("the stylesheet", () => {
     const infinite = new Set(
       [...css.matchAll(/\.([\w-]+)\s*\{[^}]*animation:[^;]*\binfinite\b/g)].map((m) => m[1]),
     );
-    expect(infinite.size).toBeGreaterThanOrEqual(8);
+    // THE FLOOR IS A REGEX GUARD AND NOT A BUDGET. It exists so that a pattern which silently
+    // stops matching cannot turn the `forEach` below into a loop over nothing — the real
+    // assertion is the one inside it. So the number tracks reality rather than constraining it,
+    // and lowering it is legitimate exactly when a rule is REMOVED.
+    //
+    // IT WAS 8 UNTIL 2026-08-16 AND IS 7 NOW, and the arithmetic is worth writing down because
+    // "the floor went down" is otherwise indistinguishable from "somebody silenced a failure".
+    // `kl-churn` ran on FOUR delayed classes and went out with the week glyph when this slide's
+    // first lever stopped being about booking time; `kl-walk` replaced all four with ONE. So the
+    // set is `kl-current` plus `walk`, `guard`, `lift`, `pass`, `drop`, `review` — seven, and
+    // every one of them is named in the block below.
+    expect(infinite.size).toBeGreaterThanOrEqual(7);
     infinite.forEach((cls) =>
       expect(block, `${cls} is not disarmed under reduced motion`).toContain(`.${cls}`),
     );

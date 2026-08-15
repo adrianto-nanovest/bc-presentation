@@ -724,11 +724,11 @@ describe("the addressing sits on the tier the room is actually in", () => {
 
   test("the second person means the ROOM, and the middle tier is third person", () => {
     // `your` ON THE TOP AND MIDDLE PLATES AND IN THE DOWNWARD ACT: the room's teams, the
-    // room's people, the room's mandate, the room's champions.
+    // room's people, the room's mandate, the room's ambassadors.
     expect(C.tiers[TOP].qualifier).toMatch(/\byour teams\b/);
     expect(C.tiers[MIDDLE].qualifier).toMatch(/\byour people\b/);
     expect(C.downGloss).toMatch(/\byour mandate\b/i);
-    expect(C.middleSubname).toBe("YOUR AI CHAMPIONS");
+    expect(C.middleSubname).toBe("YOUR AI AMBASSADORS");
     // AND THE MIDDLE PLATE MAY NOT SAY THE ROOM IS THE ONE BEING COPIED. "they watched
     // YOU do it" was the drafted line and it addresses the wrong chair.
     expect(C.tiers[MIDDLE].qualifier).not.toMatch(/\byou\b/);
@@ -1379,12 +1379,24 @@ describe("nothing here is re-spent from a neighbouring slide", () => {
     // leaves C.1's figure the only owner of the word in this run.
     const mine = authoredStrings().filter((copy) => /\bdecisions?\b/i.test(copy));
     expect(mine).toEqual([]);
-    // `champion` IS SHARED WITH K.3, WHICH ASKS THE ROOM TO NAME ONE six sections later.
-    // C.4 names the people; K.3 names the act. A term the room has already met is what
-    // makes that ask land, so the order is the argument.
-    expect(C.middleSubname).toMatch(/\bCHAMPIONS\b/);
-    const champions = authoredStrings().filter((copy) => /\bchampion/i.test(copy));
-    expect(champions, "only the middle plate's subname says it").toEqual([C.middleSubname]);
+    // `ambassador` IS SHARED WITH K.3, WHICH ASKS THE ROOM TO BACK THEM six sections
+    // later. C.4 names the people; K.3 names the act. A term the room has already met is
+    // what makes that ask land, so the order is the argument.
+    //
+    // IT WAS `champion` UNTIL 2026-08-15 ON BOTH SLIDES. The Culture department's AI
+    // Ambassador framework fixes `Champion` to mean a top level leader/CxO, which is this
+    // room — so the word on the MIDDLE plate said the opposite of what the plate means.
+    expect(C.middleSubname).toMatch(/\bAMBASSADORS\b/);
+    const ambassadors = authoredStrings().filter((copy) => /\bambassador/i.test(copy));
+    expect(ambassadors, "only the middle plate's subname says it").toEqual([C.middleSubname]);
+    // AND `champion` IS NOW SPENT NOWHERE ON THIS STAGE. The framework's meaning of the
+    // word puts it in the top plate's chairs, so a stray one here would reopen exactly the
+    // contradiction the reterming closed.
+    expect(authoredStrings().filter((copy) => /\bchampion/i.test(copy))).toEqual([]);
+    // NOR MAY THIS STAGE SAY `agent` OF A PERSON. The framework's other role is the AI
+    // Agent, and `agent` is the deck's word for a class of SOFTWARE (§B, and C.1's
+    // companions pillar two slides back). The two must never meet on one stage.
+    expect(authoredStrings().filter((copy) => /\bagents?\b/i.test(copy))).toEqual([]);
   });
 });
 

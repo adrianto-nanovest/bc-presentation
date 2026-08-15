@@ -490,22 +490,38 @@ const BERAU_BLOCK: LadderBrandBlock = {
     rung: 0,
     label: "OUTSIDE MINETECH · L1?",
     // "THE CERTIFICATE" IS GONE, and it had to go: it assumed a finished programme.
-    // The competition is still running and no Ambassador is named, so a question
-    // about what people kept AFTER the certificate asks about an event that has not
-    // happened. The desk and the room are the two places the training can end up in
-    // while it is still in flight, which is the honest version of the same question.
+    // The competition is still running, so a question about what people kept AFTER the
+    // certificate asks about an event that has not happened. The desk and the room are
+    // the two places the training can end up in while it is still in flight, which is
+    // the honest version of the same question. (This note also said "no Ambassador is
+    // named" until 2026-08-16; five are — see the evidence line below. The question is
+    // unaffected either way, because a roster is not an outcome.)
     question: "Did the training reach the desk, or did it stay in the room?",
     questionKw: ["stay in the room"],
     // THREE FACTS, TWO OF THEM CORRECTED (owner, 2026-08-14): §6.5 was written
-    // against a plan and the plan has not finished. The competition RUNS and the
-    // Ambassadors are NOT named — and a programme still in flight is a better reason
-    // for an open ring than a finished one was, because the room does not know the
-    // answer either.
+    // against a plan and the plan has not finished. The competition RUNS — and a
+    // programme still in flight is a better reason for an open ring than a finished
+    // one was, because the room does not know the answer either.
+    //
+    // THE THIRD FACT WAS CORRECTED TWICE, AND THE SECOND CORRECTION UNDID THE FIRST
+    // (owner, 2026-08-16). The 08-14 pass wrote "Ambassadors not yet named", which was
+    // an over-correction: the Culture department's AI Ambassador framework carries a
+    // footnote under its business-unit target table reading "Berau Coal already have 5
+    // AI Ambassador". So this line asserted the opposite of the programme's own sheet.
+    // `leader-mandate`'s K.2 held the identical claim and was fixed in the same edit —
+    // one wrong fact, two slides, because the 08-14 pass propagated a single source
+    // without asking a second.
+    //
+    // IT STILL DOES NOT CLOSE THE RING, WHICH IS WHY THE FIX IS SAFE HERE. Five named
+    // Ambassadors is a roster, not an outcome: the question above asks whether the
+    // training reached the desk, and a name on a list answers it no better than a
+    // certificate did. The count against the framework's target of fourteen is NOT
+    // printed — see K.2's `provenance` for why that number stays off the stage.
     //
     // "382 trained" and NOT the prototype's "382 leaders trained": §6.5 says
     // trained, the extra word is the prototype's own, and a headcount is exactly
     // the kind of number a leader will check.
-    evidence: "382 trained · the competition still runs · Ambassadors not yet named.",
+    evidence: "382 trained · the competition still runs · 5 Ambassadors named.",
     evidenceKw: [],
   },
   // TWO MARKS NOW, SO THERE IS A DISTANCE — and the closer had to stop saying
