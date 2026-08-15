@@ -65,13 +65,14 @@ export const deckSlides: SlideDef[] = resolveDeckSetSlides(
 // a first-paint one.
 export const composedDeck: ComposedDeck<SlideDef> = composeDeck(deckSlides);
 
-// A slide that prints a cross-reference to another section (A.1's agenda
-// pointers, §3.6) cannot import this module — it is already in it, through
-// `deckSlides`. Push the lookup out to the leaf module it CAN import instead;
+// A slide that prints a fact about the composed deck — A.1's agenda pointers
+// (§3.6), the title slide's interaction guide printing the live jump keys —
+// cannot import this module: it is already in it, through `deckSlides`. Push the
+// deck out to the leaf module those slides CAN import instead;
 // see `./section-letters.ts` for why the edge has to run this way round.
 // The hex-ladder deck below deliberately does NOT publish: it is one dev-only
 // slide, not the deck the audience navigates.
-publishSectionLetters(composedDeck.letterOf);
+publishSectionLetters(composedDeck);
 
 // The dev route renders the hex ladder ALONE, so that route is its own one-slide
 // deck and composes as one. It prints no FigLabel, so these values never reach

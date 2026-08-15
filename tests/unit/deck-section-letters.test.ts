@@ -17,6 +17,16 @@ import type { SectionKey } from "@/deck/sections";
 
 type SectionLetters = typeof import("@/deck/section-letters");
 
+/** What `publishSectionLetters` takes: the composed deck, of which these cases
+ *  care about the letter lookup only. The jump keys are `sectionJumpKeys`'
+ *  subject and are pinned in their own describe below. */
+function deckOf(
+  letterOf: (key: SectionKey) => string | undefined,
+  sectionFirstIndex: ReadonlyMap<string, number> = new Map(),
+) {
+  return { letterOf, sectionFirstIndex };
+}
+
 /** A virgin copy of the module — nothing published into it yet. Every case goes
  *  through here (or resets explicitly), so no `beforeEach` is needed and none is
  *  wanted: a hook would reset a registry the case is about to reset anyway. */
@@ -46,7 +56,7 @@ describe("sectionLetterOf, once a deck has published", () => {
 
   test("answers with that deck's letters", async () => {
     const { publishSectionLetters, sectionLetterOf } = await freshModule();
-    publishSectionLetters((key) => table[key]);
+    publishSectionLetters(deckOf((key) => table[key]));
     expect(sectionLetterOf("process")).toBe("D");
     expect(sectionLetterOf("tools")).toBe("G");
   });
@@ -55,7 +65,7 @@ describe("sectionLetterOf, once a deck has published", () => {
     // A registered key owning no slides is ordinary (Phase 4's leader deck has
     // three), so it is an answer, not a fault. `sectionPointerLabel` drops it.
     const { publishSectionLetters, sectionLetterOf } = await freshModule();
-    publishSectionLetters((key) => table[key]);
+    publishSectionLetters(deckOf((key) => table[key]));
     expect(sectionLetterOf("gap")).toBeUndefined();
   });
 
@@ -64,10 +74,29 @@ describe("sectionLetterOf, once a deck has published", () => {
     // hot update re-evaluates the registry, and the table must follow it rather
     // than stay pinned to a deck that is no longer on screen.
     const { publishSectionLetters, sectionLetterOf } = await freshModule();
-    publishSectionLetters((key) => table[key]);
-    publishSectionLetters((key) => (key === "process" ? "G" : undefined));
+    publishSectionLetters(deckOf((key) => table[key]));
+    publishSectionLetters(deckOf((key) => (key === "process" ? "G" : undefined)));
     expect(sectionLetterOf("process")).toBe("G");
     expect(sectionLetterOf("tools")).toBeUndefined();
+  });
+});
+
+describe("sectionJumpKeys", () => {
+  test("is empty — not a throw — before a deck is composed", async () => {
+    // The opposite answer to `sectionLetterOf`'s, and deliberately: this one is
+    // read while rendering the COVER slide's help legend, and a throw there would
+    // white-screen the deck a presenter is about to show. The legend drops its
+    // row instead.
+    const { sectionJumpKeys } = await freshModule();
+    expect(sectionJumpKeys()).toEqual([]);
+  });
+
+  test("is the published deck's jump letters, in deck order", async () => {
+    const { publishSectionLetters, sectionJumpKeys } = await freshModule();
+    publishSectionLetters(
+      deckOf(() => undefined, new Map([["A", 0], ["B", 4], ["C", 9]])),
+    );
+    expect(sectionJumpKeys()).toEqual(["A", "B", "C"]);
   });
 });
 
@@ -86,5 +115,17 @@ describe("the live registry", () => {
         expect(sectionLetterOf(key)).toBeTruthy();
       },
     );
+  });
+
+  test("publishes the jump keys the keyboard actually answers", async () => {
+    // `useKeyboardNav` looks a pressed letter up in `sectionFirstIndex`, and the
+    // title slide's legend PRINTS `sectionJumpKeys()`. Same map, so the legend
+    // cannot advertise a key that does nothing — the fault gh#72 fixed.
+    vi.resetModules();
+    const [{ composedDeck }, { sectionJumpKeys }] = await Promise.all([
+      import("@/deck/registry"),
+      import("@/deck/section-letters"),
+    ]);
+    expect(sectionJumpKeys()).toEqual([...composedDeck.sectionFirstIndex.keys()]);
   });
 });

@@ -444,7 +444,7 @@ test("A.1's leader rows take their letters from the deck that is composed", asyn
           "lab",
         ] as SectionKey[]
       ).map((sectionKey) => ({ sectionKey })),
-    ).letterOf,
+    ),
   );
 
   function AdvanceTo({ step }: { step: number }) {

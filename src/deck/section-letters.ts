@@ -28,15 +28,15 @@
 import type { ComposedDeck } from "./compose";
 import type { SectionKey } from "./sections";
 
-/** The composer's own lookup, not a re-declaration of it: a signature typed by
+/** The composer's own members, not a re-declaration of them: signatures typed by
  *  hand here could drift from `composeDeck`'s and hide the drift behind a cast.
  *  Type-only, so this module still pulls in nothing at runtime. */
-type LetterOf = ComposedDeck["letterOf"];
+type PublishedDeck = Pick<ComposedDeck, "letterOf" | "sectionFirstIndex">;
 
-let published: LetterOf | null = null;
+let published: PublishedDeck | null = null;
 
 /**
- * Hand this epoch's composed deck its letter lookup.
+ * Hand this epoch's composed deck across the gap.
  *
  * Called by `@/deck/registry` at module scope, immediately after composing, and
  * expected exactly once per epoch. A LATER CALL WINS, deliberately and
@@ -46,9 +46,13 @@ let published: LetterOf | null = null;
  * choice is that a second, unrelated publisher would go unnoticed — which is
  * why there is exactly one caller, and why `deck-section-letters.test.ts`
  * pins both the replacement and the cold read below.
+ *
+ * The deck itself is published rather than one lookup off it, because the two
+ * readers below want two different facts about the same deck and a second
+ * channel for the second fact could go stale against the first.
  */
-export function publishSectionLetters(letterOf: LetterOf): void {
-  published = letterOf;
+export function publishSectionLetters(deck: PublishedDeck): void {
+  published = deck;
 }
 
 /**
@@ -72,5 +76,26 @@ export function sectionLetterOf(key: SectionKey): string | undefined {
         "the same epoch — `tests/support/slide-harness.tsx` already imports it.",
     );
   }
-  return published(key);
+  return published.letterOf(key);
+}
+
+/**
+ * The letters this deck answers a section jump on (`useKeyboardNav`), in deck
+ * order — `A`…`K` in a standard deck, `A`…`N` in a leader one. A section with no
+ * numbered slide claims no key and is absent, exactly as it is from the composer's
+ * `sectionFirstIndex`, so what this returns is what the keyboard actually does.
+ *
+ * The title slide's interaction guide is the caller: it PRINTS these keys, and
+ * printing a hand-written list there is how the guide came to advertise A–K on a
+ * deck that runs A–N (gh#72).
+ *
+ * Returns EMPTY — not a throw, unlike `sectionLetterOf` — when no deck has
+ * published. A missing letter inside a sentence would print "SECTION undefined"
+ * and has to be loud; a help legend is not worth white-screening the cover slide
+ * over, so the caller drops the row instead. In the app the read cannot miss:
+ * `Deck.tsx` imports the registry, which publishes at module scope, before any
+ * slide renders.
+ */
+export function sectionJumpKeys(): readonly string[] {
+  return published === null ? [] : [...published.sectionFirstIndex.keys()];
 }

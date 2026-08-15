@@ -22,32 +22,43 @@
 import { Fragment, useState } from "react";
 import { motion } from "framer-motion";
 import { Info } from "lucide-react";
+import { sectionJumpKeys } from "@/deck/section-letters";
 
 interface KeymapEntry {
   keys: string[];
   action: string;
 }
 
-const ENTRIES: KeymapEntry[] = [
-  { keys: ["←", "→"], action: "Prev / next slide" },
-  {
-    keys: ["↑", "↓", "SPACE", "BACKSPACE", "CLICK"],
-    action: "Prev / next step",
-  },
-  {
-    keys: ["HOVER", "CLICK"],
-    action: "Reveal / pin card details (some slides, first step)",
-  },
-  {
-    keys: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"],
-    action: "Jump to section's first slide",
-  },
-  { keys: ["R"], action: "Go to first slide" },
-  { keys: ["U"], action: "Go to first step in current slide" },
-];
+// The section-jump row is NOT authored, because the letters are not this file's
+// to know: the composer hands them out per deck (A–K in a standard deck, A–N in
+// a leader one), and a typed list here went stale the moment the leader deck grew
+// its fourth run — it still advertised A–K on a deck answering N (gh#72). Every
+// other row is a fixed binding in `useKeyboardNav`, so those stay authored.
+function entriesFor(jumpKeys: readonly string[]): KeymapEntry[] {
+  return [
+    { keys: ["←", "→"], action: "Prev / next slide" },
+    {
+      keys: ["↑", "↓", "SPACE", "BACKSPACE", "CLICK"],
+      action: "Prev / next step",
+    },
+    {
+      keys: ["HOVER", "CLICK"],
+      action: "Reveal / pin card details (some slides, first step)",
+    },
+    // Dropped entirely when the deck has published no keys — see
+    // `sectionJumpKeys`. A row of nothing beside "Jump to section's first slide"
+    // would read as "this deck has no sections".
+    ...(jumpKeys.length > 0
+      ? [{ keys: [...jumpKeys], action: "Jump to section's first slide" }]
+      : []),
+    { keys: ["R"], action: "Go to first slide" },
+    { keys: ["U"], action: "Go to first step in current slide" },
+  ];
+}
 
 export function TitleKeymap() {
   const [hover, setHover] = useState(false);
+  const entries = entriesFor(sectionJumpKeys());
 
   return (
     <>
@@ -60,8 +71,12 @@ export function TitleKeymap() {
           display: "inline-flex",
           alignItems: "center",
           marginLeft: 10,
-          paddingTop: 7,
-          paddingBottom: 5,
+          // SYMMETRIC, so the icon's centre IS the box's centre. The facilitator
+          // chip is a `align-items: center` flex row, so it centres this box —
+          // and the 7/5 split it used to carry put the glyph a pixel below the
+          // Mic glyph and the line of text it sits on. The padding is hover
+          // target, not spacing: keep it even.
+          padding: "6px 0",
           cursor: "help",
           color: "var(--copper-400)",
         }}
@@ -126,7 +141,7 @@ export function TitleKeymap() {
             alignItems: "center",
           }}
         >
-          {ENTRIES.map((entry, i) => (
+          {entries.map((entry, i) => (
             <Fragment key={i}>
               <div
                 style={{
