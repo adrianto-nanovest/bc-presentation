@@ -2027,8 +2027,24 @@ export const investShowcaseTrapContent = {
    * complaint. The chart IS complete: the work of making a picture is genuinely finished,
    * which is why the room was right to find it impressive. The sentence grants that in
    * full and moves the incompleteness to a word the next pose can open.
+   *
+   * "AI MODELS DESIGN WELL NOW" IS THE CAPABILITY CLAIM, AND THE CARD ABOVE IT IS ITS PROOF.
+   * {@link investShowcaseTrapContent.promptLine} asks for no layout, no labels and no
+   * colour, and the chart on the stage has all three — so the design on this stage was not
+   * specified by anyone, and the claim is about the model rather than about the typing. A
+   * room that has watched one line of typing produce a presentable artifact already believes
+   * this; the sentence says it out loud so the concession is complete before pose 1 argues.
+   *
+   * "NOW" IS THE SAME TENSE {@link investShowcaseTrapContent.recapLine} CLOSES ON. Both
+   * sentences report a change in the market, not a fault in anyone's judgment — which is
+   * what keeps three acts about hidden cost from reading as three acts about bad taste.
+   *
+   * THREE CLAUSES AND 79 CHARACTERS against {@link SENTENCE_BUDGET_CHARS} in
+   * `../showcase-trap-geometry.ts`, which allows 80, each clause
+   * inside ASD-STE100's ten words. It is the longest line on this shelf, and there is no
+   * room for a fourth.
    */
-  surfaceLine: "One prompt built this. As a picture, it is complete.",
+  surfaceLine: "One prompt built this. AI models design well now. As a picture, it is complete.",
   surfaceLineKw: ["As a picture"],
 
   /**
@@ -2047,9 +2063,23 @@ export const investShowcaseTrapContent = {
    *
    * `promptLine` IS THE ARTIFACT AND NOT A DESCRIPTION OF ONE. It is set in the mono
    * register behind a chevron, so a room reads it as the thing that was typed rather than as
-   * a sentence about typing. It is deliberately lazy, unpunctuated by any instruction and
-   * shorter than any specification would be — which is the whole reason the four rows under
-   * the chart cost what they cost.
+   * a sentence about typing.
+   *
+   * IT NAMES ITS DATA, AND THAT IS THE HALF THE OLD LINE DID NOT HAVE. "Make a quarterly
+   * view of this." was replaced on 2026-08-16, on the owner's call, and the fault was that a
+   * lazy prompt gives the room a way out: write a better prompt and the cost goes away. This
+   * one points at the file the four rows under the chart produce, so the prompt is already
+   * competent and pose 1 cannot be answered by improving it. The attached data IS the five
+   * days — the typing is the thirty minutes.
+   *
+   * IT ASKS FOR NO DESIGN. No layout, no labels, no colour, and the chart on the stage has
+   * all three. That silence is what {@link investShowcaseTrapContent.surfaceLine} spends: a
+   * prompt that had specified the design would make the result obedience, and the sentence
+   * under the card claims capability.
+   *
+   * 45 CHARACTERS against {@link PROMPT_LINE_BUDGET_CHARS} in `../showcase-trap-geometry.ts`,
+   * which allows 46. It is one typed line and it may not become two: the card sets it
+   * `nowrap`, and the typewriter reveal steps once per character across a single row.
    *
    * `promptBuilds` IS THREE AND THE THIRD ONE IS THIS DECK. Naming the artifact the room is
    * looking at is the safest way to make the point: nobody in the room has to be the example,
@@ -2061,7 +2091,7 @@ export const investShowcaseTrapContent = {
    * one word pose 1 needs to have been said out loud before it can say what does not show.
    */
   promptLabel: "WHAT WE TYPED",
-  promptLine: "Make a quarterly view of this.",
+  promptLine: "Use the attached data. Make a quarterly view.",
   promptBuildsLabel: "IT ALSO BUILDS",
   promptBuilds: PROMPT_BUILDS,
   promptFoot: "All of it looks finished.",
