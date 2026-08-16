@@ -194,9 +194,17 @@ export const CARD_PAD_Y = 14;
  * are the subtitle and the happenings. Source Serif 4 advances ≈0.498em a character by
  * the deck's own measured datum, so 13px gives ≈52 characters a line and 12.5px ≈54;
  * the happenings lose 18 to their marker and get ≈51. `./content.ts` cuts the longest
- * subtitle at 61 characters (two lines) and the longest happening at 92 (two lines),
+ * subtitle at 61 characters (two lines) and the longest happening at 100 (two lines),
  * which is what makes {@link SUBTITLE_HEIGHT} and {@link HAPPENING_HEIGHT} facts rather
  * than hopes.
+ *
+ * THE HAPPENINGS' CEILING IS 102 AND THE LONGEST IS 100 (2026-08-16), which is the
+ * tightest row on this slide and the reason a test now holds it: "AISC formed" became
+ * "AI Steering Committee (AISC) formed" — the acronym spelled out on first use, now
+ * that C.1's hub names the body — and that row went from 76 characters to 100. It fits
+ * two lines by ≈22px of 644, so the next row that grows past it is CLIPPED rather than
+ * wrapped ({@link HAPPENING_HEIGHT} is a fixed box with `overflow: hidden` on it).
+ * `tests/unit/gap-failures-pattern.test.tsx` fails on the overshoot.
  */
 export const CARD_INNER_WIDTH = CARD_WIDTH - 2 * CARD_PAD_X;
 

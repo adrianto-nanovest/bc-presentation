@@ -1314,9 +1314,20 @@ describe("the copy budgets — every string inside the box it is measured for", 
  */
 const RESERVED: ReadonlyArray<readonly [string, RegExp, "C.1" | "B.1" | "B.2"]> = [
   // C.1 — the same run, the same content file.
-  ["You decide", /\bYou decide\b/i, "C.1"],
-  ["a decision on your desk", /\bon your desk\b/i, "C.1"],
+  //
+  // TWO ROWS LEFT ON 2026-08-16 — `You decide` and `a decision on your desk`. C.1's six
+  // decisions became QUESTIONS and its closer stopped addressing the room, so neither
+  // phrase is C.1's any more because neither is anybody's: they are not printed in this
+  // deck at all. A row here has to name an image its owner ACTUALLY prints (the second
+  // half of this test proves every pattern fires against its owner's corpus), so they
+  // could not stay — and there is nothing left to reserve, because a phrase no slide
+  // uses cannot be lifted from one. What replaced them is a rule on THIS slide's own
+  // stage, in the test below: no second person, anywhere.
+  ["a decision someone must own", /\bmust own\b/i, "C.1"],
   ["a tool purchase", /\bpurchase\b/i, "C.1"],
+  // C.1's hub, since the brand line became one committee for every deck. C.4's middle
+  // plate is about people and tiers and has no business naming the body at C.1's centre.
+  ["the AI Steering Committee", /\bsteering committee\b/i, "C.1"],
   ["the enabler", /\benabler\b/i, "C.1"],
   ["pillars", /\bpillars?\b/i, "C.1"],
   ["governance", /\bgovernance\b/i, "C.1"],

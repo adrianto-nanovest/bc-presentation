@@ -27,9 +27,13 @@
 // INTERPRETS those two numbers and holds no state of its own, so every rule about
 // what beats what is a pure function a node test can run without a DOM.
 //
-// IT READS NO VARIANT AND NO BRAND: the resolved hub line arrives as a prop. That
-// is what lets one test render both brands' hubs side by side in a single module
-// epoch, which is the only way to compare them (§4.4 slot 5).
+// IT READS NO VARIANT AND NO BRAND, and since 2026-08-16 there is no brand to read.
+// The hub's second line used to arrive as a `brandLine` prop resolved from
+// `VARIANT.brand` (MineTech / DigiTech / null). It now prints one string for every
+// deck — `hubEnablerName`, the AI Steering Committee — because the old line named a
+// DEPARTMENT as the thing that drives six pillars, which is not a department's remit
+// in either organisation. `../content.ts` carries the full argument where the resolver
+// used to be. This component takes `pose` and nothing else.
 //
 // CSS vars only, NO HEX AND NO rgba() LITERALS — the #16 prototype fills its hub with
 // `rgba(184,110,61,0.14)`, its boxes with `rgba(10,10,10,0.92)`, and its FOCUSED
@@ -71,6 +75,9 @@ import {
 // this slide, which is the extension path the shim's own doc comment names.
 import { LucideIcon } from "@/slides/foundation-core-section-e/components/LucideIcon";
 import { highlight } from "@/components/highlight";
+// The deck's one hover affordance, and this slide joins the eight that already use it
+// rather than keeping its own mono instruction line. See the idle block.
+import { HintIcon } from "@/components/HintIcon";
 import {
   FOCUS_HALO_WIDTH,
   FOCUS_SCALE,
@@ -309,18 +316,12 @@ const PANEL_TRANSITION = `opacity ${FOCUS_TRANSITION}`;
 // ───────────────────── the figure ─────────────────────
 
 export interface PillarOrbitProps {
-  /**
-   * The hub's second line — `hubBrandLineFor(VARIANT.brand)`. `null` means this
-   * deck names no organisation, and the hub then prints its label alone rather
-   * than a blank line (see `../content.ts`).
-   */
-  brandLine: string | null;
   /** 0 or 1. See the slide file for what each pose argues, and `../walk.ts` for the
    *  two of them. */
   pose: number;
 }
 
-export function PillarOrbit({ brandLine, pose }: PillarOrbitProps) {
+export function PillarOrbit({ pose }: PillarOrbitProps) {
   // THREE CHANNELS, AND THEY ARE SEPARATE ON PURPOSE. A single `active` number could
   // not tell "the pointer left, fall back to the pin" from "the pin was released", so
   // a hover that ended would either clear the pin or be unable to; and merging the
@@ -330,11 +331,11 @@ export function PillarOrbit({ brandLine, pose }: PillarOrbitProps) {
   const [hovered, setHovered] = useState(NO_FOCUS);
   const [focused, setFocused] = useState(NO_FOCUS);
   const [pinned, setPinned] = useState(NO_FOCUS);
-  // WHETHER ANYONE HAS TOUCHED THE FIGURE YET — the hint's whole lifetime. It is a
-  // one-way latch: once true it never goes back, because an instruction that
-  // reappeared when the pointer left would be an instruction the reader has already
-  // followed, arriving again.
-  const [touched, setTouched] = useState(false);
+  // AND NO `touched` LATCH ANY MORE. A fourth `useState` used to track whether anyone
+  // had touched the figure, for one consumer: the standing mono hint line, which was
+  // dropped from the tree for good on the first hover. That line is now the deck's
+  // `HintIcon` (see the idle block below), and a 14px glyph beside an eyebrow does not
+  // need a latch — it lives and dies with the idle block it sits in.
 
   // THE POSE, ASKED WHERE IT IS ANSWERED. Every question about the pose goes to
   // `../walk.ts` and none is re-derived from a comparison, so no branch in this tree
@@ -360,19 +361,12 @@ export function PillarOrbit({ brandLine, pose }: PillarOrbitProps) {
   // lights all six regardless of where the pointer was left.
   const litAt = (i: number) => recap || (pointerLive && isLit(i, pinned, hovered, focused));
 
-  const enter = useCallback((i: number) => {
-    setHovered(i);
-    setTouched(true);
-  }, []);
+  const enter = useCallback((i: number) => setHovered(i), []);
   const leave = useCallback(() => setHovered(NO_FOCUS), []);
-  const focusOn = useCallback((i: number) => {
-    setFocused(i);
-    setTouched(true);
-  }, []);
+  const focusOn = useCallback((i: number) => setFocused(i), []);
   const focusOff = useCallback(() => setFocused(NO_FOCUS), []);
   const pin = useCallback((e: MouseEvent<HTMLButtonElement>, i: number) => {
     setPinned((p) => togglePin(p, i));
-    setTouched(true);
     // THE ONE LINE THAT KEEPS A MOUSE CLICK FROM PAINTING A KEYBOARD RING.
     // `:focus-visible` does not match immediately after a pointer click — but the
     // browser re-evaluates it on the next keypress, and the NEXT KEYPRESS ON THIS
@@ -505,25 +499,32 @@ export function PillarOrbit({ brandLine, pose }: PillarOrbitProps) {
         >
           {C.hubLabel}
         </span>
-        {/* THE BRAND LINE, or nothing at all. Rendered only when there is an
-            organisation to name: `null` prints no element, not an empty one, so a
-            deck that names nobody shows a hub with one line instead of one line
-            and a gap. The display serif and the `--neutral-50` tier make it the
-            brightest type inside the figure, which is correct — the disc is the
-            only thing on the stage that is not one of six. */}
-        {brandLine !== null && (
-          <span
-            data-testid="shape-hub-brand-line"
-            style={{
-              fontFamily: "var(--display)",
-              fontSize: 19,
-              lineHeight: 1,
-              color: "var(--neutral-50)",
-            }}
-          >
-            {brandLine}
-          </span>
-        )}
+        {/* WHO THE ENABLER IS — one string, every deck, unconditionally rendered.
+            It used to be a nullable brand line (`MineTech` / `DigiTech` / nothing),
+            and `../content.ts` records why that is gone at the point where the
+            resolver stood. There is no absent case left to handle: the committee is
+            the same claim in front of every audience.
+
+            THE DISC IS 132px WIDE AND THE NAME IS 21 CHARACTERS, so it is set at
+            16px over two lines rather than at the brand line's 19px on one —
+            `maxWidth` forces the wrap at the word rather than leaving it to the
+            glyph metrics, and `textAlign: center` keeps both lines on the disc's own
+            axis. The display serif and the `--neutral-50` tier are unchanged: it is
+            still the brightest type inside the figure, which is correct — the disc is
+            the only thing on the stage that is not one of six. */}
+        <span
+          data-testid="shape-hub-enabler"
+          style={{
+            fontFamily: "var(--display)",
+            fontSize: 16,
+            lineHeight: 1.15,
+            maxWidth: HUB.r * 2 - 26,
+            textAlign: "center",
+            color: "var(--neutral-50)",
+          }}
+        >
+          {C.hubEnablerName}
+        </span>
       </div>
 
       {/* ───────────────── THE PILLARS ─────────────────
@@ -777,11 +778,48 @@ export function PillarOrbit({ brandLine, pose }: PillarOrbitProps) {
             six decisions are the DEPTH, not the content. That is the test an idle
             state on an interactive slide has to pass. */}
         <PanelBlock testid="shape-idle" open={!recap && focus === NO_FOCUS}>
+          {/* THE EYEBROW AND THE HINT ON ONE BASELINE. The eyebrow names the figure;
+              the glyph beside it explains the pointer, and it is the deck's own
+              `HintIcon` rather than a line of type this slide invented — E.3, E.4,
+              E.5, E.9, D.2, F.8, I.3 and K.2 all put the same pulsing glyph beside
+              the block it explains. A room that has met it once needs no instruction
+              here.
+
+              `alignItems: center` AND NOT `baseline` (owner call, 2026-08-16). The
+              glyph is a circle and the eyebrow is a 10px mono line: sitting them on a
+              shared baseline puts the circle's centre below the letters' centre, which
+              reads as a dropped icon rather than as a mark beside a label. Centres to
+              centres is what the eye checks on a round glyph.
+
+              THE 1px LIFT FINISHES IT. `HintIcon`'s own padding is asymmetric — 7
+              top, 5 bottom, for the baseline alignment the rest of the deck uses — so
+              its content box centre sits 1px above the glyph's. `top: -1px` on a
+              relatively positioned wrapper takes that back WITHOUT touching the shared
+              component or moving anything else in the row.
+
+              `position="right"`, WHICH IS ALSO THE DEFAULT. Measured on the stage
+              rather than estimated: the column's text starts at x = 792, the eyebrow
+              runs ~210px, the glyph stands at ~1010, and the tooltip is ~180px wide —
+              so it ends near 1200 against a right margin at 1232. It opens away from
+              the panel it explains, which is the direction the deck's other eight
+              hints open. */}
           <div
-            data-testid="shape-idle-eyebrow"
-            style={{ ...monoLabel(10, "var(--copper-400)", 0.24), marginBottom: 16 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 16,
+            }}
           >
-            {C.idleEyebrow}
+            <div
+              data-testid="shape-idle-eyebrow"
+              style={monoLabel(10, "var(--copper-400)", 0.24)}
+            >
+              {C.idleEyebrow}
+            </div>
+            <span style={{ position: "relative", top: -1, display: "inline-flex" }}>
+              <HintIcon text={C.hintTooltip} position="right" />
+            </span>
           </div>
           <p
             data-testid="shape-idle-lead"
@@ -795,19 +833,11 @@ export function PillarOrbit({ brandLine, pose }: PillarOrbitProps) {
           >
             {highlight(C.idleLead, C.idleLeadKw)}
           </p>
-          {/* THE HINT, AND IT LEAVES WHEN IT HAS BEEN OBEYED. Dropped from the tree
-              rather than faded to 0: an element that is still there is still a stop
-              for a screen reader and still a row in the panel's measure. The pulse it
-              carries is in `./agentic-org.css` and stops with it. */}
-          {!touched && (
-            <div
-              data-testid="shape-hint"
-              className="shape-hint"
-              style={{ ...monoLabel(9.5, "var(--copper-500)", 0.2), marginTop: 34 }}
-            >
-              {C.hint}
-            </div>
-          )}
+          {/* AND NOTHING UNDER THE LEAD. A mono hint line used to stand 34px below it
+              — "HOVER A PILLAR TO OPEN IT · CLICK TO PIN" — dropped from the tree the
+              first time a pillar was touched, with a pulse of its own in
+              `./agentic-org.css`. Both are gone: the instruction is in the tooltip on
+              the eyebrow above, which is where the rest of the deck keeps it. */}
         </PanelBlock>
 
         {/* SIX BLOCKS MOUNTED, NOT ONE PANEL WHOSE TEXT SWAPS — and this is a

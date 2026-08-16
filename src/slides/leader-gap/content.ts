@@ -1556,7 +1556,7 @@ const FAILURE_CARDS: Three<FailureCard> = [
     subtitleKw: ["they became consumers"],
     happenings: [
       {
-        label: "AISC formed",
+        label: "AI Steering Committee (AISC) formed",
         rest: "a small team, to bridge engineering and every other department",
         restKw: ["to bridge engineering"],
       },
@@ -1566,7 +1566,7 @@ const FAILURE_CARDS: Three<FailureCard> = [
         restKw: ["not to learn them"],
       },
       {
-        label: "Reps, not champions",
+        label: "Representatives, not ambassadors",
         rest: "product owners on paper — no ownership, no handover",
         restKw: ["no ownership, no handover"],
       },
@@ -1619,7 +1619,7 @@ const PHASE_LESSONS: Three<PhaseLesson> = [
   {
     id: "owned-their-work",
     phase: "PHASE 3",
-    title: "CHAMPIONS OVER LABOR",
+    title: "AMBASSADORS OVER LABOR",
     quote: "“Build WITH people, not FOR them.”",
     quoteKw: ["WITH"],
   },

@@ -1,18 +1,20 @@
-// Section THE SHAPE — every string this section's AUTHORED slides print, and the one
-// axis they vary on.
+// Section THE SHAPE — every string this section's AUTHORED slides print.
 //
-// TWO SLIDES LIVE IN THIS FILE AND THEY DISAGREE ABOUT WHETHER THIS SECTION HAS A
-// BRAND AXIS. THE AGENTIC ORGANIZATION exports one, because §4.4 slot 5 puts the
-// enabler's own name inside the hub and DigiTech is not MineTech. MIDDLE-OUT — the
-// second block, at the bottom of this file — exports NONE: issue #68 refuses a brand
-// slot in as many words, and an org chart is nobody's local evidence. Look for a
-// `…For(brand)` resolver there and there is not one. Neither answer is the house
-// style; the axis exists where the EVIDENCE varies and nowhere else, which is the
-// argument `src/slides/leader-gap/content.ts` makes at greater length about its own
-// two blocks.
+// NEITHER SLIDE IN THIS FILE HAS A BRAND AXIS ANY MORE, and one of them lost it on
+// 2026-08-16. MIDDLE-OUT — the second block, at the bottom of this file — never had
+// one: issue #68 refuses a brand slot in as many words, and an org chart is nobody's
+// local evidence. THE AGENTIC ORGANIZATION used to export one, because §4.4 slot 5 put
+// a tech function's own name inside the hub and DigiTech is not MineTech; the hub now
+// names an AI Steering Committee in both decks and the resolver is deleted (the note
+// where it stood, near the bottom of the first block, carries the argument). Look for
+// a `…For(brand)` resolver in this file and there is not one. That is not a house
+// style either: the axis exists where the EVIDENCE varies and nowhere else, which is
+// the argument `src/slides/leader-gap/content.ts` makes at greater length about its
+// own two blocks — and an organisational shape is not evidence, it is a claim about
+// what every deck is looking at.
 //
-// Spec §6.6 (content) · §7.1 (the visual contract #16 settled) · §4.4 slot 5 (the
-// brand axis). Named by SECTION KEY and not by letter. `shape` happens to be C in
+// Spec §6.6 (content) · §7.1 (the visual contract #16 settled). §4.4 slot 5 no longer
+// reaches this file — see the deleted brand axis. Named by SECTION KEY and not by letter. `shape` happens to be C in
 // both this ticket's composed leader deck and §4.3's finished one — the remaining
 // `gap` slides lengthen B without displacing it, C.3 and C.4 extend this run, and
 // `invest` lands behind it — so the letter is STABLE, and that is exactly why it is
@@ -31,9 +33,11 @@
 // in its own header.) Each of them carries a `*Kw` sibling. Everything else is the
 // mono LABEL register — the hub's two lines, the six pillar labels, the six point
 // lists, the six recap fragments, `decisionEyebrow`, `recapEyebrow`, `idleEyebrow`,
-// `hint`, and the beat counter {@link decisionCounter} builds out of it — where a
+// and the beat counter {@link decisionCounter} builds out of it — where a
 // copper italic reads as a rendering fault, so none of them has a `*Kw` sibling and
-// none of them may gain one. The counter is the sharpest case, because it is
+// none of them may gain one. `hintTooltip` is in NEITHER register: it is the
+// `HintIcon`'s copy, set in the serif italic inside a tooltip, and it is chrome that
+// explains the slide rather than copy that argues it — so it takes no `*Kw` either. The counter is the sharpest case, because it is
 // GENERATED rather than authored: a highlight inside "THE DECISION · 03 / 06" would
 // be an emphasis on arithmetic. `tests/unit/shape-agentic-org.test.tsx` holds the two
 // registers apart as lists, so a new string has to pick a side.
@@ -51,13 +55,15 @@
 // rather than deleted, because a list that only ever loses rows tells the next
 // author nothing about why the remaining ones are missing.
 //
-//   1. THE SIX LEADER DECISIONS — SHIPPED, one per pillar, on `Pillar.decision`
+//   1. THE SIX DECISIONS — SHIPPED, one per pillar, on `Pillar.decision`
 //      with its `decisionKw` sibling, in the ring order the array below holds.
 //      §6.6 spends the space the HR original's panel used on exactly this: copy that
-//      names the leader's DECISION in each pillar, which is what turns the
+//      names the DECISION each pillar forces, which is what turns the
 //      centrepiece into the index for the section behind it. Each one now arrives
 //      with `Pillar.points` — HR p4's own sub-bullets — and `Pillar.recap`, the
-//      fragment the last pose prints.
+//      fragment the last pose prints. All six are QUESTIONS since 2026-08-16 — they
+//      used to be sentences addressed at the room, and `Pillar.decision` carries the
+//      argument for the change.
 //   2. THE CLOSER — SHIPPED (`closer` / `closerKw`), now the last line of the recap
 //      rather than a pose of its own. It sits in the right column and not the bottom
 //      strip; §7.1 forced that and `WALK_COLUMN` in `./geometry.ts` records why in
@@ -91,9 +97,10 @@
 //      the cross-reference instead of making it, and would spend the only line of
 //      the column the closer needs.
 //
-// Type-only import, so this module pulls in nothing at runtime and stays plain
-// data — importable from a node test.
-import type { Brand } from "@/deck-variants";
+// NO IMPORTS AT ALL, AND THAT IS NEW. This file imported `type { Brand }` for one
+// thing — the hub's brand table — and that table is deleted (2026-08-16; the note
+// where it stood says why). Nothing here now depends on the variant system, so the
+// module is plain data end to end and stays importable from a node test.
 
 // ───────────────────── the six pillars ─────────────────────
 
@@ -124,19 +131,31 @@ export interface Pillar {
    */
   label: string;
   /**
-   * THE POINT: the leader's DECISION in that pillar, not a description of it.
+   * THE POINT: the DECISION the pillar forces, not a description of the pillar.
    *
    * "Governance & Policies" is a box on an org chart and every leader in the room
-   * already agrees with it. "You decide where the data may go" is something a
-   * division head either does on Monday or does not. Six descriptions would make
+   * already agrees with it. "Where may the data go?" is something an organisation
+   * either has an answer to on Monday or does not. Six descriptions would make
    * this slide a taxonomy nobody argues with, which is precisely the failure §6.6
    * spends the freed panel space to avoid.
    *
-   * ALL SIX OPEN "You decide", AND THAT REPETITION IS THE ARGUMENT. The walk is one
-   * sentence stem answered six ways, so by the fourth beat the room is hearing the
-   * stem rather than reading a new sentence — and the stem is the claim: none of
-   * these six is a purchase, a vendor's job or somebody else's. Six varied openings
-   * would read better on a page and lose the drumbeat in a room.
+   * ALL SIX ARE QUESTIONS, AND THAT IS THE 2026-08-16 CHANGE (owner call). They used
+   * to open "You decide …" — six sentences addressed at the people in the chairs —
+   * and the drumbeat was the argument. What that phrasing also did was ANSWER THE
+   * QUESTION THIS SLIDE IS SUPPOSED TO LEAVE OPEN: it put all six pillars on the desk
+   * of whoever is being presented to. This deck is an explanation of what an agentic
+   * organisation IS, so that the room can go and decide the committee's shape and who
+   * owns each pillar. A question invites that assignment; "you decide" pre-empts it.
+   *
+   * THE DRUMBEAT SURVIVES IN A DIFFERENT FORM. Six questions in a row is still one
+   * shape answered six ways — and the stem that used to open each sentence now stands
+   * once, in the recap's eyebrow ({@link shapeOrgContent.recapEyebrow}), over six
+   * fragments. The claim the stem carried is stated outright by the closer: every one
+   * of these is a decision someone must own, and none of them is a tool purchase.
+   *
+   * NO SECOND PERSON, ANYWHERE IN THE SIX. Not `you`, not `your`, not an imperative
+   * that implies one. A test holds it, because "you" comes back one polished sentence
+   * at a time.
    *
    * IT ALSO HAS TO INDEX THE SECTION BEHIND THIS ONE (§6.6). Each decision carries
    * anchor words a leader hears again in section D or in the ladder — they are
@@ -151,9 +170,9 @@ export interface Pillar {
    *
    * ONE PHRASE EACH. The decision is one line in a column that already holds the
    * pillar's name and the beat counter, and two copper italics inside one line
-   * emphasise nothing. The phrase chosen is the DECISION's object — what is being
-   * decided — not the verb, because "You decide" is the same in all six and an
-   * italic on it would highlight the boilerplate.
+   * emphasise nothing. The phrase chosen is WHAT THE QUESTION ASKS ABOUT — the thing
+   * being decided — and never the whole question: an italic that ran to the question
+   * mark would be an emphasis on the entire line, which is no emphasis at all.
    *
    * Every entry must be a SUBSTRING of `decision`, which the test holds: a keyword
    * that does not occur is a highlight that silently does nothing — the copy still
@@ -164,8 +183,8 @@ export interface Pillar {
    * WHAT IS ACTUALLY UNDER THE PILLAR — HR p4's own sub-bullets, and the reason this
    * slide can be opened rather than only read.
    *
-   * THE DECISION IS THE ARGUMENT; THIS IS THE EVIDENCE FOR IT. "You decide where the
-   * data may go" is a claim about the leader's desk, and a Div Head's next question
+   * THE DECISION IS THE ARGUMENT; THIS IS THE EVIDENCE FOR IT. "Where may the data
+   * go?" is a question with an owner attached, and a Div Head's next question
    * is always the same one — *what does that actually cover?* Four nouns answer it in
    * the time it takes to read them, and they are the difference between a diagram the
    * room agrees with and a diagram the room can act on. They were not authored for
@@ -195,16 +214,22 @@ export interface Pillar {
    * THE DECISION IN ONE FRAGMENT — what the recap pose prints, six of them under one
    * shared stem.
    *
-   * IT IS THE OBJECT OF THE DECISION AND NOT A SUMMARY OF IT. The recap sets "YOU
-   * DECIDE" once, as the panel's eyebrow, and lists six answers under it: *where the
-   * data may go · who gets a company-managed seat · whether the culture rewards or
-   * waits · …*. That is the drumbeat the six decisions build, collapsed into the one
+   * IT IS THE OBJECT OF THE DECISION AND NOT A SUMMARY OF IT. The recap sets "WHAT
+   * GETS DECIDED" once, as the panel's eyebrow, and lists six answers under it: *where
+   * the data may go · who gets a company-managed seat · whether the culture rewards or
+   * waits · …*. That is the drumbeat the six questions build, collapsed into the one
    * frame the room leaves with — and it only works if every fragment completes the
    * same stem, so each one starts with an interrogative or a preposition and none of
    * them is a sentence.
    *
+   * THE FRAGMENTS DID NOT MOVE WHEN THE SIX DECISIONS BECAME QUESTIONS (2026-08-16),
+   * and that is the check that the rewrite was a change of ADDRESS and not of content:
+   * every one of these already named the thing being decided without naming who
+   * decides it, so the six that stood under "YOU DECIDE" stand under "WHAT GETS
+   * DECIDED" unedited.
+   *
    * IT MUST CARRY ITS DECISION'S ANCHOR WORD (§6.6). `data`, `company-managed seat`,
-   * `culture`, `pilot`, `signs`, `agent` — these are the words a leader hears again
+   * `culture`, `pilot`, `sign(s)`, `agent` — these are the words a leader hears again
    * in section D and in the ladder, and the recap is the LAST place they are said. A
    * fragment polished free of its anchor would leave the slide indexing nothing at
    * exactly the moment the index is being handed over; the test holds each fragment
@@ -273,8 +298,13 @@ const PILLARS: readonly Pillar[] = [
     // fraying into private hairlines) rather than spelling it, so the sibling tests
     // that reserve `improvis` to a rendered corpus fire the pattern against THIS
     // line now — `shape-middle-out.test.tsx` records the move.
-    decision: "You decide where the data may go — and you write it down before someone improvises.",
-    decisionKw: ["where the data may go"],
+    //
+    // THE SECOND CLAUSE IS A QUESTION ABOUT A DOCUMENT, NOT ABOUT AN INTENTION.
+    // "is it written down" is answerable by looking; "do you write it down" was
+    // answerable only by the person being asked. Same requirement, and now the room
+    // can check it against something.
+    decision: "Where may the data go — and is that written down before someone improvises?",
+    decisionKw: ["Where may the data go"],
     // HR p4's four, verbatim, and the only pillar that gets four. "Cost control" is
     // the one a governance list is usually missing and the one a Div Head recognises
     // fastest — it is also what makes D.5's subscription argument a governance
@@ -292,11 +322,11 @@ const PILLARS: readonly Pillar[] = [
     // not use, and an index whose vocabulary is a paraphrase indexes nothing.
     //
     // "the company pays for it" AND NOT "central billing": the mechanism is D.5's
-    // to explain in three beats, and a leader's decision is the commitment, not the
-    // billing arrangement. What the leader is deciding is that the seat stops being
+    // to explain in three beats, and the decision is the commitment, not the
+    // billing arrangement. What is being decided is that the seat stops being
     // a personal expense — which is what makes admin control, SSO and usage
     // analytics possible at all.
-    decision: "You decide who gets a company-managed seat, and that the company pays for it.",
+    decision: "Who gets a company-managed seat, and does the company pay for it?",
     decisionKw: ["a company-managed seat"],
     // HR p4's three, with its first line DE-BRANDED. The original reads "Claude +
     // Gemini ecosystem"; §6.7's security block refuses every vendor token by name for
@@ -330,8 +360,8 @@ const PILLARS: readonly Pillar[] = [
     // THE TWO-PERSON CONTRAST keeps the decision on what the organisation REWARDS,
     // which is the lever a leader actually holds — and it makes the cost visible:
     // rewarding the person who waits is also a decision, made by default.
-    decision: "You decide whether the culture rewards the person who tries it or the person who waits.",
-    decisionKw: ["the culture rewards"],
+    decision: "Does the culture reward the person who tries it, or the person who waits?",
+    decisionKw: ["the culture reward"],
     // HR p4's three, with its FIRST LINE RETERMED (2026-08-15). It read "AI Champions
     // per dept", which was HR p4's own wording; the Culture department's AI Ambassador
     // framework supersedes it and gives the same structure a name and a shape — AI
@@ -376,12 +406,16 @@ const PILLARS: readonly Pillar[] = [
     // NAMES them centrally (open recruitment, calibration, internal mapping), the act
     // left to this room is the backing rather than the naming, which is exactly what
     // K.3 now asks for. Repeating any of it here spends a beat
-    // of section K on the centrepiece and lets the leader hand the pillar to the
-    // person they just named. "leading the culture is part of the job" is the half
-    // of D.3's turn that CANNOT be delegated, which is why it is the half that
-    // belongs on a slide addressed to the room.
-    decision: "You decide which problem gets the pilot, and that leading the culture is part of the job.",
-    decisionKw: ["which problem gets the pilot"],
+    // of section K on the centrepiece and lets the pillar be handed to the person
+    // just named. "whose job is leading the culture" is the half of D.3's turn that
+    // CANNOT be delegated downward, and asking WHOSE job it is — rather than
+    // asserting it is the room's — is the whole of the 2026-08-16 change: the answer
+    // is a name this deck does not have and the room does.
+    decision: "Which problem gets the pilot, and whose job is leading the culture?",
+    // CAPITALISED, because the phrase now opens the line and `decisionKw` entries are
+    // matched as literal substrings. The recap fragment keeps the lower-case spelling
+    // — it stands mid-list under a stem, not at the head of a sentence.
+    decisionKw: ["Which problem gets the pilot"],
     // HR p4's three, verbatim, and all three are things only this room can supply.
     // They are also the three D.3's 30-day proof asks for by another name: a sponsor,
     // a budget line, and a stated reason.
@@ -398,16 +432,21 @@ const PILLARS: readonly Pillar[] = [
     // B.5's L3 rung calls a decision contract, one beat before the companions
     // pillar names the crossing itself.
     //
-    // THE SECOND CLAUSE IS THE ONE THAT COSTS SOMETHING. "everywhere they no longer
-    // do" is the sentence a division head has to be willing to say out loud, and
-    // dropping it would leave a decision nobody can disagree with — every process
-    // already has a signature somewhere.
+    // THE SECOND CLAUSE IS THE ONE THAT COSTS SOMETHING. "where do they no longer" is
+    // the half a division head has to be willing to answer out loud, and dropping it
+    // would leave a question nobody can disagree with — every process already has a
+    // signature somewhere.
+    //
+    // `sign` AND NOT `signs`, AND THE ANCHOR MOVED WITH IT. English strips the -s
+    // under subject–auxiliary inversion, so a question cannot carry the verb in the
+    // third person singular; the recap fragment still prints "signs", and the test's
+    // anchor for this pillar is `/\bsigns?\b/` for exactly this reason.
     //
     // AND NO POINTER TO A SEQUENCE. The prototype pointed this pillar at
     // Specify · Generate · Verify, which §6.6 refuses and a test forbids by word —
     // see items 3 and 4 at the top of this file.
-    decision: "You decide where a human still signs, and everywhere they no longer do.",
-    decisionKw: ["where a human still signs"],
+    decision: "Where does a human still sign, and where do they no longer?",
+    decisionKw: ["Where does a human still sign"],
     // HR p4's three, verbatim — and note what is NOT here. The original's process
     // pillar is the one #16's pointer line pointed at Specify · Generate · Verify;
     // those three words are refused on this stage by §6.6 and by a test (item 3 at
@@ -427,10 +466,11 @@ const PILLARS: readonly Pillar[] = [
     // sayable instead of accidental. "allowed to" carries the whole point — the
     // crossing is granted, by someone, on a date.
     //
-    // VERBATIM FROM THE PROTOTYPE, and the only one of the six that is. It already
-    // indexes the ladder in the ladder's own vocabulary, and nothing about the
-    // rebuilt slide moved what it points at.
-    decision: "You decide when a tool is allowed to become an agent.",
+    // THE PROTOTYPE'S WORDING SURVIVES INTACT INSIDE THE QUESTION — "allowed to
+    // become an agent" is untouched, and only the stem in front of it changed. It
+    // already indexes the ladder in the ladder's own vocabulary, and nothing about
+    // the rebuilt slide moved what it points at.
+    decision: "When is a tool allowed to become an agent?",
     decisionKw: ["allowed to become an agent"],
     // HR p4's three, verbatim, and the third one is the crossing the decision above
     // names: "Tool → Companion → Agent" is B.5's ladder in three words, and it is the
@@ -443,8 +483,8 @@ const PILLARS: readonly Pillar[] = [
       "Tool → Companion → Agent",
     ],
     // "becomes" AND NOT the decision's "is allowed to become": the permission is
-    // carried by the stem ("YOU DECIDE …") once the fragment is standing under it, and
-    // repeating it would make this the only recap line with two verbs in it.
+    // carried by the stem ("WHAT GETS DECIDED …") once the fragment is standing under
+    // it, and repeating it would make this the only recap line with two verbs in it.
     recap: "when a tool becomes an agent",
   },
 ];
@@ -483,11 +523,43 @@ export const shapeOrgContent = {
    * would put the presentation layer in the content module and make the string
    * unquotable in prose.
    *
-   * GENERIC ON PURPOSE (§6.6): the brand line underneath says who the enabler
-   * actually is here, and the hub above it says what the job is. A leader whose
-   * own function is not named in the hub can still see the shape.
+   * IT NAMES THE JOB AND {@link hubEnablerName} NAMES THE BODY THAT HOLDS IT. Two
+   * lines, and the first one is the one that has to survive a room that organises
+   * itself differently: whatever an organisation calls the thing at the centre, the
+   * job is enabling, and the six pillars are what it enables.
    */
   hubLabel: "The Enabler",
+
+  /**
+   * The hub's second line — WHO the enabler is, and the same answer for every deck.
+   *
+   * IT USED TO BE A BRAND AXIS AND IS NOT ONE ANY MORE (owner call, 2026-08-16). This
+   * line printed `MineTech` for Berau and `DigiTech` for GEMS, resolved through a
+   * `Record<Brand, …>` table that this file exported a resolver for (§4.4 slot 5). The
+   * reason it is gone is not layout and not tidiness: THE CLAIM WAS WRONG. Both are
+   * DEPARTMENTS. Driving six pillars — governance, culture, process, strategy — is not
+   * a technology department's remit, so a figure that put one at the centre told the
+   * room that the tech function owns decisions it cannot make and cannot be held to.
+   * Naming a different department per deck compounded it: an organisational shape that
+   * changes with the audience is not a shape.
+   *
+   * "AI Steering Committee" IS THE SOURCE FIGURE'S OWN ANSWER. HR's original slide 3
+   * puts *AISC as Enabler* in this exact position
+   * (`docs/researches/2026-07-31-hr-group-agentic-org-analysis.md`), and the deck
+   * already says it out loud in the closing portfolio — "AISC — enabler, not delivery
+   * team", "the agentic org — AISC plus six pillars around it". So this is a RETURN to
+   * the source, and MineTech/DigiTech was the deviation.
+   *
+   * SPELLED OUT, NOT `AISC`. C.1 is the first place in the leader decks where the body
+   * is named; an acronym at the centre of the centrepiece would be a term the room has
+   * not met yet, and the disc has room for the words (see `HUB` in `./geometry.ts` —
+   * the renderer sets this line over two lines inside the 132px disc).
+   *
+   * AND IT PRESCRIBES NOTHING ELSE. Not the membership, not the chair, not the
+   * cadence, not where it reports. The shape of the committee is the room's to decide,
+   * which is the same reason the six decisions below are questions.
+   */
+  hubEnablerName: "AI Steering Committee",
 
   /**
    * The panel's eyebrow while a pillar is open — the mono label standing over every
@@ -517,9 +589,8 @@ export const shapeOrgContent = {
    *
    * IT NAMES THE FIGURE RATHER THAN THE INTERACTION. "SIX PILLARS · ONE ENABLER" is
    * the diagram said in four words, so a room that never touches the slide still
-   * leaves with the shape; the line that explains the pointer is {@link hint} below,
-   * and it is separate because it is the only string here that stops being true once
-   * it has been obeyed. Mono label, so keyword-free.
+   * leaves with the shape; what explains the pointer is the `HintIcon` standing beside
+   * this line, whose copy is {@link hintTooltip} below. Mono label, so keyword-free.
    */
   idleEyebrow: "SIX PILLARS · ONE ENABLER",
 
@@ -528,9 +599,14 @@ export const shapeOrgContent = {
    * opened.
    *
    * IT IS THE HEADLINE'S PROOF, NOT ITS ECHO. "Six pillars move together, or none of
-   * them move" is a claim; this is the mechanism under it — one enabling function,
+   * them move" is a claim; this is the mechanism under it — one enabling body,
    * six pillars that only work in company. A leader who reads only these two lines
    * has the argument.
+   *
+   * "BODY" AND NOT "FUNCTION" (2026-08-16). `function` is what an org chart calls a
+   * department, and the hub used to name one; now that the hub names a committee, the
+   * noun here has to be the one that covers a committee without prescribing its shape.
+   * It is also the only word in this sentence that changed.
    *
    * IT DOES NOT SPEND THE CLOSER. "None of them is a tool purchase" is the recap's
    * last line and the sentence the whole figure exists to earn; an idle lead that
@@ -541,44 +617,66 @@ export const shapeOrgContent = {
    * `kicker` used to be: that line was cut, not moved, and reusing its words here
    * would be the move it was refused.
    */
-  idleLead: "One enabling function at the centre. Six pillars that only work together.",
+  idleLead: "One enabling body at the centre. Six pillars that only work together.",
   /** Prose, so one keyword — on the dependency, which is the claim the ring makes and
    *  the only part of the sentence the diagram cannot draw on its own. */
   idleLeadKw: ["only work together"],
 
   /**
-   * The one line on this stage that explains the pointer.
+   * The one string on this stage that explains the pointer — and it is now a TOOLTIP,
+   * not a line of type (owner call, 2026-08-16).
    *
    * IT EXISTS BECAUSE THE STEPS WENT AWAY. Under nine poses the six decisions arrived
    * whether or not anyone touched the slide; under two, they are reached by hovering
    * a box, and a figure that hides its content behind an ungestured interaction is a
-   * figure that shows a room six labels and nothing else. One line, once.
+   * figure that shows a room six labels and nothing else.
    *
-   * IT IS DROPPED THE INSTANT IT IS OBEYED — the component stops rendering it after
-   * the first pillar is touched, rather than fading it or leaving it dim. An
-   * instruction that is still on the stage after the reader has followed it is
-   * chrome, and this deck spends no chrome.
+   * IT MOVED INTO THE DECK'S OWN AFFORDANCE. It used to print as a standing mono line
+   * 34px under the idle lead, dropped for good the first time a pillar was touched.
+   * Eight other slides — E.3, E.4, E.5, E.9, D.2, F.8, I.3, K.2 — say the same thing
+   * with `@/components/HintIcon`: a pulsing info glyph beside the block's eyebrow that
+   * opens on hover. One deck, one gesture, and a room that has met the glyph once
+   * knows what it means here. The `touched` latch went with the line, and it is not a
+   * loss: a 14px glyph beside a label is not an instruction standing on the stage
+   * after it has been obeyed, which is what the latch was there to prevent.
    *
    * BOTH HALVES ARE NAMED, and the second one is the one nobody guesses: hover is
-   * discoverable by accident, pin is not. Mono label at the panel's quietest tier, so
-   * keyword-free.
+   * discoverable by accident, pin is not.
+   *
+   * SENTENCE CASE, unlike every other label on this slide, and it is NOT a register
+   * violation: `HintIcon` sets its tooltip in the serif italic at 11px, so this string
+   * never enters the mono LABEL register at all. It carries no `*Kw` sibling for the
+   * same reason the labels do not — it is chrome that explains the slide rather than
+   * copy that argues it.
+   *
+   * NOT `HintIcon`'S DEFAULT, which reads "Hover each card for details …". The six
+   * things on this stage are pillars in a ring, not cards, and the deck-wide default
+   * would name a shape that is not there.
    */
-  hint: "HOVER A PILLAR TO OPEN IT · CLICK TO PIN",
+  hintTooltip: "Hover for details, click to pin/unpin.",
 
   /**
    * The recap's eyebrow — and the STEM the six fragments under it complete.
    *
-   * "YOU DECIDE" IS SAID ONCE HERE AND SIX TIMES NOWHERE. Every decision opens with
-   * those two words (see `Pillar.decision`), and the drumbeat is the argument — but
-   * six full sentences stacked in one column is a paragraph, and a room reads a
-   * paragraph by skimming it. Lifting the stem into the eyebrow leaves six OBJECTS
+   * THE STEM IS SAID ONCE HERE AND SIX TIMES NOWHERE. Six fragments stand under it —
+   * *where the data may go · who gets a company-managed seat · …* — and each one
+   * completes it. Six full sentences stacked in one column would be a paragraph, and a
+   * room reads a paragraph by skimming it; the stem in the eyebrow leaves six OBJECTS
    * under it, which is the same claim compressed into the one frame the room leaves
-   * with: what you decide, six times, in a single glance.
+   * with: what gets decided, six times, in a single glance.
+   *
+   * "WHAT GETS DECIDED" AND NOT "YOU DECIDE" (owner call, 2026-08-16). The old stem
+   * put all six pillars on the desk of the people being presented to, and this deck's
+   * job is to show what an agentic organisation IS so the room can go and assign the
+   * committee and the six owners itself. The passive is doing real work here rather
+   * than hedging: it names the decisions without naming a decider, which is exactly the
+   * blank the room is supposed to fill. Every decision above is a question for the same
+   * reason.
    *
    * STORED UPPERCASE. Mono label, so keyword-free — and the `·` is the deck's own
    * separator, not a bullet.
    */
-  recapEyebrow: "THE RECAP · YOU DECIDE",
+  recapEyebrow: "THE RECAP · WHAT GETS DECIDED",
 
   /**
    * The closer — the last line of the recap, and the sentence the whole figure exists
@@ -586,10 +684,25 @@ export const shapeOrgContent = {
    *
    * TWO SENTENCES, AND THE SECOND IS THE LOAD-BEARING ONE. "None of them is a tool
    * purchase" is the refusal §6.6's centrepiece is built to state: the six decisions
-   * the room has just read are all things a leader signs, none of them is a line item
+   * the room has just read are all things a person signs, none of them is a line item
    * a vendor can deliver, and a division head who leaves this slide planning a
    * procurement has misread it. The first sentence alone would be a summary; the pair
    * is a claim.
+   *
+   * "EVERY PILLAR IS A DECISION SOMEONE MUST OWN" AND NOT "EVERY ONE OF THESE IS A
+   * DECISION ON YOUR DESK" (owner call, 2026-08-16). Two edits in one sentence, and
+   * they do different jobs.
+   *
+   * THE SUBJECT NAMES WHAT IT IS TALKING ABOUT. "Every one of these" points at six
+   * fragments in a list, so it only means something while the list is on the screen —
+   * and this is the line a room repeats afterwards. "Every pillar" carries the figure
+   * with it, and it is the word the whole slide has spent two poses teaching.
+   *
+   * THE PREDICATE MOVED THE ADDRESS. "on your desk" put all six on the desk of whoever
+   * was being presented to; "someone must own" says the load-bearing half — these are
+   * OWNED, by named people, or they are made by default — and leaves the naming to the
+   * organisation. It also finishes the work the six questions set up: a question
+   * invites an owner, and this sentence says out loud that every one of them needs one.
    *
    * IT IS NO LONGER THE WHOLE OF THE LAST POSE, and that is this rewrite's one change
    * to it. The nine-pose version gave pose 8 to this sentence alone, standing in an
@@ -603,21 +716,22 @@ export const shapeOrgContent = {
    * pillar's box already reaches y = 610 of a 632 floor and it GROWS when it is lit,
    * so there is no bottom strip to print a line of type into.
    *
-   * VERBATIM FROM THE PROTOTYPE. The owner approved variant A with this line in it
-   * on a browser walkthrough, it names no letter and no figure, and rewriting an
-   * approved closer to prove the port was not a copy would be the worst reason to
-   * change copy.
+   * THE SECOND SENTENCE IS THE PROTOTYPE'S, VERBATIM. The owner approved variant A
+   * with "None of them is a tool purchase" in it on a browser walkthrough; it names no
+   * letter and no figure, and rewriting it to prove the port was not a copy would be
+   * the worst reason to change copy. Only the first sentence moved, and only its
+   * ADDRESS moved with it.
    */
-  closer: "Every one of these is a decision on your desk. None of them is a tool purchase.",
+  closer: "Every pillar is a decision someone must own. None of them is a tool purchase.",
   /**
    * Prose, so one keyword — and it goes on the claim, not on the refusal.
    *
-   * "a decision on your desk" and NOT "a tool purchase": the italic is the last
+   * "a decision someone must own" and NOT "a tool purchase": the italic is the last
    * emphasis the room takes away, and emphasising the refusal would leave the
-   * closing image a purchase. The highlighted phrase is also the only part of the
-   * sentence that is addressed to the person in the chair.
+   * closing image a purchase. The highlighted phrase is also the one part of the
+   * sentence that asks the room for something — a name against each of the six.
    */
-  closerKw: ["a decision on your desk"],
+  closerKw: ["a decision someone must own"],
 
   pillars: PILLARS,
 } as const;
@@ -674,58 +788,31 @@ export function decisionCounter(index: number): string {
   return `${shapeOrgContent.decisionEyebrow} · ${beat} / ${total}`;
 }
 
-// ───────────────────── the brand axis (§4.4 slot 5) ─────────────────────
-
-/**
- * The hub's second line, brand by brand — the ONE thing on this slide that varies
- * with the organisation in front of it (§4.4 slot 5).
- *
- * `null` MEANS THERE IS NO ORGANISATION TO NAME, and the hub prints its label
- * alone. It is not "not written yet" and it is not an empty string: an empty
- * string renders a blank line inside the disc, which on a projector reads as a
- * slide that did not finish, and a placeholder name would be an invented
- * organisation printed at the centre of the deck's centrepiece. So the absence is
- * carried by the TYPE, the renderer has to handle it, and no author can turn it
- * into copy by editing one field.
- *
- * A `Record` keyed by `Brand` and not a `brand === "gems"` ternary, for the same
- * reason `capabilityLadderFor`'s table is one: a fourth brand must FAIL TO
- * COMPILE here rather than silently show one organisation another's name. This is
- * §4.4's "a content block per brand, not a brand × deckSet matrix" — the deck-set
- * axis does not reach this slide, because a slide only the leader decks compose
- * has nothing to vary against.
- *
- * `general` IS UNREACHABLE TODAY, and kept to the thinnest honest thing. No
- * `general-leader` variant is registered (`VARIANTS` in `@/deck-variants`), so no
- * composed deck asks for it. It exists because registering that variant should
- * serve a hub that names NOBODY rather than crash at first paint or — far worse —
- * fall through to another organisation's tech function. `general` names no
- * organisation, so it has nothing to put on the second line, and `null` says
- * exactly that and nothing more.
- */
-const HUB_BRAND_LINE_BY_BRAND: Record<Brand, string | null> = {
-  berau: "MineTech",
-  gems: "DigiTech",
-  general: null,
-};
-
-/**
- * The hub's brand line for one brand. Pass `VARIANT.brand`.
- *
- * THE ONLY WAY IN. The table above is deliberately not exported: a caller that
- * could read it could also enumerate keys the brand table does not have, and the
- * tests that hold a rule over "every brand" would then prove it over this file's
- * own key set instead of over `BRANDS`. They walk `Object.keys(BRANDS)` and come
- * through here, so a brand registered without a line fails at the type and a line
- * written for a brand that does not exist fails at the same place.
- *
- * The slide file calls this ONCE at module scope and passes the result down as a
- * prop — which is what lets one test render both brands' hubs in a single module
- * epoch (§4.4 slot 5, and see `./shape-agentic-org.tsx`).
- */
-export function hubBrandLineFor(brand: Brand): string | null {
-  return HUB_BRAND_LINE_BY_BRAND[brand];
-}
+// ─────────────── the brand axis, DELETED 2026-08-16 (was §4.4 slot 5) ───────────────
+//
+// THERE IS NO `hubBrandLineFor` ANY MORE, and the deletion is recorded here rather
+// than performed silently, because §4.4 slot 5 and §7.1's Brand row both used to point
+// at this spot and a reader who follows either one has to land on the reason.
+//
+// WHAT WAS HERE. `HUB_BRAND_LINE_BY_BRAND: Record<Brand, string | null>` — `berau:
+// "MineTech"`, `gems: "DigiTech"`, `general: null` — read once at module scope by
+// `./shape-agentic-org.tsx` and passed to the hub as a prop. It was this file's only
+// brand-varying export.
+//
+// WHY IT WENT (owner call, after discussion). Both names are DEPARTMENTS. The six
+// pillars are governance, tools, people, strategy, process and companions, and driving
+// those is not a technology department's remit — so the figure was handing one
+// department the accountability for five things it cannot decide, at the centre of the
+// slide that defines the operating model. The per-brand split made it worse rather
+// than better: a shape that changes with the audience is not a shape. The hub now
+// prints {@link shapeOrgContent.hubEnablerName} — "AI Steering Committee" — for every
+// deck, which is the SOURCE figure's own answer (see that field's note).
+//
+// AND THE SLIDE NOW HAS NO BRAND AXIS AT ALL, which puts it in the same position as
+// MIDDLE-OUT at the bottom of this file: the axis exists where the EVIDENCE varies,
+// and an organisational shape is not local evidence. `./shape-agentic-org.tsx` reads
+// no `VARIANT` and `./components/PillarOrbit.tsx` takes no `brandLine` prop, so there
+// is nothing left for a fourth brand to get wrong here.
 
 // ═════════════════════════════════════════════════════════════════════════════
 // MIDDLE-OUT — §6.6's "middle-out adoption", and the one slide in this deck that

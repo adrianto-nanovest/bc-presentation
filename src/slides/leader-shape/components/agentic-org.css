@@ -27,8 +27,11 @@
  *     and the only motion on this stage that never stops. Rest drifts INWARD (six
  *     pillars feeding one enabler); the pillar under the pointer SURGES OUTWARD, fast
  *     and long, which is the second half of the hover highlight.
- *   · THE AFFORDANCE (`shape-hint-pulse`) — the one-line instruction that teaches the
- *     hover, breathing until it is obeyed.
+ *
+ * THERE USED TO BE A FOURTH — THE AFFORDANCE (`shape-hint-pulse`), a one-line
+ * instruction that taught the hover and breathed until it was obeyed. It is deleted;
+ * the deck's shared `HintIcon` does that job now, and the note where the keyframes
+ * stood says so.
  *
  * ZERO SMIL, at every pose, under either motion preference — the rule this slide has
  * carried since it shipped and the reason none of the above is an `<animate>`
@@ -189,29 +192,17 @@
   animation: shape-spoke-surge 1500ms linear infinite;
 }
 
-/* ───────────────────── the affordance ───────────────────── */
+/* ───────────────────── the affordance, and it is not here any more ─────────────────────
 
-/* THE HINT, BREATHING. This slide has no step that forces its content open — the six
-   decisions are reached with the pointer — so exactly one line on the stage has to
-   say so, and a line that says so silently is a line nobody reads. It stops the
-   moment the first pillar is touched (the component drops the element), so the pulse
-   is bounded by the reader's own first action rather than by a timer.
+   `shape-hint-pulse` AND `.shape-hint` ARE DELETED (2026-08-16). This slide has no step
+   that forces its content open — the six decisions are reached with the pointer — so
+   something on the stage has to say so, and for the last version that was a mono line
+   under the idle lead, breathing on a 2600ms pulse until the first pillar was touched.
 
-   0% AND 100% ARE THE SAME FRAME, which is the deck's rule for every infinite
-   animation: the squashed single iteration a reduced-motion reader gets must land on
-   the composed frame, not on a half-faded one. */
-@keyframes shape-hint-pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-.shape-hint {
-  animation: shape-hint-pulse 2600ms var(--ease) infinite;
-}
+   The instruction is now `@/components/HintIcon` beside the idle eyebrow, which the
+   deck's other eight interactive slides already use: it carries its own pulse in
+   framer-motion and its own reduced-motion behaviour, so this file has nothing left to
+   declare for it. The rule in the media block at the bottom went with the class. */
 
 /* ───────────────────── the pillar box, as a control ───────────────────── */
 
@@ -265,11 +256,8 @@
  * inline style any other way — the same spend the global rule already makes.
  */
 @media (prefers-reduced-motion: reduce) {
-  .shape-spoke-flow,
-  .shape-hint {
-    animation: none !important;
-  }
   .shape-spoke-flow {
+    animation: none !important;
     opacity: 0;
   }
   .shape-hub-in,

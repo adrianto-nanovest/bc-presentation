@@ -621,7 +621,7 @@ deck-set-scoped.
 `ArrowRight` jumps to the next slide but lands it at **step 0**, its blankest pose (the #12
 complaint); `Space` shows every beat. Pick the key deliberately when rehearsing.
 
-### 4.4 The seven brand × deckSet slots
+### 4.4 The brand × deckSet slots — seven authored, six live
 
 #5's conclusion that "no delta needs a brand × deckSet pair" is **false**. Cleanest
 expression is a `leader` content block under each brand, not a brand × deckSet matrix.
@@ -632,7 +632,7 @@ expression is a `leader` content block under each brand, not a brand × deckSet 
 | 2 | Capability Ladder markers | GEMS two markers / Berau one + no MineTech marker |
 | 3 | `invest-own-proof` | GEMVIS metrics / Vol-1 IDR figures |
 | 4 | `invest-security` on-prem beat | GEMS DigiTech callback / Berau none |
-| 5 | Agentic Org hub name | DigiTech / MineTech |
+| 5 | ~~Agentic Org hub name~~ | ~~DigiTech / MineTech~~ — **slot retired 2026-08-16.** The hub names one AI Steering Committee in both decks; naming a department as the driver of six pillars was the wrong claim, not the wrong department. **Six live slots.** See §6.6's amendment. |
 | 6 | `mandate-phases-gates` calendar | GEMS P0 → AI Forge / Berau P0 complete, Aug 18 **is** the gate |
 | 7 | `invest-subscription` price anchor | Berau's published $204/yr prize / GEMS list price only |
 
@@ -829,15 +829,48 @@ seen twice.
 ### 6.6 Section C · THE SHAPE
 
 **`shape-agentic-org` — C.1 · the centrepiece.** See §7.1 for the prototyped visual
-contract. Generic hub **"The Enabler"** with a brand line: **DigiTech** (GEMS) /
-**MineTech** (Berau). Six pillars from HR p4: People & Mindset · AI Companions · Process &
-Methodology · Tools & Platform · Strategy & Leadership · Governance & Policies.
+contract. Generic hub **"The Enabler"** over **"AI Steering Committee"** — one line for
+every deck, **no brand axis**. Six pillars from HR p4: People & Mindset · AI Companions ·
+Process & Methodology · Tools & Platform · Strategy & Leadership · Governance & Policies.
 
 The HR original's **Specify → Generate → Verify** panel is **dropped** — C.4 (leader F.4)
-already does it better. The freed space becomes a **focus walk naming the leader's decision
-in each pillar**, which turns the centrepiece into the index for section D: security and
+already does it better. The freed space becomes a **focus walk naming the decision each
+pillar forces**, which turns the centrepiece into the index for section D: security and
 no-SOP land on *Governance & Policies*, subscriptions on *Tools & Platform*, "Leading AI
 Culture" on *People & Mindset* + *Strategy & Leadership*.
+
+> **Amendment 2026-08-16 — the enabler is a committee, and the slide stops telling the
+> room what to decide.** Three changes, one owner call, all shipped.
+>
+> 1. **The hub's brand line is deleted (was §4.4 slot 5).** It printed **MineTech**
+>    (Berau) / **DigiTech** (GEMS). Both are **departments**, and driving six pillars —
+>    governance, culture, process, strategy — is not a technology department's remit, so
+>    the figure gave one function accountability for five things it cannot decide.
+>    Splitting it per deck made it worse: an organisational shape that changes with the
+>    audience is not a shape. The hub now names an **AI Steering Committee** in both
+>    decks, which is the HR source figure's own answer (*AISC as Enabler*,
+>    `docs/researches/2026-07-31-hr-group-agentic-org-analysis.md`) and what the closing
+>    portfolio already says out loud. The deck **does not prescribe the committee's
+>    shape** — membership, chair, cadence and reporting line are the organisation's.
+>    `hubBrandLineFor` is gone; C.1 has no brand axis at all.
+> 2. **The six decisions are questions.** They opened "You decide …" and the recap's stem
+>    read "THE RECAP · YOU DECIDE"; the closer ended "a decision on your desk". That
+>    address answered the question this slide exists to leave open — the room is meant to
+>    leave it deciding the committee's shape and who owns each pillar. The six now ask
+>    (*Where may the data go …? · Who gets a company-managed seat …? · …*), the stem is
+>    **"THE RECAP · WHAT GETS DECIDED"**, and the closer is **"Every pillar is a decision
+>    someone must own. None of them is a tool purchase."** No second person survives
+>    anywhere on the stage, at either pose; a test holds it.
+> 3. **The hint is the deck's `HintIcon`.** A standing mono line under the idle lead
+>    ("HOVER A PILLAR TO OPEN IT · CLICK TO PIN", dropped on first touch) is replaced by
+>    the pulsing info glyph beside the idle eyebrow that E.3, E.4, E.5, E.9, D.2, F.8,
+>    I.3 and K.2 already use — tooltip: *Hover for details, click to pin/unpin.*
+>
+> **B.3 followed on the vocabulary** (`leader-gap`): "AISC formed" → "AI Steering
+> Committee (AISC) formed" (spelled out on first use, since C.1 now names the body),
+> "Reps, not champions" → "Representatives, not ambassadors", and PHASE 3's lesson
+> "CHAMPIONS OVER LABOR" → "AMBASSADORS OVER LABOR" — the Culture department's framework
+> fixes *Champion* to mean a CxO, which is the room, not the people the lesson is about.
 
 **`f8-your-agentic-os` — C.2.** Relocated verbatim; `sectionOverrides` entry required.
 
@@ -1069,7 +1102,7 @@ six variants. Prototype at `?dev=proto16`; full record in
 | The focus walk | **Does not dim the other five.** Inactive pillars keep full border and label; the active one *gains* copper fill, a thickened spoke and a halo. **Attention is bought with added light, never subtracted.** |
 | Step budget | **Nine steps, not ~4.** Six pillars × one leader-decision each is six beats minimum, plus hub + reveal + closer. #16's "~4 steps" budget moves. |
 | Layout risk | The lowest satellite sits at y ≈ 620 (stage bottom ≈ 658), close to the NavBar hover zone, **and it grows on focus**. The closer had to move off the bottom strip into the right column. **Re-check clearance when rebuilt.** |
-| Brand | Hub label "The Enabler" + brand line DigiTech / MineTech (slot 5). |
+| Brand | ~~Hub label "The Enabler" + brand line DigiTech / MineTech (slot 5).~~ **No brand axis (2026-08-16).** The hub reads "The Enabler" over "AI Steering Committee" in every deck — see §6.6's amendment for why naming a department here was wrong. |
 
 ### 7.2 `gap-capability-ladder` (B.5) — staircase path-draw
 
@@ -1683,9 +1716,15 @@ official.
 
 ### 12.3 Also open
 
-1. **Give the committee a heads-up** that the deck names DigiTech/MineTech as "The Enabler".
-   It aligns with DigiTech's own stated "stewardess" intent, but it is our slide describing
-   another department's role, in front of Div Heads.
+1. ~~**Give the committee a heads-up** that the deck names DigiTech/MineTech as "The
+   Enabler". It aligns with DigiTech's own stated "stewardess" intent, but it is our slide
+   describing another department's role, in front of Div Heads.~~
+   - **CLOSED 2026-08-16 — the risk was removed rather than managed.** The concern was
+     right and the answer was to stop naming a department at all: driving the six pillars
+     is not a technology department's remit, so C.1's hub now reads "The Enabler / AI
+     Steering Committee" in both decks and prescribes nothing about that committee's
+     shape. See §6.6's amendment. No heads-up is owed, because no department's role is
+     described by our slide any more.
 2. **GEMVIS figures are vendor-reported** (Google Cloud customer story), not independently
    audited. Cite attributed; ideally have DigiTech confirm before Aug 19.
    - **Amendment 2026-08-05 — gh#56 shipped the ATTRIBUTED-ONLY branch, and the confirmation

@@ -1,6 +1,7 @@
 // THE AGENTIC ORGANIZATION — section C's centrepiece, and the deck's shape.
 //
-// Spec §6.6 (content) · §7.1 (the visual contract) · §4.4 slot 5 (the brand axis).
+// Spec §6.6 (content) · §7.1 (the visual contract). §4.4 slot 5 no longer applies —
+// the hub's brand axis is deleted (2026-08-16); see the slide def at the bottom.
 // Productionized from the #16 orbit prototype — variant A, which the owner
 // picked on a browser walkthrough of all six #16 variants; §7.1 records the
 // verdict — and REWRITTEN, not lifted: the prototype is inline-styled end to end,
@@ -87,16 +88,15 @@
 // currently puts the slide, which is the one place it is safe to say so.
 import type { SlideDef } from "@/deck/types";
 import { useDeck } from "@/deck/DeckContext";
-import { VARIANT } from "@/variant";
 import { FigLabel } from "@/components/FigLabel";
 import { highlight } from "@/components/highlight";
 import { PillarOrbit } from "./components/PillarOrbit";
-import { hubBrandLineFor, shapeOrgContent as C } from "./content";
+import { shapeOrgContent as C } from "./content";
 import { STEP_COUNT } from "./walk";
 
 // ───────────────────── slide ─────────────────────
 
-export function ShapeAgenticOrg({ brandLine }: { brandLine: string | null }) {
+export function ShapeAgenticOrg() {
   const { stepIndex } = useDeck();
 
   return (
@@ -110,20 +110,20 @@ export function ShapeAgenticOrg({ brandLine }: { brandLine: string | null }) {
         <h1 className="slide-headline small">{highlight(C.headline, C.headlineKw)}</h1>
       </div>
 
-      <PillarOrbit brandLine={brandLine} pose={stepIndex} />
+      <PillarOrbit pose={stepIndex} />
     </>
   );
 }
 
 // ───────────────────── slide def ─────────────────────
 
-// Resolved ONCE, at module scope, exactly as `gap-capability-ladder.tsx` and
-// `title.tsx` resolve theirs and for the same reason: `VARIANT` resolves at module
-// scope, so one module epoch holds one brand and the URL that decided it cannot
-// change without a reload. The component below it takes the resolved line as a
-// PROP and reads no variant of its own — which is what lets one test mount both
-// brands' hubs in the same epoch and compare them (§4.4 slot 5).
-const BRAND_LINE = hubBrandLineFor(VARIANT.brand);
+// NO `VARIANT` READ AT MODULE SCOPE, AND NOTHING TO RESOLVE. This file used to hold a
+// `const BRAND_LINE = hubBrandLineFor(VARIANT.brand)` beside the ones in
+// `gap-capability-ladder.tsx` and `title.tsx`, and passed it down as a prop so a test
+// could mount both brands' hubs in one module epoch (§4.4 slot 5). The hub no longer
+// varies: it names an AI Steering Committee in every deck, because the tech function
+// it used to name is a DEPARTMENT and driving the six pillars is not a department's
+// job. `./content.ts` records the deletion where the resolver stood.
 
 export const shapeAgenticOrgSlide: SlideDef = {
   id: "shape-agentic-org",
@@ -140,5 +140,5 @@ export const shapeAgenticOrgSlide: SlideDef = {
   animationMode: "step-reveal",
   surface: "dark",
   sectionKey: "shape",
-  render: () => <ShapeAgenticOrg brandLine={BRAND_LINE} />,
+  render: () => <ShapeAgenticOrg />,
 };

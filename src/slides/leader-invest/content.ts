@@ -469,7 +469,8 @@ const GENERAL_BLOCK: OwnProofBlock = {
  * This slide's brand-varying half, brand by brand.
  *
  * A `Record` keyed by `Brand` and not a `brand === "gems"` ternary, for the same
- * reason `capabilityLadderFor`'s and `hubBrandLineFor`'s tables are records: a
+ * reason `capabilityLadderFor`'s table is a record (C.1's hub had the third one until
+ * 2026-08-16, when its brand axis was deleted outright): a
  * fourth brand must FAIL TO COMPILE here rather than silently show one
  * organisation the evidence of another. On this slide that is not a tidiness
  * argument — showing a Div Head another company's numbers is the one failure the

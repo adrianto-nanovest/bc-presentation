@@ -54,10 +54,13 @@
 // build-carrying element is in the tree from the first frame with its stagger on it,
 // which is the half a missing element would break.
 //
-// ALL THREE BRANDS IN ONE EPOCH. The component reads no `VARIANT` — the slide file
-// resolves the hub's brand line once at module scope and hands it down as a prop
-// (§4.4 slot 5) — so three hubs mount side by side in this one module registry. A
-// test that had to re-point `window.location` per brand could not compare them.
+// AND NO BRANDS AT ALL, SINCE 2026-08-16. This file used to mount three hubs side by
+// side in one module registry, because the slide resolved a brand line at module scope
+// and handed it down as a prop (§4.4 slot 5): MineTech for Berau, DigiTech for GEMS,
+// nothing for `general`. That axis is deleted — the hub names an AI Steering Committee
+// in every deck — so the per-brand renders below collapsed into single ones, and what
+// used to be a comparison is now an absence: neither department may appear on this
+// stage at any pose.
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
@@ -67,11 +70,12 @@ import {
   ShapeAgenticOrg,
   shapeAgenticOrgSlide,
 } from "@/slides/leader-shape/shape-agentic-org";
-import {
-  decisionCounter,
-  hubBrandLineFor,
-  shapeOrgContent,
-} from "@/slides/leader-shape/content";
+import { decisionCounter, shapeOrgContent } from "@/slides/leader-shape/content";
+// THE WHOLE MODULE, for one assertion: that `hubBrandLineFor` is GONE (2026-08-16).
+// A named import of a deleted export is a compile error, which proves nothing at run
+// time and says nothing about intent; the namespace object lets the deletion be
+// asserted as a fact next to a positive control on the same object.
+import * as shapeOrgContentModule from "@/slides/leader-shape/content";
 // Imported for TWO describes — the figure takes its pose as a prop, so it can be
 // asked about a pose the slide's own step count cannot reach, and it can be compared
 // byte for byte without the harness's own chrome in the container. Everything else
@@ -190,11 +194,11 @@ function Nav() {
   );
 }
 
-function renderOrg(brandLine: string | null, pose = 0) {
+function renderOrg(pose = 0) {
   const out = render(
     <SlideHarness def={shapeAgenticOrgSlide} at={AT}>
       <Nav />
-      <ShapeAgenticOrg brandLine={brandLine} />
+      <ShapeAgenticOrg />
     </SlideHarness>,
   );
   if (pose > 0) goToPose(pose);
@@ -209,14 +213,11 @@ function goToPose(pose: number) {
   act(() => screen.getByTestId(`goto-${pose}`).click());
 }
 
-const gems = hubBrandLineFor("gems");
-const berau = hubBrandLineFor("berau");
-
 /**
- * Every brand the app REGISTERS, from `BRANDS` and not from the slide's own
- * table — which is why that table is not exported. A rule held over the keys of
- * the thing being checked proves the thing equals itself; held over `BRANDS` it
- * proves the pick answers for every brand that can actually reach a deck.
+ * Every brand the app REGISTERS. It used to be here so that a rule over "every brand"
+ * was held against `BRANDS` rather than against the slide's own hub table; the hub has
+ * no table any more (2026-08-16) and what this now proves is the stronger claim —
+ * that NO brand changes anything on this slide, because the figure takes no brand.
  */
 const REGISTERED_BRANDS = Object.keys(BRANDS) as Brand[];
 
@@ -512,11 +513,11 @@ describe("the slide def", () => {
   });
 });
 
-// ── the hub, and the one axis it varies on (§4.4 slot 5) ─────────────────────
+// ── the hub, and the axis it NO LONGER varies on (was §4.4 slot 5) ───────────
 
 describe("the hub", () => {
   test("says “The Enabler” in that casing, and shouts it through CSS", () => {
-    renderOrg(gems);
+    renderOrg();
 
     // THE STRING IS TITLE CASE AND THE GLYPHS ARE NOT. The issue's AC, the spec
     // and this test all quote "The Enabler", so the data holds that and the mono
@@ -529,39 +530,54 @@ describe("the hub", () => {
     expect(label.style.fontFamily).toBe("var(--mono)");
   });
 
-  test("names DigiTech under gems and MineTech under berau — in one epoch", () => {
-    // THE ACTUAL CHECK behind "no component reads VARIANT", and the reason it
-    // matters: if anything below the slide read `VARIANT` itself, both of these
-    // renders would show the same brand, because one module epoch holds one
-    // variant. The slide file resolves the line once and passes it down.
-    expect(gems).toBe("DigiTech");
-    expect(berau).toBe("MineTech");
-
-    const first = renderOrg(gems);
-    expect(screen.getByTestId("shape-hub-brand-line").textContent).toBe("DigiTech");
+  test("names the AI Steering Committee, and names it in every deck", () => {
+    // THE 2026-08-16 CHANGE, AND THE WHOLE OF IT. This test used to read "names
+    // DigiTech under gems and MineTech under berau — in one epoch", and it proved a
+    // brand axis: two renders, two organisations, one module registry. The axis is
+    // deleted. Both of those names are DEPARTMENTS, and driving six pillars —
+    // governance, culture, process, strategy — is not a department's remit, so the
+    // figure was handing a tech function accountability for five things it cannot
+    // decide. The hub now names the body HR's own source figure puts here (*AISC as
+    // Enabler*), and it names it the same way in front of every audience.
+    renderOrg();
+    const name = screen.getByTestId("shape-hub-enabler");
+    expect(name.textContent).toBe("AI Steering Committee");
+    expect(C.hubEnablerName).toBe("AI Steering Committee");
     expect(screen.getByTestId("shape-hub").textContent).toContain("The Enabler");
-    first.unmount();
-
-    renderOrg(berau);
-    expect(screen.getByTestId("shape-hub-brand-line").textContent).toBe("MineTech");
-    expect(screen.getByTestId("shape-hub").textContent).toContain("The Enabler");
+    // SPELLED OUT AND NOT `AISC`. C.1 is the first place in the leader decks that
+    // names the body; an acronym at the centre of the centrepiece would be a term the
+    // room has not met yet.
+    expect(name.textContent).not.toBe("AISC");
+    // AND NEITHER DEPARTMENT IS ON THE STAGE ANY MORE, at either pose. This is the
+    // half a re-added brand line would break silently — the hub would still say "The
+    // Enabler" and still render two lines.
+    for (const pose of POSES) {
+      goToPose(pose);
+      const stage = document.body.textContent ?? "";
+      expect(stage, `pose ${pose}`).not.toMatch(/MineTech/i);
+      expect(stage, `pose ${pose}`).not.toMatch(/DigiTech/i);
+    }
   });
 
-  test("prints NO second line where the deck names no organisation", () => {
-    // `general` has no leader variant registered, so no composed deck asks for
-    // this — and the honest answer is still not an empty string. An empty line
-    // inside the disc reads as a slide that did not finish rendering; a
-    // placeholder name would be an invented organisation at the centre of the
-    // deck's centrepiece. So the element is ABSENT, and the hub prints its label
-    // alone.
-    expect(hubBrandLineFor("general")).toBeNull();
+  test("takes no brand at all — the figure has no `brandLine` to pass", () => {
+    // THE STRUCTURAL HALF, and the reason the test above cannot stand alone: a hub
+    // that happened to print the same string for both brands would pass it. The
+    // component's props are the claim — `PillarOrbit` takes `pose` and nothing else,
+    // and the slide takes nothing — so there is no seam left for a brand to enter by.
+    //
+    // `render` DIRECTLY AND NOT THROUGH THE HARNESS: what is being read is the
+    // component's own contract, and TypeScript is doing most of the work. This asserts
+    // the runtime half — that a hub renders, complete, with no argument at all.
+    const { unmount } = render(<PillarOrbit pose={POSE.FIGURE} />);
+    expect(screen.getByTestId("shape-hub-enabler").textContent).toBe(
+      "AI Steering Committee",
+    );
+    unmount();
 
-    renderOrg(hubBrandLineFor("general"), POSE.RECAP);
-    expect(screen.queryByTestId("shape-hub-brand-line")).toBeNull();
-    expect(screen.getByTestId("shape-hub-label").textContent).toBe("The Enabler");
-    // And nothing invented one under another name: the disc holds exactly the
-    // label.
-    expect(screen.getByTestId("shape-hub").textContent).toBe("The Enabler");
+    // AND THE SLIDE'S OWN RENDERER TAKES NOTHING EITHER, which is what proves the
+    // module-scope `VARIANT` read is gone rather than merely unused.
+    expect(shapeAgenticOrgSlide.render.length).toBe(0);
+    expect(ShapeAgenticOrg.length).toBe(0);
   });
 
   test("stands at both poses, and carries the build's first frame", () => {
@@ -570,16 +586,16 @@ describe("the hub", () => {
     // pose it fades for. It also carries `shape-hub-in`, which is the first entry in
     // the build timetable: the disc settles, then six spokes leave it. jsdom runs no
     // keyframe, but a MISSING class is a missing arrival and that is checkable.
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     for (const pose of POSES) {
       goToPose(pose);
       const hub = screen.getByTestId("shape-hub");
       expect(hub, `pose ${pose}`).toBeInTheDocument();
       expect(hub.className, `pose ${pose} · arrival`).toContain("shape-hub-in");
       expect(
-        screen.getByTestId("shape-hub-brand-line").textContent,
+        screen.getByTestId("shape-hub-enabler").textContent,
         `pose ${pose}`,
-      ).toBe("MineTech");
+      ).toBe("AI Steering Committee");
       // NO FOCUS TIER ON THE HUB, at either pose. The hub is what the six pillars
       // are pillars OF, so a highlight that also lit the centre would be a figure
       // with seven subjects — and pose 1 lights all six, which is exactly where a
@@ -588,18 +604,19 @@ describe("the hub", () => {
     }
   });
 
-  test("resolves through a typed pick over every registered brand", () => {
-    // A `Record<Brand, …>`, so a fourth brand fails to COMPILE rather than
-    // silently showing one organisation another's name. Walked here as a value
-    // too, so `general` — which reaches no deck — is held to the same rules.
+  test("has no resolver left for a brand to reach it through", () => {
+    // THIS USED TO WALK A `Record<Brand, …>` and assert every registered brand got a
+    // name or a stated absence. There is no table and no `hubBrandLineFor` any more,
+    // so what is held here is the deletion itself: the content module exports the hub
+    // as DATA, and a fourth brand has nothing on this slide to be wrong about.
     expect([...REGISTERED_BRANDS].sort()).toEqual(["berau", "gems", "general"]);
-    for (const brand of REGISTERED_BRANDS) {
-      const line = hubBrandLineFor(brand);
-      expect(hubBrandLineFor(brand), brand).toBe(line);
-      // Either a real name or a stated absence — never an empty or blank string,
-      // which is the one value that renders as a fault.
-      if (line !== null) expect(line.trim(), brand).not.toBe("");
-    }
+    expect("hubBrandLineFor" in shapeOrgContentModule).toBe(false);
+    // POSITIVE CONTROL on the same module object, so a renamed export cannot make the
+    // absence above pass by accident.
+    expect("decisionCounter" in shapeOrgContentModule).toBe(true);
+    // And the string every brand now gets is a real one, never blank — the single
+    // value that would render as a slide that did not finish.
+    expect(C.hubEnablerName.trim()).not.toBe("");
   });
 });
 
@@ -607,7 +624,7 @@ describe("the hub", () => {
 
 describe("the six pillars", () => {
   test("are HR p4's six, verbatim, in the ring's reading order", () => {
-    renderOrg(gems);
+    renderOrg();
 
     // SIX, from the geometry's own count rather than a literal here: the labels
     // and the ring centres are the same six, and a seventh pillar would have no
@@ -645,7 +662,7 @@ describe("the six pillars", () => {
   });
 
   test("each renders an icon the shim actually has", () => {
-    renderOrg(gems);
+    renderOrg();
 
     // THE HALF THE `PillarIcon` UNION CANNOT PROVE. A name can be spelled right,
     // pass the type, and still be missing from the shim's map — which renders
@@ -658,7 +675,7 @@ describe("the six pillars", () => {
   });
 
   test("sit on their own ring point — placed by the PARENT, scaled by the button", () => {
-    renderOrg(gems);
+    renderOrg();
 
     // THE THREE-LAYER SPLIT, ASSERTED AS THREE LAYERS. This is the assertion that
     // changed shape in the rewrite: the box used to carry
@@ -709,7 +726,7 @@ describe("the six pillars", () => {
   });
 
   test("are BUTTONS, with the pin published as an ARIA state", () => {
-    renderOrg(gems);
+    renderOrg();
 
     // A `<button>` AND NOT A `<div onMouseEnter>`. The six decisions are behind a
     // pointer gesture, so without a real control they are behind a gesture a keyboard
@@ -735,7 +752,7 @@ describe("with nothing open, all six pillars carry full light", () => {
   // "Attention is bought with added light, never subtracted." With nothing hovered
   // there is nothing for a dim tier to mean — and the cheapest way to break this is
   // to port the prototype's three-tier walked/unvisited ranking.
-  beforeEach(() => renderOrg(berau));
+  beforeEach(() => renderOrg());
 
   test("with the same border, and no rank hidden in the opacity channel", () => {
     const boxes = C.pillars.map((p) => pillarBoxEl(p.id));
@@ -895,7 +912,7 @@ describe("pose 0 is the WHOLE figure", () => {
     // thing, so it arrives as one thing — the build is a keyframe timetable on mount
     // (`agentic-org.css`) and every element of it is in the tree from the first
     // frame.
-    renderOrg(gems, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     expect(screen.getByTestId("shape-hub")).toBeInTheDocument();
     C.pillars.forEach((pillar) => {
@@ -918,7 +935,7 @@ describe("pose 0 is the WHOLE figure", () => {
   });
 
   test("the panel shows the idle block, and nothing else, with the hint on it", () => {
-    renderOrg(gems, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     // THE IDLE BLOCK IS NOT A PLACEHOLDER. `idleEyebrow` names the figure and
     // `idleLead` states the mechanism under the headline, so a presenter who talks
@@ -929,17 +946,30 @@ describe("pose 0 is the WHOLE figure", () => {
     expect(screen.getByTestId("shape-idle-eyebrow").textContent).toBe(C.idleEyebrow);
     expect(screen.getByTestId("shape-idle-lead").textContent).toBe(C.idleLead);
 
-    // AND THE ONE LINE THAT EXPLAINS THE POINTER. Under nine poses the six decisions
-    // arrived whether or not anyone touched the slide; under two they are reached by
-    // hovering a box, and a figure that hides its content behind an ungestured
-    // interaction is a figure that shows a room six labels and nothing else.
-    expect(screen.getByTestId("shape-hint").textContent).toBe(C.hint);
-    expect(C.hint, "both halves are named").toMatch(/HOVER/);
-    expect(C.hint, "pin is the half nobody guesses").toMatch(/PIN/);
+    // AND THE ONE THING THAT EXPLAINS THE POINTER — now the deck's `HintIcon` beside
+    // the eyebrow, where it used to be a mono line under the lead (2026-08-16). Under
+    // nine poses the six decisions arrived whether or not anyone touched the slide;
+    // under two they are reached by hovering a box, and a figure that hides its
+    // content behind an ungestured interaction is a figure that shows a room six
+    // labels and nothing else.
+    expect(screen.getByTestId("hint-icon")).toBeInTheDocument();
+    expect(screen.getByTestId("hint-tooltip").textContent).toBe(C.hintTooltip);
+    expect(C.hintTooltip, "both halves are named").toMatch(/hover/i);
+    expect(C.hintTooltip, "pin is the half nobody guesses").toMatch(/pin/i);
+    // THE GLYPH SITS INSIDE THE IDLE BLOCK, which is what gives it its lifetime: it
+    // is on the stage exactly while the panel has nothing open, and the `touched`
+    // latch that used to do that job by hand is deleted.
+    expect(
+      screen.getByTestId("shape-idle").contains(screen.getByTestId("hint-icon")),
+    ).toBe(true);
+    // AND THE OLD LINE IS GONE FROM THE TREE, key and element both — a hint that
+    // survived as an unrendered field is how deleted chrome comes back.
+    expect(screen.queryByTestId("shape-hint")).toBeNull();
+    expect("hint" in C).toBe(false);
   });
 
   test("all six pillars are unlit, and nothing is pinned", () => {
-    renderOrg(gems, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     expect(activePillarIds()).toEqual([]);
     expect(pinnedPillarIds()).toEqual([]);
     // The pointer is live here — that is what the pose IS — so the six boxes are in
@@ -953,7 +983,7 @@ describe("pose 0 is the WHOLE figure", () => {
 
 describe("pose 1 lights all six at once and hands the panel to the recap", () => {
   test("ALL SIX are active simultaneously — no one of six is singled out", () => {
-    renderOrg(berau, POSE.RECAP);
+    renderOrg(POSE.RECAP);
 
     // THE RING AND THE PANEL SAY THE SAME THING IN TWO REGISTERS, at the same
     // moment. Six lit boxes is not "the walk ended on all six"; it is a different
@@ -980,17 +1010,24 @@ describe("pose 1 lights all six at once and hands the panel to the recap", () =>
   });
 
   test("the recap is the only open block, and it prints six fragments and the closer", () => {
-    renderOrg(berau, POSE.RECAP);
+    renderOrg(POSE.RECAP);
 
     expectOnlyOpen("shape-recap", "pose 1");
     expect(screen.getByTestId("shape-recap-eyebrow").textContent).toBe(C.recapEyebrow);
 
-    // THE STEM IS SAID ONCE. Every decision opens "You decide"; six full sentences
-    // here would be a paragraph, and a room reads a paragraph by skimming it. So the
-    // eyebrow carries the stem and the six fragments complete it.
-    expect(C.recapEyebrow).toContain("YOU DECIDE");
+    // THE STEM IS SAID ONCE, AND IT NAMES NO DECIDER (2026-08-16). It read "THE RECAP
+    // · YOU DECIDE" and every decision opened "You decide"; both put all six pillars
+    // on the desk of whoever was in the room, which is the one question this deck is
+    // supposed to leave open — the room is meant to leave it deciding the committee's
+    // shape and who owns each pillar. The eyebrow carries the stem, the six fragments
+    // complete it, and the six decisions are QUESTIONS.
+    expect(C.recapEyebrow).toContain("WHAT GETS DECIDED");
+    expect(C.recapEyebrow, "no second person").not.toMatch(/\byou(r)?\b/i);
     C.pillars.forEach((pillar) => {
-      expect(pillar.decision, `${pillar.id} · the stem`).toMatch(/^You decide /);
+      expect(pillar.decision, `${pillar.id} · a question`).toMatch(/\?$/);
+      expect(pillar.decision, `${pillar.id} · no second person`).not.toMatch(
+        /\byou(r)?\b/i,
+      );
       expect(
         screen.getByTestId(`shape-recap-${pillar.id}-label`).textContent,
         pillar.id,
@@ -1025,7 +1062,7 @@ describe("pose 1 lights all six at once and hands the panel to the recap", () =>
     // five — and un-lighting five pillars to emphasise a sixth is precisely the
     // subtraction §7.1 forbids.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.RECAP);
+    renderOrg(POSE.RECAP);
     expect(acceptsPointer(POSE.RECAP)).toBe(false);
 
     const before = allSignatures();
@@ -1051,7 +1088,7 @@ describe("pose 1 lights all six at once and hands the panel to the recap", () =>
 describe("hover opens exactly one decision", () => {
   test("each pillar in turn: its box lights, its block opens, and only that one", async () => {
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     // ONE MOUNTED TREE, SWEPT. A per-pillar re-mount would prove only that each
     // pillar opens from cold; the bug class this figure is at risk of — a box left
@@ -1112,24 +1149,35 @@ describe("hover opens exactly one decision", () => {
     );
   });
 
-  test("the hint leaves the tree the first time a pillar is touched, and never returns", async () => {
-    // DROPPED RATHER THAN FADED. An element that is still there is still a stop for
-    // a screen reader and still a row in the panel's measure — and the pulse it
-    // carries would go on breathing behind an opacity of 0. It is a ONE-WAY LATCH:
-    // an instruction that reappeared when the pointer left would be an instruction
-    // the reader has already followed, arriving again.
+  test("the hint lives and dies with the idle block, and needs no latch to do it", async () => {
+    // WHAT THIS TEST USED TO HOLD, AND WHY IT CHANGED (2026-08-16). The hint was a
+    // mono line under the idle lead, dropped from the tree on the first touch and
+    // never rendered again — a ONE-WAY LATCH, because an instruction that reappeared
+    // when the pointer left would be an instruction the reader has already followed,
+    // arriving again. The hint is now the deck's `HintIcon`, a 14px glyph beside the
+    // eyebrow, and the latch is deleted with the state that drove it.
+    //
+    // THE ARGUMENT FOR THE CHANGE IS THE ONE THE OLD COMMENT MADE. A LINE of standing
+    // instruction is chrome once obeyed; a glyph is not — it is the same mark the
+    // deck's other eight interactive slides carry, and it is what a presenter looks
+    // for when they have forgotten whether a slide pins. So it comes back with the
+    // idle block, and the only thing asserted here is that its lifetime IS the idle
+    // block's: on the stage when nothing is open, off it when a pillar is.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
-    expect(screen.getByTestId("shape-hint").className).toContain("shape-hint");
+    renderOrg(POSE.FIGURE);
+    expect(screen.getByTestId("hint-icon")).toBeInTheDocument();
 
     const box = pillarBoxEl("strategy");
     await user.hover(box);
-    expect(screen.queryByTestId("shape-hint")).toBeNull();
+    // The idle block — glyph included — is faded out, and the decision has the panel.
+    expectOnlyOpen("shape-decision-strategy", "strategy open");
 
     await user.unhover(box);
     expectOnlyOpen("shape-idle", "back to idle");
-    // The idle block is back and its two lines are back with it — the hint is not.
+    // The idle block is back and everything in it is back: both lines and the glyph.
     expect(screen.getByTestId("shape-idle-eyebrow").textContent).toBe(C.idleEyebrow);
+    expect(screen.getByTestId("hint-icon")).toBeInTheDocument();
+    // AND THE OLD LINE NEVER RETURNS, at any point in that sequence.
     expect(screen.queryByTestId("shape-hint")).toBeNull();
   });
 
@@ -1138,7 +1186,7 @@ describe("hover opens exactly one decision", () => {
     // caret is its own channel and not a second writer of `hovered` — see the blur in
     // the click handler for why the two cannot share a lifetime.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     // TABBED INTO FROM THE POSE BUTTONS, because `<Nav>` renders one control per
     // pose AHEAD of the slide and a bare `user.tab()` from a cold document would land
@@ -1169,7 +1217,7 @@ describe("hover opens exactly one decision", () => {
     // Tabbing to a pillar and then sweeping the mouse elsewhere should follow the
     // mouse; the caret has not moved and will still be there when the pointer leaves.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     act(() => pillarBoxEl("governance").focus());
     expect(activePillarIds()).toEqual(["governance"]);
@@ -1198,7 +1246,7 @@ describe("a click pins, a second click releases, and a third pillar moves it", (
     // clicker, off the screen entirely — and it settles back on the one they chose to
     // stand on.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     const box = pillarBoxEl("people");
     await user.click(box);
@@ -1229,7 +1277,7 @@ describe("a click pins, a second click releases, and a third pillar moves it", (
     // would unpin and step the slide with one press. The pillar that took the pin is
     // the only element that can give it back without arguing with the deck.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     const box = pillarBoxEl("companions");
     await user.click(box);
@@ -1254,7 +1302,7 @@ describe("a click pins, a second click releases, and a third pillar moves it", (
     // A rule that required an unpin first would make moving the pin cost two clicks
     // and would be the "pin is a mode" failure `resolveFocus` exists to avoid.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     await user.click(pillarBoxEl("governance"));
     expect(pinnedPillarIds()).toEqual(["governance"]);
@@ -1281,7 +1329,7 @@ describe("a click pins, a second click releases, and a third pillar moves it", (
     // AND THE RING IS NOT DEAD, which is the objection pin-wins invites and the reason
     // `isLit` exists: the hovered box still lights. Two boxes, one column.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     const governance = pillarBoxEl("governance");
     await user.click(governance);
@@ -1332,7 +1380,7 @@ describe("no inactive pillar loses anything, at any hover", () => {
 
   test("the five pillars a hover is not about are byte-identical to their resting selves", async () => {
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     const resting = allSignatures();
 
     // POSITIVE CONTROL. If the capture were empty — six pillars that render no
@@ -1403,7 +1451,7 @@ describe("no inactive pillar loses anything, at any hover", () => {
     // itself is not a "not yet" tier, at every hover, so the highlight has room to
     // add light without taking any.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     for (const [i, pillar] of C.pillars.entries()) {
       const box = pillarBoxEl(pillar.id);
@@ -1463,7 +1511,7 @@ describe("the open pillar gains light and nothing else", () => {
 
   test("a brighter tier on the border, icon, label, spoke and beads — never a darker one", async () => {
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     const resting = allSignatures();
 
     for (const pillar of C.pillars) {
@@ -1509,7 +1557,7 @@ describe("the open pillar gains light and nothing else", () => {
 
   test("a copper fill where the resting box is the stage's own neutral", async () => {
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     const resting = allSignatures();
 
     for (const pillar of C.pillars) {
@@ -1533,7 +1581,7 @@ describe("the open pillar gains light and nothing else", () => {
 
   test("a halo of exactly FOCUS_HALO_WIDTH, where the resting box has none", async () => {
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     const resting = allSignatures();
 
     for (const pillar of C.pillars) {
@@ -1565,7 +1613,7 @@ describe("the open pillar gains light and nothing else", () => {
 
   test("FOCUS_SCALE on the button alone, and no opacity anywhere in the gesture", async () => {
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     for (const pillar of C.pillars) {
       const box = pillarBoxEl(pillar.id);
@@ -1604,7 +1652,7 @@ describe("every decision carries HR p4's own scope under it", () => {
     // next question is always the same one — *what does that actually cover?* Four
     // nouns answer it in the time it takes to read them.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     for (const pillar of C.pillars) {
       const box = pillarBoxEl(pillar.id);
@@ -1684,7 +1732,7 @@ describe("the panel", () => {
     // in the tree, the SAME node across the pose the blink would happen on (React
     // remounting it is the same blink without the duplicate), and the border declared
     // on the COLUMN rather than on the things inside it.
-    renderOrg(gems, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     expect(document.querySelectorAll('[data-testid="shape-walk-column"]')).toHaveLength(1);
     const atFigure = screen.getByTestId("shape-walk-column");
     expect(atFigure.style.borderLeft).toContain("solid");
@@ -1704,7 +1752,7 @@ describe("the panel", () => {
   });
 
   test("mounts all eight blocks in the same rectangle, at both poses", () => {
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     const column = screen.getByTestId("shape-walk-column");
 
     for (const pose of POSES) {
@@ -1757,7 +1805,7 @@ describe("the panel", () => {
 
     // `bottom` IS A CSS OFFSET AND `WALK_COLUMN.bottom` IS A STAGE Y, hence the
     // subtraction in the renderer.
-    renderOrg(gems);
+    renderOrg();
     const column = screen.getByTestId("shape-walk-column");
     expect(column.style.left).toBe(`${WALK_COLUMN.left}px`);
     expect(column.style.right).toBe(`${WALK_COLUMN.right}px`);
@@ -1777,7 +1825,7 @@ describe("the panel", () => {
 
     // And structurally: the closer's box is the recap block's, inside the column,
     // not a second one at the stage's foot.
-    renderOrg(berau, POSE.RECAP);
+    renderOrg(POSE.RECAP);
     const closer = screen.getByTestId("shape-closer");
     expect(screen.getByTestId("shape-walk-column").contains(closer)).toBe(true);
     expect(closer.style.position).toBe("");
@@ -1866,7 +1914,11 @@ describe("the decisions index the section behind them", () => {
     { id: "tools", anchor: /company-managed seat/i },
     { id: "people", anchor: /\bculture\b/i },
     { id: "strategy", anchor: /\bpilot\b/i },
-    { id: "process", anchor: /\bsigns\b/i },
+    // `signs?` AND NOT `signs`. The decision is a question since 2026-08-16, and
+    // English strips the third-person -s under subject–auxiliary inversion ("Where
+    // does a human still sign …"); the recap fragment still prints "signs". The
+    // anchor is the VERB, and both spellings of it are the same index word.
+    { id: "process", anchor: /\bsigns?\b/i },
     { id: "companions", anchor: /\bagent\b/i },
   ];
 
@@ -1886,20 +1938,65 @@ describe("the decisions index the section behind them", () => {
     expect(new Set(C.pillars.map((p) => p.recap)).size).toBe(PILLAR_COUNT);
   });
 
-  test("and every decision is a leader's DECISION, not a description of a pillar", () => {
+  test("and every decision is a DECISION, not a description of a pillar", () => {
     // §6.6's actual failure mode. "Governance & Policies" is a box on an org chart
     // and every leader in the room already agrees with it; six descriptions make
-    // this slide a taxonomy nobody argues with. All six open on the same stem, and
-    // THE REPETITION IS THE ARGUMENT — one sentence answered six ways, so by the
-    // fourth the room hears the stem rather than reading a new sentence, and the stem
-    // is the claim the closer then states outright.
+    // this slide a taxonomy nobody argues with. All six are QUESTIONS, and THE
+    // REPETITION IS STILL THE ARGUMENT — one shape asked six ways, so by the fourth
+    // the room hears the shape rather than reading a new sentence, and the claim the
+    // shape carries is the one the closer states outright: every pillar is a decision
+    // someone must own.
+    //
+    // THEY USED TO OPEN "You decide" AND END IN A FULL STOP (until 2026-08-16). That
+    // stem answered the question this slide exists to leave open — it named the room
+    // as the decider of all six, when what the room is meant to do is go and assign
+    // the committee and the six owners. The rule below is the same rule with the
+    // address removed: a decision, phrased as the question it forces, addressed to
+    // nobody in particular.
     C.pillars.forEach((pillar) => {
-      expect(pillar.decision, pillar.id).toMatch(/^You decide /);
-      expect(pillar.decision, pillar.id).toMatch(/[.]$/);
+      expect(pillar.decision, `${pillar.id} · a question`).toMatch(/\?$/);
+      expect(pillar.decision, `${pillar.id} · no second person`).not.toMatch(
+        /\byou(r)?\b/i,
+      );
+      // AND NOT AN IMPERATIVE WEARING A QUESTION MARK — "Decide where the data may
+      // go?" would be the old address in a new punctuation.
+      expect(pillar.decision, `${pillar.id} · not an instruction`).not.toMatch(
+        /^(decide|choose|pick|name|set)\b/i,
+      );
       // And it is not the pillar's own name restated.
       expect(pillar.decision, pillar.id).not.toContain(pillar.label);
     });
     expect(new Set(C.pillars.map((p) => p.decision)).size).toBe(PILLAR_COUNT);
+  });
+
+  test("and no second person survives anywhere on this stage, at either pose", async () => {
+    // THE WHOLE OF THE 2026-08-16 CHANGE, HELD IN ONE PLACE. "You" came back into
+    // this slide one polished sentence at a time before, and it is the register the
+    // deck's centrepiece may not be written in: C.1 explains what an agentic
+    // organisation IS, so that the room can decide the committee's shape and the six
+    // owners. A slide that tells them the answers has spent that.
+    //
+    // RENDERED AND AUTHORED BOTH. The sweep hovers every pillar at pose 0 so all six
+    // decisions and their point lists reach the stage, then steps to the recap for the
+    // eyebrow, the six fragments and the closer.
+    const user = userEvent.setup();
+    renderOrg(POSE.FIGURE);
+
+    for (const pillar of [null, ...C.pillars]) {
+      if (pillar) await user.hover(pillarBoxEl(pillar.id));
+      const text = document.body.textContent ?? "";
+      const where = `pose 0 · ${pillar?.id ?? "idle"}`;
+      // POSITIVE CONTROL, because every assertion here is an absence.
+      expect(text, where).toContain(C.headline);
+      expect(text, where).not.toMatch(/\byou\b/i);
+      expect(text, where).not.toMatch(/\byour\b/i);
+    }
+
+    goToPose(POSE.RECAP);
+    const recapText = document.body.textContent ?? "";
+    expect(recapText).toContain(C.closer);
+    expect(recapText).not.toMatch(/\byou\b/i);
+    expect(recapText).not.toMatch(/\byour\b/i);
   });
 
   test("and the `→ ACT III ·` pointer line #16 wrote is NOT ported", async () => {
@@ -1911,7 +2008,7 @@ describe("the decisions index the section behind them", () => {
     // section D, and the anchor words above are the index — a line of mono chrome
     // would announce the cross-reference instead of making it.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     // Every decision block is mounted at every state, so one open pillar is enough
     // to have all six point lists in `document.body`.
     await user.hover(pillarBoxEl("process"));
@@ -1955,27 +2052,28 @@ describe("Specify → Generate → Verify appears nowhere", () => {
     const user = userEvent.setup();
     const FORBIDDEN = [/\bspecify\b/i, /\bgenerate\b/i, /\bverify\b/i];
 
-    for (const brandLine of [gems, berau, hubBrandLineFor("general")]) {
-      for (const pose of POSES) {
-        const { unmount } = renderOrg(brandLine, pose);
+    // ONE PASS PER POSE, WHERE THIS USED TO BE THREE. An outer loop ran the whole
+    // sweep once per brand line, because the hub carried a brand; it does not, so the
+    // three passes were identical and one is what is left.
+    for (const pose of POSES) {
+      const { unmount } = renderOrg(pose);
 
-        for (const pillar of [null, ...C.pillars]) {
-          if (pillar && acceptsPointer(pose)) await user.hover(pillarBoxEl(pillar.id));
-          const text = document.body.textContent ?? "";
-          const where = `pose ${pose} · ${pillar?.id ?? "idle"}`;
-          // POSITIVE CONTROL FIRST. Every assertion below is a `not.toMatch` over
-          // this one string, so an empty stage would pass all of them.
-          expect(text, where).toContain(C.headline);
-          expect(text, where).toContain("The Enabler");
-          expect(text, where).toContain(C.pillars[0].decision);
-          expect(text, where).toContain(C.pillars[4].points[0]);
+      for (const pillar of [null, ...C.pillars]) {
+        if (pillar && acceptsPointer(pose)) await user.hover(pillarBoxEl(pillar.id));
+        const text = document.body.textContent ?? "";
+        const where = `pose ${pose} · ${pillar?.id ?? "idle"}`;
+        // POSITIVE CONTROL FIRST. Every assertion below is a `not.toMatch` over
+        // this one string, so an empty stage would pass all of them.
+        expect(text, where).toContain(C.headline);
+        expect(text, where).toContain("The Enabler");
+        expect(text, where).toContain(C.pillars[0].decision);
+        expect(text, where).toContain(C.pillars[4].points[0]);
 
-          for (const word of FORBIDDEN) {
-            expect(text, `${where} · ${word}`).not.toMatch(word);
-          }
+        for (const word of FORBIDDEN) {
+          expect(text, `${where} · ${word}`).not.toMatch(word);
         }
-        unmount();
       }
+      unmount();
     }
   });
 
@@ -1987,9 +2085,10 @@ describe("Specify → Generate → Verify appears nowhere", () => {
       C.figLabel,
       C.headline,
       C.hubLabel,
+      C.hubEnablerName,
       C.idleEyebrow,
       C.idleLead,
-      C.hint,
+      C.hintTooltip,
       C.decisionEyebrow,
       C.recapEyebrow,
       C.closer,
@@ -2026,32 +2125,36 @@ describe("the standing kicker is GONE", () => {
     expect("idleLead" in C).toBe(true);
   });
 
-  test("no `shape-kicker` element, and none of its words, at either pose under any brand", () => {
-    for (const brandLine of [gems, berau, hubBrandLineFor("general")]) {
-      for (const pose of POSES) {
-        const { unmount } = renderOrg(brandLine, pose);
-        expect(screen.queryByTestId("shape-kicker"), `pose ${pose}`).toBeNull();
+  test("no `shape-kicker` element, and none of its words, at either pose", () => {
+    for (const pose of POSES) {
+      const { unmount } = renderOrg(pose);
+      expect(screen.queryByTestId("shape-kicker"), `pose ${pose}`).toBeNull();
 
-        const text = (document.body.textContent ?? "").toUpperCase();
-        // POSITIVE CONTROL: the headline that now stands alone over the figure IS
-        // there, so the absences below are absences from a populated stage.
-        expect(text, `pose ${pose}`).toContain(C.headline.toUpperCase());
-        CUT_PHRASES.forEach((phrase) =>
-          expect(text, `pose ${pose} · ${phrase}`).not.toContain(phrase),
-        );
-        unmount();
-      }
+      const text = (document.body.textContent ?? "").toUpperCase();
+      // POSITIVE CONTROL: the headline that now stands alone over the figure IS
+      // there, so the absences below are absences from a populated stage.
+      expect(text, `pose ${pose}`).toContain(C.headline.toUpperCase());
+      CUT_PHRASES.forEach((phrase) =>
+        expect(text, `pose ${pose} · ${phrase}`).not.toContain(phrase),
+      );
+      // THE HUB SAYS "COMMITTEE" NOW AND THE CUT LINE SAID "NOT A COMMITTEE", which
+      // is why the phrases above are held as PHRASES and not as words. The kicker's
+      // claim was that the agentic organisation is not a committee; the hub names the
+      // committee that ENABLES it, which is the source figure's own arrangement and a
+      // different sentence. A check on the bare noun would fail on a true stage.
+      expect(text, `pose ${pose}`).toContain("AI STEERING COMMITTEE");
+      unmount();
     }
   });
 
   test("and the idle lead did not quietly become the kicker in another face", () => {
     // THE MOVE THAT WAS REFUSED. `idleLead` sits where a reader would most expect
     // the cut line to reappear, so it is held to the words: it describes the SHAPE
-    // ("one enabling function", "only work together") and it does not re-state the
+    // ("one enabling body", "only work together") and it does not re-state the
     // negation the kicker carried.
     const lead = C.idleLead.toUpperCase();
     CUT_PHRASES.forEach((phrase) => expect(lead, phrase).not.toContain(phrase));
-    expect(C.idleLead).toContain("One enabling function");
+    expect(C.idleLead).toContain("One enabling body");
     // AND IT DOES NOT SPEND THE CLOSER EITHER. "None of them is a tool purchase" is
     // the recap's last line and the sentence the whole figure exists to earn; an
     // idle lead that previewed it would make the recap a repeat.
@@ -2206,7 +2309,7 @@ describe("the ring geometry", () => {
     // where the overlay is removed outright, and a single line cannot be both solid
     // and travelling — but they are the same LINE, and a bead track that had drifted
     // off its own spoke would read as a rendering fault nobody could name.
-    renderOrg(gems);
+    renderOrg();
     C.pillars.forEach((pillar, i) => {
       const seg = spokeSegment(i);
       const spoke = screen.getByTestId(`shape-spoke-${pillar.id}`);
@@ -2283,7 +2386,7 @@ describe("the lit pose's geometry", () => {
     // `scale(FOCUS_SCALE)` under a 4px halo at pose 1, so the two edges the budget is
     // about — the floor and the column — are under the whole ring at the same moment
     // rather than under one pillar at a time.
-    renderOrg(berau, POSE.RECAP);
+    renderOrg(POSE.RECAP);
     expect(activePillarIds(), "all six lit").toEqual(C.pillars.map((p) => p.id));
 
     for (const i of PILLAR_INDEXES) {
@@ -2609,19 +2712,19 @@ describe("the walk, as arithmetic", () => {
     // PRODUCE (`steps: 2` clamps at 1), which is why this render goes to the
     // component directly instead of through the harness — the harness's `goTo` would
     // clamp it back to 1 and prove nothing.
-    const recap = render(<PillarOrbit brandLine={gems} pose={POSE.RECAP} />);
+    const recap = render(<PillarOrbit pose={POSE.RECAP} />);
     const atRecap = recap.container.innerHTML;
     recap.unmount();
 
     for (const over of [POSE.RECAP + 1, 7, 12]) {
-      const beyond = render(<PillarOrbit brandLine={gems} pose={over} />);
+      const beyond = render(<PillarOrbit pose={over} />);
       expect(beyond.container.innerHTML, `pose ${over}`).toBe(atRecap);
       beyond.unmount();
     }
 
     // POSITIVE CONTROL: the comparison is only worth anything because pose 1 is NOT
     // identical to pose 0 — six pillars light and the panel turns over.
-    const figure = render(<PillarOrbit brandLine={gems} pose={POSE.FIGURE} />);
+    const figure = render(<PillarOrbit pose={POSE.FIGURE} />);
     expect(figure.container.innerHTML).not.toBe(atRecap);
     figure.unmount();
   });
@@ -2635,7 +2738,7 @@ describe("the two poses re-render cleanly in both directions", () => {
     // numbers nothing in the pose change writes — and this is the test that says the
     // renderer did not add a fourth. A component that cached "the pillars were all
     // lit a moment ago" would pass the step up and fail here.
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     const resting = allSignatures();
     expect(activePillarIds()).toEqual([]);
 
@@ -2662,7 +2765,7 @@ describe("the two poses re-render cleanly in both directions", () => {
     // state simply sits there, unread — which is why nothing needs resetting for this
     // to be true.
     const user = userEvent.setup();
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     const box = pillarBoxEl("people");
     await user.click(box);
@@ -2727,17 +2830,15 @@ describe("prefers-reduced-motion: reduce", () => {
     // the squash and by this file's own media block, and neither is an `<animate>`
     // element. A spoke draw written as SMIL would look identical in a browser and
     // ignore the reader's preference entirely.
-    for (const brandLine of [gems, berau, hubBrandLineFor("general")]) {
-      for (const pose of POSES) {
-        const { unmount } = renderOrg(brandLine, pose);
-        for (const tag of ["animate", "animateTransform", "animateMotion", "set"]) {
-          expect(
-            document.querySelectorAll(tag),
-            `pose ${pose} · <${tag}>`,
-          ).toHaveLength(0);
-        }
-        unmount();
+    for (const pose of POSES) {
+      const { unmount } = renderOrg(pose);
+      for (const tag of ["animate", "animateTransform", "animateMotion", "set"]) {
+        expect(
+          document.querySelectorAll(tag),
+          `pose ${pose} · <${tag}>`,
+        ).toHaveLength(0);
       }
+      unmount();
     }
   });
 
@@ -2746,7 +2847,7 @@ describe("prefers-reduced-motion: reduce", () => {
     // "the build ends on its resting frame" is not checkable here. This test
     // therefore claims only the DOM half: at each pose every element that pose shows
     // is mounted with its copy. The computed half is checked in a real engine.
-    renderOrg(berau, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     for (const pose of POSES) {
       goToPose(pose);
@@ -2754,8 +2855,8 @@ describe("prefers-reduced-motion: reduce", () => {
       expect(screen.getByTestId("shape-hub-label").textContent, `pose ${pose}`).toBe(
         "The Enabler",
       );
-      expect(screen.getByTestId("shape-hub-brand-line").textContent, `pose ${pose}`).toBe(
-        "MineTech",
+      expect(screen.getByTestId("shape-hub-enabler").textContent, `pose ${pose}`).toBe(
+        "AI Steering Committee",
       );
       C.pillars.forEach((pillar) => {
         expect(
@@ -2792,7 +2893,9 @@ describe("prefers-reduced-motion: reduce", () => {
         expect(screen.getByTestId("shape-idle-lead").textContent, `pose ${pose}`).toBe(
           C.idleLead,
         );
-        expect(screen.getByTestId("shape-hint").textContent, `pose ${pose}`).toBe(C.hint);
+        expect(screen.getByTestId("hint-tooltip").textContent, `pose ${pose}`).toBe(
+          C.hintTooltip,
+        );
       }
     }
   });
@@ -2816,8 +2919,8 @@ describe("keywords go on prose only", () => {
   const LABELS: readonly string[] = [
     C.figLabel,
     C.hubLabel,
+    C.hubEnablerName,
     C.idleEyebrow,
-    C.hint,
     C.decisionEyebrow,
     C.recapEyebrow,
     ...C.pillars.map((p) => p.label),
@@ -2842,12 +2945,12 @@ describe("keywords go on prose only", () => {
     // a pillar OPEN and then at the RECAP, so both halves of the label register — the
     // point list and the six fragments — are on the stage to be checked.
     const user = userEvent.setup();
-    renderOrg(gems, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
     await user.hover(pillarBoxEl("governance"));
 
     const labelBoxes = [
       "shape-hub-label",
-      "shape-hub-brand-line",
+      "shape-hub-enabler",
       "shape-idle-eyebrow",
       ...C.pillars.map((p) => `shape-pillar-${p.id}-label`),
       // The eyebrow IS the counter — `decisionCounter(i)` is what it prints — so one
@@ -2896,7 +2999,7 @@ describe("keywords go on prose only", () => {
 
   test("and each of the four prose registers lands its highlight on the stage", async () => {
     const user = userEvent.setup();
-    renderOrg(gems, POSE.FIGURE);
+    renderOrg(POSE.FIGURE);
 
     // 1. The headline — this slide's one line of prose at both poses.
     expect(document.querySelectorAll("h1 em").length).toBeGreaterThan(0);
@@ -2910,10 +3013,10 @@ describe("keywords go on prose only", () => {
     expect(leadEms).toEqual([...C.idleLeadKw]);
     expect(C.idleLeadKw).toContain("only work together");
 
-    // 3. The six decisions: ONE PHRASE EACH, on the decision's object rather than on
-    // the "You decide" stem, which is the same in all six and would be a highlight on
-    // the boilerplate. All six blocks are mounted at every state, so all six are
-    // checkable from one hover.
+    // 3. The six decisions: ONE PHRASE EACH, on what the question ASKS ABOUT rather
+    // than on the whole question — an italic running to the question mark is an
+    // emphasis on the entire line, which is no emphasis at all. All six blocks are
+    // mounted at every state, so all six are checkable from one hover.
     await user.hover(pillarBoxEl("tools"));
     C.pillars.forEach((pillar) => {
       const ems = [
@@ -2922,8 +3025,16 @@ describe("keywords go on prose only", () => {
       expect(ems.length, pillar.id).toBeGreaterThan(0);
       expect(ems, pillar.id).toEqual([...pillar.decisionKw]);
       expect(pillar.decisionKw, `${pillar.id} · one phrase`).toHaveLength(1);
-      expect(pillar.decisionKw[0], `${pillar.id} · not the stem`).not.toContain(
-        "You decide",
+      // NOT THE WHOLE QUESTION. The old rule here was "not the `You decide` stem",
+      // which cannot be stated that way now that the stem is gone: the shape of the
+      // failure is the same, and what it looks like today is a keyword that swallows
+      // the line it is supposed to emphasise.
+      expect(
+        pillar.decisionKw[0].length,
+        `${pillar.id} · not the whole question`,
+      ).toBeLessThan(pillar.decision.length);
+      expect(pillar.decisionKw[0], `${pillar.id} · no second person`).not.toMatch(
+        /\byou(r)?\b/i,
       );
     });
 
@@ -2935,7 +3046,7 @@ describe("keywords go on prose only", () => {
       ...screen.getByTestId("shape-closer").querySelectorAll("em"),
     ].map((e) => e.textContent);
     expect(closerEms).toEqual([...C.closerKw]);
-    expect(C.closerKw).toContain("a decision on your desk");
+    expect(C.closerKw).toContain("a decision someone must own");
   });
 
   test("no authored string names a section letter", () => {
@@ -2944,18 +3055,19 @@ describe("keywords go on prose only", () => {
     // "SECTION C" in this copy would be a letter authored in the one place that must
     // never hold one, and would survive the day the composer disagrees with it.
     // EXTENDED to everything this rewrite authored: the point lists, the recap
-    // fragments, the idle block and the hint.
+    // fragments, the idle block and the hint. `LABELS` already carries the hub's two
+    // lines, which is what the deleted per-brand spread used to add here.
     const authored = [
       ...LABELS,
       C.headline,
       C.idleLead,
       C.closer,
+      C.hintTooltip,
       ...C.pillars.map((p) => p.decision),
       ...C.pillars.flatMap((p) => [...p.decisionKw]),
       ...C.idleLeadKw,
       ...C.closerKw,
       ...C.headlineKw,
-      ...REGISTERED_BRANDS.map((brand) => hubBrandLineFor(brand) ?? ""),
     ];
 
     authored.forEach((copy) => {
@@ -2976,7 +3088,7 @@ describe("keywords go on prose only", () => {
     // · 01 / 06", the one string on this slide that could plausibly read as a figure
     // reference — and the recap. The counter is CHECKED rather than assumed innocent.
     const user = userEvent.setup();
-    const { container } = renderOrg(gems, POSE.FIGURE);
+    const { container } = renderOrg(POSE.FIGURE);
     expect(
       container.querySelector(".fig-label")?.textContent,
       "the derived reference is there to strip",

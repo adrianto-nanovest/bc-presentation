@@ -45,7 +45,9 @@ import {
   CARD_COUNT,
   CARD_HEIGHT_LESSON,
   CARD_HEIGHT_RECORD,
+  CARD_INNER_WIDTH,
   HAPPENING_COUNT,
+  HAPPENING_INDENT,
   NAV_ZONE_CLEARANCE_RECORD,
   NAV_ZONE_CLEARANCE_SHIFT,
   NAV_ZONE_TOP,
@@ -222,6 +224,52 @@ describe("pose 0 · the record", () => {
       expect(faceVisible(container, `gfp-lesson-${card.id}`)).toBe(false);
     }
     unmount();
+  });
+
+  test("every happening still fits the two lines its box is cut for", () => {
+    // THE ROW IS A FIXED 34px BOX WITH `overflow: hidden` ON IT, so a happening that
+    // grows past two lines does not push the card taller — it is SILENTLY CLIPPED, and
+    // the third line is gone in a room without a word about it anywhere. That is the
+    // one failure this slide's copy can produce that no other test here would see.
+    //
+    // IT WAS ADDED WHEN THE COPY GREW (2026-08-16). "AISC formed" became "AI Steering
+    // Committee (AISC) formed" — the acronym is spelled out on first use now that C.1's
+    // hub names the body — and that row went from 76 to 100 characters, which is the
+    // longest on the slide and the first one close enough to the ceiling to be worth a
+    // guard.
+    //
+    // WHAT THE ARITHMETIC IS. `gap-failures-pattern-geometry.ts` records the datum: Source
+    // Serif 4 advances ≈0.498em a character, the happenings are 12.5px, and they get the
+    // card's measure less their marker column. Two of those lines is the box.
+    //
+    // WHAT IT CANNOT SEE, stated so nobody reads a pass here as a rendered proof: word
+    // wrap (a long word can leave a line short), and the label's semibold weight, which
+    // advances slightly wider than the regular it is averaged with. So the margin below
+    // is the honest budget, not the pass mark — a row that only just fits here is a row
+    // to check in a browser.
+    const measure = CARD_INNER_WIDTH - HAPPENING_INDENT;
+    const twoLines = 2 * measure;
+    const perChar = 12.5 * 0.498;
+
+    const widths = C.cards.flatMap((card) =>
+      card.happenings.map((h) => ({
+        where: `${card.id} · ${h.label}`,
+        width: (`${h.label} — ${h.rest}`).length * perChar,
+      })),
+    );
+    // POSITIVE CONTROL: the sweep saw all twelve.
+    expect(widths).toHaveLength(CARD_COUNT * HAPPENING_COUNT);
+    for (const { where, width } of widths) {
+      expect(width, `${where} · ${Math.round(width)} of ${twoLines}`).toBeLessThanOrEqual(
+        twoLines,
+      );
+    }
+    // AND THE MARGIN IS NAMED, so the next edit that eats it fails HERE rather than in
+    // the room. The longest row today is ~622 of 644 — about 3% of headroom, which is
+    // less than one line's worth of wrap slack.
+    const longest = Math.max(...widths.map((w) => w.width));
+    expect(longest, "the longest happening").toBeLessThanOrEqual(twoLines);
+    expect(twoLines - longest, "headroom left on the longest row").toBeGreaterThan(0);
   });
 
   test("runs one plate per phase, and each plate's arithmetic is its copy's", () => {
