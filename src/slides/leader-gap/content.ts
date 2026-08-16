@@ -1557,8 +1557,19 @@ const FAILURE_CARDS: Three<FailureCard> = [
     happenings: [
       {
         label: "AI Steering Committee (AISC) formed",
-        rest: "a small team, to bridge engineering and every other department",
-        restKw: ["to bridge engineering"],
+        // "bridging" FOR "to bridge" (2026-08-16). It reads as what the committee WAS
+        // FOR rather than as a task it was handed, which is the phase's point — the
+        // failure was not the brief, it was that the brief made one team the road
+        // everything had to travel.
+        //
+        // IT IS NOT A FIT FIX, and saying so is the point of this note: spelling the
+        // acronym out took this row to 100 characters against a two-line box that CLIPS
+        // at ~102 (`../gap-failures-pattern-geometry.ts`), and the participle buys back
+        // ONE character — 99, about 6px of a 22px margin. This is still the tightest
+        // row on the slide and the reason a test now holds every happening to its
+        // measure. A real fix would be shorter copy, not a shorter word.
+        rest: "a small team, bridging engineering and every other department",
+        restKw: ["bridging engineering"],
       },
       {
         label: "Departments became consumers",
@@ -1678,12 +1689,38 @@ export const gapFailuresPatternContent = {
     },
     {
       title: "From Implementors to Enablers",
+      // FOUR BULLETS SINCE 2026-08-16, and the fourth is the one the record was owed.
+      // This column ran three — what the committee does (coaching), what it produces
+      // (playbooks), what departments get (equipped) — and left the phase's own third
+      // failure unanswered: "Representatives, not ambassadors — product owners on paper,
+      // no ownership, no handover". Ownership on paper is what broke; ownership in fact
+      // is what changed, and until this line the shift never said so.
+      //
+      // IT COSTS NO LAYOUT. `SHIFT_BULLET_MAX` is 4 and both boxes are cut to it, so
+      // this fills a row the geometry already reserved — and it stops the right box
+      // bottoming out visibly emptier than the left, which is the thing the equal-height
+      // rule was there to prevent in the first place.
+      //
+      // "the committee" AND NOT "AISC" (owner call). The acronym is already on this
+      // stage twice, in the record above; a third would make the shift read as a
+      // paragraph about a team rather than a claim about who owns what.
+      //
+      // AND IT IS THE WORD C.1 PICKS UP. Two slides later the centrepiece closes on
+      // "every pillar is a decision someone must own" — a room that meets `owner` here,
+      // as something that MOVED, hears that closer as a continuation rather than as a
+      // new demand. Nothing announces the cross-reference; the word is the index.
       bullets: [
         "AISC changed from building to coaching",
         "From writing code to writing playbooks",
         "Departments equipped to build their own",
+        "Every solution now has an owner outside the committee",
       ],
-      bulletsKw: ["from building to coaching", "writing playbooks", "build their own"],
+      bulletsKw: [
+        "from building to coaching",
+        "writing playbooks",
+        "build their own",
+        "an owner outside the committee",
+      ],
     },
   ],
 

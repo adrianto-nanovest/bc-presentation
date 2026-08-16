@@ -397,9 +397,11 @@ describe("pose 1 · the lessons and the shift", () => {
       expect(revealOn(container, `gfp-shift-col-${i}`), col.title).toBe(true);
       expect(stage).toContain(col.title);
       for (const bullet of col.bullets) expect(stage, col.title).toContain(bullet);
-      // TWO BOXES, AND THE SAME BOX TWICE — the second half holds three bullets and the
-      // first four, and a pair that bottomed out at different heights would read as one
-      // of them being unfinished.
+      // TWO BOXES, AND THE SAME BOX TWICE. Both halves hold four bullets since
+      // 2026-08-16 (the second held three into a box cut for four), and the height is
+      // asserted from the constant rather than from the copy for the reason that
+      // predates them agreeing: a pair that bottomed out at different heights would read
+      // as one of them being unfinished, whatever either one is holding.
       const box = container.querySelector(`[data-testid="gfp-shift-col-${i}"]`) as HTMLElement;
       expect(box.style.height, col.title).toBe(`${SHIFT_BOX_HEIGHT}px`);
       expect(box.style.border, col.title).toContain("solid");

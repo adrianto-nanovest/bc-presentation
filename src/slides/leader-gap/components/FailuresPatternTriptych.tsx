@@ -472,8 +472,13 @@ function EyebrowFace({
         left: 0,
         top: 0,
         color: TIER.eyebrow,
-        borderBottom: "1px solid var(--copper-700)",
-        paddingBottom: 5,
+        // NO UNDERLINE (owner call, 2026-08-16). Both headings carried a copper-700
+        // hairline under their own words — `padding-bottom: 5` plus 1px, B.4's
+        // `SectionTitle` idiom. It is cut on this slide: the stage already has a
+        // full-width rule above THE SHIFT and a bordered box around every card, so a
+        // third weight of horizontal line under the heading was the one that was doing
+        // no work. The 6px it occupied is KEPT AS AIR — see `EYEBROW_TRAILING_AIR` in
+        // `../gap-failures-pattern-geometry.ts` — so nothing below the heading moved.
         opacity: visible ? 1 : 0,
         transition: `opacity 300ms var(--ease) ${visible ? 160 : 0}ms`,
         pointerEvents: "none",

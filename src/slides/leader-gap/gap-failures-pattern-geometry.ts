@@ -41,7 +41,7 @@
 // {@link CONTENT_TOP} = 156, `.slide-content`'s own `top`.
 //
 //   ─────────────── THE EYEBROW · one shelf, two headings ──────────────────────
-//   156  eyebrow · 11px mono caps, underlined → 178
+//   156  eyebrow · 11px mono caps, NO rule under it (cut 2026-08-16) → 178
 //        pose 0 "THE RECORD, IN ORDER" · pose 1 "THREE FAILURES, THREE LESSONS"
 //
 //   ─────────────── POSE 0 · THE RECORD · x = 48 / 452 / 856 ───────────────────
@@ -140,11 +140,19 @@ export const TITLE_ROW_HEIGHT = 19;
  *  at pose 1 — one line, two headings, cross-faded, so the heading never twitches. */
 export const EYEBROW_TOP = CONTENT_TOP;
 
-/** What the eyebrow's underline costs below its text box: 6 — `padding-bottom: 5` plus
- *  the 1px copper-700 hairline, the `SectionTitle` idiom B.4 settled. Not exported. */
-const EYEBROW_UNDERLINE = 6;
+/**
+ * The air under the eyebrow's text box: 6. Not exported.
+ *
+ * IT USED TO BE AN UNDERLINE — `padding-bottom: 5` plus a 1px copper-700 hairline, the
+ * `SectionTitle` idiom B.4 settled. The rule is cut (owner call, 2026-08-16) and the
+ * SPACE IS KEPT, which is why this constant survives its own name change: reclaiming
+ * the 6px would lift {@link CARD_TOP} and every shelf measured from it, and this was a
+ * change to what the band LOOKS like, not to where the triptych sits. A heading with no
+ * rule under it also wants more air than a rule did, not less.
+ */
+const EYEBROW_TRAILING_AIR = 6;
 
-/** The air between the underlined eyebrow and the triptych: 14. Not exported. */
+/** The air between the eyebrow's band and the triptych: 14. Not exported. */
 const EYEBROW_TO_CARDS = 14;
 
 // ───────────────────── the triptych ─────────────────────
@@ -179,7 +187,8 @@ export const CARD_GAP = 28;
 export const CARD_WIDTH = (CONTENT_WIDTH - (CARD_COUNT - 1) * CARD_GAP) / CARD_COUNT;
 
 /** The triptych's shelf: 192. Both poses start here — the cards contract DOWNWARDS. */
-export const CARD_TOP = EYEBROW_TOP + MONO_ROW_HEIGHT + EYEBROW_UNDERLINE + EYEBROW_TO_CARDS;
+export const CARD_TOP =
+  EYEBROW_TOP + MONO_ROW_HEIGHT + EYEBROW_TRAILING_AIR + EYEBROW_TO_CARDS;
 
 /** A card's inner left/right padding: 18. */
 export const CARD_PAD_X = 18;
@@ -494,9 +503,11 @@ const SHIFT_BULLET_GAP = 4;
 /** One bullet to the next: 22. */
 export const SHIFT_BULLET_STEP = SHIFT_BULLET_HEIGHT + SHIFT_BULLET_GAP;
 
-/** The longest column: 4 bullets — the first one's. The second has three, and its BOX is
- *  the same height regardless: two boxes side by side that bottom out at different
- *  heights read as one of them being unfinished. */
+/** The longest column: 4 bullets — and since 2026-08-16 BOTH columns run four, where the
+ *  second used to run three into a box cut for four. The box was always the same height
+ *  either way, because two boxes side by side that bottom out at different heights read
+ *  as one of them being unfinished; what the fourth bullet bought is that the right box
+ *  no longer LOOKS emptier than the left inside equal borders. */
 export const SHIFT_BULLET_MAX = 4;
 
 /**
