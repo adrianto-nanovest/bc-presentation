@@ -150,7 +150,7 @@
 - *"And yet…"*
 - **88%** have launched AI initiatives
 - **25%** have scaled AI to production
-- **5.5%** have realized measurable ROI
+- **6%** have earned five percent or more of EBIT from AI *(was 5.5% "measurable ROI" until 2026-08-17 — now the same figure the leader deck's D.1 `invest-base-rates` quotes)*
 
 **Cliffhanger:** "What separates them? Not the model — the *mental model*."
 

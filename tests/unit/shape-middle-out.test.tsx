@@ -614,13 +614,16 @@ describe("the middle-out claim, argued over the whole figure", () => {
     ]);
     // THE HEADLINE REFUSES ONE OF THEM BY NAME and the figure convicts it in four words.
     expect(C.headline).toContain("top-down");
-    expect(C.tiers[TOP].approachVerdict).toBe("Generic support. No depth.");
+    expect(C.tiers[TOP].approachVerdict).toBe("Generic support. Less depth.");
     expect(C.tiers[BOTTOM].approachVerdict).toBe("Deep knowledge. No authority.");
     // THE MIDDLE'S IS THE ONLY VERDICT THAT NAMES NO ABSENCE — the two outer ones are
     // "one thing it has, one thing it lacks", and the shape of the sentence is what marks
     // the middle out.
-    expect(C.tiers[MIDDLE].approachVerdict).not.toMatch(/\bNo\b/);
-    expect(C.tiers[TOP].approachVerdict).toMatch(/\bNo\b/);
+    expect(C.tiers[MIDDLE].approachVerdict).not.toMatch(/\b(No|Less)\b/);
+    // AND THE TWO OUTER LACKS ARE NOT THE SAME SIZE. The top's is a degree ("Less"): it
+    // holds real depth, just not the method. The teams' is absolute ("No"), and the plate
+    // beside it says so under CANNOT. Level them and the room can answer "push harder".
+    expect(C.tiers[TOP].approachVerdict).toMatch(/\bLess\b/);
     expect(C.tiers[BOTTOM].approachVerdict).toMatch(/\bNo\b/);
     // AND THE TRIO IS COMPLETE: middle-out is only the answer if its two alternatives are
     // both on the stage.

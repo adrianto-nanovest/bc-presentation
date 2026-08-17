@@ -924,6 +924,24 @@ export const b5Content: B5Content = {
   mechanism: "And yet...",
   chartTitle: "Adoption is not outcome.",
   chartSubtitle: "MCKINSEY + DELOITTE ENTERPRISE SURVEYS · 2025–2026",
+  // THE THIRD BAR WAS 5.5% UNTIL 2026-08-17, AND THE OWNER MOVED IT TO 6% SO THE DECK
+  // QUOTES ONE RARE-SUCCESS RATE INSTEAD OF TWO. The leader deck shows D.1
+  // (`invest-base-rates`) ten slides BEFORE this one, and D.1's rare class is 6% — McKinsey's
+  // own "AI high performers", defined as five percent or more of EBIT attributed to AI plus
+  // significant value, from the wave published November 2025 (n = 1,993, 105 nations). Two
+  // near-equal rates for the same idea, from two definitions, read to a room as a
+  // contradiction rather than as a nuance. Now the third bar IS D.1's figure, so the second
+  // sighting reinforces the first. `tests/unit/invest-base-rates.test.tsx` welds the pair.
+  //
+  // THE 5.5% ALSO DID NOT SURVIVE ITS OWN SOURCING. `docs/researches/2026-05-12-ai-landscape-
+  // paradox-global.md` attributes it to McKinsey's MARCH 2025 report and describes it as the
+  // same ">5% EBIT impact" class — but 88% is the NOVEMBER 2025 wave's adoption figure, not
+  // March's (that wave reported 78%). So the old first and third bars crossed two waves of one
+  // survey. Both now come from the November 2025 wave alone.
+  //
+  // THE MIDDLE BAR IS STILL DELOITTE'S and is untouched: State of AI in the Enterprise 2026,
+  // 3,235 leaders, fielded August–September 2025. See the subtitle, which names both
+  // publishers because two publishers are on the stage.
   bars: [
     {
       pct: 88,
@@ -938,9 +956,13 @@ export const b5Content: B5Content = {
       variant: "dim",
     },
     {
-      pct: 5.5,
-      label: "have realized measurable ROI on their AI investment",
-      widthPct: 5.5,
+      // The label carries the DEFINITION and not a paraphrase of it. It used to read "have
+      // realized measurable ROI on their AI investment", which is a judgement no report
+      // published; the survey's own threshold is financial, so the bar states the threshold.
+      // Spelled in words, matching D.1's citation, so the row prints one numeral.
+      pct: 6,
+      label: "have earned five percent or more of EBIT from AI",
+      widthPct: 6,
       variant: "dashed",
     },
   ],

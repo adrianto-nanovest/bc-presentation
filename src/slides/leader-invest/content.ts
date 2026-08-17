@@ -1414,10 +1414,11 @@ export const investGovernanceContent = {
 //   · 1% — the 2024 wave's maturity figure. It is the honest partner of a 78% ADOPTION
 //     headline and this slide no longer makes one: printing 1% beside 88% would cross the
 //     waves again in the opposite direction.
-//   · 25%, 5.5% — E.5 (`b5-todays-landscape`) already draws an adoption-to-outcome funnel of
-//     88 / 25 / 5.5 as three bars. THAT SLIDE AND THIS ONE SHARE THE 88% AND NOTHING ELSE:
-//     see the boundary block below, which records the overlap as a known deck-level problem for
-//     the owner rather than pretending it away.
+//   · 25% — E.5 (`b5-todays-landscape`) already draws an adoption-to-outcome funnel of
+//     88 / 25 / 6 as three bars, and the middle bar is DELOITTE's, not this survey's. THAT
+//     SLIDE AND THIS ONE SHARE THE 88% AND THE 6%, BY DECISION SINCE 2026-08-17: see the
+//     boundary block below. 5.5% was E.5's third bar until that date and may not come back
+//     here or there.
 //   · 5%, 95%, 4%, 26%, 13%, 8% — MIT NANDA's pilots-to-production share, BCG's future-built
 //     and past-proof-of-concept shares, Cisco's Pacesetters, Accenture's front-runners. Each
 //     is a real published number and each is a DIFFERENT population; none is quoted here.
@@ -1463,19 +1464,29 @@ export const investGovernanceContent = {
 //     DEFAULT in the sense of "what it buys you", and the only currency on this stage is the
 //     two percentages.
 //
-// ═══ THE ONE OVERLAP THIS BLOCK DOES NOT RESOLVE, recorded rather than hidden. E.5
+// ═══ THE E.5 OVERLAP, RECORDED RATHER THAN HIDDEN — AND DELIBERATE SINCE 2026-08-17. E.5
 // (`b5-todays-landscape`, `src/slides/landscape-section-b/content.ts`) opens on the SAME 88%
 // from the SAME publisher, captioned "of organizations have adopted AI", and its chart title
 // is "Adoption is not outcome." — one letter-section later in the leader deck than this
-// slide. D.1 and E.5 therefore make adjacent arguments off one shared figure. Three things
-// keep them from being the same slide: the IMAGE differs (two hundreds of squares against
-// three horizontal bars), the SECOND figure differs (6% AI high performers, an EBIT
-// threshold, against 5.5% measurable ROI), and the ARGUMENT differs — E.5 asks what adoption
-// produced, D.1 asks what a common position is worth. THE THIRD SEPARATOR IS GONE since the
-// 2026-08-14 owner cut: D.1 used to carry a year-over-year move (78% → 88%) that E.5 does not,
-// which made its base rate a TREND rather than a level. Whether the deck wants both slides at
-// all is the owner's call and not this file's; what this file will not do is paper over the
-// overlap by inventing a different statistic for D.1.
+// slide. D.1 and E.5 therefore make adjacent arguments off shared figures.
+//
+// THE OWNER KEPT BOTH SLIDES AND WELDED THE SECOND FIGURE. E.5's third bar used to read 5.5%
+// "measurable ROI", which put a SECOND rare-success rate in one deck, from a second
+// definition, ten slides from this one. Two near-equal rates for one idea read to a room as a
+// contradiction and cost both slides their credit. E.5's third bar is now THIS SLIDE'S 6% —
+// same report, same wave, same class — so the later sighting is a callback rather than a
+// rival. The weld is asserted in `tests/unit/invest-base-rates.test.tsx` (`the E.5 overlap`),
+// so a reword that moves one figure and leaves the other fails.
+//
+// WHAT STILL KEEPS THEM FROM BEING THE SAME SLIDE: the IMAGE differs (two hundreds of squares
+// against three horizontal bars), the MIDDLE TERM is E.5's alone (25% scaled to production,
+// Deloitte's figure and nothing this stage carries), the JOB differs — E.5 sets up the mindset
+// section and hands off on "not the model — the mental model", D.1 opens the ask — and the
+// ARGUMENT differs: E.5 asks what adoption produced, D.1 asks what a common position is worth.
+// THE TREND SEPARATOR IS GONE since the 2026-08-14 owner cut: D.1 used to carry a
+// year-over-year move (78% → 88%) that E.5 does not, which made its base rate a TREND rather
+// than a level. What this file will not do is paper over the overlap by inventing a different
+// statistic for D.1.
 //
 // ═══ ONE CONTENT BLOCK, NO BRAND AXIS, NO `…For(brand)` RESOLVER — the second block in this
 // file to make that call, after D.3's, and the plainer of the two. §4.4's seven brand ×
@@ -1810,7 +1821,8 @@ export const investBridgeContent = {
 //
 //   · `70%` / `30%` / any "70/30" split ....... B.1 `gap-hardest-part`
 //   · `88%` / `6%` ............................ D.1 `invest-base-rates`
-//   · `25%` / `5.5%` .......................... E.5 `b5-todays-landscape`
+//   · `25%` ................................... E.5 `b5-todays-landscape` (its third bar is
+//                                               D.1's `6%` since 2026-08-17; `5.5%` is retired)
 //   · `73%` ................................... G.1 `d1-the-trap`
 //   · `vibe coding`, `prompt-and-pray`,
 //     `confidently wrong`, `hallucinat*`,

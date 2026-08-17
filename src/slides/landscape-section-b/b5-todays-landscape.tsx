@@ -9,8 +9,10 @@
 // collapse exactly: a single element that re-poses via animated `top` +
 // `fontSize` + `lineHeight` + `letterSpacing` (700ms var(--ease)). The serif
 // subline shifts to a display font as it joins the header. Per-bar CountUps
-// use the canonical CountUp (now with decimal support) so bar 3 animates
-// 0.0 → 5.5 while bars 1–2 stay integer.
+// use the canonical CountUp, whose decimal support is derived from the datum
+// (`Number.isInteger`) rather than authored — all three bars are integers since
+// the third moved 5.5 → 6 on 2026-08-17, so the decimal path is dormant and not
+// removed.
 //
 // Step map (load animation is mount-driven; stepIndex 0 = first Space press):
 //   load (on mount):  FIG label + dot-grid bg fade in
@@ -29,7 +31,7 @@
 //                     "And yet" fades; header pose stays. Chart title + mono
 //                     subtitle reveal above 3 horizontal bars that stagger in
 //                     150ms apart, each with a scaleX fill grow AND a CountUp
-//                     0 → pct (1200ms). Bar 3 (5.5%) uses decimal CountUp.
+//                     0 → pct (1200ms). All three bars count as integers.
 //                     Bars become hover-aware once armed.
 //   stepIndex 3       (CANONICAL — cliffhanger):
 //                     "What separates them? Not the model — the mental model."
@@ -347,8 +349,9 @@ export function B5TodaysLandscape() {
 // treatment per spec: primary (full copper fill), dim (~55% opacity copper),
 // dashed (no fill, dashed copper outline).
 //
-// Percentage label animates via the canonical CountUp — bar 3 uses decimals=1
-// so 5.5 animates as 0.0 → 5.5. Integer bars (88, 25) use decimals=0.
+// Percentage label animates via the canonical CountUp — `decimals` is DERIVED
+// from the datum, so a fractional bar would animate as 0.0 → x.x. All three
+// bars are integers today (88, 25, 6), so every one uses decimals=0.
 // When the row is armed, hover state lifts border/background/box-shadow and
 // brightens the label colors (mirrors b2 TierLadderCard treatment).
 
@@ -392,7 +395,7 @@ function InverseBarRow({
   }, [on, delayMs]);
 
   const isHot = armed && hovered;
-  // Integer bars (88, 25) animate as integers; decimals (5.5) animate as 0.0 → 5.5.
+  // Integer bars (88, 25, 6) animate as integers; a fractional one would animate 0.0 → x.x.
   const decimals = Number.isInteger(bar.pct) ? 0 : 1;
 
   // Label color picks copper-100 on hover, otherwise the variant default

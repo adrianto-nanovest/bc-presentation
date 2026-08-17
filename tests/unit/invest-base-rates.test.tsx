@@ -20,7 +20,9 @@
 //      are held below, and every forbidden pattern is fired against a control corpus.
 //   2. A FIGURE FROM A DIFFERENT STUDY ARRIVING BESIDE THESE THREE. Six real published
 //      numbers were considered and rejected while resourcing this slide — 1%, 4%, 5%, 25%,
-//      26%, 55%, 95%, 5.5% — each from a different population. Quoting any of them would
+//      26%, 55%, 95%, 5.5% — each from a different population. 5.5% is on that list as a
+//      RETIRED figure since 2026-08-17: it was E.5's third bar until the owner moved that bar
+//      to 6% so the deck quotes one rare-success rate. Quoting any of them would
 //      invent nothing and would still make this slide two arguments. Held as a shape rule over
 //      the whole rendered stage (the only number-shaped tokens outside the citation are the
 //      three the report gives) rather than as a check for one absent string.
@@ -1089,8 +1091,10 @@ describe("the citation", () => {
  * lists them with their owners: 1% is the 2024 wave's maturity figure, 5% and 95% are MIT
  * NANDA's pilots-to-production and zero-return shares, 4% and 26% are BCG's future-built and
  * past-proof-of-concept shares, 25–55% is the productivity range that sits in the same sentence
- * as the pair this slide used to quote, and 25% / 5.5% are E.5's own two lower bars. Quoting any
- * of them would INVENT NOTHING and would still make this slide two arguments.
+ * as the pair this slide used to quote, 25% is E.5's own middle bar, and 5.5% was E.5's third
+ * bar until 2026-08-17 (it is now 6%, this slide's own figure — see `the E.5 overlap` at the
+ * bottom). Quoting any of them would INVENT NOTHING and would still make this slide two
+ * arguments.
  *
  * SPELLED FOR THE `%` AND THE WORD BOTH, because the citation's own definition uses the word
  * ("at least five percent of EBIT") and a numeral-only sweep would miss "twenty-six percent".
@@ -1123,8 +1127,12 @@ const REFUSED_FIGURES: ReadonlyArray<readonly [string, RegExp]> = [
  * research on 2026-08-14, so a control written to make a regex fire proves the writing rather
  * than the pattern.
  *
- * The last entry is not a transcription at all: it is E.5's OWN content, read off the module, so
- * the two lower bars of the deck's other adoption slide are a live control rather than a copy.
+ * The last two entries are not transcriptions at all. One is E.5's OWN content, read off the
+ * module, so the lower bars of the deck's other adoption slide are a live control rather than a
+ * copy. The other is E.5's RETIRED third bar, kept verbatim as it shipped until 2026-08-17 and
+ * labelled as retired rather than passed off as a report's sentence: the live module no longer
+ * carries "5.5%" or "ROI", and both patterns stay on the list because both are still spellings
+ * this slide would gain the day somebody reached for a second study.
  */
 const REFUSED_SENTENCES: readonly string[] = [
   "Reported context: 25–55% productivity improvement; 78% adoption versus 6% proper implementation.",
@@ -1135,6 +1143,7 @@ const REFUSED_SENTENCES: readonly string[] = [
   "Of the companies at least experimenting with AI, only 26% have developed the capabilities " +
     "to move beyond proofs of concept, and only 4% are at the forefront of AI innovation.",
   ...b5Content.bars.map((bar) => `${bar.pct}% ${bar.label}`),
+  "5.5% have realized measurable ROI on their AI investment", // E.5's third bar until 2026-08-17
 ];
 
 describe("no other statistic is invented around the three rates", () => {
@@ -2657,20 +2666,27 @@ describe("the sibling boundaries", () => {
 // ── the E.5 overlap, recorded rather than hidden ──────────────────────────────
 
 describe("the E.5 overlap", () => {
-  test("shares the adoption figure with E.5 and nothing else", () => {
+  test("shares both figures with E.5, by decision, and nothing else", () => {
     // THE ONE BOUNDARY THIS FILE CANNOT ENFORCE AS AN ABSENCE, so it is enforced as an EXACT
     // OVERLAP instead. `b5-todays-landscape` opens on the same 88% from the same publisher one
     // letter-section later in the leader deck, captioned "of organizations have adopted AI", and
     // its chart title is "Adoption is not outcome." D.1 and E.5 therefore make adjacent arguments
     // off one shared figure. `content.ts`'s block header records the overlap as the owner's call
-    // and refuses to paper over it by inventing a different statistic for D.1; what this test
-    // does is pin the overlap to exactly ONE number, so it cannot quietly widen into two slides
-    // saying the same thing.
+    // and refuses to paper over it by inventing a different statistic for D.1.
     expect(b5Content.bigStat).toBe(Number(C.adoptionFigure.replace("%", "")));
 
-    // …and NOTHING ELSE crosses. E.5's two lower bars, its pivot, its cliffhanger and its chart
-    // title are all absent here — the `REFUSED_FIGURES` sweep above already forbids 25% and 5.5%,
-    // and these are the words.
+    // THE OVERLAP IS TWO NUMBERS SINCE 2026-08-17, AND THAT IS THE FIX RATHER THAN THE DEFECT.
+    // E.5's third bar used to read 5.5% "measurable ROI", which put a SECOND rare-success rate
+    // in the deck ten slides from this one, from a second definition. A room hears two
+    // near-equal rates for one idea as a contradiction, and it doubts both. The bar is now this
+    // slide's own 6%, so the later sighting is a CALLBACK: same report, same wave, same class.
+    // Welded here so the two cannot drift apart again in silence — a reword on either side that
+    // moved one figure and left the other fails on this line.
+    expect(b5Content.bars.at(-1)?.pct).toBe(Number(C.implementationFigure.replace("%", "")));
+
+    // …and NOTHING ELSE crosses. E.5's bar labels, its middle rate, its pivot, its cliffhanger
+    // and its chart title are all absent here — the `REFUSED_FIGURES` sweep above still forbids
+    // 25% and 5.5%, and these are the words.
     const { container, unmount } = renderSlide(investBaseRatesSlide.canonicalPose);
     const stage = stageTextWithoutFigLabel(container);
     for (const copy of [

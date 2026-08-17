@@ -1108,7 +1108,8 @@ export interface Tier {
    * WHAT THIS TIER HAS. PROSE, so it carries a `*Kw` sibling.
    *
    * READS AS THE CONTINUATION OF ITS EYEBROW — "HOLDS · The mandate, the budget and the
-   * air cover." — which is what lets the rows be phrases rather than sentences. The
+   * protection when it goes wrong." — which is what lets the rows be phrases rather than
+   * sentences (the top row's third item carries a clause; see its own note). The
    * shipped version of this slide opened all three rows on the word "Holds" UNDER an
    * eyebrow that already said HOLDS; deleting the repeated verb is most of why the new
    * plates fit one line each with slack to spare.
@@ -1156,7 +1157,7 @@ export interface Tier {
   /**
    * WHAT THAT APPROACH GETS YOU — a CAPTION, so no `*Kw` (see the keyword rule).
    *
-   * TWO CLAUSES, NO VERB, ONE LINE. "Generic support. No depth." is the whole finding
+   * TWO CLAUSES, NO VERB, ONE LINE. "Generic support. Less depth." is the whole finding
    * about top-down adoption, and the two outer verdicts are deliberately the same
    * SHAPE as each other — one thing it has, one thing it lacks — so the middle's, which
    * lacks nothing, is the only one that breaks the pattern.
@@ -1188,13 +1189,28 @@ const TIERS: Three<Tier> = [
     // that also cost 145px of a 604px row.
     name: "TOP MANAGEMENT",
     holdsEyebrow: HOLDS_EYEBROW,
-    // "the air cover" IS THE THIRD ITEM ON PURPOSE. The mandate and the budget are
+    // THE THIRD ITEM IS THE THIRD ITEM ON PURPOSE. The mandate and the budget are
     // what a leader expects to see credited to the top and are therefore agreed with
-    // before they are read; air cover is the one a division head has actually needed
+    // before they are read; the third is the one a division head has actually needed
     // and been grateful for, and it is what makes the row a fair account of the top
     // rather than a setup for the limit underneath it. The plate has to be RIGHT about
     // the top, or the room discounts everything under it.
-    holds: "The mandate, the budget and the air cover.",
+    //
+    // "the protection when it goes wrong" AND NOT "the air cover", WHICH IS THE
+    // 2026-08-17 DE-JARGONING. "Air cover" is a military metaphor: a listener who does
+    // not already hold the metaphor gets NO meaning from it, not a partial one, and this
+    // room is not all native speakers of English. "Protection" carries one meaning.
+    //
+    // THE CLAUSE IS THE POINT AND NOT PADDING. "The mandate, the budget and the
+    // protection." leaves the room to guess what it protects against, and the nearest
+    // guess in a mining company is somebody's job. The clause names the MOMENT instead —
+    // the one where this room is the only layer that can help — which is the same thing
+    // "air cover" meant to the people who understood it.
+    //
+    // IT COSTS THE ROW ITS RHYTHM, and that is accepted: the other two plates are flat
+    // lists and this one now ends on a subordinate clause. 62 characters against
+    // CLAIM_BUDGET_CHARS's 66, verified one line on stage at 1920×1080.
+    holds: "The mandate, the budget and the protection when it goes wrong.",
     // The keyword goes on the first item and not the last: the mandate is the object the
     // downward act later picks up by name ("Your mandate becomes …"), so the italic here is
     // the thing the room is asked to remember.
@@ -1236,7 +1252,14 @@ const TIERS: Three<Tier> = [
     // figure is about.
     qualifierKw: ["how AI should change it"],
     approach: "TOP-DOWN",
-    approachVerdict: "Generic support. No depth.",
+    // "Less depth" AND NOT "No depth", WHICH IS THE 2026-08-17 SOFTENING. The room in
+    // front of this card is the one that runs top-down, and a flat "No depth" reads as a
+    // verdict on the people rather than on the distance: the plate beside it has just
+    // credited them with the mandate, the budget and the protection, so an absolute zero
+    // in the next column is also less true than the comparative. "Less" keeps the lack —
+    // the card still names one thing the approach has and one it wants — and lets the
+    // room hear a limit of position instead of an accusation.
+    approachVerdict: "Generic support. Less depth.",
   },
   {
     id: "middle",
@@ -1299,6 +1322,13 @@ const TIERS: Three<Tier> = [
     qualifier: "Authorise a change to how any of it is done.",
     qualifierKw: ["how any of it is done"],
     approach: "BOTTOM-UP",
+    // "No authority" AND NOT "Less authority", WHICH IS DELIBERATELY NOT THE TOP CARD'S
+    // "Less depth". The asymmetry is the argument: the top's shortfall is a matter of
+    // DEGREE — it has some depth, just not the method — and the teams' is ABSOLUTE, which
+    // the plate to the left of this card has already said under CANNOT. Levelling the two
+    // to "less" and "less" reads as one problem of effort, and invites the answer the
+    // headline refuses: push harder from the top. It cannot be pushed harder. The
+    // authority is not there to push with.
     approachVerdict: "Deep knowledge. No authority.",
   },
 ];
