@@ -710,7 +710,14 @@ export function EnablementModel({ pose }: EnablementModelProps) {
           COLOUR TIER says more depth, and both are cut from one fraction
           (`../enablement-geometry.ts`), so the narrowest lane is always the brightest. No axis, no
           scale, no printed share — the bar is ORDINAL and nothing on this stage invites a number
-          to be read off it. */}
+          to be read off it.
+
+          BOTH ENCODINGS ARE NOW NAMED IN WORDS, which is the 2026-08-17 fix and the reason this
+          scene has a third text box. Two ordinal facts on one mark is one more than a room can
+          take off it unaided: the eyebrow said "and how deep", the bar said nothing about which
+          of its two properties was which, and the longest bar sat on the shallowest track. So the
+          EYEBROW names the width ("how many persons") and each ROW prints its own depth word.
+          Neither is a new claim — both were already in the geometry, and neither was legible. */}
       {tracks && (
         <>
           {eyebrow(C.tracksEyebrow, "enablement-tracks-eyebrow")}
@@ -748,6 +755,30 @@ export function EnablementModel({ pose }: EnablementModelProps) {
                 }}
               >
                 {track.name}
+              </div>
+              {/* THE DEPTH LABEL, at the far end of the name shelf — SOME, MORE, MOST DEPTH.
+                  It is the ladder the bar cannot state: the bar's WIDTH is how many persons
+                  and its COLOUR TIER is depth, and a room reading length as "more" made the
+                  widest lane the deepest one. Right-anchored, so the three words stack into a
+                  column the eye reads down; CARD LABEL TIER, so it is a different register
+                  from the track's own name and not a brighter version of it; and ONE TIER FOR
+                  ALL THREE, because stepping it with the lanes would rank the tracks'
+                  importance as well as their depth ({@link TIER}). EVERY VALUE REPEATS THE
+                  WORD "DEPTH" rather than hanging it once over the column — the rows are
+                  120px apart, and a rung that does not name its own scale is a rung the eye
+                  has to travel back up to read. See `../content.ts`. */}
+              <div
+                data-testid={`enablement-track-depth-${track.id}`}
+                style={{
+                  position: "absolute",
+                  right: TRACK_PAD_X,
+                  top: TRACK_NAME_OFFSET,
+                  ...mono(TRACK_NAME_SIZE, TIER.cardLabel, LABEL_TRACKING),
+                  lineHeight: 1.3,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {track.depth}
               </div>
               {/* THE LANE. `en-grow` scales it from its own left edge to the width `laneWidth`
                   produced — `scaleX` and not `width`, so it composites on the GPU and, the half

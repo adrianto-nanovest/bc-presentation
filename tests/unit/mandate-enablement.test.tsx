@@ -211,6 +211,7 @@ const SCENE_OF: readonly (readonly [string, readonly number[]])[] = [
   ...C.tracks.flatMap((t): (readonly [string, readonly number[]])[] => [
     [`enablement-track-${t.id}`, [2]],
     [`enablement-track-name-${t.id}`, [2]],
+    [`enablement-track-depth-${t.id}`, [2]],
     [`enablement-lane-${t.id}`, [2]],
     [`enablement-track-line-${t.id}`, [2]],
   ]),
@@ -261,6 +262,7 @@ const COPY_BOXES: readonly (readonly [string, readonly number[]])[] = [
   ["enablement-tracks-eyebrow", [2]],
   ...C.tracks.flatMap((t): (readonly [string, readonly number[]])[] => [
     [`enablement-track-name-${t.id}`, [2]],
+    [`enablement-track-depth-${t.id}`, [2]],
     [`enablement-track-line-${t.id}`, [2]],
   ]),
   ["enablement-tracks-thesis", [2]],
@@ -333,7 +335,7 @@ const ALL_AUTHORED: readonly string[] = [
   C.tracksThesis,
   ...C.blocks.flatMap((b) => [b.label, b.line]),
   ...C.pillars.flatMap((p) => [p.label, p.line]),
-  ...C.tracks.flatMap((t) => [t.name, t.line]),
+  ...C.tracks.flatMap((t) => [t.name, t.depth, t.line]),
   C.closer,
 ];
 
@@ -577,6 +579,38 @@ describe("scene 2 · the tracks", () => {
     }
     expect(laneFraction(0, TRACK_COUNT)).toBe(0);
     expect(laneFraction(TRACK_COUNT - 1, TRACK_COUNT)).toBe(1);
+  });
+
+  test("prints a depth word per row, and names the bar's OTHER variable in the eyebrow", () => {
+    // THE SCENE'S TWO ORDINAL FACTS, BOTH IN WORDS. The bar carries width (how many
+    // persons) and brightness (depth), and neither was labelled: a room reads a long bar
+    // as "more", so the widest lane — EVERYONE — read as the deepest track, which is the
+    // claim this scene exists to refute. The eyebrow now names the width and the rows
+    // print the depth ladder. Three distinct words, one per row, all mono SHOUTS, and all
+    // on ONE tier — a depth word that brightened with its lane would rank the tracks'
+    // importance as well as their depth.
+    //
+    // EVERY RUNG NAMES ITS OWN SCALE. The first cut of the column printed three VERBS
+    // (KNOW / BUILD / OWN), which say what a track does and leave the room to infer that
+    // the column ranks depth at all. The scale is now repeated on every row, and this
+    // test holds that — a header hung once over rows 120px apart is a header the eye has
+    // left behind by the third one.
+    renderSlide(2);
+    expect(C.tracksEyebrow).toMatch(/HOW MANY/);
+    const labels = C.tracks.map((t) => t.depth);
+    expect(new Set(labels).size).toBe(TRACK_COUNT);
+    const colours = new Set<string>();
+    C.tracks.forEach((t) => {
+      const box = screen.getByTestId(`enablement-track-depth-${t.id}`);
+      expect(box.textContent).toBe(t.depth);
+      expect(t.depth, `track ${t.id}`).toBe(t.depth.toUpperCase());
+      expect(t.depth, `track ${t.id} names its scale`).toMatch(/\bDEPTH\b/);
+      // A LABEL ON A MARK, NOT A SECOND LINE OF PROSE. Two words is what the ladder
+      // needs; a third is a sentence starting inside the name shelf.
+      expect(t.depth.split(/\s+/).length, `track ${t.id}`).toBeLessThanOrEqual(2);
+      colours.add(box.style.color);
+    });
+    expect(colours.size).toBe(1);
   });
 
   test("keeps every track's NAME on one shared tier while the lanes rank", () => {

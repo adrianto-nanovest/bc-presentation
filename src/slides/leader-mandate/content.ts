@@ -511,6 +511,38 @@ export interface Track {
    *  longest of the three is what `NARROWEST_LANE` in `./enablement-geometry.ts`
    *  is cut against, so a longer name is a layout change and not only a copy one. */
   name: string;
+  /**
+   * HOW DEEP THIS TRACK GOES, SAID IN THE VARIABLE'S OWN WORD — SOME DEPTH, then MORE
+   * DEPTH, then MOST DEPTH. Mono, uppercase, keyword-free, at the right end of the
+   * row's name shelf, and never more than two words: it is a label on a mark, not a
+   * second line of prose.
+   *
+   * IT EXISTS BECAUSE THE BAR CANNOT SAY IT (added 2026-08-17, owner's reading of
+   * the scene). The row carries two ordinal facts and the bar can only carry one:
+   * its WIDTH is how many persons and its COLOUR TIER is depth. A room reads a long
+   * bar as "more", the eyebrow said "and how deep", and the widest lane is EVERYONE —
+   * so the figure invited exactly the conclusion it argues against. The width is now
+   * named in the eyebrow and the depth is printed in the rows, because a colour ramp
+   * with no legend is not readable from the back row.
+   *
+   * EVERY VALUE CARRIES THE WORD "DEPTH", and that is the second pass (2026-08-17,
+   * same day). The first cut printed KNOW / BUILD / OWN — three verbs, which name what
+   * a track DOES and leave the room to work out that the column is ranking depth at
+   * all. A ladder is only readable if each rung names its own scale, so the scale is
+   * repeated three times rather than hung once over a column: these rows are 120px
+   * apart on a projected stage, and a header the eye has left behind is a header it
+   * has to travel back to.
+   *
+   * "SOME" AND NOT "LESS" ON THE FIRST ROW. "Less depth" is a comparative and the top
+   * row has nothing above it to be less than — it is the baseline the other two are
+   * measured from. SOME → MORE → MOST is one ladder, read in the reading direction,
+   * with no antecedent missing at either end.
+   *
+   * ONE TIER FOR ALL THREE, like the track names and for the same reason: the ladder
+   * is stated by the WORDS, and a depth word that brightened with its lane would rank
+   * the tracks' importance as well as their depth.
+   */
+  depth: string;
   /** What that track gets, in ONE LINE. Prose, keywords, and held to
    *  `LANE_LINE_BUDGET_CHARS` — a track row is full stage width, so its budget is
    *  the loosest on the slide. */
@@ -523,9 +555,16 @@ export interface Track {
  *
  * READING DOWN THE COLUMN IS GOING DEEPER, which is why the order is not
  * reversible: the lane bars narrow as the reader descends (`laneWidth` in
- * `./enablement-geometry.ts`) and the colour tier brightens, so the two encodings
- * agree with the reading direction. Flipped, the figure would say the same thing and
- * read as a funnel standing on its point.
+ * `./enablement-geometry.ts`), the colour tier brightens and the {@link Track.depth}
+ * label steps SOME → MORE → MOST, so all three encodings agree with the reading
+ * direction. Flipped, the figure would say the same thing and read as a funnel
+ * standing on its point.
+ *
+ * TWO OF THE THREE ARE THE BAR'S AND ONLY ONE OF THEM IS DEPTH. Width is how many
+ * persons, brightness is depth, and until 2026-08-17 the stage named neither — so the
+ * room read the longest bar as the deepest track and the model inverted itself in the
+ * one scene that carries it. The eyebrow now names the width and the rows print the
+ * depth; see {@link Track.depth}.
  *
  * THIS IS THE SLIDE'S ANSWER TO "SO WE BUY EVERYONE A SEAT?", and it answers it
  * without arithmetic: enablement is not one depth applied to a headcount, it is
@@ -542,30 +581,44 @@ const TRACKS: Three<Track> = [
   {
     id: "everyone",
     name: "EVERYONE",
+    depth: "SOME DEPTH",
     // "stop improvising" is `leader-shape`'s governance decision heard again —
     // C.1 says the leader writes the rule down "before someone improvises", and
     // this is the training half of that same sentence. The anchor word is
     // load-bearing, not decorative: reword it and this track stops indexing C.1.
-    line: "Enough to stop improvising, and to know what stays out.",
+    //
+    // "which work stays off AI" replaces "to know what stays out" (2026-08-17):
+    // "stays out" named no object, so the room had to guess what was outside what.
+    line: "All staff stop improvising. They learn the rules, and which work stays off AI.",
     lineKw: ["stop improvising"],
   },
   {
     id: "builders",
     name: "BUILDERS",
-    // "their own team runs" is the difference between a prototype and a
+    depth: "MORE DEPTH",
+    // "their own team uses" is the difference between a prototype and a
     // capability, and it is the one thing this track has to buy with the hours it
     // costs. No count, no percentage — see `laneWidth`.
-    line: "Depth, and the hours to build what their own team runs.",
-    lineKw: ["their own team runs"],
+    //
+    // THE LINE NO LONGER OPENS ON THE WORD "DEPTH" (2026-08-17). It was the only
+    // track that claimed depth in prose while the colour tier gave the greatest depth
+    // to STEWARDS below it — one figure, two answers to "who goes deepest". The
+    // ladder is now the `depth` column, and this line states what the hours buy.
+    line: "A small group receives more hours. They build the tools their own team uses.",
+    lineKw: ["their own team uses"],
   },
   {
     id: "stewards",
     name: "STEWARDS",
+    depth: "MOST DEPTH",
     // The track a workshop cannot create and only a mandate can: someone whose
     // job continues after the programme's last day. It is deliberately the
     // narrowest lane AND the brightest tier — the fewest people at the greatest
     // depth is the shape of the claim.
-    line: "The few who keep it running after the programme ends.",
+    //
+    // "the system" replaces "it" (2026-08-17): the pronoun had no antecedent on the
+    // stage, so the sentence asked the room to supply its own subject.
+    line: "A few persons keep the system in operation after the programme ends.",
     lineKw: ["after the programme ends"],
   },
 ];
@@ -591,7 +644,10 @@ export const mandateEnablementContent = {
    *
    * Each names its scene's QUESTION rather than its contents, so four consecutive
    * frames read as one argument being walked rather than as four lists. Mono
-   * labels, keyword-free.
+   * labels, keyword-free. THE TRACKS' EYEBROW CARRIES ONE CLAUSE MORE THAN THE OTHER
+   * THREE, and it is the only one that does: its scene is the only one with an ordinal
+   * mark on it, and an unlabelled bar is read by whoever is looking at it. The reason
+   * is at {@link tracksEyebrow}.
    *
    * THE SHELF IS y=156 AND THAT IS THE 2026-08-14 FIX. The eyebrows hung at y=134,
    * twelve pixels under a 40px display headline, and the owner's note on it was that
@@ -601,7 +657,13 @@ export const mandateEnablementContent = {
    */
   blocksEyebrow: "WHAT STOPS US TODAY",
   pillarsEyebrow: "WHAT THE PROGRAMME IS MADE OF",
-  tracksEyebrow: "WHO IT REACHES, AND HOW DEEP",
+  // THE ONE EYEBROW THAT IS ALSO A LEGEND, and the only place on the slide where a
+  // scene's own encoding is named (2026-08-17). "WHO IT REACHES, AND HOW DEEP" named
+  // two variables and told the room which object carried neither, so the bar — the
+  // one ordinal mark on the stage — was read as depth and EVERYONE came out deepest.
+  // The bar is HOW MANY PERSONS, it says so here, and the depth ladder is printed in
+  // the rows themselves ({@link Track.depth}).
+  tracksEyebrow: "WHO IT REACHES — THE BAR SHOWS HOW MANY PERSONS",
   modelEyebrow: "THE WHOLE MODEL, IN ONE FRAME",
 
   /**
@@ -652,8 +714,11 @@ export const mandateEnablementContent = {
   pillarsThesis: "Four pillars, and a missing one takes the other three down with it.",
   pillarsThesisKw: ["takes the other three down with it"],
 
-  tracksThesis: "Nobody gets the same depth. That is the design, not a gap.",
-  tracksThesisKw: ["That is the design"],
+  // "Nobody gets the same depth" said the same thing through a negative subject, which
+  // is a construction the room has to invert before it can agree with it. Same claim,
+  // stated positively, and the keyword moves with it (2026-08-17).
+  tracksThesis: "Each group receives a different depth. This is the plan, not a gap.",
+  tracksThesisKw: ["This is the plan"],
 
   /**
    * The thesis — the last pose, and the only thing on it.
